@@ -1,0 +1,27 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#
+#EMAIL CONVITE DE CADASTRO
+assunto=Registration Invitation
+convidadoNewCash=Guest Cointrade
+titulo=NewCash - Invitation
+titulo2=Invitation!
+conviteCadastro=Registration Invitation.
+ola=Hi
+suaFraseSeguranca=You safety phrase is:
+voceEstaRecebendo=You are receiving this email because {var} invited you to join the newest Criptocurrencies Exchange in Brazil.
+comprarVender=Buying and selling cryptocurrencies has never been easier. It's free and without obligation! Register for free!
+aceitarConvite=Accept invitation
+
+
+infAcesso=Access information:
+dataHora=Date/Time:
+ipAcesso=Access IP:
+newCashEndereco=Cointrade | 
+emailDoSistema=This is an email system. Please do not answer.
+casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.
+
+
+

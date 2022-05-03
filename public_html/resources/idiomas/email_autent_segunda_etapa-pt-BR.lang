@@ -1,0 +1,32 @@
+
+#
+#
+#--VIEW
+#Modules\layouts\inspinia\email_autenti_segunda_eapa
+##--
+assunto=Token
+#Textos da View
+titulo=NewCash - E-mail Token
+titulo2=Segundo fator, NewCash!
+suaFraseSeguranca=Sua frase de segurança é:
+autenti2Fa=Autenticação 2FA!
+segueToken=Segue o token abaixo para autenticação do segundo fator.	
+
+navegador=Navegador:
+localizacao=Localização:
+revogarAcesso=Revogar Acesso
+casoNaoSejaVoce=Caso não seja você acessando sua conta, clique no link abaixo para revogar o acesso e bloquear sua conta.
+sistemaOperacional=Sistema Operacional:
+
+infAcesso=Informações do Acesso
+dataHora=Data/Hora:
+ipAcesso=IP do Acesso:
+newCashEndereco=Cointrade | 
+emailDoSistema=Este é um e-mail do sistema. Por favor, não responda.
+casoNaoTenhaCadastro=Caso não tenha efetuado o cadastro, entrar em contato através de nossos canais de atendimento.
+
+
+informAcesso=Informação de Acesso
+ultimoLogin=Informações do último login.
+
+

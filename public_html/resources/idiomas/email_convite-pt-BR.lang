@@ -1,0 +1,28 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EMAIL CONVITE
+#
+#--VIEW
+
+##--
+#Textos da View
+assunto=Convite de Cadastro
+convidadoNewCash=Convidado Cointrade
+titulo=NewCash - E-mail Convite
+titulo2=E-mail Convite!
+conviteCadastro=Convite para cadastro.
+ola=Olá
+suaFraseSeguranca=Sua frase de segurança é:
+voceEstaRecebendo=Você está recebendo este e-mail porquê {var} o convidou para se juntar á mais completa Exchange de Criptmoedas do Brasil.
+comprarVender=Comprar e vender criptomoedas nunca foi tão fácil. É grátis e sem compromisso!
+aceitarConvite=Aceitar Convite
+infAcesso=Informações do acesso:
+dataHora=Data/Hora:
+ipAcesso=IP do Acesso:
+newCashEndereco=Cointrade | 
+emailDoSistema=Este é um e-mail do sistema. Por favor, não responda.
+casoNaoTenhaCadastro=Caso não tenha efetuado o cadastro, entrar em contato através de nossos canais de atendimento.
+
+

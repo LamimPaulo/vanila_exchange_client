@@ -1,0 +1,338 @@
+<?php
+$cliente = isset($_data["cliente"]) ? $_data["cliente"] : new Models\Modules\Cadastro\Cliente();
+$configuracao = isset($_data["configuracao"]) ? $_data["configuracao"] : new \Models\Modules\Cadastro\Configuracao();
+$saque = isset($_data["saque"]) ? $_data["saque"] : new Models\Modules\Cadastro\Saque();
+$contasBancarias = isset($_data["contas"]) ? $_data["contas"] : Array();
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+$valorSacado = ($saque->valorSaque - ($saque->valorSaque * $saque->taxaComissao / 100) - $saque->tarifaTed);
+$bancos = isset($_data["bancos"]) ? $_data["bancos"] : Array();
+
+$idioma = new \Utils\PropertiesUtils("saque", IDIOMA);
+
+?>
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+    <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+             <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+                <div class="col-lg-10">
+                    <h2><?php echo $idioma->getText("titulo") ?></h2>
+                    <ol class="breadcrumb" style="background-color: transparent !important;">
+                        <li>
+                            Financeiro
+                        </li>
+                        <li class="active">
+                            <strong><?php echo $idioma->getText("titulo") ?></strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>
+<br>
+    <section class="content">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <?php Utils\Layout::append("mensagem", $_data)?>
+                    
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        
+                        <div class="row">
+                            <div class="col col-md-6 col-xs-12">   
+                                <div class="panel panel-primary"> 
+                                    <div class="panel-heading"><?php echo $idioma->getText("extratoContaCorrente") ?> - <?php echo $saque->cliente->nome ?></div>
+                                    <input type="hidden" id="idExtrato"  name="idExtrato" value="<?php echo \Utils\Criptografia::encriptyPostId($saque->id)?>"/>
+                                    <h4><?php echo $idioma->getText("saldoDisponivel") ?> =>   R$ <span id="saldo">R$ 0,00</span> || <?php echo $idioma->getText("saldoBloqueado") ?>  =>   R$ <span id="saldoBloqueado">R$ 0,00</span></h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered table-stripped table-condensed" style="background-color: #fff; font-size: 11px">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center"><?php echo $idioma->getText("dataA") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("descricaoA") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("valorA") ?></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="extrato">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-md-6 col-xs-12 col-xs-offset-0">
+                                <form action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_SAQUES_APROVAR ?>" method="post" enctype="multipart/form-data" id="form-saque">
+                                    <input type="hidden" id="id"  name="id" value="<?php echo \Utils\Criptografia::encriptyPostId($saque->id)?>"/>
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <?php echo $idioma->getText("dadosParaDeposito") ?>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul class="list-group">
+                                                <li class="list-group-item"><?php echo $idioma->getText("nomeA") ?> <span><?php echo $saque->cliente->nome ?></span></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("cpfA") ?>  <span><?php echo $saque->cliente->documento; ?></span></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("controleA") ?>  <span><?php echo $saque->id; ?></span></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("dataA") ?>  <span><?php echo $saque->dataSolicitacao->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO)?></span></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("bancoA") ?>  <span><?php echo ($saque->contaBancaria->banco->codigo . " - " . $saque->contaBancaria->banco->nome); ?></span></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("tipoA") ?>  <span id="contaTipo"></span></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("agenciaA") ?>  <span id="contaAgencia"></span></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("contaA") ?>  <span id="contaNumero"></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("valorSaque") ?>  <?php echo number_format($saque->valorSaque, 2, ",", ".") ?></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("comissaoSaqueA") ?>  <?php echo number_format($saque->taxaComissao, 2, ",", "")?>%</li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("tarifaTransfA") ?>  <?php echo number_format($saque->tarifaTed, 2, ",", "")?></li>
+                                                <li class="list-group-item"><strong style="font-size: 14px"><?php echo $idioma->getText("creditoSerTransfA") ?>  <?php echo number_format($valorSacado, 2, ",", ".")?></strong></li>
+
+
+                                                <li class="list-group-item"><?php echo $idioma->getText("aceitaNFA") ?>  <?php echo ($saque->aceitaNota > 0 ? "Sim" : "Não") ?></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("compDepositoA") ?> 
+                                            <input type="file"  class="form-control" id="comprovante" name="comprovante"/>
+                                            <div class="row" id="progressDocumentsContainer">
+                                                <div class="col col-lg-12">
+                                                    <div class="progress">
+                                                        <div style="width: 0%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" id="progressDocuments" class="progress-bar progress-bar-success">
+                                                            <span class="sr-only" id="progressDocumentsLegend"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php if (!empty($saque->notaFiscal)) { ?>
+                                            <a href="<?php echo URLBASE_CLIENT . UPLOADS . $saque->notaFiscal ?>" target="_BLANK"><?php echo $idioma->getText("verNFanexadaA") ?></a>
+                                            <?php } ?>
+                                                </li>
+                                            </ul>
+
+                                            <div class="row">
+                                        <div class="form-buttons text-center">
+                                            <div class="col-lg-4 col-xs-12 m-b-xs">
+                                            <a class="btn btn-default full-width" href="<?php echo URLBASE_CLIENT . Utils\Rotas::R_SAQUES ?>" id="btnVoltar">
+                                                <?php echo $idioma->getText("voltarA") ?>
+                                            </a>
+                                            </div>
+
+                                            <?php if(Models\Modules\Acesso\ModuloRn::validar(Utils\Rotas::M_SAQUES, \Utils\Constantes::EDITAR)) {  ?>
+
+                                                <?php if (!in_array($saque->status, Array(Utils\Constantes::STATUS_SAQUE_CONFIRMADO, Utils\Constantes::STATUS_SAQUE_CANCELADO))) { ?>
+                                            <div class="col-lg-4 col-xs-12 m-b-xs">    
+                                            <button class="btn btn-danger full-width" type="button" id="btnCancelar" onclick="dialogCancelar();">
+                                                    <?php echo $idioma->getText("cancelarA") ?>
+                                                </button>
+                                                <?php } ?>
+                                            </div>
+                                            <div class="col-xs-12 col-lg-4 m-b-xs">
+                                                <button class="btn btn-success full-width" type="submit" id="btnSalvar">
+                                                    <?php echo $idioma->getText("aprovarA") ?>
+                                                </button>
+
+                                            <?php }  ?>
+                                            </div>
+
+                                        </div>
+
+                                        </div>
+                                        </div>      
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                        
+                        <br><br>
+                        
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        $("#idContaBancaria").change(function () {
+            getDadosContaBancaria();
+        });
+        $("#valor").keydown(function (event) {
+            $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+            event.preventDefault();
+            calcularValorCreditado();
+        });
+        
+        $("#form-saque").ajaxForm({
+            dataType: 'json',
+            beforeSubmit: function () {
+                $("#btnVoltar, #btnSalvar, #btnCancelar").prop("disabled", true);
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                $("#progressDocumentsContainer").show();
+                var percentVal = percentComplete + '%';
+                $("#progressDocuments").width(percentVal);
+                $("#progressDocumentsLegend").html("Carregando: "+percentVal + "%");
+                },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_SAQUES ?>";
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e){
+                    showNotyAlert(e, "e");
+                }
+                $("#btnVoltar, #btnSalvar, #btnCancelar").prop("disabled", false);
+                $("#progressDocumentsContainer").hide();
+                $("#progressDocuments").width("0%");
+                $("#progressDocumentsLegend").html("");
+            }
+        });
+        extratoCliente();
+       getDadosContaBancaria();
+    });
+    
+    function calcularValorCreditado() {
+        var valor = ($("#valor").val().length > 0 ? parseFloat($("#valor").val().replace(",", ".")) : 0);
+        var comissao = <?php echo number_format($saque->taxaComissao, 2, ".", "")?>;
+        var tarifaTed = <?php echo number_format($saque->tarifaTed, 2, ".", "")?>;
+        
+        var resultado = (valor - (valor * comissao / 100) - tarifaTed);
+        $("#valorSacado").html("R$ " + resultado.toFixed(2).replace(".", ","));
+    }
+    
+    function dialogCancelar() {
+        $("#modalCancelar").modal();
+    }
+    
+    function cancelar() {
+        $("#btnVoltar, #btnSalvar, #btnCancelar, #modalCancelarClose, #modalCancelarConfirmar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_SAQUES_CANCELAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                id: $("#id").val(),
+                motivo: $("#modalCancelarMotivoCancelamento").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert("Saque cancelado com sucesso", "s");
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_SAQUES ?>";
+                    } else {
+                        $("#btnVoltar, #btnSalvar, #modalCancelarClose, #btnCancelar, #modalCancelarConfirmar").prop("disabled", false);
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $("#btnVoltar, #btnSalvar, #btnCancelar, #modalCancelarClose, #modalCancelarConfirmar").prop("disabled", false);
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    function getDadosContaBancaria() {
+        if (<?php echo $saque->idContaBancaria?> > 0) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_SAQUES_DADOSCONTA ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    idContaBancaria: <?php echo $saque->idContaBancaria?>
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#contaNomeBanco").html(json.conta.banco.nome);
+                            $("#contaTipo").html(json.conta.tipoConta);
+                            $("#contaAgencia").html(json.conta.agencia);
+                            $("#contaAgenciaDigito").html(json.conta.agenciaDigito);
+                            $("#contaNumero").html(json.conta.conta);
+                            
+                        } else {
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
+                        showNotyAlert(e, "e");
+                    }
+                }
+            });
+        }
+    }
+    
+        
+    function extratoCliente() {
+            $("#extrato").html("<tr><td colspan='3' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_SAQUES_EXTRATO_CLIENTE ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    id: $("#id").val()
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#extrato").html(json.html);
+                            $("#saldo").html(json.saldo);
+                            $("#saldoBloqueado").html(json.saldoBloqueado);
+                            
+                            
+                        } else {
+                            $("#extrato").html("<tr><td colspan='3' class='text-center'>" + json.mensagem + "</td></tr>");
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
+                        showNotyAlert(e, "e");
+                        $("#extrato").html("<tr><td colspan='3' class='text-center'>" + e + "</td></tr>");
+                    }
+                }
+            });
+        
+    }
+</script>
+
+
+<div class="modal fade" id="modalCancelar" tabindex="-1" role="dialog" aria-labelledby="modalCancelar" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCancelarLabel">Cancelar Saque</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label><?php echo $idioma->getText("informeCancelamentoSaque") ?></label>
+                            <textarea class="form-control" id="modalCancelarMotivoCancelamento" ></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-offset-5 col-xs-12 col-lg-3 m-b-xs">
+                <button type="button" class="btn btn-default full-width" id="modalCancelarClose" data-dismiss="modal"><?php echo $idioma->getText("fecharA") ?></button>
+                </div>
+                <div class="col-xs-12 col-lg-4 m-b-xs">
+                <button type="button" class="btn btn-danger full-width" onclick="cancelar();" id="modalCancelarConfirmar" ><?php echo $idioma->getText("cancelarSaqueA") ?></button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

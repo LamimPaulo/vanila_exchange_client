@@ -1,0 +1,206 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#NEGOCIACOES
+#
+#
+#--VIEW
+#Modules\convidados\views\convidados.phtml
+##--
+#Textos da View
+titulo=Referral
+subTitulo=Invitation
+compartilheSeuLink=Share your link through the tools below:
+oSeuLinkDeCadastro=Your referral link is:
+cliqueAquiCopie=Click and copy your link here
+vocePodeEnviar=You can send as many invitations as you want. Just enter the person's email in the field below and click invite. When your guest makes the first deposit or withdrawal of real in the system you will win
+daComissaoCobrada=of the commission charged by the system. After that the guest will be automatically removed from your account.
+maisAbaixoVoce=Below you will have a list of your guests who have joined the system in the last 180 days.
+umaPessoaPode=PS: One person can receive invitations from several others already registered. Therefore, when sending the invitation make sure that the guest click on your link to register. If he clicks on another person's link or accesses the system directly without using his invitation link, he will not be assigned as your guest.
+convitesCadastrados=Registered guests
+qtd=Quantity:                                                              
+valorTotal=Total Amount
+
+
+
+#Labels
+
+
+
+#Buttons
+convidar=Invite
+
+
+#inputs
+
+
+
+#Placeholder
+digiteEmailConvidado=Enter Guest Email
+pesquiseNome=Search by name
+
+
+
+#Links
+sejaBemVindo=Welcome to Cointrade! Register and get to know the most innovative cryptoactive platform in Brazil.
+sejaBemVindoJS="Welcome to Cointrade! Register and get to know the most innovative cryptoactive platform in Brazil. "
+
+
+
+#Options
+
+
+#Tabela
+nome=Name
+email=E-mail
+dataCadastro=Register date
+horaCadastro=Register time
+movimento=Movement
+comissao=Fee (R$)
+valorTotalTb=Total Amount
+
+
+#Sucesso
+
+
+
+##--------------------
+
+#--CONTROLLER
+#Modules\trade\Controllers\Convidados.class.php
+##--
+#Textos da View
+
+
+
+                                                                
+
+#Labels
+
+
+
+#Buttons
+
+
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+
+
+#Tabela
+nenhumConvidado=No guests have registered using your link in the last 180 days.
+
+#Sucesso
+conviteEnviadoSucesso=Invitation sent successfully!
+
+#Erro
+emailCadastradoSistema=E-mail already registered in the system
+
+
+##--------------------
+
+#--FINANCAS
+#Modules\franqueado\views\index_financas.class.php
+##--
+#Textos da View
+totalRecebido=Amount Received
+mesAtual=Current Month
+convitesEnviados=Sent Invitations
+clientesAtivos=Active Customers
+selecionar=Select
+nomeCliente=Customer name
+ganhosPeriodo=Gains in the Period
+dtInicial=Initial Date
+dtFinal=Final Date
+filtro=Filter
+valorePorMes=Amounts received per month
+valorTotalRecebido=Total amount received
+valoresRecebidos=Amount Received
+
+#Buttons
+atualizarGrafico=Update Chart
+
+#--REFERENCIAS
+#Modules\FRANQUIADO\VIEWS\referencias.phtml
+
+##--
+#Textos da View
+referenciasDe={var] referral
+clientesCadastrados=Registered Customers:
+referencias=Referrals:
+adicionarReferencia=Add Referral
+informeEmailCliente=Enter customer's email
+adicionarReferencia=Add Referral
+voltar=Back
+nomeCliente=Customer Name
+email=E-mail
+acao=Action
+
+todos=All
+
+#Buttons
+
+#--INDEX
+#Modules\FRANQUEADO\VIEWS\INDEX_CLIENTES.phtml
+
+##--
+#Textos da View
+compartilheSeuLink=Share your link through the tools below:
+linkDeCadastro=Your referral link is:
+cliqueAquiCopiarLink=Click here and copy your link
+utilizeNossaPlataforma=Use the form below to invite people to the platform, just enter the email and click invite.
+convidar=Invite
+atualizarLista=Update list
+limpar=Clean
+mostrarTodos=Show All
+nome=Name
+dataCadastro=Registration Date
+horaCadastro=Registration Time
+estado=State
+cidade=City
+emailConfirmado=Account Confirmed
+selfie=Selfie
+docPessoal=Personal document
+compEndereco=Proof-of-residence
+financeiro=Financial
+convidados=Guest
+moeda=Coin
+valor=Amount
+vocePodePesquisarPor=You can search by Coin, Date, and Customers using the filters below and clicking Update Chart.
+
+nenhumClienteFiltro=There is no client for the reported filters
+
+
+#--INDEX
+#Modules\FRANQUIADO\VIEWS\CLIENTES.phtml
+
+sejaBemVindo=Welcome to Cointrade! Register and get to know the newest cryptocurrencies platform in the world.
+
+nenhumResultado=Thre are not results for the filter.
+voceAindaNaoPossui=You do not have any indication yet.
+naoConfirmado=Not confirmed
+confirmado=Confirmed
+naoEnviada=Not Sent
+aguardandoAnalise=Waiting for Review
+aprovado=Approved
+
+informacoes=Information:
+oLinkRefManeiraCliente=The referral link is a way for customers to post the Cointrade and earn from the referrals they receive through their referral link.
+recebaAte20Cripto=Receive up to 20% in cryptocurrencies from the fee charged by the exchange in the operations of your referrals.
+convideSeusParceiros=Invite your partners by using your referral link on the side.
+abaixoOperacoes=Below the operations that your partners make and you win:
+compraVendaDireta=Direct purchase and sale of cryptocurrencies.
+compraVendaBook=Buy and Sell in the order book.
+
+

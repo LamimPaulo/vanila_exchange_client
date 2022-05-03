@@ -1,0 +1,345 @@
+<?php $idioma1 = new \Utils\PropertiesUtils("recuperar", IDIOMA);
+$idioma = (isset($_SESSION['lang']) ? $_SESSION['lang'] : "pt-br");
+include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
+?>
+<script src="<?php echo JS; ?>passwordRequirements.min.js"></script>
+<script src="<?php echo TEMA; ?>js/plugins/sweetalert/sweetalert.min.js"></script>
+<script>
+$(document).ready(function () {    
+    
+    $(".pss-token").hide();
+    $(".pss-key").hide();
+    
+    $(".pr-password").passwordRequirements({
+        numCharacters: 8,
+        useLowercase: true,
+        useUppercase: true,
+        useNumbers: true,
+        useSpecial: true
+    });
+
+    
+    
+    
+    $('#form-cadastro').on('submit', function(e){
+
+            var Nome = $('#nome').val(),
+                EmailCadastro = $('#email').val(),
+                Senha =  $('#senha').val(),
+                SenhaConfirmar = $('#senhaConfirmar').val(),
+                TermosAceite = $('#termos').is(':checked'),
+                ReferenciaCadastro = $('#referencia').val(),
+                TesteMail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+            // Caique created 28/06/2019 - validate name
+             var validaNome = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/; 
+             var OK = validaNome.exec(Nome);
+             var stringsNome = Nome.split(" ");
+           
+            if(Nome == '' || Nome == null){
+                showNotyAlert('<?php echo $idioma1->getText("preeenchaNomeCorreto")?>', "w");
+                $('#nome').focus();
+            }
+            // Caique created 28/06/2019 - validate name
+            else if(!OK){
+                showNotyAlert('<?php echo $idioma1->getText("nomeCaracNum")?>', "w");
+                $('#nome').focus();   
+            }
+            else if(stringsNome[1] == null){
+                showNotyAlert('<?php echo $idioma1->getText("porFavorSobrenome")?>', "w");
+                $('#nome').focus();   
+            }
+            //end 28/06/2019
+            else if((!TesteMail.test(EmailCadastro))){
+                showNotyAlert('<?php echo $idioma1->getText("emailCorretamente")?>', "w");
+                $('#email').focus();
+                
+            }else if(!TermosAceite){
+                showNotyAlert('<?php echo $idioma1->getText("voceConcorda")?>', "w");
+                $('#termos').focus();
+            
+            }else if((Senha == '' || Senha == null || Senha < 8) || (SenhaConfirmar == '' || SenhaConfirmar == null || SenhaConfirmar < 8) ||
+                    (Senha !== SenhaConfirmar)){
+                
+                showNotyAlert('<?php echo "Senha inválida." ?>', "w");
+                $('#senha').focus();
+                
+            } else {
+
+                $.ajax({
+                    url: '<?php echo URLBASE_CLIENT . "api/signup" ?>',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        referencia: ReferenciaCadastro,
+                        nome: Nome,
+                        email: EmailCadastro,
+                        senha: btoa(Senha),
+                        confirmarSenha: btoa(SenhaConfirmar),
+                        code: $('#g-recaptcha-response').val()
+                    },
+                    beforeSend: function(){
+                        $('#conta-gratis').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+                    },
+                    success: function (json) {
+                        
+                        try {
+                            if (json.sucesso) {
+                                $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
+                                swal({
+                                    title: "Pronto!",
+                                    text: json.mensagem,
+                                    type: "success",
+                                    showCancelButton: false,
+                                    confirmButtonColor: "#18a689",
+                                    confirmButtonText: "Ok!",
+                                    closeOnConfirm: false
+                                }, function () {
+                                    setTimeout(function () {
+
+                                        window.location.href = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_LOGIN ?>";
+                                    }, 1000);
+
+                                });
+
+
+
+
+                            } else {
+                                reloadCaptcha();
+                                $('#senha').val("");
+                                $('#senhaConfirmar').val("");
+                                showNotyAlert(json.mensagem, "w");
+                                $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
+                            }
+                        } catch (e) {
+                            console.log(e.message)
+                            $('#conta-gratis').html('<?php echo $lang['home14']; ?>');                         
+                            showNotyAlert('Erro ao enviar os dados, tente mais tarde', "w");
+                        }
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+    
+        
+    $('#form-login').on('submit', function(e){
+            var EmailLogin = $('#email_login').val(),
+                SenhaLogin = $('#senha').val(),
+                TesteMail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+
+            if(EmailLogin == ''|| EmailLogin == null){
+                showNotyAlert('<?php echo $idioma1->getText("emailCorretamente")?>', "w");
+                $('#email_login').focus();
+            }else if(SenhaLogin == ''|| SenhaLogin == null){
+                showNotyAlert('<?php echo $idioma1->getText("preenchaSenha")?>', "w");
+                $('#senha').focus();
+            }else{
+                $.ajax({
+                    url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGAR_API ?>',
+                    method: 'post',
+                    dataType: 'json',
+                    data: {
+                        email: EmailLogin,
+                        senha: SenhaLogin,
+                        code: $('#g-recaptcha-response').val()
+                    },
+                    beforeSend: function(){
+                        $('#acessar-painel').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+                    },
+                    success: function (data){
+                        if(data.mensagem){
+                            showNotyAlert(data.mensagem, "w");
+                            $('#email_login').val('');
+                            $('#senha').val('');
+                            $('#acessar-painel').html('<?php echo $lang['modal3']; ?>');
+                            reloadCaptcha();
+                        }else{    
+                            window.location.href = '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGIN ?>/' + data.token;
+                        }
+                    },
+                    error: function(){
+                        showNotyAlert('<?php echo $idioma1->getText("erroDados")?>', "w");
+                        $('#acessar-painel').html('<?php echo $lang['modal3']; ?>');
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+    });
+    
+    function showNotyAlert(mensagem, tipo) {
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            showMethod: 'slideDown',
+            timeOut: 7000,
+            preventDuplicates: true,
+            positionClass: "toast-top-left"
+        };
+        
+        if (tipo === "s") {
+            toastr.success("<?php echo TITULO ?>", mensagem);
+        } else if (tipo === "e") {
+            toastr.error("<?php echo TITULO ?>", mensagem);
+        } else if (tipo === "w") {
+            toastr.warning("<?php echo TITULO ?>", mensagem);
+        }
+
+    }
+
+    function validarDados() {
+        $("#error-msg").hide();
+        $("#btn-send").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_RECOVERVALIDATION?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                email: $("#email").val(),
+                code: $('#g-recaptcha-response').val() 
+            },
+            beforeSend: function(){
+                $('#btn-send').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $('#btn-send').html(' <?php echo $idioma1->getText("recuperarSenha") ?> ');
+                        $(".pss-dados").hide();
+                        $(".pss-key").hide();
+                        $(".pss-token").show();
+                        $("#token").attr("placeholder", json.placeholder);
+                        $("#token").val("");
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        $('#btn-send').html(' <?php echo $idioma1->getText("recuperarSenha") ?> ');
+                        showNotyAlert(json.mensagem, "w");
+                    }
+                } catch (e) {
+                    $('#btn-send').html(' <?php echo $idioma1->getText("recuperarSenha") ?> ');
+                    showNotyAlert(e, "w");
+                }
+                $("#btn-send").prop("disabled", false);
+            }
+        });
+    }
+    
+    function reloadCaptcha(){
+        grecaptcha.reset();
+        desativarBotao();
+    }
+    
+    function desativarBotao(){
+
+        var operacao = $("#google").attr("atrpage");
+        var opcao = true;
+        
+        switch(operacao){
+            case "register":
+                document.getElementById("conta-gratis").disabled = opcao;
+                break;
+            case "login":
+                document.getElementById("acessar-painel").disabled = opcao;
+                break;
+            case "recovery":
+                document.getElementById("btn-send").disabled = opcao;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    function validarBotao(){
+    
+        var operacao = $("#google").attr("atrpage");
+        var opcao = false;
+        
+        switch(operacao){
+            case "register":
+                document.getElementById("conta-gratis").disabled = opcao;
+                break;
+            case "login":
+                document.getElementById("acessar-painel").disabled = opcao;
+                break;
+            case "recovery":
+                document.getElementById("btn-send").disabled = opcao;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    function recuperar() {
+        $("#error-msg").hide();
+        $("#btn-validate").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_AUTHRECOVER ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                email: $("#email").val(),
+                token: $("#token").val()
+            },
+            beforeSend: function(){
+                $('#btn-validate').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+            },        
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $('#btn-validate').html('<?php echo $idioma1->getText("validarToken") ?>');
+                        $(".pss-dados").hide();
+                        $(".pss-token").hide();
+                        $(".pss-key").show();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        $('#btn-validate').html('<?php echo $idioma1->getText("validarToken") ?>');
+                        showNotyAlert(json.mensagem, "w");
+                    }
+                } catch (e) {
+                    $('#btn-validate').html('<?php echo $idioma1->getText("validarToken") ?>');
+                    showNotyAlert(e, "w");
+                }
+                $("#btn-validate").prop("disabled", false);
+            }
+        });
+    }
+    
+    function validar() {
+        $("#error-msg").hide();
+        $("#btn-key").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_RECOVER ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                email: $("#email").val(),
+                key: $("#key").val()
+            },
+            beforeSend: function(){
+                $('#btn-key').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $('#btn-key').html('<?php echo $idioma1->getText("validarChave") ?>');
+                        $(".pss-dados").remove();
+                        $(".pss-token").remove();
+                        $(".pss-key").remove();
+                        showNotyAlert(json.mensagem, "s");
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_LOGIN?>";
+                    } else {
+                        $('#btn-key').html('<?php echo $idioma1->getText("validarChave") ?>');
+                        showNotyAlert(json.mensagem, "w");
+                    }
+                } catch (e) {
+                    $('#btn-key').html('<?php echo $idioma1->getText("validarChave") ?>');
+                }
+                $("#btn-key").prop("disabled", false);
+            }
+        });
+    }   
+
+
+  
+</script>

@@ -1,0 +1,134 @@
+
+<div class="modal fade" id="dialogTaxasCliente" tabindex="-1" role="dialog" aria-labelledby="dialogTaxasCliente" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogTaxasClienteLabel">Taxas Aplicadas ao cliente</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" value="" id="dialogTaxasClienteIdCliente" />
+                <div class="row">
+                    <div class="col col-lg-12" style="max-height: 400px; overflow-y: scroll;">
+                        
+                        
+                        <table class="table table-hover table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Moeda</th>
+                                    <th class="text-center">Taxa Compra Direta (%)</th>
+                                    <th class="text-center">Taxa Compra Indireta (%)</th>
+                                    <th class="text-center">Taxa Venda Direta (%)</th>
+                                    <th class="text-center">Taxa Venda Indireta (%)</th>
+                                    <th class="text-center">Ativar</th>
+                                </tr>
+                            </thead>
+                        
+                            <tbody id="dialogTaxasClienteBody">
+                                
+                            <tbody>
+                                
+                        </table>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogTaxasClienteClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarTaxasCliente();" id="dialogTaxasClienteConfirmar" >Salvar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script>
+    
+    function modalTaxasCliente(cliente) {
+        
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_TAXAS_LISTAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                cliente: cliente
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                        $("#dialogTaxasClienteIdCliente").val(json.cliente.id);
+                        $("#dialogTaxasClienteBody").html(json.html);
+                        $("#dialogTaxasCliente").modal();
+                        
+                        
+                        $(".modal-taxas-clientes-currency").keydown(function (event) {
+                            if (event.keyCode !== 9) {
+                                $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+                                event.preventDefault();
+                            }
+                        });
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+        
+    }
+    
+    function salvarTaxasCliente() {
+        var taxas = [];
+        
+        $(".dialog-taxas-cliente-coin-id").each(function(){
+            var idMoeda = $(this).val();
+            var utilizar = ($(this).is(":checked") ? 1 : 0);
+            var taxaCompraDireta = $("#dialogTaxasClienteTaxaCompraDireta-"+idMoeda).val();
+            var taxaCompraIndireta = $("#dialogTaxasClienteTaxaCompraIndireta-"+idMoeda).val();
+            var taxaVendaDireta = $("#dialogTaxasClienteTaxaVendaDireta-"+idMoeda).val();
+            var taxaVendaIndireta = $("#dialogTaxasClienteTaxaVendaIndireta-"+idMoeda).val();
+            
+            taxas.push(
+                {
+                    idMoeda:idMoeda, 
+                    taxaCompraDireta:taxaCompraDireta,
+                    taxaCompraIndireta:taxaCompraIndireta,
+                    taxaVendaDireta:taxaVendaDireta,
+                    taxaVendaIndireta:taxaVendaIndireta,
+                    utilizar: utilizar
+                }
+            );
+            
+        });
+        
+        $("#dialogTaxasClienteClose, #dialogTaxasClienteConfirmar").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_TAXAS_SALVAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                cliente: $("#dialogTaxasClienteIdCliente").val(),
+                taxas: taxas
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogTaxasClienteClose").prop("disabled", false).trigger("click");
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogTaxasClienteClose, #dialogTaxasClienteConfirmar").prop("disabled", false);
+            }
+        });
+        
+    }
+    
+</script>

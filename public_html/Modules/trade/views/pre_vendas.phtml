@@ -1,0 +1,640 @@
+<?php
+use Utils\Rotas;
+$isAdm = Utils\Geral::isUsuario();
+
+$comunidades = (isset($_data[ "comunidades"]) ? $_data[ "comunidades"] : Array());
+$saldo = (isset($_data[ "saldo"]) ? $_data[ "saldo"] : 0);
+
+$idioma = new \Utils\PropertiesUtils("pre-sales", IDIOMA);
+
+$_data["idiomaMenu"] = $idioma;
+?>
+<style>
+    .border-edit {
+        border: 1px solid #1c84c6 !important;
+    }
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<?php Utils\Layout::append("inspina/breadcrumb", $_data) ?>
+<div class="wrapper wrapper-content  animated fadeInRight">
+    
+    
+        
+    
+    <?php if (Utils\Geral::isUsuario()) { ?>
+    <div class="row">
+        <div class="col col-xs-12 text-center">
+            <button class="btn btn-success btn-lg" type="button" onclick="modalCadastrarPrevenda('<?php echo \Utils\Criptografia::encriptyPostId(0)?>');">
+                <?php echo $idioma->getText("preVendas10") ?>
+            </button>
+        </div>
+    </div>
+    <?php } ?>
+    
+    <?php if (Utils\Geral::isUsuario()) { ?>
+    <div class="row m-t-lg">
+        <div class="col col-xs-12 text-center">
+            <button class="btn btn-primary" type="button" onclick="listarPrevendas();">
+                <?php echo $idioma->getText("preVendas11") ?>
+            </button>
+        </div>
+    </div>
+    <br><br>
+    <?php } ?>
+    
+    <div class="row mt-5" id="lista-prevenda-um"  >
+
+    </div>
+          
+</div>
+
+
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+
+
+<script>
+    
+    $(document).ready(function () {
+        
+        $("#modalAprovarMoedaDataInicial, #modalAprovarMoedaDataFinal").datepicker({format:'dd/mm/yyyy' }).mask("99/99/9999");
+        
+        $("#modalCadastrarIcoForm").ajaxForm({
+            dataType: "json",
+            beforeSubmit: function () {
+                $("#modalCadastrarIcoCancelar, #modalCadastrarIcoConfirmar").prop("disabled", true);
+                $("#modalCadastrarIcoProgressContainer").show();
+                $("#modalCadastrarIcoProgress").width('0%');
+                $("#modalCadastrarIcoProgress").attr('aria-valuenow', 0);
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                $("#modalCadastrarIcoProgress").attr('aria-valuenow', percentComplete);
+                $("#modalCadastrarIcoProgress").width(percentComplete+'%');
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        $("#modalCadastrarIcoCancelar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCadastrarIcoCancelar, #modalCadastrarIcoConfirmar").prop("disabled", false);
+            }
+        });
+        
+        $("#modalCadastrarFaseIcoOrdem").numeric();
+        
+        
+        listarPrevendas();
+    });
+    
+    function modalCadastrarPrevenda(codigo) {
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Rotas::R_PREVENDA_CADASTRO ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                        $("#modalCadastrarIcoId").val(json.ico.id);
+                        $("#modalCadastrarIcoNome").val(json.ico.nome);
+                        $("#modalCadastrarIcoEmailContaCliente").val(json.emailContaCliente);
+                        $("#modalCadastrarIcoSigla").val(json.ico.sigla);
+                        $("#modalCadastrarIcoSite").val(json.ico.site);
+                        $("#modalCadastrarIcoWhitepapper").val(json.ico.whitepaper);
+                        $("#modalCadastrarIcoResponsavel").val(json.ico.responsavel);
+                        $("#modalCadastrarIcoLogo").val("");
+                        $("#modalCadastrarIcoEmail").val(json.ico.email);
+                        $("#modalCadastrarIcoDescricao").val(json.ico.descricao);
+                        $("#modalCadastrarIcoIdMoeda").val(json.ico.idMoeda);
+                        $("#modalCadastrarIcoExibirPublico").prop("checked", json.ico.exibirPublico > 0);
+                        
+                        $("#modalCadastrarIcoProgressContainer").hide();
+                        $("#modalCadastrarIcoProgress").width('0%');
+                        $("#modalCadastrarIcoProgress").attr('aria-valuenow', 0);
+                               
+                        $("#modalCadastrarIco").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    function cadastrar() {
+        $("#modalCadastrarIcoForm").submit();
+    }
+    
+    function listarPrevendas() {
+    
+        $("#lista-prevenda-um").html("<div class='col-lg-12 text-center'> <img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Rotas::R_PREVENDA_LISTAR ?>",
+            method: "post",
+            dataType: "json",
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista-prevenda-um").html(json.html);
+                        
+                        $(".comprar-ico-moeda").change(function () {
+                            var moeda = $(this).children("option:selected").first().html();
+                            var preco = $(this).children("option:selected").first().attr("data-volume");
+                            var id = $(this).attr("data-ico");
+                            
+                            $("#comprar-ico-"+id+"-sigla").html("<?php echo $idioma->getText("preVendas46") ?> "+moeda);
+                            $("#comprar-ico-"+id+"-precoFase").html(preco +" "+moeda);
+                            
+                            getSaldoDisponivel(id);
+                        }).trigger("change");
+                        
+                        
+                        $(".comprar-ico-volume").keydown(function (event) {
+                            var ico = $(this).attr("data-ico");
+                            $(this).val(currency($(this).val(), 8, 8, event.keyCode));
+                            event.preventDefault();
+                            calcularVolumeReceber(ico);
+                        });
+                        
+                    } else {
+                        $("#lista-prevenda-um").html("<div class='col-lg-12 text-center'>"+json.mensagem+"</div>");
+                    }
+                } catch(e) {
+                    $("#lista-prevenda-um").html("<div class='col-lg-12 text-center'>"+e+"</div>");
+                }
+            }
+        });
+    }
+    
+    function calcularVolumeReceber(ico) {
+        var moeda = $("#comprar-ico-"+ico+"-moeda").children("option:selected").first().html();
+        var preco = $("#comprar-ico-"+ico+"-moeda").children("option:selected").first().attr("data-volume");
+        var volume = $("#comprar-ico-"+ico+"-volume").val();
+        
+        preco = parseFloat(typeof preco !== 'undefined' ? preco : 0);
+        volume = parseFloat(typeof volume !== 'undefined' ? volume.replace(",", ".") : 0);
+        
+        var receber = volume / preco;
+        
+        $("#comprar-ico-"+ico+"-receber").html(receber.toFixed(8));
+    }
+    
+    function alterarStatusAtivo(codigo) {
+    
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Rotas::R_PREVENDA_ALTERARSTATUS ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#ico-"+json.codigo).replaceWith(json.html);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch(e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    
+    
+    
+    function modalCadastroFase(ico, fase) {
+    
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Rotas::R_PREVENDA_FASE_CADASTRO ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                id: fase,
+                idIco: ico
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                         
+                        $("#modalCadastrarFaseIcoId").val(json.fase.id);
+                        $("#modalCadastrarFaseIcoIdIco").val(json.fase.idIco);
+                        $("#modalCadastrarFaseIcoNome").val(json.fase.nome);
+                        $("#modalCadastrarFaseIcoOrdem").val(json.fase.ordem);
+                        $("#modalCadastrarFaseIcoTokensVenda").val(json.fase.tokensParaVenda);
+                        $("#modalCadastrarFaseIcoTokensBonus").val(json.fase.bonus);
+                        
+                        $("#modalCadastrarFaseIcoPercentualBonusNewc").val(json.fase.percentualBonusNewc);
+                        $("#modalCadastrarFaseIcoPercentualComissaoExchange").val(json.fase.percentualComissaoExchange);
+                        $("#modalCadastrarFaseIcoPercentualBonusIcoNewcash").val(json.fase.percentualBonusIcoNewcash);
+                        $("#modalCadastrarFaseIco").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    
+    }
+    
+    function salvarFaseIco() {
+        $("#modalCadastrarFaseIcoCancelar, #modalCadastrarFaseIcoConfirmar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Rotas::R_PREVENDA_FASE_SALVAR ?>',
+            method: 'post',
+            dataType: "json",
+            data: {
+                id: $("#modalCadastrarFaseIcoId").val(),
+                idIco: $("#modalCadastrarFaseIcoIdIco").val(),
+                nome: $("#modalCadastrarFaseIcoNome").val(),
+                ordem: $("#modalCadastrarFaseIcoOrdem").val(),
+                tokensParaVenda: $("#modalCadastrarFaseIcoTokensVenda").val(),
+                percentualBonusNewc: $("#modalCadastrarFaseIcoPercentualBonusNewc").val(),
+                percentualComissaoExchange: $("#modalCadastrarFaseIcoPercentualComissaoExchange").val(),
+                percentualBonusIcoNewcash: $("#modalCadastrarFaseIcoPercentualBonusIcoNewcash").val(),
+                bonus: $("#modalCadastrarFaseIcoTokensBonus").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        $("#ico-"+json.codigo).replaceWith(json.html);
+                        $("#modalCadastrarFaseIcoCancelar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCadastrarFaseIcoCancelar, #modalCadastrarFaseIcoConfirmar").prop("disabled", false);
+            }
+        });
+    
+    }
+    
+    
+    function comprarIco(ico) {
+        var moeda = $("#comprar-ico-"+ico+"-moeda").val();
+        var preco = $("#comprar-ico-"+ico+"-moeda").children("option:selected").first().attr("data-volume");
+        var volume = $("#comprar-ico-"+ico+"-volume").val();
+        
+        var val = parseFloat(volume.replace(",", "."));
+        
+        var textoVolume = $("#comprar-ico-"+ico+"-receber").html();
+        var textoMoeda = $("#comprar-ico-"+ico+"-nome-moeda").val();
+        var titulo = "<?php echo $idioma->getText("preVendas58")?> " + textoVolume + " " + textoMoeda;
+        
+        if (val > 0) {
+            swal({
+                title: titulo,
+                text: "<?php echo $idioma->getText("preVendas59")?>" ,
+                type: "success",
+                showCancelButton: true,
+                closeOnConfirm: true,
+                showLoaderOnConfirm: true,
+                confirmButtonColor: "#18a689",
+                confirmButtonText: "<?php echo $idioma->getText("preVendas57")?>",
+                cancelButtonText: "<?php echo $idioma->getText("preVendas14")?>"
+                },
+                function () {
+                    $.ajax({
+                        url: '<?php echo URLBASE_CLIENT  . Rotas::R_PREVENDA_COMPRAR ?>',
+                        dataType: 'json',
+                        method: 'post',
+                        data: {
+                            moeda: moeda,
+                            volume: volume,
+                            ico: ico
+                        },
+                        success: function (json) {
+                            try {
+                                if (json.sucesso) {
+
+
+                                    showNotyAlert(json.mensagem, 's');
+                                } else {
+                                    showNotyAlert(json.mensagem, 'e');
+                                }
+                            } catch (e) {
+                                showNotyAlert(e, 'e');
+                            }
+                        }
+                    });
+                }
+            );
+        } else {
+            swal({
+                title: "<?php echo $idioma->getText("preVendas60")?>",
+                text: "<?php echo $idioma->getText("preVendas61")?>" ,
+                type: "error",
+                closeOnConfirm: true,
+                confirmButtonColor: "#F27474",
+                confirmButtonText: "<?php echo $idioma->getText("preVendas62")?>"
+                }
+            );
+        }
+        
+        
+    }
+    
+    
+    
+    function getSaldoDisponivel(ico) {
+        var moeda = $("#comprar-ico-"+ico+"-moeda").val();
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT  . Rotas::R_PREVENDA_SALDODISPONIVEL ?>',
+            dataType: 'json',
+            method: 'post',
+            data: {
+                moeda: moeda
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#comprar-ico-"+ico+"-saldo").html(json.saldo + " " + json.moeda);
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, 'e');
+                    }
+                } catch (e) {
+                    showNotyAlert(e, 'e');
+                }
+            }
+        });
+        
+    }
+    
+    function setSaldoParaCompra(ico) {
+        var preco = $("#comprar-ico-"+ico+"-saldo").html().split(" ");
+        var p = preco[0].split(",");
+        if (typeof p[1] !== 'undefined') {
+            while (p[1].length < 8) {
+                p[1] += "0";
+                preco[0] += "0";
+            }
+        }
+        $("#comprar-ico-"+ico+"-volume").val(preco[0]).trigger("keydown");
+    }
+    
+</script>
+
+
+<div class="modal inmodal" id="modalCadastrarIco" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                
+                <h4 class="modal-title "><?php echo $idioma->getText("preVendas25") ?></h4>
+            </div>
+            <div class="modal-body">
+                
+                <div class="row">
+                    <div class="col col-xs-12">
+                        <form id="modalCadastrarIcoForm" action="<?php echo URLBASE_CLIENT . Rotas::R_PREVENDA_SALVAR ?>" method="POST" enctype="multipart/form-data">
+                            
+                            <input type="hidden" id="modalCadastrarIcoId" name="modalCadastrarIcoId" value="" />
+                            
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoNome"><?php echo $idioma->getText("preVendas15") ?></label>
+                                <input type="text" id="modalCadastrarIcoNome" name="modalCadastrarIcoName" class="form-control" maxlength="40" />
+                            </div> 
+
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoSigla"><?php echo $idioma->getText("preVendas16") ?></label>
+                                <input type="text" id="modalCadastrarIcoSigla" name="modalCadastrarIcoSigla" class="form-control" maxlength="5" />
+                            </div> 
+                            
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoSite"><?php echo $idioma->getText("preVendas17") ?></label>
+                                <input type="text" id="modalCadastrarIcoSite" name="modalCadastrarIcoSite" class="form-control" maxlength="2000" />
+                            </div> 
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoWhitepapper"><?php echo $idioma->getText("preVendas18") ?></label>
+                                <input type="text" id="modalCadastrarIcoWhitepapper" name="modalCadastrarIcoWhitepapper" class="form-control" maxlength="2000" />
+                            </div> 
+
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoResponsavel"><?php echo $idioma->getText("preVendas19") ?></label>
+                                <input type="text" id="modalCadastrarIcoResponsavel" name="modalCadastrarIcoResponsavel" class="form-control" maxlength="200" />
+                            </div> 
+
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoLogo"><?php echo $idioma->getText("preVendas20") ?></label>
+                                <input type="file" id="modalCadastrarIcoLogo" name="modalCadastrarIcoLogo" class="form-control"  />
+                            </div> 
+
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoEmail"><?php echo $idioma->getText("preVendas21") ?></label>
+                                <input type="text" id="modalCadastrarIcoEmail" name="modalCadastrarIcoEmail" class="form-control" maxlength="200" />
+                            </div> 
+
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoDescricao"><?php echo $idioma->getText("preVendas22") ?></label>
+                                <input type="text" id="modalCadastrarIcoDescricao" name="modalCadastrarIcoDescricao" class="form-control" maxlength="200" />
+                            </div> 
+
+                            
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoIdMoeda"><?php echo $idioma->getText("preVendas23") ?></label>
+                                <select id="modalCadastrarIcoIdMoeda" name="modalCadastrarIcoIdMoeda" class="form-control">
+                                    <?php 
+                                    foreach ($moedas as $moeda) {
+                                        ?>
+                                        <option value="<?php echo \Utils\Criptografia::encriptyPostId($moeda->id) ?>"><?php echo $moeda->nome ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div> 
+                            
+                            <div class="form-group">
+                                <label for="modalCadastrarIcoEmailContaCliente"><?php echo $idioma->getText("preVendas51") ?></label>
+                                <input type="text" id="modalCadastrarIcoEmailContaCliente" name="modalCadastrarIcoEmailContaCliente" class="form-control" maxlength="200" />
+                                <p class="text-muted"><?php echo $idioma->getText("preVendas52") ?></p>
+                            </div> 
+                            
+                            <div class="form-group">
+                                <div class="checkbox m-r-xs">
+                                    <input type="checkbox" id="modalCadastrarIcoExibirPublico" name="modalCadastrarIcoExibirPublico">
+                                    <label for="modalCadastrarIcoExibirPublico" >
+                                        <?php echo $idioma->getText("preVendas24") ?>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        <div class="form-group" id="modalCadastrarIcoProgressContainer">
+                                <div class="progress progress-bar-default">
+                                    <div style="width: 0%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" class="progress-bar" id="modalCadastrarIcoProgress">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-6 col-xs-12 m-t-xs">
+                    <button type="button" class="btn btn-white full-width" data-dismiss="modal" id="modalCadastrarIcoCancelar"><?php echo $idioma->getText("preVendas14") ?></button>
+                </div>
+                <div class="col-lg-6 col-xs-12 m-t-xs">
+                    <button type="button" class="btn btn-success full-width" onclick="cadastrar();"  id="modalCadastrarIcoConfirmar"><?php echo $idioma->getText("preVendas13") ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal inmodal" id="modalCadastrarFaseIco" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                
+                <h4 class="modal-title "><?php echo $idioma->getText("preVendas31") ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-xs-12">
+                            
+                        <input type="hidden" id="modalCadastrarFaseIcoIdIco" name="modalCadastrarFaseIcoIdIco" value="" />
+                        <input type="hidden" id="modalCadastrarFaseIcoId" name="modalCadastrarFaseIcoId" value="" />
+
+                        <div class="form-group">
+                            <label for="modalCadastrarFaseIcoNome"><?php echo $idioma->getText("preVendas27") ?></label>
+                            <input type="text" id="modalCadastrarFaseIcoNome" name="modalCadastrarFaseIcoName" class="form-control" maxlength="40" />
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="modalCadastrarFaseIcoOrdem"><?php echo $idioma->getText("preVendas28") ?></label>
+                            <input type="text" id="modalCadastrarFaseIcoOrdem" name="modalCadastrarFaseIcoOrdem" class="form-control" maxlength="5" />
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="modalCadastrarFaseIcoTokensVenda"><?php echo $idioma->getText("preVendas29") ?></label>
+                            <input type="text" id="modalCadastrarFaseIcoTokensVenda" name="modalCadastrarFaseIcoTokensVenda" class="form-control" maxlength="2000" />
+                        </div> 
+                         
+                        <div class="form-group">
+                            <label for="modalCadastrarFaseIcoTokensBonus"><?php echo $idioma->getText("preVendas30") ?></label>
+                            <input type="text" id="modalCadastrarFaseIcoTokensBonus" name="modalCadastrarFaseIcoTokensBonus" class="form-control" maxlength="2000" />
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="modalCadastrarFaseIcoPercentualBonusNewc"><?php echo $idioma->getText("preVendas53") ?></label>
+                            <input type="text" id="modalCadastrarFaseIcoPercentualBonusNewc" name="modalCadastrarFaseIcoPercentualBonusNewc" class="form-control" maxlength="2000" />
+                        </div> 
+                        
+                        <div class="form-group">
+                            <label for="modalCadastrarFaseIcoPercentualComissaoExchange"><?php echo $idioma->getText("preVendas54") ?></label>
+                            <input type="text" id="modalCadastrarFaseIcoPercentualComissaoExchange" name="modalCadastrarFaseIcoPercentualComissaoExchange" class="form-control" maxlength="2000" />
+                        </div> 
+                        
+                        <div class="form-group">
+                            <label for="modalCadastrarFaseIcoPercentualBonusIcoNewcash"><?php echo $idioma->getText("preVendas55") ?></label>
+                            <input type="text" id="modalCadastrarFaseIcoPercentualBonusIcoNewcash" name="modalCadastrarFaseIcoPercentualBonusIcoNewcash" class="form-control" maxlength="2000" />
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-6 col-xs-12 m-t-xs">
+                    <button type="button" class="btn btn-white full-width" data-dismiss="modal" id="modalCadastrarFaseIcoCancelar"><?php echo $idioma->getText("preVendas14") ?></button>
+                </div>
+                <div class="col-lg-6 col-xs-12 m-t-xs">
+                    <button type="button" class="btn btn-success full-width" onclick="salvarFaseIco();"  id="modalCadastrarFaseIcoConfirmar"><?php echo $idioma->getText("preVendas13") ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="modalCadastrarTabelaIco" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                
+                <h4 class="modal-title "><?php echo $idioma->getText("preVendas31") ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-xs-12">
+                            
+                        <input type="hidden" id="modalCadastrarFaseIcoIdIco" name="modalCadastrarFaseIcoIdIco" value="" />
+                        <input type="hidden" id="modalCadastrarFaseIcoId" name="modalCadastrarFaseIcoId" value="" />
+
+                        <div class="form-group">
+                            <label for="modalCadastrarTabelaIcoMoeda"><?php echo $idioma->getText("preVendas27") ?></label>
+                            <select class="form-control" id="modalCadastrarTabelaIcoMoeda" name="modalCadastrarTabelaIcoMoeda" >
+                                <?php 
+                                foreach ($moedas as $moeda) {
+                                    ?>
+                                    <option value="<?php echo \Utils\Excecao::mensagem($moeda->id) ?>"><?php echo $moeda->nome ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div> 
+                        
+                        <table>
+                            <thead>
+                            </thead>
+                        </table>
+                        
+                        <div class="form-group">
+                            <label for="modalCadastrarTabelaIcoPreco"><?php echo $idioma->getText("preVendas29") ?></label>
+                            <input type="text" id="modalCadastrarTabelaIcoPreco" name="modalCadastrarTabelaIcoPreco" class="form-control" maxlength="2000" />
+                        </div> 
+                        
+                        <div class="form-group">
+                            <label for="modalCadastrarFaseIcoOrdem"><?php echo $idioma->getText("preVendas28") ?></label>
+                            <input type="text" id="modalCadastrarFaseIcoOrdem" name="modalCadastrarFaseIcoOrdem" class="form-control" maxlength="5" />
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="modalCadastrarFaseIcoTokensBonus"><?php echo $idioma->getText("preVendas30") ?></label>
+                            <input type="text" id="modalCadastrarFaseIcoTokensBonus" name="modalCadastrarFaseIcoTokensBonus" class="form-control" maxlength="2000" />
+                        </div> 
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-6 col-xs-12 m-t-xs">
+                    <button type="button" class="btn btn-white full-width" data-dismiss="modal" id="modalCadastrarTabelaIcoCancelar"><?php echo $idioma->getText("preVendas14") ?></button>
+                </div>
+                <div class="col-lg-6 col-xs-12 m-t-xs">
+                    <button type="button" class="btn btn-success full-width" onclick="salvarFaseIco();"  id="modalCadastrarTabelaIcoConfirmar"><?php echo $idioma->getText("preVendas13") ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

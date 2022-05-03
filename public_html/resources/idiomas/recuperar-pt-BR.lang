@@ -1,0 +1,51 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#Recuperar
+#
+#
+#--VIEW
+#Modules\acesso\views\recuperar.phtml
+##--
+#Textos da View
+newCashRecuperar=Cointrade - Recuperação de Senha
+validarCodigo=Validar o código
+
+
+#Labels
+
+#Buttons
+recuperarSenha=Recuperar Senha
+validarToken=Validar Token
+validarChave=Validar Chave
+
+#Placeholder
+codEnviadoEmail=Código enviado por e-mail
+digiteEmailCadastrado=Digite o e-mail cadastrado
+googleAutherticator=Google Authenticator
+codigoPorSMS=Código enviado por SMS
+coleChave=Cole sua chave aqui
+
+#Links
+entrar=Entrar
+recuperarChave=Recuperar Chave
+reenviarToken=Reenviar Token
+
+
+preeenchaNomeCorreto=Preencha seu nome corretamente.
+nomeCaracNum=O nome não deve conter caracteres especiais e números.
+porFavorSobrenome=Por favor, informe um sobrenome.
+emailCorretamente=Preencha o e-mail corretamente.
+voceConcorda=Você concorda com os Termos e Condições?
+preenchaSenha=Por favor, digite sua senha.
+emailCorretamente=Preencha o e-mail corretamente.
+erroDados=Erro ao enviar os dados, tente mais tarde.
+cadastroSucesso=Cadastro efetuado com sucesso! Um e-mail foi enviado para
+
+cadastrar=Cadastrar
+
+
+##--
+
+

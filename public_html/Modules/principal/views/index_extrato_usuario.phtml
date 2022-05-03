@@ -1,0 +1,184 @@
+<?php
+$usuario = isset($_data["usuario"]) ? $_data["usuario"] : new \Models\Modules\Cadastro\Usuario();
+$ref = isset($_data["ref"]) ? $_data["ref"] : null;
+
+$sucesso =  isset($_data["sucesso"]) ? $_data["sucesso"] : false;
+$mensagems =  isset($_data["mensagem"]) ? $_data["mensagem"] : "";
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+
+
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Extrato</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            Dashboards
+                        </li>
+                        <li class="active">
+                            <strong>Extrato</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <?php if ($sucesso) { ?>
+
+        <div class="row">
+            <div class="col col-lg-12 ">
+                <div class="show-grid ">
+                    <div class="col-lg-12 box box-default color-palette-box">
+                        <div class="col col-lg-6">
+                            Usuário: <?php echo $usuario->nome ?>
+                        </div>
+                        <div class="col col-lg-6">
+                            Email: <?php echo $usuario->email ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-lg-12" id="listaClientes">
+
+            </div>
+        </div>
+
+        <?php } else { ?>
+        <div class="row">
+            <div class="col col-lg-12">
+                <div class="alert alert-danger">
+                    Erro: <?php echo $mensagem ?>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+    
+<script>
+
+    $(document).ready(function () {
+        carregarExtrato();
+
+
+    });
+
+    function carregarExtrato() {
+        $("#listaClientes").html("<div class='col col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DASHBOARD_REFERENCIAS_EXTRATO ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                id: <?php echo $usuario->id ?>,
+                ref: '<?php echo $ref ?>'
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaClientes").html(json.html);
+
+
+                        $(".real").keydown(function(event) {
+                            $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+                            event.preventDefault();
+                        });
+
+                        $(".btc").keydown(function(event) {
+                            $(this).val(currency($(this).val(), 8, 16, event.keyCode));
+                            event.preventDefault();
+                        });
+
+                    } else {
+                        $("#listaClientes").html("<div class='col col-lg-12 text-center'>"+json.mensagem+"</div>");
+                    }
+                } catch (e) {
+                    $("#listaClientes").html("<div class='col col-lg-12 text-center'>"+e+"</div>");
+                }
+            }
+        });
+    }
+
+    function dialogPagamentoComissao(idCliente) {
+        $("#confirmarPagamento").modal();
+        $("#confirmarPagamentoIdCliente").val(idCliente);
+    }
+
+    function confirmarPagamento() {
+        $("#confirmarPagamentoFechar, #confirmarPagamentoSalvar").prop("disabled", true);
+        var idCliente = $("#confirmarPagamentoIdCliente").val();
+        var r = $("#real-cliente-"+idCliente).val();
+        var b = $("#btc-cliente-"+idCliente).val();
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DASHBOARD_REFERENCIAS_PAGAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                ref: '<?php echo $ref ?>',
+                u: <?php echo $usuario->id ?>,
+                idCliente: idCliente,
+                r: r,
+                b: b
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cliente-"+idCliente).replaceWith(json.html);
+                        $("#confirmarPagamentoFechar").prop("disabled", false).trigger("click");
+                        $("#valorTotalPago").html("<strong>R$ "+json.valorTotalPago+"</strong>");
+                        $("#btcTotalPago").html("<strong>BTC "+json.btcTotalPago+"</strong>");
+                    }
+                    showNotyAlert(json.mensagem, "e");
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#confirmarPagamentoFechar, #confirmarPagamentoSalvar").prop("disabled", false);
+            }
+        });
+    }
+
+</script>
+    
+<div class="modal fade" id="confirmarPagamento" tabindex="-1" role="dialog" aria-labelledby="confirmarPagamento" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="confirmarPagamentoLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="confirmarPagamentoIdCliente" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        Tem certeza que deseja assinalar como paga a comissão referente ao cliente selecionado?
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="confirmarPagamentoFechar" data-dismiss="modal">Não</button>
+                <button type="button" class="btn btn-primary" onclick="confirmarPagamento();" id="confirmarPagamentoSalvar" >Sim</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

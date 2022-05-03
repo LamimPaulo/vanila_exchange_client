@@ -1,0 +1,207 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#BOLETO
+#
+#
+#--VIEW
+#Modules\servicos\views\boletos.phtml
+##--
+#Textos da View
+titulo=Pago de Boletos
+subTitulo=Servicios
+abaBoleto=Boleto
+abaExtrato=Extracto
+abaCalendario=Calendario
+abaBoletoCategoria=Boleto por Categoría
+abaBoletoMes=Boleto por Mes
+abaBoletoMesCategoria=Boleto por Mes / Categoría
+marcarBoletoDesejaContinuar=Marcar el boleto como finalizado significa haber efectuado el pago del mismo ante una institución financiera
+desejaContinuar=¿Desea confirmar el pago del boleto?
+cancelarBoleto=Cancelar Boleto
+desejaRealmenteCancelar=¿Desea realmente cancelar el boleto?
+motivoCancelamento=Motivo de la cancelación
+pagarBoleto=Pagar Boleto
+valorDoBoletoSeraDebitado=El valor del boleto será debitado de su saldo. ¿Desea continuar?
+pagamentoEfetuado=Pago Efectuado
+recebemosSeuPagamento=Recibimos su pago. El boleto será pagado en un plazo máximo de 1 dia hábil.
+                                                                
+
+#Labels
+dtInicial=Fecha Inicial
+dtFinal=Fecha Final
+registros=Registros
+filtroGeral=Filtro General
+instituicaoBancaria=Institución bancaria del boleto
+categoriaServico=Categoria de servicio
+infPagamentoBoleto=Información para el pago de boleto:
+valorLb=Valor del boleto
+txCobradaBoleto=Tasa cobrada por boleto:
+vencimentoBoleto=Vencimiento del boleto
+emailNotificacao=E-mail para notificación
+pagamentoRealizadoDiaUtil=El pago será realizado máximo en 1 día hábil.
+saldoSeraDebitado=El saldo será debitado al momento del registro del boleto.
+anexeFotoBoleto=Adjunte una foto o PDF del boleto
+codigoBarras=Código de barras
+cpfNf=Documento Fiscal en la Nota Fiscal?
+seraDebitadoSuaConta=Será debitado de su cuenta:
+tipoData=Tipo de fecha
+dataPagamento=Fecha pago
+dataCadastro=Fecha registro
+lancamentosRegistrados=Novedades Registrados
+graficoBoletoCategoria='Gráfico de Boletos por Categoría'
+enviosPorMes='Pagos de Boletos Por Mes'
+graficoEnviosMesCategorias='Gráfico de Boletos Por Mes e Categorías'
+marcarBoletoFinalizado=Marcar Boleto Como Finalizado
+anexarComprovante=Adjuntar comprobante
+inserirComentarios=Insertar comentarios
+valorMaxCaracteres=Valor máximo de caracteres: 
+
+
+#Buttons
+limpar=Limpiar
+reenviar=Reenviar
+cancelar=Cancelar
+confirmaTransacaoBtn=Confirma Transação
+cadastrarBtn=Cadastrar
+voltarBtn=Volver
+atualizarGrafico=Actualizar Gráfico
+fecharBtn=Cerrar
+confirmarFinalizacao=Confirmar Finalización
+cancelarPagamento=Cancelar Pago
+filtro=Filtro
+cadastroCategoriaBtn=Registro de Categorías de Servicio
+pagarBoletoBtn=Pagar Boleto
+
+
+#inputs
+selecionar=Seleccionar
+alterar=Modificar
+remover=Eliminar
+
+
+#Placeholder
+
+
+#Links
+verComprovante=Ver comprobante adjunto.
+
+
+#Options
+aguardOp=En espera
+cancelOp=Cancelado
+finalizadoOp=Finalizado
+todosOp=Todos
+selecioneContaCadastradaOp=Seleccione una cuenta registrada
+selecioneBancoOp=Seleccione un banco
+selecioneTipoConta=Seleccione un tipo de cuenta
+contaCorrente=Cuenta Corriente
+selecioneCategoriaServico=Seleccione una categoría para el servicio
+dataVencimento=Fecha vencimiento
+
+
+
+#Tabela
+controle=Control
+status=Status
+data=Fecha Registro
+acao=Acción
+cliente=Cliente
+taxa=Tasa
+valor=Valor
+destinatario=Destinatario
+titular=Titular
+contaBancaria=Cuenta Bancaria
+creditado=Acreditado
+comprovante=Comp.
+nf=Nota Fiscal
+comentarios=Comentarios
+dtPagamento=Fecha Pago Pagamento
+vencimento=Vencimiento
+boleto=Boleto
+codBarras= Cód. Barras
+
+
+
+
+##--------------------
+
+##--CONTROLLER 1
+#Modules\servicos\Controllers\Boletos.class.php
+#--
+
+#Textos da View
+
+
+#Labels
+nomeClienteC=Nombre Cliente:
+controleC=Control:
+nomeTitularC=Nombre Titular:
+cpfCnpjC=Documento Fiscal:
+dataCadastroC=Fecha Registro:
+dataVencimentoC=Fecha Vencimiento:
+operacaoC=Operación:
+valorTaxaC=Valor Tasa:
+valorSerTransferidoC=Valor a ser transferido:
+notaFiscalC=Nota Fiscal:
+valorC=Valor
+codigoBarrasC=Código de Barras:
+comentariosC=Comentario:
+simC=Si
+naoC=No
+cadastroBoleto=Registro de Boleto:
+boletoVencendo=Boleto Ganador:
+boletoPago=Boleto Pago: 
+boletoCancelado=Boleto Cancelado:
+codBarrasC=Cód. Barras
+comentarioC=Comentario
+boletoCanceladoC=Boleto Cancelado
+
+
+
+#Buttons
+informarPagamentoBtn=Informar Pago
+cancelarClienteC=Cancelar
+cancelarAdmC=Cancelar
+
+
+#Placeholder
+
+
+#Links
+
+
+#tabela
+nenhumaBoletoEncontrado=Ningún boleto encontrado según los datos ingresados
+
+#Sucesso
+boletoRegistradoSucesso=Boleto registrado con éxito!
+boletoFinalizadoSucesso=Boleto finalizado con éxito!
+boletoCanceladoSucesso=Boleto cancelado con éxito!
+
+
+#Erros
+dtInicialInvalida=Fecha inicial inválida.
+dtFinalInvalida=Fecha final inválida.
+dtInicialMenorDtFinal=La data inicial no puede ser mayor que la fecha final.
+voceNaoTemPermissaoAlterar=No tiene permiso para modificar los datos del boleto.
+voceNaoTemPermissaoCadastrar=No tiene permiso para registrar boletos.
+naoPossivelEfetuarBoleto=No es posible efectuar el cobro del boleto por el momento. Por favor, intente nuevamente más tarde.
+erroEnviarEmail=Error al enviar el e-mail al cliente.
+invoiceNaoLocalizada=Invoice no localizado en el sistema.
+boletoNaoLocalizada=Boleto no localizado en el sistema.
+boletoNaoPodeSerPago=El boleto no puede ser pagado.
+boletoNaoCancelado=Boleto no fue cancelado.
+
+##--
+
+
+##--------------------
+
+
+
+
+
+
+

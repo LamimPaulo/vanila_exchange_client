@@ -1,0 +1,265 @@
+
+
+<div class="modal fade" id="cadastroGlobalNotificacoes" tabindex="-1" role="dialog" aria-labelledby="cadastroGlobalNotificacoes" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="cadastroGlobalNotificacoesLabel"></h4>
+            </div>
+            <div class="modal-body">
+                
+                <div class="row">
+                    <div class="col col-lg-2">
+                        <div class="switch">
+                            <div class="onoffswitch">
+                                <input type="checkbox"  class="onoffswitch-checkbox" id="cadastroGlobalNotificacoesClientes">
+                                <label class="onoffswitch-label" for="cadastroGlobalNotificacoesClientes">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-lg-10">
+                        Enviar para todos os clientes
+                    </div>
+                </div>
+                
+                <div class="row cadastro-global-notificacoes-clientes" >
+                    <div class="col col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                
+                                <div class="row">
+                                    <div class="col col-lg-10">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" id="cadastroGlobalNotificacoesFiltroCliente" placeholder="CPF ou E-mail" />
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-2">
+                                        <button class="btn btn-primary" type="button" onclick="notificationPesquisarCliente();">
+                                            Buscar
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col col-lg-12">
+                                        <ul class="list-group" id="cadastroGlobalNotificacoesListaClientes">
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                
+                
+                <div class="row">
+                    <div class="col col-lg-2">
+                        <div class="switch">
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="cadastroGlobalNotificacoesUsuarios">
+                                <label class="onoffswitch-label" for="cadastroGlobalNotificacoesUsuarios">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-lg-10">
+                        Enviar para todos os usuários
+                    </div>
+                </div>
+                
+                
+                <div class="row cadastro-global-notificacoes-usuarios">
+                    <div class="col col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                 <div class="row">
+                                    <div class="col col-lg-12">
+                                        <div class="form-group">
+                                            <label>Selecione os usuários que receberão a mensagem</label>
+                                            <select  class="form-control" style="width: 100%;" multiple="true"   id="cadastroGlobalNotificacoesIdsUsuarios">
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label>Tipo de notficação</label>
+                            <select class="form-control" id="cadastroGlobalNotificacoesTipo" >
+                                <option value="s">Sucesso</option>
+                                <option value="e">Erro</option>
+                                <option value="w">Aviso</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label>Mensagem</label>
+                            <textarea class="form-control" id="cadastroGlobalNotificacoesMensagem"></textarea>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="cadastroGlobalNotificacoesFechar" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="notificationGlobalSalvar();" id="cadastroGlobalNotificacoesSalvar" >Enviar Mensagens</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<script>
+    
+    $(document).ready(function () {
+        $("#cadastroGlobalNotificacoesIdsUsuarios").select2();
+        
+        var radioUsuarios = $("#cadastroGlobalNotificacoesUsuarios");
+        var radioClientes = $("#cadastroGlobalNotificacoesClientes");
+        //new Switchery(radioUsuarios, { color: '#1AB394' });
+        //new Switchery(radioClientes, { color: '#1AB394' });
+        
+        
+        $("#cadastroGlobalNotificacoesClientes").change(function () {
+            if ($(this).is(":checked")) {
+                $(".cadastro-global-notificacoes-clientes").hide();
+            } else {
+                $(".cadastro-global-notificacoes-clientes").show();
+            }
+        }).trigger("change");
+        
+        
+        $("#cadastroGlobalNotificacoesUsuarios").change(function () {
+            if ($(this).is(":checked")) {
+                $(".cadastro-global-notificacoes-usuarios").hide();
+            } else {
+                $(".cadastro-global-notificacoes-usuarios").show();
+            }
+        }).trigger("change");
+        
+    });
+    
+    function modalCadastroGlobalNotificacoes(){
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_NOTIFICACOES_CADASTRO ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroGlobalNotificacoesIdsUsuarios").html(json.usuarios).trigger("change");
+                        $("#cadastroGlobalNotificacoesClientes").prop("checked", false).trigger("change");
+                        $("#cadastroGlobalNotificacoesUsuarios").prop("checked", false).trigger("change");
+                        $("#cadastroGlobalNotificacoesListaClientes").html("");
+                        $("#cadastroGlobalNotificacoesFiltroCliente").val("");
+                        $("#cadastroGlobalNotificacoesTipo").val("s"),
+                        $("#cadastroGlobalNotificacoesMensagem").val("Olá, \n"
+                                +"Por gentileza, enviar novamente os documentos rejeitados e preencha todos os campos do formulário.\n"
+                                +"\n"        
+                                +"Obrigado,\n"
+                                +"Time Cointrade!");
+                        $("#cadastroGlobalNotificacoes").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch(e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+        
+    }
+    
+    
+    function notificationPesquisarCliente() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_NOTIFICACOES_CLIENTE_BUSCAR ?>',
+            dataType: 'json',
+            method: 'post',
+            data: {
+                filtro : $("#cadastroGlobalNotificacoesFiltroCliente").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroGlobalNotificacoesCliente" + json.cliente.codigo).remove();
+                        $("#cadastroGlobalNotificacoesListaClientes").append(json.html);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    console.log(e);
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function notificationRemoverCliente(codigo) {
+        $("#cadastroGlobalNotificacoesCliente" + codigo).remove();
+    }
+    
+    
+    function notificationGlobalSalvar() {
+        
+        var idsClientes = [];
+        $(".cadastroGlobalNotificacoesIdsClientes").each(function () {
+            idsClientes.push($(this).val());
+        });
+        
+        $("#cadastroGlobalNotificacoesFechar").prop("disabled", true);
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_NOTIFICACOES_SALVAR ?>',
+            dataType: 'json',
+            method: 'post',
+            data: {
+                idsUsuarios : $("#cadastroGlobalNotificacoesIdsUsuarios").val(),
+                idsClientes : idsClientes,
+                tipo : $("#cadastroGlobalNotificacoesTipo").val(),
+                mensagem : $("#cadastroGlobalNotificacoesMensagem").val(),
+                usuarios : ($("#cadastroGlobalNotificacoesUsuarios").is(":checked") ? 1 : 0),
+                clientes : ($("#cadastroGlobalNotificacoesClientes").is(":checked") ? 1 : 0)
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroGlobalNotificacoesFechar").prop("disabled", false).trigger("click");
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    console.log(e);
+                    showNotyAlert(e, "e");
+                }
+                $("#cadastroGlobalNotificacoesFechar").prop("disabled", false);
+            }
+        });
+    }
+</script>

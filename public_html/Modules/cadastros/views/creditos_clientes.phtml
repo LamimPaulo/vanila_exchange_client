@@ -1,0 +1,125 @@
+
+<div class="modal fade" id="dialogCreditosCliente" tabindex="-1" role="dialog" aria-labelledby="dialogCreditosCliente" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogCreditosClienteLabel">Créditos Aplicados ao cliente</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" value="" id="dialogCreditosClienteIdCliente" />
+                <div class="row">
+                    <div class="col col-lg-12" style="max-height: 400px; overflow-y: scroll;">
+                        
+                        
+                        <table class="table table-hover table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Moeda</th>
+                                    <th class="text-center">Crédito</th>
+                                    <th class="text-center">Ativo</th>
+                                </tr>
+                            </thead>
+                        
+                            <tbody id="dialogCreditosClienteBody">
+                                
+                            <tbody>
+                                
+                        </table>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogCreditosClienteClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarCreditosCliente();" id="dialogCreditosClienteConfirmar" >Salvar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script>
+    
+    function modalCreditosCliente(cliente) {
+        
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_CREDITOS_LISTAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                cliente: cliente
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                        $("#dialogCreditosClienteIdCliente").val(json.cliente.id);
+                        $("#dialogCreditosClienteBody").html(json.html);
+                        $("#dialogCreditosCliente").modal();
+                        
+                        
+                        $(".modal-creditos-clientes-currency").keydown(function (event) {
+                            if (event.keyCode !== 9) {
+                                $(this).val(currency($(this).val(), 8, 8, event.keyCode));
+                                event.preventDefault();
+                            }
+                        });
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+        
+    }
+    
+    function salvarCreditosCliente() {
+        var moedas = [];
+        
+        $(".moedaCreditoCliente").each(function(){
+            var moeda = $(this).val();
+            var ativo = ($("#moedaCreditoClienteAtivo"+moeda).is(":checked") ? 1 : 0);
+            var credito = $("#moedaCreditoClienteCredito"+moeda).val();
+            
+            moedas.push(
+                {
+                    moeda:moeda, 
+                    ativo:ativo,
+                    credito:credito
+                }
+            );
+            
+        });
+        
+        $("#dialogCreditosClienteClose, #dialogCreditosClienteConfirmar").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_CREDITOS_SALVAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                cliente: $("#dialogCreditosClienteIdCliente").val(),
+                moedas: moedas
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogCreditosClienteClose").prop("disabled", false).trigger("click");
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogCreditosClienteClose, #dialogCreditosClienteConfirmar").prop("disabled", false);
+            }
+        });
+        
+    }
+    
+</script>

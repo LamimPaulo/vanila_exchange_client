@@ -1,0 +1,229 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#COFRE
+#
+#--VIEW
+#Modules\cofre\views\cofre.phtml
+##--
+#Textos da View
+titulo=Investimento
+subTitulo=Financeiro
+saldoAtual=Saldo investido
+meusInvestimentos=Meus Investimentos
+informUsoCofre=Informações para uso do cofre
+comissaoDoCofre=A comissão do cofre é de 3% ao mês (tarifado diariamente).
+saqueDoCofre=O saque do cofre tem o prazo de 5 dias úteis para ser creditado na conta do cliente.
+solicitacoesPendentes=Solicitações Pendentes
+confirmarTransacao=Confirmar transação
+resgatePode=O resgate pode ser solicitado a qualquer momento, sem penalidade.
+rendimentoMoeda=O rendimento é na mesma moeda da aplicação.
+
+
+
+#Labels
+volumeDepositar=Volume a Depositar
+informeToken=Informe o Token: 
+informePin=Informe o seu PIN:
+
+utilizarSaldo=Meu Saldo
+confirmaTransacao=Confirmar Transação
+informToken=Informe o Token:
+informPin=Informe o seu PIN:
+reenviar=Reenviar
+cancelar=Cancelar
+confirmar=Confirmar
+
+ultimosDias=Últimos Dias
+moeda=Moeda
+dias=dias
+todas=Todas
+saldoConsolidado=Saldo consolidado
+
+info1=Informações e regras sobre o investimento:
+info2=O rendimento é de {var1}% a cada 30 dias sobre o valor aplicado e é creditado na sua conta diariamente.
+info3=O resgate tem prazo de {var1} dias úteis para ser liberado.
+info4=A qualquer momento você pode resgatar o valor investido.
+info5=O prazo dos contratos de investimento é de {var1} dias, e o valor investido é resgatado para a conta automaticamente ao final deste ciclo.
+info6=Investir em
+info7=Rendimentos
+rendimentosPagoDiariamente=Os seus rendimentos são pagos diariamente.
+info8=Recebido
+
+#Buttons
+guardar=Investir
+sacar=Resgatar
+reenviar=Reenviar
+cancelar=Cancelar
+confirmar=Confirmar
+filtrar=Filtrar
+
+#inputs
+
+
+
+#Placeholder
+
+
+
+#Links
+
+
+
+
+#Options
+
+
+#Tabela
+icone=Ícone
+moeda=Moeda
+dataSolicitacao=Data da Solicitação
+volume=Volume
+previsao=Previsão
+
+dataDeposito=Entrada
+saldoDepositado=Investido
+vencimentoContrato=Vencimento
+saldoRendimentos=Rendimentos
+saldoTotal=Total
+
+
+#Sucesso
+foiEnviadoTokenEmailCel="Foi enviado um token de confirmação para o seu e-mail e celular"
+
+
+
+##--------------------
+
+#--CONTROLLER
+#Modules\Cofre\Controllers\Cofre.class.php
+##--
+#Textos da View
+foiEnviadoEmail=Foi enviado um token de confirmação para o seu e-mail 
+porFavorInsiraTokenEmail=. Por favor, insira o token abaixo para efetuar a transação.
+foiEnviadoSms=Foi enviado um token de confirmação para o seu celular
+porFavorInsiraTokenSms=. Por favor, insira o token abaixo para efetuar a transação.
+useGoogle=Por favor, use seu Google Authenticator para inserir o token abaixo.
+modalDepositarSaldoAtual=O seu saldo atual é de
+
+                                                                
+
+#Labels
+
+
+
+#Buttons
+
+
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+
+
+#Tabela
+nenhumaSolicitacao=Nenhuma solicitação de retirada ou depósito no momento.
+
+
+#Sucesso
+depositoSucesso=Depósito efetuado com sucesso!
+retiradaSucesso=Retirada solicitada com sucesso!
+
+#Erro
+precisaCadastrarPin=Você precisa cadastrar um PIN para efetuar essa operação. Acesso o perfil e configure seu PIN de segurança.
+pinDeveSerInformado=O PIN deve ser informado
+tokenDeveSerInformado=O TOKEN deve ser informado
+pinInvalido=PIN inválido
+
+
+##--------------------
+
+cofreTextoSaldoCCMoeda=Saldo disponível para investimento:
+cofreModalDepositoLabelDescricao=Descrição (Opcional)
+cofreModalDepositoOpcaoDescricao=Desejo adicionar uma descrição ao lançamento.
+cofreTabelaMeusInvestimentosControle=Contrato
+descricao=Descrição
+meuHistoricoRendimentos=Histórico de pagamentos
+meuHistoricoNenhumRendimentos=Ainda não há pagamentos em sua conta.
+
+#Tabela histórico rendimentos
+rendimentosData=Data Pagamento
+rendimentosMoeda=Moeda
+rendimentosDescricao=Descrição
+rendimentosValor=Valor
+
+tempo=Tempo do Investimento (Meses)
+lucro=Rendimento Por Mês
+
+meses=Meses
+mes=Mês
+
+informacoes=INFORMAÇÕES
+
+invest1=Durante
+invest2=Investimento
+invest3=Após o período de
+invest4=meses/mês você terá o volume de
+invest5=Extrato do Cliente
+invest6=Meus Investimentos
+invest7=Tempo e Rendimento:
+invest8=Calculadora
+invest9=Calculadora de Investimento
+invest10=Calcule o futuro do seu investimento.
+invest11=Investimento
+invest12=Informações
+invest13=Volume
+invest14=Saldo Bitcoin Disponível
+invest15=Saldo Bitcoin Investido
+invest16=Investir Bitcoin
+invest17=Resgatar Bitcoin
+invest18=Reenviar Token
+invest19=Investir Bitcoin
+invest20=Tempo de Rendimento
+invest21=Selecione o tempo de rendimento
+invest22=Confirmar Investimento
+invest23=Resgatar Investimento
+invest24=Resgate seu investimento.
+invest25=Confirmar Resgate
+invest26=Cointrade
+invest27=Poupança
+invest28=IGP-M
+invest29=Tesouro Direto
+invest30=Extrato do Cliente
+invest31=Investimentos e rendimentos
+invest32=Painel de Investimentos
+invest33=Movimentações dos investimentos
+invest34=Resumo dos Investimentos
+invest35=Durante
+invest36=Rendimento
+invest37=Selecione a duração do investimento.
+invest38=Dias
+invest39=Todos
+invest40=Total Investido
+invest41=Total de Rendimentos
+invest42=Total de Aportes
+invest43=Meu Total Investido
+invest44=Meus Rendimentos
+invest45=Meus Aportes
+invest46=Resumo Empresa
+invest47=Total Investido Clientes
+invest48=Meu Resumo
+invest49=Meu Investimento
+invest50=Meu Saldo
+invest51=Durante
+invest52=meses - Rendimento
+invest53=
+invest54=
+invest55=
+invest56=
+invest57=

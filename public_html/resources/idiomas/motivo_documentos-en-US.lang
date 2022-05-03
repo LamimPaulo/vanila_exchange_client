@@ -1,0 +1,38 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+
+
+#MOTIVO REJEIÇAO DE DOCUMENTOS
+
+##--
+fotoDoc=Foto do Documento
+naoArqValido=Not a valid file.
+naoPossuiFotoDoc=There is no photo in the document.
+docIlegivelDifLeitura=Unreadable or difficult to read document.
+docsAceitos=Documents accepted: CNH, RG, Passport, Military Identity, RNE.
+docNaoCompativelDados=Document not compatible with the reported data.
+necessarioPreencherTodos=All fields are required.
+docVencido=Expired document.
+necessarioVersoDoc=The back side of the document is needed.
+obrigatorioConterCpf=Required to contain the CPF number in the document.
+docNaoMesmo=The document in the selfie is not the same as the submitted document.
+fotoCompResidencia=Foto do comprovante de residência.
+compResidenciaInvalido=Invalid proof-of-residence.
+envieCompResidenciaTresMeses=Send proof-of-residence no more than three months ago.
+docAceitosResidencia=Bills accepted: Water, gas, electricity or telephone (landline or mobile).
+impossivelAnalizar=Impossible to analyze.
+selfieNaoEstaLegivel=Selfie is not readable.
+pessoaIdentificadaNaoCorresponde=Person identified in photo does not match with the person in the submitted document.
+oDocSelfieNaoMesmoEnviado=The document in the selfie is not the same as the submitted document.
+outroDoc=Outro Documento
+                 
+
+
+##--------------------
+
+
+
+
+

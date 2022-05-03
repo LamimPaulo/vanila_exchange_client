@@ -1,0 +1,115 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EXTRATO
+#
+#
+#--VIEW
+#Modules\trade\views\index_extrato.phtml
+##--
+#Textos da View
+titulo=Account statement
+subTitulo=Negotiations
+
+
+                                                                
+
+#Labels
+dtInicial=Initial Date
+dtFinal=Final Date
+movimentoDe=Movement
+registros=Records
+todasMoedas=All Cryptocurrency
+
+
+#Buttons
+limpar=Clean
+filtro=Filter
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+todas=All
+todos=All
+compraO=Buy
+vendaO=Sell
+
+
+
+#Tabela
+data=Date
+status=Status
+moeda=Cryptocurrency
+movimento=Type
+hora=Time
+cotacao=Price quote
+volumeTotal=Total Amount 
+valorTotal=Total Value
+volumeExecutado=Executed Amount
+valorExecutado=Executed Value
+
+
+#Sucesso
+
+
+
+##--------------------
+
+#--CONTROLLER
+#Modules\trade\Controllers\Extrato.class.php
+##--
+#Textos da View
+
+
+
+                                                                
+
+#Labels
+
+
+
+#Buttons
+limpar=Clean
+
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+compraC=Buy
+vendaC=Sell
+executadaC=Executed
+pendenteC=Pending
+canceladaC=Canceled
+
+
+
+
+#Tabela
+nenhumaOrdemExibida=No order to be displayed
+
+
+
+#Sucesso
+
+
+
+##--------------------

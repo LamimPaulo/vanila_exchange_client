@@ -1,0 +1,259 @@
+<?php
+$sucesso = isset($_data["sucesso"]) ? $_data["sucesso"] : true;
+$mensagem = isset($_data["mensagem"]) ? $_data["mensagem"] : "";
+
+$transacaoPendenteBtc = isset($_data["transacao"]) ? $_data["transacao"] : new Models\Modules\Cadastro\TransacaoPendenteBtc();
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+//$transacaoPendenteBtc = new Models\Modules\Cadastro\TransacaoPendenteBtc();
+?>
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+ <div class="content-wrapper">
+  <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+    <div class="col-lg-10">
+      <h2>Painel de confirmação de transações de BTC</h2>
+      <ol class="breadcrumb" style="background-color: transparent !important;">
+          <li>BTC</li>
+          <li class="active">
+              <strong>Painel de confirmação de transações de BTC</strong>
+          </li>
+      </ol>
+    </div>
+  </div>
+</div>  
+    
+    
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <?php Utils\Layout::append("mensagem", $_data)?>
+                    
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <label>Cliente</label>
+                                <input type="text" readonly="true" value="<?php echo $transacaoPendenteBtc->cliente->nome ?>" />
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <label>Mensagem de erro</label>
+                                <input type="text" readonly="true" value="<?php echo $transacaoPendenteBtc->erro ?>" />
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col col-lg-3">
+                                <div class="form-group">
+                                    <label>Valor</label>
+                                    <input type="text" class="form-control" id="valor"  value="<?php echo number_format($transacaoPendenteBtc->valor, 8, ".", "") ?>" />
+                                </div>
+                            </div>
+                            <div class="col col-lg-3">
+                                <div class="form-group">
+                                    <label>Data</label>
+                                    <input type="text" class="form-control" id="data" value="<?php echo $transacaoPendenteBtc->data->formatar(Utils\Data::FORMATO_PT_BR)?>"/>
+                                </div>
+                            </div>
+                            
+                            <div class="col col-lg-6">
+                                <div class="form-group">
+                                    <label>Endereço da carteira</label>
+                                    <input type="text" class="form-control" id="enderecoBitcoin"  value="<?php echo $transacaoPendenteBtc->enderecoBitcoin ?>" />
+                                </div>
+                            </div>
+                        </div>
+                       
+                        </div>
+                        
+                        
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <div class="form-group">
+                                    <label>Descrição</label>
+                                    <input type="text" class="form-control" id="descricao" maxlength="2000"  value="<?php echo $transacaoPendenteBtc->descricao ?>" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <br><br>
+                        
+                        <div class="row">
+                            <div class="col col-lg-6 text-center">
+                                <?php if (Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_PAINELBTC, \Utils\Constantes::EDITAR)) { ?>
+                                <button class="btn btn-danger" onclick="modalExcluir();" id="btnExcluir">
+                                    Excluir
+                                </button>
+                                <?php } ?>
+                            </div>
+                            <div class="col col-lg-6 text-center">
+                                <?php if (Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_PAINELBTC, \Utils\Constantes::EDITAR)) { ?>
+                                <button class="btn btn-success" onclick="modalConfirmar();" id="btnConfirmar">
+                                    Confirmar
+                                </button>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        
+                        <br><br>
+                        
+                       
+                        
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        
+        $("#data").datepicker({format: "dd/mm/yyyy"}).mask("99/99/9999");
+        
+        $("#valor").keydown(function (event) {
+            $(this).val(currency($(this).val(), 8, 8, event.keyCode));
+            event.preventDefault();
+        });
+        
+        
+    });
+    
+    
+    
+    function modalConfirmar() {
+        $("#modalConfirmacao").modal();
+    }
+    
+    function confirmar() {
+        $("#modalConfirmacaoClose, #modalConfirmacaoSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_PAINEL_CONFIRMAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                data: $("#data").val(),
+                valor: $("#valor").val(),
+                enderecoBitcoin: $("#enderecoBitcoin").val(),
+                hash: '<?php echo $transacaoPendenteBtc->hash ?>',
+                descricao: $("#descricao").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_PAINELBTC ?>";
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalConfirmacaoClose, #modalConfirmacaoSalvar").prop("disabled", false);
+            }
+        });
+        
+    }
+    
+    
+    function modalExcluir() {
+        $("#modalExclusao").modal();
+    }
+    
+    
+    
+    function excluir() {
+        $("#modalExclusaoClose, #modalExclusaoExcluir").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_PAINEL_EXCLUIR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                hash: '<?php echo $transacaoPendenteBtc->hash ?>'
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_PAINELBTC ?>";
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalExclusaoClose, #modalExclusaoExcluir").prop("disabled", false);
+            }
+        });
+        
+    }
+</script>
+
+
+<div class="modal fade" id="modalConfirmacao" tabindex="-1" role="dialog" aria-labelledby="modalConfirmacao" aria-hidden="true" >
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalConfirmacaoLabel">Confirmar transação</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-12">
+                        Deseja realmente confirmar a transação?
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalConfirmacaoClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-success" onclick="confirmar();" id="modalConfirmacaoSalvar" >Confirmar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="modalExclusao" tabindex="-1" role="dialog" aria-labelledby="modalExclusao" aria-hidden="true" >
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalExclusaoLabel">Excluir transação</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-12">
+                        Deseja realmente excluir a transação?
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalExclusaoClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" onclick="excluir();" id="modalExclusaoExcluir" >Excluir</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

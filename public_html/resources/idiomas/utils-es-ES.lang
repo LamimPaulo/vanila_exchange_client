@@ -1,0 +1,30 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#UTILS
+falhaDesconhecida=Falla desconocida. Por favor, intente nuevamente más tarde.
+ocorreramFalhas=Ocurrió una falla al la imagen al servidor. Es probable que el permiso de acceso al directorio haya sido negado. Por favor, contate o suporte.
+extensaoImagem=Extensión de imagen no soportada: 
+arquivoTemporario=Archivo temporal no fue localizado.
+nomeImagemNaoInformado=Nombre de la imagen no fue ingresado.
+senhaBranco=Contraseña en blanco.
+sessaoExpirada=Sesión expirada. Por favor inicie sesión nuevamente.
+naoPossuiPermissao=No posee permiso para acceder al módulo
+cadastroSuspenso=Registro temporalmente suspendido.
+erroEnvioArquivo=Error en el envío del archivo.
+arqInvalido=Archivo inválido.
+arqNaoSuportado=Archivo no soportado por el servidor.
+tamanhoMaximoArq=El tamaño del archivo excede oel máximo permitido de 10MB.
+formatoInvalido=Formato inválido.
+
+
+##--
+
+
+##--------------------
+
+
+
+
+

@@ -1,0 +1,236 @@
+<?php
+$casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"]  : 2);
+
+$paridade = Modules\principal\Controllers\Principal::getParity();
+$cliente = Utils\Geral::getCliente();
+$dataInicial = new \Utils\Data(date("d/m/Y H:i:s"));
+$dataInicial->subtrair(0,1,0);
+$dataFinal = new \Utils\Data(date("d/m/Y H:i:s"));
+$mostrarBotoes = ($paridade->ativo > 0 && $paridade->statusMercado > 0 && $cliente->statusMercado > 0);
+
+$mostrarAlerta = false;
+$mensagemAlerta = "";
+
+if ($paridade->ativo < 1) {
+    $mostrarAlerta = true;
+    $mensagemAlerta = "O mercado da moeda foi encerrado!";
+} else if ($paridade->statusMercado < 1) {
+    $mostrarAlerta = true;         
+    $mensagemAlerta = "O mercado da moeda está temporariamente suspenso!";                  
+} else if ($cliente->statusMercado < 1) {
+    $mensagemAlerta = "A compra e venda de criptomoedas está temporariamente suspensa na sua conta!";
+    $mostrarAlerta = true;
+}
+
+$idioma = new \Utils\PropertiesUtils("extrato", IDIOMA);
+
+$_data["idiomaMenu"] = $idioma;
+?>
+<style>
+    .border-edit {
+        border: 1px solid #1c84c6 !important;
+    }
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<?php Utils\Layout::append("inspina/breadcrumb", $_data) ?>
+
+<div>
+    <!-- Main content -->
+<section class="content">
+    <!-- Profile Image -->
+    
+    <?php if ($mostrarAlerta) { ?>
+    <div class="row">
+        <div class="col col-lg-12">
+            <br><br>
+            <div class="alert alert-warning text-center">
+                <h4><i class="fa fa-exclamation-triangle fa-2x" ></i> &nbsp;&nbsp; <span ><?php echo $mensagemAlerta ?> </span></h4>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+    
+    <br>
+    <form id="pesquisa">
+        <div class="row">
+            <div class="col col-lg-12">
+
+                <div class="ibox">
+                    <div class="ibox-content">
+
+
+                        <div class="row">
+                            <div class="col col-lg-2">
+                                <div class="form-group">
+                                    <label><?php echo $idioma->getText("dtInicial") ?></label>
+                                    <input type="text" class="form-control" id="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>"/>
+                                </div>
+                            </div>
+                            <div class="col col-lg-2">
+                                <div class="form-group">
+                                    <label><?php echo $idioma->getText("dtFinal") ?></label>
+                                    <input type="text" class="form-control" id="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>"/>
+                                </div>
+                            </div>
+
+                            <div class="col col-lg-2">
+                                <div class="form-group">
+                                    <label><?php echo $idioma->getText("movimentoDe") ?></label>
+                                    <select  class="form-control" id="tipo" name="tipo">
+                                        <option value="T"><?php echo $idioma->getText("todas") ?></option>
+                                        <option value="C"><?php echo $idioma->getText("compraO") ?></option>
+                                        <option value="V"><?php echo $idioma->getText("vendaO") ?></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col col-lg-2">
+                                <div class="form-group">
+                                    <label class="control-label"><?php echo $idioma->getText("registros") ?></label>
+                                    <select class="form-control" id="nresultado">
+                                        <option value="10" >10</option>
+                                        <option value="20" >20</option>
+                                        <option value="50" >50</option>
+                                        <option value="100" >100</option>
+                                        <option value="T" ><?php echo $idioma->getText("todos") ?></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <br>
+                                <div class="checkbox i-checks">
+                                    <div class="icheckbox_square-green" style="position: relative;">
+                                        <input type="checkbox"  id="mostraTodos" name="mostraTodos" value="1" unchecked>
+                                    </div> <strong><?php echo $idioma->getText("todasMoedas") ?></strong>
+                                </div>
+                            </div>
+                            <div class="col col-lg-1">
+                                <label class="control-label">&nbsp;</label>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-default  full-width pull-right" onClick="listarMinhasOrdens();">
+                                        <?php echo $idioma->getText("filtro") ?>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table-responsive">
+            <table class="table table-hover table-condensed table-bordered" style="background-color: #fff; font-size: 11px">
+                <thead>
+                    <tr>
+                        <th class="text-center"><strong><?php echo $idioma->getText("moeda") ?></strong></th>
+                        <th class="text-center"><strong><?php echo $idioma->getText("movimento") ?></strong></th>
+                        <th class="text-center"><strong><?php echo $idioma->getText("data") ?></strong></th>
+                        <th class="text-center"><strong><?php echo $idioma->getText("hora") ?></strong></th>
+                        <th class="text-center"><strong><?php echo $idioma->getText("cotacao") ?></strong></th>
+                        <th class="text-center"><strong><?php echo $idioma->getText("volumeTotal") ?></strong></th>
+                        <th class="text-center"><strong><?php echo $idioma->getText("valorTotal") ?></strong></th>
+                        <th class="text-center"><strong><?php echo $idioma->getText("volumeExecutado") ?></strong></th>
+                        <th class="text-center"><strong><?php echo $idioma->getText("valorExecutado") ?></strong></th>
+                        <th class="text-center"><strong><?php echo $idioma->getText("status") ?></strong></th>
+                    </tr>
+                </thead>
+
+                <tbody id="orders-list">
+
+                </tbody>
+
+            </table>
+            </div>
+        </div>
+
+    </div>
+    
+    
+    <br><br>
+</section>
+    
+<div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        
+        $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green'
+        });
+        
+        $("#mostraTodos").on('ifUnchecked ifChecked', function (event) {
+            listarMinhasOrdens();
+        });
+        $("#mostraReais").on('ifUnchecked ifChecked', function (event) {
+           listarMinhasOrdens();
+        });
+
+        
+        listarMinhasOrdens();
+    });
+    
+    function limpar(){
+        $('#pesquisa').each (function(){
+            this.reset();
+        });
+    }
+    
+    $("#dataInicial,#dataFinal").datepicker({
+        format: "dd/mm/yyyy",
+        todayBtn: "linked",
+        language: "pt-BR",
+        orientation: "top left",
+        autoclose: true,
+        todayHighlight: true,
+        toggleActive: true
+    });
+
+    function listarMinhasOrdens() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_EXTRATO_FILTRAR ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                dataInicial: $("#dataInicial").val(),
+                dataFinal: $("#dataFinal").val(),
+                status: $("#status").val(),
+                tipo: $("#tipo").val(),
+                nresultado: $("#nresultado").val(),
+                moedas: $("#mostraTodos").is(":checked")
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $(".my-order-item").remove();
+                        $("#orders-list").append(json.html);
+                    } else {
+                        $(".my-order-item").remove();
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $(".my-order-item").remove();
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+</script>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+

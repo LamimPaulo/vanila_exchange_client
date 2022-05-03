@@ -1,0 +1,27 @@
+<?php
+use Utils\Layout;
+
+Layout::append('metas');
+Layout::append('scripts');
+?>
+<title><?php echo TITLE; ?></title>
+</head>
+<body>
+    <div id="wrapper" class="full">
+        <?php Layout::append('header'); ?>
+        <div id="content-wrap">
+            <div id="content">
+                <div id="content-outer">
+                    <div id="content-inner">
+                        <?php Layout::append('menu', $_data['_parameters']); ?>
+                        <div id="sidebar-separator"></div>
+                        <section id="main" class="clearfix">
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php Layout::append('footer'); ?>
+    </div>
+</body>
+</html>

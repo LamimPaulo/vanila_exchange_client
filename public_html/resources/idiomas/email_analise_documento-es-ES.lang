@@ -1,0 +1,35 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EMAIL ANALISE DE DOCUMENTO
+#
+#
+#--VIEW
+
+##--
+#Textos da View
+assunto=Análisis de Cuenta
+titulo=NewCash – Notificación de Análisis de Cuenta
+confiraSeuStatus=¡Compruebe su status de análisis de documentos!
+ola=Hola
+suaFraseSeguranca=Su pregunta de seguridad es:
+oStatusDaAnaliseDocumento=El status de análisis de sus documentos fue modificado:
+rejeitada=Rechazado
+aprovado=Aprobado
+emAnalise=En análisis
+motivoRejeicao=Motivo del rechazo:
+selfie=Selfie
+status=Status:
+compResidencia=Comprobante de Residencia
+documentoFoto=Documento con foto
+infAcesso=Información de do acceso:
+dataHora=Fecha/Hora:
+ipAcesso=IP de Acceso:
+newCashEndereco=Cointrade
+emailDoSistema=Este es un e-mail del sistema. Por favor, no responder.
+casoNaoTenhaCadastro=En caso de no haberse efectuado el registro, entrar en contacto a través de nuestros canales de atención al cliente.
+
+
+
+

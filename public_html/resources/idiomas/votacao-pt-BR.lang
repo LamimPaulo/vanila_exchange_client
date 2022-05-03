@@ -1,0 +1,109 @@
+titulo=Votação
+
+tituloTabUm=Votações Abertas
+tituloTabDois=Votações Encerradas
+tituloTabTres=Votações Futuras
+tituloTabQuatro=Votações Pendentes
+tituloTabSeis=Implementação
+
+votacaoSemVotacao1=Nenhuma votação acontecendo agora.
+votacaoSemVotacao2=Nenhuma votação encerrada.
+votacaoSemVotacao3=Nenhuma votação programada.
+votacaoSemVotacao4=Nenhuma votação pendente de análise.
+votacaoSemVotacao5=Nenhuma criptomoeda para implantanção
+
+responsavelVotacao=Responsável: 
+emailVotacao=E-mail:
+casasDecimaisVotacao=Casas decimais: 
+
+moedaBaseVotacao=Fork da Rede: 
+descricaoVotacao=Descrição: 
+
+btnAtualizarListaVotacoes=Atualizar Listas
+btnVotar=Votar
+progressoVotacao=Completados
+votos=Votos
+de=de
+progresso=Progresso: 
+iniciaEm=Inicia em 
+encerraEm=Encerra em 
+btnAprovar=Aprovar
+btnNegar=Negar
+
+
+nomeMoeda=Nome da Moeda:
+siglaMoeda=Sigla da Moeda (max 5 caracteres): 
+moedaBase=A moeda é fork da rede: 
+nomeResponsavel=Nome do responsável pelo cadastro: 
+logoMoeda=Logo da Moeda (PNG 200 x 200 px): 
+emailContato=Email para contato: 
+descricaoProjeto=Descrição do projeto (max 200 caracteres): 
+quantidadeCasasDecimais=Quantidade de casas decimais da moeda: 
+
+modalCadastroMoedaTitulo=Cadastre sua moeda para votação!
+modalCadastroMoedaConfirmar=Confirmar
+modalCadastroMoedaCancelar=Cancelar
+
+
+cadastreSuaMoeda=Cadastre agora sua moeda para votação na {var}
+
+controllerVotacao1=Solicitação recebida. Em breve sua solicitação será analisada por nossa equipe.
+controllerVotacao2=Moeda aprovada com sucesso.
+controllerVotacao3=Moeda negada com sucesso
+controllerVotacao4=Você não tem permissão para votar
+controllerVotacao5=Voto registrado com sucesso.
+controllerVotacao6=Site da moeda.
+controllerVotacao7=Whitepapper.
+
+modalCadastroMoeda1=Site da Moeda
+modalCadastroMoeda2=Link para o documento White Papper
+
+modalAprovar1=Aprovar cadastro da moeda
+modalAprovar2=Informe abaixo a data inicial e final de vigência da votação.
+modalAprovar3=Data inicial
+modalAprovar4=Data final
+modalAprovar5=Cancelar
+modalAprovar6=Aprovar Cadastro
+
+
+modalNegar1=Negar cadastro da moeda
+modalNegar2=Deseja realmente negar o cadastro da moeda para votação?
+modalNegar3=Cancelar
+modalNegar4=Negar Cadastro
+
+votacao1=Descreva brevemente a comunidade da moeda
+controllerVotacao8=Descrição da comunidade:
+votacao2=Selecione abaixo as redes onde a moeda tem quantidade e clique no botão incluir. Após isso informe o link da página e a quantidade de membros.
+votacao3=Quantidade de membros da comunidade {var1}:
+votacao4=É necessário informar o link da comunidade {var1}:
+controllerVotacao9=Membro(s)
+
+votacao5=Capital de mercado:
+
+votacao6=Cadastrar sua moeda para votação na {var1} é gratuito, rápido e fácil. Não cobramos pelo cadastro mas exigimos que o solicitante tenha em sua conta na {var2} o saldo mínimo de {var3}.
+
+cadastroMoeda=Cadastrar Criptomoeda
+
+informacoes=INFORMAÇÕES
+inf1=Após finalizar o cadastro, o formulário será encaminhado para à direção.
+inf2=O contato informado receberá as decisões da direção.
+inf3=Só é permitido a votação com {var}.
+inf4=Acesse e conheça a {var}
+
+votacaoAbertaClientes=Votação aberta para clientes.
+votacaoEncerradas=Votação encerradas.
+votacaoAprovacao=Votação em aprovação.
+cadastroCriptoAnalise=Cadastro de criptomoeda para análise.
+
+vocePrecisaNewCash=Você precisa ter {var1}.
+
+vocePrecisaNewCashCripto=Você precisa ter {var1} para poder fazer o cadastro da sua criptomoeda.
+
+criptoAprovacaoPendente=Criptomoeda pendente de aprovação.
+
+criptoMoedaVotada=Criptomoeda aprovada e votada para ser implementada.
+
+saldoNewCash=Saldo {var}
+descricao=Descrição
+volume=Volume
+ 

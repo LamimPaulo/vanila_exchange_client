@@ -1,0 +1,30 @@
+
+#REMESSA FINALIZADA
+#
+#--VIEW
+
+##--
+#Textos da View
+assunto=Remittance Made
+titulo=NewCash - Remittance Made
+titulo2=Remittance Made!
+ola=Hi
+fraseSeguranca=Your safety phrase is:
+remessaSucesso=Remittance Done Successfully!
+banco=Bank
+titular=Owner:
+tipoConta=Account type:
+corrente=Checking
+conta=Account:
+dataPagamento=Payday:
+agencia=Agency:
+dataVencimento=Date Due:
+valor=Amount:
+
+
+infAcesso=Access information:
+dataHora=Date/Time:
+ipAcesso=Access IP:
+newCashEndereco=Cointrade | 
+emailDoSistema=This is an e-mail system. Please do not answer.
+casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.
