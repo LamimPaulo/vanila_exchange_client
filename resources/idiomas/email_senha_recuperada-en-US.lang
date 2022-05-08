@@ -1,0 +1,25 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EMAIL SENHA RECUPERADA
+#
+#
+#--VIEW
+#Modules\layouts\inspinia\senha_recuperada
+##--
+assunto=Password Retrieved
+#Textos da View
+titulo=NewCash - Password Retrieved
+titulo2=Password Retrieved!
+suaFraseSeguranca=Your safety phrase is:
+recuperacaoSenha=Password recovery
+
+recomendamos=We recommend that after accessing the system, update your password in the My Profile menu, Password tab.
+
+infAcesso=Access information:
+dataHora=Date/Time:
+ipAcesso=Access IP:
+newCashEndereco=Cointrade | 
+emailDoSistema=This is an email system. Please do not answer.
+casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.

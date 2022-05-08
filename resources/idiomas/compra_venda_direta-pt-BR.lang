@@ -1,0 +1,159 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#COMPRA VENDA DIRETA
+#
+#
+#--VIEW
+#Modules\trade\views\compra_venda_direta.phtml
+##--
+#Textos da View
+titulo=Compra e Venda Direta
+subTitulo=Negociações
+mercadoEncerrado=O mercado da moeda foi encerrado!
+mercadoSupenso=O mercado da moeda está temporariamente suspenso!
+compraVendaSuspensaConta=A compra e venda de criptomoedas está temporariamente suspensa na sua conta!
+
+                                                                
+
+#Labels
+comprar=Comprar
+vender=Vender
+valorTotal=Valor Total
+volumeComprar=Volume à Comprar
+preco=Preço Médio
+receberaAprox=Receberá aproximadamente
+volumeVender=Volume à Vender
+precoMedio=Preço Médio
+totalVender=Total
+receberaAproxVender=Receberá aproximadamente
+dtInicial=Data Inicial
+dtFinal=Data Final
+movimentoDe=Movimento de
+registros=Registros
+ultima_compra=Última Compra
+ultima_venda=Última Venda
+maior_preco=Maior Preço
+menor_preco=Menor Preço
+volume24=Volume 24h
+
+
+
+#Buttons
+compraDiretaBtn=Comprar
+vendaDiretaBtn=Vender
+filtro=Filtro
+
+#inputs
+
+
+#Placeholder
+
+
+
+#Links
+
+
+
+#Options
+compraO=Compra
+vendaO=Venda
+compraVendaO=Compra / Venda
+todos=Todos
+
+
+#Tabela
+movimento=Movimento
+data=Data
+volumeOrdem=Volume Ordem
+cotacao=Cotação
+recebido=Recebido
+taxa=Taxa
+
+
+##--------------------
+
+
+#----CONTROLLER
+#Modules\principal\Controllers\CompraVendaDireta.class.php
+##--
+#Textos da View
+
+                                                                
+
+#Labels
+
+
+#Buttons
+
+
+
+#inputs
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+compraC=Compra
+vendaC=Venda
+
+
+#Tabela
+nenhumaOrdem=Nenhuma ordem para ser exibida
+
+
+#Sucesso
+ordemRegistradaSucessoC=Ordem de compra registrada com sucesso!
+ordemRegistradaSucessoV=Ordem de venda registrada com sucesso!
+
+#Erros
+voceNaoTemPermissao=Você não tem permissão para cadastrar ordens
+
+
+##--------------------
+
+
+txCobradaTrans=Taxa cobrada na transação
+
+pesquisar=Pesquisar
+direta1=Movimento
+direta2=Data
+direta3=Volume Ordem
+direta4=Cotação
+direta5=Recebido
+direta6=Taxa
+direta7=Dia
+direta8=Sem
+direta9=Mes
+direta10=Todos
+direta11=Compra
+direta12=Venda
+direta13=Todos
+direta14=Cotação
+direta15=Volume/24Hs
+direta16=Total Compra
+direta17=Total Venda
+direta18=Taxa cobrada na transação
+direta19=Estimativa da Taxa
+direta20=Ordens de Compra
+direta21=Ordens de Venda
+direta22=Moeda
+direta23=Disponível
+direta24=Saldos
+direta25=Ordens de Venda
+direta26=Meu Saldo
+direta27=Histórico
+direta28=Mercado
+direta29=Em Ordem
+direta30=Volume
+direta21=
+direta32=
+direta33=
+direta34=
+direta35=

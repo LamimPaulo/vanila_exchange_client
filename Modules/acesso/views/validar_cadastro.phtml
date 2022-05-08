@@ -1,0 +1,52 @@
+<?php
+$idioma = new \Utils\PropertiesUtils("docs_aceitacao", IDIOMA);
+$urlLogin = URLBASE_CLIENT . \Utils\Rotas::R_LOGIN;
+
+?>
+
+
+
+<!DOCTYPE html>
+<html class="wide wow-animation smoothscroll scrollTo" lang="pt-br">
+<head>
+<title><?php echo TITULO ?></title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="Tue, 01 Jan 2030 1:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<link href="<?php echo TEMA; ?>css/bootstrap.min.css" rel="stylesheet">
+<link href="<?php echo TEMA; ?>font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
+<link href="<?php echo TEMA; ?>css/style.css" rel="stylesheet">
+</head>
+
+<body class="" style="background-color: <?php echo $brand->colorBackground ?>">
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <a href="<?php echo $empresa->homePage ?>">
+                <img alt="image"  width="150px" src="<?php echo IMAGES; ?>logo-cointrade.png" class="logo">
+            </a>        </div>
+    </div>
+    </br></br>
+    <div class="row">
+        <div class="col-lg-offset-2 col-lg-8 text-center">
+            <h1 class="m-b-md" style="color: #FFFFFF !important"><?php echo "Seja Bem-Vindo a CointradeCX" ?></h1></br>
+            <h3 class="m-b-md" style="color: #FFFFFF !important"><?php echo "Sua conta foi ativada com sucesso." ?></h3></br>
+            <a href="<?php echo $urlLogin ?>" class="btn btn-lg btn-primary">Fazer Login</a>
+        </div>            
+    </div>
+</body>
+<!-- Bootstrap 3.3.6 -->
+<script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script>
+<script src="<?php echo TEMA; ?>bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

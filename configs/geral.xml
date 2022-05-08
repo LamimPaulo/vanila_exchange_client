@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <conexao>
+        <name>gmail</name>
+        <host>smtp.gmail.com</host>
+        <port>587</port>
+        <connection_class>plain</connection_class>
+        <connection_config>
+            <username>contatotriadz@gmail.com</username>
+            <password>dduo1234</password>
+            <ssl>tls</ssl>
+        </connection_config> 
+    </conexao>
+    <enderecoEnvio>
+        <email>contatotriadz@gmail.com</email>
+        <nome>DDUO Sistemas</nome>
+    </enderecoEnvio>
+</config>
+

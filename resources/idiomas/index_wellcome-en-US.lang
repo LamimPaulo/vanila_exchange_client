@@ -1,0 +1,130 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#INDEX WELLCOME
+#
+#
+#--VIEW
+#Modules\principal\views\index_wellcome.phtml
+##--
+#Textos da View 
+titulo= Dashboard
+subTitulo=
+clienteDesde=Costumer since
+conta=Account
+fraseSeguranca=Security phrase:
+seuPerfilesta=Your profile is
+completo=complete
+selfie=Selfie
+documentos=Documents
+concluido=COMPLETED
+emAnalise=IN ANALYSIS
+pendente=PENDING
+compResidencia=Proof-of-address
+autenticacaoGoogle=Authentication by Authy Authenticator (recommended)
+pinSeguranca=Security PIN
+fraseSeguranca=Security phrase
+esconderMoedaSaldo0=Hide coins with balance 0 (zero)
+ultimoDeposito=Latest Deposits / Withdrawals in Reais
+ordensPendentes=Pending Orders
+deposito=Deposit
+saque=Withdraw
+copiarCarteira=Copy Wallet
+favorita=Favorite                                                                
+pesquisar=Search
+comSaldo=With Balance
+todos=All
+real=Real
+
+compraVenda=Buy / Sell
+
+envieOsDocumentos=Submit your documents and get access to the  Deposit and Withdrawal menus to Real.
+meuPerfil=My Profile
+
+
+#Labels
+
+
+#Buttons
+carteira={var} Wallet
+
+
+#inputs
+
+
+#Placeholder
+
+
+#Links
+gerarNovaCarteira=Generate new Wallet
+
+
+#Options
+
+
+#Tabela
+moeda=Cryptocurrency
+volume=Available
+cofre=Safe
+ordem=Order
+valorAprox=Total Amount Approximately
+acao=Action
+tipo=Type
+dataHora=Date / Time
+valor=Amount
+status=Status
+nenhumSaqueDeposito=No withdrawal or deposit!
+movimento=Type
+cotacao=Price quote
+total=Total
+ranking=Monthly Ranking
+##--------------------
+
+
+#----CONTROLLER
+#Modules\principal\Controllers\Dashboard.class.php
+##--
+#Textos da View
+
+                                                                
+
+#Labels
+
+
+#Buttons
+acao=Action
+
+
+#inputs
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+
+
+#Tabela
+nenhumaOrdemPendente=No pending order!
+compraC=Buy
+vendaC=Sell
+depositarC=Deposit
+sacarC=Withdraw
+transferirC=Withdraw
+comprarC=Buy
+livroOfertasC=Order book
+compVendaDiretaC=Direct Buy Sell
+carteirasC=Wallets
+cofreC=Investment
+
+
+#Erros
+vocePrecisaLogado=You must be logged in to perform the operation
+
+##--------------------
+

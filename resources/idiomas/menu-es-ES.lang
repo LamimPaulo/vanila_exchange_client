@@ -1,0 +1,168 @@
+﻿# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#MENU
+#
+#
+#--VIEW
+#Modules\acesso\views\login.phtml
+##--
+#Textos da View
+compra=COMPRA
+venda=VENTA
+volume24=VOLUMEN 24H
+sair=Salir
+compra:=Compra:
+venda:=Venta:
+volume=Volumen:
+verTodasMensagens=Ver todos los mensajes
+notificar=Notificar
+vocePrecisaCompletarPerfil=Necesita completar su perfil para tener acceso a todas las funciones del sistema.
+osSeusDocEstaoAnalise=Sus documentos están en análisis. En breve retornaremos con una respuesta sobre la validez de la información suministrada.
+vcPossuiProcedimento=Posee 
+estornoPendente=procedimiento de anulación pendiente.
+deposito=Depósito
+cliqueAqui=Cliquee aquí
+paraInformarConta= para ingresar una cuenta bancaria para la anulación.
+rejeitado=RECHAZADO: 
+topMenuMercado=Paridad
+topMenuMensagem=Mensaje
+compraVendaDireta=Compra y Venta Directa
+livroOfertas=Libro de Ofertas
+investimento=Inversión
+transferencia=Transferencias
+idioma=Idioma
+
+meuPerfilD=Mi Perfil
+minhasCarteiras=Mis Monedero
+meusInvestimentos=Mis Inversiones
+
+#Links
+cliqueAquiPendencias=Cliquee aquí para ver los pendientes
+
+apresenteQr=Apresente este QR Code para receber fundos
+
+#Buttons
+fecharBtn=Fechar
+copiarBtn=Copiar
+
+#Placeholder
+
+#FOOTER ESP
+#
+#
+#--VIEW
+#Modules\***menu.phtml
+##--
+#Textos da View
+temCerteza=¿Está seguro?
+seraNecessario=Será necesario autenticar nuevamente al volver.
+simQueroSair=Si, quiero Salir!
+queroFicar=Quiero Quedarmer
+sessaFinalizada=Sesión finalizada con Éxito!
+aviso=Aviso!
+redirecionando=Redireccionando!
+bloqueadoRS=Bloqueado
+meuSaldo=Mi Saldo 
+
+sidebarMenuPrincipal=Principal
+sidebarMenuSair=Salir
+
+sidebarMenu1=Mi Perfil
+sidebarMenu2=Depósitos
+sidebarMenu3=Bitcoin
+sidebarMenu4=Reais
+sidebarMenu5=Servicios
+sidebarMenu6=Mis Comercios
+sidebarMenu7=Documentación API
+sidebarMenu8=Vendedor
+sidebarMenu9=Configuración
+sidebarMenu10=Registros
+sidebarMenu11=Monitoreo
+sidebarMenu12=Recibo PDV
+sidebarMenu13=Negociar
+sidebarMenu14=Depósitos
+sidebarMenu15=Retiros
+sidebarMenu16=Transferencias
+sidebarMenu17=Cuentas Empresa
+sidebarMenu18=Comercios
+sidebarMenu19=Reversión Bancaria
+sidebarMenu20=Referidos
+sidebarMenu21=Tarjeta
+sidebarMenu22=Investimiento
+sidebarMenu23=Votación
+sidebarMenu25=Seguir al Comerciante
+sidebarMenu26=Extraer
+sidebarMenu27=Recomendación
+sidebarMenu28=Cambiar
+
+
+#Rotinas
+sidebarRotina1=Histórico
+sidebarRotina2=Transferir Bitcoin
+sidebarRotina3=Histórico
+sidebarRotina4=Depósito
+sidebarRotina5=Retiros Bancarios
+sidebarRotina6=Pago de Boletos
+sidebarRotina7=Remesas de Valores
+sidebarRotina8=Establecimientos
+sidebarRotina9=Punntos de Venta
+sidebarRotina10=Transferencia
+sidebarRotina12=Punto de Venta
+sidebarRotina13=Deposito
+sidebarRotina14=Trade
+sidebarRotina15=Calculadora
+sidebarRotina16=Pago
+sidebarRotina17=Tablas
+sidebarRotina18=Clientes
+sidebarRotina19=Finanzas
+sidebarRotina20=Portal
+sidebarRotina21=Transacciones Pendientes
+sidebarRotina22=Cuenta Corriente Empresa
+sidebarRotina23=Panel de Control
+sidebarRotina24=Tasas
+sidebarRotina25=Cuentas Bancaria Empresa
+sidebarRotina26=Notas Fiscales
+sidebarRotina27=Usuarios
+sidebarRotina28=Clientes
+sidebarRotina29=Upgrade de Licencia
+sidebarRotina30=Panel Api de Pagos
+sidebarRotina31=Panel
+sidebarRotina32=Compra y Venta Directa
+sidebarRotina33=Libro de Ofertas
+sidebarRotina34=Cuenta BTC
+sidebarRotina35=Cuenta Corriente
+sidebarRotina36=Transferencias
+sidebarRotina37=Extracto
+sidebarRotina38=Negociaciones
+sidebarRotina39=Administrativo
+sidebarRotina40=Segmentos de Comercio
+sidebarRotina41=Licencias de Software
+sidebarRotina42=Roadmap
+sidebarRotina43=Newsletter
+sidebarRotina44=Contacto
+sidebarRotina45=Resumen de Cuentas
+sidebarRotina46=Mis Tarjetas
+sidebarRotina47=Mensualidades
+sidebarRotina48=Recargas
+sidebarRotina49=Administrativo
+sidebarRotina50=Administrativo
+sidebarRotina51=Panel del sitio web
+sidebarRotina52=Resumen de Clientes
+sidebarRotina53=P2P
+sidebarRotina54=Comisiones
+sidebarRotina55=Compra NEWC Token
+sidebarRotina56=Painel ICO
+sidebarRotina58=Pre ventas
+sidebarRotina59=Votación
+sidebarRotina60=Investimiento
+
+#Modal Moedas Habilitadas
+modalMoedasHabilitadasTitulo=Escoja una de las monedas a continuación para comenzar a invertir!
+modalMoedasHabilitadasCancelar=Cancelar
+
+
+menu1=Crear nueva cartera NEWC
+mododia=Dia
+modonoite=Noite

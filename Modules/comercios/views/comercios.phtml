@@ -1,0 +1,641 @@
+<?php
+
+$cliente = Utils\Geral::getCliente();
+$segmentosComercio = isset($_data["segmentos"]) ? $_data["segmentos"] : Array();
+$estados = isset($_data["estados"]) ? $_data["estados"] : Array();
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<div class="content-wrapper">
+  <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+    <div class="col-lg-9">
+      <ol class="breadcrumb m-t-md" style="background-color: transparent !important;">
+          <li>
+            <?php echo $idioma->getText("subTitulo") ?>
+          </li>
+          <li class="active">
+              <strong><?php echo $idioma->getText("titulo") ?>
+          </li>
+      </ol>
+    </div>
+    <div class="col-lg-3">
+    <?php Utils\Layout::append("inspina/flags", $_data) ?>
+    </div>
+  </div>
+</div>
+
+    <!-- Main content -->
+<section class="content">
+    <br><br>
+    <div class="row">
+        <div class="col col-lg-12 text-center">
+            <button class="btn btn-success" onclick="openCadastro();">
+                Cadastrar Novo Comércio
+            </button>
+        </div>
+    </div>
+    <br><br>
+    <div class="row"   id="rowCadastro" style="display: none;">
+        <div class="col col-lg-12">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    Cadastro de comércio
+                </div>
+                <div class="panel-body">
+                    <input type="hidden" id="idComercio" value="0" />
+                    <div class="row">
+                        <div class="col col-lg-8">
+                            <div class="form-group">
+                                <label>Nome / Descrição do comércio</label>
+                                <input type="text" id="descricao" class="form-control" maxlength="200" />
+                            </div>
+                        </div>
+                        <div class="col col-lg-4">
+                            <div class="form-group">
+                                <label>CEP</label>
+                                <input type="text" id="cep" class="form-control" maxlength="9" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col col-lg-5">
+                            <div class="form-group">
+                                <label>Endereço</label>
+                                <input type="text" id="endereco" class="form-control address" maxlength="200" />
+                            </div>
+                        </div>
+                        <div class="col col-lg-3">
+                            <div class="form-group">
+                                <label>Número</label>
+                                <input type="text" id="numero" class="form-control address" maxlength="10" />
+                            </div>
+                        </div>
+                        <div class="col col-lg-4">
+                            <div class="form-group">
+                                <label>Bairro</label>
+                                <input type="text" id="bairro" class="form-control address" maxlength="200" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="row">
+                        <div class="col col-lg-2">
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <select id="estado" class="form-control address" style="width: 100%;">
+                                    <option value="0">Selecione um estado</option>
+                                    <?php 
+                                    foreach ($estados as $estado) {
+                                        ?>
+                                        <option value="<?php echo \Utils\Criptografia::encriptyPostId($estado->id)?>"><?php echo $estado->sigla ?></option>    
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-lg-5">
+                            <div class="form-group">
+                                <label>
+                                    <img src="<?php echo IMAGES ?>loading.GIF" style="width: 15px; height: 15px; display: none;" id="loagindCidades" />
+                                    Cidade
+                                </label>
+                                <select id="cidade" class="form-control address"  style="width: 100%;">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-lg-5">
+                            <div class="form-group">
+                                <label>Segmento</label>
+                                <select id="idSeguimentoComercio" class="form-control"  style="width: 100%;">
+                                    <option value="0">Selecione um segmento de comércio</option>
+                                    <?php 
+                                    foreach ($segmentosComercio as $segmento) {
+                                        ?>
+                                        <option value="<?php echo \Utils\Criptografia::encriptyPostId($segmento->id)?>"><?php echo $segmento->nome ?></option>    
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="row">
+                        <div class="col col-lg-4">
+                            <div class="form-group">
+                                <div class="">
+                                    <label>
+                                        <input type="checkbox" class="" id="publico" /> Exibir para o público
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-lg-5">
+                            <div class="form-group">
+                                <label>Coordenadas</label>
+                                <input type="text" id="coordenadas" class="form-control" maxlength="200" />
+                            </div>
+                        </div>
+                        
+                        <div class="col col-lg-3">
+                            <br>
+                            <div class="form-group">
+                                <button class="btn btn-success" onclick="buscarCoordenadas();">
+                                    Buscar Coordenadas
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <br><br>
+                    <div class="row">
+                        <div class="col col-lg-12 text-center">
+                            <button class="btn btn-default" onclick="cancelarComercio();">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-success" onclick="salvarComercio();">
+                                Salvar
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Meus Comércios</h5>
+                </div>
+                <div class="ibox-content">
+                    <p>
+                        Veja abaixo os seus comércios cadastrados em nosso sistema: 
+                    </p>
+                    <div class="google-map" id="map-content" style="height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <br><br>
+</section>
+    
+<div class="clearfix"></div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKAqfCOrOTX_d2hy0WXI-6U85suEyBLwY"></script>
+
+<script>
+    var map = null;
+    var markers = [];
+    $(document).ready(function () {
+        $("#idSeguimentoComercio, #cidade, #estado").select2();
+        $("#cep").mask("99999-999");
+        $("#estado").change(function () {
+            getCidades();
+        });
+        
+        $("#cep").keyup(function () {
+            if (validarCep().length === 8) {
+                buscarCep();
+            }
+        });
+        
+        createMap();
+        
+    });
+    
+    function listarComercios() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_COMERCIOS_LISTAR ?>',
+            method: 'post',
+            dataType: 'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        markers = [];
+                        var i = 0;
+                        var latLng =null;
+                        if (json.comercios.length > 0) {
+                            for(i = 0; i < json.comercios.length; i++) {
+                                var comercio = json.comercios[i];
+                                if (comercio.coordenadas.length > 0) {
+                                    coord = comercio.coordenadas.replace(" ", "");
+                                    coord = coord.split(",");
+                                    latLng = {lat: parseFloat(coord[0]), lng: parseFloat(coord[1])};
+                                    setMarker(comercio.id, coord[0], coord[1], comercio.descricao);
+                                }
+                                
+                            }
+                            map.setCenter(latLng);
+                        } else {
+                            getLocation();
+                        }
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }
+    }
+
+    function showPosition(position) {
+        var latLng = {lat: parseFloat(position.coords.latitude), lng: parseFloat(position.coords.longitude)};
+        map.setCenter(latLng);
+    }
+    
+    function openCadastro(id) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_COMERCIOS_CADASTRO ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#idComercio").val(json.comercio.id);
+                        $("#descricao").val(json.comercio.descricao);
+                        $("#cep").val(json.comercio.cep);
+                        $("#endereco").val(json.comercio.endereco);
+                        $("#numero").val(json.comercio.numero);
+                        $("#bairro").val(json.comercio.bairro);
+                        $("#idSeguimentoComercio").val(json.comercio.idSegmentoComercio).trigger("change");
+                        $("#publico").prop("checked", (json.comercio.publico > 0));
+                        $("#coordenadas").val(json.comercio.coordenadas);
+                        
+                        if (json.comercio.cidade !== null) {
+                            $("#estado").val(json.comercio.cidade.estado.id);
+                            cidade = json.comercio.cidade.codigo;
+                        } else {
+                            $("#estado").children("option").first().prop("selectec", true);
+                            cidade = "";
+                        }
+                        $("#estado").trigger("change");
+                        $("#rowCadastro").show();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function salvarComercio() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_COMERCIOS_SALVAR ?>',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                id: $("#idComercio").val(),
+                descricao: $("#descricao").val(),
+                cep: $("#cep").val(),
+                endereco: $("#endereco").val(),
+                numero: $("#numero").val(),
+                bairro: $("#bairro").val(),
+                idSeguimentoComercio: $("#idSeguimentoComercio").val(),
+                publico: ($("#publico").is(":checked") ? 1 : 0),
+                coordenadas: $("#coordenadas").val(),
+                codigoCidade: $("#cidade").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#rowCadastro").hide();
+                        /*if (json.comercio.coordenadas.length > 0) {
+                            let coord = json.comercio.coordenadas.replace(" ", "");
+                            coord = coord.split(",");
+                            latLng = {lat: parseFloat(coord[0]), lng: parseFloat(coord[1])};
+                            setMarker(json.comercio.id, coord[0], coord[1], json.comercio.descricao, true);
+                        }
+                        map.setCenter(latLng);*/
+                
+                        listarComercios();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(e, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function cancelarComercio() {
+        $("#idComercio").val("");
+        $("#descricao").val("");
+        $("#cep").val("");
+        $("#endereco").val("");
+        $("#numero").val("");
+        $("#bairro").val("");
+        $("#idSeguimentoComercio").val("<?php echo Utils\Criptografia::encriptyPostId(0) ?>");
+        $("#publico").prop(":checked", false);
+        $("#coordenadas").val("");
+
+        $("#estado").children("option").first().prop("selectec", true);
+        cidade = "";
+            
+        $("#estado").trigger("change");
+        $("#rowCadastro").hide();
+    }
+    
+    function validarCep() {
+        var cep = "";
+        var i = 0;
+        for(i=0; i < $("#cep").val().length; i++) {
+            if ($("#cep").val().charAt(i) !== "_" && $("#cep").val().charAt(i) !== "-") {
+                cep += $("#cep").val().charAt(i);
+            }
+        }
+        return cep;
+    }
+    
+    var cidade = "";
+    var buscarCidades = true;
+    function getCidades() {
+        if (buscarCidades) {
+            $("#loagindCidades").show();
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_COMERCIOS_CIDADES_LISTAR?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    estado: $('#estado').val()
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#cidade").html(json.html);
+                            if (typeof cidade !== 'undefined' && cidade.length > 0) {
+                                $("#cidade").val(cidade);
+                            }
+                            $("#cidade").trigger("change");
+                        } else {
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
+                        showNotyAlert(e, "e");
+                    }
+                    $("#loagindCidades").hide();
+                }
+            });
+        }
+    }
+    
+    function buscarCep() {
+        buscarCidades = false;
+        $(".address").prop("disabled", true).trigger("change");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_SERVICE_CORREIO_BUSCACEP ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                cep: $('#cep').val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                        $("#endereco").val(json.endereco.logradouro);
+                        $("#bairro").val(json.endereco.bairro);
+                        $("#coordenadas").val(json.coordenadas);
+                        if (json.coordenadas.length > 0) {
+                            coord = json.coordenadas.replace(" ", "");
+                            coord = coord.split(",");
+                            var latLng = {lat: parseFloat(coord[0]), lng: parseFloat(coord[1])};
+                            map.setCenter(latLng);
+                            setMarker($("#idComercio").val(), coord[0], coord[1], $("#descricao").val());
+                        }
+                        cidade = json.cidade.codigo;
+                        buscarCidades = true;
+                        $("#estado").val(json.estado).trigger("change");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $(".address").prop("disabled", false).trigger("change");
+                buscarCidades = true;
+            }
+        });
+    }
+    
+    
+    function buscarCoordenadas() {
+        buscarCidades = false;
+        $(".address").prop("disabled", true).trigger("change");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_SERVICE_CORREIO_BUSCACOORDENADAS ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                logradouro: $('#endereco').val() + $('#numero').val(),
+                bairro: $('#bairro').val(),
+                numero: $('#numero').val(),
+                codigoCidade: $('#cidade').val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                        $("#coordenadas").val(json.coordenadas);
+                        if (json.coordenadas.length > 0) {
+                            coord = json.coordenadas.replace(" ", "");
+                            coord = coord.split(",");
+                            var latLng = {lat: parseFloat(coord[0]), lng: parseFloat(coord[1])};
+                            map.setCenter(latLng);
+                            setMarker($("#idComercio").val(), coord[0], coord[1], $("#descricao").val());
+                        }
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $(".address").prop("disabled", false).trigger("change");
+                buscarCidades = true;
+            }
+        });
+    }
+    
+    
+    
+    function createMap(lt, lg) {
+    
+        var mapOptions = {
+            zoom: 17,
+            // Style for Google Maps
+            styles: [{"featureType":"water","stylers":[{"saturation":43},{"lightness":-11},{"hue":"#0088ff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":99}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"color":"#808080"},{"lightness":54}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ece2d9"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#ccdca1"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#767676"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#b8cb93"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"}]},{"featureType":"poi.sports_complex","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","stylers":[{"visibility":"simplified"}]}]
+        };
+
+        var mapElement = document.getElementById('map-content');
+        map = new google.maps.Map(mapElement, mapOptions);
+        listarComercios();
+
+        // Create the Google Map using elements
+        /*
+        if (typeof lt === 'undefined' || typeof lg === 'undefined') {
+            getLocation();
+        }
+        */
+    }
+    
+    function setMarker(id, lt, lg, name, removerSemId) {
+        encontrado = false;
+        var i =0;
+        for(i = 0; i < markers.length; i++) {
+            if (markers[i].id === id) {
+                encontrado = true;
+                markers[i].marker.setPosition(new google.maps.LatLng(lt, lg));
+                markers[i].marker.setTitle(name);
+                
+            }
+            
+            if (removerSemId) {
+                if (markers[i].id === '<?php echo Utils\Criptografia::encriptyPostId(0)?>') {
+                    markers[i].marker.setMap(null);
+                    markers[i] = null;
+                }
+            }
+        }
+        
+        if (!encontrado) {
+            var marker = {
+                id : id,
+                marker: new google.maps.Marker({
+                position: new google.maps.LatLng(lt, lg),
+                    title: name,
+                    map: map,
+                    icon: "<?php echo IMAGES ?>shopping.png"
+                })
+            };
+            
+            if (id.length > 0) {
+                marker.marker.addListener('click', function (mouseEvent) {
+                    
+                    var content = "<table style='min-width: 200px;' >"
+                                    + "<tr>"
+                                        +"<td colspan='2' style='text-align: center;'></br><strong>"+name+"</strong></br></td>"
+                                    + "</tr>"
+                                    + "<tr>"
+                                        +"<td style='text-align: center;'></br>"
+                                            +"<button class='btn btn-danger' onclick='dialogExcluirComercio(\""+id+"\")'>Remover</button>"
+                                        +"</br></td>"
+                                        +"<td style='text-align: center;'></br>"
+                                            +"<button class='btn btn-primary' onclick='openCadastro(\""+id+"\")'>Editar</button>"
+                                        +"</br></td>"
+                                    + "</tr>"
+                                +"</table>";
+                    
+                    var infoWindow = new google.maps.InfoWindow({
+                            content: content
+                    });
+                    
+                    infoWindow.open(map, marker.marker);
+                    
+                });
+            }
+            
+            markers.push(marker);
+        }
+    }
+    
+    
+    function dialogExcluirComercio(id) {
+        $("#dialogExcluirComercio").modal();
+        $("#dialogExcluirComercioId").val(id);
+    }
+    
+    
+    function excluirComercio() {
+        $("#dialogExcluirComercioClose, #dialogExcluirComercioExcluir").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_COMERCIOS_EXCLUIR ?>',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                id: $("#dialogExcluirComercioId").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        var i = 0;
+                        for(i = 0; i < markers.length; i++) {
+                            if (json.id === markers[i].id) {
+                                marker = markers[i];
+                                markers.splice(i, 1);
+                                i < markers.length;
+                                marker.marker.setMap(null);
+                            }
+                        }
+                        $("#dialogExcluirComercioClose").prop("disabled", false).trigger("click");
+                        showNotyAlert("Comércio excluído com sucesso!", "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch(e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogExcluirComercioClose, #dialogExcluirComercioExcluir").prop("disabled", false);
+            }
+        });
+    }
+</script>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+
+
+
+<div class="modal fade" id="dialogExcluirComercio" tabindex="-1" role="dialog" aria-labelledby="dialogExcluirComercio" aria-hidden="true" >
+    <div class="modal-dialog modal-sm" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogExcluirComercioLabel">Excluir Comércio</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="dialogExcluirComercioId" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        Tem certeza que deseja excluir o estabelecimento?
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogExcluirComercioClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" onclick="excluirComercio();" id="dialogExcluirComercioExcluir" >Excluir</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

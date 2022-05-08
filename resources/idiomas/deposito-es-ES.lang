@@ -1,0 +1,275 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#DEPOSITO
+#
+#
+#--VIEW
+#Modules\contas\views\index_deposito.phtml
+##--
+#Textos da View
+titulo=Depósito
+subTitulo=Finanzas
+abaReais=Depositar Reais
+abaMoeda=Depositar
+carteira=Monedero {var}
+copiarEndereco=Cliquee para copiar la dirección.
+copiarEndereco1=Cliquee aquí para copiar la dirección
+possuiCarteira=Usted no posee ningún monedero de {var}
+cliqueAquiCarteira=Cliquee aquí para crear su primer monedero y poder recibir sus depósitos.
+funcionaNaoDispo=Función no disponible por el momento!
+informacoes=Información:
+aNewCashNao=Cointrade no cobra tasa para depósito de {var}
+atencao=ATENCIÓN
+envieSomente=Envíe solamente
+paraOEnderecoAbaixo=para la dirección a continuación. El envío de cualquier otra criptomoneda a la dirección a continuación resultará en pérdida permanente de los fondos.
+fiqueAtento=Mantente atento a nuestras normas sobre el depósito:
+desanconselhamos=Desaconsejamos que los depósitos se realicen en efectivo, si ha realizado un depósito en efectivo, seleccione el banco/cuenta donde se realizó el depósito, en el tipo de depósito escoja la opción Dinero y lea la política del banco sobre este tipo de depósito. La política de depósito del banco estará disponible en el cuadro "Información sobre el banco seleccionado", resaltada en rojo.
+naoRealizamos=No realizamos la anulación de depósitos en efectivo.
+naoAceitamosTED=No aceptamos TED o DOC realizados por cuentas de terceros, la anulación se ejecutará a la cuenta de origen, se descontará el 3% del valor depositado más el valor del TED.
+informacoesEnvioArq=Información para el envío de los archivos:
+informacoesEnvioArqLi1=Archivos soportados: JPEG, JPG, PNG, BMP, DOC, DOCX, PDF y XPS.
+informacoesEnvioArqLi2=Tamaño máximo de <b>3MB.</b>
+informacoesEnvioArqLi3=El nombre del archivo no puede contener punto, Ej.: depósito.banco.
+informacoesEnvioArqLi4=Envíe archivos de fácil lectura e identificación.
+informacoesEnvioArqLi5=El comprobante no puede contener espacios o símbolos Ej:( / % $ @ * > < )
+informacoesEnvioArqLi6=Ejemplo (comprobante_1050.jpg, comprobante_98.pdf).
+comissaoDeposito=Comisión de depósito:
+seraCreditado=Será acreditado en su cuenta:
+prazoMedioAprovacao=Plazo promedio para la aprobación del depósito:
+horas=hora(s)
+informacoesBancoSelec=Información sobre o banco seleccionado:
+titular=Titular:
+cnpj=Registro Persona Jurídica:
+banco=Banco:
+tipo=Tipo:
+agencia=Agencia:
+conta=Cuenta:
+depositoJs=Depósito
+solicitacaoDepositoSucesso=Solicitud de depósito realizado con éxito!
+carregando=Cargando:
+boletoGerenciaNet=Boleto   
+modalGerarBoletoTitulo=Gerar Boleto
+modalGerarBoletoMensagem=Desea generar el boleto ahora o más tarde?
+modalGerarBoletoCancelar=Más tarde
+modalGerarBoletoSalvar=Generar
+modalBoletoGeradoTitulo=Boleto
+modalBoletoGeradoBarras=Código de Barras:
+modalBoletoGeradoVencimento=Fecha de Vencimiento:
+modalBoletoGeradoLink=Link:
+modalBoletoGeradoFechar=Cerca
+depositoInvalidoOuNaoEncontrado=Depósito inválido ou não encontrado.  
+                                                                
+
+#Labels
+selecioneOBanco=Seleccione el banco para depósito:
+tipoDeposito=Tipo de depósito:
+valorDepositado=Valor a ser depositado:
+comprovanDeposito=Comprobante de depósito:
+dtInicial=Fecha Inicial
+dtFinal=Fecha Final
+statusDeposito=Status de depósito
+registros=Registros
+filtroGeral=Filtro General
+realizadoConta=Realizados en la cuenta
+
+
+#Buttons
+cadastrarDeposito=Registrar depósito
+limpar=Limpiar
+filtro=Filtro
+gerarBoleto=Ver Boleto
+boletoBancario=Boleto
+
+#inputs
+selecionar=Seleccionar
+alterar=Modificar
+remover=Eliminar
+
+
+#Placeholder
+
+
+#Links
+verComprovante=Ver comprobante adjunto.
+
+
+#Options
+selecioneUmaConta=Seleccione un cuenta
+ted=TED
+doc=DOC
+dinheiro=Dinero
+transEntreContas=Transferencia entre Cuentas
+todos=Todos
+pendente=Pendiente
+confirmado=Confirmado
+cancelado=Cancelado
+todasContas=Todas las cuentas
+
+
+#Tabela
+controle=Control
+tipoTabela=Tipo
+volume=Volumen
+comp=Comp.
+data=Fecha
+endereco=Dirección
+acoes=Acciones
+cliente=Cliente
+contaBancaria=Cuenta Bancaria
+deposito=Depósito 
+comissaoR=Comisión (R$)
+comissaoP=Comisión (%)
+creditado=Acreditado
+nf=NF
+status=Status
+analisar=Analizar
+
+
+##--------------------
+
+#--VIEW
+#Modules\contas\views\aprovar_deposito.phtml
+##--
+#Textos da View
+tituloA=Aprobar Depósito
+subTituloA=Finanzas
+tituloB=Aprovar Depósito
+dadosSolicitacao=Datos de solicitud
+clienteA=Cliente:
+depositoA=Depósito:
+comissaoA=Comisión:
+creditadoA=Acreditado:
+bancoA=Banco:
+tipoA=Tipo:
+dinheiroA=Dinero
+tedA=TED
+docA=DOC
+comprovanteA=Comprobante:
+taxaClienteA=Tasa de cliente:
+taxaSistemaA=Tasa de sistema:
+txUtilizadaA=Tasa Utilizada:
+txDoA=Tasa de
+clienteAtx=cliente
+sistemaAtx=sistema
+aceitaNFa= ¿Acepta la factura?
+simA=Si
+naoA=No
+existeProcessoA=Existe un proceso de anulación
+paraEstedepositoA=para este depósito con número
+iniciadoPorA=iniciado por
+emA=en
+contasBancariaClienteA=Cuentas bancarias del cliente
+banco1A=Banco
+tipoContaA=Tipo cuenta
+agencia1A=Agencia
+conta1A=Cuenta
+clienteNaoContaCadastradaA=O Cliente no posee ninguna cuenta registrada
+depositoCanceladoSucesso="Depósito cancelado con éxito"
+cancelarDepositoA=Cancelar Depósito
+informeMotivoCancelamento=Informe a continuación el motivo de la cancelación del depósito
+iniciarProceEstornoA=Iniciar Procedimiento de Anulación de Depósito
+temCertezaIniciarA=¿Está seguro en iniciar los procedimientos de anulación de valores para el depósito?
+aoConfirmarAbaixoA=Al confirmar a continuación será solicitado al cliente que ingrese una cuenta bancaria para acreditar el valor revertido.
+
+                                                              
+
+#Labels
+
+
+#Buttons
+voltarA=Volver
+cancelarA=Cancelar
+aprovarA=Aprobar
+proceParaEstorno=Iniciar Procedimientos para Anulación
+fechaA=Cerrar
+cancelarDepositoAbtn=Cancelar Depósito
+confirmarAbtn=Confirmar
+
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+
+
+#Tabela
+
+
+
+##--------------------
+
+##--CONTROLLER
+#Modules\contas\Controllers\Depositos.class.php
+#--
+
+#Textos da View
+clienteC=Cliente:
+dtSolicitacaoC=Fecha de solicitud:
+contaBancariaC=Cuenta Bancaria:
+vlrDepositadoC=Valor depositado:
+comissaoC=Comisión:
+vlrCreditadoC=Valor acreditado:
+
+
+
+#Labels
+bancoC=Banco:
+tipoC=Tipo:
+agenciaC=Agencia:
+contaC=Cuenta:
+statusC=Status:
+confirmadoEmC=Confirmado en:
+confirmadoPorC=Confirmado por:
+canceladoEmC=Cancelado en:
+canceladoPorC=Cancelado por: 
+mtvCancelamentoC=Motivo de cancelación:
+analiseDepositoC=Analizar Depósito
+
+
+#Buttons
+
+
+#Placeholder
+
+
+#Links
+contaBancariaC=Cuenta Bancaria
+motivoC=Motivo
+analisarC=Analizar
+
+#tabela
+nenhumDepositoC=Ningún depósito según los filtros ingresados
+
+#Sucesso
+
+#Erros
+permissaoDepositoC=No tiene permiso para solicitar depósitos.
+necessarioLogadoC=Es necesario iniciar sesión para efectuar la operación
+contaNaoEncontradaC=Cuenta bancaria no encontrada
+contaCorrenteC=Cuenta Corriente
+contaPoupancaC=Cuenta de Ahorros
+arqInvalidoC=Archivo de comprobante inválido o no ingresado
+permissaoAlteraDepC=No tiene permiso para modificar los datos del depósito
+identicacaoInvalidaC=Identificación de depósito inválida
+##--
+
+foiEnviadoEmail1=Fue enviado un token de confirmación a su e-mail
+porFavorInsiraToken1=. Por favor, inserte el token a continuación para efectuar la transacción.
+foiEnviadoSMS1=Fue enviado un token de confirmación a su celular
+useGoogle1=Por favor, use su Google Authenticator para insertar el token a continuación.
+
+tokenInvalido=Token inválido.
+pinInvalido=PIN inválido.
+
+
+

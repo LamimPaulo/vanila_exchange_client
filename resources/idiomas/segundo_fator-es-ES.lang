@@ -1,0 +1,28 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#Segundo Fator
+#
+
+
+#Segundo Fator
+#--VIEW
+#Modules\acesso\views\two_factor_auth.phtml
+#Textos da View
+newCashAcesso=Cointrade - Acceso
+validarCodigo=Validar el código
+entrarButton=Entrar
+enviandoBtn=Enviando Token...
+reenviarBtn=Reenviar Token
+#Placeholder
+codEnviadoEmail=Código enviado por e-mail
+googleAutherticator=Google Authenticator
+codigoPorSMS=Código enviado por SMS
+#Links
+reenviarToken=Reenviar Token
+cancelarAcesso=Cancelar Acesso
+
+##--
+
+

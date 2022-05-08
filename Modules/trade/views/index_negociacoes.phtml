@@ -1,0 +1,281 @@
+<?php
+$casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"]  : 2);
+
+$paridade = Modules\principal\Controllers\Principal::getParity();
+$cliente = Utils\Geral::getCliente();
+$dataInicial = new \Utils\Data(date("d/m/Y H:i:s"));
+$dataInicial->subtrair(0,1,0);
+$dataFinal = new \Utils\Data(date("d/m/Y H:i:s"));
+$mostrarBotoes = ($paridade->ativo > 0 && $paridade->statusMercado > 0 && $cliente->statusMercado > 0);
+
+$mostrarAlerta = false;
+$mensagemAlerta = "";
+
+if ($paridade->ativo < 1) {
+    $mostrarAlerta = true;
+    $mensagemAlerta = "O mercado da moeda foi encerrado!";
+} else if ($paridade->statusMercado < 1) {
+    $mostrarAlerta = true;         
+    $mensagemAlerta = "O mercado da moeda está temporariamente suspenso!";                  
+} else if ($cliente->statusMercado < 1) {
+    $mensagemAlerta = "A compra e venda de criptomoedas está temporariamente suspensa na sua conta!";
+    $mostrarAlerta = true;
+}
+
+$idioma = new \Utils\PropertiesUtils("negociacoes", IDIOMA);
+$_data["idiomaMenu"] = $idioma;
+?>
+<style>
+    .border-edit {
+        border: 1px solid #1c84c6 !important;
+    }
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<?php Utils\Layout::append("inspina/breadcrumb", $_data) ?>
+    
+<div>
+
+
+    <!-- Main content -->
+<section class="content">
+    <!-- Profile Image -->
+    
+    <?php if ($mostrarAlerta) { ?>
+    <div class="row">
+        <div class="col col-lg-12">
+            <br><br>
+            <div class="alert alert-warning text-center">
+                <h4><i class="fa fa-exclamation-triangle fa-2x" ></i> &nbsp;&nbsp; <span ><?php echo $mensagemAlerta ?> </span></h4>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+    
+    <br>
+
+    <div class="row">
+        <div class="col col-lg-12">
+            <div class="table-responsive">
+                    <table class="table table-bordered" style="font-size: 11px;background-color: #fff;scroll-behavior:">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="background-color: #fff"><?php echo $idioma->getText("inicioDia") ?></th>
+                                <th class="text-center" style="background-color: #fff"><?php echo $idioma->getText("ultimoPreco") ?></th>
+                                <th class="text-center" style="background-color: #fff"><?php echo $idioma->getText("menorValor24") ?></th>
+                                <th class="text-center" style="background-color: #fff"><?php echo $idioma->getText("maiorValor24") ?></th>
+                                <th class="text-center" style="background-color: #fff"><?php echo $idioma->getText("variacao24") ?></th>
+                                <th class="text-center" style="background-color: #fff"><?php echo $idioma->getText("volume24") ?></th>
+                            </tr>
+                        </thead>
+                        <tbody id="hoje-list">  
+                            <tr>
+                                <td class="text-center" style="background-color: #fff" id="inicioDia"></td>
+                                <td class="text-center" style="background-color: #fff" id="ultimoPreco"></td>
+                                <td class="text-center" style="background-color: #fff" id="menorValor24h"></td>
+                                <td class="text-center" style="background-color: #fff" id="maiorValor24h"></td>
+                                <td class="text-center" style="background-color: #fff" id="variacao24h"></td>
+                                <td class="text-center" style="background-color: #fff" id="volume24h"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col col-lg-4">
+                <div class="panel-body">
+                   <div class="panel-heading" style="color: #fff;text-align: center;background-color: #1ab394">
+                    <strong><?php echo $idioma->getText("ordensCompra") ?></strong> 
+                </div> 
+                    <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 11px;background-color: #fff">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><?php echo $idioma->getText("cotacaoC") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("volumeC") ?> - <?php echo $paridade->moedaBook->simbolo ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("valorTotalC") ?></th>
+                            </tr>
+                        </thead>
+                        <tbody id="buy-list">    
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+        
+        <div class="col col-lg-4">
+                <div class="panel-body">
+                   <div class="panel-heading" style="color: #fff;text-align: center;background-color: #ed5565">
+                    <strong><?php echo $idioma->getText("ordensVenda") ?></strong> 
+                </div> 
+                    <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 11px;background-color: #fff">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><?php echo $idioma->getText("cotacaoV") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("volumeV") ?> - <?php echo $paridade->moedaBook->simbolo ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("valorTotalV") ?></th>
+                            </tr>
+                        </thead>
+                        <tbody id="sell-list">
+                            
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+        
+        <div class="col col-lg-4">
+                <div class="panel-body">
+                   <div class="panel-heading" style="color: #fff;text-align: center;background-color: #1c84c6">
+                       <strong style="margin-left: -55px"><?php echo $idioma->getText("negociacoesTb") ?></strong> 
+                    <div class="pull-left">   
+                        <input type="checkbox" class="" id="otc" name="otc" value="1"><label style="font-size: 11px">&nbsp;<?php echo $idioma->getText("otc") ?>&nbsp;</label>
+                    </div>  
+                </div> 
+                    <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 11px;background-color: #fff">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><?php echo $idioma->getText("modo") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("hora") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("cotacaoN") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("volumeN") ?> - <?php echo $paridade->moedaBook->simbolo ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("valorTotalN") ?></th>
+                            </tr>
+                        </thead>
+                        <tbody id="trade-list">
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+    
+    
+    <br><br>
+
+</section>
+    
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        listarCompras();
+        listarVendas();
+        listarTrade();
+        getDados();
+    });
+    
+    setInterval(
+        function() {
+            listarCompras();
+            listarVendas();
+            listarTrade();
+            getDados();
+        },2000);
+    
+    function listarCompras() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_NEGOCIACOES_FILTRARCOMPRAS ?>',
+            method: 'post',
+            dataType:'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $(".order-item-<?php echo \Utils\Constantes::ORDEM_COMPRA ?>").remove();
+                        $("#buy-list").append(json.html);
+                    } else {
+                        $(".order-item-<?php echo \Utils\Constantes::ORDEM_COMPRA ?>").remove();
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $(".order-item-<?php echo \Utils\Constantes::ORDEM_COMPRA ?>").remove();
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+
+    function listarVendas() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_NEGOCIACOES_FILTRARVENDAS ?>',
+            method: 'post',
+            dataType:'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $(".order-item-<?php echo \Utils\Constantes::ORDEM_VENDA ?>").remove();
+                        $("#sell-list").append(json.html);
+                    } else {
+                        $(".order-item-<?php echo \Utils\Constantes::ORDEM_VENDA ?>").remove();
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $(".order-item-<?php echo \Utils\Constantes::ORDEM_VENDA ?>").remove();
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function listarTrade() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_NEGOCIACOES_FILTRARTRADE ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+               otc: $("#otc").is(":checked") 
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $(".order-item-trade").remove();
+                        $("#trade-list").append(json.html);
+                    } else {
+                        $(".order-item-trade").remove();
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $(".order-item-trade").remove();
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function getDados() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_NEGOCIACOES_DADOS ?>',
+            method: 'post',
+            dataType:'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#inicioDia").html(json.inicio);
+                        $("#ultimoPreco").html(json.ultimoPreco);
+                        $("#menorValor24h").html(json.menorPreco);
+                        $("#maiorValor24h").html(json.maiorPreco);
+                        $("#variacao24h").html(json.variacao);
+                        $("#volume24h").html(json.volume);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    //showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+</script>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+

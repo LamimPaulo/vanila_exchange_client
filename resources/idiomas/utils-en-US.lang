@@ -1,0 +1,27 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#UTILS
+falhaDesconhecida=Unknown error. Please try again later.
+ocorreramFalhas=Failed to send the image to the server, it is likely that the directory access permission has been denied. Please contact support.
+extensaoImagem=Unsupported image extension: 
+arquivoTemporario=Temporary file was not found.
+nomeImagemNaoInformado=Image name was not informed.
+senhaBranco=Password is blank.
+sessaoExpirada=Session expired. Please log in again.
+naoPossuiPermissao=You do not have permission to access this module
+cadastroSuspenso=Registration temporarily suspended.
+erroEnvioArquivo=Error sending file.
+arqInvalido=Invalid file.
+arqNaoSuportado=File not supported by server.
+tamanhoMaximoArq=The file size exceeds the maximum allowed of 10MB.
+formatoInvalido=Invalid format.
+
+
+##--------------------
+
+
+
+
+

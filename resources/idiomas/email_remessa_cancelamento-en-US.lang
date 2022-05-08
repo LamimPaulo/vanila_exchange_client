@@ -1,0 +1,34 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#REMESSA CANCELADA
+#
+#--VIEW
+
+##--
+#Textos da View
+assunto=Cancel Remittance Done
+titulo=NewCash - Cancel Remittance Done
+titulo2=Cancel Remittance Done!
+ola=Hi
+fraseSeguranca=Your safety phrase is:
+remessaSucesso=The remittance of values below was canceled.
+banco=Bank:
+titular=Owner:
+tipoConta=Account Type:
+corrente=Account
+conta=Accoun:
+agencia=Agency:
+valor=Amunt:
+motivoCancelamento=Reason for Cancellation:
+
+
+infAcesso=Access information:
+dataHora=Date/Time:
+ipAcesso=Access IP:
+newCashEndereco=Cointrade | 
+emailDoSistema=This is an email system. Please do not answer.
+casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.
+
+

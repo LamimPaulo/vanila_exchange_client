@@ -1,0 +1,457 @@
+<?php
+$dataInicial = new Utils\Data(date("d/m/Y"));
+$dataFinal = new Utils\Data(date("d/m/Y"));
+$dataInicial->subtrair(0, 0, 30);
+$saldo = isset($_data["saldo"]) ? $_data["saldo"] : 0;
+$cliente = isset($_data["cliente"]) ? $_data["cliente"] : new Models\Modules\Cadastro\Cliente();
+$configuracao = isset($_data["configuracao"]) ? $_data["configuracao"] : new Models\Modules\Cadastro\Configuracao();
+$adm = (\Utils\Geral::isUsuario() && \Utils\Geral::getLogado()->tipo == Utils\Constantes::ADMINISTRADOR);
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+
+$mostrarBotaoTransferir = (Utils\Geral::isCliente() && ($cliente->statusSaqueBrl > 0));
+?>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+    <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+    <div class="col-lg-9">
+      <ol class="breadcrumb m-t-md" style="background-color: transparent !important;">
+          <li>
+            <?php echo $idioma->getText("subTitulo") ?>
+          </li>
+          <li class="active">
+              <strong><?php echo $idioma->getText("titulo") ?>
+          </li>
+      </ol>
+    </div>
+    <div class="col-lg-3">
+    <?php Utils\Layout::append("inspina/flags", $_data) ?>
+    </div>
+  </div>
+</div>
+    
+<div>
+<br>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-6 b-r">
+                        <form role="form">
+                            <div class="form-group">
+                                <label>Carteira de destino.</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control"  id="transferenciaContaCarteira"/>
+                                    <input type="hidden" id="idClienteDestiantario"/>
+
+                                </div>
+                                <p>
+                                    Atenção: Utilize a carteira de qualquer moeda da pessoa para a qual você deseja enviar o valor. O valor será debitado em reais da sua 
+                                    conta corrente e será creditado em reais na conta corrente do destinatário.
+                                </p>
+                            </div>
+                            <div class="form-group"><label>Descrição para essa transferência.</label> <input type="text" class="form-control"  id="descricao"  maxlength="60"/></div>
+                            <label>Valor (em reais).</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="transferenciaContaValor"  />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary" onclick="utilizarSaldo();">Meu Saldo Total</button>
+                                </span>
+                            </div>
+                    </div>
+                    <div class="col-sm-6">
+
+                        <span id="transferenciaContaNomeClienteDestinatario" class="label label-warning" style="font-size: 16px;"></span>
+                        <span id="transferenciaContaNaoEncontradoContainer" class="label label-danger" style="font-size: 16px;">Carteira Inválida</span>
+                        <span style="font-size: 16px;">&nbsp;</span>
+
+                        <div class="widget style1 navy-bg">
+                                <div class="row">
+                                    <div class="col-xs-4 text-center">
+                                        <span style="font-size: 70px">R</span><i class="fa fa-usd fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <span> Reais </span>
+                                        <h1 class="font-bold"> <label id="transferenciaContaTotal">R$ 0,00</label></h1>
+                                    </div>
+                                </div>
+                        </div>
+                        <p>Taxa: R$ <?php echo number_format($configuracao->taxaTransferenciaInternaReais, 2, ",", "")?></p>
+                        <p></p>
+                        <p style="color: #ed5565">Valor da transferência deve ser maior ou igual a R$ <?php echo number_format($configuracao->taxaTransferenciaInternaReais, 2, ",", "")?></p>
+
+                        <?php if (Models\Modules\Acesso\RotinaRn::validar(Utils\Rotas::R_TRANSFERENCIAREAIS, \Utils\Constantes::CADASTRAR)) { ?>
+
+                        <?php if ($mostrarBotaoTransferir) { ?>
+                        <button type="button" class="btn btn-sm  btn-success pull-right m-t-n-xs" id="transferenciaContaBtnTransferir" onclick="modalTransferir();"><strong>Transferir Agora</strong></button>
+                        <?php } ?>
+
+                        <?php } ?>
+
+                    </div>
+                    <div></div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div >
+    <div class="ibox float-e-margins">                    
+        <div class="ibox-content">
+            <div class="row">
+
+                <div class="col-md-12">           
+        
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Data Inicial</label>
+                                        <input type="text" id="dataInicial" class="form-control" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR)?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Data Final</label>
+                                        <input type="text" id="dataFinal" class="form-control" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR)?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-lg-6">
+                                    <div class="form-group">
+                                        <label>Filtro Geral</label>
+                                        <input type="text" id="filtro" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-lg-12 text-center">
+                                    <br>
+                                    <button class="btn btn-primary" onclick="filtrar();">
+                                        <i class="fa fa-refresh"></i> Atualizar
+                                    </button>
+                                    <button class="btn btn-default pull-right" onclick="print();">
+                                        <i class="fa fa-print"></i> Imprimir
+                                    </button>
+                                    <br><br>
+                                </div>
+                            </div>
+
+                                           
+                    
+                            <div class="row">
+                                <div class="col col-lg-12" >
+                                    <div id="vertical-timeline" class="vertical-container light-timeline ">
+                                        <div class="vertical-timeline-block " id="lista">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br><br>
+
+                            <?php if ($adm) { ?>
+                            <div class="row">
+                                <div class="col col-lg-3 col-lg-offset-9 text-center">
+                                    <a class="btn btn-default btn-lg" href="<?php echo URLBASE_CLIENT  . Utils\Rotas::R_CONTACORRENTEREAIS ?>/<?php echo Utils\Criptografia::encriptyPostId($cliente->id) ?>">
+                                        Voltar
+                                    </a>
+                                    <br><br>
+                                </div>
+                            </div>
+                            <?php } ?>
+
+
+                        </div>
+                        <!-- /.panel-body -->
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        
+        filtrar();
+        
+        $("#dataInicial, #dataFinal").datepicker({format: 'dd/mm/yyyy'}).mask("99/99/9999");
+        
+        $("#transferenciaContaValor").keydown(function(event) {
+            $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+            calcularValorTotal();
+            event.preventDefault();
+        });
+        
+        $("#token, #pin").numeric();
+    });
+    
+    function calcularValorTotal() {
+        var taxa = <?php echo number_format($configuracao->taxaTransferenciaInternaReais, 2, ".", "")?>;
+        var valor = ($("#transferenciaContaValor").val().length > 0 ? parseFloat($("#transferenciaContaValor").val().replace(",", ".")) : 0.00);
+        var total = taxa + valor;
+        $("#transferenciaContaTotal").text("R$ " + total.toFixed(2).replace(".",","));
+    }
+    
+    function filtrar() {
+        $("#lista").html("<div class='col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT  . Utils\Rotas::R_REAIS_TRANSFERENCIAS_FILTRAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                dataInicial:$("#dataInicial").val(),
+                dataFinal:$("#dataFinal").val(),
+                idCliente:<?php echo $cliente->id ?>,
+                filtro: $("#filtro").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista").html(json.html);
+                    } else {
+                        $("#lista").html("<div class='col-lg-12 text-center'>"+json.mensagem+"</div>");
+                    }
+                } catch (e) {
+                    $("#lista").html("<div class='col-lg-12 text-center'>"+e+"</div>");
+                }
+            }
+        });
+    }
+    
+    
+    function print() {
+        var dataInicial = $("#dataInicial").val();
+        var dataFinal = $("#dataFinal").val();
+        var idCliente = <?php echo $cliente->id ?>;
+        var filtro = $("#filtro").val();
+        var s = dataInicial + "|"+ dataFinal + "|"+filtro+"|"+idCliente;
+        var params = btoa(s);
+        
+        window.open("<?php echo URLBASE_CLIENT  . Utils\Rotas::R_REAIS_TRANSFERENCIAS_IMPRIMIR ?>/"+params);
+        
+    }
+    
+    
+    
+    function transferir() {
+        $("#transferenciaContaBtnTransferir, #modalTransacaoConfirmar, #modalTransacaoCancelar, #modalTransacaoReenviar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_TRANSFERIR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idClienteFrom: <?php echo $cliente->id ?>,
+                idClienteTo: $("#idClienteDestiantario").val(),
+                valor: $("#transferenciaContaValor").val(),
+                descricao: $("#descricao").val(),
+                token: $("#token").val(),
+                pin: $("#pin").val()
+            },
+
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalTransacaoCancelar").prop("disabled", false).trigger("click");
+                        showNotyAlert(json.mensagem, "s");
+                        $("#transferenciaContaNomeClienteDestinatario").html("");
+                        $("#transferenciaContaDestinatarioContainer").hide();
+                        $("#transferenciaContaNaoEncontradoContainer").hide();
+                        $("#saldobrl").text(json.saldo);
+                        $("#transferenciaContaValor").val("0,00");
+                        $("#transferenciaContaTotal").text("0,00");
+                        $("#transferenciaContaCarteira").text("");
+                        $("#idClienteDestiantario").val("0");
+                        filtrar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#transferenciaContaBtnTransferir, #modalTransacaoConfirmar, #modalTransacaoCancelar, #modalTransacaoReenviar").prop("disabled", false);
+            }
+        });
+    }
+    $("#transferenciaContaBtnTransferir").prop("disabled", true);
+    $("#transferenciaContaNaoEncontradoContainer").hide();
+
+    $('#transferenciaContaCarteira').on('keyup', function(){
+    let myLength = $("#transferenciaContaCarteira").val().length;
+    if (myLength > 26) {
+        findCliente();
+    } else if(myLength == 0) {
+        $("#transferenciaContaNaoEncontradoContainer").hide();
+        $("#transferenciaContaDestinatarioContainer").hide();
+        $("#transferenciaContaBtnTransferir").prop("disabled", true);
+    }
+    });
+
+
+    
+    function findCliente() {
+        $("#transferenciaContaBtnFind").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_CLIENTES_FINDBYWALLET ?>',
+            dataType: 'json',
+            method: 'post',
+            data: {
+                carteira: $("#transferenciaContaCarteira").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        if (json.cliente.id > 0) {
+                            $("#idClienteDestiantario").val(json.cliente.id);
+                            $("#transferenciaContaDestinatarioContainer").show();
+                            $("#transferenciaContaNaoEncontradoContainer").hide();
+                            $("#transferenciaContaNomeClienteDestinatario").html(json.cliente.nome);
+                            $("#transferenciaContaBtnTransferir").prop("disabled", false);
+                        } else {
+                            
+                        }
+                    } else {
+                        //alert(json.mensagem);
+                            $("#idClienteDestiantario").val(0);
+                            $("#transferenciaContaNaoEncontradoContainer").show();
+                            $("#transferenciaContaDestinatarioContainer").hide();
+                            $("#transferenciaContaNomeClienteDestinatario").html("");
+                            $("#transferenciaContaBtnTransferir").prop("disabled", true);
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                //$("#transferenciaContaBtnFind").prop("disabled", false);
+            }
+        });
+    }
+    
+    function utilizarSaldo() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INIT ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        var taxa = <?php echo number_format($configuracao->taxaTransferenciaInternaReais, 2, ".", "")?>;
+                        var valor = parseFloat(json.saldobrl);
+                        
+                        if (valor > 0) {
+                            var total = valor-taxa;
+                        } else {
+                            var total = 0;
+                        }
+                        $("#transferenciaContaValor").val(total.toFixed(2).replace(".",","));
+                        calcularValorTotal();
+                    }
+                } catch (e) {
+                }
+                
+            }
+        });
+    }
+    
+    
+    
+    function modalTransferir() {
+        $("#transferenciaContaBtnTransferir").prop("disabled", true);
+        $("#modalTransacaoCancelar").trigger("click");
+        $("#token").val("");
+        $("#pin").val("");
+        var idClienteTo = $("#idClienteDestiantario").val();
+        var descricao = $("#descricao").val();
+        var valor = parseFloat(($("#transferenciaContaValor").val().length > 0 ? $("#transferenciaContaValor").val().replace(",", ".") : 0));
+        
+        if (!idClienteTo > 0 || descricao.length <= 0 || valor <= 0) {
+            $("#transferenciaContaBtnTransferir").prop("disabled", false);
+            e("Você precisa informar todos os parâmetros");
+        } else {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_AUTORIZACAO_TOKEN ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    idClienteTo:  $("#idClienteDestiantario").val(),
+                    valor: valor
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#modalTransacaoMeio").html(json.meio);
+                            $("emodalTransacao").modal();
+                        } else {
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
+                        showNotyAlert(e, "e");
+                    }
+                    $("#transferenciaContaBtnTransferir").prop("disabled", false);
+                    
+
+                }
+            });
+        }
+    }
+</script>
+
+
+
+<div class="modal inmodal" id="modalTransacao" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <i class="fa fa-bitcoin modal-icon"></i>
+                <h4 class="modal-title">Confirmar transação</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <strong id="modalTransacaoMeio"></strong>
+                </p>
+                
+                <div class="form-group">
+                    <label>Informe o token: </label> 
+                    <input type="text"  class="form-control" id="token">
+                </div>
+                
+                
+                <div class="form-group">
+                    <label>Informe o seu PIN: </label> 
+                    <input type="password"  class="form-control" id="pin">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info pull-left" onclick="modalTransferir();"  id="modalTransacaoReenviar">Reenviar</button>
+                <button type="button" class="btn btn-white" data-dismiss="modal" id="modalTransacaoCancelar">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="transferir();"  id="modalTransacaoConfirmar">Confirmar transação</button>
+            </div>
+        </div>
+    </div>
+</div>

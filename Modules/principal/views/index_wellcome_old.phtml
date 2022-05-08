@@ -1,0 +1,333 @@
+<?php
+
+$brand = Models\Modules\Cadastro\BrandRn::getBrand();
+
+$idioma = new \Utils\PropertiesUtils("index_wellcome", IDIOMA);
+$_data["idiomaMenu"] = $idioma;
+use Utils\Rotas;
+$usuario = Utils\Geral::getLogado();
+$cliente = Utils\Geral::getCliente();
+$sexo = (\Utils\Geral::isCliente() ? $cliente->sexo : "M");
+if (strtolower($sexo) == "m") {
+    $foto = TEMA . "dist/img/avatar5.png";
+} else {
+    $foto = TEMA . "dist/img/avatar2.png";
+}
+if (\Utils\Geral::isCliente() && !empty($cliente->foto)) {
+    $foto = URLBASE_CLIENT . UPLOADS . $cliente->foto;
+} else if (!empty ($usuario->foto)){
+    $foto = URLBASE_CLIENT . UPLOADS . $usuario->foto;
+}
+
+$clienteVerificado = isset($_data["clienteVerificado"]) ? $_data["clienteVerificado"] : false;
+
+$fraseSeguranca = (\Utils\Geral::isCliente() ? $cliente->fraseSeguranca : "");
+$carteiraPrincipal = isset($_data["carteiraPrincipal"]) ? $_data["carteiraPrincipal"] : null;
+$moedaFavorita = isset($_data["moedaFavorita"]) ? $_data["moedaFavorita"] : null;
+$configuracao = isset($_data["configuracao"]) ? $_data["configuracao"] : null;
+$moeda1 = isset($_data["moeda1"]) ? $_data["moeda1"] : null;
+$moeda2 = isset($_data["moeda2"]) ? $_data["moeda2"] : null;
+//$listaSaquesDepositos = isset($_data["saquesDepositos"]) ? $_data["saquesDepositos"] : null;
+
+$moedaCripto = Utils\Criptografia::encriptyPostId($moedaFavorita->id);
+
+?>
+    
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data);  ?>
+<?php Utils\Layout::append("inspina/menu", $_data);  ?>
+
+<div class="wrapper wrapper-content">
+    <?php if(!$clienteVerificado){ ?>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert alert-success alert-dismissable">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                <?php echo $idioma->getText("envieOsDocumentos") ?> -  <a class="alert-link" href="<?php echo URLBASE_CLIENT . Rotas::R_MEUSDADOS ?>">Meu Perfil</a>.
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+    <div class="row">
+            <div class="col-lg-4">
+                <div class="widget style" style="background-color: <?php echo $moeda1->mainColor ?>">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <img src="<?php echo IMAGES ?>currencies/<?php echo $moeda1->icone ?>" style="height: 60px;">
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <span style="color: <?php echo $moeda1->corFonte ?>"><?php echo $moeda1->nome ?></span>
+                            <h2 id="totalMoeda1" class="font-bold" style="color: <?php echo $moeda1->corFonte ?>; font-size: 25px;">0,00</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget style1" style="background-color: <?php echo $moeda2->mainColor ?>">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <img src="<?php echo IMAGES ?>currencies/<?php echo $moeda2->icone ?>" style="height: 60px;"> 
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <span style="color: <?php echo $moeda2->corFonte ?>"><?php echo $moeda2->nome ?></span>
+                            <h2 id="totalMoeda2" class="font-bold" style="color: <?php echo $moeda2->corFonte ?>; font-size: 25px;">0.00000000</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="widget style1" style="background-color: <?php echo $moedaFavorita->mainColor ?>">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <img src="<?php echo IMAGES ?>currencies/<?php echo $moedaFavorita->icone ?>" style="height: 60px;">
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <i class="fa fa-star" style="color: gold;">&nbsp;&nbsp;</i><span style="color: <?php echo $moedaFavorita->corFonte ?>;"><?php echo $moedaFavorita->nome ?></span>
+                            <h2 id="totalFavorita" class="font-bold" style="color: <?php echo $moedaFavorita->corFonte ?>; font-size: 25px;">0.00000000</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    
+    <hr style="border-width: 2px; margin-bottom: 20px;">
+    
+    
+    <div class="">
+        <div class="row">
+            <div class="col-sm-2 ">
+                <div data-toggle="buttons" class="btn-group">
+                    <label class="btn btn-sm btn-white active"> <input type="radio" value="1" name="listCoin" onclick="listCoins();"><?php echo $idioma->getText("comSaldo") ?></label>
+                    <label class="btn btn-sm btn-white"> <input type="radio" value="0" name="listCoin" onclick="listCoins();"><?php echo $idioma->getText("todos") ?></label>
+                </div>
+            </div>
+            
+            
+            <div class="col-sm-10">
+                    <input type="text" id="filtroTextoCoin" placeholder="<?php echo $idioma->getText("pesquisar") ?>" class="input-sm form-control">
+            </div>
+        </div>
+        <div class="table-responsive ">
+                <table id="tblListaCoin" class="table table-stripped text-center" data-sort="false" data-page-size="7" data-filter=#filtroTextoCoin  style="font-size: 11px;">
+                    <thead>
+                    <tr>
+                        <th class="text-left "><?php echo $idioma->getText("moeda") ?></th>
+                        <th class="text-center "><?php echo $idioma->getText("ranking") ?></th>
+                        <th class="text-center "><?php echo $idioma->getText("volume") ?></th>                        
+                        <th class="text-center "><?php echo $idioma->getText("ordem") ?></th>
+                        <th class="text-center "><?php echo $idioma->getText("total") ?></th>
+                        <th class="text-center " style="text-align: center; width: 180px;"><strong><?php echo $idioma->getText("acao") ?></strong></th>
+                    </tr>
+                    </thead>
+                    <tbody id="minhas-moedas">
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <ul class="pagination pull-right"></ul>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        <button id="btn" class="hidden" hidden="true"></button>
+    </div> 
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+<script>
+    var todas = true;
+    $(document).ready(function () {
+        
+        $('#tblListaCoin').footable();        
+        saldo();
+        listarMinhasMoedas(todas);
+        setInterval(function() {   
+                    listarMinhasMoedas(todas);
+                    saldo();
+                  },65000);
+    });
+        
+        $('.table-responsive').on('show.bs.dropdown', function () {
+        $('.table-responsive').css( "overflow", "inherit" );
+        });
+
+        $('.table-responsive').on('hide.bs.dropdown', function () {
+        $('.table-responsive').css( "overflow", "auto" );
+        });
+    
+    var $radios = $('input[name="listCoin"]');
+    $radios.change(function() {
+         checked = $radios.filter(':checked');
+         if(checked.val() == 1){
+            todas = true;
+            listarMinhasMoedas(true);
+         } else {
+            todas = false;
+            listarMinhasMoedas(false); 
+         }
+    });
+    
+    function getWallet() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CURRENCY_DADOS ?>',
+            method: 'post',
+            dataType: 'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#imgCarteiraDestino").attr("src", json.src);
+                        $("#txtEndereco").html(json.address);
+                    } else {
+                    }
+                } catch (e) {
+                }
+            }
+        });
+    }
+    
+    function testeEmail() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_TESTE_EMAIL ?>',
+            method: 'post',
+            dataType: 'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                }
+            }
+        });
+    }
+
+    function contador(par1, par2, par3) {
+   
+        Number.prototype.numberFormat = function(decimals, dec_point, thousands_sep) {
+            dec_point = typeof dec_point !== 'undefined' ? dec_point : ',';
+            thousands_sep = typeof thousands_sep !== 'undefined' ? thousands_sep : '.';
+
+            var parts = this.toFixed(decimals).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep);
+
+            return parts.join(dec_point);
+            }
+            Number.prototype.numberFormat1 = function(decimals, dec_point, thousands_sep) {
+            dec_point = typeof dec_point !== 'undefined' ? dec_point : '.';
+            thousands_sep = typeof thousands_sep !== 'undefined' ? thousands_sep : '';
+
+            var parts = this.toFixed(decimals).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep);
+
+            return parts.join(dec_point);
+            }
+            
+            var counter = { var1: 0, 
+                            var2: 0,
+                            var3: 0};
+
+             TweenMax.to(counter, 1, {
+                  var1: par1,
+                  var2: par2,
+                  var3: par3,
+                  onUpdate: function () {
+                      var nwc1 = counter.var1.<?php echo $moeda1->casasDecimais == 8 ? "numberFormat1(8)" : "numberFormat(2)" ?>;
+                      var nwc2 = counter.var2.<?php echo $moeda2->casasDecimais == 8 ? "numberFormat1(8)" : "numberFormat(2)" ?>;
+                      var nwc3 = counter.var3.numberFormat1(8);
+                      $("#totalMoeda1").html(nwc1);
+                      $("#totalMoeda2").html(nwc2);
+                      $("#totalFavorita").html(nwc3);       
+                  },
+                  ease:Circ.easeOut
+              });
+    }
+    
+    function listarMinhasMoedas(qtd) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD_MINHASMOEDAS ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                esconderZerados: qtd,
+                moedaFavorita: '<?php echo $moedaCripto ?>'
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+
+                        $("#minhas-moedas").html(json.html);
+                        $('#minhas-moedas').trigger('footable_initialize');
+                    } else {
+                        $("#minhas-moedas").html("");
+                    }
+                } catch (e) {
+                    $("#minhas-moedas").html("");
+                }
+            }
+        });
+    }
+    
+    function saldo() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD_MOEDA_SALDO ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                moeda1: '<?php echo \Utils\Criptografia::encriptyPostId($moeda1->id) ?>',
+                moeda2: '<?php echo \Utils\Criptografia::encriptyPostId($moeda2->id) ?>',
+                moedaFavorita: '<?php echo $moedaCripto ?>'
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        contador(json.saldoMoeda1, json.saldoMoeda2, json.saldoFavorita);
+                    } else {
+                        $("#totalMoeda1").html('0,00000000');
+                        $("#totalMoeda2").html('0,00000000');
+                        $("#totalFavorita").html('0,00000000');
+                    }
+                } catch (e) {
+
+                }
+            }
+        });
+    }
+    
+    function setMoedaFavorita(moeda) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD_MOEDA_FAVORITA ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                moeda: moeda
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        location.reload();
+                    } else {
+                        location.reload();
+                    }
+                } catch (e) {
+                   
+                }
+            }
+        });
+    }
+    
+    function selectAction(moeda,categoria,url){
+        if (url == 'R_DEPOSITOS'){
+            var actionForm = $('<form>', {'action': '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_DEPOSITOS ?>', 'method': 'post'}).append($('<input>', {'name': 'moeda', 'value': moeda, 'type': 'hidden'}), $('<input>', {'name': 'categoria', 'value': categoria, 'type': 'hidden'}));
+            }else {    
+            var actionForm = $('<form>', {'action': '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_SAQUES ?>', 'method': 'post'}).append($('<input>', {'name': 'moeda', 'value': moeda, 'type': 'hidden'}), $('<input>', {'name': 'categoria', 'value': categoria, 'type': 'hidden'}));
+            }
+        $(document.body).append(actionForm);
+        actionForm.submit();
+        }
+</script>
+

@@ -1,0 +1,56 @@
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+      <h2>Processso</h2>
+      <ol class="breadcrumb">
+        <li>Financeiro</li>
+        <li class="active">
+          <strong>Processso</strong>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="ibox float-e-margins">
+        <div class="ibox-content form-horizontal">
+          <div class="form-group">
+            <label for="simbolo">S&iacute;mbolo</label>
+            <input type="text" id="simbolo" name="simbolo" value="" class="form-control" maxlength="3" />
+          </div>
+          <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" value="<?php echo $teste; ?>" class="form-control" maxlength="3" />
+          </div>
+          <div class="form-group">
+            <label for="nome">Path</label>
+            <input type="text" id="nome" name="nome" value="<?php echo $teste; ?>" class="form-control" maxlength="3" />
+          </div>
+          <div class="form-group">
+            <label for="nome">Data &Uacute;ltima Execu&ccedil;&atilde;o</label>
+            <input type="text" id="nome" name="nome" value="<?php echo $teste; ?>" class="form-control" maxlength="3" />
+          </div>
+          <div class="form-group">
+            <label for="ativo">Ativo</label>
+            <input type="checkbox" name="ativo" value="ativo" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>

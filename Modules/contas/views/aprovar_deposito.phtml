@@ -1,0 +1,394 @@
+<?php
+$cliente = isset($_data["cliente"]) ? $_data["cliente"] : new Models\Modules\Cadastro\Cliente();
+$estorno = isset($_data["estorno"]) ? $_data["estorno"] : null;
+
+$configuracao = isset($_data["configuracao"]) ? $_data["configuracao"] : new \Models\Modules\Cadastro\Configuracao();
+$deposito = isset($_data["deposito"]) ? $_data["deposito"] : new Models\Modules\Cadastro\Deposito();
+$contasBancarias = isset($_data["contas"]) ? $_data["contas"] : Array();
+$contasBancariasEmpresa = isset($_data["contasEmpresa"]) ? $_data["contasEmpresa"] : Array();
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+$valorCreditado = ($deposito->valorDepositado - ($deposito->valorDepositado * $deposito->taxaComissao / 100));
+
+$idioma = new \Utils\PropertiesUtils("deposito", IDIOMA);
+?>
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+        <div class="col-lg-10">
+            <h2><?php echo $idioma->getText("tituloA") ?></h2>
+            <ol class="breadcrumb" style="background-color: transparent !important;">
+                <li>
+                    <?php echo $idioma->getText("subTituloA") ?>
+                </li>
+                <li class="active">
+                    <strong><?php echo $idioma->getText("tituloB") ?></strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+    <!-- Main content -->
+<section class="content">
+    
+    <br><br>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <?php Utils\Layout::append("mensagem", $_data)?>
+                    
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        
+                        <div class="row">
+                            <div class="col col-md-6 col-md-offset-3 col-xs-12 col-xs-offset-0">
+                                <div class="panel panel-primary">
+                                    
+                                    
+                                        <div class="panel-heading">
+                                            <?php echo $idioma->getText("dadosSolicitacao") ?>
+                                        </div>
+                                        
+                                        <div class="panel-body">
+                                            <ul class="list-group">
+                                                
+                                                <li class="list-group-item"><?php echo $idioma->getText("clienteA") ?> <?php echo $cliente->nome ?></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("depositoA") ?> R$<?php echo number_format($deposito->valorDepositado, 2, ",", ".") ?></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("comissaoA") ?> R$<?php echo number_format($deposito->valorComissao, 2, ",", ".") ?></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("creditadoA") ?> R$<?php echo number_format($valorCreditado, 2, ",", ".")?></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("bancoA") ?> <?php echo $deposito->contaBancariaEmpresa->banco->nome ?></li>
+                                                <li class="list-group-item">
+                                                    <?php echo $idioma->getText("tipoA") ?> 
+                                                        <?php 
+                                                        switch ($deposito->tipoDeposito) {
+                                                            case \Utils\Constantes::DINHEIRO: echo $idioma->getText("dinheiroA"); break;
+                                                            case \Utils\Constantes::TED: echo $idioma->getText("tedA"); break;
+                                                            case \Utils\Constantes::DOC: echo $idioma->getText("docA"); break;
+                                                        }
+                                                        ?>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <?php echo $idioma->getText("comprovanteA") ?>
+                                                    <a href="<?php echo URLBASE_CLIENT . UPLOADS . $deposito->comprovante ?>" target="_BLANK_<?php echo $deposito->id?>">
+                                                        <i class="fa fa-file-archive-o"></i> 
+                                                    </a>
+                                                </li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("taxaClienteA") ?> <?php echo number_format($cliente->taxaComissaoDeposito, 2, ",", ".") ?>%</li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("taxaSistemaA") ?> <?php echo number_format($deposito->taxaComissao, 2, ",", ".") ?>%</li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("txUtilizadaA") ?> <?php echo $idioma->getText("txDoA") ?> <?php echo ($cliente->considerarTaxaDepositoCliente ? $idioma->getText("clienteAtx") : $idioma->getText("sistemaAtx")) ?></li>
+                                                <li class="list-group-item"><?php echo $idioma->getText("aceitaNFa") ?> <?php echo ($deposito->aceitaNota > 0 ? $idioma->getText("simA") : $idioma->getText("naoA")) ?></li>
+                                            </ul>
+                                            <div class="row">
+                                            <div class="form-buttons text-center">
+                                                
+                                                <form action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_DEPOSITOS_APROVAR ?>" method="post" enctype="multipart/form-data" id="form-deposito">
+                                                    <input type="hidden" value="<?php echo $deposito->id ?>" name="id" id="id" />
+                                                    <div class="col-lg-4 col-xs-12 m-b-xs">
+                                                    <a class="btn btn-default full-width" href="<?php echo URLBASE_CLIENT  . Utils\Rotas::R_DEPOSITOS ?>" id="btnVoltar">
+                                                        <?php echo $idioma->getText("voltarA") ?>
+                                                    </a>
+                                                    </div>
+
+                                                    <?php if(Models\Modules\Acesso\ModuloRn::validar(Utils\Rotas::M_DEPOSITOS, \Utils\Constantes::EDITAR)) {  ?>
+
+                                                    <?php if (!in_array($deposito->status, Array(Utils\Constantes::STATUS_DEPOSITO_CONFIRMADO, Utils\Constantes::STATUS_DEPOSITO_CANCELADO))) { ?>
+                                                    <div class="col-lg-4 col-xs-12 m-b-xs">
+                                                    <button class="btn btn-danger full-width" type="button" id="btnCancelar" onclick="dialogCancelar();">
+                                                        <?php echo $idioma->getText("cancelarA") ?>
+                                                    </button>
+                                                    </div>
+                                                    <?php } ?>
+                                                    
+                                                    <?php if (!in_array($deposito->status, Array(Utils\Constantes::STATUS_DEPOSITO_CONFIRMADO, Utils\Constantes::STATUS_DEPOSITO_CANCELADO))) { ?>
+                                                        <div class="col-lg-4 col-xs-12 m-b-xs">
+                                                    <button class="btn btn-success full-width" type="submit" id="btnSalvar">
+                                                        <?php echo $idioma->getText("aprovarA") ?>
+                                                    </button>
+                                                        </div>                                                            
+                                                    <?php } ?>
+                                                    
+                                                    <?php } ?>
+                                                </form>
+                                            </div>
+                                            </div>
+                                            <br><br>
+                                            
+                                            <?php if ($estorno == null) { ?>
+                                                <?php if ($deposito->status == Utils\Constantes::STATUS_DEPOSITO_PENDENTE) { ?>
+                                                <div class="row">
+                                                    <div class="col col-lg-12 text-center">
+                                                        <button class="btn btn-success" type="button" id="btnEstorno" onclick="modalIniciarEstorno('<?php echo \Utils\Criptografia::encriptyPostId($deposito->id)?>');">
+                                                            <?php echo $idioma->getText("proceParaEstorno") ?>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <?php } ?>
+                                            <?php } else { ?>
+                                            <div class="row">
+                                                <div class="col col-lg-12">
+                                                    <div class="alert alert-info">
+                                                        <?php echo $idioma->getText("existeProcessoA") ?> <strong><?php echo $estorno->getStatus() ?></strong> <?php echo $idioma->getText("paraEstedepositoA") ?> 
+                                                        <strong><?php echo $estorno->id ?></strong> <?php echo $idioma->getText("iniciadoPorA") ?> <strong><?php echo $estorno->usuarioAbertura->nome ?> </strong>
+                                                        <?php echo $idioma->getText("emA") ?> <strong><?php echo $estorno->dataAbertura->formatar(Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO) ?></strong>.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php }  ?>
+                                            
+                                            
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <br><br>
+                        
+                        <h4 class="page-header"><?php echo $idioma->getText("contasBancariaClienteA") ?></h4>
+                        
+                        <ul class="list-group">
+                            <?php
+                            if (sizeof($contasBancarias) > 0) {
+                                ?>
+                                <li class="list-group-item">
+                                    <div class="row text-center">
+                                        <div class="col col-lg-5 col-xs-4">
+                                            <strong><?php echo $idioma->getText("banco1A") ?></strong>
+                                        </div>
+                                        <div class="col col-lg-2 col-xs-2">
+                                            <strong><?php echo $idioma->getText("tipoContaA") ?></strong>
+                                        </div>
+                                        <div class="col col-lg-2 col-xs-2">
+                                            <strong><?php echo $idioma->getText("agencia1A") ?></strong>
+                                        </div>
+                                        <div class="col col-lg-3 col-xs-4">
+                                            <strong><?php echo $idioma->getText("conta1A") ?></strong>
+                                        </div>
+                                    </div>
+                                </li>
+                                <?php
+                                foreach ($contasBancarias as $conta) {
+                                    ?>
+                                    <li class="list-group-item">
+                                        <div class="row text-center">
+                                            <div class="col col-lg-5 col-xs-4">
+                                                <?php echo $conta->banco->codigo . " - " . $conta->banco->nome ?>
+                                            </div>
+                                            <div class="col col-lg-2 col-xs-2">
+                                                <?php echo $conta->getTipoConta() ?>
+                                            </div>
+                                            <div class="col col-lg-2 col-xs-2">
+                                                <?php echo $conta->agencia ?>
+                                            </div>
+                                            <div class="col col-lg-3 col-xs-4">
+                                                <?php echo $conta->conta ?>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <?php
+                                }
+                            } else {
+                                ?>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col col-lg-12 text-center">
+                                            <?php echo $idioma->getText("clienteNaoContaCadastradaA") ?>
+                                        </div>
+                                    </div>
+                                </li>
+                                <?php
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        
+        $("#valor").keydown(function (event) {
+            $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+            event.preventDefault();
+            calcularValorCreditado();
+        });
+        
+        $("#form-deposito").ajaxForm({
+            dataType: 'json',
+            beforeSubmit: function () {
+                $("#btnVoltar, #btnSalvar, #btnCancelar, #btnEstorno").prop("disabled", true);
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DEPOSITOS ?>";
+                    } else {
+                        $("#btnVoltar, #btnSalvar, #btnCancelar, #btnEstorno").prop("disabled", false);
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e){
+                    showNotyAlert(e, "e");
+                    $("#btnVoltar, #btnSalvar, #btnCancelar, #btnEstorno").prop("disabled", false);
+                }
+                
+            }
+            
+        });
+       
+    });
+    
+    function calcularValorCreditado() {
+        var valor = ($("#valor").val().length > 0 ? parseFloat($("#valor").val().replace(",", ".")) : 0);
+        var comissao = <?php echo number_format($deposito->taxaComissao, 2, ".", "")?>;
+        
+        var resultado = (valor - (valor * comissao / 100));
+        $("#valorCreditado").html("R$ " + resultado.toFixed(2).replace(".", ","));
+    }
+    
+    function dialogCancelar() {
+        $("#modalCancelar").modal();
+        $("#modalCancelarMotivoCancelamento").val("");
+    }
+    
+    function cancelar() {
+        $("#btnVoltar, #btnSalvar, #btnCancelar, #modalCancelarClose, #modalCancelarConfirmar, #btnEstorno").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_DEPOSITOS_CANCELAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                id: $("#id").val(),
+                motivoCancelamento: $("#modalCancelarMotivoCancelamento").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(<?php echo $idioma->getText("depositoCanceladoSucesso")?>, "s");
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DEPOSITOS ?>";
+                    } else {
+                        $("#btnVoltar, #btnSalvar, #btnCancelar, #modalCancelarClose, #modalCancelarConfirmar, #btnEstorno").prop("disabled", false);
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $("#btnVoltar, #btnSalvar, #btnCancelar, #modalCancelarClose, #modalCancelarConfirmar, #btnEstorno").prop("disabled", false);
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    function modalIniciarEstorno(codigo) {
+        $("#modalEstornoCodigo").val(codigo);
+        $("#modalEstorno").modal();
+    }
+    
+    function confirmarEstorno() {
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DEPOSITO_EXTORNO_INICIAR ?>",
+            dataType: "json",
+            method: "post",
+            data: {
+                codigo: $("#modalEstornoCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso){
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_DEPOSITOS_ANALISAR ?>/<?php echo base64_encode("ID_SOLICITACAO-" . $deposito->id)?>";
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+</script>
+
+
+<div class="modal fade" id="modalCancelar" tabindex="-1" role="dialog" aria-labelledby="modalCancelar" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" style="">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCancelarLabel"><?php echo $idioma->getText("cancelarDepositoA") ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label><?php echo $idioma->getText("informeMotivoCancelamento") ?></label>
+                            <textarea class="form-control" id="modalCancelarMotivoCancelamento" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-offset-4 col-xs-12 col-lg-4 m-b-xs">
+                <button type="button" class="btn btn-default full-width" id="modalCancelarClose" data-dismiss="modal"><?php echo $idioma->getText("fecharA") ?></button>
+                </div>
+                <div class="col-xs-12 col-lg-4 m-b-xs">
+                <button type="button" class="btn btn-danger full-width" onclick="cancelar();" id="modalCancelarConfirmar" ><?php echo $idioma->getText("cancelarDepositoAbtn") ?></button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="modalEstorno" tabindex="-1" role="dialog" aria-labelledby="modalEstorno" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" style="">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalEstornoLabel"><?php echo $idioma->getText("iniciarProceEstornoA") ?></h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalEstornoCodigo" name="modalEstornoCodigo" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <p>
+                            <?php echo $idioma->getText("temCertezaIniciarA") ?> <br>
+                            <?php echo $idioma->getText("aoConfirmarAbaixoA") ?>
+                        </p>
+                    </div>
+                </div>
+                
+            </div>
+                
+            <div class="modal-footer">
+                <div class="col-lg-offset-4 col-xs-12 col-lg-4 m-b-xs">
+                <button type="button" class="btn btn-default full-width" id="modalEstornoClose" data-dismiss="modal"><?php echo $idioma->getText("fechaA") ?></button>
+                </div>
+                <div class="col-xs-12 col-lg-4 m-b-xs">
+                <button type="button" class="btn btn-primary full-width" onclick="confirmarEstorno();" id="modalEstornoConfirmar" ><?php echo $idioma->getText("confirmarAbtn") ?></button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

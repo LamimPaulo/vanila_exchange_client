@@ -1,0 +1,41 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EMAIL BEM-VINDO
+#
+#
+#--VIEW
+#Modules\layouts\inspinia\email_bemvindo
+##--
+#Textos da View
+bemVindo=Bem-vindo 
+titulo=NewCash - Bem-Vindo!
+titulo2=Bem-vindo a Cointrade!
+emailLogin=Login:
+senha1=Senha: 
+senha=Senha: Você receberá sua senha após ativar sua conta.
+acesse=Acesse:
+agradecemos=Agradecemos por realizar o seu cadastro.	
+cliqueAqui=Clique aqui para ativar sua conta!
+
+acesso2=Você pode clicar no link abaixo para ativar a sua conta.
+ 
+contaAtivada=Sua conta está ativada!
+senha2=Senha:
+
+cliqueAqui2=Clique Aqui
+
+contaAtivadaAss=Conta Ativada
+
+
+infAcesso=Informações do acesso:
+dataHora=Data/Hora:
+ipAcesso=IP do Acesso:
+newCashEndereco=Cointrade | 
+emailDoSistema=Este é um e-mail do sistema. Por favor, não responda.
+casoNaoTenhaCadastro=Caso não tenha efetuado o cadastro, entrar em contato através de nossos canais de atendimento.
+
+
+
+

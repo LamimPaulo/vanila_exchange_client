@@ -1,0 +1,169 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#CONVIDADOS
+#
+#
+#--VIEW
+#Modules\convidados\views\convidados.phtml
+##--
+#Textos da View
+titulo=Invitados
+subTitulo=Invitación
+compartilheSeuLink= Comparta su link a través de las siguientes herramientas:
+oSeuLinkDeCadastro=Su link de registro de referencia es:
+cliqueAquiCopie=Cliquee y copie su link aquí
+vocePodeEnviar=Puede enviar tantas invitaciones quiera. Solo basta con ingresar el email de la persona en el campo a continuación e clicar en invitar. Cuando su referido haga el primer depósito o retiro en el sistema usted ganará
+daComissaoCobrada=de la comisión cobrada por el sistema. Después de eso el referido será removido de su registro automáticamente.
+maisAbaixoVoce=Más abajo tendrá una relación de sus referidos que se registraron en el sistema en los últimos 180 días.
+umaPessoaPode=OBS: Una persona puede recibir invitaciones de varias otras ya registradas. Por lo tanto, al enviar la invitación asegúrese de que el invitado haga clic en su enlace para realizar el registro. Si hace clic en el enlace de otra persona o accede directamente al sistema sin utilizar su enlace de invitación, el mismo no se asignará como su referido.
+convitesCadastrados=Invitados registrados
+qtd=Qtd:                                                              
+valorTotal=Valor Total
+todos=Todos
+
+#Labels
+
+
+
+#Buttons
+convidar=Convidar
+
+
+#inputs
+
+
+
+#Placeholder
+digiteEmailConvidado=Escriba el e-mail del invitado
+pesquiseNome=Búsqueda por nombre
+
+#Links
+sejaBemVindo=Sea bienvenido a Cointrade! Regístrese y conozca la más innovadora plataforma de criptoactivos del Brasil.
+sejaBemVindoJS="Sea bienvenido a Cointrade! Regístrese y conozca la más innovadora plataforma de criptoactivos del Brasil. "
+
+
+
+#Options
+
+
+#Tabela
+nome=Nombre
+email=E-mail
+dataCadastro=Fecha de registro
+horaCadastro=Hora de registro
+movimento=Movimiento
+comissao=Comisión (R$)
+valorTotalTb=Valor total
+
+
+#Sucesso
+
+
+
+##--------------------
+
+#--CONTROLLER
+#Modules\trade\Controllers\Convidados.class.php
+##--
+#Textos da View
+
+
+#Tabela
+nenhumConvidado=Ningún invitado se registró utilizando su link en los últimos 180 días.
+
+#Sucesso
+conviteEnviadoSucesso=Invitación enviada con éxito!
+
+#Erro
+emailCadastradoSistema=E-mail ya registrado en el sistema
+
+
+#--FINANCAS
+#Modules\franqueado\views\index_financas.class.php
+##--
+#Textos da View
+totalRecebido=Total Recibido
+mesAtual=Mes Actual
+convitesEnviados=Invitaciones Enviadas
+clientesAtivos=Clientes Activos
+selecionar=Seleccionar
+nomeCliente=Nombre del Cliente
+ganhosPeriodo=Ganancias en el Período
+dtInicial=Fecha Inicial
+dtFinal=Fecha Final
+filtro=Filtro
+valorePorMes=Valores recibidos por mes
+valorTotalRecebido=Valor total recibido
+#Buttons
+atualizarGrafico=Actualizar Gráfico
+#--REFERENCIAS
+#Modules\FRANQUIADO\VIEWS\referencias.phtml
+
+##--
+#Textos da View
+referenciasDe=Referencias de 
+clientesCadastrados=Clientes Registrados:
+referencias=Referencias:
+adicionarReferencia=Añadir Referencia
+informeEmailCliente=Ingrese el e-mail del cliente
+adicionarReferencia=Añadir Referencia
+voltar=Regresar
+nomeCliente=Nombre Cliente
+email=E-mail
+acao=Acción
+
+
+#--INDEX
+#Modules\FRANQUIADO\VIEWS\INDEX_CLIENTES.phtml
+
+##--
+#Textos da View
+compartilheSeuLink=Comparta su link a través de las siguientes herramientas:
+linkDeCadastro=Su link de registro de referencia es:
+cliqueAquiCopiarLink=Cliquee y copie su link aquí
+utilizeNossaPlataforma=Utilice el formulario a continuación para invitar persona a la plataforma, basta ingresar el e-mail y clicar en invitar.
+convidar=Invitar
+atualizarLista=Actualizar Lista
+limpar=Limpiar
+mostrarTodos=Mostrar Todos
+nome=Nombre
+dataCadastro=Fecha Registro
+horaCadastro=Hora  Registro
+estado=Estado
+cidade=Ciudad
+emailConfirmado=Conta Confirmada
+selfie=Selfie
+docPessoal=Documento Personal
+compEndereco=Comp. de Dirección
+financeiro=Financiero
+convidados=Invitados
+moeda=Moeneda
+valor=Valor
+vocePodePesquisarPor=Puede buscar por Moneda, Fecha y Clientes utilizando los filtros siguientes y haciendo clic en Actualizar gráfico.
+
+sejaBemVindo=Bienvenido a Cointrade! Registrarse y cumplir con la plataforma criptoativos más reciente en Brasil.
+
+nenhumClienteFiltro=Ningún cliente según los filtros ingresados
+
+##--------------------
+
+#--INDEX
+#Modules\FRANQUIADO\VIEWS\CLIENTES.phtml
+
+nenhumResultado=Ningún resultado para el filtro.
+voceAindaNaoPossui=Usted no tiene ninguna indicación.
+naoConfirmado=No Confirmado
+confirmado=Confirmado
+naoEnviada=No Enviado
+aguardandoAnalise=Esperando Revisión
+aprovado=Aprobado
+
+informacoes=Información:
+oLinkRefManeiraCliente=El enlace de referencia es una manera de los clientes de divulgar a Cointrade y ganar con los registros recibidos a través de su enlace de referencia.
+recebaAte20Cripto=Reciba hasta un 20% en criptomonedas de la tasa cobrada por la exchange en las operaciones de sus referidos.
+convideSeusParceiros=Invite a sus socios utilizando su enlace de referencia al lado.
+abaixoOperacoes=A continuación las operaciones que sus socios hacen y usted gana:
+compraVendaDireta=Compra y Venta directa de criptomonedas.
+compraVendaBook=Compra y Venta en el libro de ofertas.

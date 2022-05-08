@@ -1,0 +1,1022 @@
+<?php
+
+$idioma = new \Utils\PropertiesUtils("book", IDIOMA);
+
+$paridades = (isset($_data["paridades"]) ? $_data["paridades"]: Array() );
+$paridade = \Modules\principal\Controllers\Principal::getParity();
+
+$cliente = Utils\Geral::getCliente();
+
+$mostrarAlerta = false;
+$mensagemAlerta = "";
+
+
+
+$_data["idiomaMenu"] = $idioma;
+?>
+<style>
+    .border-edit {
+        border: 1px solid #1c84c6 !important;
+    }
+    
+    .change-parity, tr .change-parity {
+        cursor: pointer;
+    }
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<?php Utils\Layout::append("inspina/breadcrumb", $_data) ?>
+    <!-- Main content -->
+<section class="content">
+    <!-- Profile Image -->
+    
+    <?php if ($mostrarAlerta) { ?>
+    <div class="row">
+        <div class="col col-lg-12">
+            <br><br>
+            <div class="alert alert-warning text-center">
+                <h4><i class="fa fa-exclamation-triangle fa-2x" ></i> &nbsp;&nbsp; <span ><?php echo $mensagemAlerta ?> </span></h4>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+    
+    
+    <div class="row">
+        <div class="col col-md-4">
+            
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Ticker</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col col-md-2">
+                            <button class="btn btn-link text-warning"  onclick="setSomenteFavoritas();">
+                                <i class="fa fa-star-o fa-2x" id="filtro-favoritas"></i>
+                            </button>
+                        </div>
+                        <div class="col col-md-5">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="ticker-search" />
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-md-5">
+                            <div class="form-group">
+                                <select class="form-control" id="ticker-paridade">
+                                    <?php 
+                                    foreach ($paridades as $moedaTrade) {
+                                        ?>
+                                    <option value="<?php echo $moedaTrade->id ?>"><?php echo $moedaTrade->nome ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive" style="max-height: 300px; overflow-y: scroll;">
+                        <table style="font-size: 10px;" class="table table-striped" id="tickers-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"></th>
+                                    <th colspan="2" class="text-center">Moeda</th>
+                                    <th class="text-center">Cotação</th>
+                                    <th class="text-center">%</th>
+                                    <th class="text-center">Volume</th>
+                                </tr>
+                            </thead>
+                            <tbody id="body-paridades" >
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            
+            
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="#" data-body="#order-form-body" class="panel-book">Formulário de Ordens</a>
+                </div>
+                <div class="panel-body" id="order-form-body" >
+                    
+                    <div class="row">
+                        <div class="col col-lg-6">
+                            <div class="form-group">
+                                <label >Preço</label>
+                                <div class="input-group m-b">
+                                    <input type="text" class="form-control" id="order-price" />
+                                    <span class="input-group-addon" onclick="getBalance('p')" style="cursor: pointer;"> <?php echo $paridade->moedaTrade->simbolo ?> </span>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col col-lg-6">
+                            <div class="form-group">
+                                <label>Volume</label>
+                                <div class="input-group m-b">
+                                    <input type="text" class="form-control" id="order-amount" />
+                                    <span class="input-group-addon" onclick="getBalance('a')" style="cursor: pointer;"> <?php echo $paridade->moedaBook->simbolo ?> </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <span class="text-muted">Valor total: <strong id="order-total"></strong> <?php echo $paridade->moedaTrade->simbolo ?></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col col-lg-6">
+                            <button class="btn btn-primary full-width" type="button" id="btn-order-buy" onclick="salvarOrdem('<?php echo Utils\Constantes::ORDEM_COMPRA ?>')">
+                                Comprar
+                            </button>
+                        </div>
+                        <div class="col col-lg-6">
+                            <button class="btn btn-danger full-width" type="button" id="btn-order-sell" onclick="salvarOrdem('<?php echo Utils\Constantes::ORDEM_VENDA ?>')">
+                                Vender
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <span class="text-muted" id="order-total"></span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="#" data-body="#balance-body" class="panel-book">Saldos</a>
+                </div>
+                <div class="panel-body" id="balance-body" >
+                    
+                    <div class="row">
+                        <div class="col col-md-8">
+                            <div class="form-group">
+                                <div class="input-group m-t-md">
+                                    <input type="text" class="form-control" id="balances-search" />
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col col-md-4">
+                            <div class="btn-group m-t-md">
+                                <button class="btn btn-white" type="button" id="btn-blocked-balance-show">
+                                    <i class="fa fa-th-list"></i>
+                                </button>
+                                <button class="btn btn-white" type="button" id="btn-blocked-balance-hide">
+                                    <i class="fa fa-list"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-xs-12" style="max-height: 300px; overflow-y: scroll;">
+                            <table style="font-size: 10px;" class="table table-hover table-condensed table-striped ">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="text-center">
+                                            Moeda
+                                        </th>
+                                        <th class="text-right">
+                                            Saldo
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="body-balances" >
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="col col-md-8">
+            
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="#" data-body="#chart-body" class="panel-book">Gráfico</a>
+                </div>
+                <div class="panel-body" id="chart-body" style="height: 500px;">
+                    <iframe style="border: none;" seamless="seamless" src="https://newcash.exchange/resources/js/tradeview/index.html?lang=<?php echo $idioma->getLang()?>&symbol=<?php echo $paridade->symbol ?>" width="100%" height="100%"></iframe>
+                </div>
+            </div>
+            
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="#" data-body="#orderbook-body" class="panel-book">Book de ordens </a>
+                </div>
+                <div class="panel-body" id="orderbook-body" >
+                    <div class="row">
+                        <div class="col col-md-4">
+                            <table class="table table-hover text-primary" style="font-size: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3" class="text-center">
+                                            Compra
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">Cotação</th>
+                                        <th class="text-center">Volume</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="buy-list">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="col col-md-4">
+                            <table class="table table-hover text-danger" style="font-size: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3" class="text-center">
+                                            Venda
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">Cotação</th>
+                                        <th class="text-center">Volume</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sell-list">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="col col-md-4">
+                            <table class="table table-hover" style="font-size: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" colspan="3">
+                                            Ordens Executadas
+                                            <div class="btn-group pull-right">
+                                                <button class="btn btn-primary btn-sm" type="button" id="trade-ordens-mercado">Mercado</button>
+                                                <button class="btn btn-white btn-sm" type="button" id="trade-ordens-cliente">Suas</button>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">Data/Hora</th>
+                                        <th class="text-center">Cotação</th>
+                                        <th class="text-center">Volume</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="trade-list">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="#" data-body="#orders-body" class="panel-book">Ordens</a>
+                    
+                    <div class="btn-group pull-right ">
+                        <button class="btn btn-white btn-sm" type="button" id="minhas-ordens-todas">Todas</button>
+                    </div>
+                    
+                </div>
+                <div class="panel-body" id="orders-body" >
+                    <table class="table table-hover table-condensed table-stripped" style="font-size: 10px;background-color: #fff">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><?php echo $idioma->getText("moeda") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("movimento") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("dataTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("cotacaoTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("volumeTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("valorTotalTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("executado") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("pendente") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("statusTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("acaoTb") ?></th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody id="orders-list">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="#" data-body="#order-history-body" class="panel-book">Histórico de Ordens </a>
+                    
+                    <div class="btn-group pull-right ">
+                        <button class="btn btn-white btn-sm" type="button" id="extrato-ordens-todas">Todas</button>
+                        
+                    </div>
+                    
+                </div>
+                <div class="panel-body" id="order-history-body" >
+                    <div class="table-responsive">
+                        <table class="table table-hover table-condensed" style="background-color: #fff; font-size: 11px">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("moedaExtrato") ?></strong></th>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("movimentoExtrato") ?></strong></th>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("dataExtrato") ?></strong></th>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("horaExtrato") ?></strong></th>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("cotacaoExtrato") ?></strong></th>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("volumeTotalExtrato") ?></strong></th>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("valorTotalExtrato") ?></strong></th>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("volumeExecutadoExtrato") ?></strong></th>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("valorExecutadoExtrato") ?></strong></th>
+                                    <th class="text-center"><strong><?php echo $idioma->getText("statusExtratof") ?></strong></th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="extrato-orders-list">
+                                
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+        </div>
+    </div>
+    
+    
+    <br><br>
+</section>
+<div class="clearfix"></div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    
+    var somenteFavoritas = false;
+    
+    $(document).ready(function  () {
+
+        $("#order-price, #order-amount").numeric({allow: ','});
+        
+        $("#order-price").keyup(function () {
+            calcularValorTotalOrdem('p');
+        });
+        
+        $("#order-amount").keyup(function () {
+            calcularValorTotalOrdem('a');
+        });
+        
+        $(".panel-book").click(function (event) {
+            $($(this).attr("data-body")).toggle();
+        });
+        
+        $("#ticker-paridade").change(function () {
+            listarParidadesBook();
+        }); 
+
+        listarParidadesBook();
+        
+        $("#ticker-search").keyup(function () {
+            filtrarParidadesBook();
+        });
+        
+        $("#balances-search").keyup(function () {
+            filtrarMoedasBook();
+        });
+        
+        setInterval(listarParidadesBook, 2000);
+        setInterval(listarSaldoMoedasBook, 2000);
+        
+        setInterval(
+            function() {
+                listarBook();
+                listarTrade();
+                listarMinhasOrdens();
+                listarExtratoOrdens();
+        },1500);
+        
+        $("#btn-blocked-balance-show").click(function () {
+            $(".table-blocked-balance").show();
+            balanceMode = 1;
+        });
+        
+        $("#btn-blocked-balance-hide").click(function () {
+            $(".table-blocked-balance").hide();
+            balanceMode = 2;
+        });
+        
+        $("#trade-ordens-mercado").click(function () {
+            listaTradeMode = 0;
+            $("#trade-ordens-mercado, #trade-ordens-cliente").removeClass("btn-white").removeClass("btn-primary");
+            $("#trade-ordens-cliente").addClass("btn-white");
+            $("#trade-ordens-mercado").addClass("btn-primary");
+        });
+        $("#trade-ordens-cliente").click(function () {
+            listaTradeMode = 1;
+            $("#trade-ordens-mercado, #trade-ordens-cliente").removeClass("btn-white").removeClass("btn-primary");
+            $("#trade-ordens-cliente").addClass("btn-primary");
+            $("#trade-ordens-mercado").addClass("btn-white");
+        });
+        
+        $("#extrato-ordens-todas").click(function () {
+            if (modoExtratoOrdens > 0) {
+                modoExtratoOrdens = 0;
+                $("#extrato-ordens-todas").removeClass("btn-primary").addClass("btn-white");
+            } else {
+                modoExtratoOrdens = 1;
+                $("#extrato-ordens-todas").removeClass("btn-white").addClass("btn-primary");
+            }
+        });
+        
+        
+        $("#minhas-ordens-todas").click(function () {
+            if (modoMinhasOrdens > 0) {
+                modoMinhasOrdens = 0;
+                $("#minhas-ordens-todas").removeClass("btn-primary").addClass("btn-white");
+            } else {
+                modoMinhasOrdens = 1;
+                $("#minhas-ordens-todas").removeClass("btn-white").addClass("btn-primary");
+            }
+        });
+        
+        
+    });
+    
+    var modoMinhasOrdens = 0;
+    var modoExtratoOrdens = 0;
+    var listaTradeMode = 0;
+    var balanceMode = 1;
+    
+    function mudarParidade(paridade) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CURRENCY ?>',
+            dataType: 'json',
+            method: 'post',
+            data: {
+                codigo: paridade
+            },
+            beforeSend: function () {
+
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+
+                        location = location.href;
+
+                    } else {
+                        console.log(json.mensagem);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+
+            },
+            complete: function () {
+
+            }
+        });
+    }
+    
+    function calcularValorTotalOrdem(field) {
+        var preco = 0;
+        var sPreco = $("#order-price").val().replace(",", ".");
+        var amount = 0;
+        var sAmount = $("#order-amount").val().replace(",", ".");
+        var total = 0;
+        var sTotal = $("#order-total").html().replace(",", ".");
+        
+        if (sPreco.length > 0 && sPreco.indexOf(",") < 0) {
+            preco = parseFloat(sPreco);
+        } else {
+            preco = 0;
+        }
+        
+        if (sAmount.length > 0 && sAmount.indexOf(",") < 0) {
+            amount = parseFloat(sAmount);
+        } else {
+            amount = 0;
+        }
+        
+        if (sTotal.length > 0 && sTotal.indexOf(",") < 0) {
+            total = parseFloat(sTotal);
+        } else {
+            total = 0;
+        }
+        
+        if (field === 'a') {
+            var total = preco * amount;
+            $("#order-total").html(total.toFixed(8).replace(".", ","));
+        } else {
+            var amount = (total / preco);
+            $("#order-amount").val(amount.toFixed(8).replace(".", ","));
+        }
+    }
+    
+    
+    function getBalance(tipo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_BALANCE ?>',
+            dataType: 'json',
+            method: 'post',
+            beforeSend: function () {
+
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+
+                        if (tipo === 'a') {
+                            $("#order-amount").val(json.book);
+                        } else {
+                            $("#order-total").html(json.trade);
+                        }
+
+                        calcularValorTotalOrdem(tipo);
+                    } else {
+                        console.log(json.mensagem);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+
+            },
+            complete: function () {
+
+            }
+        });
+    }
+    
+    function setSomenteFavoritas() {
+        somenteFavoritas = !somenteFavoritas;
+         
+        if (somenteFavoritas) {
+            $("#filtro-favoritas").removeClass("fa-star-o").addClass("fa-star");
+        } else {
+            $("#filtro-favoritas").removeClass("fa-star").addClass("fa-star-o");
+        }
+        
+        filtrarParidadesBook();
+    }
+    
+    function filtrarParidadesBook() {
+        
+        var filtro = $("#ticker-search").val().toLowerCase();
+        
+        $("#body-paridades tr").each(function () {
+            var mostrar = true;
+            
+            if (filtro.length > 0) {
+                var name = $(this).children("td.column-paridade").first().attr("data-name").toLowerCase();
+                var content = $(this).children("td.column-paridade").first().html().toLowerCase();
+                
+                var mostrar = (name.indexOf(filtro) !== -1 || content.indexOf(filtro) !== -1);
+                
+            } 
+            
+            if (mostrar && somenteFavoritas) {
+                mostrar = $(this).hasClass("favorite-parity");
+            }
+            
+            if (mostrar) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+            
+        });
+        
+    }
+    
+    function salvarOrdem(tipo) {
+        $("#btn-order-buy, #btn-order-sell").prop("disabled", true);
+        
+        var url = "";
+        if (tipo ==='<?php echo Utils\Constantes::ORDEM_COMPRA?>') {
+            url = '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_COMPRAR ?>';
+        } else {
+            url = '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_VENDER ?>';
+        }
+        
+        $.ajax({
+            url: url,
+            method: 'post',
+            dataType: 'json',
+            data: {
+                amount: $("#order-amount").val(),
+                price: $("#order-price").val()
+            }, 
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-order-buy, #btn-order-sell").prop("disabled", false);
+            }
+        });
+    }
+    
+    function filtrarMoedasBook() {
+        
+        var filtro = $("#balances-search").val().toLowerCase();
+        
+        $("#body-balances tr").each(function () {
+            if (filtro.length > 0) {
+                var name = $(this).children("td.column-balance").first().attr("data-name").toLowerCase();
+                var content = $(this).children("td.column-balance").first().html().toLowerCase();
+                
+                if (name.indexOf(filtro) !== -1 || content.indexOf(filtro) !== -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            } else {
+                $(this).show();
+            }
+        });
+        
+    }
+    
+    
+    var flagAddParidadeFavorita = true;
+    function addFavorito(codigo) {
+        if (flagAddParidadeFavorita) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_FAVORITO_ADD ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    paridade: codigo
+                },
+                beforeSend: function () {
+                    flagAddParidadeFavorita = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#btn-favorito-"+json.codigo).html(json.html);
+                            
+                            
+                        } else {
+                            console.log(json.mensagem);
+                        }
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    flagAddParidadeFavorita = true;
+                },
+                complete: function () {
+                    flagAddParidadeFavorita = true;
+                }
+            });
+        }
+    }
+    
+    var flagRemoverParidadeFavorita = true;
+    function removerFavorito(codigo) {
+        if (flagRemoverParidadeFavorita) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_FAVORITO_REMOVE ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    paridade: codigo
+                },
+                beforeSend: function () {
+                    flagRemoverParidadeFavorita = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#btn-favorito-"+json.codigo).html(json.html);
+                            
+                            
+                        } else {
+                            console.log(json.mensagem);
+                        }
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    flagRemoverParidadeFavorita = true;
+                },
+                complete: function () {
+                    flagRemoverParidadeFavorita = true;
+                }
+            });
+        }
+    }
+    
+    var flagParidadesBook = true;
+    function listarParidadesBook() {
+        if (flagParidadesBook) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_PARIDADES_LISTAR ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    moeda: $("#ticker-paridade").val()
+                },
+                beforeSend: function () {
+                    flagParidadesBook = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#body-paridades").html(json.html);
+                            
+                            $(".change-parity").each(function () {
+                                $(this).click(function () {
+                                    var paridade = $(this).parent("tr").attr("data-paridade");
+                                    mudarParidade(paridade);
+                                });
+                            });
+                            
+                            filtrarParidadesBook();
+                        } else {
+                            console.log(json.mensagem);
+                        }
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    flagParidadesBook = true;
+                },
+                complete: function () {
+                    flagParidadesBook = true;
+                }
+            });
+        }
+    }
+
+
+    var flagSaldoMoedas = true;
+    function listarSaldoMoedasBook() {
+        
+        if (flagSaldoMoedas) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_MOEDAS_SALDO ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    balanceMode: balanceMode
+                },
+                beforeSend: function () {
+                    flagSaldoMoedas = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#body-balances").html(json.html);
+                            
+                            if(balanceMode === 2) {
+                                $(".table-blocked-balance").hide();
+                            } else {
+                                $(".table-blocked-balance").show();
+                            }
+                            
+                            filtrarMoedasBook();
+                        } else {
+                            console.log(json.mensagem);
+                        }
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    flagSaldoMoedas = true;
+                },
+                complete: function () {
+                    flagSaldoMoedas = true;
+                }
+            });
+        }
+    }
+
+
+    var flagMinhasOrdens = true;
+    function listarMinhasOrdens() {
+        if (flagMinhasOrdens) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_LISTAR ?>',
+                method: 'post',
+                dataType:'json',
+                data:{ 
+                    todas: true
+                },  
+                beforeSend: function () {
+                    flagMinhasOrdens = modoMinhasOrdens;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $(".my-order-item").remove();
+                            $("#orders-list").append(json.html);
+                        } else {
+                            $(".my-order-item").remove();
+                            showNotyAlert(json.mensagem, "e");
+                            if (json.redirect) {
+                                location = json.url;
+                            }
+                        }
+                    } catch (e) {
+                        $(".my-order-item").remove();
+                        showNotyAlert(e, "e");
+                    }
+                    flagMinhasOrdens = true;
+                },
+                complete: function () {
+                    flagMinhasOrdens = true;
+                }
+            });
+        }
+    }
+    
+    var flagExtratoOrdens = true;
+    function listarExtratoOrdens() {
+    
+        if (flagExtratoOrdens) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_EXTRATO_FILTRAR ?>',
+                method: 'post',
+                dataType:'json',
+                data: {
+                    modoExtratoOrdens: modoExtratoOrdens
+                },
+                beforeSend: function () {
+                    flagExtratoOrdens = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#extrato-orders-list").html(json.html);
+                        } else {
+                            $(".my-extrato-order-item").remove();
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
+                        $(".my-extrato-order-item").remove();
+                        showNotyAlert(e, "e");
+                    }
+                    flagExtratoOrdens = true;
+                },
+                complete: function () {
+                    flagExtratoOrdens = true;
+                }
+            });
+        }
+    }
+    
+    var bookListLimit = true;
+    function listarBook() {
+        if (bookListLimit) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_LISTAR ?>',
+                method: 'post',
+                dataType:'json',
+                beforeSend: function () {
+                    bookListLimit = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $(".order-item").remove();
+                            $("#buy-list").append(json.compra);
+                            $("#sell-list").append(json.venda);
+                        } else {
+                            $(".order-item").remove();
+                            showNotyAlert(json.mensagem, "e");
+
+                            if (json.redirect) {
+                                location = json.url;
+                            }
+                        }
+                    } catch (e) {
+                        $(".order-item").remove();
+                        showNotyAlert(e, "e");
+                    }
+                    bookListLimit = true;
+                },
+                complete: function () {
+                    bookListLimit = true;
+                }
+            });
+        }
+    }
+
+    var tradeListLimit = true;
+    function listarTrade() {
+        
+        if (tradeListLimit) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_TRADES_LIST ?>',
+                method: 'post',
+                dataType:'json',
+                data: {
+                    minhasOrdens: listaTradeMode
+                },
+                beforeSend: function () {
+                    tradeListLimit = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $(".trade-item").remove();
+                            $("#trade-list").append(json.html);
+                        } else {
+                            $(".trade-item").remove();
+                            showNotyAlert(json.mensagem, "e");
+
+                            if (json.redirect) {
+                                location = json.url;
+                            }
+                        }
+                    } catch (e) {
+                        $(".trade-item").remove();
+                        showNotyAlert(e, "e");
+                    }
+                    tradeListLimit = true;
+                },
+                complete: function () {
+                    tradeListLimit = true;
+                }
+            });
+        }
+    }
+    
+    
+    function cancelar(order) {
+        $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_CANCELAR ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                ordem: order
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        //$("#modalCancelarOrdemClose").prop("disabled", false).trigger("click");
+                        listarMinhasOrdens();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", false);
+            }
+        });
+    }  
+    
+    
+    function configOrder(tipo, cotacao, volume) {
+        
+        $("#order-price").val(cotacao.replace(".", ","));
+        $("#order-amount").val(volume.replace(".", ","));
+        calcularValorTotalOrdem('a');
+    }
+    
+</script>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+

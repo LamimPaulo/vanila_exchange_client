@@ -1,0 +1,456 @@
+<?php
+$dataInicial = new Utils\Data(date("d/m/Y"));
+$dataFinal = new Utils\Data(date("d/m/Y"));
+$dataInicial->subtrair(0, 0, 30);
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+$clientes = isset($_data["clientes"]) ? $_data["clientes"] : Array();
+
+$isCliente = Utils\Geral::isCliente();
+$cliente = Utils\Geral::getCliente();
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+                <div class="col-lg-10">
+                    <h2>Mensalidades</h2>
+                    <ol class="breadcrumb" style="background-color: transparent !important;">
+                        <li>
+                            Cartões
+                        </li>
+                        <li class="active">
+                            <strong>Mensalidades</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>
+    <br>
+    <!-- Main content -->
+    <section class="content">
+
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <?php Utils\Layout::append("mensagem", $_data)?>
+                    
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        
+                        
+                        <div class="row">
+                            
+                            <?php if (!$isCliente) { ?>
+                            <div class="col col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Cliente</label>
+                                    <select class="form-control" id="idCliente" >
+                                        <option value="0" >Todos os clientes</option>
+                                        <?php foreach ($clientes as $cliente) { ?>
+                                        <option value="<?php echo $cliente->id ?>" ><?php echo $cliente->nome ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <?php } ?>
+                            <div class="col col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <img id="load-cartao"  src="<?php echo IMAGES ?>loading.gif" style="margin: 2px; width: 15px; height: 15px;"/>
+                                        Cartão
+                                    </label>
+                                    <select class="form-control" id="idPedidoCartao" onchange="listar();">
+                                        <option value="0" >Todos os Cartões</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Status</label>
+                                    <select class="form-control" id="status" onchange="listar();">
+                                        <option value="T" >Todos</option>
+                                        <option value="<?php echo \Utils\Constantes::STATUS_MENSALIDADE_CARTAO_AGUARDANDO ?>" >Aguardando</option>
+                                        <option value="<?php echo \Utils\Constantes::STATUS_MENSALIDADE_CARTAO_PAGO ?>" >Pago</option>
+                                        <option value="<?php echo \Utils\Constantes::STATUS_MENSALIDADE_CARTAO_VENCIDA ?>" >Vencido</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col col-lg-12 text-center">
+                                <br>
+                                <button class="btn btn-primary" onclick="listar();" id="btn-filtrar">
+                                    <i class="fa fa-refresh"></i> Filtrar
+                                </button>
+                                <br><br>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <span class="badge bg-blue" style="width: 100%; padding-top: 15px; padding-bottom: 15px;">
+                                                    Em aberto: R$ <span id="aberto"></span>
+                                                </span>
+                                            </div>
+                                            <div class="col-xs-4 ">
+                                                <span class="badge bg-green" style="width: 100%; padding-top: 15px; padding-bottom: 15px;">
+                                                    Pagas: R$ <span id="pagas"></span>
+                                                </span>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <span class="badge  bg-red" style="width: 100%; padding-top: 15px; padding-bottom: 15px;">
+                                                    Atrasadas: R$ <span id="atrasadas"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col col-lg-12 text-right">
+                                <button class="btn btn-success" type="button" onclick="pagar();">
+                                    <i class="fa fa-money"></i> Pagar
+                                </button>
+                                <br><br>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col col-lg-12" >
+                                <ul class="list-group" id="lista">
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="row">
+                            <div class="col col-lg-12 text-right">
+                                <button class="btn btn-success" type="button" onclick="pagar();">
+                                    <i class="fa fa-money"></i> Pagar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+            </div>
+
+        </div>
+
+        <a  id="openOrder" target="_BLANK"></a>
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    var iniciado = false;
+    
+    $(document).ready(function () {
+        
+        filtrarCartoes();
+    });
+    
+    
+    function filtrarCartoes() {
+        $("#btn-filtrar").prop("disabled", true);
+        $("#load-cartao").show();
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_MENSALIDADES_CLIENTES_CARTOES ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: <?php echo (!$isCliente ? "$('#idCliente').val()" : $cliente->id) ?>
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#idPedidoCartao").html(json.html);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-filtrar").prop("disabled", false);
+                $("#load-cartao").hide();
+                
+                if (!iniciado) {
+                    iniciado = true;
+                    listar();
+                }
+            }
+        });
+    }
+    
+    function listar() {
+        $("#lista").html("<div class='col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_MENSALIDADES_LISTAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: <?php echo (!$isCliente ? "$('#idCliente').val()" : $cliente->id) ?>,
+                idPedidoCartao:$("#idPedidoCartao").val(),
+                status:$("#status").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista").html(json.html);
+                        $("#aberto").html(json.aberto);
+                        $("#pagas").html(json.pagas);
+                        $("#atrasadas").html(json.atrasadas);
+                    } else {
+                        $("#lista").html("<div class='col-lg-12 text-center'>"+json.mensagem+"</div>");
+                        $("#aberto").html("0,00");
+                        $("#pagas").html("0,00");
+                        $("#atrasadas").html("0,00");
+                    }
+                } catch (e) {
+                    $("#lista").html("<div class='col-lg-12 text-center'>"+e+"</div>");
+                        $("#aberto").html("0,00");
+                        $("#pagas").html("0,00");
+                        $("#atrasadas").html("0,00");
+                }
+            }
+        });
+    }
+    
+    
+    function pagar() {
+        
+        $("#pagarModalMensalidades").html("<div class='col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $("#pagarModalGerarInvoice").prop("disabled", true);
+        var ids = [];
+        $(".check-mensalidade").each(function () {
+            if ($(this).is(":checked")) {
+                ids.push($(this).val());
+            }
+        });
+        $("#pagarModal").modal();
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_MENSALIDADES_PAGAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                ids: ids,
+                idCliente:<?php echo (!$isCliente ? "$('#idCliente').val()" : $cliente->id) ?>,
+                idPedidoCartao:$("#idPedidoCartao").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#pagarModalMensalidades").html(json.html);
+                        $("#pagarModalTotal").html(json.valorTotal);
+                        $("#pagarModalIds").val(json.ids);
+                    } else {
+                        $("#pagarModalMensalidades").html("<div class='col-lg-12 text-center'>"+json.mensagem+"</div>");
+                        $("#pagarModalTotal").html("0,00");
+                        $("#pagarModalIds").html("");
+                    }
+                } catch (e) {
+                    $("#pagarModalMensalidades").html("<div class='col-lg-12 text-center'>"+e+"</div>");
+                    $("#pagarModalTotal").html("0,00");
+                    $("#pagarModalIds").html("");
+                }
+                $("#pagarModalGerarInvoice").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    
+    function gerarInvoice() {
+        $("#invoiceModalFechar").trigger("click");
+        $("#pagarModalGerarInvoice, #pagarModalFechar").prop("disabled", true);
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_MENSALIDADES_INVOICE_GERAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                ids: $("#pagarModalIds").val(),
+                idCliente:<?php echo (!$isCliente ? "$('#idCliente').val()" : $cliente->id) ?>,
+                idPedidoCartao:$("#idPedidoCartao").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#pagarModalFechar").prop("disabled", false).trigger("click");
+                        
+                        if (json.saldo) {
+                            showNotyAlert("Mensalidades pagas com sucesso!", "s");
+                            listar();
+                        } else {
+                            $("#invoiceModalNumero").html(json.numero);
+                            $("#invoiceModalValorBtc").html(json.btc);
+                            $("#invoiceModalAddress").html(json.address);
+                            $("#invoiceModalQr").attr("src", json.qr);
+                            $("#invoiceModalGerarNovaInvoice").hide();
+
+                            $("#invoiceModal").modal();
+
+                            g_iCount = new Number();
+                            g_iCount = json.time;
+                            invoiceId = json.numero;
+                            startCountdown();
+                        }
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#pagarModalGerarInvoice, #pagarModalFechar").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    
+    var g_iCount = new Number();
+    var g_iCount = null;
+    var invoiceId = null;
+    
+    function startCountdown(){
+           if((g_iCount - 1) > 0){
+                   g_iCount = g_iCount - 1;
+
+                   if (g_iCount % 5 === 0) {
+                       getStatusInvoice(invoiceId);
+                   }
+
+                   var min = ((g_iCount - (g_iCount % 60)) / 60);
+                   var seg = g_iCount % 60;
+
+                   var sMin = (min < 10 ? "0"+ min : min);
+                   var sSeg = (seg < 10 ? "0"+ seg : seg);
+                   $("#invoiceModalTimeToExpire").html(sMin+':' + sSeg);
+                   setTimeout('startCountdown()',1000);
+           } else {
+               $("#invoiceModalTimeToExpire").html("Expirada!");
+               $("#invoiceModalGerarNovaInvoice").show();
+           }
+    }
+
+    function getStatusInvoice(invoiceId) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_MENSALIDADES_INVOICE_STATUS ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                invoiceId: invoiceId
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        if (json.status === '<?php echo Utils\Constantes::STATUS_MENSALIDADE_CARTAO_VENCIDA ?>') {
+                            $("#invoiceModalGerarNovaInvoice").show();
+                        } else if (json.status === '<?php echo Utils\Constantes::STATUS_MENSALIDADE_CARTAO_PAGO ?>') {
+                            $("#invoiceModalFechar").trigger("click");
+                            listar();
+                            clearTimeout();
+                        }
+                    } else {
+                        console.log(json.mensagem);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        });
+    }
+    
+</script>
+
+
+
+<div class="modal fade" id="pagarModal" tabindex="-1" role="dialog" aria-labelledby="pagarModal" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="pagarModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <h4 class="page-header">As seguintes mensalidades serão cobradas: </h4>
+                <input type="hidden" id="pagarModalIds" value="" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <ul class="list-group" id="pagarModalMensalidades">
+                            
+                        </ul>
+                    </div>
+                </div>
+                <h4 class="page-header text-right">Valor total: R$ <strong id="pagarModalTotal"></strong> </h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="pagarModalFechar" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="gerarInvoice();" id="pagarModalGerarInvoice" >Gerar Invoice</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<div class="modal fade" id="invoiceModal" tabindex="-1" role="dialog" aria-labelledby="invoiceModal" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="pagarModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <h4 class="page-header">Pagamento de mensalidade: </h4>
+                <div class="row">
+                    <div class="col col-sm-6">
+                        <h4>Invoice No.: <span id="invoiceModalNumero"></span></h4>
+                        <h4>Envie exatamente o valor de <span id="invoiceModalValorBtc"></span> para o enredereço:</h4>
+                        <h3 id="invoiceModalAddress"><?php echo $pedidoCartao->address ?></h3>
+
+                        <br><br>
+                        <h4>Ordem expira em : <span id="invoiceModalTimeToExpire"></span></h4>
+                        <br><br>
+                        <button class="btn btn-info" id="invoiceModalGerarNovaInvoice" onclick="gerarInvoice();">
+                            <i class="fa fa-refresh"></i> Gerar Nova Invoice
+                        </button>
+                    </div>
+                    <div class="col col-sm-6 text-center">
+                        <img src="" id="invoiceModalQr" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="invoiceModalFechar" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>

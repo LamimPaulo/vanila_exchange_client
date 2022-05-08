@@ -1,0 +1,209 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#CONVIDADOS
+#
+#
+#--VIEW
+#Modules\convidados\views\convidados.phtml
+##--
+#Textos da View
+titulo=Convidados
+subTitulo=Convite
+compartilheSeuLink=Compartilhe seu link através das ferramentas abaixo:
+oSeuLinkDeCadastro=O seu link de cadastro de referência é:
+cliqueAquiCopie=Clique e copie seu link aqui
+vocePodeEnviar=Você pode enviar quantos convites quiser. Basta informar o email da pessoa no campo abaixo e clicar em convidar. Quando seu convidado fizer o primeiro depósito ou saque de reais no sistema você irá ganhar
+daComissaoCobrada=da comissão cobrada pelo sistema. Após isso o convidado será removido do seu cadastro automaticamente.
+maisAbaixoVoce=Mais abaixo você terá uma relação dos seus convidados que se cadastraram no sistema nos últimos 180 dias.
+umaPessoaPode=OBS: Uma pessoa pode receber convites de várias outras já cadastradas. Sendo assim, ao enviar o convite certifique-se de que o convidado clique no seu link para realizar o cadastro. Caso ele clique no link de outra pessoa ou acesse diretamente o sistema sem utilizar o seu link de convite o mesmo não será atribuído como seu convidado.
+convitesCadastrados=Convidados cadastrados
+qtd=Qtd:                                                              
+valorTotal=Valor Total
+valoresRecebidos=Valores Ricibidos
+
+
+#Labels
+
+
+
+#Buttons
+convidar=Convidar
+
+
+#inputs
+
+
+
+#Placeholder
+digiteEmailConvidado=Digite o e-mail do convidado
+pesquiseNome=Pesquise pelo nome
+
+
+#Links
+sejaBemVindo=Seja bem-vindo a Cointrade! Cadastre e conheça a mais inovadora plataforma de criptoativos do Brasil.
+sejaBemVindoJS="Seja bem-vindo a Cointrade! Cadastre e conheça a mais inovadora plataforma de criptoativos do Brasil. "
+
+
+
+#Options
+
+
+#Tabela
+nome=Nome
+email=E-mail
+dataCadastro=Data de cadastro
+horaCadastro=Hora de cadastro
+movimento=Movimento
+comissao=Comissão (R$)
+valorTotalTb=Valor total
+
+
+#Sucesso
+
+
+
+##--------------------
+
+#--CONTROLLER
+#Modules\trade\Controllers\Convidados.class.php
+##--
+#Textos da View
+
+
+
+                                                                
+
+#Labels
+
+
+
+#Buttons
+
+
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+
+
+#Tabela
+nenhumConvidado=Nenhum convidado se cadastrou utilizando seu link nos últimos 180 dias.
+
+#Sucesso
+conviteEnviadoSucesso=Convite enviado com sucesso!
+
+#Erro
+emailCadastradoSistema=E-mail já cadastrado no sistema
+
+
+##--------------------
+
+#--FINANCAS
+#Modules\franqueado\views\index_financas.class.php
+##--
+#Textos da View
+totalRecebido=Total Recebido
+mesAtual=Mes Atual
+convitesEnviados=Convites Enviados
+clientesAtivos=Clientes Ativos
+selecionar=Selecionar
+nomeCliente=Nome do Cliente
+ganhosPeriodo=Ganhos no Período
+dtInicial=Data Inicial
+dtFinal=Data Final
+filtro=Filtro
+valorePorMes=Valores recebidos por mês
+valorTotalRecebido=Valor total recebido
+moeda=Moeda
+valor=Valor
+
+#Buttons
+atualizarGrafico=Atualizar Gráfico
+
+
+##--------------------
+
+#--REFERENCIAS
+#Modules\FRANQUIADO\VIEWS\referencias.phtml
+
+##--
+#Textos da View
+referenciasDe=Referências de 
+clientesCadastrados=Clientes Cadastrados:
+referencias=Referências:
+adicionarReferencia=Adicionar Referência
+informeEmailCliente=Informe o e-mail do cliente
+adicionarReferencia=Adicionar Referência
+voltar=Voltar
+nomeCliente=Nome Cliente
+email=E-mail
+acao=Ação
+
+#Buttons
+
+
+#--INDEX
+#Modules\FRANQUIADO\VIEWS\INDEX_CLIENTES.phtml
+
+##--
+#Textos da View
+compartilheSeuLink=Compartilhe seu link através das ferramentas abaixo:
+linkDeCadastro=O seu link de cadastro de referência é:
+cliqueAquiCopiarLink=Clique e copie seu link aqui
+utilizeNossaPlataforma=Utilize o formulário abaixo para convidar pessoas para a plataforma, basta informar o e-mail e clicar em convidar.
+convidar=Convidar
+atualizarLista=Atualizar Lista
+limpar=Limpar
+mostrarTodos=Mostrar Todos
+nome=Nome
+dataCadastro=Data Cadastro
+horaCadastro=Hora Cadastro
+estado=Estado
+cidade=Cidade
+emailConfirmado=Conta Confirmada
+selfie=Selfie
+docPessoal=Documento Pessoal
+compEndereco=Comp. de Endereço
+financeiro=Financeiro
+convidados=Convidados
+
+vocePodePesquisarPor=Você pode pesquisar por Moeda, Data e Clientes utilizando os filtros abaixo e clicando em Atualizar Gráfico.
+
+sejaBemVindo=Seja bem-vindo a Cointrade! Cadastre e conheça a mais nova plataforma de criptoativos do Brasil.
+
+todos=Todos
+
+#------------
+informacoes=Informações:
+oLinkRefManeiraCliente=O link de referência é uma maneira dos clientes divulgarem a Cointrade e ganhar com os cadastros recebidos através do seu link de referência.
+recebaAte20Cripto=Receba até 20% em criptomoedas da taxa cobrada pela exchange nas operações de seus indicados.
+convideSeusParceiros=Convide seus parceiros usando o seu link de referência ao lado.
+abaixoOperacoes=Abaixo as operações que seus parceiros fazem e você ganha:
+compraVendaDireta=Compra e Venda direta de criptomoedas.
+compraVendaBook=Compra e Venda no livro de ofertas.
+
+#FINANCAS CONTROLLER
+
+nenhumClienteFiltro=Nenhum cliente para os filtros informados
+
+#--INDEX
+#Modules\FRANQUIADO\VIEWS\CLIENTES.phtml
+
+nenhumResultado=Nenhum resultado para o filtro.
+voceAindaNaoPossui=Você ainda não possui nenhuma indicação.
+naoConfirmado=Não Confirmado
+confirmado=Confirmado
+naoEnviada=Não Enviada
+aguardandoAnalise=Aguardando Análise
+aprovado=Aprovado

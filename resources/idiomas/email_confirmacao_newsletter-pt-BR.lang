@@ -1,0 +1,29 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EMAIL CONFIRMACAO NEWSLETTER
+#
+#
+#--VIEW
+#Modules\layouts\inspinia\confirmacao_newsletter
+##--
+#Textos da View
+assunto=E-mail Newsletter
+titulo=NewCash - E-mail Newsletter
+titulo2=Obrigado por Assinar Nossa Newsletter!
+ola=Olá
+confirmacao=Confirmação de Cadastro!
+voceEsta=Você está recebendo e-mail porque se cadastrou na nossa Newsletter. A partir de agora você receberá conteúdos incríveis semanalmente.
+obrigado=Obrigado por assinar nossa newsletter!
+
+infAcesso=Informações do acesso:
+dataHora=Data/Hora:
+ipAcesso=IP do Acesso:
+newCashEndereco=Cointrade | 
+emailDoSistema=Este é um e-mail do sistema. Por favor, não responda.
+casoNaoTenhaCadastro=Caso não tenha efetuado o cadastro, entrar em contato através de nossos canais de atendimento.
+
+
+
+

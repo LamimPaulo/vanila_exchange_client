@@ -1,54 +1,107 @@
-<?
-if ($_SERVER['REQUEST_METHOD'] === 'POST')
-{
-  $file = '/tmp/sample-app.log';
-  $message = file_get_contents('php://input');
-  file_put_contents($file, date('Y-m-d H:i:s') . " Received message: " . $message . "\n", FILE_APPEND);
+<?php
+ob_start();
+
+require_once __DIR__ . '/Library/vendor/autoload.php';
+require_once __DIR__ . '/Library/autoload_classmap.php';
+
+
+use Utils\Session;
+
+//Definição do ambiente de execução do sistema
+$ambiente = getenv('AMBIENTE');
+$empresa = getenv('EMPRESA');
+$titulo = getenv('TITULO');
+$grafico = getenv('GRAFICO');
+$erro = getenv('ERRO');
+$urlBase = getenv("EnvUrlProd");
+$bdBook = getenv("EnvBdUrlBookName");
+$bdGrafico = getenv("EnvBdUrlGraficoName");
+
+define("AMBIENTE", $ambiente);
+define("EMPRESA", $empresa);
+define("TITULO", $titulo);
+define("GRAFICO", $grafico);
+define("BDBOOK", $bdBook);
+define("BDGRAFICO", $bdGrafico);
+
+if ($ambiente == 'desenvolvimento') {
+    error_reporting(E_ERROR);
+    /*ini_set('display_errors', TRUE);
+    ini_set('display_startup_errors', TRUE);*/
+
+} else if ($ambiente == 'producao') {
+    //Se não, os erros são omitidos
+    error_reporting(0);
 }
-else
-{
-?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>PHP Application - AWS Elastic Beanstalk</title>
-    <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster+Two" type="text/css">
-    <link rel="icon" href="https://awsmedia.s3.amazonaws.com/favicon.ico" type="image/ico" >
-    <link rel="shortcut icon" href="https://awsmedia.s3.amazonaws.com/favicon.ico" type="image/ico" >
-    <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-    <link rel="stylesheet" href="/styles.css" type="text/css">
-</head>
-<body>
-    <section class="congratulations">
-        <h1>Congratulations!</h1>
-        <p>Your AWS Elastic Beanstalk <em>PHP</em> application is now running on your own dedicated environment in the AWS&nbsp;Cloud</p>
-        <p>You are running PHP version <?= phpversion() ?></p>
-    </section>
 
-    <section class="instructions">
-        <h2>What's Next?</h2>
-        <ul>
-            <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/">AWS Elastic Beanstalk overview</a></li>
-            <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/create_deploy_PHP_eb.html">Deploying AWS Elastic Beanstalk Applications in PHP Using Eb and Git</a></li>
-            <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/create_deploy_PHP.rds.html">Using Amazon RDS with PHP</a>
-            <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/customize-containers-ec2.html">Customizing the Software on EC2 Instances</a></li>
-            <li><a href="http://docs.amazonwebservices.com/elasticbeanstalk/latest/dg/customize-containers-resources.html">Customizing Environment Resources</a></li>
-        </ul>
 
-        <h2>AWS SDK for PHP</h2>
-        <ul>
-            <li><a href="http://aws.amazon.com/sdkforphp">AWS SDK for PHP home</a></li>
-            <li><a href="http://aws.amazon.com/php">PHP developer center</a></li>
-            <li><a href="https://github.com/aws/aws-sdk-php">AWS SDK for PHP on GitHub</a></li>
-        </ul>
-    </section>
+if (AMBIENTE == "producao" && isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+    $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CF_CONNECTING_IP'];
+}
 
-    <!--[if lt IE 9]><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
-</body>
-</html>
-<? 
-} 
+//Incluo os caminhos de todas as bibliotecas e arquivos de include do sistema
+set_include_path('./Library/' . PATH_SEPARATOR . './Core/' . PATH_SEPARATOR . './Modules/');
+//Defino o locale do sistema
+setlocale(LC_ALL, "pt_BR", "ptb_bra");
+date_default_timezone_set('America/Sao_Paulo' );
+//Único require feito manualmente, responsável pelo autoload de todas as outras classes
+
+
+require_once 'Dduo.class.php';
+//require_once './Library/PHPMailer/vendor/autoload.php';
+//require_once './Library/GerenciaNet/vendor/autoload.php';
+
+define('DIR_MODULES', 'Modules/');
+define('DIR_LAYOUTS', 'layouts/');
+define('DIR_PUBLIC', 'public/');
+define('DIR_TV', 'tradingview/');
+
+$dduo = new Dduo();
+
+date_default_timezone_set($dduo->getTimeZone());
+
+
+//Definição de urls para a inclusão de scripts JS, CSS, arquivos de imagens, ícones, etc.
+//define('IDIOMA', Modules\principal\Controllers\Principal::getIdioma());
+define('URL', $urlBase . $_SERVER['REQUEST_URI']);
+define('URLBASE', $urlBase);
+define('CSS', $urlBase . '/resources/css/');
+define('JS', $urlBase . '/resources/js/');
+define('BOOK', $urlBase . '/resources/book/');
+define('LIB', JS . 'lib/');
+define('TEMPLATE', $urlBase . '/resources/templates/');
+define('NC', TEMPLATE . 'default/');
+define('TEMA', TEMPLATE . 'inspina/');
+define('SITE', TEMPLATE . 'appic/');
+define('NEWCASH', TEMPLATE . 'default/');
+define('IMAGES', $urlBase . '/resources/images/');
+define('AUDIO', $urlBase . '/resources/sounds/');
+define('ICONS', IMAGES . 'icons/');
+
+//Tema Cointrade
+define('TEMACOINTRADE', TEMPLATE . 'Cointrade/');
+define('TEMAJS', TEMPLATE . 'Cointrade/js/');
+define('TEMACSS', TEMPLATE . 'Cointrade/css/');
+define('TEMAIMG', TEMPLATE . 'Cointrade/img/');
+
+if(AMBIENTE == "producao"){
+    define('UPLOADS', "../../../../efs/arquivosclientes/");
+    define('IMG_PUBLIC', "../../../../efs/img-public/");
+} else {
+    define('UPLOADS', "arquivosclientes/");
+    define('IMG_PUBLIC', "uploads/public/");
+}
+
+define('QRCODES', "qrcodes/");
+define('PUBLIC_IMAGES', "uploads/public/");
+
+
+$parametros = $dduo->checaURL(URL);
+define('URLBASE_CLIENT', URLBASE . '/' );
+
+define('CLIENTE', (!empty($parametros['_parameters']['_client']) ? $parametros['_parameters']['_client'] . '/' : null));
+
+$dduo->route($parametros);
+
+
 ?>

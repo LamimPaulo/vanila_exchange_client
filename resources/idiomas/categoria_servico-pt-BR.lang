@@ -1,0 +1,38 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#BOLETO
+#
+#
+#--VIEW
+#Modules\servicos\views\categoria_servico.phtml
+##--
+catCadSucesso=Categoria cadastrada com sucesso!
+catExcSucesso=Categoria excluída com sucesso!
+statusAltSucesso=Status alterado com sucesso!
+listaServi=Lista de Categoria de Serviço
+cadNova=Cadastrar Nova
+desc=Descrição
+altStatus=Alterar Status
+editar=Editar
+excluir=Excluir
+fechar=Fechar
+cadCarServ=Cadastro de Categoria de Serviço
+salvar=Salvar
+excluirCatServico=Excluir Categoria de Serviço
+desejaRealExcluir=Deseja realmente excluir o registro selecionado?
+
+#COntroller
+nenhumaCadastrada=Nenhuma categoria cadastrada.
+catServInvalida=Categoria de serviço inválida
+
+##--
+
+
+##--------------------
+
+
+
+
+

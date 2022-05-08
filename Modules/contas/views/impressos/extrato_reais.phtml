@@ -1,0 +1,134 @@
+<?php
+$cliente = isset($_data["cliente"]) ? $_data["cliente"] : new Models\Modules\Cadastro\Cliente();
+$lancamentos = isset($_data["lancamentos"]) ? $_data["lancamentos"] : Array();
+
+$entradas = isset($_data["entrada"]) ? $_data["entrada"] : 0;
+$saidas = isset($_data["saida"]) ? $_data["saida"] : 0;
+
+$saldo = $entradas - $saidas;
+?>
+
+<html>
+    <head>
+        <title></title>
+    </head>
+    
+    <body>
+        
+        <table style="width: 100%;"> 
+            
+            <tbody>
+                <tr>
+                    <td style="text-align: center;">
+                        <h2>Extrato de Conta Corrente</h2>
+                        <br><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Cliente: </strong><?php echo $cliente->nome ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Email: </strong><?php echo $cliente->email ?>
+                    </td>
+                </tr>
+                
+            </tbody>
+            
+        </table>
+        
+        
+        <br><br>
+        <table style="width: 100%;"> 
+            
+            <tbody>
+                <tr>
+                    <td>
+                        <strong>Outras Movimentações: </strong>
+                    </td>
+                    <td>
+                        <strong>Entradas: </strong> R$ <?php echo number_format($entradas, 2, ",", ".")?>
+                    </td>
+                    <td>
+                        <strong>Saídas: </strong> R$ <?php echo number_format($saidas, 2, ",", ".")?>
+                    </td>
+                    <td>
+                        <strong>Saldo: </strong> R$ <?php echo number_format($saldo, 2, ",", ".")?>
+                    </td>
+                </tr>
+                
+            </tbody>
+            
+        </table>
+        <table style="width: 100%; font-size: 10px;"> 
+            
+            <thead>
+                <tr>
+                    <th style="text-align: center; background: #999999; color: #ffffff;">
+                        <strong>Controle</strong>
+                    </th>
+                    <th style="text-align: center; background: #999999; color: #ffffff;">
+                        <strong>Data</strong>
+                    </th>
+                    <th style="background: #999999; color: #ffffff;">
+                        <strong>Descrição</strong>
+                    </th>
+                    <th style="text-align: center; background: #999999; color: #ffffff;">
+                        <strong>Movimento</strong>
+                    </th>
+                    <th style="text-align: center; background: #999999; color: #ffffff;">
+                        <strong>Valor</strong>
+                    </th>
+                    <th style="text-align: center; background: #999999; color: #ffffff;">
+                        <strong>Saldo</strong>
+                    </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <?php
+                $i = 0;
+                foreach ($lancamentos as $contaCorrente) {
+                    //$contaCorrente = new \Models\Modules\Cadastro\ContaCorrenteReais();
+                    if ($contaCorrente->tipo == Utils\Constantes::ENTRADA) {
+                        $saldo += $contaCorrente->valor;
+                    } else {
+                        $saldo -= $contaCorrente->valor;
+                    }
+                    
+                    $bg = (($i%2) > 0 ? "#cccccc" : "#ffffff");
+                    $cl = (($i%2) > 0 ? "#000000" : "#000000");
+                ?>
+                <tr>
+                    <td style="text-align: center; background: <?php echo $bg?>; color: <?php echo $cl ?>;">
+                        <?php echo $contaCorrente->id ?>
+                    </td>
+                    <td style="text-align: center; background: <?php echo $bg?>; color: <?php echo $cl ?>;">
+                        <?php echo $contaCorrente->data->formatar(Utils\Data::FORMATO_PT_BR) ?>
+                    </td>
+                    <td style="background: <?php echo $bg?>; color: <?php echo $cl ?>;">
+                        <?php echo $contaCorrente->descricao ?>
+                    </td>
+                    <td style="text-align: center; background: <?php echo $bg?>; color: <?php echo $cl ?>;">
+                        <?php echo ($contaCorrente->tipo == Utils\Constantes::ENTRADA ? "Entrada" : "Saída") ?>
+                    </td>
+                    <td style="text-align: center; background: <?php echo $bg?>; color: <?php echo $cl ?>;">
+                        R$ <?php echo number_format(($contaCorrente->valor * ($contaCorrente->tipo == Utils\Constantes::ENTRADA ? (1) : (-1))), 2, ",", ".")?>
+                    </td>
+                    <td style="text-align: center; background: <?php echo $bg?>; color: <?php echo $cl ?>;">
+                        R$ <?php echo number_format($saldo, 2, ",", ".")?>
+                    </td>
+                </tr>
+                <?php 
+                $i++;
+                }
+                ?>
+            </tbody>
+            
+        </table>
+        
+    </body>
+    
+</html>

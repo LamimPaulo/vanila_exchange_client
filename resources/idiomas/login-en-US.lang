@@ -1,0 +1,108 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#LOGIN
+#
+#
+#--VIEW
+#Modules\acesso\views\login.phtml
+##--
+#Textos da View
+bemvindoMsg=Welcome to Cointrade. Thank for your registrering in our plataform.
+bemvindo2Msg=You have received an e-mail confirming your registration. You must sign in and click on the email confirmation link to activate your account and receive a temporary password.
+newCashAcesso=Cointrade - Access
+
+#Labels
+
+#Buttons
+entrarButton=Log in
+
+#Placeholder
+placeholderInputSenha=Password
+
+#Links
+confirmaEmailLnk=Confirm E-mail
+esqueciSenhaLnk=I forgot my password
+
+#SMS
+celular=Mobile
+tokenEnviadoTipo=Token was sent to {var}.
+
+##--
+
+##--CONTROLLER
+#Modules\acesso\controllers\Acesso.class.php
+#--
+
+#Textos da View
+
+
+#Labels
+
+
+#Buttons
+
+
+#Placeholder
+placeHolderInputTokEmail=2FA Token sent by e-mail
+placeHolderInputTokSMS=2FA Token sent by SMS
+placeHolderInputTokGoogle=Insert the token from your 2FA
+
+#Links
+
+
+#Sucesso
+chaveEnviadaJson=A key was sent to your e-mail
+senhaEnviadaMsg=A new password was sent to your email
+emailConfirmadoMsg=Email allready confirmed
+
+
+#Erros
+sistemaIndisponivelErr=The system is temporarily unavailable. Try again later.
+documentoInvalido=Invalid document.
+emailConfirmadoErr=You need to confirm your Email. To do so, go to the login page and click on "Confirm Email"
+recuperaSenhaErr=Password recovery was blocked in your account because of many attempted execution. Please contact support for the unlock!
+problemaContaErr=There is a problem with your account that prevents password recovery. For more information please contact support.
+dataInvalidaErr=Invalid date
+dadosInválidosErr=Invalid data
+emailConfirmadoSucessoMsg=Email confirmed successfully! A temporary password has been sent to your email.
+falhaEnviaRecupeErr=Failed to send password recovery email:
+impossivelRecuperaSenhaErr=Could not perform password recovery. Please check the reported data and try again.
+chaveInvalidaErr=Invalid recovery key!
+dataExpiradaErr=Expired date
+chaveInvalidaErr=Invalid key!
+emailInvalido=Invalid E-mail.
+recuperacaoBloqueadaSenha=Password recovery is blocked in your account because of many attempted execution. Please contact support for the unlock!
+
+##--
+
+
+###########################
+#UsuarioRn.class.php 
+confirmaSenhaErr=You need to confirm the password!
+informadaSenhaErr=If you have confirmed your password, you must enter a password!
+confirmacaoSenhaIguaisErr=Password and confirmed password must be the same!
+usuarioAlteracoesErr=This user does not allow changes
+informarSenhaErr=Password must be entered.
+usuarioInvalidoErr=Invalid user type.
+nomeUserInformadoErr=The user name needs to be informed.
+emailPrecisaIndformadoErr=The user's email needs to be informed.
+emailJaCadastradoErr=The email is already registered in the system.
+celularInvalido=Invalid phone
+login2FAErr=You must register a mobile phone to enable 2FA authentication.
+loginEmailErr=The registered e-mail must be informed.
+loginSenhaErr=The password must be entered.
+permissaoAcessoSistemaErr=You are not allowed to access the system. Please contact your system administrator.
+senhaInvalidaErr=Invalid password
+cadastroEmAnaliseErr=Registration under analysis. Please wait for contact.
+cadastroRecusadoErr=Your registration has been declined. Please wait for contact.
+emailPrecisaConfirmadoErr=Your email needs to be confirmed to gain access to the system.
+loginESenhaInvalidosErr=Login or password invalid.
+emailConfirmadoSenhaErr=Your email needs to be confirmed to make the change of password.
+userNaoLocalizadoErr=User not found in system
+senhaAtualInvalidErr=Invalid current password
+necessConfirmaSenhaErr=Must confirm password
+senhaConfirmacaoErr=The password and the confirmed password confirmation do not match
+
+login1=You need to wait 5 minutes to try again

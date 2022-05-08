@@ -1,0 +1,315 @@
+<?php
+$moeda = Modules\principal\Controllers\Principal::getCurrency();
+
+$moedas = (isset($_data["moedas"]) ? $_data["moedas"] : Array());
+
+?>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<div class="content-wrapper">
+     <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+        <div class="col-lg-10">
+            <h2>Resumo de Contas</h2>
+            <ol class="breadcrumb" style="background-color: transparent !important;">
+                <li>
+                    <a href="<?php echo Utils\Rotas::R_DASHBOARD ?>">Conta Corrente Empresa</a>
+                </li>
+                <li class="active">
+                    <strong>Resumo de contas</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-12">
+            
+            
+            <div class="row">
+                <div class="col col-lg-4">
+                    <div class="form-group">
+                        <label>Saldo Mínimo</label>
+                        <input type="text" class="form-control" id="filtroMinCurrency" value="0,00000001" />
+                    </div>
+                </div>
+                <div class="col col-lg-2">
+                    <div class="form-group">
+                        <label>Moeda</label>
+                        <select class="form-control" id="filtroIdMoeda" >
+                            <option value="<?php echo \Utils\Criptografia::encriptyPostId(1) ?>">BRL</option>
+                            <?php 
+                            foreach ($moedas as $moeda) {
+                                ?>
+                                <option value="<?php echo \Utils\Criptografia::encriptyPostId($moeda->id) ?>"><?php echo $moeda->simbolo ?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col col-lg-6">
+                    <div class="form-group">
+                        <label>Filtro (nome do cliente)</label>
+                        <input type="text" class="form-control" id="filtro" />
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col col-lg-12 text-center">
+                    <button onclick="filtrar();" type="button" class="btn btn-info">
+                        Filtrar Contas
+                    </button>
+                </div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col col-lg-12">
+
+                    <div class="table-responsive">
+                    
+                        <table class="table table-hover table-condensed table-responsive table-striped table-bordered">
+
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Cliente</th>
+                                    <th class="text-center">Disponível</th>
+                                    <th class="text-center">Bloqueado</th>
+                                    <th class="text-center">Total</th>
+                                    <th class="text-center">Cobrar</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="contas">
+
+                            </tbody>
+
+
+                            <tfoot>
+                                <tr>
+                                    <th><strong>Totais</strong></th>
+                                    <th colspan="3" class="text-center"  id="saldoBtcTotal"></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+
+                    </div>
+                        
+                </div>
+            </div>
+            
+            <br><br><br>
+            
+            
+            
+            
+            
+        </div>
+    </div>
+   
+    
+    
+    
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        
+        
+        $("#modalCobrancaValorCurrency, #filtroMinCurrency").keydown(function(event) {
+            $(this).val(currency($(this).val(), 8, 8, event.keyCode));
+            
+            event.preventDefault();
+        });
+        
+        $("#modalCobrancaValorBrl, #filtroMinBrl").keydown(function(event) {
+            $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+            
+            event.preventDefault();
+        });
+        
+        $("#modalCobrancaMoeda").change(function () {
+            if ($(this).val() === "BRL") { 
+                $("#modalCobrancaValorBrl").show();
+                $("#modalCobrancaValorCurrency").hide();
+                $("#modalCobrancaValorCurrency").val("");
+            } else {
+                $("#modalCobrancaValorBrl").hide();
+                $("#modalCobrancaValorBrl").val("");
+                $("#modalCobrancaValorCurrency").show();
+            }
+        });
+    });
+    
+    
+    function filtrar() {
+        $("#contas").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CONTAS_RESUMO_LISTARCONTAS ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idMoeda: $("#filtroIdMoeda").val(),
+                saldoMinCurrency:$("#filtroMinCurrency").val(),
+                filtro: $("#filtro").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#contas").html(json.html);
+                        $("#saldoBtcTotal").html(json.currency.toFixed(8));
+                    } else {
+                        $("#contas").html("<tr><td colspan='6' class='text-center'>"+json.mensagem+"</td></tr>");
+                    }
+                } catch (e) {
+                    $("#contas").html("<tr><td colspan='6' class='text-center'>"+e+"</td></tr>");
+                }
+            }
+        });
+    }
+    
+    
+    function modalCobranca(cliente) {
+    
+        $("#modalCobrancaIdCliente").val(cliente);
+        $("#modalCobrancaMoeda").val("BRL").trigger("change");
+        $("#modalCobrancaValorBrl").val("");
+        $("#modalCobrancaValorCurrency").val("");
+        $("#modalCobrancaDescricaoCliente").val("");
+        $("#modalCobrancaDescricaoEmpresa").val("");
+        $("#modalCobranca").modal();
+    }
+    
+    
+    function modalConfirmarLancamento() {
+        $("#modalConfirmarLancamento").modal();
+        
+        $("#modalConfirmarLancamentoValor").html(($("#modalCobrancaMoeda").val() === "BRL" ? "R$ " + $("#modalCobrancaValorBrl").val() : $("#modalCobrancaValorCurrency").val() + " ") );
+        $("#modalConfirmarLancamentoCliente").html($("#cli-"+$("#modalCobrancaIdCliente").val()).html());
+    }
+    
+    function cobrar() {
+        $("#modalCobrancaFechar, #modalCobrancaCobrar, #modalConfirmarLancamentoCobrar, #modalConfirmarLancamentoFechar").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CONTAS_RESUMO_COBRAR?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                cliente : $("#modalCobrancaIdCliente").val(),
+                moeda : $("#modalCobrancaMoeda").val(),
+                valor : ($("#modalCobrancaMoeda").val() ==="BRL" ? $("#modalCobrancaValorBrl").val() : $("#modalCobrancaValorCurrency").val()),
+                descricaoCliente : $("#modalCobrancaDescricaoCliente").val(),
+                descricaoEmpresa : $("#modalCobrancaDescricaoEmpresa").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalCobrancaFechar").prop("disabled", false).trigger("click");
+                        $("#modalConfirmarLancamentoFechar").prop("disabled", false).trigger("click");
+                        showNotyAlert(json.mensagem, "s");
+                        filtrar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch(e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCobrancaFechar, #modalCobrancaCobrar, #modalConfirmarLancamentoCobrar, #modalConfirmarLancamentoFechar").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+</script>
+
+
+<div class="modal fade" id="modalCobranca" tabindex="-1" role="dialog" aria-labelledby="modalCobranca" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" >Lançar cobrança</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalCobrancaIdCliente" />
+                <div class="row">
+                    <div class="col col-lg-6" >
+                        <div class="form-group">
+                            <label>Moeda</label>
+                            <select id="modalCobrancaMoeda" class="form-control">
+                                <option value="<?php echo \Utils\Criptografia::encriptyPostId(1) ?>">BRL</option>
+                                <?php 
+                                foreach ($moedas as $moeda) {
+                                    ?>
+                                    <option value="<?php echo \Utils\Criptografia::encriptyPostId($moeda->id) ?>"><?php echo $moeda->simbolo ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <input type="text" class="form-control" id="modalCobrancaValorBrl" />
+                            <input type="text" class="form-control" id="modalCobrancaValorCurrency" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label>Descrição para o cliente</label>
+                            <input type="text" id="modalCobrancaDescricaoCliente" maxlength="200" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label>Descrição para a empresa</label>
+                            <input type="text" id="modalCobrancaDescricaoEmpresa" maxlength="200" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalCobrancaFechar" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="modalCobrancaCobrar" onclick="modalConfirmarLancamento();">Lançar Cobrança</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<div class="modal fade" id="modalConfirmarLancamento" tabindex="-1" role="dialog" aria-labelledby="modalConfirmarLancamento" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" >Excluir Lançamento</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-12" >
+                        Tem certeza que deseja efetuar a cobrança de <span id="modalConfirmarLancamentoValor"></span> para o cliente <span id="modalConfirmarLancamentoCliente"></span>?
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalConfirmarLancamentoFechar" data-dismiss="modal">Não</button>
+                <button type="button" class="btn btn-primary" id="modalConfirmarLancamentoCobrar" onclick="cobrar();">Sim</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+

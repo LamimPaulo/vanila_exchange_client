@@ -1,0 +1,221 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#LOGIN
+#
+#
+#--VIEW
+#Modules\contas\views\transferencia_btc.phtml
+##--
+#Textos da View
+titulo=Transfer
+subTitulo=Transfer
+abaTransfMoeda=Transfer
+abaTransfReais=Transfer Real
+abaTransfNewCash=Transfer to Cointrade
+enderDestino=Destination {var} address
+descTransferencia=Description for this transfer
+taxa=Fee:
+valorDaTranferenciaMaior=Transfer amount must be greater than or equal to
+carteiraDestino=Destination address
+atencaoUtilize=Attention: Use the {var} address of the person to whom you want to send the value. The amount will be debited in reais from your checking account and will be credited in reais to the recipient's checking account.
+descParaEssaTransf=Description for this transfer
+valorReais=Amount in Reais
+carteiraInvalida=Invalid Wallet
+taxaR=Fee: R$
+valorTransferenciaMaiorR=Transfer amount must be greater than or equal to R$
+transferirReais= Transfer Reais
+reais=Reais
+descParaTransNc=Description for this transfer
+moeda=Cryptocurrency
+qualquerValor=Any amount in
+podeSerTransf=can be transfered.
+confirmaTransacao=Confirm Transaction
+nenhumaContaEncontrada=No account found
+volumeTotalC=Total amount:
+depositoVar={var} Deposit
+saqueVar={var} Withdraw
+vocePreciaInforarTodosParametros=You need to enter all parameters.
+valorTotal=Total Amount
+
+
+
+                                                                
+
+#Labels
+volumeEm=Volume in
+volumeEmNc=Volume in 
+transfSemTaxa=Transfer without Fee
+dtInicial=Initial Date
+dtFinal=Final Date
+informaToken=Insert token: 
+informaPin=Insert PIN:
+registros=Records
+filtroGeral=General Filter
+filtro=Filter
+
+
+
+#Buttons
+meuVolumeTotal=Total Amount
+meuSaldoTotal=Total Balance
+meuVolumeTotalNc=Total Volume
+meuSaldoTotalNc=Total Balance
+btTransferir=Transfer
+transfParaNc=Transfer to Cointrade
+limpar=Clean
+reenviar=Resend
+cancelar=Cancel
+confirmaTransacaoBtn=Confirm Transaction
+
+
+#inputs
+selecionar=Select
+alterar=Alter
+remover=Remove
+
+
+#Placeholder
+
+
+#Links
+verComprovante=See attached receipt.
+
+
+#Options
+opReais=Reais
+todos=All
+
+
+
+#Tabela
+controle=Control
+tipoTabela=Type
+volume=Volume
+descricao=Description
+status=Status
+data=Date
+endereco=Address
+acoes=Action
+cliente=Client
+taxa=Fee
+hash=Hash
+valor=Value
+destinatario=Destination
+
+
+
+
+##--------------------
+
+##--CONTROLLER 1
+#Modules\contas\Controllers\Transferencia.class.php
+#--
+
+#Textos da View
+foiEnviadoEmail=A confirmation token has been sent to your email
+porFavorInsiraToken=. Please enter the token below to complete the transaction.
+foiEnviadoSMS=A confirmation token was sent to your mobile phone
+useGoogle=Please use your Google Authenticator to enter the token below.
+
+
+
+#Labels
+
+
+#Buttons
+
+
+#Placeholder
+
+
+#Links
+
+
+#tabela
+
+
+#Sucesso
+transfSucesso=Transfer successfully done!
+
+
+#Erros
+voceNaoTemPermissao=You do not have permission to transfer values to company
+saldoInsuficiente=Insufficient funds
+moedaInvalida=Invalid coin
+precisaCadPin=You need to register a PIN to perform this operation. Access the profile and configure your security PIN.
+pinInvalido=Invalid PIN
+##--
+
+
+##--------------------
+
+##--CONTROLLER 2
+#Modules\contas\Controllers\Btc.class.php
+##--CONTROLLER 3
+#Modules\contas\Controllers\Reais.class.php
+#--
+
+#Textos da View
+cartNewCash=Internal Transfer
+erro=Error
+foiEnviadoEmail1=A confirmation token has been sent to your email
+porFavorInsiraToken1=. Please enter the token below to complete the transaction.
+foiEnviadoSMS1=A confirmation token was sent to your mobile phone
+useGoogle1=Please use your Google Authenticator to enter the token below.
+necessarioInfCarteira=It necessary inform a wallet.
+voceNaoPodeTransContaCorrente=You can not transfer money to your own checking account.
+cartInformadaNaoNc=The wallet informed is not Cointrade wallet.
+
+
+#Labels
+statusNaoAutorizado=Not authorized
+statusEmAnalise=In Analysis
+statusEmProcessamento=Processing
+statusConcluido=Completed
+
+
+
+#Buttons
+
+
+#Placeholder
+
+
+#Links
+
+
+#tabela
+liCliente=Client
+liEntrada=Entry
+liSaida=Spent
+liVolume=Volume
+liAbrir=Open
+descricao1=Description
+
+
+#Sucesso
+transSucesso=Transfer successfully done!
+
+
+
+#Erros
+clienteNaoLoc=Client not found in system.
+precisaCadPin1=You need to register a PIN to perform this operation. Access your profile and configure your security PIN.
+pinInvalido1=Invalid PIN
+saldoInsuficiente=Insufficient funds
+enderecoInvalido=Invalid address.
+
+
+##--
+
+##--CONTROLLER 3
+#Modules\contas\Controllers\Reais.class.php
+
+
+
+##--
+
+
+
