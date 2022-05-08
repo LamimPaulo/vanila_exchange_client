@@ -311,23 +311,6 @@ $moeda = $paridade->moedaBook;
 <?php
 if (AMBIENTE == "producao" && $cliente->documentoVerificado == 1) { ?>
 
-        <script type="text/javascript">
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        Tawk_API.visitor = {
-            name  : '<?php echo ucwords($cliente->nome); ?>',
-            email : '<?php echo $cliente->email; ?>',
-            hash  : '<?php echo hash_hmac("sha256", $cliente->email, "0301f9d39bac149c44de8a63c9b58b6301351330"); ?>'
-        };
-        (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/5ff8508aa9a34e36b96a5a33/1ergvl7an';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-        })();
-
-        </script>
 
 <?php } ?>
         

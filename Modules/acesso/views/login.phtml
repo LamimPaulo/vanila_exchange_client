@@ -13,15 +13,9 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
 <html>
 <head>
     <?php if(AMBIENTE == "producao") { ?>
-        <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MSSF6SZ');</script>
-    <!-- End Google Tag Manager -->
+
     <?php } ?>
     <script src="https://www.google.com/recaptcha/api.js"></script>
-
     <title><?php echo TITULO ?></title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -68,7 +62,7 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
         <?php if(AMBIENTE == "producao") { ?>
         <div class="form-group m-t-lg">
             <div style="text-align: center;">
-                <div  id="google" name="google" atrpage="login" class="g-recaptcha" data-callback="validarBotao" data-sitekey="6Ld9i6AaAAAAAD9QvLv2iendNl2NVZKc0BDkB9Uv" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
+                <div  id="google" name="google" atrpage="login" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo GOOGLESITE; ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
             </div>
         </div>
         <?php } ?>
@@ -98,10 +92,7 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
 
 </body>
 <?php if(AMBIENTE == "producao") { ?>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MSSF6SZ"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+
 <?php } ?>
 </html>
 
