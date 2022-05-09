@@ -115,109 +115,35 @@ class Book {
                 
                 ?>
 
-                <tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
+                <tr class="<?php echo ($favorita ? "favorite-parity" : "") ?> tr-h" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >                    
+                    <td class="text-left change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 18px; width: 25% !important" data-name="<?php echo $paridade->symbol ?>">
+                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 12px; height: 12px;" />&nbsp;
                         <?php echo $paridade->moedaBook->simbolo; ?>
                     </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
+                    <td class="text-right change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 35%;" data-name="<?php echo $paridade->symbol ?>">
                         <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
                     </td>
-
+                    <td class="text-right change-parity<?php echo $color ?> column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 30% !important;" data-name="<?php echo $paridade->symbol ?>">
+                         <?php echo number_format($variacao, 1, ",", ".") ?>%
+                    </td>           
+                    <td><?php echo $icon ?></td>
+                    <?php if($cliente->modoOperacao == "basic"){ ?>
+                    <td class="text-right change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 35% !important" data-name="<?php echo $paridade->symbol ?>">
+                        <?php echo number_format($paridade->quoteVolume, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo ?>
+                    </td>
+                    <?php } ?>
+                    <td class="text-center column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 15% !important"  id="btn-favorito-<?php echo $paridade->id ?>" data-name="<?php echo $paridade->symbol ?>">
+                        <?php if ($favorita) {?>
+                        <button class="btn btn-link text-warning" type="button" onclick="removerFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
+                            <i class="fa  fa-star" style="font-size: 9px; color: gray"></i>
+                        </button>
+                        <?php } else { ?>
+                        <button class="btn btn-link text-warning" type="button" onclick="addFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
+                            <i class="fa  fa-star-o" style="font-size: 9px; color: gray"></i>
+                        </button>
+                        <?php }  ?>
+                    </td>
                 </tr>
-                <tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-
-                </tr>
-                <tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-
-                </tr>
-                <tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-
-                </tr>
-                <tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-
-                </tr>
-                <tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-
-                </tr><tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-
-                </tr>
-                <tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-
-                </tr>
-                <tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-
-                </tr>
-                <tr class="d-flex" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 5px;" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 20px; height: 20px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-
-                </tr>
-
-
-
-
                 <?php
             }
             $html = ob_get_contents();
@@ -448,33 +374,6 @@ class Book {
             <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;"><?php echo number_format($ordem->volumeCurrency, $ordem->paridade->moedaBook->casasDecimais, ",", ".") ?></td>
             <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;"><?php echo number_format(($ordem->valorCotacao * $ordem->volumeCurrency), $this->casasDecimaisMoedaTrade, ",", ".") ?></td> 
             
-        </tr>
-        <tr style="background-image: linear-gradient(to left, rgba(<?php echo $color ?>, 0.2) <?php echo number_format($ordem->porcentagem, 2, ".", "") ?>%, rgba(<?php echo $color ?>, 0) <?php echo number_format($ordem->porcentagem, 2, ".", "") ?>%) !important; font-weight: <?php echo $ordem->idCliente == $idCliente ? "bold" : "normal" ?>"
-            class="order-item"
-            onclick="configOrder('<?php echo ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? \Utils\Constantes::ORDEM_VENDA : \Utils\Constantes::ORDEM_COMPRA) ?>', '<?php echo number_format($ordem->valorCotacao, $this->casasDecimaisMoedaTrade, ".", "")?>', '<?php echo number_format($volumeAcumulado, $ordem->paridade->moedaBook->casasDecimais, ".", "")?>');" >
-
-            <td class="text-left td-price" style="padding-top: 1px !important; padding-bottom: 1px !important; color: <?php echo $colorHex ?>; ">
-                <span><?php echo number_format($ordem->valorCotacao, $this->casasDecimaisMoedaTrade, ",", ".") ?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <?php if ($ordem->idCliente == $idCliente) { ?>
-                    <a onclick="cancelar('<?php echo $ordemRemover ?>');"><i class='fa fa-times' style='color: #676a6c !important'></i></a>
-                <?php } ?>
-            </td>
-            <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;"><?php echo number_format($ordem->volumeCurrency, $ordem->paridade->moedaBook->casasDecimais, ",", ".") ?></td>
-            <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;"><?php echo number_format(($ordem->valorCotacao * $ordem->volumeCurrency), $this->casasDecimaisMoedaTrade, ",", ".") ?></td>
-
-        </tr><tr style="background-image: linear-gradient(to left, rgba(<?php echo $color ?>, 0.2) <?php echo number_format($ordem->porcentagem, 2, ".", "") ?>%, rgba(<?php echo $color ?>, 0) <?php echo number_format($ordem->porcentagem, 2, ".", "") ?>%) !important; font-weight: <?php echo $ordem->idCliente == $idCliente ? "bold" : "normal" ?>"
-                 class="order-item"
-                 onclick="configOrder('<?php echo ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? \Utils\Constantes::ORDEM_VENDA : \Utils\Constantes::ORDEM_COMPRA) ?>', '<?php echo number_format($ordem->valorCotacao, $this->casasDecimaisMoedaTrade, ".", "")?>', '<?php echo number_format($volumeAcumulado, $ordem->paridade->moedaBook->casasDecimais, ".", "")?>');" >
-
-            <td class="text-left td-price" style="padding-top: 1px !important; padding-bottom: 1px !important; color: <?php echo $colorHex ?>; ">
-                <span><?php echo number_format($ordem->valorCotacao, $this->casasDecimaisMoedaTrade, ",", ".") ?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <?php if ($ordem->idCliente == $idCliente) { ?>
-                    <a onclick="cancelar('<?php echo $ordemRemover ?>');"><i class='fa fa-times' style='color: #676a6c !important'></i></a>
-                <?php } ?>
-            </td>
-            <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;"><?php echo number_format($ordem->volumeCurrency, $ordem->paridade->moedaBook->casasDecimais, ",", ".") ?></td>
-            <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;"><?php echo number_format(($ordem->valorCotacao * $ordem->volumeCurrency), $this->casasDecimaisMoedaTrade, ",", ".") ?></td>
-
         </tr>
         <?php
         

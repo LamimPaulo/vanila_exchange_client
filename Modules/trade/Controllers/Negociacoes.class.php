@@ -118,7 +118,7 @@ class Negociacoes {
                         
             $ordemExecutadaRn = new \Models\Modules\Cadastro\OrdemExecutadaRn();
             $lista = $ordemExecutadaRn->filtrar($paridade, $dataInicial, $dataFinal, "T", "T", 0, 200, false);
-
+            
             $json["html"] = $this->htmlOrdensTrade($lista, $paridade);
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
@@ -137,7 +137,7 @@ class Negociacoes {
             foreach ($lista as $ordem) {  
    
                 $this->htmlItemOrdemTrade($ordem, $paridade);
-
+                
             }
         } else {
             ?>
@@ -164,95 +164,19 @@ class Negociacoes {
         
         ?>
             <tr class="order-item-trade" style="<?php echo $color?>; cursor: pointer;" >
-                <td class="text-left">
-                    <?php echo $ordemExecutada->dataExecucao->formatar(\Utils\Data::FORMATO_HORA_TIMESTAMP)?>
+                <td class="text-center">
+                    <?php echo $ordemExecutada->dataExecucao->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP)?>
                 </td>
                 <td class="text-center">
                     <?php echo $paridade->moedaTrade->simbolo . " " . number_format($ordemExecutada->valorCotacao, $paridade->moedaTrade->casasDecimais, ",", ".")?>
                 </td>
-                <td class="text-right">
+                <td class="text-center">
                     <?php echo number_format($ordemExecutada->volumeExecutado, $paridade->moedaBook->casasDecimais, ".", ",")?>
                 </td>
+                <td class="text-center">
+                    <?php echo $paridade->moedaTrade->simbolo . " " . number_format(($ordemExecutada->valorCotacao * $ordemExecutada->volumeExecutado), $paridade->moedaTrade->casasDecimais, ",", ".")?>
+                </td>
         </tr>
-        <tr class="order-item-trade" style="<?php echo $color?>; cursor: pointer;" >
-            <td class="text-left">
-                <?php echo $ordemExecutada->dataExecucao->formatar(\Utils\Data::FORMATO_HORA_TIMESTAMP)?>
-            </td>
-            <td class="text-center">
-                <?php echo $paridade->moedaTrade->simbolo . " " . number_format($ordemExecutada->valorCotacao, $paridade->moedaTrade->casasDecimais, ",", ".")?>
-            </td>
-            <td class="text-right">
-                <?php echo number_format($ordemExecutada->volumeExecutado, $paridade->moedaBook->casasDecimais, ".", ",")?>
-            </td>
-        </tr>
-        <tr class="order-item-trade" style="<?php echo $color?>; cursor: pointer;" >
-            <td class="text-left">
-                <?php echo $ordemExecutada->dataExecucao->formatar(\Utils\Data::FORMATO_HORA_TIMESTAMP)?>
-            </td>
-            <td class="text-center">
-                <?php echo $paridade->moedaTrade->simbolo . " " . number_format($ordemExecutada->valorCotacao, $paridade->moedaTrade->casasDecimais, ",", ".")?>
-            </td>
-            <td class="text-right">
-                <?php echo number_format($ordemExecutada->volumeExecutado, $paridade->moedaBook->casasDecimais, ".", ",")?>
-            </td>
-        </tr>
-        <tr class="order-item-trade" style="<?php echo $color?>; cursor: pointer;" >
-            <td class="text-left">
-                <?php echo $ordemExecutada->dataExecucao->formatar(\Utils\Data::FORMATO_HORA_TIMESTAMP)?>
-            </td>
-            <td class="text-center">
-                <?php echo $paridade->moedaTrade->simbolo . " " . number_format($ordemExecutada->valorCotacao, $paridade->moedaTrade->casasDecimais, ",", ".")?>
-            </td>
-            <td class="text-right">
-                <?php echo number_format($ordemExecutada->volumeExecutado, $paridade->moedaBook->casasDecimais, ".", ",")?>
-            </td>
-        </tr>
-        <tr class="order-item-trade" style="<?php echo $color?>; cursor: pointer;" >
-            <td class="text-left">
-                <?php echo $ordemExecutada->dataExecucao->formatar(\Utils\Data::FORMATO_HORA_TIMESTAMP)?>
-            </td>
-            <td class="text-center">
-                <?php echo $paridade->moedaTrade->simbolo . " " . number_format($ordemExecutada->valorCotacao, $paridade->moedaTrade->casasDecimais, ",", ".")?>
-            </td>
-            <td class="text-right">
-                <?php echo number_format($ordemExecutada->volumeExecutado, $paridade->moedaBook->casasDecimais, ".", ",")?>
-            </td>
-        </tr>
-        <tr class="order-item-trade" style="<?php echo $color?>; cursor: pointer;" >
-            <td class="text-left">
-                <?php echo $ordemExecutada->dataExecucao->formatar(\Utils\Data::FORMATO_HORA_TIMESTAMP)?>
-            </td>
-            <td class="text-center">
-                <?php echo $paridade->moedaTrade->simbolo . " " . number_format($ordemExecutada->valorCotacao, $paridade->moedaTrade->casasDecimais, ",", ".")?>
-            </td>
-            <td class="text-right">
-                <?php echo number_format($ordemExecutada->volumeExecutado, $paridade->moedaBook->casasDecimais, ".", ",")?>
-            </td>
-        </tr>
-        <tr class="order-item-trade" style="<?php echo $color?>; cursor: pointer;" >
-            <td class="text-left">
-                <?php echo $ordemExecutada->dataExecucao->formatar(\Utils\Data::FORMATO_HORA_TIMESTAMP)?>
-            </td>
-            <td class="text-center">
-                <?php echo $paridade->moedaTrade->simbolo . " " . number_format($ordemExecutada->valorCotacao, $paridade->moedaTrade->casasDecimais, ",", ".")?>
-            </td>
-            <td class="text-right">
-                <?php echo number_format($ordemExecutada->volumeExecutado, $paridade->moedaBook->casasDecimais, ".", ",")?>
-            </td>
-        </tr>
-        <tr class="order-item-trade" style="<?php echo $color?>; cursor: pointer;" >
-            <td class="text-left">
-                <?php echo $ordemExecutada->dataExecucao->formatar(\Utils\Data::FORMATO_HORA_TIMESTAMP)?>
-            </td>
-            <td class="text-center">
-                <?php echo $paridade->moedaTrade->simbolo . " " . number_format($ordemExecutada->valorCotacao, $paridade->moedaTrade->casasDecimais, ",", ".")?>
-            </td>
-            <td class="text-right">
-                <?php echo number_format($ordemExecutada->volumeExecutado, $paridade->moedaBook->casasDecimais, ".", ",")?>
-            </td>
-        </tr>
-
-
         <?php
         
     }

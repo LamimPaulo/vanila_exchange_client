@@ -8,6 +8,10 @@ $taxaVenda = (isset($_data["venda"]) ? number_format($_data["venda"], $casasDeci
 
 $paridade = Modules\principal\Controllers\Principal::getParity();
 
+if (!empty($paridade->casasDecimaisMoedaTrade) && $paridade->casasDecimaisMoedaTrade > 0) {
+    $paridade->moedaTrade->casasDecimais = $paridade->casasDecimaisMoedaTrade;
+}
+
 $cliente = Utils\Geral::getCliente();
 
 $mostrarBotoes = ($paridade->ativo > 0 && $paridade->statusMercado > 0 && $cliente->statusMercado > 0 && $paridade->moedaBook->statusMercado > 0 && $paridade->moedaBook->ativo > 0);
@@ -19,8 +23,8 @@ if ($paridade->ativo < 1 || $paridade->moedaBook->ativo < 1) {
     $mostrarAlerta = true;
     $mensagemAlerta = $idioma->getText("mercadoEncerrado");
 } else if ($paridade->statusMercado < 1 || $paridade->moedaBook->statusMercado < 1) {
-    $mostrarAlerta = true;         
-    $mensagemAlerta = $idioma->getText("mercadoSupenso");                  
+    $mostrarAlerta = true;
+    $mensagemAlerta = $idioma->getText("mercadoSupenso");
 } else if ($cliente->statusMercado < 1) {
     $mensagemAlerta = $idioma->getText("compraVendaSuspensaConta");
     $mostrarAlerta = true;
@@ -28,204 +32,853 @@ if ($paridade->ativo < 1 || $paridade->moedaBook->ativo < 1) {
 
 $_data["idiomaMenu"] = $idioma;
 ?>
+<!DOCTYPE html>
+<html lang="en">
 
-<?php Utils\Layout::append("inspina/metas", $_data) ?>
-<?php Utils\Layout::append("inspina/scripts", $_data) ?>
-<?php Utils\Layout::append("inspina/menu", $_data) ?>
-<style>
-    .container {
-        width: 100%;
-        margin: 0px !important;
-    }
-    #page-wrapper {
-     padding: 0px !important;
-    }
-     */
-    .panel {
-        margin-bottom: 5px !important;
-    }
-    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
-        padding-right: 0px !important;
-        padding-left:  0px !important;
-
-    .border-edit {
-        border: 1px solid #1c84c6 !important;
-    }
-
-    .row.vdivide [class*='col-']:not(:last-child):after {
-        background: #e0e0e0;
-        content: "";
-        display:block;
-        position: absolute;
-        top:0;
-        bottom: 0;
-        right: 0;
-        min-height: 50px;
-    }
-
-    .row.vdivide1 [class*='col-']:not(:last-child):after {
-        background: #1c84c6;
-        width: 2px;
-        content: "";
-        display:block;
-        position: absolute;
-        top:0;
-        bottom: 0;
-        right: 0;
-        min-height: 200px;
-    }
-
-    .fh-column {
-        background: none !important;
-        width: 100% !important;
-        float: left !important;
-    }
-    .linkActive {
-        font-size: 20px;
-        font-weight: bold;
-        cursor: default;
-    }
-    .verticalText {
-        vertical-align:middle;
-        height:50px;
-        display:flex;
-        justify-content:center;
-        align-items: center;
-    }
-    .ontent-btnbuysell {
-        height:50px;
-    }
-    .content-buysell {
-        height:200px;
-        border-bottom: 1px solid #e7eaec;
-    }
-    .content-orders {
-        height: calc(100% - 251px)!important;
-        border-bottom: 2px solid #e7eaec;
-        overflow: hidden !important;
-    }
-    .my-custom-scrollbar {
-        position: relative;
-        height: 100%;
-        overflow: hidden !important;
-    }
-    .full-height-scroll{
-
-    }
-    .fix{
-        overflow: hidden;
-    }
-
-    .sellOrders{
-        height: calc(60.75% - 25px);
-        border-bottom: 1px solid #e7eaec;
-    }
-    .spread{
-        height: calc(5% - 25px);
-        border-bottom: 1px solid #e7eaec;
-    }
-    .buyOrders{
-        height: calc(64.3% - 25px);
-        border-bottom: 1px solid #e7eaec;
-    }
-
-    .mycoins{
-        height: calc(65% - 25px);
-        border-bottom: 1px solid #e7eaec;
-    }
-
-    .mybalance{
-        height: calc(45% - 25px);
-        border-bottom: 1px solid #e7eaec;
-    }
-
-
-</style>
-<style>
-    .table-container {
-        height: 90vh;
-    }
-    .table-container-div {
-        height: 50vh;
-    }
-    .table-container-center {
-        height: 10vh;
-    }
-    table {
-        display: flex;
-        flex-flow: column;
-        height: 100%;
-        width: 100%;
-    }
-    table thead {
-        /* head takes the height it requires,
-        and it's not scaled when table is resized */
-        flex: 0 0 auto;
-        width: calc(100% - 0.9em);
-    }
-    table tbody {
-        /* body takes all the remaining available space */
-        flex: 1 1 auto;
-        display: block;
-        overflow-y: scroll;
-    }
-    table tbody tr {
-        width: 100%;
-    }
-    table thead,
-    table tbody tr {
-        display: table;
-        table-layout: fixed;
-    }
-
-    table {
-
-    }
-    table th {
-        padding: 0.3em;
-    }
-    table td {
-        padding: 0.3em;
-        border-top: 1px solid lightgrey;
-    }
-    .ibox {
-        margin: 5px !important;
-        border: 2px !important;
-        padding: 5px !important;
-        border-color: #ababab !important;
-        border-style: solid !important;
-        border-radius: 10px !important;
-    }
-
-    .ibox-div {
-        margin: 5px !important;
-        border: 2px !important;
-        padding: 5px !important;
-        border-color: #ababab !important;
-        border-style: solid !important;
-        border-radius: 10px !important;
-    }
-</style>
-
-<div class="wrapper wrapper-content">
-    <div class="container">
-        <div class="row">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="<?php echo BOOK; ?>bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo BOOK; ?>css/icons.css">
+    <link rel="stylesheet" href="<?php echo BOOK; ?>css/ui.css">
+    <link rel="stylesheet" href="<?php echo BOOK; ?>css/style.css">
+</head>
 
 
 
+<body id="theme" class="crypt-light">
+<header>
+    <div class="container-full-width">
+        <div class="crypt-header">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-5">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <div class="crypt-logo"><img src="" alt=""></div>
+                        </div>
+                        <div class="col-xs-2">
 
-            <div class="col-lg-3">
-                <div class="ibox" style="margin: 2px;">
-                    <div class="ibox-content no-padding" style="background-color: transparent !important; border-color: transparent !important;">
-                        <div class="table-container paridade">
-                            <table style="font-size: 14px;" class="table-container" id="tickers-table">
-                                <thead class="">
-                                <tr style="font-size: 9px">
-                                    <th class="text-left"><?php echo $idioma->getText("direta22") ?></th>
-                                    <th class="text-right"><?php echo $idioma->getText("direta4") ?></th>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-8 col-lg-8 col-md-8 d-none d-md-block d-lg-block">
+                    <ul class="crypt-heading-menu fright">
+
+
+
+                        <li><button id="theme-switcher">Temas!</button></li>
+
+
+                    </ul>
+                </div><i class="menu-toggle pe-7s-menu d-xs-block d-sm-block d-md-none d-sm-none"></i></div>
+        </div>
+    </div>
+    <div class="crypt-mobile-menu">
+        <ul class="crypt-heading-menu">
+            <li class="active"><a href="">Exchange</a></li>
+            <li><a href="">Market Cap</a></li>
+            <li><a href="">Treanding</a></li>
+            <li><a href="">Tools</a></li>
+            <li class="crypt-box-menu menu-red"><a href="">register</a></li>
+            <li class="crypt-box-menu menu-green"><a href="">login</a></li>
+        </ul>
+        <div class="crypt-gross-market-cap">
+            <h5>$34.795.90 <span class="crypt-up pl-2">+3.435 %</span></h5>
+            <h6>0.7925.90 BTC <span class="crypt-down pl-2">+7.435 %</span></h6></div>
+    </div>
+</header>
+<div class="container-fluid">
+    <div class="row sm-gutters ">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-2">
+            <div class="crypt-market-status mt-4">
+                <div>
+                    <ul class="nav nav-tabs" id="crypt-tab">
+                        <li role="presentation"><a href="#usd" class="active" data-toggle="tab">usdt</a></li>
+                        <li role="presentation"><a href="#btc" data-toggle="tab">btc</a></li>
+                        <li role="presentation"><a href="#eth" data-toggle="tab">eth</a></li>
+                    </ul>
+                    <div class="tab-content crypt-tab-content">
+                        <div role="tabpanel" class="tab-pane active mb-4" id="usd">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Coin</th>
+                                    <th scope="text-center">Last Price</th>
+                                    <th class="text-right">Change</th>
                                 </tr>
                                 </thead>
-                                <tbody id="body-paridades" style="cursor: pointer;font-size: 12px;" >
+                                <tbody class="crypt-table-hover">
+                                <tr>
+                                    <td class="align-middle">
+                                        <img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> BTC/USDT</td>
+                                    <td class="crypt-down">
+                                        <span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00004356</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <b class="crypt-down">-5.4%</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> LTC/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00005640</span></td>
+                                    <td class="text-right"><b class="crypt-up">+6.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ETH/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00002340</span></td>
+                                    <td class="text-right"><b class="crypt-down">-7.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> DOGE/USDT</td>
+                                    <td class="crypt-up align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00003644</span></td>
+                                    <td class="text-right"><b class="crypt-up">+3.7%</b> </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ERC20/USDT</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td class="text-right"> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> RIF/USDT</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td class="text-right"><span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> BTC/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00004356</span></td>
+                                    <td class="text-right"><b class="crypt-down">-5.4%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> LTC/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00005640</span></td>
+                                    <td class="text-right"><b class="crypt-up">+6.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ETH/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00002340</span></td>
+                                    <td class="text-right"><b class="crypt-down">-7.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> DOGE/USDT</td>
+                                    <td class="crypt-up align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00003644</span></td>
+                                    <td class="text-right"><b class="crypt-up">+3.7%</b> </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ERC20/USDT</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td class="text-right"> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> RIF/USDT</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td class="text-right"><span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> BTC/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00004356</span></td>
+                                    <td class="text-right"><b class="crypt-down">-5.4%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> LTC/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00005640</span></td>
+                                    <td class="text-right"><b class="crypt-up">+6.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ETH/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00002340</span></td>
+                                    <td class="text-right"><b class="crypt-down">-7.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> DOGE/USDT</td>
+                                    <td class="crypt-up align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00003644</span></td>
+                                    <td class="text-right"><b class="crypt-up">+3.7%</b> </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ERC20/USDT</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td class="text-right"> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> RIF/USDT</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td class="text-right"><span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> BTC/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00004356</span></td>
+                                    <td class="text-right"><b class="crypt-down">-5.4%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> LTC/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00005640</span></td>
+                                    <td class="text-right"><b class="crypt-up">+6.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ETH/USDT</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00002340</span></td>
+                                    <td class="text-right"><b class="crypt-down">-7.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> DOGE/USDT</td>
+                                    <td class="crypt-up align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00003644</span></td>
+                                    <td class="text-right"><b class="crypt-up">+3.7%</b> </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ERC20/USDT</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td class="text-right"> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> RIF/USDT</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td class="text-right"><span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="btc">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Coin</th>
+                                    <th scope="col">Last Price</th>
+                                    <th scope="col">Change</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ETH/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.0000234</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <b class="crypt-down">-7.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> EOS/BTC</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000056</span></td>
+                                    <td> <span class="d-block">5.3424984</span> <b class="crypt-down">-5.4%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> LTC/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.0000564</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> DOGE/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <b class="crypt-up">+3.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> XMR/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span>3.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> LINK/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> FTN/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> RIF/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> NEO/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> TRX/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> LSK/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> XRP/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> CNB/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> VEN/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> DASH/BTC</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="eth">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Coin</th>
+                                    <th scope="col">Last Price</th>
+                                    <th scope="col">Change</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> BTC/ETH</td>
+                                    <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000056</span></td>
+                                    <td> <span class="d-block">5.3424984</span> <b class="crypt-down">-5.4%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> LTC/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.0000564</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> ERC20/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.0000234</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <b class="crypt-down">-7.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> DOGE/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <b class="crypt-up">+3.7%</b> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> XMR/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span>3.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> HMB/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> FTN/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> MGC/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> IOTE/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> YTA/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> PQR/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> PAX/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                    <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> VBT/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> CCE/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> QTUM/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="<?php echo BOOK; ?>images/star.svg" width="15"> BOA/ETH</td>
+                                    <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                    <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-8">
+            <div class="crypt-gross-market-cap mt-4">
+                <div class="row">
+                    <div class="col-3 col-sm-6 col-md-6 col-lg-6">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <p>84568.85</p>
+                                <p>≈$8378.6850 USDT</p>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <p>24H Change</p>
+                                <p class="crypt-down">-0.0234230 -3.35%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3 col-sm-2 col-md-3 col-lg-2">
+                        <p>24H High</p>
+                        <p class="crypt-up">0.435453</p>
+                    </div>
+                    <div class="col-3 col-sm-2 col-md-3 col-lg-2">
+                        <p>24H Low</p>
+                        <p class="crypt-down">0.09945</p>
+                    </div>
+                    <div class="col-3 col-sm-2 col-md-3 col-lg-2">
+                        <p>24H Volume</p>
+                        <p>12.33445</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tradingview-widget-container">
+                <div id="crypt-candle-chart">
+                    <iframe style="border: none;" seamless="seamless" src="<?php echo DIR_TV ?>/index.html?lang=<?php echo $idioma->getLang()?>&symbol=<?php echo $paridade->symbol ?>" width="100%" height="290px"></iframe>
+                </div>
+
+
+
+                <div class="crypt-boxed-area">
+
+                    <div class="row no-gutters">
+                        <div class="col-md-6">
+                            <div class="crypt-buy-sell-form">
+                                <p>Buy <span class="crypt-up">BTC</span> <span class="fright">Available: <b class="crypt-up">0.00 BTC</b></span></p>
+                                <div class="crypt-buy">
+                                    <div class="input-group mb-1">
+                                        <div class="input-group-prepend"> <span class="input-group-text">Price</span> </div>
+                                        <input type="text" class="form-control" placeholder="0.02323476" readonly>
+                                        <div class="input-group-append"> <span class="input-group-text">USDT</span> </div>
+                                    </div>
+                                    <div class="input-group mb-1">
+                                        <div class="input-group-prepend"> <span class="input-group-text">Amount</span> </div>
+                                        <input type="number" class="form-control">
+                                        <div class="input-group-append"> <span class="input-group-text">BTC</span> </div>
+                                    </div>
+                                    <div class="input-group mb-1">
+                                        <div class="input-group-prepend"> <span class="input-group-text">Total</span> </div>
+                                        <input type="text" class="form-control" readonly>
+                                        <div class="input-group-append"> <span class="input-group-text">BTC</span> </div>
+                                    </div>
+                                    <div>
+                                        <p>Fee: <span class="fright">100%x0.2=0.02</span></p>
+                                    </div>
+                                    <div class="text-center mt-1 mb-1 crypt-up">
+                                        <p style="margin-bottom: 0.6rem !important;">You will approximately pay</p>
+                                        <h4>0.09834 BTC</h4></div>
+                                    <div class="menu-green"><a href="" class="crypt-button-green-full">Buy</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="crypt-buy-sell-form">
+                                <p>Sell <span class="crypt-down">BTC</span> <span class="fright">Available: <b class="crypt-down">0.00 BTC</b></span></p>
+                                <div class="crypt-sell">
+                                    <div class="input-group mb-1">
+                                        <div class="input-group-prepend"> <span class="input-group-text">Price</span> </div>
+                                        <input type="text" class="form-control" placeholder="0.02323476" readonly>
+                                        <div class="input-group-append"> <span class="input-group-text">USDT</span> </div>
+                                    </div>
+                                    <div class="input-group mb-1">
+                                        <div class="input-group-prepend"> <span class="input-group-text">Amount</span> </div>
+                                        <input type="number" class="form-control">
+                                        <div class="input-group-append"> <span class="input-group-text">BTC</span> </div>
+                                    </div>
+                                    <div class="input-group mb-1">
+                                        <div class="input-group-prepend"> <span class="input-group-text">Total</span> </div>
+                                        <input type="text" class="form-control" readonly>
+                                        <div class="input-group-append"> <span class="input-group-text">BTC</span> </div>
+                                    </div>
+                                    <div>
+                                        <p style="margin-bottom: 0.6rem !important;">Fee: <span class="fright">100%x0.2=0.02</span></p>
+                                    </div>
+                                    <div class="text-center mt-1 mb-1 crypt-down">
+                                        <p>You will approximately pay</p>
+                                        <h4>0.09834 BTC</h4></div>
+                                    <div class=" menu-green"><a href="" class="crypt-button-red-full">Sell</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-3 col-xxl-2">
+            <div class="crypt-market-status mt-4">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li role="presentation"><a href="#history" class="active" data-toggle="tab">Order Book</a></li>
+                        <li role="presentation"><a href="#market-trading" data-toggle="tab">market trading</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="history">
+                            <table class="table table-striped" style="margin-bottom: 0 !important;">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Price</th>
+                                    <th class="text-right" scope="col">Quantity</th>
+                                    <th class="text-right" scope="col">Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr><tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr><tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-down">6590.08</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <h6 class="text-center">29384798 <span>938475</span></h6>
+                            <table class="table table-striped">
+                                <tbody>
+                                <tr>
+                                    <td class="crypt-up">4300.67</td>
+                                    <td class="text-right">0.0000567</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">9510.56</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">9080.67</td>
+                                    <td class="text-right">0.000056</td>
+                                    <td class="text-right">5.3424984</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">2346.64</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">5478.87</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">5689.78</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">4518.56</td>
+                                    <td class="text-right">0.0000567</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">6900.67</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">6898.56</td>
+                                    <td class="text-right">0.0000567</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">7894.34</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">8765.90</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">5674.76</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">3452.09</td>
+                                    <td class="text-right">0.0000567</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">7689.65</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">3468.34</td>
+                                    <td class="text-right">0.0000567</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">8794.12</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">2315.86</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">463.98</td>
+                                    <td class="text-right">0.0000234</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                <tr>
+                                    <td class="crypt-up">673.67</td>
+                                    <td class="text-right">0.0000567</td>
+                                    <td class="text-right">4.3456600</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="market-trading">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Time</th>
+                                    <th class="text-right">Amount</th>
+                                    <th class="text-right">Volume</th>
+                                </tr>
+                                </thead>
+                                <tbody >
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">22:35:59</td>
+                                    <td class="text-right">0.0000564</td>
+                                    <td class="text-right">6.6768876</td>
+                                </tr>
 
                                 </tbody>
                             </table>
@@ -233,1102 +886,260 @@ $_data["idiomaMenu"] = $idioma;
                     </div>
                 </div>
             </div>
-            <div class="col-lg-9">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="container" hidden>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="" style="min-height: 100hv; background-color: saddlebrown">
-                                            grafico
-                                        </div>
-                                    </div>
-                                </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row sm-gutters">
+        <div class="col-xl-5">
+
+        </div>
+        <div class="col-xl-12">
+            <div>
+                <div class="crypt-market-status">
+                    <div>
+                        <ul class="nav nav-tabs">
+                            <li role="presentation"><a href="#active-orders" class="active" data-toggle="tab">Active Orders</a></li>
+                            <li role="presentation"><a href="#closed-orders" data-toggle="tab">Closed Orders</a></li>
+                            <li role="presentation"><a href="#balance" data-toggle="tab">Balance</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="active-orders">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Moeda</th>
+                                        <th scope="col">Movimento</th>
+                                        <th scope="col">Data</th>
+                                        <th scope="col">Cotação</th>
+                                        <th scope="col">Volume</th>
+                                        <th scope="col">Valor Total</th>
+                                        <th scope="col">Pendente</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Ação</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="no-orders text-center p-160"><img src="<?php echo BOOK; ?>images/empty.svg" alt="no-orders"></div>
                             </div>
-                            <div class="container">
-                                <div class="row" >
-                                    <div class="col-md-6">
-                                        <div class="ibox table-container" style="margin: 2px;">
-
-                                            <div class="ibox-content no-padding" style="background-color: transparent !important; border-color: transparent !important;">
-                                                <div class="ibox-title">
-                                                    <h3 style="display: inline;"><strong><?php echo $idioma->getText("direta28") ?> - <?php echo $paridade->symbol ?></strong>
-                                                </div>
-                                                    <div class="ticker__container">
-                                                        <div class="ticker-content">
-                                                            <div class="ticker-balances">
-                                                                <div class="ticker-balances__avail">
-                                                                    <span>Saldo BTC Disponível</span>
-                                                                    <div class="crypto" style="font-size: 16px;">0,00883 BTC</div>
-                                                                    <div class="fiat" style="font-size: 12px;">R$ 2.755,78</div>
-                                                                </div>
-                                                                <div class="ticker-balances__booked">
-                                                                    <span>Em Ordens</span>
-                                                                    <div class="open">0 BTC</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="ticker-market-data">
-                                                                <div class="position">
-                                                                    <div>
-                                                                        <span class="label">Último preço</span>
-                                                                        <div class="ticker-variation up">R$&nbsp;311.852,00</div>
-                                                                    </div>
-                                                                    <div style="margin-left: auto;">
-                                                                        <span class="label" style="text-align: right;">Variação 24h</span>
-                                                                        <div class="ticker-variation up" style="text-align: right;"><span>▲</span> 1,28%</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="metric">
-                                                                    <div>
-                                                                        <span class="label">Máxima 24h</span>
-                                                                        <div class="value">R$&nbsp;312.500,00</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="metric">
-                                                                    <div>
-                                                                        <span class="label">Mínima 24h</span>
-                                                                        <div class="value">R$&nbsp;304.099,00</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="metric">
-                                                                    <div>
-                                                                        <span class="label">Volume 24h</span>
-                                                                        <div class="value">93,5001 BTC</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="panel panel-danger" >
-                                                    <div class="panel-body" >
-                                                        <div class="row">
-                                                            <div class="col col-lg-12">
-                                                                <div class="form-group">
-                                                                    <label><?php echo $idioma->getText("volumeVender") ?></label>
-                                                                    <div class="input-group m-b">
-                                                                        <input type="text" class="form-control digital-currency" id="sellamount">
-                                                                        <span class="input-group-addon" onclick="initbuysell('s', 'a');" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label><?php echo $idioma->getText("preco") ?></label>
-                                                                    <div class="input-group m-b">
-                                                                        <input type="text" class="form-control real" id="sellprice">
-                                                                        <span class="input-group-addon" onclick="initbuysell('s', 'p');" style="cursor: pointer;"> <?php echo $paridade->moedaTrade->simbolo ?> </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label><?php echo $idioma->getText("totalVender") ?></label>
-                                                                    <div class="input-group m-b">
-                                                                        <input type="text" class="form-control real" id="selltotal">
-                                                                        <span class="input-group-addon" onclick="initbuysell('s', 't');"> <?php echo $paridade->moedaTrade->simbolo ?> </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label><?php echo $idioma->getText("taxa") ?> <label id="taxLabelSell"></label></label>
-                                                                    <div class="full-width input-group m-b">
-                                                                        <input type="text" disabled="true" class="form-control real" id="selltaxIn" style="background-color: #e7eaec">
-                                                                        <span class="input-group-addon" style="cursor: pointer;"> <?php echo $paridade->moedaTrade->simbolo ?> </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label><?php echo $idioma->getText("receberaAproxVender") ?></label>
-                                                                    <div class="full-width input-group m-b">
-                                                                        <input type="text" disabled="true" class="form-control real" id="sellreceiveIn" style="background-color: #e7eaec; font-weight: bold;">
-                                                                        <span class="input-group-addon" style="cursor: pointer;"> <?php echo $paridade->moedaTrade->simbolo ?> </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xs-12">
-                                                                <div class="form-actions text-center">
-                                                                    <button type="button" class="btn btn-danger full-width" id="btn-order-sell" onclick="salvarOrdemVenda();">
-                                                                        <strong><?php echo $idioma->getText("vendaRegistrarOrdemBtn") ?></strong>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="ibox ibox-div" style="margin: 2px;">
-                                            <div class="ibox-content no-padding" style="background-color: transparent !important; border-color: transparent !important;">
-                                                <table style="font-size: 14px;" class="table-container">
-                                                    <thead class="">
-                                                    <tr style="font-size: 9px">
-                                                        <th class="text-left"><?php echo $idioma->getText("direta31") ?> - <?php echo $paridade->moedaTrade->simbolo ?></th>
-                                                        <th class="text-center"><?php echo $idioma->getText("direta32") ?> - <?php echo $paridade->moedaBook->simbolo ?></th>
-                                                        <th class="text-right"><?php echo $idioma->getText("direta33") ?> - <?php echo $paridade->moedaTrade->simbolo ?></th>
-                                                     </tr>
-                                                    </thead>
-                                                    <tbody id="ordersSells" style="cursor: pointer;font-size: 12px;" >
-                                                    </tbody>
-                                                    <thead class="">
-                                                    <tr>
-                                                        <th class="text-center" colspan="2" style="vertical-align: middle !important; font-size: 13px;"><h4 style="display: inline" id="differenceP"></h4>&nbsp;&nbsp;&nbsp;<h5 style="display: inline" id="differenceV"></h5></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody id="ordersBuys" style="cursor: pointer;font-size: 12px;" >
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div role="tabpanel" class="tab-pane" id="closed-orders">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Moeda</th>
+                                        <th scope="col">Movimento</th>
+                                        <th scope="col">Data</th>
+                                        <th scope="col">Cotação</th>
+                                        <th scope="col">Volume</th>
+                                        <th scope="col">Valor Total</th>
+                                        <th scope="col">Pendente</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Ação</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="closed-orders">
+                                    <tr>
+                                        <th>22:35:59</th>
+                                        <td class="crypt-up">Buy</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.0003456</td>
+                                        <td>5.3424984</td>
+                                    </tr>
+                                    <tr>
+                                        <th>22:35:59</th>
+                                        <td class="crypt-down">Sell</td>
+                                        <td class="crypt-down">0.000056</td>
+                                        <td class="crypt-down">0.000056</td>
+                                        <td class="crypt-down">0.0003456</td>
+                                        <td>5.3424984</td>
+                                    </tr>
+                                    <tr>
+                                        <th>22:35:59</th>
+                                        <td class="crypt-up">Buy</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.0003456</td>
+                                        <td>5.3424984</td>
+                                    </tr>
+                                    <tr>
+                                        <th>22:35:59</th>
+                                        <td class="crypt-down">Sell</td>
+                                        <td class="crypt-down">0.000056</td>
+                                        <td class="crypt-down">0.000056</td>
+                                        <td class="crypt-down">0.0003456</td>
+                                        <td>5.3424984</td>
+                                    </tr>
+                                    <tr>
+                                        <th>22:35:59</th>
+                                        <td class="crypt-up">Buy</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.0003456</td>
+                                        <td>5.3424984</td>
+                                    </tr>
+                                    <tr>
+                                        <th>22:35:59</th>
+                                        <td class="crypt-down">Sell</td>
+                                        <td class="crypt-down">0.000056</td>
+                                        <td class="crypt-down">0.000056</td>
+                                        <td class="crypt-down">0.0003456</td>
+                                        <td>5.3424984</td>
+                                    </tr>
+                                    <tr>
+                                        <th>22:35:59</th>
+                                        <td class="crypt-up">Buy</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.0003456</td>
+                                        <td>5.3424984</td>
+                                    </tr>
+                                    <tr>
+                                        <th>22:35:59</th>
+                                        <td class="crypt-down">Sell</td>
+                                        <td class="crypt-down">0.000056</td>
+                                        <td class="crypt-down">0.000056</td>
+                                        <td class="crypt-down">0.0003456</td>
+                                        <td>5.3424984</td>
+                                    </tr>
+                                    <tr>
+                                        <th>22:35:59</th>
+                                        <td class="crypt-up">Buy</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.000056</td>
+                                        <td class="crypt-up">0.0003456</td>
+                                        <td>5.3424984</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="ibox" style="margin: 2px;">
-                                <div class="ibox-content no-padding" style="background-color: transparent !important; border-color: transparent !important;">
-                                    <div class="table-container">
-                                        <table style="font-size: 14px;" class="table-container" id="tickers-table">
-                                            <thead class="">
-                                            <tr style="font-size: 9px">
-                                                <th class="text-center"><?php echo $idioma->getText("hora") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("cotacaoN") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("volumeN") ?> - <?php echo $paridade->moedaBook->simbolo ?></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="trade-list" style="cursor: pointer;font-size: 12px;" >
+                            <div role="tabpanel" class="tab-pane" id="balance">
+                                <table class="table table-striped ">
+                                    <thead>
+                                    <tr>
+                                        <th width="30px"></th>
+                                        <th class="text-left">Moeda</th>
+                                        <th class="text-center">Em Ordem</th>
+                                        <th class="text-right">Disponivel</th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="balance">
+                                    <tr>
+                                        <th width="30px"></th>
+                                        <th>BTC</th>
+                                        <td class="text-center">0.0000564</td>
+                                        <td class="text-right">6.6768876</td>
+                                        <td class="text-right">6.6768876</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30px"></th>
 
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                        <th>ETC</th>
+                                        <td class="text-center">0.000056</td>
+                                        <td class="text-right">5.3424984</td>
+                                        <td class="text-right">6.6768876</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30px"></th>
+                                        <th>LTC</th>
+                                        <td class="text-center">0.0000234</td>
+                                        <td class="text-right">4.3456600</td>
+                                        <td class="text-right">6.6768876</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30px"></th>
+                                        <th>XMR</th>
+                                        <td class="text-center">0.0000234</td>
+                                        <td class="text-right">4.3456600</td>
+                                        <td class="text-right">6.6768876</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30px"></th>
+                                        <th>BIT</th>
+                                        <td class="text-center">0.0000567</td>
+                                        <td class="text-right">4.3456600</td>
+                                        <td class="text-right">6.6768876</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30px"></th>
+                                        <th>EGF</th>
+                                        <td class="text-center">0.0000234</td>
+                                        <td class="text-right">4.3456600</td>
+                                        <td class="text-right">6.6768876</td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30px"></th>
+                                        <th>EER</th>
+                                        <td class="text-center">0.0000567</td>
+                                        <td class="text-right">4.3456600</td>
+                                        <td class="text-right">6.6768876</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="" style="min-height: 20vh; background-color: steelblue">
-                                    <div class="tabs-container">
-                                        <ul class="nav nav-tabs">
-                                            <li class="active" ><a id="tab-market" data-toggle="tab" href="#tab-1" aria-expanded="true" style="color: #676a6c !important; font-weight: bold;"><?php echo $idioma->getText("direta36") ?></a></li>
-                                            <li ><a id="tab-myorders" data-toggle="tab" href="#tab-2" aria-expanded="false" style="color: #676a6c !important"><?php echo $idioma->getText("direta37") ?></a></li>
-                                            <li ><a id="tab-mytrades" data-toggle="tab" href="#tab-4" aria-expanded="false" style="color: #676a6c !important"><?php echo $idioma->getText("direta38") ?></a></li>
-                                        </ul>
-                                        <div class="tab-content">
-                                            <div id="tab-1" class="tab-pane active">
-                                                <div class="row mybalance"   style="margin: 2px;">
-                                                    <div class="ibox">
-                                                        <div class="ibox-title">
-                                                            <h3><strong><?php echo $idioma->getText("direta24") ?></strong></h3>
-                                                        </div>
-                                                        <div class="ibox-content no-padding">
-                                                            <div class="row" style="">
-                                                                <div class="col col-md-8">
-                                                                    <div class="form-group">
-                                                                        <div class="input-group">
-                                                                            <input type="text" class="form-control input-sm" id="balances-search" />
-                                                                            <span class="input-group-addon">
-                                            <i class="fa fa-search"></i>
-                                        </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col col-md-4 text-right" style="padding-right: 30px;">
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col col-xs-12">
-                                                                    <div class="table-responsive saldo">
-                                                                        <table style="font-size: 14px;" class="table table-hover table-condensed table-striped ">
-                                                                            <thead class="thead-h thead-h1">
-                                                                            <tr class="tr-h">
-                                                                                <th class="text-left" style="padding-left: 28px !important; width: 44%">
-                                                                                    <?php echo $idioma->getText("direta22") ?>
-                                                                                </th>
-                                                                                <th class="text-right" style="width: 150px;">
-                                                                                    <?php echo $idioma->getText("direta29") ?>
-                                                                                </th>
-                                                                                <th class="text-right" style="width: 130px;">
-                                                                                    <?php echo $idioma->getText("direta23") ?>
-                                                                                </th>
-                                                                            </tr>
-                                                                            </thead>
-                                                                            <tbody id="body-balances" class="tbody-h tbody-saldo" >
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div id="tab-2" class="tab-pane">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="panel-heading" style="text-align: center; background-color: #C2C2C2C7;">
-                                                            <strong style="margin-left: -35px"><?php echo $idioma->getText("minhasOrdens") ?> - <?php echo $paridade->moedaBook->nome ?>  (<?php echo $paridade->symbol ?>)</strong>
-                                                            <div class="pull-left">
-                                                                <input type="checkbox" class="" id="todas" name="todas" value="1"><label>&nbsp;<?php echo $idioma->getText("todas") ?>&nbsp;</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="table-responsive" style="height: 52.5% !important;  background-color: #fff;">
-                                                            <table class="table table-hover table-bordered table-condensed table-stripped " style="font-size: 12.5px; background-color: #fff; margin-bottom: 0px !important;">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th class="text-center"><?php echo $idioma->getText("moeda") ?></th>
-                                                                    <th class="text-center"><?php echo $idioma->getText("movimento") ?></th>
-                                                                    <th class="text-center"><?php echo $idioma->getText("dataTb") ?></th>
-                                                                    <th class="text-center"><?php echo $idioma->getText("cotacaoTb") ?></th>
-                                                                    <th class="text-center"><?php echo $idioma->getText("volumeTb") ?></th>
-                                                                    <th class="text-center"><?php echo $idioma->getText("valorTotalTb") ?></th>
-                                                                    <th class="text-center"><?php echo $idioma->getText("executado") ?></th>
-                                                                    <th class="text-center"><?php echo $idioma->getText("pendente") ?></th>
-                                                                    <th class="text-center"><?php echo $idioma->getText("statusTb") ?></th>
-                                                                    <th class="text-center"><?php echo $idioma->getText("acaoTb") ?></th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody id="orders-list" style="overflow-y: auto;">
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div id="tab-4" class="tab-pane">
-                                                <div class="row" >
-                                                    <div class="col col-lg-12">
-                                                        <div class="row m-t-xs">
-                                                            <div class="col-sm-3 m-b-xs">
-                                                                <div data-toggle="buttons" class="btn-group" id="radioTipoBtc">
-                                                                    <label class="btn btn-sm btn-white btn-filtro-extrato" id="compraBtc">
-                                                                        <input type="radio"  name="optionsBtc" value="compra" class="btn-filtro-extrato">
-                                                                        <?php echo $idioma->getText("direta11") ?>
-                                                                    </label>
-                                                                    <label class="btn btn-sm btn-white btn-filtro-extrato" id="vendaBtc">
-                                                                        <input type="radio" name="optionsBtc" value="venda" class="btn-filtro-extrato">
-                                                                        <?php echo $idioma->getText("direta12") ?>
-                                                                    </label>
-                                                                    <label class="btn btn-sm btn-white btn-filtro-extrato active " id="todosBtc">
-                                                                        <input type="radio" id="" name="optionsBtc" value="todos" class="btn-filtro-extrato">
-                                                                        <?php echo $idioma->getText("direta13") ?>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-6 m-b-xs">
-                                                                <div data-toggle="buttons" class="btn-group" id="radioDatas">
-                                                                    <label class="btn btn-sm btn-white btn-filtro-extrato" id="diaBtc">
-                                                                        <input type="radio" name="optionsBtc" value="dia" ><?php echo $idioma->getText("direta7") ?>
-                                                                    </label>
-                                                                    <label class="btn btn-sm btn-white btn-filtro-extrato" id="semanaBtc">
-                                                                        <input type="radio"  name="optionsBtc" value="semana" ><?php echo $idioma->getText("direta8") ?>
-                                                                    </label>
-                                                                    <label class="btn btn-sm btn-white btn-filtro-extrato" >
-                                                                        <input type="radio" name="optionsBtc " value="mes" class=""><?php echo $idioma->getText("direta9") ?>
-                                                                    </label>
-                                                                    <label class="btn btn-sm btn-white btn-filtro-extrato active" id="todosDataBtc">
-                                                                        <input type="radio"  name="optionsBtc" value="todos" ><?php echo $idioma->getText("direta10") ?>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 m-b-xs">
-                                                                <div data-toggle="buttons" class="btn-group" id="radioLimite">
-                                                                    <label class="btn btn-sm btn-white active btn-filtro-extrato" id="limit10">
-                                                                        <input type="radio"  name="optionsBtc" value="10" >
-                                                                        <?php echo $idioma->getText("direta34") ?>
-                                                                    </label>
-                                                                    <label class="btn btn-sm btn-white btn-filtro-extrato" id="limit20">
-                                                                        <input type="radio" name="optionsBtc" value="30" >
-                                                                        <?php echo $idioma->getText("direta35") ?>
-                                                                    </label>
-                                                                    <label class="btn btn-sm btn-white btn-filtro-extrato" id="noLimit">
-                                                                        <input type="radio" id="" name="optionsBtc" value="todos" >
-                                                                        <?php echo $idioma->getText("direta13") ?>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="table-responsive m-t-md" style="height: 52.1% !important; background-color: #fff; ">
-                                                            <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 12.5px; margin-bottom: 0px !important;">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th class="text-center"><strong><?php echo $idioma->getText("moeda") ?></strong></th>
-                                                                    <th class="text-center"><strong><?php echo $idioma->getText("data") ?></strong></th>
-                                                                    <th class="text-center"><strong><?php echo $idioma->getText("cotacao") ?></strong></th>
-                                                                    <th class="text-center"><strong><?php echo $idioma->getText("volumeTotal") ?></strong></th>
-                                                                    <th class="text-center"><strong><?php echo $idioma->getText("valorTotal") ?></strong></th>
-                                                                    <th class="text-center"><strong><?php echo $idioma->getText("volumeExecutado") ?></strong></th>
-                                                                    <th class="text-center"><strong><?php echo $idioma->getText("valorExecutado") ?></strong></th>
-                                                                    <th class="text-center"><strong><?php echo $idioma->getText("status") ?></strong></th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody id="myTrades" style="overflow-y: auto;">
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
+<footer>
 
+</footer>
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
-<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script src="<?php echo JS; ?>underscore-min.js"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(event) {
 
-<div class="thirds-row">
+        var themeSwitcher = document.getElementById("theme-switcher");
+        let themas = document.querySelector('#theme');
 
+        themeSwitcher.onclick = function() {
+            var currentTheme = themas.getAttribute("class");
+            var switchToTheme = currentTheme === "crypt-dark" ? "crypt-light" : "crypt-dark"
 
-    <script>
-        var amountCompra = 0;
-        var amountVenda = 0;
-        var precoCompra = 0;
-        var precoVenda = 0;
-        var balanceMode = 1;
-        var casasDecimaisReal = <?php echo empty($paridade->casasDecimaisMoedaTrade) ? $paridade->moedaTrade->casasDecimais : $paridade->casasDecimaisMoedaTrade ?>;
-        var pageWidth, pageHeight;
-        var data = "todos";
-        var tipo = "todos";
-        var limite = 10;
-        var listMinhasOrdens = "";
-        var listTrade = "";
-        var basePage = {
-            width: 2048,
-            height: 768,
-            scale: 1,
-            scaleX: 1,
-            scaleY: 1
-        };
-
-
-        $(document).ready(function () {
-            alertaKyc();
-            listarBook();
-            listarParidadesBook();
-            listarSaldoMoedasBook();
-           // setInterval(listarParidadesBook, 10000);
-           // setInterval(listarSaldoMoedasBook, 5000);
-            //setInterval(listarBook, 3000);
-
-            $("#radioDatas input").on('change', function(){
-                data = $('input[name="optionsBtc"]:checked', '#radioDatas').val();
-                extratoCliente();
-            });
-
-            $("#radioTipoBtc input").on('change', function(){
-                tipo = $('input[name="optionsBtc"]:checked', '#radioTipoBtc').val();
-                extratoCliente();
-            });
-
-            $("#radioLimite input").on('change', function(){
-                limite = $('input[name="optionsBtc"]:checked', '#radioLimite').val();
-                extratoCliente();
-            });
-
-            $(".real").each(function () {
-                currencymask($(this), 20, casasDecimaisReal, ",");
-            });
-            $(".digital-currency").each(function () {
-                currencymask($(this), 20, <?php echo $paridade->moedaBook->casasDecimais ?>, ",");
-            });
-
-            listarParidadesBook();
-
-            $("#ticker-search").keyup(function () {
-                filtrarParidadesBook();
-            });
-
-            $("#balances-search").keyup(function () {
-                filtrarMoedasBook();
-            });
-
-            $("#btn-blocked-balance-show").click(function () {
-                $(".table-blocked-balance").show();
-                balanceMode = 1;
-            });
-
-            $("#btn-blocked-balance-hide").click(function () {
-                $(".table-blocked-balance").hide();
-                balanceMode = 2;
-            });
-
-            $("#buyamount").keyup(function () {
-                calcularTotal("b", "a");
-            });
-
-
-            $("#buyprice").keyup(function () {
-                calcularTotal("b", "p");
-            });
-
-
-            $("#buytotal").keyup(function () {
-                calcularTotal("b", "t");
-            });
-
-
-            $("#sellamount").keyup(function () {
-                calcularTotal("s", "a");
-            });
-
-            $("#sellprice").keyup(function () {
-                calcularTotal("s", "p");
-            });
-
-            $("#selltotal").keyup(function () {
-                calcularTotal("s", "t");
-            });
-
-
-        });
-
-        $("#tab-market").click(function () {
-            $("#tab-market").css( 'font-weight', 'bold' );
-            $("#tab-myorders").css( 'font-weight', 'normal' );
-            $("#tab-tradehistoric").css( 'font-weight', 'normal' );
-            $("#tab-mytrades").css( 'font-weight', 'normal' );
-            clearInterval(listMinhasOrdens);
-            clearInterval(listTrade);
-        });
-
-        $("#tab-myorders").click(function () {
-            $("#tab-myorders").css( 'font-weight', 'bold' );
-            $("#tab-market").css( 'font-weight', 'normal' );
-            $("#tab-tradehistoric").css( 'font-weight', 'normal' );
-            $("#tab-mytrades").css( 'font-weight', 'normal' );
-            listarMinhasOrdens();
-            listMinhasOrdens = setInterval(listarMinhasOrdens, 5000);
-            clearInterval(listTrade);
-        });
-
-        //$("#tab-tradehistoric").click(function () {
-            $("#tab-tradehistoric").css( 'font-weight', 'bold' );
-            $("#tab-market").css( 'font-weight', 'normal' );
-            $("#tab-myorders").css( 'font-weight', 'normal' );
-            $("#tab-mytrades").css( 'font-weight', 'normal' );
-            listarTrade();
-            listTrade = setInterval(listarTrade, 5000);
-            clearInterval(listMinhasOrdens);
-        //});
-
-        $("#tab-mytrades").click(function () {
-            $("#tab-mytrades").css( 'font-weight', 'bold' );
-            $("#tab-tradehistoric").css( 'font-weight', 'normal' );
-            $("#tab-market").css( 'font-weight', 'normal' );
-            $("#tab-myorders").css( 'font-weight', 'normal' );
-            extratoCliente();
-            clearInterval(listMinhasOrdens);
-            clearInterval(listTrade);
-
-        });
-
-
-        function extratoCliente() {
-            $.ajax({
-                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_EXTRATO_FILTRAR ?>',
-                method: 'post',
-                dataType:'json',
-                data: {
-                    data: data,
-                    tipo: tipo,
-                    limite: limite
-                },
-                beforeSend: function () {
-                    $(".btn-filtro-extrato").addClass("disabled");
-                    //$(".btn-filtro-extrato").trigger("change");
-                },
-                error: function () {
-                    $(".btn-filtro-extrato").removeClass("disabled");
-                },
-                success: function (json) {
-                    try {
-                        if (json.sucesso) {
-                            $("#myTrades").html(json.html);
-                        } else {
-
-                        }
-                    } catch (e) {
-
-                    }
-                    $(".btn-filtro-extrato").removeClass("disabled");
-                }
-            });
+            themas.setAttribute("class", switchToTheme);
         }
-
-        function mudarParidade(paridade) {
-            $.ajax({
-                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CURRENCY ?>',
-                dataType: 'json',
-                method: 'post',
-                data: {
-                    codigo: paridade
-                },
-                beforeSend: function () {
-
-                },
-                success: function (json) {
-                    try {
-                        if (json.sucesso) {
-
-                            location = location.href;
-
-                        } else {
-
-                        }
-                    } catch (e) {
-
-                    }
-
-                },
-                complete: function () {
-
-                }
-            });
-        }
-
-
-        function filtrarParidadesBook() {
-
-            var filtro = $("#ticker-search").val().toLowerCase();
-            $("#body-paridades tr").each(function () {
-                var mostrar = true;
-
-                if (filtro.length > 0) {
-                    var name = $(this).children("td.column-paridade").first().attr("data-name").toLowerCase();
-                    var content = $(this).children("td.column-paridade").first().html().toLowerCase();
-
-                    var mostrar = (name.indexOf(filtro) !== -1 || content.indexOf(filtro) !== -1);
-
-                }
-
-
-
-                if (mostrar) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-
-            });
-        }
-
-        function filtrarMoedasBook() {
-
-            var filtro = $("#balances-search").val().toLowerCase();
-
-            $("#body-balances tr").each(function () {
-                if (filtro.length > 0) {
-                    var name = $(this).children("td.column-balance").first().attr("data-name").toLowerCase();
-                    var content = $(this).children("td.column-balance").first().html().toLowerCase();
-
-                    if (name.indexOf(filtro) !== -1 || content.indexOf(filtro) !== -1) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                } else {
-                    $(this).show();
-                }
-            });
-        }
-
-
-
-
-        var flagParidadesBook = true;
-        function listarParidadesBook() {
-            if (flagParidadesBook) {
-                $.ajax({
-                    url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_PARIDADES_LISTAR ?>',
-                    dataType: 'json',
-                    method: 'post',
-                    data: {
-                        moeda: 1
-                    },
-                    beforeSend: function () {
-                        flagParidadesBook = false;
-                    },
-                    success: function (json) {
-                        try {
-                            if (json.sucesso) {
-                                $("#body-paridades").html(json.html);
-
-                                $(".change-parity").each(function () {
-                                    $(this).click(function () {
-                                        var paridade = $(this).parent("tr").attr("data-paridade");
-                                        mudarParidade(paridade);
-                                    });
-                                });
-
-                                filtrarParidadesBook();
-                            } else {
-
-                            }
-                        } catch (e) {
-
-                        }
-                        flagParidadesBook = true;
-                    },
-                    complete: function () {
-                        flagParidadesBook = true;
-                    }
-                });
-            }
-        }
-
-
-        var flagSaldoMoedas = true;
-        function listarSaldoMoedasBook() {
-            if (flagSaldoMoedas) {
-                $.ajax({
-                    url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_MOEDAS_SALDO ?>',
-                    dataType: 'json',
-                    method: 'post',
-                    data: {
-                        balanceMode: balanceMode
-                    },
-                    beforeSend: function () {
-                        flagSaldoMoedas = false;
-                    },
-                    success: function (json) {
-                        try {
-                            if (json.sucesso) {
-                                $("#body-balances").html(json.html);
-
-                                if(balanceMode === 2) {
-                                    $(".table-blocked-balance").hide();
-                                } else {
-                                    $(".table-blocked-balance").show();
-                                }
-
-                                filtrarMoedasBook();
-                            } else {
-
-                            }
-                        } catch (e) {
-
-                        }
-                        flagSaldoMoedas = true;
-                    },
-                    complete: function () {
-                        flagSaldoMoedas = true;
-                    }
-                });
-            }
-        }
-
-        var flagBook = true;
-        function listarBook() {
-            if (flagBook) {
-                $.ajax({
-                    url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_LISTAR ?>',
-                    method: 'post',
-                    dataType:'json',
-                    beforeSend: function () {
-                        flagBook = false;
-                    },
-                    success: function (json) {
-                        try {
-                            if (json.sucesso) {
-                                $("#ordersBuys").html(json.htmlCompra);
-                                $("#ordersSells").html(json.htmlVenda);
-                                $("#differenceV").html(json.diferenca);
-
-                                var porc = parseFloat(json.diferencaPorcentagem);
-
-                                if(porc >= 0){
-                                    $("#differenceP").html(json.diferencaPorcentagem + "%");
-                                } else {
-                                    $("#differenceP").html("");
-                                }
-                                $("#tblVenda").css('margin-top', json.adjusttbl+"%");
-                            } else {
-                                showNotyAlert(json.mensagem, "e");
-
-                            }
-                        } catch (e) {
-
-                            showNotyAlert(e, "e");
-                        }
-                        flagBook = true;
-                    },
-                    complete: function () {
-                        flagBook = true;
-                    }
-                });
-            }
-        }
-
-        var flagMinharOrdens = true;
-        function listarMinhasOrdens() {
-            if (flagMinharOrdens) {
-                $.ajax({
-                    url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_LISTAR ?>',
-                    method: 'post',
-                    dataType:'json',
-                    data:{
-                        todas: $("#todas").is(":checked")
-                    },
-                    beforeSend: function () {
-                        flagMinharOrdens = false;
-                    },
-                    success: function (json) {
-                        try {
-                            if (json.sucesso) {
-                                $(".my-order-item").remove();
-                                $("#orders-list").append( $(json.html));
-                            } else {
-                                $(".my-order-item").remove();
-                                showNotyAlert(json.mensagem, "e");
-                                if (json.redirect) {
-                                    location = json.url;
-                                }
-                            }
-                        } catch (e) {
-                            $(".my-order-item").remove();
-                            showNotyAlert(e, "e");
-                        }
-                        flagMinharOrdens = true;
-                    },
-                    complete: function () {
-                        flagMinharOrdens = true;
-                    }
-
-                });
-            }
-        }
-
-        function calcularTotal(m, f) {
-            let fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
-            let fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
-            let fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
-
-            let amo = ($(fieldAmount).val().length > 0 ? parseFloat($(fieldAmount).val().replace(",", ".")) : 0);;
-            let fee = (m === 'b' ? parseFloat(   ($("#buyamountwithfee").val().length > 0 ? $("#buyamountwithfee").val(): 0) ): 0);
-            let amount = amo + fee;
-            let price = ($(fieldPrice).val().length > 0 ? parseFloat($(fieldPrice).val().replace(",", ".")) : 0);;
-            let total = ($(fieldTotal).val().length > 0 ? parseFloat($(fieldTotal).val().replace(",", ".")) : 0);;
-
-            let perTax = (m === 'b' ? <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?> : <?php echo number_format($taxaVenda, $casasDecimais, ".", "")?>);
-
-            if (f === "a") { // o usuário inseriu dados no campo amount
-                if (price > 0) {
-                    total = (amount * price);
-                    $(fieldTotal).val(total.toFixed(casasDecimaisReal).replace(".",","));
-                } else if (total > 0) {
-                    price = (amount > 0 ? (total / amount) : 0);
-                    $(fieldPrice).val(price.toFixed(casasDecimaisReal).replace(".",","));
-                }
-            } else if (f === "p") { // o usuário inseriu dados no campo price
-                if (amount > 0) {
-                    total = (amount * price);
-                    $(fieldTotal).val(total.toFixed(casasDecimaisReal).replace(".",","));
-                } else if (total > 0) {
-                    amount = (price > 0 ? (total / price) : 0);
-                    $(fieldAmount).val(amo.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).replace(".",","));
-                }
-            } else if (f === "t") { // o usuário inseriu dados no campo total
-                if (price > 0) {
-                    amount = (price > 0 ? (total / price) : 0 );
-                    $(fieldAmount).val(amount.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).replace(".",","));
-                } else if (amount > 0) {
-                    price = (amount > 0 ? (total / amount) : 0);
-                    $(fieldPrice).val(price.toFixed(casasDecimaisReal).replace(".",","));
-                }
-            }
-
-            if (m === 'b') {
-                let valorTaxa = parseFloat( (amount * (perTax / 100)) );
-                let receber = parseFloat( (amount - valorTaxa) );
-
-                $("#buytaxIn").val(valorTaxa.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>));
-                $("#taxLabelBuy").html(" (" + perTax.toFixed(casasDecimaisReal).replace(".", ",") + "%)" );
-                $("#buyreceiveIn").val(receber.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>));
-            } else {
-                let valorTaxa = parseFloat( (total * (perTax / 100)) );
-                let receber = parseFloat( (total - valorTaxa) );
-
-                $("#selltaxIn").val((valorTaxa.toFixed(casasDecimaisReal).replace(".",",")));
-                $("#taxLabelSell").html(" (" + perTax.toFixed(casasDecimaisReal).replace(".", ",") + "%)" );
-                $("#sellreceiveIn").val((receber.toFixed(casasDecimaisReal)).replace(".",",") );
-            }
-
-        }
-
-        function salvarOrdemCompra() {
-            $("#btn-order-buy").prop("disabled", true);
-            $.ajax({
-                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_COMPRAR ?>',
-                method: 'post',
-                dataType: 'json',
-                data: {
-                    amount: $("#buyamount").val(),
-                    price: $("#buyprice").val()
-                },
-                success: function (json) {
-                    try {
-                        if (json.sucesso) {
-                            listarBook();
-                            listarMinhasOrdens();
-                            showNotyAlert(json.mensagem, "s");
-                        } else {
-                            showNotyAlert(json.mensagem, "e");
-                        }
-                    } catch (e) {
-                        showNotyAlert(e, "e");
-                    }
-                    $("#btn-order-buy").prop("disabled", false);
-                }
-            });
-        }
-
-        function salvarOrdemVenda() {
-            $("#btn-order-sell").prop("disabled", true);
-            $.ajax({
-                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_VENDER ?>',
-                method: 'post',
-                dataType: 'json',
-                data: {
-                    amount: $("#sellamount").val(),
-                    price: $("#sellprice").val()
-                },
-                success: function (json) {
-                    try {
-                        if (json.sucesso) {
-                            listarBook();
-                            listarMinhasOrdens();
-                            showNotyAlert(json.mensagem, "s");
-                        } else {
-                            showNotyAlert(json.mensagem, "e");
-                        }
-                    } catch (e) {
-                        showNotyAlert(e, "e");
-                    }
-                    $("#btn-order-sell").prop("disabled", false);
-                }
-            });
-        }
-
-        function modalCancelar(order) {
-            $("#modalCancelarOrdem").modal();
-            $("#modalCancelarOrdemCodigo").val(order);
-        }
-
-        function cancelar(order) {
-            $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", true);
-            $.ajax({
-                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_CANCELAR ?>',
-                method: 'post',
-                dataType:'json',
-                data: {
-                    ordem: order
-                },
-                success: function (json) {
-                    try {
-                        if (json.sucesso) {
-
-                            listarMinhasOrdens();
-                        } else {
-                            showNotyAlert(json.mensagem, "e");
-                        }
-                    } catch (e) {
-                        showNotyAlert(e, "e");
-                    }
-                    $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", false);
-                }
-            });
-        }
-
-        function initbuysell(m, f) {
-
-
-            if (f === 'p') {
-                consultarPreco(m);
-                calcularTotal(m, f);
-            } else {
-                $.ajax({
-                    url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INIT ?>',
-                    method: 'post',
-                    dataType: 'json',
-                    data: {
-
-                    },
-                    success: function (json) {
-                        try {
-                            if (json.sucesso) {
-                                var fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
-
-                                var fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
-
-                                if (f === 'a') {
-                                    if (m === 'b') {
-                                        $(fieldTotal).val(json.saldobrl.replace(".", ""));
-
-                                        atualizarTotalCompra();
-                                    } else {
-                                        $(fieldAmount).val(json.saldobtc);
-                                    }
-
-                                } else if (f === 't') {
-                                    $(fieldTotal).val(json.saldobrl.replace(".", ""));
-                                }
-
-                                calcularTotal(m, f);
-                            }
-                        } catch (e) {
-                        }
-
-                    }
-                });
-            }
-        }
-
-        function consultarPreco(m) {
-            var fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
-            var tr = null;
-            if (m === 's') {
-                tr = $("#ordersBuys tr").first();
-
-            } else {
-                tr = $("#ordersSells tr").last();
-
-            }
-
-            var preco = parseFloat($(tr).children(".td-price").first().children("span").first().html().replace(",", "?").replace(".", "").replace("?", ".")).toFixed(casasDecimaisReal);
-
-            $(fieldPrice).val(preco);
-        }
-
-        function init(m, f) {
-            $.ajax({
-                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INIT ?>',
-                method: 'post',
-                dataType: 'json',
-                data: {
-
-                },
-                success: function (json) {
-                    try {
-                        if (json.sucesso) {
-                            var fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
-                            var fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
-                            var fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
-
-                            var saldobrl = parseFloat(json.saldobrl.replace(".", "").replace(",", "."));
-                            var saldobtc = parseFloat(json.saldobtc);
-
-
-                            if (f === 'a') {
-                                if (m === 'b') {
-                                    $(fieldTotal).val(saldobrl.replace(".", ","));
-                                } else {
-                                    $(fieldAmount).val(saldobtc.replace(".", ","));
-                                }
-                            } else if (f === 'p') {
-                                if (m === 'b') {
-                                    $(fieldPrice).val(json.venda);
-                                } else {
-                                    $(fieldPrice).val(json.compra);
-                                }
-                            } else if (f === 't') {
-                                $(fieldTotal).val(saldobrl.replace(".", ","));
-                            }
-
-                            calcularTotal(m, f);
-                        }
-                    } catch (e) {
-                    }
-
-                }
-            });
-        }
-
-        var flagListarTrade = true;
-        function listarTrade() {
-            if(flagListarTrade){
-                $.ajax({
-                    url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_NEGOCIACOES_FILTRARTRADE ?>',
-                    method: 'post',
-                    dataType:'json',
-                    data: {
-                        otc: $("#otc").is(":checked")
-                    },
-                    beforeSend: function () {
-                        flagListarTrade = false;
-
-                    },
-                    success: function (json) {
-                        try {
-                            if (json.sucesso) {
-                                $(".order-item-trade").remove();
-                                $("#trade-list").append(json.html);
-                            } else {
-                                $(".order-item-trade").remove();
-                                showNotyAlert(json.mensagem, "e");
-                            }
-                        } catch (e) {
-                            $(".order-item-trade").remove();
-                            showNotyAlert(e, "e");
-                        }
-                        flagListarTrade = true;
-                    },
-                    complete: function () {
-                        flagListarTrade = true;
-                    }
-                });
-            }
-        }
-
-        function configOrder(tipo, cotacao, volume) {
-
-            if (tipo === "<?php echo \Utils\Constantes::ORDEM_COMPRA ?>") {
-
-                var volumeC = parseFloat(volume);
-                var cotacaoC = parseFloat(cotacao);
-                var total = volumeC * cotacaoC;
-
-                $("#tab-compra").trigger("click");
-                $("#buyamount").val(volumeC.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
-                $("#buyprice").val(cotacaoC.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
-                $("#buytotal").val(total.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
-
-                var taxa = <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?>;
-                var fee = (volumeC * taxa) / 100;
-                var receber = parseFloat(volumeC - fee);
-
-                $("#buytaxIn").val(fee.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
-                $("#taxLabelBuy").html(" (" + taxa.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).replace(".", ",") + "%)" );
-                $("#buyreceiveIn").val(receber.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
-
-            } else {
-                var volumeV = parseFloat(volume);
-                var cotacaoV = parseFloat(cotacao);
-                var taxa = <?php echo number_format($taxaVenda, $casasDecimais, ".", "") ?>;
-
-                var fee = (volumeV * taxa) / 100;
-                var volumeToSell = volumeV;
-
-                $("#buyamountwithfee").val(fee.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
-                $("#tab-venda").trigger("click");
-                $("#sellamount").val(volumeToSell.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
-                $("#sellprice").val(cotacaoV.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ',')).trigger("keyup");
-            }
-        }
-
-    </script>
-
-
-<?php Utils\Layout::append("mensage_text", $_data) ?>
-
+    });
+
+
+
+
+    var amountCompra = 0;
+    var amountVenda = 0;
+    var precoCompra = 0;
+    var precoVenda = 0;
+    var balanceMode = 1;
+    var somenteFavoritas = false;
+    var casasDecimaisReal = <?php echo empty($paridade->casasDecimaisMoedaTrade) ? $paridade->moedaTrade->casasDecimais : $paridade->casasDecimaisMoedaTrade ?>;
+    var pageWidth, pageHeight;
+    var data = "todos";
+    var tipo = "todos";
+    var limite = 10;
+    var listMinhasOrdens = "";
+    var listTrade = "";
+    var basePage = {
+    width: 2048,
+    height: 768,
+    scale: 1,
+    scaleX: 1,
+    scaleY: 1
+    };
+
+
+    $(document).ready(function () {
+        //alertaKyc();
+        //listarBook();
+        //listarParidadesBook();
+        //listarSaldoMoedasBook();
+        setInterval(listarTicker, 10000);
+        //setInterval(listarParidadesBook, 10000);
+        //setInterval(listarSaldoMoedasBook, 5000);
+       // setInterval(listarBook, 3000);
+
+    }
+
+</script>
+</body>

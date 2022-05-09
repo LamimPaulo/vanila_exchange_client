@@ -483,16 +483,16 @@ class BookWeb {
         print json_encode($json);
     }
     
-
+    
     public function adicionarFavorito($params) {
         try {
-
+            
             $idParidade = \Utils\Post::getEncrypted($params, "paridade", 0);
-
+            
             $cliente = \Utils\Geral::getLogado();
             $clienteHasParidadeFavoritaRn = new \Models\Modules\Cadastro\ClienteHasParidadeFavoritaRn();
             $clienteHasParidadeFavoritaRn->salvar($cliente->id, $idParidade);
-
+            
             ob_start();
             ?>
             <button class="btn btn-link text-warning" type="button" onclick="removerFavorito('<?php echo \Utils\Criptografia::encriptyPostId($idParidade)?>');">
@@ -501,7 +501,7 @@ class BookWeb {
             <?php
             $html = ob_get_contents();
             ob_end_clean();
-
+            
             $json["codigo"] = $idParidade;
             $json["html"] = $html;
             $json["sucesso"] = true;
@@ -511,16 +511,16 @@ class BookWeb {
         }
         print json_encode($json);
     }
-
+    
     public function removerFavorito($params) {
         try {
-
+            
             $idParidade = \Utils\Post::getEncrypted($params, "paridade", 0);
-
+            
             $cliente = \Utils\Geral::getLogado();
             $clienteHasParidadeFavoritaRn = new \Models\Modules\Cadastro\ClienteHasParidadeFavoritaRn();
             $clienteHasParidadeFavoritaRn->remover($cliente->id, $idParidade);
-
+            
             ob_start();
             ?>
             <button class="btn btn-link text-warning" type="button" onclick="addFavorito('<?php echo \Utils\Criptografia::encriptyPostId($idParidade)?>');">
@@ -529,7 +529,7 @@ class BookWeb {
             <?php
             $html = ob_get_contents();
             ob_end_clean();
-
+            
             $json["codigo"] = $idParidade;
             $json["html"] = $html;
             $json["sucesso"] = true;
@@ -539,7 +539,7 @@ class BookWeb {
         }
         print json_encode($json);
     }
-
+    
     public function getListaTrade($params) {
         
         try {
