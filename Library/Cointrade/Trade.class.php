@@ -105,7 +105,7 @@ class Trade {
     public static function host(){
         
         if(AMBIENTE == "producao"){
-            return "https://api.cointradecx.com/private/";
+            return "http://177.38.215.102/private/";
         } else {
             return "http://l.api.cointradecx/private/";
         }
