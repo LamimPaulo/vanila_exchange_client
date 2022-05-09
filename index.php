@@ -37,7 +37,7 @@ if ($ambiente == 'desenvolvimento') {
 
 } else if ($ambiente == 'producao') {
     //Se não, os erros são omitidos
-    error_reporting(E_ALL);
+    error_reporting(E_ERROR);
 }
 
 
