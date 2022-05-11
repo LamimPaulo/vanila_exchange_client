@@ -20,7 +20,6 @@ $googleSite = getenv("GoogleSite");
 $googleSecret= getenv("GooleSecret");
 
 
-
 define("AMBIENTE", $ambiente);
 define("EMPRESA", $empresa);
 define("TITULO", $titulo);
@@ -53,7 +52,7 @@ date_default_timezone_set('America/Sao_Paulo' );
 //Único require feito manualmente, responsável pelo autoload de todas as outras classes
 
 
-require_once 'Dduo.class.php';
+require_once 'Core/Dduo.class.php';
 //require_once './Library/PHPMailer/vendor/autoload.php';
 //require_once './Library/GerenciaNet/vendor/autoload.php';
 

@@ -45,8 +45,8 @@ class PropertiesUtils {
     
     private function openFile() {
         
-        $file = "./resources/idiomas/{$this->arquivo}-{$this->idioma}.lang";
-        $defaultFile = "./resources/idiomas/{$this->arquivo}-{$this->idiomaPadrao}.lang";
+        $file = "/Users/leandrosantos/Projects/Renato/exchangeCX/resources/idiomas/{$this->arquivo}-{$this->idioma}.lang";
+        $defaultFile = "/Users/leandrosantos/Projects/Renato/exchangeCX/resources/idiomas/{$this->arquivo}-{$this->idiomaPadrao}.lang";
         
         $this->dados = Array();
         $this->dadosDefault = Array();        

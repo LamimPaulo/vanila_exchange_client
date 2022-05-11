@@ -16,6 +16,7 @@ class Dduo {
     public $_dadosConfiguracao = null;
 
     function __construct() {
+
         $this->carregarConfiguracoes();
 
     }

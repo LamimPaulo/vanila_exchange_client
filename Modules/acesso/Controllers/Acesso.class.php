@@ -67,21 +67,25 @@ class Acesso {
                             $linkRevogar = URLBASE_CLIENT . \Utils\Rotas::R_REVOGAR . "?nnc={$idNavegadorEncripty}&cnc={$idClienteEncripty}";
                             
                             $dataAtual = new \Utils\Data(date("d/m/Y H:i"));
-                            
-                            $json = ["comando" => "seg.acesso",
-                                     "parametros" => [
-                                        "sistema_operacional" => $navegador->sistemaOperacional,
-                                        "navegador" => $navegador->navegador,
-                                        "data_hora" => $dataAtual->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP) ,
-                                        "ip" => $navegador->ipUltimoAcesso,
-                                        "id_session" => $navegador->idSession,
-                                        "link_revogar" => $linkRevogar,
-                                        "id_cliente" => $cliente->id,
-                                        "notificar" => $cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL ? false : true,
-                                        "id_usuario" => "",]
-                                    ];
-                            
-                            \LambdaAWS\QueueKYC::sendLog("seguranca_localizacao", null, $json);
+
+                        $bodyMail = [
+                            'nome' => $cliente->nome,
+                            'email' => $cliente->email,
+                            'params' => [
+                                "sistema_operacional" => $navegador->sistemaOperacional,
+                                "navegador" => $navegador->navegador,
+                                "data_hora" => $dataAtual->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP),
+                                "ip" => $navegador->ipUltimoAcesso,
+                                "id_session" => $navegador->idSession,
+                                "link_revogar" => $linkRevogar,
+                                "id_cliente" => $cliente->id,
+                                "notificar" => $cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL ? false : true,
+                                "id_usuario" => ""
+                            ],
+                            'template_name' => 'system.security.logacesso'
+                        ];
+                        $rabbit = new \RabbitMq\Client();
+                        $rabbit->sendQueue('log_acesso', $bodyMail);
                     }
                     
                     Geral::setAutenticado(false);

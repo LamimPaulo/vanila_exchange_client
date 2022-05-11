@@ -53,7 +53,10 @@ class Acao {
      * @param String $dados Array contendo os dados do objeto
      */
     public function __construct($dados = null) {
+        print_r(sprintf('Aqui estou na parte do Acao RN -> %s', json_encode($dados)).PHP_EOL);
         if (!is_null($dados)) {
+
+
             $this->exchangeArray($dados);
         }
     }

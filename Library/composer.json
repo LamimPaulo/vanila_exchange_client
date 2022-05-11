@@ -4,6 +4,7 @@
         "google/apiclient": "^2.0",
         "clue/socket-raw": "^1.4",
         "aws/aws-sdk-php": "^3.100",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "php-amqplib/php-amqplib": "^3.2"
     }
 }

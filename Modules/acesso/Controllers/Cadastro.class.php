@@ -3,13 +3,17 @@
 namespace Modules\acesso\Controllers;
 
 
+use Io\BancoDados;
+
 class Cadastro {
     
     public $idioma = null;
     
     public function __construct() {
+
         $this->idioma = new \Utils\PropertiesUtils("login", IDIOMA);
         header('Access-Control-Allow-Origin: *');
+
     }
     
     public function cadastroCliente($params) {
@@ -26,8 +30,10 @@ class Cadastro {
             $senha = base64_decode(\Utils\Post::get($params, "senha", null));
             $confirmarSenha = base64_decode(\Utils\Post::get($params, "confirmarSenha", null));
             $referencia = \Utils\Post::get($params, "referencia", NULL);
+
+
             
-            $googleCode = \Utils\Post::get($params, "code", null);
+            /*$googleCode = \Utils\Post::get($params, "code", null);
             
             if (!empty($googleCode)) {
                 $validate = \GoogleAuth\Recaptcha::validarRecaptcha($googleCode);
@@ -36,7 +42,7 @@ class Cadastro {
                 }
             } else {
                 throw new \Exception("Recaptcha inválido.");
-            }
+            }*/
 
             $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
 
@@ -47,6 +53,8 @@ class Cadastro {
             if (empty($email) || !\Utils\Validacao::email($email) || \Utils\EmailBlacklist::isBlacklist($email)) {
                 throw new \Exception("O e-mail deve ser informado.");
             }
+
+
 
             if (empty($nome)) {
                 throw new \Exception("O nome deve ser informado.");
@@ -64,16 +72,29 @@ class Cadastro {
             if (sizeof($cliente) > 0) {
                 throw new \Exception("Cadastro de e-mail não autorizado.");
                 
-            } else{
-                $result = \LambdaAWS\QueueKYC::validarEmail($nome, $email, $referencia, \Utils\Criptografia::encriptyPostId($senha));
             }
 
+            $bodyMail = [
+                'nome' => $nome,
+                'email' => $email,
+                'referencia' => $referencia,
+                'senha' => \Utils\Criptografia::encriptyPostId($senha)
+            ];
+
+
+
+            $rabbit = new \RabbitMq\Client();
+            $result = $rabbit->sendQueue('user_new', $bodyMail);
             if (!$result) {
                 throw new \Exception("Por favor, tente novamente mais tarde.");
             }
 
+
             $json["sucesso"] = true;
-            $json["mensagem"] = $this->idioma->getText("cadastroSucesso");
+            /* $json["mensagem"] = $this->idioma->getText("cadastroSucesso") ?? 'Cadastrado com sucesso';*/
+            $json["mensagem"] = 'Cadastrado com sucesso';
+
+
         } catch (\Exception $ex) {
             $json["sucesso"] = false;
             $json["mensagem"] = \Utils\Excecao::mensagem($ex);
@@ -113,85 +134,131 @@ class Cadastro {
         }
         return null;
     }
-    
-    public static function criarNovoCliente($object) {
-        
-        $cliente = new \Models\Modules\Cadastro\Cliente();
-        
-        $cliente->email = strtolower(\Utils\SQLInjection::clean($object->parametros->email));
-        $cliente->nome = \Utils\SQLInjection::clean($object->parametros->nome);
-        $cliente->senha = \Utils\Criptografia::decriptyPostId($object->parametros->senha);
-        
-        $cliente->senha = sha1($cliente->senha . \Utils\Constantes::SEED_SENHA);
-                
-        $cliente->idReferencia = \Utils\Criptografia::decriptyPostId($object->parametros->referencia);
-        
-        if (!is_numeric($cliente->idReferencia)) {
-            $cliente->idReferencia = null;
-        }
 
-        if (empty($cliente->email)) {
-            throw new \Exception("O email deve ser informado");
-        }
-        
-        if (empty($cliente->nome)) {
-            throw new \Exception("O nome deve ser informado");
-        }
-        
-        $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-        $result = $clienteRn->conexao->listar("email = '{$cliente->email}'");
-        
-        if (sizeof($result) > 0) {
-            throw new \Exception("O email já está cadastrado no sistema");
-            
-        } else {
-            $cliente->id = 0;
-        }
+    public static function criarNovoCliente($object)
+    {
+        try {
+            $object = json_decode($object);
+            $cliente = new \Models\Modules\Cadastro\Cliente();
 
-        $where = "tipo IN ('C', 'UC') ";
-        $rotinaHasAcaoRn = new \Models\Modules\Acesso\RotinaHasAcaoRn();
-        $rotinasHasAcoes = $rotinaHasAcaoRn->conexao->listar($where);
-        $permissoesRotinas = Array();
-        foreach ($rotinasHasAcoes as $rha) {
-            $permissoesRotinas[] = $rha->id;
-        }
+            $cliente->email = strtolower(\Utils\SQLInjection::clean($object->email));
 
-        $moduloHasAcaoRn = new \Models\Modules\Acesso\ModuloHasAcaoRn();
-        $modulosHasAcoes = $moduloHasAcaoRn->listar($where, null, null, null, true);
-        $permissoesModulos = Array();
-        foreach ($modulosHasAcoes as $mha) {
-            if ($mha->idModulo != 12) {  // modulo 12 = Recebimentos PDV
-                if ($mha->acao->codigo != "TPE") {
-                    $permissoesModulos[] = $mha->id;
+            $cliente->nome = \Utils\SQLInjection::clean($object->nome);
+            $cliente->senha = \Utils\Criptografia::decriptyPostId($object->senha);
+
+            $cliente->senha = sha1($cliente->senha . \Utils\Constantes::SEED_SENHA);
+
+            $cliente->idReferencia = \Utils\Criptografia::decriptyPostId($object->referencia);
+
+            if (!is_numeric($cliente->idReferencia)) {
+                $cliente->idReferencia = null;
+            }
+
+            if (empty($cliente->email)) {
+                throw new \Exception("O email deve ser informado");
+            }
+
+            if (empty($cliente->nome)) {
+                throw new \Exception("O nome deve ser informado");
+            }
+
+            $db_ = new BancoDados();
+            print_r('-> Estou aqui 1'.PHP_EOL);
+            $clienteRn = new \Models\Modules\Cadastro\ClienteRn($db_);
+            print_r('-> Estou aqui 2'.PHP_EOL);
+            $result = $clienteRn->conexao->listar("email = '{$cliente->email}'");
+            print_r('-> Estou aqui 3'.PHP_EOL);
+
+            if (sizeof($result) > 0) {
+                throw new \Exception("O email já está cadastrado no sistema");
+
+            } else {
+                $cliente->id = 0;
+            }
+
+            print_r('-> Estou aqui 4'.PHP_EOL);
+
+            $where = "tipo IN ('C', 'UC') ";
+            $rotinaHasAcaoRn = new \Models\Modules\Acesso\RotinaHasAcaoRn($db_);
+            $rotinasHasAcoes = $rotinaHasAcaoRn->conexao->listar($where);
+            $permissoesRotinas = array();
+            foreach ($rotinasHasAcoes as $rha) {
+                $permissoesRotinas[] = $rha->id;
+            }
+
+            print_r('-> Estou aqui 5'.PHP_EOL);
+
+
+            $moduloHasAcaoRn = new \Models\Modules\Acesso\ModuloHasAcaoRn($db_);
+            print_r('-> Estou aqui 6'.PHP_EOL);
+            print_r(sprintf('-> Estou aqui 6.1 -> %s', json_encode($where)).PHP_EOL);
+            $modulosHasAcoes = $moduloHasAcaoRn->listar($where, null, null, null, true);
+            print_r('-> Estou aqui 7'.PHP_EOL);
+
+            $permissoesModulos = array();
+            foreach ($modulosHasAcoes as $mha) {
+                if ($mha->idModulo != 12) {  // modulo 12 = Recebimentos PDV
+                    if ($mha->acao->codigo != "TPE") {
+                        $permissoesModulos[] = $mha->id;
+                    }
                 }
             }
-        }
-        
-        $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']);
 
-        if(strpos($ip,',') !== false) {
-            $ip = substr($ip,0,strpos($ip,','));
+            $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']);
+
+            if (strpos($ip, ',') !== false) {
+                $ip = substr($ip, 0, strpos($ip, ','));
+            }
+
+            $_SESSION["cadastrado"] = true;
+
+            $cliente->comissaoConvitePago = 0;
+            $cliente->documentoVerificado = 0;
+            $cliente->documentoTipo = \Utils\Constantes::DOCUMENTO_CPF;
+            $cliente->status = \Utils\Constantes::CLIENTE_AGUARDANDO;
+            $cliente->statusDepositoBrl = 1;
+            $cliente->statusDepositoCurrency = 1;
+            $cliente->statusResgatePdv = 1;
+            $cliente->statusSaqueBrl = 1;
+            $cliente->statusSaqueCurrency = 1;
+            $cliente->idPaisNaturalidade = 30;
+            $cliente->utilizaSaqueDepositoBrl = 1;
+            $cliente->modoOperacao = \Utils\Constantes::MODO_TRADER;
+            $cliente->origemCadastro = \Utils\Constantes::ORIGEM_SITE;
+            $cliente->ipCadastro = $ip;
+            $cliente->retornoAnaliseEmail = "E-mail consultado com sucesso. - E-mail válido.";
+            $clienteRn->salvar($cliente, $cliente->senha, $permissoesRotinas, $permissoesModulos);
+
+            //\Models\Modules\Cadastro\
+            $tokenApiRn = new \Models\Modules\Cadastro\TokenApiRn($db_);
+            $tokenApi = new TokenApi();
+
+
+            $tokenApi->idCliente = $cliente->id;
+            $tokenApiRn->salvar($tokenApi);
+
+            $token = \Utils\Criptografia::encriptyPostId($tokenApi->token);
+
+            $token2 = \Utils\Criptografia::encriptyPostId(base64_encode($token . "]" . $cliente->email));
+
+            $cliente_url = URLBASE_CLIENT . \Utils\Rotas::R_ATIVACAO . "?at=" . $token2;
+
+            return [
+                'sucesso' => true,
+                'mensagem' => 'Cadastrado com sucesso',
+                'dados' => [
+                    'cliente_url' => $cliente_url,
+                    'cliente_nome' => $cliente->nome,
+                    'cliente_email' => $cliente->email
+                ]
+            ];
+        } catch (\Exception $e) {
+            return [
+                'sucesso' => false,
+                'mensagem' => sprintf('Falha no cadastro %s', $e->getMessage())
+            ];
         }
-        
-        $_SESSION["cadastrado"] = true;
-        
-        $cliente->comissaoConvitePago = 0;
-        $cliente->documentoVerificado = 0;
-        $cliente->documentoTipo = \Utils\Constantes::DOCUMENTO_CPF;
-        $cliente->status = \Utils\Constantes::CLIENTE_AGUARDANDO;
-        $cliente->statusDepositoBrl = 1;
-        $cliente->statusDepositoCurrency = 1;
-        $cliente->statusResgatePdv = 1;
-        $cliente->statusSaqueBrl = 1;
-        $cliente->statusSaqueCurrency = 1;
-        $cliente->idPaisNaturalidade = 30;
-        $cliente->utilizaSaqueDepositoBrl = 1;
-        $cliente->modoOperacao = \Utils\Constantes::MODO_TRADER;
-        $cliente->origemCadastro = \Utils\Constantes::ORIGEM_SITE;
-        $cliente->ipCadastro = $ip;
-        $cliente->retornoAnaliseEmail = "E-mail consultado com sucesso. - E-mail válido.";
-        
-        $clienteRn->salvar($cliente, $cliente->senha, $permissoesRotinas, $permissoesModulos);
+
     }
     
     

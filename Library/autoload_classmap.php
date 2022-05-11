@@ -7,6 +7,8 @@ require_once __DIR__ . '/Utils/Idiomas.class.php' ;
 require_once __DIR__ . '/Utils/ValidarSeguranca.class.php' ;
 require_once __DIR__ . '/Utils/Notificacao.class.php' ;
 require_once __DIR__ . '/Utils/Converter.class.php' ;
+require_once __DIR__ . '/RabbitMq/RabbitMq.class.php' ;
+require_once __DIR__ . '/RabbitMq/RabbitMain.class.php' ;
 require_once __DIR__ . '/GoogleAuth/GoogleAuthenticator.class.php' ;
 require_once __DIR__ . '/GoogleAuth/Recaptcha.class.php' ;
 require_once __DIR__ . '/LambdaAWS/LambdaNotificacao.class.php' ;

@@ -15,9 +15,12 @@ class ModuloHasAcaoRn {
     public $conexao = null;
     
     public function __construct(\Io\BancoDados $adapter = null) {
+
         if ($adapter == null) {
             $this->conexao = new GenericModel(\Dduo::conexao(), new ModuloHasAcao());
+
         } else {
+
             $this->conexao = new GenericModel($adapter, new ModuloHasAcao());
         }
     }
