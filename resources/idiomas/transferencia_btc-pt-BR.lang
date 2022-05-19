@@ -1,0 +1,211 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#LOGIN
+#
+#
+#--VIEW
+#Modules\contas\views\transferencia_btc.phtml
+##--
+#Textos da View
+titulo=Transferência
+subTitulo=Transferência
+abaTransfMoeda=Transferir
+abaTransfReais=Transferir Reais
+abaTransfNewCash=Transferir para Cointrade
+enderDestino=Endereço de destino {var}
+descTransferencia=Descrição para essa transferência
+taxa=Taxa:
+valorDaTranferenciaMaior=Valor da transferência deve ser maior ou igual a
+carteiraDestino=Carteira de destino
+atencaoUtilize=Atenção: Utilize o endereço de {var} da pessoa para a qual deseja enviar o valor. O valor será debitado em reais da sua conta corrente e será creditado em reais na conta corrente do destinatário.
+
+descParaEssaTransf=Descrição para essa transferência
+valorReais=Valor em reais
+carteiraInvalida=Carteira Inválida
+taxaR=Taxa: R$
+valorTransferenciaMaiorR=Valor da transferência deve ser maior ou igual a R$
+transferirReais= Transferir Reais
+reais=Reais
+descParaTransNc=Descrição para essa transferência
+moeda=Moeda
+qualquerValor=Qualquer valor em
+podeSerTransf=pode ser transferido.
+confirmaTransacao=Confirmar Transação
+vocePreciaInforarTodosParametros=Usted necesita informar todos los parámetros.
+valorTotal=Valor Total
+
+
+
+
+                                                                
+
+#Labels
+volumeEm=Volume em
+volumeEmNc=Volume em 
+transfSemTaxa=Transferência sem Taxa
+dtInicial=Data Inicial
+dtFinal=Data Final
+informaToken=Informe o token: 
+informaPin=Informe o seu PIN:
+registros=Registros
+filtroGeral=Filtro Geral
+
+
+
+#Buttons
+meuVolumeTotal=Meu Volume Total
+meuSaldoTotal=Meu Saldo Total
+meuVolumeTotalNc=Meu Volume Total
+meuSaldoTotalNc=Meu Saldo Total
+btTransferir=Transferir
+transfParaNc=Transferir para Cointrade
+limpar=Limpar
+reenviar=Reenviar
+cancelar=Cancelar
+confirmaTransacaoBtn=Confirma Transação
+filtro=Filtro
+
+#inputs
+selecionar=Selecionar
+alterar=Alterar
+remover=Remover
+
+
+#Placeholder
+
+
+#Links
+verComprovante=Ver comprovante anexado.
+
+
+#Options
+opReais=Reais
+todos=Todos
+
+
+
+#Tabela
+controle=Controle
+tipoTabela=Tipo
+volume=Volume
+descricao=Descrição
+status=Status
+data=Data
+endereco=Endereço
+acoes=Ações
+cliente=Cliente
+taxa=Taxa
+hash=Hash
+valor=Valor
+destinatario=Destinatário
+
+
+
+
+##--------------------
+
+##--CONTROLLER 1
+#Modules\contas\Controllers\Transferencia.class.php
+#--
+
+#Textos da View
+foiEnviadoEmail=Foi enviado um token de confirmação para o seu e-mail
+porFavorInsiraToken=. Por favor, insira o token abaixo para efetuar a transação.
+foiEnviadoSMS=Foi enviado um token de confirmação para o seu celular
+useGoogle=Por favor, use seu Google Authenticator para inserir o token abaixo.
+
+
+
+#Labels
+
+
+#Buttons
+
+
+#Placeholder
+
+
+#Links
+
+
+#tabela
+
+
+#Sucesso
+transfSucesso=Transferência realizada com sucesso!
+
+
+#Erros
+voceNaoTemPermissao=Você não tem permissão para transferir valores para empresa
+saldoInsuficiente=Saldo insuficiente
+moedaInvalida=Moeda inválida
+precisaCadPin=Você precisa cadastrar um PIN para efetuar essa operação. Acesso o perfil e configure seu PIN de segurança.
+pinInvalido=PIN inválido
+##--
+
+
+##--------------------
+
+##--CONTROLLER 2
+#Modules\contas\Controllers\Btc.class.php
+#--
+
+#Textos da View
+cartNewCash=Transf. Interna
+erro=Erro
+foiEnviadoEmail1=Foi enviado um token de confirmação para o seu e-mail
+porFavorInsiraToken1=. Por favor, insira o token abaixo para efetuar a transação.
+foiEnviadoSMS1=Foi enviado um token de confirmação para o seu celular
+useGoogle1=Por favor, use seu Google Authenticator para inserir o token abaixo.
+necessarioInfCarteira=É necessário informar uma carteira.
+voceNaoPodeTransContaCorrente=Você não pode transferir dinheiro para sua própria conta corrente.
+cartInformadaNaoNc=A carteira informada não é uma carteira Cointrade.
+
+#Labels
+statusNaoAutorizado=Não Autorizado
+statusEmAnalise=Em Análise
+statusEmProcessamento=Em Processamento
+statusConcluido=Concluído
+
+
+
+#Buttons
+
+
+#Placeholder
+
+
+#Links
+
+
+#tabela
+liCliente=Cliente
+liEntrada=Entrada
+liSaida=Saída
+liVolume=Volume
+liAbrir=Abrir
+descricao1=Descrição
+nenhumaContaEncontrada=Nenhuma conta corrente encontrada
+volumeTotalC=Volume total:
+depositoVar=Deposito {var}
+saqueVar=Saque {var}
+
+#Sucesso
+transSucesso=Transferência realizada com sucesso!
+
+
+
+#Erros
+clienteNaoLoc=Cliente não localizado no sistema.
+precisaCadPin1=Você precisa cadastrar um PIN para efetuar essa operação. Acesso o perfil e configure seu PIN de segurança.
+pinInvalido1=PIN inválido
+saldoInsuficiente=Saldo insuficiente
+enderecoInvalido=Endereço inválido.
+
+
+
+##--
+
+

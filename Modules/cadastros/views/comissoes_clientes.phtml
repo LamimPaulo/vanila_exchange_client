@@ -1,0 +1,155 @@
+
+<div class="modal fade" id="dialogClientesHasComissao" tabindex="-1" role="dialog" aria-labelledby="dialogClientesHasComissao" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogClientesHasComissaoLabel">Taxas Aplicadas ao cliente</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" value="" id="dialogClientesHasComissaoIdCliente" />
+                
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <label class=""> 
+                            <input type="checkbox" class="" id="dialogClientesHasComissaoUtilizar" name="dialogClientesHasComissaoUtilizar">
+                            Utilizar a tabela abaixo
+                        </label>
+                    </div>
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label>Comissão em depósitos (%)</label>
+                            <input type="text" id="dialogClientesHasComissaoDeposito" class="form-control dialog-comissao-real" name="dialogClientesHasComissaoDeposito" />
+                        </div>
+                    </div>
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label>Comissão em Saques (%)</label>
+                            <input type="text" id="dialogClientesHasComissaoSaque" class="form-control dialog-comissao-real" name="dialogClientesHasComissaoSaque" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label>Comissão em Boletos (%)</label>
+                            <input type="text" id="dialogClientesHasComissaoBoleto" class="form-control dialog-comissao-real" name="dialogClientesHasComissaoBoleto" />
+                        </div>
+                    </div>
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label>Comissão em Remessas (%)</label>
+                            <input type="text" id="dialogClientesHasComissaoRemessa" class="form-control dialog-comissao-real" name="dialogClientesHasComissaoRemessa" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label>Comissão em Compra (%)</label>
+                            <input type="text" id="dialogClientesHasComissaoCompra" class="form-control dialog-comissao-real" name="dialogClientesHasComissaoCompra" />
+                        </div>
+                    </div>
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label>Comissão em Venda (%)</label>
+                            <input type="text" id="dialogClientesHasComissaoVenda" class="form-control dialog-comissao-real" name="dialogClientesHasComissaoVenda" />
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogClientesHasComissaoClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarClienteHasComissao();" id="dialogClientesHasComissaoConfirmar" >Salvar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script>
+    
+    $(document).ready(function () {
+        $(".dialog-comissao-real").keydown(function (event) {
+            if (event.keyCode !== 9) {
+                $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+                event.preventDefault();
+            }
+        });
+    });
+    
+    function cadastroClienteHasComissao(cliente) {
+        
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_COMISSOES_CADASTRO ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                cliente: cliente
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                        $("#dialogClientesHasComissaoUtilizar").prop("checked", (json.utilizar > 0));
+                        $("#dialogClientesHasComissaoIdCliente").val(json.cliente.id);
+                        $("#dialogClientesHasComissaoDeposito").val(json.deposito);
+                        $("#dialogClientesHasComissaoSaque").val(json.saque);
+                        $("#dialogClientesHasComissaoBoleto").val(json.boleto);
+                        $("#dialogClientesHasComissaoRemessa").val(json.remessa);
+                        $("#dialogClientesHasComissaoCompra").val(json.compra);
+                        $("#dialogClientesHasComissaoVenda").val(json.venda);
+                        $("#dialogClientesHasComissao").modal();
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+        
+    }
+    
+    function salvarClienteHasComissao() {
+    
+        $("#dialogClientesHasComissao, #dialogClientesHasComissaoConfirmar").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_COMISSOES_SALVAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                cliente:   $("#dialogClientesHasComissaoIdCliente").val(),
+                deposito:  $("#dialogClientesHasComissaoDeposito").val(),
+                saque:     $("#dialogClientesHasComissaoSaque").val(),
+                boleto:    $("#dialogClientesHasComissaoBoleto").val(),
+                remessa:   $("#dialogClientesHasComissaoRemessa").val(),
+                compra:    $("#dialogClientesHasComissaoCompra").val(),
+                venda:     $("#dialogClientesHasComissaoVenda").val(),
+                utilizar: ($("#dialogClientesHasComissaoUtilizar").is(":checked") ? 1 : 0)
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogClientesHasComissaoClose").prop("disabled", false).trigger("click");
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogClientesHasComissaoClose, #dialogClientesHasComissaoConfirmar").prop("disabled", false);
+            }
+        });
+        
+    }
+    
+</script>

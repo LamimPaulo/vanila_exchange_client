@@ -1,0 +1,206 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#BOLETO
+
+#
+#
+#--VIEW
+#Modules\servicos\views\boletos.phtml
+##--
+#Textos da View
+titulo=Boletos Payment
+subTitulo=Services
+abaBoleto=Boleto
+abaExtrato=Statement
+abaCalendario=Calendar
+abaBoletoCategoria=Boleto by Category
+abaBoletoMes=Boleto per month
+abaBoletoMesCategoria=Boleto per month / Category
+marcarBoletoDesejaContinuar=Marking the boleto as finalized means having paid it to a financial institution.
+desejaContinuar=Do you want to confirm the boleto payment?
+cancelarBoleto=Cancel Boleto
+desejaRealmenteCancelar=Do you really want to cancel the boleto?
+motivoCancelamento=Cacel reason
+pagarBoleto=Pay Boleto
+valorDoBoletoSeraDebitado=The boleto amount will be debited from your balance. Do you want to continue?
+pagamentoEfetuado=Payment Made
+recebemosSeuPagamento=We have received your payment. The boleto will be paid within a maximum of 1 business day.                                                                
+
+#Labels
+dtInicial=Initial Date
+dtFinal=Final Date
+registros=Registrations
+filtroGeral=General Filter
+instituicaoBancaria=Banking institution of the boleto
+categoriaServico=Category of service
+infPagamentoBoleto=Information for boleto payment:
+valorLb=Boleto amount
+txCobradaBoleto=Fee charged per boleto:
+vencimentoBoleto=Boleto expiration
+emailNotificacao=E-mail notification
+pagamentoRealizadoDiaUtil=Payment will be made within 1 business day.
+saldoSeraDebitado=The balance will be debited at the boleto's registering moment.
+anexeFotoBoleto=Please attach a photo or PDF of the boleto
+codigoBarras=Bar code
+cpfNf=CPF in the NF?
+seraDebitadoSuaConta=Will be debited from your account:
+tipoData=Date type
+dataPagamento=Payment date
+dataCadastro=Registering date
+lancamentosRegistrados=Registered requests
+graficoBoletoCategoria='Boleto Graph by Category'
+enviosPorMes='Boleto Payments Per Month'
+graficoEnviosMesCategorias='Boleto Graph per month and by Category'
+marcarBoletoFinalizado=Mark Boleto as Finished
+anexarComprovante=Attach receipt
+inserirComentarios=Enter comments
+valorMaxCaracteres=Maximum characters: 
+
+
+#Buttons
+limpar=Clean
+reenviar=Resend
+cancelar=Cancel
+confirmaTransacaoBtn=Confirm Transaction
+cadastrarBtn=Register
+voltarBtn=Back
+atualizarGrafico=Update Chart
+fecharBtn=Close
+confirmarFinalizacao=Confirm End
+cancelarPagamento=Cancel Payment
+filtro=Filter
+cadastroCategoriaBtn=Service Categories Registration
+pagarBoletoBtn=Pay Boleto
+
+
+#inputs
+selecionar=Select
+alterar=Alter
+remover=Remove
+
+
+#Placeholder
+
+
+#Links
+verComprovante=See attached receipt.
+
+
+#Options
+aguardOp=Awaiting
+cancelOp=Canceled
+finalizadoOp=Finished
+todosOp=All
+selecioneContaCadastradaOp=Select a registered account
+selecioneBancoOp=Select a bank
+selecioneTipoConta=Select an account type
+contaCorrente=Account
+selecioneCategoriaServico=Select a category for the service
+dataVencimento=Expiring date
+
+
+
+#Tabela
+controle=Control
+status=Status
+data=Registration Date
+acao=Action
+cliente=Customer
+taxa=Fee
+valor=Amount
+destinatario=Destination
+titular=Owner
+contaBancaria=Bank Account
+creditado=Credited
+comprovante=Receipt.
+nf=NF
+comentarios=Comments
+dtPagamento=Payment Date
+vencimento=Expiring date
+boleto=Boleto
+codBarras= Bar Code
+
+
+
+
+##--------------------
+
+##--CONTROLLER 1
+#Modules\servicos\Controllers\Boletos.class.php
+#--
+
+#Textos da View
+
+
+#Labels
+nomeClienteC=Customer Name:
+controleC=Control:
+nomeTitularC=Owner Name:
+cpfCnpjC=CPF:
+dataCadastroC=Registration Date:
+dataVencimentoC=Expiring Date:
+operacaoC=Operation:
+valorTaxaC=Fee amount:
+valorSerTransferidoC=Amount to be transfered:
+notaFiscalC=NF:
+valorC=Amount
+codigoBarrasC=Bar Code:
+comentariosC=Comment:
+simC=Yes
+naoC=No
+cadastroBoleto=Boleto Registration:
+boletoVencendo=Expiring Boleto :
+boletoPago=Paid Boleto : 
+boletoCancelado=Canceled Boleto:
+codBarrasC=Bar Code
+comentarioC=Comment
+boletoCanceladoC=Canceled Boleto
+
+
+
+#Buttons
+informarPagamentoBtn=Inform Payment
+cancelarClienteC=Cancel
+cancelarAdmC=Cancel
+
+
+#Placeholder
+
+
+#Links
+
+
+#tabela
+nenhumaBoletoEncontrado=No boleto found for reported data
+
+
+#Sucesso
+boletoRegistradoSucesso=Boleto registered successfully!
+boletoFinalizadoSucesso=Boleto finished successfully!
+boletoCanceladoSucesso=Boleto canceled successfully!
+
+
+#Erros
+dtInicialInvalida=Invalid initial date.
+dtFinalInvalida=Invalid final date.
+dtInicialMenorDtFinal=The initial date can not be greater than the final date.
+voceNaoTemPermissaoAlterar=You are not allowed to change the boleto data.
+voceNaoTemPermissaoCadastrar=You are not allowed to register boletos.
+naoPossivelEfetuarBoleto=We were unable to make the payment of your ticket at this time. Please try again later.
+erroEnviarEmail=Error sending email to customer.
+invoiceNaoLocalizada=Invoice not found in the system.
+boletoNaoLocalizada=Boleto not found in system.
+boletoNaoPodeSerPago=The boleto can not be paid.
+boletoNaoCancelado=Boleto has not been canceled.
+
+##--
+
+
+##--------------------
+
+
+
+
+

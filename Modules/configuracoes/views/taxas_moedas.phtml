@@ -1,0 +1,257 @@
+<?php
+$moedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
+?>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+
+
+    
+    <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Taxas de Moedas</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            Configurações
+                        </li>
+                        <li class="active">
+                            <strong>Taxas</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>
+<br>
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <?php Utils\Layout::append("mensagem", $_data)?>
+                    
+                    
+                    <div class="panel-body">
+                        <br><br>
+                        
+                        <table class="table table-hover table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Moeda</th>
+                                    <th class="text-center">Taxa de transferência</th>
+                                    <th class="text-center">Valor máx permitido para saque sem confirmação</th>
+                                    <th class="text-center">Volume mínimo para negociação</th>
+                                    <th class="text-center">TX Rede</th>
+                                    <th class="text-center">Qtd Carteiras</th>
+                                    <th class="text-center">Min Confirmações</th>
+                                    <th class="text-center">Max Confirmações</th>
+                                    <th class="text-center">Taxa Compra Direta (%)</th>
+                                    <th class="text-center">Taxa Compra Indireta (%)</th>
+                                    <th class="text-center">Taxa Venda Direta (%)</th>
+                                    <th class="text-center">Taxa Venda Indireta (%)</th>
+                                </tr>
+                            </thead>
+                        
+                            <tbody>
+                        <?php 
+                        foreach ($moedas as $dados) { 
+                            $moeda = $dados["moeda"];
+                            $taxa = $dados["taxa"];
+                        ?>
+                                <tr>
+                                    <td>
+                                        <input type="hidden" class="coin-id" data-cod='<?php echo $moeda->id ?>' value="<?php echo \Utils\Criptografia::encriptyPostId($moeda->id) ?>" />
+                                        <label ><?php echo $moeda->nome ?></label>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="taxaTransferencia-<?php echo $moeda->id ?>" class="form-control currency text-center" value="<?php echo number_format(($taxa != null ? $taxa->taxaTransferencia : 0), 8, ",", "")?>" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="valorMaxSaqueSemConfirmacao-<?php echo $moeda->id ?>" class="form-control currency text-center" value="<?php echo number_format(($taxa != null ? $taxa->valorMaxSaqueSemConfirmacao : 0), 8, ",", "")?>" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="volumeMinimoNegociacao-<?php echo $moeda->id ?>" class="form-control currency text-center" value="<?php echo number_format(($taxa != null ? $taxa->volumeMinimoNegociacao : 0), 8, ",", "")?>" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="taxaRede-<?php echo $moeda->id ?>" class="form-control currency text-center" value="<?php echo number_format(($taxa != null ? $taxa->taxaRede : 0), 8, ",", "")?>" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="qtdCarteiras-<?php echo $moeda->id ?>" class="form-control numeric text-center" value="<?php echo $moeda->qtdMaximaCarteiras ?>" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="minConfirmacoes-<?php echo $moeda->id ?>" class="form-control numeric text-center" value="<?php echo $taxa->minConfirmacoes ?>" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="maxConfirmacoes-<?php echo $moeda->id ?>" class="form-control numeric text-center" value="<?php echo $taxa->maxConfirmacoes ?>" />
+                                        </div>
+                                    </td>
+                                    
+                                    
+                                    
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="taxaCompraDireta-<?php echo $moeda->id ?>" class="form-control numeric text-center" value="<?php echo number_format($taxa->taxaCompraDireta, 2, ",", "") ?>" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="taxaCompraIndireta-<?php echo $moeda->id ?>" class="form-control numeric text-center" value="<?php echo number_format($taxa->taxaCompraIndireta, 2, ",", "") ?>" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="taxaVendaDireta-<?php echo $moeda->id ?>" class="form-control numeric text-center" value="<?php echo number_format($taxa->taxaVendaDireta, 2, ",", "") ?>" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" id="taxaVendaIndireta-<?php echo $moeda->id ?>" class="form-control numeric text-center" value="<?php echo number_format($taxa->taxaVendaIndireta, 2, ",", "") ?>" />
+                                        </div>
+                                    </td>
+                                </tr>
+                        
+                        <?php } ?>
+                            <tbody>
+                                
+                        </table>
+                        <br>
+                       
+                        
+                        <br>
+                        
+                        <div class="row">
+                            <div class="col col-lg-12 text-center">
+                                
+                                <?php if (\Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_CRIPTOCURRENCIES_FEES, \Utils\Constantes::EDITAR)) { ?>
+                                <button type="button" class="btn btn-primary" onclick="atualizarDados()" id="btn-update">
+                                    Atualizar Taxas
+                                </button>
+                                <?php } ?>
+                                
+                            </div>
+                        </div>
+                        
+                        <br><br>
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        
+        $(".currency").keydown(function (event) {
+            if (event.keyCode !== 9) {
+                $(this).val(currency($(this).val(), 8, 16, event.keyCode));
+                event.preventDefault();
+            }
+        });
+        
+        $(".numeric").numeric();
+    });
+    
+    
+    function atualizarDados() {
+        
+        var taxas = [];
+        
+        $(".coin-id").each(function(){
+            var cod = $(this).attr("data-cod");
+            var idMoeda = $(this).val();
+            var taxaTransferencia = $("#taxaTransferencia-"+cod).val();
+            var valorMaxSaqueSemConfirmacao = $("#valorMaxSaqueSemConfirmacao-"+cod).val();
+            var volumeMinimoNegociacao = $("#volumeMinimoNegociacao-"+cod).val();
+            var taxaRede = $("#taxaRede-"+cod).val();
+            var qtdCarteiras = $("#qtdCarteiras-"+cod).val();
+            var minConfirmacoes = $("#minConfirmacoes-"+cod).val();
+            var maxConfirmacoes = $("#maxConfirmacoes-"+cod).val();
+            
+            var taxaCompraDireta = $("#taxaCompraDireta-"+cod).val();
+            var taxaCompraIndireta = $("#taxaCompraIndireta-"+cod).val();
+            var taxaVendaDireta = $("#taxaVendaDireta-"+cod).val();
+            var taxaVendaIndireta = $("#taxaVendaIndireta-"+cod).val();
+            
+            taxas.push(
+                {
+                    idMoeda:idMoeda, 
+                    taxaTransferencia:taxaTransferencia, 
+                    valorMaxSaqueSemConfirmacao:valorMaxSaqueSemConfirmacao, 
+                    volumeMinimoNegociacao:volumeMinimoNegociacao, 
+                    taxaRede:taxaRede,
+                    qtdCarteiras:qtdCarteiras,
+                    minConfirmacoes: minConfirmacoes,
+                    maxConfirmacoes: maxConfirmacoes,
+                    taxaCompraDireta:taxaCompraDireta,
+                    taxaCompraIndireta:taxaCompraIndireta,
+                    taxaVendaDireta:taxaVendaDireta,
+                    taxaVendaIndireta:taxaVendaIndireta
+                }
+            );
+            
+        });
+        
+        $("#btn-update").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CRIPTOCURRENCIES_FEES_UPDATE ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                taxas: taxas
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                
+                $("#btn-update").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+</script>
+
+    </section>
+      </div>
+    </section>
+  </div>
+<?php Utils\Layout::append("inspina/footer_esp", $_data)?>
+</body>
+</html>

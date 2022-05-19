@@ -1,0 +1,671 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#PERFIL
+#
+#
+#--VIEW
+#Modules\Perfil\views\perfil.phtml
+##--
+#Textos da View
+
+titulo=Meus Dados
+subTitulo=Meu Perfil
+minhasInformacoes=Status e minhas informações.
+abaDadosPessoais=Dados Pessoais
+abaDocumentos=Documentos
+abaSeguranca=Segurança
+abaLicenca=Licença
+abaAlertas=Alertas
+abaPessoaJuridica=Pessoa Jurídica
+abaSenha=Senha
+abaApi=API
+dadosPessoais=Dados Pessoais
+clienteDesde=Cliente desde
+conta=Conta {var}
+documentos=Documentos
+seguranca=Segurança
+fraseSeguranca=Frase de segurança:
+fraseSeguranca1=Frase de Segurança
+perfilEsta=O seu perfil está
+completo=completo
+selfie=Selfie
+concluido=CONCLUÍDO
+pendente=PENDENTE
+emAnaliseG=EM ANÁLISE
+autenticacaoGoogleAut=Segurança 2FA
+pinSeguranca=PIN de Segurança
+compResidencia=Comprovante de Residência
+compResidencia1=Comp. Residência
+preencherTodosDadosPelfil=Preencher todos os dados do perfil
+atualizarImagemPerfil=Atualizar imagem do perfil
+preVisualizacao=Pré-visualização
+carregueUmaImagem=Carregue uma imagem clicando no botão abaixo:
+informacoesPreenchimentoPerfil=INFORMAÇÕES PARA PREENCHIMENTO DO PERFIL
+todosOsCamposDevem=Todos os campos devem ser preenchidos conforme os documentos que serão/foram enviados.
+casoNaoTenhaAlgum=Caso não tenha em algum documento o nome do pai/mãe, inserir "não consta".
+parabens=Parabéns.
+documentosLiberado=Acesse a aba "Documentos" e faça o envios dos seus documentos.
+agoraQueVoce2=Após preencher todos os campos obrigatórios, envie os documentos necessários para a validação da conta.
+dadosPessoais2=Dados Pessoais
+digiteNomeCompleto=Digite seu nome completo.
+endereco=Endereço
+segurancaSuaConta=Segurança da sua conta
+entreContatoSac=Entre em contato com o SAC caso precise resetar o PIN.
+informacoesSeguranca=INFORMAÇÕES DE SEGURANÇA
+pinText=PIN:
+alertaAjudaSaber=O alerta ajuda o cliente a saber as movimentações que estão sendo realizadas sua conta.
+informOrdemCompraVenda=Informa o cliente se sua ordem de compra/venda foi executada.
+oClienteUsarTodos=O cliente pode usar todos os serviços de comunicação ou somente um.
+oPinDeSegurancaCodigo=O PIN de segurança é um código numérico de 4 dígitos, será solicitado para aumentar a segurança de sua conta durante as transações.
+fraseDeSegurancaPin=Frase de Segurança:
+aFraseDeSegurancaFormaReduzir=A Frase de segurança é uma forma de reduzir o risco de phishing - uma técnica criminosa comum onde o fraudador cria um site idêntico ao da Cointrade para capturar os dados do usuário.
+autenticacaoDoisPasso2=Autenticação em Dois Passos:
+aAutenticaoEmDoisPassos=A autenticação em Dois Passos é uma etapa adicional que aumenta muito a segurança da sua conta. Você poderá receber o TOKEN por e-mail ou SMS, e também poderá utilizar o Google Authenticator para validar sua autenticação.
+licencaDeUsoSoftware=Licença de Uso de Software
+documentos1=Documentos
+anexeUmaSelfie=Anexe uma selfie segurando seu documento
+infEnvioArquivos=INFORMAÇÕES
+arquivosSuportados=Arquivos suportados: JPEG, JPG, PNG, BMP, DOC, DOCX, PDF e XPS.
+versoOpcional=Documento Verso só é obrigatório quando a foto não está no mesmo verso que o CPF e outros dados. Ex.: RG.
+preencherMeusDados=Preencha todos os dados obrigatórios na aba Meus Dados para fazer o envio dos arquivos.
+tamanhoMaximo3mb=Tamanho máximo de 3MB.
+oNomeDoArquivoPonto=O nome do arquivo não pode ter ponto, espaços ou símbolos.
+compResidenciaTresMeses=Envie comprovante de residência de no máximo três meses atrás.
+compResidenciaValido=Comprovantes de residência aceitos: Conta de água, conta de energia, conta de telefone e celular, conta de internet e serviços de dados.
+documentoSelfie=O documento enviado precisa ser o mesmo da selfie.
+envieArquivosFacilLeiutura=Envie arquivos de fácil leitura e identificação.
+envieDocDentroRealidade=Envie documentos dentro da validade.
+exemploComprovante=Exemplo: (comprovante_1050.jpg, comprovante_98.pdf).
+alterarRecebimentoAlertas=Notificações
+receberAlertasMovimentacoes=Receber alerta de movimentações da conta
+formEnvioDocPj=Pessoa jurídica
+informacoes=INFORMAÇÕES
+campoEspContratoSocial=Campo específico para contrato social.
+contratoSocialDados=No contrato social, o representante da empresa deve ter os mesmos dados que o titular da conta na plataforma.
+criarVinculoBancario=Criar vínculo bancário entre pessoa jurídica e pessoa física.
+arquivosAceitos=ARQUIVOS ACEITOS
+
+informacoesSegurancaAtualizacao=Informações de Atualização de Segurança
+aposAtualizar=Após atualizar qualquer dado de segurança, seu SAQUE será autorizado após o tempo de verificação.
+tempoFraseSeguranca=Frase de Segurança - Tempo de verificação de {var}
+tempoPin=PIN - Tempo de verificação de {var}
+tempoSenha=Senha - Tempo de verificação de {var}
+tempo2fa=2FA - Tempo de verificação de {var}
+
+tamanhoMax=Tamanho máximo de 3MB.
+nomeArquivoNaoPonto=O nome do arquivo não pode ter ponto, Ex.: nome.sobrenome.
+arquivosFacilLeitura=Envie arquivos de fácil leitura e identificação.
+documentosValidade=Envie documentos dentro da validade.
+formAlteracaoSenha=Segurança
+criacaoSenha=CRIAÇÃO DE SENHA
+naoCrieSequencia=Não crie senha baseada em sequências (123, abc e etc.).
+naoUseDadosPessoais=Não use dados pessoais de fácil acesso (Data de nascimento, placa de carro, nomes e etc.).
+mistureCaracteresEspeciais=Misture letras, números e caracteres especiais (#$%ˆ!*&-@%?\).
+useLetrasMaiusculas=Use letras maiúscula e minúsculas, (M, m, N, n A, a, B, b).
+senhaDeveConter=A senha deve conter ao menos:
+digitoSenha=8 dígitos
+1letraMinuscula=Ao menos 1 letra minúscula
+1letraMaiuscula=1 letra maiúscula
+1numero=1 número
+1caractereEspecial=1 caractere especial (#$%ˆ!*&-@%?\)
+apiKeys=API Keys
+chaveAcessoPagamentos=API KEY
+voceAindaNaoCriouApi=Você ainda não criou uma API Key
+cuidadosComSuaApi=CUIDADOS COM SUA CREDENCIAL
+essaChaveSecreta=Essa credencial é secreta e intransferível.
+naoPodeSerCompartilhada=Não pode ser compartilhada.
+naoPodeUsadaOutrosSistemas=Não pode ser usada em outros sistemas.
+essaKeyApiNewCash=Essa key é usada na API de pagamentos da Cointrade.
+necessarioPreencherCampos="É necessário preencher os seguintes campos: "
+voceAindaNaoCriou="Você ainda não criou uma API Key"
+gerarApiKey=Gerar API Key
+paraGerarUmaApiKey=Para gerar uma nova API KEY é necessário informar o seu PIN cadastrado.
+visualizarApi=Visualizar API Key
+paraVisualizaInformarPin=Para visualizar a API Key é necessário informar o seu PIN cadastrado.
+cancelarApiKey=Cancelar API Key
+cancelarPaiPinCadastrado=Para cancelar a API Key é necessário informar o seu PIN cadastrado.
+desativarKeyBtn=Desativar Key
+confirmarAlteracao=Confirmar Alteração
+informarToker=Informe o token:
+verificadaPj=VERIFICADA PJ
+verificada=VERIFICADA
+basica=BÁSICA
+frente=Frente:
+verso=Verso:
+tipoDocumento=Tipo de documento
+pendente1=Pendente
+tipodocumentoenvio=Documento
+dataenvio=Data Envio
+dataatualizacao=Data Análise
+documentostatus=Status
+acao=Ação
+documentoaprovado=Aprovado
+documentoanalise=Em Análise
+documentorejeitado=Reprovado
+residencia=Residência
+empresa=Empresa
+empresaLateral=EMPRESA
+pendente1=Pendete
+alterarSenha=Alterar Senha
+pinFrase=PIN - Frase de Segurança - 2FA
+
+#Labels
+carregarImagemCortar=Carregar Imagem para Cortar
+nome=Nome
+email=E-mail
+sexo=Sexo
+mae=Mãe
+pai=Pai
+codPais=Cod. País
+celular=Celular
+nascimento=Nascimento
+rg=RG
+cnpj=CNPJ
+documentofrente=Documento Frente
+documentoverso=Documento Verso
+endereco2=Endereço
+numero=Número
+complemento=Complemento
+codigoPostal=Código Postal
+bairro=Bairro
+pais=País
+estado=Estado
+cidade=Cidade
+pin=PIN
+confirmePin=Confirme o PIN
+fraseSeguranca2=Frase de segurança
+autenticacao2passos=Autenticação em Dois Passos - 2FA
+emailOp=E-mail
+smsOp=SMS
+googleOp=2FA Authenticator (recomendado)
+chaveSecreta=Chave secreta:
+digiteCodigoAcimaGoogle=Digite o código acima no seu app 2FA Authenticator ou leia o QRCode utilizando seu aparelho de celular. Após isso salve a chave em um local seguro. Em caso de perda ou troca do aparelho smartphone essa chave será necessária para reabilitar a geração de tokens no seu celular.
+informeCodigoGerado=Informe o código gerado no seu aplicativo Google Authenticator para ativar a autenticação.
+anexeUmaSelfie=Anexe uma selfie segurando seu documento
+baixarDocumento=Baixar documento anexo
+verificada=Verificada
+emAnalise=Em análise
+anexeSeuDocumentoFotoCpf=Anexe seu documento que contenha foto e CPF
+frente=Frente
+verso=Verso
+anexeCompResidenciaAtual=Anexe seu comprovante de residência mais atual
+anexeDocPj=Anexe um documento complementar ou PJ
+senhaAtual=Senha Atual
+novaSenha=Nova Senha
+confirmarSenha=Confirmar Senha
+naoPasseSuaSenha=Não passe sua senha para outras pessoas, sua senha é intransferível.
+aconselhamosUsoGoogle=Aconselhamos o uso do Google Authenticator como TOKEN.
+informeSeuPin=Informe o seu PIN:
+paisNaturalidade=País de Naturalidade
+
+compResidenciaTitulo=Comprovante de Residência
+documentoTitulo=Documento
+selfieTitulo=Selfie
+
+senhaLogoff=APÓS QUALQUER ATUALIZAÇÃO DE SEGURANÇA, O CLIENTE PRECISARÁ FAZER LOGIN NOVAMENTE.
+
+documento=Documento
+rgDocumento=Registro
+
+
+
+#Buttons
+alterarBtn=Alterar
+cancelEdicaoBtn=Cancelar Edição
+salvarFotoPerfilBtn=Salvar Foto do Perfil
+salvarAlteracaoPerfilBtn=Salvar Alterações do Perfil
+salvarConfiguracoesSegurancaBtn=Salvar Configurações de Segurança
+selecionarBtn=Selecionar
+removerBtn=Remover
+removerDocumentoBtn=Remover Documento
+enviarSelfieBtn=Enviar Selfie
+enviarDocComFoto=Enviar Documento com Foto
+enviarCompResidencia=Enviar Comprovante de Residência
+alterarConfigBtn=Alterar configurações
+enviarDocumento=Enviar Documento
+altararSenhaBtn=Alterar Senha
+mostrarKeyBtn=Mostrar Key
+gerarNovaApiBtn=Gerar nova API Key
+desativarChaveBtn=Desativar Chave
+cancelarBtn=Cancelar
+gerarChaveBtn=Gerar Chave
+validarBtn=Validar
+reenviarBtn=Reenviar
+enviarBtn=Enviar
+confirmarBtn=Confirmar
+
+#inputs
+
+
+#Placeholder
+
+
+
+#Links
+
+
+
+
+#Options
+masculino=Masculino
+feminino=Feminino
+selecionePais=Selecione um país
+selecionePaisNaturalidade=Selecione a naturalidade
+selecioneEstado=Selecione um estado
+selecioneCidade=Selecione uma cidade
+emailOp=E-mail
+smsOp=SMS
+naoReceberOp=Não Receber 
+
+
+
+
+#Tabela
+
+
+#Sucesso
+
+
+
+
+##--------------------
+
+#--CONTROLLER
+#Modules\Perfil\Controllers\MeusDados.class.php
+##--
+#Textos da View
+
+
+
+                                                                
+
+#Labels
+investimento=Investimento
+duracaoLicenca=Duração da Licença
+tempoLiberacao=Tempo de liberação de depósitos e saques
+comissao=Comissão
+aSuaSolicitacaoDeUpgrade=A sua solicitação de upgrade de licença de software está em análise. Em breve retornaremos uma posição.
+
+#Buttons
+solicitarLicenca=Solicitar Alteração de Licença
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+
+
+#Tabela
+nenhumaLicenca=Nenhuma licença cadastrada.
+
+
+#Sucesso
+senhaSucesso=Senha alterada com sucesso!
+configAlertaSucesso=Configurações de alerta atualizados com sucesso!
+chaveSucesso=Chave gerada com sucesso!
+parabensVoceCliente=PARABÉNS! VOCÊ É UM CLIENTE Cointrade.
+
+tipoDocumentoTitulo=Tipo
+tipoDocumento1=Documento de Identidade
+tipoDocumento2=CLT
+tipoDocumento3=Carteira Profissional
+tipoDocumento4=Passaporte
+tipoDocumento5=Identificação Funcional
+tipoDocumento6=CPF
+tipoDocumento7=Carteira de Motorista
+tipoDocumento8=CNPJ
+tipoDocumento9=Número de Segurança Social(SSN)
+desejaDepositarValoresReal=Deseja sacar ou depositar valores em Real Brasileiro (BRL)?
+
+
+#Erro
+necessarioGoogle=É necessário informar o Token Google Authenticator.
+googleInvalido=Token Google Authenticator inválido.
+necessarioPreencherTodosCampos=É necessário preencher todos os campos do cadastro.
+necessarioInformarDocumentos=É necessário informar os documentos.
+senhaMuitoFraca=A senha é muito fraca. Por favor informe uma senha mais forte.
+precisCadastrarPin=Você precisa cadastrar um PIN para efetuar essa operação.
+informePin=Informe o PIN cadastrado para efetuar a operação.
+pinInvalido=PIN Inválido.
+configRecebimentoInvalida=Configuração de recebimento de alerta de movimentação inválida.
+voceNaoSelecionouImagem=Você não selecionou uma imagem.
+vocePrecisaRegistrarCliente=Vocë precisa registrar-se como cliente para efetuar essa operação.
+vocePrecisaCadastrarPinAcesseNovamente=Você precisa cadastrar um PIN para efetuar essa operação. Acesso o seu perfil e tente novamente.
+voceCadastrarPin=É necessário informar o PIN.
+oPinInformadoNãoConfere=O PIN informado náo confere com o PIN cadastrado.
+clienteNaoLocalizado=Cliente não localizado.
+voceNaoCadastrouApi=Você ainda não cadastrou uma API Key.
+foiEnviadoEmail=Foi enviado um token de confirmação para o seu e-mail
+porFavorInsiraToken=. Por favor, insira o token abaixo para efetuar a transação.
+foiEnviadoSMS=Foi enviado um token de confirmação para o seu celular
+useGoogle=Por favor, use seu Google Authenticator para inserir o token abaixo.
+
+
+
+##--------------------
+
+perfil1=Aparelhos
+perfil2=Marca/Fabricante
+perfil3=Modelo
+perfil4=Número do Dispositivo
+perfil5=Número Serial
+perfil6=Sistema Operacional
+perfil7=Versão
+perfil8=Status
+perfil9=Data de Cadastro
+perfil10=Ativar/Desativar
+
+perfil11=Informações sobre o cliente.
+perfil12=PIN, frase de segurança e senha.
+perfil13=Aumente a segurança da sua conta.
+perfil14=Opções para receber as informações da sua conta.
+perfil15=Associar sua conta a um CNPJ.
+perfil16=Gerar chave para API.
+perfil17=Ativar ou desativar smartphone.
+perfil18=Notificações
+perfil19=Notificação das operações.
+perfil20=API - Acesso
+perfil21=Histórico de Acesso
+perfil22=Histórico dos últimos acessos.
+perfil23=Notificação
+perfil24=Meus Limites
+perfil25=Taxas e limites operacionais.
+perfil26=Afiliados
+perfil27=Programa de afiliados e link de referência.
+perfil28=Pesquisar
+perfil29=Valor Recebido
+perfil30=Dia
+perfil31=Sem
+perfil32=Mês
+perfil33=Todos
+perfil34=Buscar
+perfil35=Descrição de Recompensa
+perfil36=Valor
+perfil37=Bônus recebido por indicação
+perfil38=Comissão recebida de indicação
+perfil39=No momento em que sua referência ter a conta verificada, você ganhará R$ 1,00.
+perfil40=Você ganha comissão das taxas da exchange pelos depósitos e  saques feitos por sua referência.
+perfil41=Taxas e Limites Operacionais
+perfil42=Programa De Afiliados
+perfil43=Compartilhe seu link referência e ganhe muitos benefícios.
+perfil44=Incentive sua referência a validar a conta.
+perfil45=Link Referência
+perfil46=Valide sua conta para ter maiores limites.
+perfil47=Conta Básica
+perfil48=Conta Verificada
+perfil49=Os limites de Saque e Depósito são por 24 horas.
+perfil50=Meus Bancos
+perfil51=Minhas contas bancárias.
+perfil52=Taxa Ordem de Compra
+perfil53=Taxa Ordem de Venda
+perfil54=Registrar Meus Dados
+perfil55=Senha / PIN / TOKEN
+perfil56=Cadastrar Contas Bancárias
+perfil57=Cadastre o CNPJ da sua empresa para fazer saques e depósitos com sua conta jurídica.
+perfil58=Após cadastrar o CNPJ, cadastre sua conta jurídica na aba Meus Bancos.
+perfil59=Configurar Notificações
+perfil60=Solicitar Credenciais
+perfil61=Solicite suas credenciais de API clicando no botão abaixo. As credenciais serão enviadas em seu e-mail.
+perfil62=Insira seu token:
+perfil63=Solicitar Credenciais
+perfil64=Solicitar Credenciais
+perfil65=Conferir Meus Acessos
+perfil66=Configurar Dispositivos
+perfil67=Parear Dispositivo
+perfil68=Leia o QRCODE com seu dispositivo para permitir o acesso ao aplicativo.
+perfil69=Limites & Taxas
+perfil70=Só é permitido gerar uma nova credencial após 24 horas, a antiga credencial é desativada.
+perfil71=Para gerar sua credencial, você deve ter o 2FA Authenticator habilitado em sua conta.
+perfil72=
+perfil73=
+perfil74=
+perfil75=Preferências
+perfil76=Notificações
+perfil77=Receber novidades, notícias e cotações.
+
+
+
+
+operacao1=Saque Real
+operacao2=Depósito Real
+operacao3=Saque Criptomoeda
+operacao4=Depósito Criptomoeda
+operacao5=Acesso
+operacao6=Ordem Executada
+operacao7=Autorizar Ranking
+
+comunicacao1=Desativar
+comunicacao2=E-mail
+comunicacao3=SMS
+comunicacao4=Whatsapp
+comunicacao5=Telegram
+
+notaFiscal=Nota Fiscal
+notafiscal1=Data Autorização
+notafiscal3=Valor Total
+notafiscal4=Serviço
+notafiscal5=Código
+notafiscal6=Data
+notafiscal7=Número
+notafiscal8=Status
+notafiscal9=Serviço
+notafiscal10=Dia
+notafiscal11=Sem
+notafiscal12=Mês
+notafiscal13=Todos
+notafiscal14=Buscar
+notafiscal15=Depósito
+notafiscal16=Saque
+notafiscal17=Boleto
+notafiscal18=Valor
+notafiscal19=Serviços
+notafiscal20=Remessa de Valores
+notafiscal21=Todos
+notafiscal22=Arquivo
+notafiscal23=Autorizada
+notafiscal24=Cancelada
+notafiscal25=Negada
+notafiscal26=Nenhuma nota fiscal para os filtros informados.
+notafiscal27=Ativar Nota Fiscal para os serviços abaixo:
+notafiscal28=Operação
+notafiscal29=Ação
+notafiscal30=Depósito
+notafiscal31=Saque
+notafiscal32=Após a operação ser ativada, seu CPF será inserido na nota fiscal.
+notafiscal33=Configuração de nota fiscal.
+notafiscal34=INFORMAÇÕES
+notafiscal35=Nota Fiscal operation updated successfully.
+
+
+navegadores=Histórico De Acessos
+navegador1=Navegador
+navegador2=Localização
+navegador3=Sistema Operacional
+navegador4=IP Último Acesso
+navegador5=Data
+navegador6=Revogar
+
+meusDados=Meus Dados
+enviarDocumentos=Enviar documentos e validar a conta
+
+ativarMobile=Ativar
+desativarMobile=Desativar
+respostaFiltroMobile=Nenhum dispositivo cadastrado
+statusMobile=Status alterado com sucesso!
+
+validacao1=Por favor, preencher o campo "Nome".
+validacao2=Por favor, preencher o campo "Documento".
+validacao3=Por favor, preencher o campo "Nome mãe".
+validacao4=Por favor, preencher o campo "Nascimento".
+validacao5=Por favor, preencher o campo "Naturalidade".
+validacao6=Por favor, preencher o campo "RG".
+validacao7=Por favor, preencher o campo "Endereço".
+validacao8=Por favor, preencher o campo "CEP".
+validacao9=Por favor, preencher o campo "País".
+validacao10=Por favor, preencher o campo "Sexo".
+
+
+dadosSalvoSucesso=Dados salvos com sucesso.
+arquivoEnviadoSucesso=Arquivo enviado com sucesso.
+contaNaoVerificada=Conta não verificada. Envie seus documentos.
+desconhecido=Desconhecido
+notificacaoSucesso=Notificação alterada com sucesso.
+
+
+limite1=Depósito Reais
+limite2=Saque Reais
+limite3=Transferência Reais
+limite4=Depósito Criptomoeda
+limite5=Saque Criptomoeda
+limite6=Programa Afiliados
+limite7=Comissão Afiliados
+limite8=Sem limite
+limite9=R$ 0,00
+limite10=0%
+limite11=R$ 100.000,00
+limite12=R$ 50.000,00
+limite13=0
+limite14=5,00%
+limite15=Minha Conta
+limite17=Logo
+limite18=Sigla
+limite19=Nome
+limite20=Taxa Transferência
+limite21=Confirmação da Rede
+limite22=Pesquisar
+limite23=Criptomoedas, Real, Taxas e Rede
+limite24=Real - Taxas
+limite25=Criptomoedas - Taxas e Rede
+limite26=Descrição
+limite27=Tipo
+limite28=Valor
+limite29=Compra Ativa
+limite30=Venda Ativa
+limite31=Compra Passiva
+limite32=Venda Passiva
+limite33=R$ 100.000,00
+
+taxaDeposito=Comissão de depósito em TED ou DOC
+estornoDeposito=Estorno bancário de transferências de terceiros
+prazoMaximoDeposito=Tempo de processamento de depósito TED ou DOC
+prazoMedioDeposito=Tempo médio de processamento de depósito TED ou DOC
+
+
+percentualDepositoZeroAteDoisMil=Comissão de depósito em espécie até R$2.000,00
+percentualDepositoDoisAteCincoMil=Comissão de depósito em espécie de R$2.000,00 até R$4.999,99
+percentualDepositoCincoAteDezMil=Comissão de depósito em espécie de R$5.000,00 até R$9.999,99
+percentualDepositoDezAteCinquentaMil=Comissão de depósito em espécie de R$10.000,00 até R$49.999,99
+percentualDepositoAcimaCinquentaMil=Comissão de depósito em espécie acima de R$50.000,00
+prazoMaximoDepositoEsp=Tempo de processamento de depósito em espécie
+prazoMedioDepositoEsp=Tempo médio de processamento de depósito em espécie
+
+percentualSaque=Comissão de saque em Reais
+tarifaTed=TED - Transferências para outros bancos 
+tarifaMesmoBanco=Transferências entre bancos 
+valorMinimoSaque=Valor mínimo para saque em Reais
+prazoMaximoSaque=Tempo de processamento para saque em Reais
+prazoMedioSaque=Tempo médio dos ultimos processamentos para saque em Reais 
+           
+percentualCompraAtiva=Compra ativa
+percentualCompraPassiva=Compra passiva
+percentualVendaAtiva=Venda ativa
+percentualVendaPassiva=Venda passiva
+
+
+comissaoTransferenciaInternaReais=Comissão de transferência em Reais entre clientes   
+comissaoTransferenciaReaisMinima=Valor mínimo para transferência em Reais
+
+
+comissaoBoleto=Comissão para pagamento de boletos
+prazoDiasBoleto=Prazo para pagamento do boleto
+valorMinimoBoleto=Valor mínimo aceito por boleto
+valorMaximoBoleto=Valor máximo aceito por boleto
+
+
+comissaoRemessa=Comissão para envio da Remessas
+prazoDiasRemessaPrazo para envio da Remessa
+valorMinimoRemessa=Valor mínimo aceito por Remessa
+valorMaximoRemessa=Valor máximo aceito por Remessa
+
+
+prazoMaximoAtendimento=Tempo esperado para suporte
+prazoMaximoValidaConta=Tempo médio para análise e validação de documentos
+
+
+cartaoMensalidade=Mensalidade
+prazoPAC=Prazo para entrega
+taxaRecarga=Taxa de recarga
+tempoRecarga=Prazo de recarga
+valorAquisicao=Valor de aquisição
+
+depositoTaxa=Depósito
+saqueTaxa=Saque
+transTaxa=Transferência
+depositoCripto=Depósito Criptomoeda
+compraVendaTaxa=Compra & Venda
+depositoCriptoLabel= Taxa depósito criptomoeda
+
+insiraGoogleAuth=Insira seu atual token do Google Authenticator
+insiraEmailEnviado=Um token foi enviado para o seu e-mail, insira o token abaixo - 
+reenviarToken=Reenviar Token
+
+
+
+
+#--VIEW
+#Modules\contas\views\contas_bancarias.phtml
+##--
+#Textos da View
+cadastreApenas=Cadastre apenas contas bancárias do titular da conta Cointrade.
+instituicaoBancariaC=Instituição Bancária
+seleInstiBancariaC=Selecione uma instituição bancária
+                     
+
+#Labels
+tipoContaC=Tipo de conta
+agenciaC=Agência
+agenciaDigitoC=Dígito
+contaC=Conta
+contaDigitoC=Dígito
+
+
+#Buttons
+cancelarC=Cancelar
+salvarContaC=Salvar Conta
+
+#option
+contaCorrenteC=Conta Corrente
+
+
+#Tabela
+codBancoC=Cod Banco
+bancoC=Banco
+agenciaDigC=Agência - Dig.
+contaDigC=Conta - Dig.
+tipoC=Tipo
+statusA=Ativo
+ativarC=Ativar/Desativar
+
+chaveAcessoCliente=ClienteID
+
+nomeTitular=Nome do Titular da Conta
+documentoCpfConta=Documento CPF
+nomeConta=Nome do Titular
+documentoCpf=Documento CPF
+
+cadastrePin=Cadastre seu PIN e sua frase de segurança.
+
+verificarContaInicio=Verificar minha conta
+verificarContaPendente=Verificação pendente
+verificarContaReprovado=Não foi possível validar sua conta.
+verificarContaAprovada=Conta verificada

@@ -1,0 +1,55 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#INDEX CARTEIRAS
+#
+#
+#--VIEW
+#Modules\notificacoes\views\notificacoes.phtml
+##--
+#Textos da View
+titulo=Notificações
+subTitulo=Mensagens Recebidas
+
+                                                                
+
+#Labels
+
+
+#Buttons
+selNaoLidas=Selecionar não lidas
+atualizar=Atualizar
+pesquisar=Pesquisar
+
+
+#inputs
+
+
+#Placeholder
+pesquisarMensagem=Pesquisar mensagem
+
+
+
+
+##--------------------
+
+
+#----CONTROLLER
+#Modules\notificacoes\Controllers\Notificacoes.class.php
+##--
+#Textos da View
+nenhumaMensagem=Nenhuma mensagem no momento.
+carregarMensagens=Carregar mais mensagens
+naoHaMensagens=Não há mais mensagens
+atendimento=Atendimento 
+                                                             
+
+#Erros
+informeEmailCpfCliente=Informe o email ou CPF do cliente.
+clienteNaoLocalizado=Cliente não localizado. Verifique o e-mail ou CPF informado e tente novamente.
+
+
+
+
+##--------------------

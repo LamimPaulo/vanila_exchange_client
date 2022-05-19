@@ -1,0 +1,27 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EMAIL CONTATO RECEBIDO
+#
+#
+#--VIEW
+#Textos da View
+assunto=Received Contact
+titulo=NewCash - Received Contact
+titulo2=Received Contact!
+ola=Hi
+confirmacaoContato=Contact Confirmation!
+recebemosContato=We received your contact. Thank you for submitting your message. Soon a consultant will contact you.
+abaixo=Below, the content of your message:
+nome=Name:
+email=E-mail:
+mensagem=Message:
+
+
+infAcesso=Access information:
+dataHora=Date/Time:
+ipAcesso=Access IP:
+newCashEndereco=Cointrade | 
+emailDoSistema=This is an email system. Please do not answer.
+casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.

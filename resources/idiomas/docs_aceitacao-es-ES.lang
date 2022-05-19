@@ -1,0 +1,24 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#ACEITE DE DOCS
+#
+#
+#--VIEW
+#ACEITE DE DOCS
+#
+#
+#--VIEW
+#Modules\acesso\views\aceite_docs.phtml
+##--
+#Textos da View
+titulo=Cointrade - Documentos Obrigatorios
+docsLegais=Documentos Legales
+paraSaberUtilizar=Para continuar a utilizar el sistema es necesario leer y aceptar los documentos a continuación:
+liEConcordo=He leído y estoy de acuerdo           
+mensagemImportante=Mensaje Importante:
+
+#Controller
+necessarioAceitarDocs=Es necesario aceptar los siguientes documentos: 
+e= e 

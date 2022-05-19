@@ -1,0 +1,117 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EXTRATO
+#
+#
+#--VIEW
+#Modules\trade\views\index_extrato.phtml
+##--
+#Textos da View
+titulo=Extrato
+subTitulo=Negociações
+
+
+
+                                                                
+
+#Labels
+dtInicial=Data Inicial
+dtFinal=Data Final
+movimentoDe=Movimento de
+registros=Registros
+todasMoedas=Todas as moedas
+
+
+#Buttons
+limpar=Limpar
+filtro=Filtro
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+todas=Todas
+todos=Todos
+compraO=Compra
+vendaO=Venda
+
+
+
+#Tabela
+data=Data
+status=Status
+moeda=Moeda
+movimento=Movimento
+hora=Hora
+cotacao=Cotação
+volumeTotal=Volume Total
+valorTotal=Valor Total
+volumeExecutado=Volume Executado
+valorExecutado=Valor Executado
+
+
+#Sucesso
+
+
+
+##--------------------
+
+#--CONTROLLER
+#Modules\trade\Controllers\Extrato.class.php
+##--
+#Textos da View
+
+
+
+                                                                
+
+#Labels
+
+
+
+#Buttons
+limpar=Limpar
+
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+compraC=Compra
+vendaC=Venda
+executadaC=Executada
+pendenteC=Pendente
+canceladaC=Cancelada
+
+
+
+
+#Tabela
+nenhumaOrdemExibida=Nenhuma ordem para ser exibida
+
+
+
+#Sucesso
+
+
+
+##--------------------
+

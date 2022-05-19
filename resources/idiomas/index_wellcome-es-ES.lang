@@ -1,0 +1,128 @@
+﻿# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#INDEX WELLCOME
+#
+#
+#--VIEW
+#Modules\principal\views\index_wellcome.phtml
+##--
+#Textos da View
+titulo= Principal
+subTitulo=
+clienteDesde=Cliente desde
+conta=Cuenta
+fraseSeguranca=Pregunta de seguridad:
+seuPerfilesta=Su Perfil está
+completo=completo
+selfie=Selfie
+documentos=Documentos
+concluido=TERMINADO
+emAnalise=EN ANÁLISIS
+pendente=PENDIENTE
+compResidencia=Comprobante de Residencia
+autenticacaoGoogle=Autentificación por Authy Authenticator (recomendado)
+pinSeguranca=PIN de Seguridad
+fraseSeguranca=Pregunta de Seguridad
+esconderMoedaSaldo0=Esconder monedas con saldo 0 (cero)
+ultimoDeposito=Últimos Depósitos / Retiros en Reais
+ordensPendentes=Órdenes Pendientes
+deposito=Depósito
+saque=Retiro
+copiarCarteira=Copiar Monedero
+favorita=Favorita
+pesquisar=Buscar
+comSaldo=Con Saldo
+todos=Todos   
+real=Real
+
+compraVenda=Compra / Venta         
+
+envieOsDocumentos=Envíe sus documentos y obtenga acceso a los menús Depósito y Retirada a Real.
+meuPerfil=Mi Perfil                                                   
+
+#Labels
+
+
+#Buttons
+carteira=Monedero {var}
+
+
+#inputs
+
+
+#Placeholder
+
+
+#Links
+gerarNovaCarteira=Generar nuevo monedero
+
+
+#Options
+
+
+#Tabela
+moeda=Moneda
+volume=Disponible
+cofre=Caja Fuerte
+ordem=Orden
+valorAprox=Valor Total Aprox.
+acao=Acción
+tipo=Tipo
+dataHora=Fecha / Hora
+valor=Valor
+status=Status
+nenhumSaqueDeposito=Ningún retiro o depósito!
+movimento=Movimiento
+cotacao=Cotización
+total=Total
+##--------------------
+
+
+#----CONTROLLER
+#Modules\principal\Controllers\Dashboard.class.php
+##--
+#Textos da View
+
+                                                                
+
+#Labels
+
+
+#Buttons
+
+
+
+#inputs
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+
+
+#Tabela
+nenhumaOrdemPendente=Ninguna orden pendiente!
+compraC=Compra
+vendaC=Venta
+depositarC=Depositar
+sacarC=Retirar
+transferirC=Transferir
+comprarC=Comprar
+livroOfertasC=Libro de Ofertas
+compVendaDiretaC=Comp. Venta Directa
+carteirasC=Monederos
+cofreC=Inversión
+ranking=Ranking Mensual
+
+
+#Erros
+vocePrecisaLogado=Necesita estar logeado para ejecutar la operación
+
+##--------------------

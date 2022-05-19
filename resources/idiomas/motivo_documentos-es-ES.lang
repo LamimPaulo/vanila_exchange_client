@@ -1,0 +1,38 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+
+
+#MOTIVO REJEIÇAO DE DOCUMENTOS
+
+#MOTIVOS
+fotoDoc=Foto do Documento
+naoArqValido=No es un archivo válido.
+naoPossuiFotoDoc=No possee foto en el documento.
+docIlegivelDifLeitura=Documento ilegible o de difícil lectura.
+docsAceitos=Documentos aceptados: Licencia para Conducir, Cédula de Identidad, Pasaporte, Registro Militar, Registro Nacional de Extranjeros.
+docNaoCompativelDados=Documento no compatible con los datos ingresados.
+necessarioPreencherTodos=Es necesario rellenar todos los campos.
+docVencido=Documento vencido.
+necessarioVersoDoc=Es necesario el reverso del documento.
+obrigatorioConterCpf=Obligatorio contar con el Documento Fiscal en el documento.
+docNaoMesmo=El documento de la selfie no es el mismo al documento enviado.
+fotoCompResidencia=Foto del comprobante de residencia.
+compResidenciaInvalido=Comprobante de residencia inválido.
+envieCompResidenciaTresMeses=Envie comprobante de residencia de no máximo tres meses atrás.
+docAceitosResidencia=Documentos aceptados: Facturas o cuentas de servicios públicos o privados de agua, gas, energía eléctrica o teléfono (fijo o móvil).
+impossivelAnalizar=Imposible analizar.
+selfieNaoEstaLegivel=Selfie no es legible.
+pessoaIdentificadaNaoCorresponde=Persona identificada en la foto no corresponde al documento enviado.
+oDocSelfieNaoMesmoEnviado=El documento de la selfie no es el mismo del documento enviado.
+outroDoc=Otro Documento
+
+
+
+##--------------------
+
+
+
+
+

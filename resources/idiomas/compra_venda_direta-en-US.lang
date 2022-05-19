@@ -1,0 +1,161 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#COMPRA VENDA DIRETA
+#
+#
+#--VIEW
+#Modules\trade\views\compra_venda_direta.phtml
+##--
+#Textos da View
+titulo=Direct Buy and Sell
+subTitulo=Negotiations
+comprar=Buy
+vender=Sell
+valorTotal=Total Value
+volumeComprar=Amount to Buy
+preco=Price
+receberaAprox=You will receive approximately
+mercadoEncerrado=This coin market has been terminated!
+mercadoSupenso=This coin market is temporarily suspended!
+compraVendaSuspensaConta=The purchase and sale of cryptocurrencies is temporarily suspended in your account!
+                                                                
+
+#Labels
+comprar=Buy
+vender=Sell
+valorTotal=Total Value
+volumeComprar=Amount to Buy
+preco=Price
+receberaAprox=You will receive approximately
+volumeVender=Amount to Sell
+precoMedio=Average Price
+totalVender=Total
+receberaAproxVender=You will receive approximately
+dtInicial=Initial date
+dtFinal=Final date
+movimentoDe=Type
+registros=Records
+filtro=Filter
+ultima_compra=Last Bid Price
+ultima_venda=Last Ask Price
+maior_preco=High Price
+menor_preco=Low Price
+volume24=Amount 24h
+
+
+#Buttons
+compraDiretaBtn=Direct Buy
+vendaDiretaBtn=Direct Sell
+
+
+#inputs
+
+
+#Placeholder
+
+
+
+#Links
+
+
+
+#Options
+compraO=Buy
+vendaO=Sell
+compraVendaO=Buy / Sell
+todos=All
+
+
+#Tabela
+movimento=Movement
+data=Date
+volumeOrdem=Amount Order
+cotacao=Price quote
+recebido=Received
+taxa=Taxa
+
+
+##--------------------
+
+
+#----CONTROLLER
+#Modules\principal\Controllers\CompraVendaDireta.class.php
+##--
+#Textos da View
+
+                                                                
+
+#Labels
+
+
+#Buttons
+
+
+
+#inputs
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+compraC=Buy
+vendaC=Sell
+
+
+#Tabela
+nenhumaOrdem=No order to be displayed
+
+
+#Sucesso
+ordemRegistradaSucessoC=Purchase order successfully registered!
+ordemRegistradaSucessoV=Sales order successfully registered!
+
+#Erros
+voceNaoTemPermissao=You are not allowed to enter orders
+
+
+##--------------------
+
+pesquisar=Search
+direta1=Type
+direta2=Date
+direta3=Amount Order
+direta4=Price
+direta5=Received
+direta6=Fill
+direta7=Day
+direta8=Week
+direta9=Month
+direta10=All
+direta11=Buy
+direta12=Sale
+direta13=All
+direta14=Price
+direta15=Amount/24Hs
+direta16=Total Purchase
+direta17=Total Sale
+direta18=Fee charged on transaction
+direta19=Fee estimate
+direta20=Purchase Orders
+direta21=Sales Orders
+direta22=Coin
+direta23=Balance
+direta24=Balances
+direta25=Sales Orders
+direta26=My Balance
+direta27=Trade History
+direta28=Market
+direta29=In Order
+direta30=Amount
+direta21=
+direta32=
+direta33=
+direta34=
+direta35=

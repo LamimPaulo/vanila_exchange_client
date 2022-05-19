@@ -1,0 +1,243 @@
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+
+
+    
+    <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Análise de Upgrade Licença</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            Cadastros
+                        </li>
+                        <li class="active">
+                            <strong>Análise de Upgrade de Licença</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>
+<br>
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <?php Utils\Layout::append("mensagem", $_data)?>
+                    
+                    
+                    <div class="panel-body">
+                        <br><br>
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <div class="form-group">
+                                    <label>Filtro</label>
+                                    <input type="text" class="form-control" id="filtro" name="filtro" onkeyup="listarSolicitacoes()" />
+                                </div>
+                            </div>
+                        </div>
+                        <br> 
+                        
+                        <br><br>
+                        
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                
+                                <ul class="list-group" id="listaSolicitacoes">
+                                    
+                                </ul>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        listarSolicitacoes();
+    });
+    
+    
+    function listarSolicitacoes() {
+        $("#listaSolicitacoes").html("<li class='list-group-item'><div class='row'><div class='col col-lg-12 text-center'><img src='<?php echo IMAGES?>loading.GIF' /></div></div></li>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_PERFIL_UPGRADE_LISTAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                filtro: $("#filtro").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaSolicitacoes").html(json.html);
+                    } else {
+                        $("#listaSolicitacoes").html("<li class='list-group-item'><div class='row'><div class='col col-lg-12 text-center'>"+json.mensagem+"</div></div></li>");
+                    }
+                } catch (e) {
+                    $("#listaSolicitacoes").html("<li class='list-group-item'><div class='row'><div class='col col-lg-12 text-center'>"+e+"</div></div></li>");
+                }
+            }
+        });
+    }
+    
+    function dialogAprovarSolicitacaoUpgrade(codigo) {
+        $("#dialogAprovarSolicitacaoUpgradeCodigo").val(codigo);
+        $("#dialogAprovarSolicitacaoUpgrade").modal();
+    }
+    
+    function dialogNegarSolicitacaoUpgrade(codigo) {
+        $("#dialogNegarSolicitacaoUpgradeCodigo").val(codigo);
+        $("#dialogNegarSolicitacaoUpgradeMotivo").val(-1);
+        $("#dialogNegarSolicitacaoUpgrade").modal();
+    }
+    
+    function aprovarSolicitacaoUpgrade() {
+        $("#dialogAprovarSolicitacaoUpgradeCancelar, #dialogAprovarSolicitacaoUpgradeAprovar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_PERFIL_UPGRADE_APROVAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#dialogAprovarSolicitacaoUpgradeCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarSolicitacoes();
+                        $("#dialogAprovarSolicitacaoUpgradeCancelar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogAprovarSolicitacaoUpgradeCancelar, #dialogAprovarSolicitacaoUpgradeAprovar").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    
+    function negarSolicitacaoUpgrade() {
+        $("#dialogNegarSolicitacaoUpgradeCancelar, #dialogNegarSolicitacaoUpgradeAprovar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_PERFIL_UPGRADE_NEGAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#dialogNegarSolicitacaoUpgradeCodigo").val(),
+                motivo: $("#dialogNegarSolicitacaoUpgradeMotivo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarSolicitacoes();
+                        $("#dialogNegarSolicitacaoUpgradeCancelar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogNegarSolicitacaoUpgradeCancelar, #dialogNegarSolicitacaoUpgradeAprovar").prop("disabled", false);
+            }
+        });
+    }
+    
+</script>
+
+    </section>
+      </div>
+    </section>
+  </div>
+<?php Utils\Layout::append("inspina/footer_esp", $_data)?>
+</body>
+</html>
+
+
+<div class="modal inmodal" id="dialogAprovarSolicitacaoUpgrade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <i class="fa fa-check modal-icon" style="color: green;"></i>
+                <h4 class="modal-title">Aprovar Upgrade de Licença</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="dialogAprovarSolicitacaoUpgradeCodigo" />
+                <p>
+                    Deseja realmente aprovar o upgrade de licença de uso de software do cliente?
+                </p>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal" id="dialogAprovarSolicitacaoUpgradeCancelar">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="aprovarSolicitacaoUpgrade();"  id="dialogAprovarSolicitacaoUpgradeAprovar">Aprovar Upgrade</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal inmodal" id="dialogNegarSolicitacaoUpgrade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <i class="fa fa-remove modal-icon" style="color: red;"></i>
+                <h4 class="modal-title">Negar Upgrade de Licença</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="dialogNegarSolicitacaoUpgradeCodigo" />
+                <p>
+                    Deseja realmente negar o upgrade de licença de uso de software do cliente?
+                </p>
+                
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <select id="dialogNegarSolicitacaoUpgradeMotivo" class="form-control">
+                                <option value="-1">Informe um motivo para a negação</option>
+                                <?php
+                                foreach (\Modules\cadastros\Controllers\AnalisePerfis::$motivos as $key=>$value) {
+                                    ?>
+                                    <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal" id="dialogNegarSolicitacaoUpgradeCancelar">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="negarSolicitacaoUpgrade();"  id="dialogNegarSolicitacaoUpgradeAprovar">Negar Upgrade</button>
+            </div>
+        </div>
+    </div>
+</div>

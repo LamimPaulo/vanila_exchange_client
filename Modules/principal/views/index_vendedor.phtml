@@ -1,0 +1,152 @@
+<?php
+$usuario = \Utils\Geral::getLogado();
+$cliente = \Utils\Geral::getCliente();
+$meses = isset($_data["meses"]) ? $_data["meses"] : Array();
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Dashboard
+            <small></small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        
+            
+        <?php if (\Utils\Geral::isUsuario()) { ?>
+        <div class="row">
+            <div class="col col-lg-11">
+                <div class="form-group">
+                    <label class="control-label">Selecione abaixo o período que deseja visualizar</label>
+                    <select id="filtroPeriodo" class="form-control">
+                        <?php
+                        foreach ($meses as $mes) {
+                            ?>
+                            <option value="<?php echo $mes ?>" ><?php echo $mes ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-lg-1 text-center">
+                <img src="<?php echo IMAGES ?>loading.gif" style="width: 30px; height: 30px;" id="loading"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel bg-green">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-money fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <h2><div class="huge" id="comissao-reais">R$ 0,00</div></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel bg-yellow">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-bitcoin fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <h2><div class="huge" id="comissao-btc">BTC 0,00000000</div></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+        <div class="row">
+            <br><br>
+            <div class="col col-lg-12" id="extrato">
+
+            </div>
+        </div>
+
+
+        <?php } ?>
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+
+    
+<script>
+
+    $(document).ready(function () {
+        $("#filtroPeriodo").change(function () {
+            carregarValorMensal();
+        });
+
+        $("#filtroPeriodo").trigger("change");
+
+
+    });
+
+
+    <?php if (\Utils\Geral::isUsuario()) { ?>
+    function carregarValorMensal() {
+        $("#loading").show();
+        $("#extrato").html("<div class='col col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DASHBOARD_REFERENCIAS_VENDEDOR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                mes: $("#filtroPeriodo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#comissao-reais").html("R$ " + json.reais);
+                        $("#comissao-btc").html("BTC " + json.btc);
+                        $("#extrato").html(json.html);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                        $("#extrato").html("");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                    $("#extrato").html("");
+                }
+                $("#loading").hide();
+            }
+        });
+
+    }
+    <?php }  ?>
+
+</script>

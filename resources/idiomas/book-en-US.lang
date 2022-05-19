@@ -1,0 +1,277 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#COMPRA VENDA DIRETA
+#
+#
+#--VIEW
+#Modules\trade\views\book.phtml
+##--
+#Textos da View
+titulo=Order Book
+subTitulo=Negotiations
+ordensDeCompra=Buy Orders
+ordensDeVenda=Sell Orders
+cancelarOrdem=Cancel Order
+certezaCancelarOrdem=Are you sure you want to cancel the order?
+mercadoEncerrado=This coin market has been terminated!
+mercadoSupenso=This coin market is temporarily suspended!
+compraVendaSuspensaConta=The purchase and sale of cryptocurrencies is temporarily suspended in your account!
+
+
+                                                                
+
+#Labels
+comprar=Buy
+vender=Sell
+totalVender=Total
+totalComprar=Total
+volumeComprar=Amount to Buy
+preco=Price
+receberaAprox=You will receive approximately
+volumeVender=Amount to Sell
+precoMedio=Average Price
+receberaAproxVender=You will receive approximately
+dtInicial=Initial date
+dtFinal=Final date
+movimentoDe=Order Type
+registros=Records
+ultima_compra=Last Bid Price
+ultima_venda=Last Ask Price
+maior_preco=High Price
+menor_preco=Low Price
+
+#Buttons
+compraRegistrarOrdemBtn=Register Buy Order
+vendaRegistrarOrdemBtn=Register Sell Order
+voltarBtn=Go Back
+cancelarBtn=Cancel Order
+
+
+#inputs
+
+
+#Placeholder
+
+
+
+#Links
+
+
+
+#Options
+compraO=Buy
+vendaO=Sell
+compraVendaO=Buy / Sell
+todos=All
+
+
+#Tabela
+data=Date
+volumeOrdem=Order Amount
+cotacaoCompra=Buy Price
+cotacaoVenda=Sell Price
+recebido=Received
+taxa=Fee
+valorTotalCtb=Total
+valorTotalVtb=Total
+volumeCompra=Amount
+volumeVenda=Amount
+minhasOrdens=My Orders
+todas=All
+moeda=Cryptocurrency
+movimento=Order Type
+dataTb=Date
+cotacaoTb=Price Quote
+volumeTb=Amount
+valorTotalTb=Total
+executado=Executed
+pendente=Pending
+statusTb=Status
+acaoTb=Action
+
+##--------------------
+
+
+#----CONTROLLER
+#Modules\principal\Controllers\Book.class.php
+##--
+#Textos da View
+
+                                                                
+
+#Labels
+
+
+#Buttons
+removerBtn=Delete
+
+
+#inputs
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+compraC=Buy
+vendaC=Sell
+executadaC=Executed
+pendenteC=Pending
+canceladaC=Canceled
+
+#Tabela
+nenhumaOrdem=No order to be displayed
+
+
+#Sucesso
+ordemRegistradaSucessoC=Purchase order successfully registered!
+ordemRegistradaSucessoV=Sales order successfully registered!
+
+#Erros
+voceNaoTemPermissao=You are not allowed to enter orders
+
+
+
+
+#Tabela Extrato
+dataExtrato=Date
+statusExtrato=Status
+moedaExtrato=Cryptocurrency
+movimentoExtrato=Type
+horaExtrato=Time
+cotacaoExtrato=Price quote
+volumeTotalExtrato=Total Amount 
+valorTotalExtrato=Total Value
+volumeExecutadoExtrato=Executed Amount
+valorExecutadoExtrato=Executed Value
+
+##--------------------
+
+pesquisar=Search
+direta1=Type
+direta2=Date
+direta3=Amount Order
+direta4=Price
+direta5=Received
+direta6=Fill
+direta7=Day
+direta8=Week
+direta9=Month
+direta10=All
+direta11=Buy
+direta12=Sale
+direta13=All
+direta14=Price
+direta15=Amount/24Hs
+direta16=Total Purchase
+direta17=Total Sale
+direta18=Fee charged on transaction
+direta19=Fee estimate
+direta20=Purchase Orders
+direta21=Sales Orders
+direta22=Coin
+direta23=Balance
+direta24=Balances
+direta25=Sales Orders
+direta26=My Balance
+direta27=Trade History
+direta28=Market
+direta29=In Order
+direta30=Amount
+direta31=Price
+direta32=Amount
+direta33=Total
+direta34=Limit 10
+direta35=Limit 30
+direta36=Buy / Sell
+direta37=My Orders
+direta38=My Negotiatios
+direta39=24 Hours
+direta40=Oscillation(24h)
+
+#NEGOCIACOES
+#
+#
+#--VIEW
+#Modules\trade\views\negociacoes.phtml
+##--
+#Textos da View
+titulo=Negotiations
+subTitulo=Negotiations
+ordensCompra=Buy Orders
+ordensVenda=Sell Orders
+negociacoesTb=Negotiations
+
+
+
+#Options
+todas=All
+todos=All
+compraO=Buy
+vendaO=Sell
+
+
+
+#Tabela
+inicioDia=Beginning of the day
+ultimoPreco=Last price
+menorValor24=Lowest price 24h
+maiorValor24=Higher price 24h
+variacao24=Variation 24h
+volume24=Amount 24h
+data=Date
+status=Status
+moeda=Cryptocurrency
+movimento=Movement
+hora=Time
+cotacao=Price Quote
+volumeTotal=Total Amount 
+valorTotal=Total Value
+volumeExecutado=Executed Amount 
+valorExecutado=Executed Value
+cotacaoC=Price Quote
+volumeC=Amount
+valorTotalC=Valor Total
+cotacaoV=Price Quote
+volumeV=Amount
+valorTotalV=Total Amount
+modo=Mode
+hora=Time
+cotacaoN=Price Quote
+volumeN=Amount
+valorTotalN=Total Amount
+otc=OTC/API
+
+
+nenhumaOrdem24Horas=No executed order in the last 24 hours
+
+paridade=Parity
+tipo=Type
+precoOrdem=Order Price
+precoMedio=Average Price
+total=Total
+historicoOrdemExecutada=Executed Orders History
+volume=Volume
+acao=Action
+registrarOrdemCompra=Register Purchase Order
+registrarOrdemVenda=Register Sales Order
+executarOperacao=Perform Operation
+comprar=Buy
+vender=Sell
+volume24h=Volume 24hs
+menor=Low
+maior=High
+volume=Volume
+disponivel=Available
+emOrdem=In order
+ultimo=Last
+oscilacao=Change
+mercados=Market
+historicoOrdem24h=Order History 24HS
+minhasOrdens=My Orders

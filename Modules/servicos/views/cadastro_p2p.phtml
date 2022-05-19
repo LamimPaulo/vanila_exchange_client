@@ -1,0 +1,458 @@
+<?php
+
+$usuarios = isset($_data["usuarios"]) ? $_data["usuarios"] : Array();
+$p2p = isset($_data["p2p"]) ? $_data["p2p"] : new Models\Modules\Cadastro\P2pVenda();
+
+$indicesCliente = isset($_data["indicesCliente"]) ? $_data["indicesCliente"] : Array();
+
+$indiceNomeCliente = isset($indicesCliente["nomes"]) ?  $indicesCliente["nomes"] : Array();
+$indiceEmailCliente = isset($indicesCliente["emails"]) ?  $indicesCliente["emails"] : Array();
+$indiceTelefoneCliente = isset($indicesCliente["telefones"]) ?  $indicesCliente["telefones"] : Array();
+
+$indicesDepositante = isset($_data["indicesDepositante"]) ? $_data["indicesDepositante"] : Array();
+
+$indiceNomeDepositante = isset($indicesDepositante["nomes"]) ?  $indicesDepositante["nomes"] : Array();
+$indiceEmailDepositante = isset($indicesDepositante["emails"]) ?  $indicesDepositante["emails"] : Array();
+$indiceTelefoneDepositante = isset($indicesDepositante["telefones"]) ?  $indicesDepositante["telefones"] : Array();
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+                <div class="col-lg-10">
+                    <h2>P2P Venda</h2>
+                    <ol class="breadcrumb" style="background-color: transparent !important;">
+                        <li>
+                            Serviços
+                        </li>
+                        <li class="active">
+                            <strong>P2P Venda</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <?php Utils\Layout::append("mensagem", $_data)?>
+                    
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        
+                        <!--
+                        <div class="row">
+                            <div class="col col-xs-12 text-center">
+                                <button type="button" class="btn btn-primary btn-lg" onclick="dialogRecargaCartao();">
+                                    <i class="fa fa-dollar"></i> Faça Agora mesmo uma Recarga
+                                </button>
+                                <br><br>
+                            </div>
+                        </div>
+                        -->
+                        <form id="form-p2p" action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_P2P_SALVAR ?>" method="post" enctype="multipart/form-data">
+                            <input type="hidden" id="id" name="id" value="<?php echo $p2p->id ?>" />
+                            <div class="row">
+
+                                <div class="col col-md-5">
+                                    <div class="form-group">
+                                        <label class="control-label">Nome do Cliente</label>
+                                        <input type="text" id="nomeCliente" name="nomeCliente" class="form-control" value="<?php echo $p2p->nomeCliente ?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Email do Cliente</label>
+                                        <input type="email" id="emailCliente" name="emailCliente" class="form-control" value="<?php echo $p2p->emailCliente ?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Telefone</label>
+                                        <input type="text" id="telefone" name="telefone" class="form-control" value="<?php echo $p2p->telefone ?>" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-md-5">
+                                    <div class="form-group">
+                                        <label class="control-label">Nome do Depositante</label>
+                                        <input type="text" id="nomeDepositante" name="nomeDepositante" class="form-control" value="<?php echo $p2p->nomeDepositante ?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Email do Depositante</label>
+                                        <input type="email" id="emailDepositante" name="emailDepositante" class="form-control" value="<?php echo $p2p->emailDepositante ?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Telefone Depositante</label>
+                                        <input type="text" id="telefoneDepositante" name="telefoneDepositante" class="form-control" value="<?php echo $p2p->telefoneDepositante?>" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Data da Compra</label>
+                                        <input type="text" id="dataCompra" name="dataCompra" class="form-control" value="<?php echo ($p2p->dataCompra != null ? $p2p->dataCompra->formatar(\Utils\Data::FORMATO_PT_BR) : "") ?>" />
+                                    </div>
+                                </div>
+
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Tipo de depósito</label>
+                                        <select class="form-control" id="tipoDeposito" name="tipoDeposito">
+                                            <option value="<?php echo Utils\Constantes::TIPO_DEPOSITO_DOC ?>" 
+                                                <?php echo (Utils\Constantes::TIPO_DEPOSITO_DOC == $p2p->tipoDeposito ? "selected = 'true'" : "")?> >DOC</option>
+                                            <option value="<?php echo Utils\Constantes::TIPO_DEPOSITO_TED ?>" 
+                                                    <?php echo (Utils\Constantes::TIPO_DEPOSITO_TED == $p2p->tipoDeposito ? "selected = 'true'" : "")?>>TED</option>
+                                            <option value="<?php echo Utils\Constantes::TIPO_DEPOSITO_TEF ?>" 
+                                                    <?php echo (Utils\Constantes::TIPO_DEPOSITO_TEF == $p2p->tipoDeposito ? "selected = 'true'" : "")?>>TEF</option>
+                                            <option value="<?php echo Utils\Constantes::TIPO_DEPOSITO_DINHEIRO ?>" 
+                                                    <?php echo (Utils\Constantes::TIPO_DEPOSITO_DINHEIRO == $p2p->tipoDeposito ? "selected = 'true'" : "")?>>Dinheiro</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Valor Depósito</label>
+                                        <input type="text" id="valorDeposito" name="valorDeposito" class="form-control" value="<?php echo number_format($p2p->valorDeposito, 2, ",", "") ?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Valor Compra</label>
+                                        <input type="text" id="valorCompra" name="valorCompra" class="form-control" value="<?php echo number_format($p2p->valorCompra, 2, ",", "") ?>" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label">Taxa (%)</label>
+                                        <input type="text" id="taxa" name="taxa" class="form-control" value="<?php echo number_format($p2p->taxa, 3, ",", "") ?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Valor do Resultado</label>
+                                        <input type="text" id="valorResultado" name="valorResultado" class="form-control" value="<?php echo number_format($p2p->valorResultado, 2, ",", "") ?>" />
+                                    </div>
+                                </div>
+
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Volume BTC</label>
+                                        <input type="text" id="volumeBtc" name="volumeBtc" class="form-control" value="<?php echo number_format($p2p->volumeBtc, 8, ",", "") ?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Comprovante de depósito</label>
+                                        <input type="file" id="comprovanteDeposito" name="comprovanteDeposito" class="form-control" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Valor Cotação</label>
+                                        <input type="text" id="valorCotacao" name="valorCotacao" class="form-control" value="<?php echo number_format($p2p->valorCotacao, 2, ",", "") ?>" />
+                                    </div>
+                                </div>
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Valor Cotação Média</label>
+                                        <input type="text" id="valorCotacaoMedia" name="valorCotacaoMedia" class="form-control" value="<?php echo number_format($p2p->valorCotacaoMedia, 2, ",", "") ?>" />
+                                    </div>
+                                </div>
+
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Carteira de Destino</label>
+                                        <input type="text" id="carteiraDestino" name="carteiraDestino" class="form-control" value="<?php echo $p2p->carteiraDestino ?>" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Data de Finalização</label>
+                                        <input type="text" id="dataFinalizacao" name="dataFinalizacao" class="form-control" value="<?php echo ($p2p->dataFinalizacao != null ? $p2p->dataFinalizacao->formatar(Utils\Data::FORMATO_PT_BR) : "") ?>" />
+                                    </div>
+                                </div>
+
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Status</label>
+                                        <select class="form-control" id="status" name="status">
+                                            <option value="<?php echo Utils\Constantes::P2P_STATUS_PROCESSANDO ?>" 
+                                                <?php echo (Utils\Constantes::P2P_STATUS_PROCESSANDO == $p2p->status ? "selected = 'true'" : "")?> >Processando</option>
+                                            <option value="<?php echo Utils\Constantes::P2P_STATUS_NAO_CONFIRMADO ?>" 
+                                                    <?php echo (Utils\Constantes::P2P_STATUS_NAO_CONFIRMADO == $p2p->status ? "selected = 'true'" : "")?>>Não Confirmado</option>
+                                            <option value="<?php echo Utils\Constantes::P2P_STATUS_CONFIRMADO ?>" 
+                                                    <?php echo (Utils\Constantes::P2P_STATUS_CONFIRMADO== $p2p->status ? "selected = 'true'" : "")?>>Confirmado</option>
+                                            <option value="<?php echo Utils\Constantes::P2P_STATUS_CONCLUIDO ?>" 
+                                                    <?php echo (Utils\Constantes::P2P_STATUS_CONCLUIDO == $p2p->status ? "selected = 'true'" : "")?>>Concluído</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Hash</label>
+                                        <input type="text" id="hash" name="hash" class="form-control" value="<?php echo $p2p->hash ?>" />
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+
+
+                            <div class="row">
+
+                                <div class="col col-md-9">
+                                    <div class="form-group">
+                                        <label class="control-label">Informações bancárias</label>
+                                        <input type="text" id="informacoesBancarias" name="informacoesBancarias" class="form-control" value="<?php echo $p2p->informacoesBancarias ?>" />
+                                    </div>
+                                </div>
+
+                                <div class="col col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Operador</label>
+                                        <select class="form-control" id="idUsuario" name="idUsuario">
+                                            <?php foreach($usuarios as $usuario) { ?>
+                                            <option value="<?php echo $usuario->id ?>" <?php echo ($usuario->id == $p2p->idUsuario ? "selected = 'true'" : "")?> ><?php echo $usuario->nome ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col col-md-6 text-center">
+                                    <a href="<?php echo URLBASE_CLIENT . Utils\Rotas::R_P2P ?>servicos/p2p" class="btn btn-default" id="btnCancelar">
+                                        Cancelar
+                                    </a>
+                                </div>
+                                <div class="col col-md-6 text-center">
+                                    <button type="submit" class="btn btn-primary" id="btnSalvar">
+                                        Salvar
+                                    </button>
+                                </div>
+                            </div>
+                            
+                        </form>
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+            </div>
+
+        </div>
+
+        <a  id="openOrder" target="_BLANK"></a>
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    
+    var indicesNomesClientes  = <?php echo Zend\Json\Json::encode($indiceNomeCliente)?>;
+    var indicesEmailsClientes  = <?php echo Zend\Json\Json::encode($indiceEmailCliente)?>;
+    var indicesTelefonesClientes  = <?php echo Zend\Json\Json::encode($indiceTelefoneCliente)?>;
+    
+    
+    var indicesNomesDepositantes  = <?php echo Zend\Json\Json::encode($indiceNomeDepositante)?>;
+    var indicesEmailsDepositantes  = <?php echo Zend\Json\Json::encode($indiceEmailDepositante)?>;
+    var indicesTelefonesDepositantes  = <?php echo Zend\Json\Json::encode($indiceTelefoneDepositante)?>;
+    
+    var sourceNomesClientes = [];
+    <?php foreach ($indiceNomeCliente as $nome=>$dados) { ?>
+        sourceNomesClientes.push('<?php echo $nome ?>');
+    <?php } ?>
+        
+    
+    var sourceEmailClientes = [];
+    <?php foreach ($indiceEmailCliente as $email=>$dados) { ?>
+        sourceEmailClientes.push('<?php echo $email ?>');
+    <?php } ?>
+        
+    
+    var sourceTelefoneClientes = [];
+    <?php foreach ($indiceTelefoneCliente as $telefone=>$dados) { ?>
+        sourceTelefoneClientes.push('<?php echo $telefone ?>');
+    <?php } ?>
+        
+        
+        
+    var sourceNomesDepositantes = [];
+    <?php foreach ($indiceNomeDepositante as $nome=>$dados) { ?>
+        sourceNomesDepositantes.push('<?php echo $nome ?>');
+    <?php } ?>
+        
+    
+    var sourceEmailDepositantes = [];
+    <?php foreach ($indiceEmailDepositante as $email=>$dados) { ?>
+        sourceEmailDepositantes.push('<?php echo $email ?>');
+    <?php } ?>
+        
+    
+    var sourceTelefoneDepositantes = [];
+    <?php foreach ($indiceTelefoneDepositante as $telefone=>$dados) { ?>
+        sourceTelefoneDepositantes.push('<?php echo $telefone ?>');
+    <?php } ?>
+        
+    $(document).ready(function () {
+        
+        $("#nomeCliente").autocomplete({
+            source: sourceNomesClientes,
+            select: function (event, ui) {
+                var key = ui.item.value;
+                if (typeof indicesNomesClientes[key] !== 'undefined') {
+                    $("#telefone").val(indicesNomesClientes[key].telefone);
+                    $("#emailCliente").val(indicesNomesClientes[key].email);
+                }
+            }
+        });
+        
+        
+        $("#telefone").autocomplete({
+            source: sourceTelefoneClientes,
+            select: function (event, ui) {
+                var key = ui.item.value;
+                if (typeof indicesTelefonesClientes[key] !== 'undefined') {
+                    $("#nomeCliente").val(indicesTelefonesClientes[key].nome);
+                    $("#emailCliente").val(indicesTelefonesClientes[key].email);
+                }
+            }
+        });
+        
+        
+        $("#emailCliente").autocomplete({
+            source: sourceEmailClientes,
+            select: function (event, ui) {
+                var key = ui.item.value;
+                if (typeof indicesEmailsClientes[key] !== 'undefined') {
+                    $("#nomeCliente").val(indicesEmailsClientes[key].nome);
+                    $("#telefone").val(indicesEmailsClientes[key].telefone);
+                }
+            }
+        });
+        
+        
+        
+        
+        
+        $("#nomeDepositante").autocomplete({
+            source: sourceNomesDepositantes,
+            select: function (event, ui) {
+                var key = ui.item.value;
+                if (typeof indicesNomesDepositantes[key] !== 'undefined') {
+                    $("#telefoneDepositante").val(indicesNomesDepositantes[key].telefone);
+                    $("#emailDepositante").val(indicesNomesDepositantes[key].email);
+                }
+            }
+        });
+        
+        
+        $("#telefoneDepositante").autocomplete({
+            source: sourceTelefoneDepositantes,
+            select: function (event, ui) {
+                var key = ui.item.value;
+                if (typeof indicesTelefonesDepositantes[key] !== 'undefined') {
+                    $("#nomeDepositante").val(indicesTelefonesDepositantes[key].nome);
+                    $("#emailDepositante").val(indicesTelefonesDepositantes[key].email);
+                }
+            }
+        });
+        
+        
+        $("#emailDepositante").autocomplete({
+            source: sourceEmailDepositantes,
+            select: function (event, ui) {
+                var key = ui.item.value;
+                if (typeof indicesEmailsDepositantes[key] !== 'undefined') {
+                    $("#nomeDepositante").val(indicesEmailsDepositantes[key].nome);
+                    $("#telefoneDepositante").val(indicesEmailsDepositantes[key].telefone);
+                }
+            }
+        });
+        
+        $("#valorDeposito, #valorCompra, #valorResultado, #valorCotacao, #valorCotacaoMedia").keydown(function (event) {
+            $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+            event.preventDefault();
+        });
+        
+        
+        $("#taxa").keydown(function (event) {
+            $(this).val(currency($(this).val(), 3, 8, event.keyCode));
+            event.preventDefault();
+        });
+        
+        $("#volumeBtc").keydown(function (event) {
+            $(this).val(currency($(this).val(), 8, 8, event.keyCode));
+            event.preventDefault();
+        });
+        
+        $("#dataCompra, #dataFinalizacao").datepicker({format: "dd/mm/yyyy"}).mask("99/99/9999");
+        
+        $("#form-p2p").ajaxForm({
+            dataType: "json",
+            beforeSubmit: function () {
+                $("#btnCancelar, #btnSalvar").prop("disabled", true);
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btnCancelar, #btnSalvar").prop("disabled", false);
+            }
+        });
+        
+    });
+    
+</script>

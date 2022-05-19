@@ -1,0 +1,25 @@
+
+
+assunto=Token
+titulo=NewCash - E-mail Token
+titulo2=Second-factor, NewCash!
+suaFraseSeguranca=Your safety phrase is:
+autenti2Fa=Authentication 2FA!
+segueToken=Follow the token below for second factor authentication.	
+
+navegador=Browser:
+localizacao=Location:
+revogarAcesso=Revoke Access
+casoNaoSejaVoce=If you are not accessing your account, click on the link below to revoke access and block your account.
+sistemaOperacional=Operational System:
+
+
+infAcesso=Access Information
+dataHora=Date/Time:
+ipAcesso=Access IP:
+newCashEndereco=Cointrade | 
+emailDoSistema=This is an email system. Please do not answer.
+casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.
+
+informAcesso=Access Information
+ultimoLogin=Last login information.

@@ -1,0 +1,98 @@
+<?php
+$available_langs = array('pt-br','en','es','fr');
+if(in_array($_POST['lang'], $available_langs)) {
+    $_SESSION['lang'] = $_POST['lang'];
+  }
+$idioma = (isset($_SESSION['lang']) ? $_SESSION['lang'] : "pt-br");
+$homeBase = URLBASE_CLIENT . 'Modules/acesso/views/';
+include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
+$brand = Models\Modules\Cadastro\BrandRn::getBrand();
+$empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <?php if(AMBIENTE == "producao") { ?>
+
+    <?php } ?>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <title><?php echo TITULO ?></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 2030 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <link href="<?php echo TEMA; ?>css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css/styleD.css" rel="stylesheet">
+
+</head>
+<script type="text/javascript">
+    var AMBIENTE = '<?php echo AMBIENTE ?>';
+</script>
+<body class="m-lg" style="background-color: <?php echo $brand->colorBackground ?>">
+        <!-- Google Tag Manager (noscript) -->
+            <noscript>
+                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W3JFHGP" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+            </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div class="m-t-lg m-b-lg">
+        <a href="<?php echo $empresa->homePage ?>">
+        <img alt="image"  width="150px" src="<?php echo IMAGES; ?>logo-cointrade.png" class="logo">
+        </a>
+    </div>
+    <form method="post" id="form-login" class="form-cadastro mt-lg-4">
+        <div class="form-group">
+            <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;"  type="email" id="email_login" class="form-control" placeholder="<?php echo $lang['modal1']; ?>">
+        </div>
+        <div class="form-group">
+            <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;"  type="password" id="senha" class="form-control" placeholder="<?php echo $lang['modal2']; ?>" autocomplete="current-password">
+        </div>
+        <?php if(AMBIENTE == "producao") { ?>
+        <div class="form-group m-t-lg">
+            <div style="text-align: center;">
+                <div  id="google" name="google" atrpage="login" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo GOOGLESITE; ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
+            </div>
+        </div>
+        <?php } ?>
+        <div class="form-group">
+            <button id="acessar-painel" type="submit" disabled="disabled" class="btn btn-primary block full-width m-b"><?php echo $lang['modal3']; ?></button>
+        </div>
+        <div class="form-group m-b-lg">
+            <div class="row">
+            <div class="col-xs-6 text-left">
+                <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_REGISTER ?>" style="color: #e5e6e7;"><?php echo $lang['home9']; ?></a>
+            </div>
+            <div class="col-xs-6 text-right">
+                <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_RECUPERACAO ?>" style="color: #e5e6e7;"><?php echo $lang['modal4']; ?></a>
+            </div>
+                </div>
+        </div>
+    </form>
+</div>
+<div class="footer navbar-fixed-bottom center">
+        <small ><?php echo $empresa->nomeEmpresarial ?> <?php echo $empresa->anoInicio ?> - <?php echo date('Y');?></small>
+</div>
+
+<script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script>
+<script src="<?php echo TEMA; ?>js/bootstrap.min.js"></script>
+<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+<?php Utils\Layout::append("inspina/notificacao", null); ?>
+
+</body>
+<?php if(AMBIENTE == "producao") { ?>
+
+<?php } ?>
+</html>
+

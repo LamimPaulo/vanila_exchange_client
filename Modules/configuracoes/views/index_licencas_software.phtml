@@ -1,0 +1,614 @@
+<?php
+
+$dataInicial = new \Utils\Data(date("d/m/Y H:i:s"));
+$dataInicial->subtrair(0, 0, 30);
+$dataFinal = new \Utils\Data(date("d/m/Y H:i:s"));
+
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Licenças de Software</h2>
+            <ol class="breadcrumb">
+                <li>
+                    Configurações
+                </li>
+                <li class="active">
+                    <strong>Licenças de Software</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    
+</div>  
+
+<br>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#tab-1">Licenças</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-2">Recursos</a></li>
+                        </ul>
+                        
+                        
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <h4>Licenças de Software</h4>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col col-xs-12 text-right">
+                                            <button class="btn btn-success" type="button" onclick="cadastroLicenca('<?php echo \Utils\Criptografia::encriptyPostId(0) ?>');">
+                                                Criar Nova Licença
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    
+                                    <div class="row" id="lista-planos">
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                            
+                            <div id="tab-2" class="tab-pane">
+                                <div class="panel-body">
+                                    <br>
+                                    <h4>Recursos de licença</h4>
+                                    <button class="btn btn-success pull-right" type="button" onclick="cadastroRecurso('<?php echo \Utils\Criptografia::encriptyPostId(0) ?>');">
+                                        Criar Novo Recurso
+                                    </button>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div class="row">
+                                        
+                                        <div class="col col-lg-12">
+                                            
+                                            <table class="table table-hover table-bordered table-condensed table-stripped">
+                                                
+                                                <thead>
+                                                    <tr>
+                                                        <th>Descrição</th>
+                                                        <th>Ordem</th>
+                                                        <th>Editar</th>
+                                                        <th>Excluir</th>
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <tbody id="lista-recursos">
+                                                    
+                                                </tbody>
+                                                
+                                            </table>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <a  id="openOrder" target="_BLANK"></a>
+</section>
+    
+<div class="clearfix"></div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        filtrarLicencas();
+        filtrarRecursos();
+        $(".numeric").numeric();
+        $(".real").keydown(function (event) {
+            $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+            event.preventDefault();
+        });
+    });
+    
+    function filtrarLicencas() {
+        $("#lista-planos").html("<div class='col col-xs-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /> </div>");
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_LISTAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista-planos").html(json.html);
+                    } else {
+                        $("#lista-planos").html("<div class='col col-xs-12 text-center'>"+json.mensagem+"</div>");
+                    }
+                } catch (e) {
+                    $("#lista-planos").html("<div class='col col-xs-12 text-center'>"+e+" </div>");
+                }
+            }
+        });
+        
+    }
+    
+    function cadastroLicenca(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_CADASTRAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalLicencaSoftwareId").val(json.licenca.id);
+                        $("#modalLicencaSoftwareNome").val(json.licenca.nome);
+                        $("#modalLicencaSoftwareDescricao").val(json.licenca.descricao);
+                        $("#modalLicencaSoftwarePreco").val(json.licenca.preco);
+                        $("#modalLicencaSoftwareOrdem").val(json.licenca.ordem);
+                        
+                        $("#modalLicencaSoftwareTempoLiberacaoDepositosSaques").val(json.licenca.tempoLiberacaoDepositosSaques);
+                        $("#modalLicencaSoftwareComissao").val(json.licenca.comissao);
+                        $("#modalLicencaSoftwareMesesDuracao").val(json.licenca.mesesDuracao);
+                        
+                        $("#modalLicencaSoftware").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function salvarLicenca() {
+        $("#modalLicencaSoftwareFechar, #modalLicencaSoftwareSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_SALVAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#modalLicencaSoftwareId").val(),
+                nome: $("#modalLicencaSoftwareNome").val(),
+                descricao: $("#modalLicencaSoftwareDescricao").val(),
+                preco: $("#modalLicencaSoftwarePreco").val(),
+                ordem: $("#modalLicencaSoftwareOrdem").val(),
+                tempoLiberacaoDepositosSaques: $("#modalLicencaSoftwareTempoLiberacaoDepositosSaques").val(),
+                comissao: $("#modalLicencaSoftwareComissao").val(),
+                mesesDuracao: $("#modalLicencaSoftwareMesesDuracao").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrarLicencas();
+                        $("#modalLicencaSoftwareFechar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalLicencaSoftwareFechar, #modalLicencaSoftwareSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function modalExcluirLicenca(codigo) {
+        $("#modalExcluirLicencaSoftwareId").val(codigo);
+        $("#modalExcluirLicencaSoftware").modal();
+    }
+    
+    function excluirLicenca() {
+        $("#modalExcluirLicencaSoftwareFechar, #modalExcluirLicencaSoftwareSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_EXCLUIR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#modalExcluirLicencaSoftwareId").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrarLicencas();
+                        $("#modalExcluirLicencaSoftwareFechar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalExcluirLicencaSoftwareFechar, #modalExcluirLicencaSoftwareSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    function alterarStatusAtivo(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_STATUS ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrarLicencas();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalExcluirLicencaSoftwareFechar, #modalExcluirLicencaSoftwareSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    
+    function filtrarRecursos() {
+        $("#lista-recursos").html("<tr><td class='text-center' colspan='4'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_RECURSOS_LISTAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista-recursos").html(json.html);
+                    } else {
+                        $("#lista-recursos").html("<tr><td class='text-center' colspan='4'>"+json.mensagem+"</td></tr>");
+                    }
+                } catch (e) {
+                    $("#lista-recursos").html("<tr><td class='text-center' colspan='4'>"+e+"</td></tr>");
+                }
+            }
+        });
+        
+    }
+    
+    function cadastroRecurso(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_RECURSOS_CADASTRAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalRecursoLicencaId").val(json.recurso.id);
+                        $("#modalRecursoLicencaDescricao").val(json.recurso.descricao);
+                        $("#modalRecursoLicencaOrdem").val(json.recurso.ordem);
+                        
+                        $("#modalRecursoLicenca").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function salvarRecurso() {
+        $("#modalRecursoLicencaFechar, #modalRecursoLicencaSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_RECURSOS_SALVAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#modalRecursoLicencaId").val(),
+                descricao: $("#modalRecursoLicencaDescricao").val(),
+                ordem: $("#modalRecursoLicencaOrdem").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrarLicencas();
+                        filtrarRecursos();
+                        $("#modalRecursoLicencaFechar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalRecursoLicencaFechar, #modalRecursoLicencaSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    function modalExcluirRecurso(codigo) {
+        $("#modalExcluirRecursoLicencaId").val(codigo);
+        $("#modalExcluirRecursoLicenca").modal();
+    }
+    
+    function excluirRecurso() {
+        $("#modalExcluirRecursoLicencaFechar, #modalExcluirRecursoLicencaSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_RECURSOS_EXCLUIR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#modalExcluirRecursoLicencaId").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrarLicencas();
+                        filtrarRecursos();
+                        $("#modalExcluirRecursoLicencaFechar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalExcluirRecursoLicencaFechar, #modalExcluirRecursoLicencaSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function removerRecurso(licenca, recurso) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_RECURSOS_REMOVER ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                licenca: licenca,
+                recurso: recurso
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrarLicencas();
+                        $("#recurso-"+licenca+"-"+recurso).replaceWith(json.html);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    function atribuirRecurso(licenca, recurso) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_LICENCAS_RECURSOS_ATRIBUIR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                licenca: licenca,
+                recurso: recurso
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrarLicencas();
+                        $("#recurso-"+licenca+"-"+recurso).replaceWith(json.html);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+</script>
+
+<div class="modal inmodal" id="modalLicencaSoftware" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadein">
+            
+            <div class="modal-header">
+                <h3 style="color: #1ab394;">Cadastro de Licença de Software</h3>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="modalLicencaSoftwareId"  />
+                <div class="row">
+                    <div class="col col-md-12">
+                        <div class="form-group">
+                            <label>Nome da Licenca</label>
+                            <input type="text" id="modalLicencaSoftwareNome" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col col-md-12">
+                        <div class="form-group">
+                            <label>Descrição da licença</label>
+                            <textarea class="form-control" id="modalLicencaSoftwareDescricao" maxlength="1000"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col col-xs-6">
+                        <div class="form-group">
+                            <label>Preço da Licenca (R$)</label>
+                            <input type="text" id="modalLicencaSoftwarePreco" class="form-control real" />
+                        </div>
+                    </div>
+                    <div class="col col-xs-6">
+                        <div class="form-group">
+                            <label>Ordem</label>
+                            <input type="text" id="modalLicencaSoftwareOrdem" class="form-control numeric" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col col-xs-6">
+                        <div class="form-group">
+                            <label>Comissão (%)</label>
+                            <input type="text" id="modalLicencaSoftwareComissao" class="form-control real" />
+                        </div>
+                    </div>
+                    <div class="col col-xs-6">
+                        <div class="form-group">
+                            <label>Meses de duração (mês)</label>
+                            <input type="text" id="modalLicencaSoftwareMesesDuracao" class="form-control numeric" />
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="row">
+                    <div class="col col-xs-12">
+                        <div class="form-group">
+                            <label>Tempo de liberação de depósitos e saques</label>
+                            <input type="text" id="modalLicencaSoftwareTempoLiberacaoDepositosSaques" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalLicencaSoftwareFechar">Fechar</button>
+                <button type="button" class="btn btn-primary" id="modalLicencaSoftwareSalvar" onclick="salvarLicenca();" >Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal inmodal" id="modalExcluirLicencaSoftware" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadein">
+            
+            <div class="modal-header">
+                <h3 style="color: #1ab394;">Excluir licença de Software</h3>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="modalExcluirLicencaSoftwareId"  />
+                <p>
+                    Deseja realmente excluir a licença de software lecionada?
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalExcluirLicencaSoftwareFechar">Fechar</button>
+                <button type="button" class="btn btn-danger" id="modalExcluirLicencaSoftwareSalvar" onclick="excluirLicenca();" >Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal inmodal" id="modalRecursoLicenca" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadein">
+            
+            <div class="modal-header">
+                <h3 style="color: #1ab394;">Cadastro de Licença de Software</h3>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="modalRecursoLicencaId"  />
+                <div class="row">
+                    <div class="col col-md-12">
+                        <div class="form-group">
+                            <label>Descrição do recurso</label>
+                            <input type="text" id="modalRecursoLicencaDescricao" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col col-xs-12">
+                        <div class="form-group">
+                            <label>Ordem</label>
+                            <input type="text" id="modalRecursoLicencaOrdem" class="form-control numeric" />
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalRecursoLicencaFechar">Fechar</button>
+                <button type="button" class="btn btn-primary" id="modalRecursoLicencaSalvar" onclick="salvarRecurso();" >Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal inmodal" id="modalExcluirRecursoLicenca" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadein">
+            
+            <div class="modal-header">
+                <h3 style="color: #1ab394;">Excluir Recurso de Licença</h3>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="modalExcluirRecursoLicencaId"  />
+                <p>
+                    Deseja realmente excluir o recurso de licença lecionado?
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalExcluirRecursoLicencaFechar">Fechar</button>
+                <button type="button" class="btn btn-danger" id="modalExcluirRecursoLicencaSalvar" onclick="excluirRecurso();" >Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>

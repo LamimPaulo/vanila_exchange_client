@@ -1,0 +1,401 @@
+<?php
+$dataInicial = new Utils\Data(date("d/m/Y"));
+$dataFinal = new Utils\Data(date("d/m/Y"));
+$dataInicial->subtrair(0, 0, 30);
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+$bancos = isset($_data["bancos"]) ? $_data["bancos"] : Array();
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+    <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+                <div class="col-lg-10">
+                    <h2>Remessa de Valores</h2>
+                    <ol class="breadcrumb" style="background-color: transparent !important;">
+                        <li>
+                            Serviços
+                        </li>
+                        <li class="active">
+                            <strong>Remessa de Valores</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>
+</br>
+
+    <!-- Main content -->
+    <section class="content">
+<form id="pesquisa">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <?php Utils\Layout::append("mensagem", $_data)?>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Data Inicial</label>
+                                    <input type="text" id="dataInicial" class="form-control" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR)?>" onchange="listarRemessas();" />
+                                </div>
+                            </div>
+                            <div class="col col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Data Final</label>
+                                    <input type="text" id="dataFinal" class="form-control" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR)?>" onchange="listarRemessas();" />
+                                </div>
+                            </div>
+                            
+                            <div class="col col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Status</label>
+                                    <select class="form-control" id="status" onchange="listarRemessas();" />
+                                        <option value="T" >Todos</option>
+                                        <option value="<?php echo \Utils\Constantes::STATUS_REMESSA_DINHEIRO_AGUARDANDO ?>" >Aguardando</option>
+                                        <option value="<?php echo \Utils\Constantes::STATUS_REMESSA_DINHEIRO_CANCELADO ?>" >Cancelado</option>
+                                        <option value="<?php echo \Utils\Constantes::STATUS_REMESSA_DINHEIRO_FINALIZADO ?>" >Finalizado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Filtro</label>
+                                    <input type="text" id="titular" class="form-control" onkeyup="listarRemessas();" />
+                                </div>
+                            </div>
+                            <div class="col col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Registros</label>
+                                    <select class="form-control" id="nresultado" onchange="filtrar();" >
+                                        <option value="10" >10</option>
+                                        <option value="20" >20</option>
+                                        <option value="50" >50</option>
+                                        <option value="100" >100</option>
+                                        <option value="T" >Todos</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col col-lg-12 text-center">
+                                <br>
+                                <?php if (\Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_REMESSAS, \Utils\Constantes::CADASTRAR)) { ?>
+                                <a href="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_CADASTRO ?>" class="btn btn-primary">
+                                    Nova Remessa
+                                </a>
+                                <?php } ?>
+                                <button class="btn btn-default pull-right" onClick="limpar();">
+                                    Limpar
+                                </button>
+
+
+                                <br><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</form>
+<div class="row">
+            <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col col-lg-12 table-responsive" style="font-size: 10px">
+                                <table class="table table-hover table-condensed table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <?php if (\Utils\Geral::isUsuario()) { ?>
+                                            <th class="text-center">Cliente</th>
+                                            <?php } ?>
+                                            <th class="text-center"><strong>Controle</strong></th>
+                                            <th class="text-center"><strong>Data</strong></th>
+                                            <th class="text-center"><strong>Titular</strong></th>
+                                            <th class="text-center"><strong>Conta bancária</strong></th>
+                                            <th class="text-center"><strong>Saque</strong></th>
+                                            <th class="text-center"><strong>Creditado</strong></th>
+                                            <th class="text-center"><strong>Comp.</strong></th>
+                                            <th class="text-center"><strong>NF</strong></th>
+                                            <th class="text-center"><strong>Status</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listaRemessas" style="background-color: #fff">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+            </div>
+</div>
+                
+
+                        <div class="row">
+                            <div class="col col-lg-12" >
+
+                                <ul class="list-group" id="listaRemessass">
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+            </div>
+
+        </div>
+
+        <a  id="openOrder" target="_BLANK"></a>
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        $("#idBanco").select2();
+        $("#dataInicial,#dataFinal").datepicker({
+            format: "dd/mm/yyyy",
+            todayBtn: "linked",
+            language: "pt-BR",
+            orientation: "top left",
+            autoclose: true,
+            todayHighlight: true,
+            toggleActive: true,
+            });
+        $("#dataInicial, #dataFinal").datepicker({format: 'dd/mm/yyyy'}).mask("99/99/9999");
+        function limpar(){
+        $('#pesquisa').each (function(){
+          this.reset();
+          filtrar();
+        });
+        }
+        listarRemessas();
+        
+        $("#form-finalizar").ajaxForm({
+            dataType: "json",
+            beforeSubmit: function () {
+                $("#dialogFinalizarRemessaFechar, #dialogFinalizarRemessaConfirmar").prop("disabled", true);
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogFinalizarRemessaFechar").prop("disabled", false).trigger("click");
+                        listarRemessas();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogFinalizarRemessaFechar, #dialogFinalizarRemessaConfirmar").prop("disabled", false);
+            }
+        });
+        
+    });
+    
+    function listarRemessas() {
+        $("#listaRemessas").html("<tr class='text-center'><td  class='text-center' colspan='9'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_FILTRAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                dataInicial:$("#dataInicial").val(),
+                dataFinal:$("#dataFinal").val(),
+                status:$("#status").val(),
+                tipoData:$("#tipoData").val(),
+                idBanco:$("#idBanco").val(),
+                email:$("#email").val(),
+                agencia:$("#agencia").val(),
+                conta:$("#conta").val(),
+                titular:$("#titular").val(),
+                nresultado: $("#nresultado").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaRemessas").html(json.html);
+                        $("#aguardando").html(json.dados.aguardando);
+                        $("#pago").html(json.dados.pago);
+                        $("#finalizados").html(json.dados.finalizado);
+                        $("#cancelados").html(json.dados.cancelado);
+                    } else {
+                        $("#listaRemessas").html("<tr class='text-center'><td  class='text-center' colspan='9'>"+json.mensagem+"</td></tr>");
+                        
+                        $("#aguardando").html("0");
+                        $("#pago").html("0");
+                        $("#finalizados").html("0");
+                        $("#cancelados").html("0");
+                    }
+                } catch (e) {
+                    $("#listaRemessas").html("<tr class='text-center'><td  class='text-center' colspan='9'>"+e+"</td></tr>");
+                    $("#aguardando").html("0");
+                    $("#pago").html("0");
+                    $("#finalizados").html("0");
+                    $("#finalizados").html("0");
+                }
+            }
+        });
+    }
+    
+    function dialogFinalizarRemessa(idRemessa) {
+        $("#dialogFinalizarRemessaIdRemessa").val(idRemessa);
+        $("#dialogFinalizarRemessa").modal();
+    }
+    
+    function confirmarFinalizacaoRemessa() {
+        $("#form-finalizar").submit();
+    }
+    
+    
+    
+    
+function modalDialogPagar(id) {
+    
+    $("#dialogPagar").modal();
+    $("#dialogPagarIdRemessa").val(id);
+}
+
+function pagarRemessa() {
+    $("#dialogPagarClose, #dialogPagarSalvar").prop("disabled", true);
+    $.ajax({
+        url : "<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_PAGAR ?>",
+        method: "post",
+        dataType: "json",
+        data: {
+            id: $("#dialogPagarIdRemessa").val()
+        },
+        success: function (json) {
+            try {
+                if (json.sucesso) {
+                    $("#dialogPagarClose").prop("disabled", false).trigger("click");
+                    modalDialogConfirmacaoPagamento();
+                    listarRemessas();
+                } else {
+                    showNotyAlert(json.mensagem, "e");
+                }
+            } catch (e) {
+                showNotyAlert(e, "e");
+            }
+            $("#dialogPagarClose, #dialogPagarSalvar").prop("disabled", false);
+        }
+    });
+    
+}
+
+function modalDialogConfirmacaoPagamento() {
+    
+    $("#dialogConfirmacaoPagamento").modal();
+    
+}
+</script>
+
+
+<div class="modal fade" id="dialogFinalizarRemessa" tabindex="-1" role="dialog" aria-labelledby="dialogFinalizarRemessa" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogFinalizarRemessaLabel">Marcar Remessa como Finalizada</h4>
+            </div>
+            <div class="modal-body">
+                <form id="form-finalizar" action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_FINALIZAR ?>" method="post">
+                    <input type="hidden" id="dialogFinalizarRemessaIdRemessa" name="idRemessa" />
+                    <div class="row">
+                        <div class="col col-lg-12" >
+                            Marcar a remessa como finalizada significa ter efetuado a tranferência do valor solicitado para a conta do titular cadastrado. Deseja continuar?
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <div class="form-group">
+                                <label>Anexar comprovante</label>
+                                <input type="file" id="comprovante" name="comprovante" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogFinalizarRemessaFechar" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-success" id="dialogFinalizarRemessaConfirmar" onclick="confirmarFinalizacaoRemessa();">Confirmar Finalização</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+
+<div class="modal fade" id="dialogPagar" tabindex="-1" role="dialog" aria-labelledby="dialogPagar" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" >Pagar Remessa</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" value="" id="dialogPagarIdRemessa" />
+                <div class="row">
+                    
+                    <div class="col col-lg-12">
+                        O valor da remessa será debitado do seu saldo. Deseja continuar?
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogPagarClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="pagarRemessa();" id="dialogPagarSalvar" >Pagar Remessa</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="dialogConfirmacaoPagamento" tabindex="-1" role="dialog" aria-labelledby="dialogConfirmacaoPagamento" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" >Pagamento Efetuado</h4>
+            </div>
+            <div class="modal-body">
+                <br><br>
+                <div class="row">
+                    
+                    <div class="col col-lg-12">
+                        Recebemos o seu pagamento. O valor será creditado na conta destinatária no prazo máximo de 1 dia útil.<strong></strong>.
+                    </div>
+                    
+                </div>
+                <br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogConfirmacaoPagamentoClose" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+

@@ -1,0 +1,211 @@
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+<?php
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+?>
+<style>
+    code {
+        white-space: pre-wrap;
+        color: #047cc1;
+    }
+    code i {
+        color: #545454;
+    }
+</style>
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+    
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+                <div class="col-lg-10">
+                    <h2>Trade</h2>
+                    <ol class="breadcrumb" style="background-color: transparent !important;">
+                        <li>
+                            Documentação - API
+                        </li>
+                        <li class="active">
+                            <strong>PDV</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>
+<br>       
+<div class="wrapper wrapper-content">
+    <div class="col-lg-12">
+                    <div class="wrapper wrapper-content animated fadeInRight">
+
+                        <div class="ibox-content m-b-sm border-bottom">
+                            <div class="text-center p-lg">
+                                <h2>Documentação - API de Trade</h2>
+                                
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <a data-toggle="collapse" href="#faq1" class="faq-question collapsed" aria-expanded="false">Taxas e Prazos</a>
+                                    
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="fa fa-clock-o"></i> Sexta-feira 18:00 - 24/02/2018</small>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div id="faq1" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                        <div class="faq-answer">
+                                            
+<p>Retorna as taxas e prazos aplicados no sistema.</p>
+
+Endpoint: <b>/api/trade/fees</b></br>
+Verbo: <b>GET</b></p>
+
+<b>Retorno:</b></p>
+
+
+<code>
+    {
+        "percentualCompraAtiva": "0.00",<i> Quando o cliente executa compra de forma direta sem criar ordem de compra</i>
+        "percentualCompraPassiva": "0.00",<i> Quando o cliente executa compra através de ordem de compra</i>
+        "percentualVendaAtiva": "0.50",<i> Quando o cliente executa venda de forma direta sem criar ordem de compra</i>
+        "percentualVendaPassiva": "0.20",<i> Quando o cliente executa venda através de ordem de compra</i>
+        "prazoDiasRemessa": "0",<i> Tempo máximo para ser efetuado a remessa de valores.</i>
+        "comissaoRemessa": "0.00",<i> Comissão aplicada ao solicitar uma remessa de valores.</i>
+        "valorMinimoRemessa": "0.00",<i> Valor mínimo para solicitar remessa de valores</i>
+        "valorMaximoRemessa": "0.00",<i> Valor máximo para solicitar remessa de valores</i>
+        "prazoDiasBoleto": "1",<i> Tempo máximo para ser liquidado o boleto.</i>
+        "comissaoBoleto": "1.00",<i> Comissão em percentual para liquidar boleto.</i>
+        "valorMinimoBoleto" "0.00",<i> Valor mínimo para solicitar pagamento de boleto.</i>
+        "valorMaximoBoleto" "0.00",<i> Valor máximo para solicitar quitaçao de boleto.</i>
+        "valorTarifaTed": "8.00",<i> Valor cobrado para transferência de valores.</i>
+        "comissaoSaque": "1.65",<i> Comissão aplicada ao solicitar saque em reais para sua conta bancária.</i>
+        "estornoBancario" "0.00",<i> Percentual que será cobrado caso solicitado estorno de valores depositados.</i>
+        "comissaoDeposito": "1.50",<i> Comissão aplicada ao efetuar depósito em reais na conta da empresa.</i>
+        "comissaoTransferenciaBtc": "0.00025000",<i> Comissão aplicada ao efetuar uma transferência de Bitcoin.</i>
+        "comissaoTransferenciaReais": "2.50",<i> Comissão aplicada ao efetuar uma transferência em Reais.</i>
+        "comissaoUsoCofre": "0,2",><i> Comissao de uso Cofre</i>
+        "retardosaquecofre": "5",><i> Prazo em dias para a liberação do saldo do Cofre.</i>
+        "prazoLiberacaoDepositoc": "0.00",<i> Prazo de liberação de depósito perfil Cliente</i>
+        "prazoLiberacaoDepositocDescricao" <i> Prazo para liberação de Depósito perfíl Cliente</i>
+        "prazoLiberacaoSaquec": "0.00",<i> Prazo de liberação de saque perfil Cliente</i>
+        "prazoLiberacaoSaquecDescricao" <i> Prazo para liberação de Saque perfíl Cliente</i>
+        "prazoLiberacaoDepositov": "0.00",<i> Prazo de liberação de depósito perfil Vendedor</i>
+        "prazoLiberacaoDepositovDescricao" <i> Prazo para liberação de Depósito perfíl Vendedor</i>
+        "prazoLiberacaoSaquev": "0.00",<i> Prazo de liberação de saque perfil Vendedor</i>
+        "prazoLiberacaoSaquevDescricao" <i> Prazo para liberação de Saque perfíl Vendedor</i>
+        "prazoLiberacaoDepositoo": "0.00",<i> Prazo de liberação de depósito perfil Open House</i>
+        "prazoLiberacaoDepositooDescricao" <i> Prazo para liberação de Depósito perfíl Open House</i>
+        "prazoLiberacaoSaqueo": "0.00",<i> Prazo de liberação de saque perfil open House</i>
+        "prazoLiberacaoSaqueoDescricao" <i> Prazo para liberação de Saque perfíl Open House</i>
+        "prazoLiberacaoDepositoh": "0.00",<i> Prazo de liberação de depósito perfil Home Work</i>
+        "prazoLiberacaoDepositohDescricao" <i> Prazo para liberação de Depósito perfíl Home Work</i>
+        "prazoLiberacaoSaqueh": "0.00",<i> Prazo de liberação de saque perfil Home Work</i>
+        "prazoLiberacaoSaquehDescricao" <i> Prazo para liberação de Saque perfíl Home Work</i>
+        "adesaoClientes": "0.00",<i> Valor para adesão de conta perfil Cliente</i>
+        "adesaoClientesDescricao": "0.00",<i> Descricão básico perfil Cliente</i>
+        "adesaoVendedor": "0.00",<i> Valor para adesão de conta perfil Vendedor</i>
+        "adesaoVendedorVescricao": "0.00",<i> Descricão básico perfil Vendedor</i>
+        "adesaoOpenHouse": "0.00",<i> Valor para adesão de conta perfil Open House</i>
+        "adesaoOpenhouseDescricao": "0.00",<i> Descricão básico perfil Open House</i>
+        "adesaoHomeWork": "0.00",<i> Valor para adesão de conta perfil Home Work</i>
+        "adesaoHomeWorkDescricao": "0.00",<i> Descricão básico perfil Home Work</i>
+        "tempodeContratoMinimo": "0.00",<i> Tempo mínimo de adesão</i>
+        "tempoContratoMaximo": "0.00",<i> Tempo máximo de adesão</i>
+        "sucesso": true        
+    }
+</code>
+
+
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <a data-toggle="collapse" href="#faq2" class="faq-question collapsed" aria-expanded="false">Cotação</a>
+                                    
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="fa fa-clock-o"></i> Segunda-feira 14:30 - 19/02/2018</small>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div id="faq2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                        <div class="faq-answer">
+                                            <p>
+Descrição: Retorna a cotação atual do Bitcoin.</br>
+
+Endpoint: <b>/api/trade/price</b></br>
+Verbo: <b>GET</b></p>
+    
+    
+<b>Exemplo de retorno com sucesso:</b>
+<code>
+    {
+        "currencies": [ <i> Array com as moedas atualmente vigentes na plataforma </i>
+            {
+                "nome": "BITCOIN", <i> Nome da moeda </i>
+                "simbolo": "BTC", <i> Simbolo ou sigla da moeda</i>
+                "compra": "36030.7000848", <i> Valor de cotação de compra para a moeda</i>
+                "venda": "36030.7000848", <i> Valor de cotação de venda para a moeda</i>
+                "volume": "24041341160.2", <i> Volume negociado nas últimas 24hrs</i>
+                "ultCompra": "36030.7000848", <i> Valor da última compra </i>
+                "ultVenda": "36030.7000848", <i> Valor da última venda </i>
+                "spred": "2.00", <i> Percentual de diferença do valor de compra para o valor de venda </i>
+                "logo": "http://localhost/resources/images/currencies/BTC.png" <i>URL da logomarca da moeda</i>
+            },
+            {
+                "nome": "Bitcoin Cash",
+                "simbolo": "BCH",
+                "compra": "4990.08910236",
+                "venda": "4990.08910236",
+                "volume": "1898517121.62",
+                "ultCompra": "4990.08910236",
+                "ultVenda": "4990.08910236",
+                "spred": "2.00",
+                "logo": "http://localhost/resources/images/currencies/BCH.png"
+            }
+        ],
+        "fontenome": "",  <i> Nome da fonte utilizada para referencia dos valores utilizados nos cálculos </i>
+        "fonturl": "", <i> URL para fonte dos valores utilizados nos cálculos  </i>
+        "sucesso": true
+    }
+</code>
+
+<b>Exemplo de retorno com erro:</b></p> 
+
+<code>
+{
+    "sucesso": false,
+    "mensagem": "Mensagem descritiva de erro"
+}
+</code>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+</div>
+</div>
+
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+

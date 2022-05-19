@@ -1,0 +1,32 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#CANCELAMENTO BOLETO
+#
+#--VIEW
+
+##--
+#Textos da View
+assunto=Canceled Boleto
+titulo=NewCash - Canceled Boleto
+titulo2=Canceled Boleto!
+ola=Hi
+fraseSeguranca=Your safety phrase is:
+oPagamentoCancelado=Payment of the boleto has been canceled.
+motivo=Reason for cancellation:
+codigoBarras=Bar Code:
+instituicao=Banking Institution:
+dataVencimento=Expiring Date:
+valor=Amount:
+motivoCancelamento=Reason for cancellation:
+
+
+infAcesso=Access information:
+dataHora=Date/Time:
+ipAcesso=Access IP:
+newCashEndereco=Cointrade | 
+emailDoSistema=This is an email system. Please do not answer.
+casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.
+
+

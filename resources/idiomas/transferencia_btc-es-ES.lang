@@ -1,0 +1,215 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#LOGIN
+#
+#
+#--VIEW
+#Modules\contas\views\transferencia_btc.phtml
+##--
+#Textos da View
+titulo=Transferencia
+subTitulo=Transferencia
+abaTransfMoeda=Transferir
+abaTransfReais=Transferir Reais
+abaTransfNewCash=Transferir para Cointrade
+enderDestino=Dirección de destino {var}
+descTransferencia=Descripción de la transferencia
+taxa=Tasa:
+valorDaTranferenciaMaior=Valor de transferencia debe ser mayor o igual a
+carteiraDestino=Monedero de destino
+atencaoUtilize=Atención: Utilice la dirección {var} de la persona a la cual desea enviar el valor. El valor será debitado en reais de su cuenta corriente y será acreditado en reais en la cuenta corriente del destinatario.
+descParaEssaTransf=Descripción de la transferencia
+valorReais=Valor en reais
+carteiraInvalida=Monedero Inválido
+taxaR=Tasa: R$
+valorTransferenciaMaiorR=Valor de transferencia debe ser mayor o igual a R$
+transferirReais= Transferir Reais
+reais=Reais
+descParaTransNc=Descripción de la transferencia
+moeda=Moneda
+qualquerValor=Cualquier valor en
+podeSerTransf=puede ser transferido.
+confirmaTransacao=Confirmar Transacción
+vocePreciaInforarTodosParametros=Você precisa informar todos os paramentros.
+nenhumaContaEncontrada=Ninguna cuenta corriente encontrada
+volumeTotalC=Volumen total:
+depositoVar=Depósito {var}
+saqueVar=Retiro {var}
+valorTotal=Valor Total
+
+
+
+
+
+                                                                
+
+#Labels
+volumeEm=Volumen en
+volumeEmNc=Volumen en 
+transfSemTaxa=Transferencia sin Tasa
+dtInicial=Fecha Inicial
+dtFinal=Fecha Final
+informaToken=Ingrese el token: 
+informaPin=Ingrese su PIN:
+registros=Registros
+filtroGeral=Filtro General
+filtro=Filtro
+
+
+
+#Buttons
+meuVolumeTotal=Mi Volumen Total
+meuSaldoTotal=Mi Saldo Total
+meuVolumeTotalNc=Mi Volumen Total
+meuSaldoTotalNc=Mi Saldo Total
+btTransferir=Transferir
+transfParaNc=Transferir para Cointrade
+limpar=Limpiar
+reenviar=Reenviar
+cancelar=Cancelar
+confirmaTransacaoBtn=Confirma Transacción
+
+
+#inputs
+selecionar=Seleccionar
+alterar=Modificar
+remover=Eliminar
+
+
+#Placeholder
+
+
+#Links
+verComprovante=Ver comprobante adjunto.
+
+
+#Options
+opReais=Reais
+todos=Todos
+
+
+
+#Tabela
+controle=Control
+tipoTabela=Tipo
+volume=Volumen
+descricao=Descripción
+status=Status
+data=Fecha
+endereco=Dirección
+acoes=Acciones
+cliente=Cliente
+taxa=Tasa
+hash=Hash
+valor=Valor
+destinatario=Destinatario
+
+
+
+
+##--------------------
+
+##--CONTROLLER 1
+#Modules\contas\Controllers\Transferencia.class.php
+#--
+
+#Textos da View
+foiEnviadoEmail=Fue enviado un token de confirmación a su e-mail
+porFavorInsiraToken=. Por favor, inserte el token a continuación para efectuar la transacción.
+foiEnviadoSMS=Fue enviado un token de confirmación a su celular
+useGoogle=Por favor, use su Google Authenticator para insertar el token a continuación.
+
+
+
+#Labels
+
+
+#Buttons
+
+
+#Placeholder
+
+
+#Links
+
+
+#tabela
+
+
+#Sucesso
+transfSucesso=Transferencia realizada con éxito!
+
+
+#Erros
+voceNaoTemPermissao=No tiene permiso para transferir valores a la empresa
+saldoInsuficiente=Saldo insuficiente
+moedaInvalida=Moneda inválida
+precisaCadPin=Necesita registrar un PIN para efectuar la operación. Acceda a su perfil y configure su PIN de seguridad.
+pinInvalido=PIN inválido
+##--
+
+
+##--------------------
+
+##--CONTROLLER 2
+#Modules\contas\Controllers\Btc.class.php
+#--
+
+#Textos da View
+cartNewCash=Transf. Interna
+erro=Error
+foiEnviadoEmail1=Fue enviado un token de confirmación a su e-mail
+porFavorInsiraToken1=. Por favor, inserte el token a continuación para efectuar la transacción.
+foiEnviadoSMS1=Fue enviado un token de confirmación a su celular
+useGoogle1=Por favor, use su Google Authenticator para insertar el token a continuación.
+necessarioInfCarteira=Es necesario informar una monedero.
+voceNaoPodeTransContaCorrente=Usted no puede transferir dinero a su propia cuenta corriente.
+cartInformadaNaoNc=La monedero informada no es una monedero Cointrade.
+
+
+#Labels
+statusNaoAutorizado=Não Autorizado
+statusEmAnalise=En Análisis
+statusEmProcessamento=En Procesamiento
+statusConcluido=Completado
+
+
+
+#Buttons
+
+
+#Placeholder
+
+
+#Links
+
+
+#tabela
+liCliente=Cliente
+liEntrada=Entrada
+liSaida=Salida
+liVolume=Volumen
+liAbrir=Abrir
+descricao1=Descripción
+
+
+#Sucesso
+transSucesso=Transferencia realizada con éxito!
+
+
+
+#Erros
+clienteNaoLoc=Cliente no localizado en el sistema.
+precisaCadPin1=Necesita registrar un PIN para efectuar la operación. Acceda a su perfil y configure su PIN de seguridad.
+pinInvalido1=PIN inválido
+saldoInsuficiente=Saldo insuficiente
+enderecoInvalido=Dirección inválida.
+
+
+##--
+
+
+
+

@@ -1,0 +1,375 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#SAQUE
+#
+#
+#--VIEW
+#Modules\contas\views\index_saques.phtml
+##--
+#Textos da View
+titulo=Withdraw of Cryptocurrency and Real
+subTitulo=Financial
+abaSaque=Request Withdraw
+abaExtrato=Account Statement
+abaMinhasContas=My Accounts
+seleBancoDepo=Select the bank for deposit
+seleUmaConta=Select an account
+meuSaldoTotal=My Total Balance
+comiSaque=Withdraw fee:
+tarifaTansfer=Transfer fee:
+seraCreditadaNaConta=It will be credited:
+prazoEnvioTed=Estimated time for sending TED:
+todosBancos=All banks
+statusConta=Account Status
+valorSaque=Withdraw amount
+hora=Hour
+comprovante=Hash
+dia=Day
+semana=Week
+mes=Month
+pesquisar=Search
+criarCarteira=Generate wallet.
+
+
+                                                                
+
+#Labels
+dtInicial=Initial Date
+dtFinal=Final Date
+statusDeposito=Deposit status
+registros=Records
+filtroGeral=General Filter
+realizadoConta=Made in the account
+cpfNaNota=CPF in the note?
+ultima_compra=Last Bid Price
+ultima_venda=Last Ask Price
+maior_preco=High Price
+menor_preco=Low Price
+volume24=Amount 24h
+
+
+#Buttons
+confirmaSaque=Confirm Withdraw 
+limpar=Clean
+filtro=Filter
+
+#inputs
+selecionar=Select
+alterar=Alter
+remover=Remove
+
+
+#Placeholder
+
+
+#Links
+verComprovante=See attached receipt.
+
+
+#Options
+selecioneUmaConta=Select an account
+todos=All
+pendente=Pending
+confirmado=Confirmed
+cancelado=Canceled
+
+
+#Tabela
+controle=Control
+data=Date
+cliente=Client
+contaBancaria=Bank Account
+saque=Withdraw
+comissaoR=Fee (R$)
+comissaoP=Fee (%)
+creditado=Credited
+taxaTed=TED fee
+comprovante=Receipt
+nf=NF
+status=Status
+analisar=Analyse
+
+#Sucesso
+saqueSucesso=Successful Withdraw!
+
+
+##--------------------
+
+#--VIEW
+#Modules\contas\views\aprovar_saque.phtml
+##--
+#Textos da View
+
+subTitulo=Financial
+extratoContaCorrente=Bank account Statement
+saldoDisponivel=Available Balance
+saldoBloqueado=Blocked Balance
+dadosParaDeposito=Deposit data for the selected bank
+nomeA=Name:
+cpfA=CPF:
+controleA=Control:
+dataA=Date:
+bancoA=Bank:
+tipoA=Type:
+agenciaA=Agency:
+contaA=Account:
+valorSaque=Withdraw balance: R$
+comissaoSaqueA=Withdraw fee:
+tarifaTransfA=Transfer fee: R$
+creditoSerTransfA=Credit to be transferred: R$ 
+aceitaNFA=Do you accept NF?
+compDepositoA=Deposit proof
+verNFanexadaA=See attached NF. 
+saqueCanceladoSuccesso="Successfully canceled withdraw"
+cancelarSaqueA=Cancel withdraw
+informeCancelamentoSaque=Please state below the reason for canceling the withdrawal
+horas=Hour(s)
+
+saldoDisponivel=Available Balance
+saldoBloqueado=Blocked Balance
+saldoTotal=Total Balance
+                     
+
+#Labels
+
+#Buttons
+voltarA=Turn back
+cancelarA=Cancel
+aprovarA=Aprove
+fecharA=Close
+cancelarSaqueA=Cancel Withdraw
+
+#inputs
+selecionar=Select
+alterar=Alter
+remover=Remove
+
+#Tabela
+dataA=Date
+descricaoA=Description
+valorA=Value
+
+#Sucesso
+
+
+##--------------------
+
+#--VIEW
+#Modules\contas\views\contas_bancarias.phtml
+##--
+#Textos da View
+cadastreApenas=Register only bank accounts of the Cointrade account holder.
+instituicaoBancariaC=Banking institution
+seleInstiBancariaC=Select a banking institution
+                     
+
+#Labels
+tipoContaC=Account type
+agenciaC=Agency
+agenciaDigitoC=Digit
+contaC=Account
+contaDigitoC=Digit
+
+
+#Buttons
+cancelarC=Cancel
+salvarContaC=Save Account
+
+#option
+contaCorrenteC=Account
+
+
+#Tabela
+codBancoC=Bank code
+bancoC=Bak
+agenciaDigC=Agency - Dig.
+contaDigC=Account - Dig.
+tipoC=Type
+statusC=Status
+ativarC=Activate/Disable
+
+
+#Sucesso
+
+
+##--------------------
+
+
+
+##--CONTROLLER
+#Modules\contas\Controllers\Saques.class.php
+#--
+
+#Textos da View
+clienteC=Client:
+dtSolicitacaoC=Date of request:
+statusC=Status:
+contaBancariaC=Bank Account:
+valorSacadoC=Withdrawn amount:
+comissaoC=Fee:
+vlrCreditadoC=Credited amount:
+rS=R$
+cliqueDownloadC=Clic for download
+autorizaqdoEmC=Authorized in:
+autorizadoPorC=Authorized by:
+analisarSaqueC=Analyse withdraw
+contaCorrenteC=Account
+contaPoupancaC=Account
+excluirC=Delete
+obsC=Observation
+nenhumaContaEncontrada=No bank account was found.
+simC=Yes
+naoC=No
+desativarC=Disable
+ativarC=Enable
+statusAlteradoSucesso=Status changed successfully!
+
+#Labels
+
+
+#Buttons
+motivoC=Motive
+analisarC=Analyse
+
+
+#Placeholder
+
+
+#Links
+
+#tabela
+nenhumSaqueC= No withdraw for informed filters
+contaBancariaC=Bank account
+agenciaC=Agency
+contaC=Account
+codC=Code
+bancoC=Bank
+contaNaoInformadaC=No account reported.
+
+
+
+#Sucesso
+
+#Erros
+naoTemPermissaoSaqueC=You are not allowed to request withdrawals.
+necessarioLogadoC=You must be logged in to perform the operation.
+contaNaoEncontradaC=Bank account not found.
+saqueInvalidoNaoEncontradoC=Invalid or missing withdraw
+arqInvalidoC=Invalid or non-informed receipt file.
+permissaoAlteraC=You are not allowed to change data after the withdraw.
+permissaoSolicitarC=You are not allowed to request withdrawal.
+identicacaoInvalidaC=Invalid withdraw ID.
+erroC=Error
+
+##--
+
+contaRegistrada=Bank account successfully registered.
+
+volume=Amount
+taxa=Fee
+carteira=Wallet
+hash=Hash
+moeda=Cryptocurrency
+
+saqueReais=Cash Withdrawal
+comp=Receipt
+valor=Amount
+todasContas=All bank accounts
+
+transfInterna=Transfer value to other customer of system.
+email=Enter the email of the customer you want to transfer to.
+meusUltimosSaques=My Latest Withdrawals
+informacoes=INFORMATION
+conta=Account
+
+transSucesso=Transfer was done with successful.
+
+saque5=Your withdrawal will be processed within 72 business hours.
+saque6=If your account has a lock, check with technical support.
+saque1=Minimum withdrawal of R$ {var}.
+saque2=You can make transfers to other customers of platform.
+saque3=Register your bank account in the "My Profile" menu.
+saque4=Daily Cashout Limit R$ 50,000.
+paraBrasileiro=For Brazilians, it will be necessary to complete the registration in the menu My Profile, tab My Data.
+
+carteiraDestino=Wallet
+seraDebitado=It will be charged
+
+insiraSeuToken=Enter your Token 2FA and PIN to confirm the withdrawal
+cancelar=Cancel
+confirmar=Confirm
+token2fa=Token 2FA
+pin=PIN
+carteira=Wallet
+volumeConfirmar=Amount + Fee
+transferir=Withdraw
+
+insiraSomente=Use only {var} wallet
+taxasMoeda={var} transfer fees are charged in {var1} currency.
+reenviar2fa=Resend Token 2FA 
+
+atencao=ATTENTION
+irreversiveis=Cryptocurrency withdrawals are irreversible.
+
+bancos=Banks
+stablecoins=Stablecoins
+criptomoeda=Cryptocurrency
+
+
+foiEnviadoEmail1=A confirmation token has been sent to your email
+porFavorInsiraToken1=. Please enter the token below to complete the transaction.
+foiEnviadoSMS1=A confirmation token was sent to your mobile phone
+useGoogle1=Please use your Google Authenticator to enter the token below.
+
+saldoInsuficiente=Insufficient funds.
+tokenInvalido=Invalid token.
+pinInvalido=Invalid PIN.
+saqueSucesso=Withdrawal successfully.
+
+pesquisar=Search
+direta1=Type
+direta2=Date
+direta3=Amount Order
+direta4=Price
+direta5=Received
+direta6=Fill
+direta7=Day
+direta8=Week
+direta9=Month
+direta10=All
+direta11=Buy
+direta12=Sale
+direta13=All
+direta14=Price
+direta15=Amount/24Hs
+direta16=Total Purchase
+direta17=Total Sale
+direta18=Fee charged on transaction
+direta19=Fee estimate
+direta20=Purchase Orders
+direta21=Sales Orders
+direta22=Coin
+direta23=Balance
+direta24=Balances
+direta25=Sales Orders
+direta26=My Balance
+direta27=Trade History
+direta28=Market
+direta29=In Order
+direta30=Amount
+direta31=Price
+direta32=Amount
+direta33=Total
+direta34=Limit 10
+direta35=Limit 30
+direta36=Buy / Sell
+direta37=My Orders
+direta38=My Negotiatios
+direta39=24 Hours
+
+
+informacoesGerais=General Informations
+
+verifiqueSuaConta=Please verify your account in the My Profile menu.

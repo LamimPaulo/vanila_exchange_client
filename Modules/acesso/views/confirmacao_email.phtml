@@ -1,0 +1,171 @@
+<?php
+$mensagem = ((isset($_data['mensagem'])) ? ($_data['mensagem']) : "");
+$sucesso = (isset($_data['sucesso']) ? ($_data['sucesso']) : false);
+
+?>
+<!DOCTYPE html>
+<html class="wide wow-animation smoothscroll scrollTo" lang="pt-br">
+    <head>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Cointrade - Confirmação de e-mail</title>
+        
+        <link href="<?php echo TEMA; ?>css/bootstrap.min.css" rel="stylesheet">
+        <link href="<?php echo TEMA; ?>font-awesome/css/font-awesome.css" rel="stylesheet">
+        <link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
+        <link href="<?php echo TEMA; ?>css/style.css" rel="stylesheet">
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400">
+        <link rel="stylesheet" href="<?php echo NEWCASH; ?>assets/css/style.css">
+        <link rel="apple-touch-icon" sizes="180x180" href="<?php echo NC ?>images/icon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="<?php echo NC ?>images/icon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="<?php echo NC ?>images/icon/favicon-16x16.png">
+        
+        <style>
+        body, html{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .box-login{
+            width: 360px;
+            min-height: 80px;
+            /* top: 50%;
+            left: 50%;
+            position: absolute; */
+            position: relative;
+            z-index: 10;
+            box-sizing: border-box;
+            padding: 30px;
+            background: url('<?php echo NEWCASH; ?>assets/img/efx-box-login.png') #fff;
+            box-shadow: 0px 0px 20px 1px rgb(0, 184, 78);
+        }
+    </style>
+    </head>
+    <body class="bg-intro">
+    <div class="box-login" id="box-login" style="border-radius: 30px;">
+       
+            <div class="row text-center">
+                <a href="https://newc.com.br">
+                    <img src="<?php echo NEWCASH; ?>assets/img/logo.png" class="" alt="Cointrade" height="64" width="300">
+                </a>
+
+                <div class="col-md-12">
+
+                        <h2 class="font-bold">Confirmação de e-mail</h2>
+
+                        <p>
+                            <?php if (!$sucesso) { ?>
+                            <p style="color: #d67b7b; font-size: 14px;">
+                                <?php echo $mensagem ?></br>
+                                <a href="<?php echo URLBASE_CLIENT . Utils\Rotas::R_RECUPERACAO ?>"><small>Esqueceu a senha?</small></a>
+
+                            </p>
+                            <br>
+                            <a class="btn btn-sm btn-white btn-block" href="<?php echo URLBASE_CLIENT . Utils\Rotas::R_LOGIN ?>">Entrar</a>
+                        <?php } else { ?>
+                            <h4 style="color: green;">
+                                
+                                <br>
+                                Ao se cadastrar você recebeu um e-mail com a chave de ativação da conta.<br><br> Por favor, informe abaixo a chave recebida.
+                                <br>
+                                
+                                <form class="form-login" method="post" id="form-recover" action="<?php echo URLBASE_CLIENT  . Utils\Rotas::R_RECUPERACAO ?>">
+                                    
+                                    <div class="input-group pss-key full-width">
+                                        <span class="icon">
+                                            <i class="fa fa-lock color-green"></i>
+                                        </span>
+                                        <input type="text" id="key" name='key' class="gray-border full-width input-login"  placeholder="Cole aqui sua chave">
+                                    </div>
+
+
+                                    <button class="acess-painel pss-key"  type="button" onclick="validarKey();" id="btn-key">
+                                        <i class="fa fa-lock"></i> Validar Chave
+                                    </button>
+                                   
+                                    
+                                </form>
+                                
+                            </h4>
+
+                        <?php } ?>
+                        </p>
+                        <div class="text-right">
+                        <a href="<?php echo URLBASE_CLIENT . Utils\Rotas::R_LOGIN ?>" class="action-login-href" style="text-align: right;">Entrar</a>
+                        </div>
+
+                    
+                </div>
+            </div>
+            
+    </div>
+    <div class="overlay"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="<?php echo NEWCASH; ?>assets/js/jquery.mask.min.js"></script>
+    <script src="<?php echo NEWCASH; ?>assets/js/script.js"></script>
+
+        <?php if (isset($_SESSION["cadastrado"]) && $_SESSION["cadastrado"]) { ?>
+            <!-- Google Code for Conta Criada Conversion Page -->
+            <script type="text/javascript">
+            /* <![CDATA[ */
+            var google_conversion_id = 802526075;
+            var google_conversion_label = "JFLECKX8v4MBEPum1v4C";
+            var google_remarketing_only = false;
+            /* ]]> */
+            </script>
+            <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+            </script>
+            <noscript>
+            <div style="display:inline;">
+            <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/802526075/?label=JFLECKX8v4MBEPum1v4C&amp;guid=ON&amp;script=0"/>
+            </div>
+            </noscript>
+            <?php unset($_SESSION["cadastrado"]); ?>
+        <?php } ?>
+</body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="<?php echo NEWCASH; ?>assets/js/jquery.mask.min.js"></script>
+    <script src="<?php echo NEWCASH; ?>assets/js/script.js"></script>
+    
+    
+    <script>
+    function validarKey() {
+        $("#btn-key").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_MAIL_CONFIRMATION ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                key: $("#key").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                        showAlert(json.mensagem, "success");
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_LOGIN?>";
+                    } else {
+                        showAlert(json.mensagem, "danger");
+                    }
+                } catch (e) {
+                    showAlert(e, "danger");
+                }
+                $("#btn-key").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    
+    function showAlert(msg, tipo) {
+        alert(msg);
+    }
+    
+    </script>
+    
+</html>
+

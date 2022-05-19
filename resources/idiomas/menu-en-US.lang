@@ -1,0 +1,180 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#MENU
+#
+#
+#--VIEW
+#Modules\acesso\views\login.phtml
+##--
+#Textos da View
+compra=BUY
+venda=SELL
+volume=Amount:
+volume24=24H Amount
+sair=Log out
+compra:=Buy:
+venda:=Sell:
+verTodasMensagens=View all messages
+notificar=Notify
+vocePrecisaCompletarPerfil=You need to complete your profile to gain access to all system features.
+osSeusDocEstaoAnalise=Your documents are under review. We will return an answer about the validity of the information provided.
+vcPossuiProcedimento=You have 
+estornoPendente=pending refund procedement(s)
+deposito=Deposit
+cliqueAqui=Click here
+paraInformarConta=to inform a account to receive founds.
+rejeitado=REJECTED: 
+apresenteQr=Present this QR Code to receive funds
+topMenuMercado=Parity
+compraVendaDireta=Direct Buy and Sell
+livroOfertas=Order Book
+investimento=Investiment
+transferencia=Transfers
+topMenuMensagem=Message
+idioma=Language
+
+meuPerfilD=My Profile
+minhasCarteiras=My Wallets
+meusInvestimentos=My Investments 
+
+#Labels
+sidebarLabelNovidade=New
+
+
+
+
+#Buttons
+fecharBtn=Close
+copiarBtn=Copy
+
+#Placeholder
+
+
+#Links
+cliqueAquiPendencias=Click here to see what is pending.
+
+#FOOTER ESP
+#
+#
+#--VIEW
+#Modules\***menu.phtml
+##--
+#Textos da View
+temCerteza=Are you sure?
+seraNecessario=You will need to authenticate again when you return.
+simQueroSair=Yes, I want to log out!
+queroFicar=I wanna stay
+sessaFinalizada=Session ended successfully!
+aviso=Warning!
+redirecionando=Redirecting!
+bloqueadoRS=Blocked
+meuSaldo=My Balance 
+
+
+
+
+
+#Modulos
+sidebarMenuPrincipal=Main
+sidebarMenuSair=Log out
+
+sidebarMenu1=My Profile
+sidebarMenu2=Deposits
+sidebarMenu3=Bitcoin
+sidebarMenu4=Reais
+sidebarMenu5=Services
+sidebarMenu6=My Markets
+sidebarMenu7=API Docs
+sidebarMenu8=Seller
+sidebarMenu9=Settings
+sidebarMenu10=Register
+sidebarMenu11=Monitoring
+sidebarMenu12=PDV Receiving
+sidebarMenu13=Trade
+sidebarMenu14=Withdrawals
+sidebarMenu15=Withdrawals
+sidebarMenu16=Transfers
+sidebarMenu17=Company Accounts
+sidebarMenu18=Markets
+sidebarMenu19=Bank Reversals
+sidebarMenu20=Inviteds
+sidebarMenu21=Card
+sidebarMenu22=Investments
+sidebarMenu23=Voting
+sidebarMenu25=Follow the Trader
+sidebarMenu26=Extract
+sidebarMenu27=Recommendation
+sidebarMenu28=Convert
+
+
+#Rotinas
+sidebarRotina1=Historic
+sidebarRotina2=Transfer Bitcoin
+sidebarRotina3=Historic
+sidebarRotina4=Deposit
+sidebarRotina5=Bank Withdraws
+sidebarRotina6=Ticket Payments
+sidebarRotina7=Money Remittances
+sidebarRotina8=Establishment
+sidebarRotina9=Sell Points
+sidebarRotina10=Transfer
+sidebarRotina12=Sell Points
+sidebarRotina13=Wallet
+sidebarRotina14=Trade
+sidebarRotina15=Calculator
+sidebarRotina16=Payment
+sidebarRotina17=Tables
+sidebarRotina18=Clients
+sidebarRotina19=Business
+sidebarRotina20=Portal
+sidebarRotina21=Pending Transactions
+sidebarRotina22=Company Accounts
+sidebarRotina23=Control Painel
+sidebarRotina24=Fees
+sidebarRotina25=Company Bank Accounts
+sidebarRotina26=Invoices
+sidebarRotina27=Users
+sidebarRotina28=Clients
+sidebarRotina29=Licence Upgrade
+sidebarRotina30=Payments API Panel
+sidebarRotina31=Painel
+sidebarRotina32=Direct Sell and Buy
+sidebarRotina33=Order Book
+sidebarRotina34=BTC Account
+sidebarRotina35=Account
+sidebarRotina36=Transfers
+sidebarRotina37=Account Statement
+sidebarRotina38=Negotiations
+sidebarRotina39=Administrative
+sidebarRotina40=Business Segments
+sidebarRotina41=Software Licences
+sidebarRotina42=Roadmap
+sidebarRotina43=Newsletter
+sidebarRotina44=Contact
+sidebarRotina45=Accounts Resume
+sidebarRotina46=My Cards
+sidebarRotina47=Monthly payment
+sidebarRotina48=Rechards
+sidebarRotina49=Administrative
+sidebarRotina50=Administrative
+sidebarRotina51=Site Painel
+sidebarRotina52=Clients Resume
+sidebarRotina53=P2P
+sidebarRotina54=Commissions
+sidebarRotina55=Buy NEWC Token
+sidebarRotina56=Painel ICO
+sidebarRotina58=Pre sales
+sidebarRotina59=Voting
+sidebarRotina60=Investments
+
+
+#Modal Moedas Habilitadas
+modalMoedasHabilitadasTitulo=Choose one of the currencies below to start investing!
+modalMoedasHabilitadasCancelar=Cancel
+
+
+menu1=Create NEWC Wallet
+mododia=Light
+modonoite=Dark

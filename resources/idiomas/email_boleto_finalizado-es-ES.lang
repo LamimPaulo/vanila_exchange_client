@@ -1,0 +1,33 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#CANCELAMENTO BOLETO
+#
+#--VIEW
+
+##--
+#Textos da View
+assunto=Boleto Finalizado con Éxito
+titulo=NewCash - Boleto Finalizado con Éxito
+titulo2=Boleto Finalizado con Éxito!
+ola=Hola
+fraseSeguranca=Su pregunta de seguridad es:
+pagamentoAbaixo=El pago del boleto abajo fue efectuado con éxito.
+codigoBarras=Código de barras:
+dataPagamento=Fecha Pago:
+emailInformado=E-mail informado:
+comentario=Comentario:
+instituicao=Banco:
+dataVencimento=Fecha de Vencimiento:
+valor=Valor:
+
+
+infAcesso=Información de acceso:
+dataHora=Fecha/Hora:
+ipAcesso=IP de Acceso:
+newCashEndereco=Cointrade | 
+emailDoSistema=Este es un e-mail del sistema. Por favor, no responder.
+casoNaoTenhaCadastro=En caso de no haberse efectuado el registro, entrar en contacto a través de nuestros canales de atención al cliente.
+
+

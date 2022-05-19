@@ -1,0 +1,289 @@
+<?php
+$bancos = isset($_data["bancos"]) ? $_data["bancos"] : Array();
+$clientes = isset($_data["clientes"]) ? $_data["clientes"] : Array();
+$usuarioLogado = Utils\Geral::getLogado();
+?>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+<div class="content-wrapper">
+  <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+    <div class="col-lg-9">
+      <ol class="breadcrumb m-t-md" style="background-color: transparent !important;">
+          <li>
+            <?php echo $idioma->getText("subTitulo") ?>
+          </li>
+          <li class="active">
+              <strong><?php echo $idioma->getText("titulo") ?>
+          </li>
+      </ol>
+    </div>
+    <div class="col-lg-3">
+    <?php Utils\Layout::append("inspina/flags", $_data) ?>
+    </div>
+  </div>
+</div>
+
+<div>
+    <br>
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Bancos <small class="m-l-sm">Minhas Contas bancárias</small></h5>
+
+            </div>
+
+
+            <div class="ibox-content">
+            <?php if (Utils\Geral::isCliente()) { ?>
+
+                <div class="row">
+    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <span>Instituição Bancaria:</span>
+                            <select class="chosen-select" id="cadastroContaIdBanco">
+                                <option value="0">Selecione o banco</option>
+                                <?php 
+                                foreach ($bancos as $banco  )  {
+                                    ?>
+                                    <option value="<?php echo $banco->id?>"><?php echo $banco->codigo . " - " . $banco->nome ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <span>Tipo de conta:</span>
+                            <select class="form-control" id="cadastroContaTipoConta">
+                                <option value="<?php echo Utils\Constantes::CONTA_CORRENTE ?>">Conta Corrente</option>
+                                <option value="<?php echo Utils\Constantes::CONTA_POUPANCA ?>">Conta Poupança</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <span>Agência: </span>
+                            <input type="text" class="form-control" id="cadastroContaAgencia" maxlength="10" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <span>Conta: </span>
+                            <input type="text" class="form-control" id="cadastroContaConta" maxlength="10" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <span style="color: blue;">*Obs:</span>
+                            <input type="text" class="form-control" id="cadastroContaObservacoes" maxlength="40" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-1 text-center">
+                        <button type="button" class="btn btn-primary" onclick="salvar();" id="cadastroContaSalvar" >Gravar</button>
+                    </div>
+
+                    <div class="col-md-1 text-center">
+                        <button type="button" class="btn btn-primary" onclick="listar();" >Atualizar</button>
+                    </div>
+
+
+                </div>
+                
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <span style="color: blue">* Obs: Campo destinado a armazenar informações que possam ajudar os nossos operadores.</span>
+                    </div>
+                </div>
+                    
+
+                <?php Utils\Layout::append("mensagem", $_data)?>
+                    
+
+
+            <?php } ?>
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <ul class="list-group" id="lista">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<div id="confirmarExclusao" title="Excluir registro" style="display: none;">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        O item e seus dependentes serão removidos. Deseja continuar?</p>
+</div>
+
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+
+
+<script>
+
+$(".chosen-select").chosen()
+    $(document).ready(function () {
+        listar();
+        //$("#filtroIdCliente").select2();
+    });
+    
+    function listar() {
+        $("#lista").html("<div class='col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CADASTROLISTARCONTASBANCARIAS ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {f: $("#filtro").val(), idCliente: $("#filtroIdCliente").val()},
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista").html(json.html);
+                    } else {
+                        $("#lista").html("<div class='col-lg-12 text-center'>"+json.mensagem+"</div>");
+                    }
+                } catch (e) {
+                    $("#lista").html("<div class='col-lg-12 text-center'>"+e+"</div>");
+                }
+            }
+        });
+    }
+    
+    function cadastro(idConta) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CADASTRONOVACONTABANCARIA ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {id: idConta},
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroContaId").val(json.conta.id);
+                        $("#cadastroContaAgencia").val(json.conta.agencia);
+                        $("#cadastroContaConta").val(json.conta.conta);
+                        $("#cadastroContaObservacoes").val(json.conta.observacoes);
+                        if (json.conta.id > 0) {
+                            $("#cadastroContaIdBanco").val(json.conta.idBanco);
+                            $("#cadastroContaTipoConta").val(json.conta.tipoConta);
+                        } else {
+                            $("#cadastroContaIdBanco").children("option").first().prop("selected", true);
+                            $("#cadastroContaTipoConta").children("option").first().prop("selected", true);
+                        }
+                        $("#cadastroConta").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+  function salvar() {
+        $("#cadastroContaFechar, #cadastroContaSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CADASTROSALVARCONTABANCARIA ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                id: $("#cadastroContaId").val(),
+                agencia: $("#cadastroContaAgencia").val(),
+                conta: $("#cadastroContaConta").val(),
+                idBanco: $("#cadastroContaIdBanco").val(),
+                tipoConta: $("#cadastroContaTipoConta").val(),
+                observacoes: $("#cadastroContaObservacoes").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroContaFechar").prop("disabled", false);
+                        $("#cadastroContaFechar").trigger("click");
+                        listar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                
+                $("#cadastroContaFechar, #cadastroContaSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function modalExcluir(idConta) {
+        $("#modalExcluirContaId").val(idConta);
+        $("#modalExcluirConta").modal();
+    }
+    
+    function excluir() {
+        $("#modalExcluirContaExcluir, #modalExcluirContaClose").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CADASTROEXCLUIRCONTABANCARIA ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {id: $("#modalExcluirContaId").val()},
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalExcluirContaClose").prop("disabled", false).trigger("click");
+                        listar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalExcluirContaExcluir, #modalExcluirContaClose").prop("disabled", false);
+            }
+        });
+    }
+</script>
+
+<div class="modal fade" id="modalExcluirConta" tabindex="-1" role="dialog" aria-labelledby="modalExcluirConta" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalExcluirContaLabel">Excluir Conta Bancária</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modalExcluirContaId" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        Deseja realmente excluir o registro selecionado?
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalExcluirContaClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" onclick="excluir();" id="modalExcluirContaExcluir" >Excluir</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

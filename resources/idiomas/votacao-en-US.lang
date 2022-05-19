@@ -1,0 +1,111 @@
+
+titulo=Voting
+tituloTabUm=Current Voting
+tituloTabDois=Closed Polls
+tituloTabTres=Future Polls
+tituloTabQuatro=Upcoming Polls
+tituloTabSeis=Set Up
+
+votacaoSemVotacao1=No voting going on now
+votacaoSemVotacao2=No polls closed
+votacaoSemVotacao3=No scheduled votes
+votacaoSemVotacao4=No voting pending analysis
+votacaoSemVotacao5=No criptomoeda for deployment
+
+responsavelVotacao=Responsible: 
+emailVotacao=E-mail:
+casasDecimaisVotacao=Decimal places: 
+
+moedaBaseVotacao=Network Fork: 
+descricaoVotacao=Description: 
+
+btnAtualizarListaVotacoes=Update Lists
+btnVotar=Vote
+progressoVotacao=Completed
+votos=Votes
+de=from
+progresso=Progress: 
+iniciaEm=Starts at
+encerraEm=Closed on
+btnAprovar=Approve
+btnNegar=Deny
+
+
+nomeMoeda=Currency Name:
+siglaMoeda=Currency Symbol (max 5 characters): 
+moedaBase=Currency is fork of the network: 
+nomeResponsavel=Name of person in charge of registration: 
+logoMoeda=Currency Logo (PNG 200 x 200 px): 
+emailContato=Contact email: 
+descricaoProjeto=Project description (max 200 characters): 
+quantidadeCasasDecimais=Number of decimal places of the coin: 
+
+modalCadastroMoedaTitulo=Register your currency to vote!
+modalCadastroMoedaConfirmar=Confirm
+modalCadastroMoedaCancelar=Cancel
+
+
+cadastreSuaMoeda=Register your currency now to vote in {var}
+
+controllerVotacao1=Request received. Your request will be reviewed shortly by our team.
+controllerVotacao2=Currency approved successfully.
+controllerVotacao3=Currency denied successfully
+controllerVotacao4=You are not allowed to vote
+controllerVotacao5=Vote registered successfully.
+controllerVotacao6=Currency website.
+controllerVotacao7=Whitepapper.
+
+modalCadastroMoeda1=Currency website.
+modalCadastroMoeda2=Link to document White Paper
+
+modalAprovar1=Approve currency registration
+modalAprovar2=Enter the start and end date of voting.
+modalAprovar3=Initial date
+modalAprovar4=Data final
+modalAprovar5=Cancel
+modalAprovar6=Approve Registration
+
+
+modalNegar1=Deny currency registration
+modalNegar2=Do you really want to deny the registration of the currency for voting?
+modalNegar3=Cancel
+modalNegar4=Negar Cadastro
+
+
+votacao1=Briefly describe the currency community
+controllerVotacao8=Community Description:
+votacao2=Select the networks where the currency has quantity and click the include button. After that, inform the page link and the number of members.
+votacao3=Number of community members in {var1}:
+votacao4=You need to report the community link on {var1}:
+controllerVotacao9=Member(s)
+
+
+votacao5=Market capital:
+votacao6=Registering your currency to vote on the {var1} is free, quick and easy. We do not charge for registration but we require the applicant to have in his {var2} account the minimum balance of {var3} {var4}.
+
+cadastroMoeda=Register Cryptocurrency
+
+informacoes=INFORMATION
+inf1=After completed the registration, the form will be forwarded to the management.
+inf2=The informed contact will receive the decisions of the management.
+inf3=You can only vote with {var} .
+inf4=Access and to get know the  {var} 
+
+
+votacaoAbertaClientes=Open voting for clients.
+votacaoEncerradas=Voting closed.
+votacaoAprovacao=Vote on approval.
+cadastroCriptoAnalise=Register of cryptocurrency for analysis.
+
+vocePrecisaNewCash=You need to have {var1} {var2}.
+
+vocePrecisaNewCashCripto=You need to have {var1} {var2} to be able to register your cryptocurrency.
+
+criptoAprovacaoPendente=Criptocurrency pending approval.
+
+criptoMoedaVotada=Criptocurrency approved and voted to be set up.
+
+saldoNewCash=Balance {var}
+
+descricao=Description
+volume=Amount

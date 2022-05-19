@@ -1,0 +1,31 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EMAIL ANALISE DE DOCUMENTO
+#
+#
+#--VIEW
+
+##--
+#Textos da View
+titulo=NewCash - Contact From Site
+titulo2=Contact From Site!
+dataHora1=Data/Hora:
+nome=Name:
+email=Email:
+telefone=Phone:
+departamento=Department:
+mensagem=Message:
+novoContatoRecebido=New contact received!
+contatoRecebido=Contact Received
+
+infAcesso=Access information:
+dataHora=Date/Time:
+ipAcesso=Access IP:
+newCashEndereco=Cointrade | 
+emailDoSistema=This is an email system. Please do not answer.
+casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.
+
+
+

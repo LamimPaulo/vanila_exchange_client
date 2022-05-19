@@ -1,0 +1,874 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#SMS
+smsOrdemExecutada=Cointrade informa: Sua ordem de {var1} de paridade {var2} foi executada.
+
+clienteInvalido=Cliente inválido.
+
+eNecessarioInformarIdentificaoUsuario=É necessário informar a identificação do usuário"
+
+usuarioInvalido=Usuário inválido.
+
+celularInvalido=Celular inválido
+
+noMomentoEstamosProblemaSms=No momento estamos enfrentando problemas técnicos com o serviço de SMS. Por este motivo o token foi enviado para o seu e-mail cadastrado
+
+retomaremos=Retomaremos o serviço de SMS assim que possível.
+
+porFavorInformeCodigoValidacao=Por favor, informe o código de validação.
+
+codigoNaoEncontrado=Código não encontrado. Por favor, gere um novo código e tente novamente.
+
+codigoInvalido=Token inválido. Por favor, verifique o token enviado e tente novamente.
+
+codigoExpirado=Token expirado. Por favor, gere um novo token e tente novamente.
+
+necessarioInformarEndereco=É necessário informar o endereço da carteira.
+
+indentificacaoDeveInformada=A identificação da moeda deve ser informada.
+
+enderecoCadastrado=Endereço já cadastrado.
+
+naoPossivelGerarCarteira=Não foi possível gerar uma carteira no momento. Por favor, tente mais tarde.
+
+necessarioNomeCarteira=É necessário informar o nome da carteira.
+
+carteiraInutilizada=Carteira inutilizada no sistema.
+
+moedaInvalida=Moeda inválida.
+
+identificacaoClienteInformada=A identificação do cliente deve ser informada.
+
+voceJaExcedeuLimite=Você já excedeu o limite de carteiras permitido.
+
+naoFoiPossivelCriarCarteiraMomento=Não foi possível criar a carteira neste momento. Por favor, tente novamente mais tarde.
+
+voceNaoTemPermissaoAcessarCarteira=Você não tem permissão para acessar essa carteira
+
+carteiraNaoLocalizado=Carteira não localizada no sistema.
+
+necessarioInformarCidade=É necessário informar o nome da cidade.
+
+codigoCidadeInvalido=Código da cidade inválido.
+
+necessarioInformarEstado=É necessário informar o estado.
+
+cidadeNaoLocalizada=Cidade não localizada no sistema
+
+oEmailDeveInformado=O e-mail deve ser informado
+
+movimentoInvalido=Movimeno inválido.
+
+dataIniciarMaiorDataFinal=A data inicial não pode ser maior que a data final.
+
+documentoInvalido=Documento inválido.
+
+clienteAceitouDocumento=O Cliente já aceitou essa versão do documento.
+
+codigoInvalido=Código inválido.
+
+necessarioConfirmarSenha=É necessário confirmar a senha.
+
+aSenhaConfirmacaoDevemIguais=A senha e a confirmacao de senha devem ser iguais.
+
+emailInvalido=E-mail inválido.
+
+oEmailJaCadastrado=O e-mail já está cadastrado.
+
+cpfInvalido=CPF inválido. Para clientes domiciliados no Brasil é necessário informar um CPF válido.
+
+idadeSuperior18Anos=É necessário possuir idade igual ou superior a 18 anos.
+
+pinDeveTer4Digitos=O PIN deve ter 4 dígitos.
+
+informarEmailCliente=É necessário informar o email do cliente.
+
+cpfInvalido=CPF inválido.
+
+cpfJaCadastrado=O CPF já está cadastrado.
+
+necessarioInformarNomeCliente=É necessário informar o nome do cliente.
+
+cadastrarDDi=É necessário cadastrar o DDI.
+
+sejaBemVindo=Seja bem-vindo a Cointrade. Agradecemos pelo seu cadastro. Utilize a senha
+
+paraLogin= para seu primeiro login.
+
+ativarTokenPorSMS=Para ativar o TOKEN por SMS você precisa cadastrar o número de celular.
+
+autenticacaoGoogleSecret=Autenticação com 2FA exige uma Secret Key.
+
+chaveGoogleNaoValidade=Chave 2FA não validada.
+
+clienteNaoLocalizado=Cliente não localizado no sistema.
+
+senhaAtualInvalida=Senha atual inválida
+
+necessarioInformarSenha=É necessário informar a senha.
+
+necessarioConfirmarSenha=É necessário confirmar a senha.
+
+senhaConfirmacaoNaoConferem=A senha e a confirmação de senha não conferem.
+
+clienteInvalidoNaoEncontrado=Cliente inválido ou não encontrado.
+
+clienteJaEmAnalise=O cliente já se encontra em análise.
+
+vcNaoPermissaoExecutarAcao=Você não tem permissão para executar essa ação.
+
+necessarioInformarAgencia=É necessário informar a agência.
+
+necessarioInformarConta=É necessário informar a conta.
+
+necessarioInformarContaDigito=É necessário informar o dígito da conta.
+
+necessarioInformarBanco=É necessário informar a identificação do banco.
+
+tipoContaInvalido=Tipo de conta inválido.
+
+contaInvalida=Conta inválida ou não encontrada.
+
+direcaoInvalida=Direção inválida.
+
+informarDataLancamento=É necessário informar a data do lançamento.
+
+informarIdentificacaoCliente=É necessário informar a identificação do cliente.
+
+tipoMovimentoInvalido=Tipo de movimento inválido.
+
+valorPrecisaMaioroZero=O valor precisa ser maior que zero.
+
+oDeposito=O Depósito de
+
+estaTemporariamente=está temporariamente suspenso.
+
+oSaqueDe=O Saque de
+
+cadastrouContaCorrente=Cadastrou a conta corrente 
+
+alterouContaCorrente=Alterou a conta corrente
+
+novoSaque= Novo saque de
+
+autorizadoAutomaticamente= autorizado automaticamente.
+
+aguardandoAtutorizacao= aguardando autorização.
+
+newCashDeposito=Cointrade: Deposito
+
+volume=Volume
+
+newCashSaqueProcessando=Cointrade: PROCESSANDO Saque
+
+newCashSaqueAprovado=Cointrade: APROVADO Saque
+
+newCashSaqueRealizado=Cointrade: REALIZADO Saque
+
+newCashSaqueCancelado=Cointrade: CANCELADO Saque
+
+dataInicialInformada=A data inicial deve ser informada.
+
+dataFinalInformada=A data final deve ser informada.
+
+clienteDebitoIdentificado=O cliente da conta de débito precisa ser identificado.
+
+saqueCriptoSuspenso=O saque de criptomoedas está temporariamente suspenso para a sua conta.
+
+comercioMoedaSuspenso=O comércio da moeda está suspenso.
+
+comercioMoedaTempSuspenso=O comércio da moeda está temporariamente suspenso.
+
+valorMinimoTransf=O valor mínimo para transferência é de 
+
+voceNaoTemSaldoSuficiente=Você não tem saldo suficiente para efetuar essa operação.
+
+taxaSobreTransferencia=Taxa sobre Transferências entre contas Saída:
+
+entrada=Entrada:
+
+depositoBitcoin=Depósito Bitcoin
+
+transacaoNaoLocalizada=Transferência não localizada no sistema.
+
+transacaoConfirmada=A transação já foi confirmada no sistema.
+
+transacaoNaoAutorizada=A transação não está autorizada no sistema.
+
+transacaoNegada=A transação foi negada pelo sistema. Contate o responsável.
+
+hashTransacaoInvalido=O Hash da transação é inválido.
+
+divergenciaMoedaInformada=Divergência na moeda informada.
+
+dataTransacaoInvalida=Data da transação inválida.
+
+divergenciaEnderecoCarteira=Divergência no endereço da carteira.
+
+divergenciaValorTransacao=Divergência no valor da transação.
+
+transacaoNaoLocalizadaSistema=Transação não localizada no sistema.
+
+vocePrecisaLogadoOperacao=Você precisa estar logado para efetuar essa operação.
+
+valorInvalido=Valor inválido.
+
+necessarioInformarDescricaoEmpresa=É necessário informar a descrição da empresa.
+
+informarDescricaoCliente=É necessário informar a descrição do cliente.
+
+#--------------------------
+
+vocePrecisaLogadoLancamento=Você precisa estar logado para efetuar lançamentos.
+
+solicitacaoDepositoSuspensa=A solicitação de depósito está temporariamente suspensa para sua conta.
+
+naoPossivelAlterarDeposito=Não é possível alterar o depósito.
+
+vocePrecisaInformarCompDeposito=Você precisa informar o comprovante de depósito.
+
+necessarioInformarConta=É necessário selecionar uma conta bancária para depósito.
+
+necessarioIdentifarDepositante=É necessário identificar o depositante.
+
+necessarioDepositarTipoDeposito=É necessário identificar o tipo de depósito
+
+statusInvalido=Status inválido.
+
+valorPrecisaMaiorZero=O valor depositado precisa ser maior que zero.
+
+creditadoNaContaMaiorZero=O valor a ser creditado na conta do clitente precisa ser maior que zero.
+
+novoDepositoPendenteReais=Novo depósito de reais pendente:
+
+valorDepositadoDeveInformado=O valor depositado deve ser informado.
+
+identificacaoInvalidaDeposito=Identificação do depósito inválida.
+
+voceNaoTemPermissaoEfetuarOperacao=Você não tem permissão para efetuar essa operação.
+
+depositoConfirmado=O depósito já foi confirmado no sistema.
+
+depositoCancelado=O depósito já foi cancelado no sistema.
+
+pagamentoComissaoDepositoReferencia=Pagamento comissão depósito Referência
+
+pagamentoComissaoDepositoConvidado=Pagamento comissão depósito convidado
+
+newCashDepositoAprovadoValorCreditado=Cointrade: Depósito aprovado. Valor creditado: R
+
+depositoNaoEncontrado=Depósito não encontrado no sistema.
+
+depositoConfirmadoNaoPodeCancelado=O depósito já foi confirmado no sistema e não pode ser cancelado.
+
+depositoCanceladoSistema=O depósito já se encontra cancelado no sistema.
+
+vocePrecisaLogadoExecutarOperacao=Você precisa estar logado para executar essa operação.
+
+voceNaoTemPermissaoEssaOperacao=Você não tem permissão para executar essa operação.
+
+necessarioMotivoCancelamento=É necessário informar o motivo do cancelamento.
+
+necessarioInformarNomeEstado=É necessário informar o nome do estado.
+
+siglaEstadoInvalida=Sigla do estado inválida.
+
+necessarioIdentificacaoDeposito=É necessário informar a identificação do depósito.
+
+taxaTedInvalida=Taxa de TED inválida.
+
+percentualTaxaInvalido=Percentual de taxa inválido.
+
+valorTaxaInvalido=Valor da taxa inválido.
+
+depositoInvalidoNaoEncontrado=Depósito inválido ou não encontrado.
+
+procEstornoIniciado=Procedimento de estorno iniciado.
+
+estornoInvalidoNaoEncontrado=Estorno inválido ou não encontrado.
+
+registroComoFinalizado=O registro consta como finalizado.
+
+registroComoCancelado=O registro consta como cancelado.
+
+registroComoAprovado=O registro consta como aprovado.
+
+agenciaDeveInformada=A agência deve ser informada.
+
+contaDeveInformada=A conta deve ser informada.
+
+titularDeveInformado=O nome do titular da conta deve ser informado.
+
+cpfCnpjInvalido=CPF ou CNPJ inválido.
+
+cnpjInvalido=CNPJ inválido.
+
+naoPossiveRejeitarRegistroFinalizado=Não é possível rejeitar um registro finalizado.
+
+naoPossRejRegCancelado=Não é possível rejeitar um registro cancelado.
+
+necInfMotRejDados=É necessário informar o motivo para a rejeição dos dados.
+
+osDadosInformadosConsulteMensTopoTela=Os seus dados bancário informados para o estorno {var1} no valor de R$ {var2} foram rejeitados. Consulte a mensagem no topo da tela do sistema para mais informações.
+
+naoPosCancelarRegFina=Não é possível cancelar um registro finalizado.
+
+oProcEstornCancelado=O procedimento de estorno {var1} no valor de R$ {var2} foi cancelado.
+
+naoPosAproRegFinal=Não é possível aprovar um registro finalizado.
+
+naoPOsAprovRegAprovado=Não é possível aprovar um registro que já consta como aprovado.
+
+naoPosAprovRegCancelado=Não é possível aprovar um registro cancelado.
+
+dadosInformValidadosSucesso=Os dados bancários informados no procedimento de estorno {var1} no valor de R$ {$var2} foram validados com sucesso. Em breve os valores serão creditados na conta informada.
+
+naoPosRegFinalizado=Não é possível finalizar um registro já finalizado.
+
+naoPossFinalRegCan=Não é possível finalizar um registro cancelado.
+
+regPrecEstarAprovado=O registro precisa estar aprovado para ser finalizado.
+
+enviarValorRefProcEstorno=Enviamos o valor de R$ {var1} referentes ao procedimento de estorno {var2}. Qualquer dúvida por favor entrar em contato com nossa central de atendimento.
+
+dataInicialInvalida=Data inicial inválida.
+
+dataFinalInvalida=Data final inválida.
+
+valorMinimoNegRS=O valor mínimo para negociação é de
+
+sessaInvalida=Sessão inválida.
+
+mercadoMoedaSuspenso=O mercado da moeda foi suspenso.
+
+mercadoTempSuspenso=Mercado temporariamente suspenso.
+
+negBloqParaSuaConta=A negociação de criptomoedas está bloqueado para sua conta.
+
+saldoInsuficiente=Saldo insuficiente.
+
+volumeInvalido=Volume inválido
+
+cotacaoInvalido=Cotação inválido.
+
+tipoOrdemInvalida=Tipo de ordem inválida.
+
+ordemInvalidaNaoEncontrada=Ordem inválida ou não encontrada.
+
+dataInvalidaInformarData=Data inválida. É necessário informar a data.
+
+necInformMoedaAtual=É necessário informar a moeda atual.
+
+naoPossivelAtualizarRegPago=Não é possível atualizar um registro pago.
+
+naoPosAtualiRegistroCancelado=Não é possível atualizar um registro cancelado.
+
+enderecoOrigemPrecisaInformado=O endereço de origem precisa ser informado.
+
+endOrigemInvalido=Endereço de origem inválido.
+
+endDestinoInvalido=O endereço de destino é inválido.
+
+valumeMaiorQueZero=O Volume precisa ser maior que zero.
+
+identiClienteInvalida=Identificação do cliente inválida.
+
+necessarioInformarNomeMoeda=É necessário informar o nome da moeda.
+
+simboloMoedaInvalido=Símbolo da moeda inválido.
+
+naoPossivelAlteRemessaCancelada=Não é possível alterar os dados de uma remessa cancelada.
+
+naoPossivelAlteRemessaPaga=Não é possível alterar os dados de uma remessa paga.
+
+naoPossivelAlteRemessaFinalizada=Não é possível alterar os dados de uma remessa finalizada.
+
+informarTitular=É necessário informar o nome do titular da conta.
+
+informarAgencia=É necessário informar a agência bancária para transferência.
+
+informarConta=É necessário informar a conta para transferência.
+
+informarDigConta=É necessário informar o dígito da conta para transferência.
+
+informarCpfCnpj=É necessário informar o CPF ou CNPJ do titular da conta.
+
+docInvalido=Documento inválido - CPF / CNPJ
+
+tipoContaInvalida=Tipo de conta inválida.
+
+valorRemessaInvalido=O valor da remessa está inválido.
+
+tipoDataInvalida=Tipo de data inválido.
+
+necessarioComprovanteDeposito=É necessário informar o comprovante de depósito.
+
+remessaValoresInvalida=Remessa de valores inválida.
+
+necessarioInformDataReferencia=É necessário informar a data de referência.
+
+clientePrecisaInformado=O Cliente precisa ser informado.
+
+tipoResgateInvalido=Tipo de resgate inválido.
+
+clientePrecisaSerInformado=O Cliente de destino precisa ser informado.
+
+naoPOssivelAltSaque=Não é possível alterar o saque.
+
+valorPrecSaqueMaiorZero=O valor do saque precisa ser maior que zero.
+
+valorSacadoMaiorZero=O valor sacado precisa ser maior que zero.
+
+necessarioEstarLogadoOperacao=É necessário estar logado para efetuar a operação.
+
+contaBancariaInvalida=Conta bancária inválida.
+
+valorDeveSerInformado=O valor do saque deve ser informado.
+
+valorMinimoSaque=O valor mínimo para saque é de R$ 
+
+valorSolicitadoValorTaxas=O valor solicitado é inferior ao valor das taxas cobradas.
+
+identificacaoSaqueInvalida=Identificação do saque inválida.
+
+saqueJaConfirmado=O saque já foi confirmado no sistema.
+
+saqueJaCancelado=O saque já foi cancelado no sistema.
+
+necessarioEnviarCompDeposito=É necessário enviar o comprovante de depósito.
+
+newCashSaqueAprovado=Cointrade: Saque aprovado. Valor sacado: R$ 
+
+saqueNaoEncontrado=Saque não encontrado no sistema.
+
+saqueJaConfirmadoNaPodeCancelado=O saque já foi confirmado no sistema e não pode ser cancelado.
+
+saqueJaCanceladoSistema=O saque já se encontra cancelado no sistema.
+
+
+
+#_______________________Não precisa traduzir esse bloco
+
+sistemaIndisponivelErr=Sistema indisponível no momento.
+
+confirmaSenhaErr=Você precisa confirmar a senha!
+
+informadaSenhaErr=Se informada a confirmação da senha, você precisa informar uma senha!
+
+confirmacaoSenhaIguaisErr=A senha e a confirmação de senha precisam ser iguais!
+
+usuarioAlteracoesErr=Este usuário não permite alterações
+
+informarSenhaErr=É necessário informar a senha.
+
+usuarioInvalidoErr=Tipo de usuário inválido.
+
+nomeUserInformadoErr=O nome do usuário precisa ser informado.
+
+emailPrecisaIndformadoErr=O email do usuário precisa ser informado.
+
+emailJaCadastradoErr=O email já está cadastrado no sistema.
+
+celularInvalido=Celular inválido
+
+login2FAErr=É necessário cadastrar um celular para habilitar a autenticação em duas etapas.
+
+loginEmailErr=O e-mail cadastrado deve ser informado.
+
+loginSenhaErr=A senha de acesso deve ser informada.
+
+permissaoAcessoSistemaErr=Você não tem permissão de acesso ao sistema. Por favor, contate o administrador do sistema.
+
+senhaInvalidaErr=Senha invalída
+
+cadastroEmAnaliseErr=Cadastro em análise. Por favor, aguarde contato.
+
+cadastroRecusadoErr=O seu cadastro foi recusado. Por favor, aguarde contato.
+
+emailPrecisaConfirmadoErr=O seu e-mail precisa ser confirmado para ter acesso ao sistema.
+
+loginESenhaInvalidosErr=Login ou senha inválidos.
+
+emailConfirmadoSenhaErr=O seu e-mail precisa ser confirmado para efetuar a troca de senha.
+
+userNaoLocalizadoErr=Usuário não localizado no sistema
+
+senhaAtualInvalidErr=Senha atual inválida
+
+necessConfirmaSenhaErr=É necessário confirmar a senha
+
+senhaConfirmacaoErr=A senha e a confirmação de senha não conferem
+
+nenhumUserCPFinformado=Nenhum usuário com o CPF informado.
+
+userNaoPodeExcluido=O usuário não pode ser excluído pois existem {var} cliente(s) vinculados ao mesmo.
+
+
+
+##--------------------Final do bloco
+
+
+naoPossivelAlterarDadosBoletoCancelado=Não é possível alterar os dados de um boleto cancelado.
+
+naoPossAltBoletopago=Não é possível alterar os dados de um boleto pago.
+
+naoPossAltBoletoFinalizado=Não é possível alterar os dados de um boleto finalizado.
+
+necessarioInformarBarras=É necessário informar o código de barras.
+
+dataVencimentoInvalida=Data de vencimento inválida.
+
+necessarioEmail=É necessário cadastrar um e-mail.
+
+emailInvalido=E-mail inválido.
+
+valorBoletoInvalido=Valor do boleto inválido.
+
+novoBoletoSMS=Novo boleto pendente. Valor: R$
+
+informarCompPagamento=É necessário informar o comprovante de pagamento.
+
+boletoInvalido=Boleto inválido.
+
+voceNaoTemSaldoSufuciente=Você não tem saldo suficiente para realizar essa operação.
+
+nomeDeveInformado=O nome deve ser informado.
+
+emailDeveInformado=O e-mail deve ser informado.
+
+telefoneDeveInformado=O telefone deve ser informado.
+
+departamentoDeveInformado=O departamento deve ser informado.
+
+mensagemDeveInformada=A mensagem deve ser informada.
+
+clienteDeveInformado=O cliente deve ser informado.
+
+moedaDeveInformada=A moeda deve ser informada.
+
+moedaNaoAceita=Moeda não aceita.
+
+#-----
+
+voceNaoTemPermirealOper=Você não tem permissão para realizar essa operação.
+
+aDescDeveInformada=A descrição deve ser informada.
+
+oIdClienteDeveInformado=O id do cliente deve ser informado.
+
+caterogiaInvalida=Categoria inválida.
+
+aCatNaoPodeSerDeletada=A categoria não pode ser deletada porque existem registros referenciando a mesma.
+
+necessarioNomeNews=É necessário informar o nome.
+
+necessarioEmailNews=É necessário informar o e-mail.
+
+emailCadstradoNews=E-mail já cadastrado na newsletter.
+
+newsNaoLocalizada=Newsletter não localizada.
+
+emailNaoCadastradoSistema=E-mail não cadastrado no sistema.
+
+endPagamentoInvalido=Endereço de pagamento inválido.
+
+dataExpiInvalida=Data de expiração inválida.
+
+identificacaoBoleoInvalida=Identificação de remessa inválida.
+
+identificacaoInvoiceInvalida=Identificação da invoice inválida.
+
+valorRemessaInvalido=Valor da remessa inválido.
+
+valorMoedaDigitalinvalida=Valor da moeda digital inválida.
+
+dataPagamentoInvalida=Data de pagamento inválida.
+
+necessarioInformarOrdemCompra=É necessário informar a identificação da ordem de compra.
+
+valorCotacaoInvalido=Valor da cotação inválido.
+
+volumeExecutadoInvalido=Volume executado inválido.
+
+ordemNaoEncontrada=Ordem não encontrada.
+
+simboloMoedaInvalido=Simbolo da moeda inválido.
+
+solicitacoesUpgradelicenca=Solicitações de Upgrade de Licença de Software estão temporariamente suspensas. Em caso de dúvidas entre em contato com a cental de atendimento.
+
+licencainvalida=Licença inválida.
+
+licencaNaoEncontrada=Licença não encontrada no sistema.
+
+necessarioCEP=É necessário informar o CEP.
+
+necessarioCoordenadas=É necessário informar as coordenadas.
+
+necessarioDescricao=É necessário informar a descrição.
+
+necessarioEnd=É necessário informar o endereço.
+
+necessarioSeguimentoComercio=É necessário informar o seguimento do comércio.
+
+necessarioInformarNumero=É necessário informar o número.
+
+comercioNaoEncontrado=Comércio não encontrado.
+
+necessarioTitular=É necessário informar o titular da conta.
+
+necessarioCNPJ=É necessário informar o CNPJ da empresa.
+
+necessarioAgencia=É necessário informar a agencia.
+
+necessarioConta=É necessário informar a conta.
+
+necessarioBanco=É necessário informar a identificação do banco.
+
+contaNaoLocalizada=Conta bancária não localizada.
+
+descricaoInvalida=Descrição inválida.
+
+linkInvalida=Link inválida.
+
+versaoInvalida=Versão inválida.
+
+identicacaoCarteiraDeveInformada=A identificação da carteira deve ser informada.
+
+tipoTransacaoInvalida=Tipo de transação inválida.
+
+valorePrecisaInformado=O valor precisa ser informado.
+
+necessarioChaveEstabelecimento=É necessário informar a chave do estabelecimento.
+
+identBoletoInvalida=Identificação do boleto inválida.
+
+clienteNaoInformado=Cliente não informado.
+
+periodoReferenciaInvalido=Período de referência inválido:
+
+necessarioIndentNoti=É necessário informar a identificação da notificação.
+
+necessarioInformarIdentDest=É necessário informar a identificação do destinatário.
+
+notfiJaExiste=A notificação já existe para o cliente informado.
+
+notfiJaExisteUser=A notificação já existe para o usuário informado.
+
+notfiInvalidNaoEncont=Notificação inválida ou não encontrada.
+
+necessarioConteudoMensagem=É necessário informar o conteúdo da mensagem.
+
+tipoNotfiInvalido=Tipo de notificação inválido.
+
+necessarioInformCliente=É necessário informar o cliente.
+
+conteudoObsevacoes=É necessário informar o conteúdo do campo observações.
+
+valorDepositadsoMaiorQueZeroCliente=O valor a ser depositado na conta do cliente precisa ser maior que zero.
+
+nomeRecursoInvalido=Nome do recurso inválido.
+
+ordemRecursoInvalido=Ordem do recurso inválido.
+
+recursoNaoEncontrado=Recurso não encontrado.
+
+referenciaPrecisaInformada=A referência precisa ser informada.
+
+necessariosInformarIdentEstbe=É necessário informar a identificação do estabelecimento.
+
+estabelecimentoInvalido=Estabelecimento inválido.
+
+clienteJaCadastradoSistema=Cliente já cadastrado no sistema.
+
+chaveEstabeleInvalida=Chave do estabelecimento inválida.
+
+estabelecimentoDesativado=O Estabelecimento está desativado no sistema.
+
+referenciaInvalida=Referência inválida.
+
+identEstabeleInvalida=Indentificação do estabelecimento inválida.
+
+identificacaoInvalida=Identificação inválida.
+
+emailDeveSerInformado=O e-mail cadastrado deve ser informado.
+
+tokenExpirado=Token expirado.
+
+tokenInvalido=Token inválido.
+
+necessarioHash=É necessário informar o hash.
+
+jaExisteTransacao=Já existe uma transação.
+
+transacaoAguardaConfirmacao=A transação já foi recebida e aguarda confirmação.
+
+necessarioEndDestino=É necessário informar o endereço de destino.
+
+endInformadoNaoPertenceBase=O Endereço informado não pertence á base de endereços do sistema.
+
+depositanteCriptoEstaSuspenso=O depósito de criptomoedas está temporariamente suspenso para a conta do cliente.
+
+necessarioDescricaoLancamento=É necessário informar a descrição do lançamento.
+
+depositoUspenso=O depósito de {var} está temporariamente suspenso.
+
+transacaoConfirmadaSistema=Essa transação já foi confirmada no sistema.
+
+dataRegistroNaoConfere=A data do registro não confere.
+
+descNaoConfere=A descrição do registro não confere.
+
+endRegistroNaoConfere=O endereço do registro não confere.
+
+valorRistroNaoConfere=O valor do registro não confere.
+
+tipoMovimentoNaoConfere=O tipo de movimento não confere.
+
+moedasDivergentes=Moedas divergentes.
+
+dadosJsonInvalidos=Dados json do core inválidos.
+
+tentativaDeConfirmacaoNaoExiste=Tentativa de confirmação para um registro que não existe.
+
+jaExisteTransacaoComHash=Já existe uma transação com este hash.
+
+sessaoInvalidaLoginNovamente=Sessão inválida. Realize login e tente novamente.
+
+naoPossivelExcluirTransaConfirmada=Não é possível excluir uma transação já confirmada.
+
+
+votacaoListagemRn1=Cliente inválido
+votacaoListagemRn2=Você precisa informar a descrição
+votacaoListagemRn3=É necessário cadastrar uma logo para a moeda
+votacaoListagemRn4=É necessário informar a quantidade de casas decimais da moeda
+votacaoListagemRn5=É necessário informar um email de contato
+votacaoListagemRn6=É necessário informar o nome do responsável
+votacaoListagemRn7=É necessário informar a sigla da moeda com 5 dígitos
+votacaoListagemRn8=O tamanho máximo para o campo sigla é de 5 caracteres
+votacaoListagemRn9=É necessário informar o nome da moeda
+votacaoListagemRn10=Data inicial inválida
+votacaoListagemRn11=Data final inválida
+votacaoListagemRn12=A data inicial não pode ser maior que a data final
+votacaoListagemRn13=É necessário informar o site da moeda
+votacaoListagemRn14=É necessário informar o link para o White Papper
+votacaoListagemRn15=O cadastro de moedas para votação é gratuíto mas é necessário possuir um saldo de pelo menos {var1} NEWC. Seu saldo atual é {var2} NEWC.
+
+
+clienteHasVotoRn1=Identificação do cliente inválida
+clienteHasVotoRn2=Identificação da votação inválida
+clienteHasVotoRn3=Quantidade de votos inválida
+clienteHasVotoRn4=Você não tem saldo NEWC suficiente para essa quantidade de votos
+
+
+votacaoListagemRn16=É necessário falar sobre a comunidade
+
+votacaoListagemHasComunidadeRn1=É necessário informar a identificação da comunidade
+votacaoListagemHasComunidadeRn2=É necessário informar a identificação da votação
+votacaoListagemHasComunidadeRn3=É necessário informar o link da comunidade
+
+votacaoListagemRn17=É necessário informar o capital de mercado da moeda
+
+
+depositoIcoRn1=Saldo insuficiente
+depositoIcoRn2=Moeda inválida
+
+
+clienteHasCompartilhamentoBlogRn1=É necessário informar o id do POST
+clienteHasCompartilhamentoBlogRn2=É necessário informar o id do Cliente
+clienteHasCompartilhamentoBlogRn3=É necessário informar o POST compartilhado
+clienteHasCompartilhamentoBlogRn4=É necessário informar a categoria fo POST compartilhado
+clienteHasCompartilhamentoBlogRn5=Rede Social inválida
+clienteHasCompartilhamentoBlogRn6=Você já compartilhou este POST por Facebook
+clienteHasCompartilhamentoBlogRn7=Você já compartilhou este POST por Telegram
+clienteHasCompartilhamentoBlogRn8=Você já compartilhou este POST por Instagram
+clienteHasCompartilhamentoBlogRn9=Você já compartilhou este POST por Twitter
+clienteHasCompartilhamentoBlogRn10=Você já compartilhou este POST por Whatsapp
+
+
+depositoIcoRn3=É necessário informar o cliente
+depositoIcoRn4=É necessário informar a moeda
+depositoIcoRn5=ICO inválido
+depositoIcoRn6=Volume inválido
+depositoIcoRn7=Carteira inválida
+depositoIcoRn8=TXID inválido
+
+distribuicaoTokenRn1=É necessário informar a fase
+distribuicaoTokenRn2=Cliente inválido
+distribuicaoTokenRn3=ICO inválido
+distribuicaoTokenRn4=Moeda inválida
+distribuicaoTokenRn5=Preço inválido
+distribuicaoTokenRn6=Tipo de compra inválido
+distribuicaoTokenRn7=Valor total inválido
+distribuicaoTokenRn8=Volume do Token inválido
+
+saqueIcoRn1=Moeda para conversão inválida
+saqueIcoRn2=Moeda para saque inválida
+saqueIcoRn3=Identificação do ICO inválida
+saqueIcoRn4=Identificação do cliente inválida
+saqueIcoRn5=Cotaçao inválida
+saqueIcoRn6=Volume da moeda de conversão inválida
+saqueIcoRn7=Volume dav moeda de saque inválida
+saqueIcoRn8=Exchange para cotação inválida
+saqueIcoRn9=É necessário informar a carteira de resgate
+saqueIcoRn10=O saldo mínimo para saque é de 30 USD.
+saqueIcoRn11=O volume precisa ser maior que zero
+saqueIcoRn12=Saldo insuficiente
+saqueIcoRn13=A operação resulta em um volume inferior a 1 satoshi
+saqueIcoRn14=Registro não encontrado
+saqueIcoRn15=O saque está cancelado no sistema
+saqueIcoRn16=O saque já foi executado
+saqueIcoRn17=O saque já está autorizado no sistema
+saqueIcoRn18=Cotação inválida
+saqueIcoRn19=É necessário informar a exchange.
+saqueIcoRn20=A operação resulta em menos de 1 satoshi.
+saqueIcoRn21=Registro não encontrado
+saqueIcoRn22=O saque já foi executado.
+saqueIcoRn23=O saque já está cancelado no sistema.
+saqueIcoRn24=É necessário informar a exchange.
+saqueIcoRn25=Registro não encontrado
+saqueIcoRn26=O saque já está cancelado no sistema.
+saqueIcoRn27=O saque não foi autorizado.
+saqueIcoRn28=O saque já foi executado.
+saqueIcoRn29=É necessário informar a hash da transação.
+saqueIcoRn30=Data inicial inválida
+saqueIcoRn31=Data final inválida
+saqueIcoRn32=A data inicial não pode ser maior que a data final
+
+walletIcoRn1=Cliente inválido
+walletIcoRn2=Moeda inválida
+walletIcoRn3=ICO inválido
+walletIcoRn4=Cliente inválido
+walletIcoRn5=Moeda inválida
+
+authRn1=Código 2FA Inválido
+
+contaCorrenteBtcRn1=Saldo insuficiente
+clienteHasCreditoRn1=A operação não pode ser efetuado pois existem pendências na(s) conta(s) corrente(s) {var1} 
+
+depositoIcoRn10=Não existe uma tabela de preço para a moeda selecionada
+
+contaCorrenteReais1=Esse registro não pode ser alterado.
+contaCorrenteReais2=O cliente da conta de crédito precisa ser identificado
+contaCorrenteReais3=
+contaCorrenteReais4=
+contaCorrenteReais5=
+contaCorrenteReais6=
+contaCorrenteReais7=
+contaCorrenteReais8=
+contaCorrenteReais9=
+contaCorrenteReais10=
+contaCorrenteReais11=
+contaCorrenteReais12=
+
+
+volumeMinimo=O preço mínimo deve ser maior que {var}
+
+
+bancoCadastrado=Conta bancária já cadastrada.
+
+contratoInvalido=Contrato inválido.
+
+contaClienteDocumento=O cadastro da conta precisa ter o CPF do cliente.
+contaClienteNome=O cadastro da conta precisa ter o nome do cliente (Titular da conta).

@@ -1,0 +1,20 @@
+titulo=Comprar NEWC Token
+subTitulo=Negociações
+
+compraico1=Você pode utilizar o saldo na Cointrade para comprar o NEWC Token. Utilize a sua moeda favorita abaixo e faça já a sua compra.
+compraico2=Compre com
+compraico3=Informe o volume de
+compraico4=Receberá
+compraico5=Bônus
+compraico6=Compre com
+compraico7=Seu saldo
+compraico8=Cancelar
+compraico9=Confirmar Compra
+compraico10=Comprar NEWC Token
+compraico11=Você confirmar a compra de {var1} NEWC Tokens pelo valor de {var2} {var3}?
+compraico12=Essa compra te dará um bônus de {var1} NEWC Tokens.
+compraico13=O volume de {var1} precisa ser maior que zero.
+compraico14=O Volume inserido é insuficiente para compra NEWC Tokens.
+compraico15=Moeda inválida
+compraico16=O volume precisa ser maior que zero
+compraico17=Parabéns. Você comprou {var1} NEWC Token e ganhou {var2} de bônus. 

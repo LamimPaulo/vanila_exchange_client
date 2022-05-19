@@ -1,0 +1,35 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#REMESSA FINALIZADA
+#
+#--VIEW
+
+##--
+#Textos da View
+assunto=Remesa Finalizada
+titulo=NewCash - Remesa Finalizada
+titulo2=Remesa Finalizada!
+ola=Hola
+fraseSeguranca=Su pregunta de seguridad es:
+remessaSucesso=Remesa de valores registrada con éxito!
+banco=Banco:
+titular=Nombre Titular:
+tipoConta=Tipo de Cuenta:
+corrente=Cuenta Corriente
+conta=Cuenta:
+dataPagamento=Fecha de Pago:
+agencia=Agencia:
+dataVencimento=Fecha de Vencimiento:
+valor=Valor:
+
+
+infAcesso=Información de acceso:
+dataHora=Fecha/Hora:
+ipAcesso=IP de Acceso:
+newCashEndereco=Cointrade | 
+emailDoSistema=Este es un e-mail del sistema. Por favor, no responder.
+casoNaoTenhaCadastro=En caso de no haberse efectuado el registro, entrar en contacto a través de nuestros canales de atención al cliente.
+
+

@@ -1,0 +1,538 @@
+<?php
+
+?>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+  
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+       <div class="col-lg-10">
+           <h2>Estornos Bancários</h2>
+           <ol class="breadcrumb" style="background-color: transparent !important;">
+               <li>
+                   Estornos
+               </li>
+           </ol>
+       </div>
+    </div>
+</div>
+<br>
+
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    
+                    <form id="pesquisa">                        
+                        
+                        <div class="row">
+                            <div class="col col-lg-3">
+                                <div class="form-group">
+                                    <label>Data Inicial</label>
+                                    <input type="text" class="form-control" id="filtroDataInicial"  onchange="filtrar();" value="" />
+                                </div>
+                            </div>
+                            <div class="col col-lg-3">
+                                <div class="form-group">
+                                    <label>Data Final</label>
+                                    <input type="text" class="form-control" id="filtroDataFinal"  onchange="filtrar();" value=""/>
+                                </div>
+                            </div>
+                            
+                            <div class="col col-lg-2">
+                                <div class="form-group">
+                                    <label>Status do depósito</label>
+                                    <select class="form-control" id="filtroStatus" onchange="filtrar();">
+                                        <option value="T">Todos</option>
+                                        <option value="<?php echo Utils\Constantes::EXTORNO_REJEITADO ?>">Rejeitado</option>
+                                        <option value="<?php echo Utils\Constantes::EXTORNO_PENDENTE ?>">Pendente</option>
+                                        <option value="<?php echo Utils\Constantes::EXTORNO_APROVADO ?>">Aprovado</option>
+                                        <option value="<?php echo Utils\Constantes::EXTORNO_CANCELADO ?>">Cancelado</option>
+                                        <option value="<?php echo Utils\Constantes::EXTORNO_FINALIZADO ?>">Finalizados</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col col-lg-2">
+                                <div class="form-group">
+                                    <label class="control-label">Registros</label>
+                                    <select class="form-control" id="nresultado" onchange="filtrar();" >
+                                        <option value="10" >10</option>
+                                        <option value="20" >20</option>
+                                        <option value="50" >50</option>
+                                        <option value="100" >100</option>
+                                        <option value="T" >Todos</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="row">
+                            
+                            <div class="col col-lg-6">
+                                <div class="form-group">
+                                    <label>Filtro Geral</label>
+                                    <input type="text" id="filtroTexto" class="form-control" onkeyup="filtrar();"/>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="col col-lg-6">
+                                <div class="checkbox m-r-xs">
+                                    <input type="checkbox" id="comDadosBancarios" name="comDadosBancarios" onchange="filtrar();">
+                                    <label for="comDadosBancarios">
+                                        Mostrar somente registros com dados bancários informados.
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col col-lg-12 col-xs-12 text-center">
+                                <div class="col-lg-5">
+                                </div>
+                                <div class="col-lg-2">
+                                <button class="btn btn-default full-width" type="button" onclick="limpar();">
+                                    Limpar Filtros
+                                </button>
+                                </div>
+                                <div class="col-lg-5">
+                                </div>
+                            </div>
+                        </div>
+                    </form>                        
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    
+<section class="content">
+    <div class="row">
+        <div class="col col-lg-12">
+            <div class="table-responsive">
+            <table class="table table-hover table-bordered table-stripped table-condensed" style="background-color: #fff; font-size: 11px">
+                <thead>
+                    <tr>
+                        <th class="text-center">N Processo</th>
+                        <th class="text-center">Depósito</th>
+                        <th class="text-center">Cliente</th>
+                        <th class="text-center">Valor Dep.</th>
+                        <th class="text-center">Valor Estornado</th>
+                        <th class="text-center">Taxa + Ted</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Ação</th>
+                        <th class="text-center">Cancelar</th>
+                    </tr>
+                </thead>
+
+                <tbody id="lista" class="text-center">
+
+                </tbody>
+            </table>
+                </div>
+        </div>
+    </div>
+</section>
+<br><br>
+<div class="clearfix"></div>
+
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<!-- NumberFormat -->
+<script>
+
+
+    $(document).ready(function () {
+        filtrar();
+        $(".select2").select2();
+        $("#filtroDataInicial, #filtroDataFinal").datepicker({format: 'dd/mm/yyyy'}).mask("99/99/9999");
+    });
+    
+    function limpar() {
+        $("#filtroDataInicial").val("");
+        $("#filtroDataFinal").val("");
+        $("#filtroStatus").children("option").first().prop("selected", true);
+        $("#filtroTexto").val("");
+        $("#nresultado").children("option").first().prop("selected", true);
+        $("#comDadosBancarios").prop("checked", false);
+        
+        filtrar();
+    }
+    
+    function filtrar() {
+        $("#lista").html("<tr><td colspan='9' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ESTORNO_LISTAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                dataInicial: $("#filtroDataInicial").val(),
+                dataFinal: $("#filtroDataFinal").val(),
+                status: $("#filtroStatus").val(),
+                filtro: $("#filtroTexto").val(),
+                nresultado: $("#nresultado").val(),
+                comDadosBancarios: $("#comDadosBancarios").is(":checked")
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista").html(json.html);
+                    } else {
+                        $("#lista").html("<tr><td colspan='9'>"+json.mensagem+"</td></tr>");
+                    }
+                } catch (e) {
+                    $("#lista").html("<tr><td colspan='9'>"+e+"</td></tr>");
+                }
+            }
+        });
+    }
+    
+    
+    
+    function modalAprovarEstorno(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_ESTORNO_ANALISAR ?>',
+            method: "post",
+            dataType: "json",
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) { 
+                        $("#modalAprovarEstornoCodigo").val(codigo);
+                        $("#modalAprovarEstornoTitular").html(json.estornoTitular);
+                        $("#modalAprovarEstornoCnpjCpf").html(json.estornoCnpjCpf);
+                        $("#modalAprovarEstornoAgencia").html(json.estornoAgencia);
+                        $("#modalAprovarEstornoConta").html(json.estornoConta);
+                        $("#modalAprovarEstornoTipoConta").html(json.estornoTipoConta);
+                        $("#modalAprovarEstornoBanco").html(json.estornoBanco);
+                        $("#modalAprovarEstornoValorEstorno").html(json.estornoValorEstorno);
+                        $("#modalAprovarEstornoPercentualTaxaEstorno").html(json.estornoPercentualTaxaEstorno);
+                        $("#modalAprovarTaxaEstorno").html(json.taxaEstorno);
+                        $("#modalAprovarEstornoValorTed").html(json.estornoValorTed);
+
+                        $("#modalAprovarEstornoDepositoTitular").html(json.depositoTitular);
+                        $("#modalAprovarEstornoDepositoCnpjCpf").html(json.depositoCnpjCpf);
+                        $("#modalAprovarEstornoDepositoAgencia").html(json.depositoAgencia);
+                        $("#modalAprovarEstornoDepositoConta").html(json.depositoConta);
+                        $("#modalAprovarEstornoDepositoTipoConta").html(json.depositoTipoConta);
+                        $("#modalAprovarEstornoDepositoBanco").html(json.depositoBanco);
+                        $("#modalAprovarEstornoDepositoValor").html(json.depositoValor);
+                        $("#modalAprovarEstornoDepositoTipo").html(json.depositoTipo);
+                        
+                        $("#modalAprovarEstorno").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function aprovarEstorno() {
+        $("#modalEstornoRejeitar, #modalEstornoClose, #modalEstornoAprovar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_ESTORNO_APROVAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#modalAprovarEstornoCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        $("#modalEstornoClose").prop("disabled", false).trigger("click");
+                        filtrar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch(e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalEstornoRejeitar, #modalEstornoClose, #modalEstornoAprovar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function modalFinalizarEstorno(codigo) {
+        $("#modalFinalizarEstornoCodigo").val(codigo);
+        $("#modalFinalizarEstorno").modal();
+    }
+    
+    function finalizarEstorno() {
+        $("#modalFinalizarEstornoClose, #modalFinalizarEstornoFinalizar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_ESTORNO_FINALIZAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#modalFinalizarEstornoCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        $("#modalFinalizarEstornoClose").prop("disabled", false).trigger("click");
+                        filtrar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch(e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalFinalizarEstornoFinalizar, #modalFinalizarEstornoClose").prop("disabled", false);
+            }
+        });
+    }
+    
+    function modalCancelarEstorno(codigo) {
+        $("#modalCancelarEstornoCodigo").val(codigo);
+        $("#modalCancelarEstorno").modal();
+    }
+    
+    
+    function cancelarEstorno() {
+        $("#modalCancelarEstornoClose, #modalCancelarEstornoCancelar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_ESTORNO_CANCELAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#modalCancelarEstornoCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        $("#modalCancelarEstornoClose").prop("disabled", false).trigger("click");
+                        filtrar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch(e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCancelarEstornoCancelar, #modalCancelarEstornoClose").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    function modalRejeitarEstorno(codigo) {
+        $("#modalRejeitarEstornoCodigo").val(codigo);
+        $("#modalRejeitarEstornoMotivo").val(0);
+        $("#modalRejeitarEstorno").modal();
+    }
+    
+    
+    function rejeitarEstorno() {
+        $("#modalRejeitarEstornoClose, #modalRejeitarEstornoRejeitar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_ESTORNO_REJEITAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#modalRejeitarEstornoCodigo").val(),
+                motivo: $("#modalRejeitarEstornoMotivo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        $("#modalRejeitarEstornoClose").prop("disabled", false).trigger("click");
+                        $("#modalEstornoClose").prop("disabled", false).trigger("click");
+                        filtrar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch(e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalRejeitarEstornoRejeitar, #modalRejeitarEstornoClose").prop("disabled", false);
+            }
+        });
+    }
+</script>
+
+
+
+
+
+<div class="modal fade" id="modalAprovarEstorno" tabindex="-1" role="dialog" aria-labelledby="modalAprovarEstorno" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalEstornoLabel">Analisar Processo de Estorno</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalAprovarEstornoCodigo" name="modalAprovarEstornoCodigo" />
+                <div class="row">
+                    <div class="col col-lg-6">
+                      
+                        Dados do extorno: 
+                        <br><br>
+                        <strong>Titular: </strong> <span id="modalAprovarEstornoTitular"></span>. <br>
+                        <strong>CPF/CNPJ: </strong> <span id="modalAprovarEstornoCnpjCpf"></span>. <br>
+                        <strong>Agencia: </strong> <span id="modalAprovarEstornoAgencia"></span>. <br>
+                        <strong>Conta: </strong> <span id="modalAprovarEstornoConta"></span>. <br>
+                        <strong>Tipo Conta: </strong> <span id="modalAprovarEstornoTipoConta"></span>. <br>
+                        <strong>Banco: </strong> <span id="modalAprovarEstornoBanco"></span>. <br>
+                        <strong>Valor do Estorno: </strong> <span id="modalAprovarEstornoValorEstorno"></span>. <br>
+                        <strong>Taxa de Estorno: </strong> <span id="modalAprovarEstornoPercentualTaxaEstorno"></span>. <br>
+                        <strong>Valor da taxa de extorno: </strong> <span id="modalAprovarTaxaEstorno"></span>. <br>
+                        <strong>Valor do TED: </strong> <span id="modalAprovarEstornoValorTed"></span>. <br>
+                    </div>
+                    
+                    <div class="col col-lg-6">
+                        Dados do depósito: 
+                        <br><br>
+                        <strong>Titular: </strong> <span id="modalAprovarEstornoDepositoTitular"></span>. <br>
+                        <strong>CPF/CNPJ: </strong> <span id="modalAprovarEstornoDepositoCnpjCpf"></span>. <br>
+                        <strong>Agencia: </strong> <span id="modalAprovarEstornoDepositoAgencia"></span>. <br>
+                        <strong>Conta: </strong> <span id="modalAprovarEstornoDepositoConta"></span>. <br>
+                        <strong>Tipo Conta: </strong> <span id="modalAprovarEstornoDepositoTipoConta"></span>. <br>
+                        <strong>Banco: </strong> <span id="modalAprovarEstornoDepositoBanco"></span>. <br>
+                        <strong>Valor do Depósito: </strong> <span id="modalAprovarEstornoDepositoValor"></span>. <br>
+                        <strong>Tipo de depósito: </strong> <span id="modalAprovarEstornoDepositoTipo"></span>. <br>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-offset-3 col-xs-12 col-lg-3 m-b-xs">
+                <button type="button" class="btn btn-default full-width" id="modalEstornoClose" data-dismiss="modal">Fechar</button>
+                </div>
+                <div class="col-xs-12 col-lg-3 m-b-xs">
+                <button type="button" class="btn btn-danger full-width" onclick="modalRejeitarEstorno($('#modalAprovarEstornoCodigo').val());" id="modalEstornoRejeitar" >Rejeitar Dados</button>
+                </div>
+                <div class="col-xs-12 col-lg-3 m-b-xs">
+                <button type="button" class="btn btn-primary full-width" onclick="aprovarEstorno();" id="modalEstornoAprovar" >Aprovar Dados</button>
+                </div>
+                </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<div class="modal fade" id="modalRejeitarEstorno" tabindex="-1" role="dialog" aria-labelledby="modalRejeitarEstorno" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalRejeitarEstornoLabel">Rejeitar dados de conta bancária</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalRejeitarEstornoCodigo" name="modalRejeitarEstornoCodigo" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label>Informe o motivo da rejeição</label>
+                            <select id="modalRejeitarEstornoMotivo" name="modalRejeitarEstornoMotivo" style="width: 100%;" class="form-control select2">
+                                <option value="0">Informe um motivo para rejeição</option>
+                                <?php 
+                                foreach (\Modules\contas\Controllers\Estorno::$motivosRejeicao as $key=>$motivo) {
+                                    ?>
+                                    <option value="<?php echo $key ?>"><?php echo $motivo ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-offset-5 col-xs-12 col-lg-3 m-b-xs">
+                <button type="button" class="btn btn-default full-width" id="modalRejeitarEstornoClose" data-dismiss="modal">Fechar</button>
+                </div>
+                <div class="col-lg-4 col-xs-12 m-b-xs">
+                <button type="button" class="btn btn-danger full-width" onclick="rejeitarEstorno();" id="modalRejeitarEstornoRejeitar" >Rejeitar Dados</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="modalCancelarEstorno" tabindex="-1" role="dialog" aria-labelledby="modalCancelarEstorno" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCancelarEstornoLabel">Cancelar processo de estorno</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalCancelarEstornoCodigo" name="modalCancelarEstornoCodigo" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        Deseja realmente cancelar o processo de estorno?
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-offset-4 col-xs-12 col-lg-3 m-b-xs">
+                <button type="button" class="btn btn-default full-width" id="modalRejeitarEstornoClose" data-dismiss="modal">Fechar</button>
+                </div>
+                <div class="col-xs-12 col-lg-5 m-b-xs">
+                <button type="button" class="btn btn-danger full-width" onclick="cancelarEstorno();" id="modalCancelarEstornoCancelar" >Cancelar Processo de Estorno</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<div class="modal fade" id="modalFinalizarEstorno" tabindex="-1" role="dialog" aria-labelledby="modalFinalizarEstorno" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalFinalizarEstornoLabel">Finalizar processo de estorno</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalFinalizarEstornoCodigo" name="modalFinalizarEstornoCodigo" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        Deseja realmente marcar o processo de estorno como finalizado? <br>
+                        Isso indicará para o cliente que o crédito foi efetuado na conta informada e nenhuma ação mais será necessária.
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-offset-5 col-xs-12 col-lg-3 m-b-xs">
+                <button type="button" class="btn btn-default full-width" id="modalFinalizarEstornoClose" data-dismiss="modal">Fechar</button>
+                </div>
+                <div class="col-lg-4 col-xs-12 m-b-xs">
+                <button type="button" class="btn btn-primary full-width" onclick="finalizarEstorno();" id="modalFinalizarEstornoFinalizar" >Finalizar Processo</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
