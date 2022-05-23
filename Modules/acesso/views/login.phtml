@@ -67,7 +67,12 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
         </div>
         <?php } ?>
         <div class="form-group">
-            <button id="acessar-painel" type="submit" disabled="disabled" class="btn btn-primary block full-width m-b"><?php echo $lang['modal3']; ?></button>
+            <?php if(AMBIENTE == "producao") { ?>
+                    <!-- remove disabled="disabled" -->
+                <button id="acessar-painel" type="submit"  class="btn btn-primary block full-width m-b"><?php echo $lang['modal3']; ?></button>
+            <?php }else{ ?>
+                <button id="acessar-painel" type="submit" class="btn btn-primary block full-width m-b"><?php echo $lang['modal3']; ?></button>
+            <?php } ?>
         </div>
         <div class="form-group m-b-lg">
             <div class="row">

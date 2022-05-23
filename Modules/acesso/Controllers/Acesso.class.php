@@ -168,11 +168,12 @@ class Acesso {
      */
     public function logarapi($params) {
         try {
+
             unset($_SESSION["login"]);
             $email = \Utils\Post::get($params, "email", NULL);
             $senha = \Utils\Post::get($params, "senha", NULL);
 
-            if(AMBIENTE == "producao") {
+           /* if(AMBIENTE == "producao") {
                 $googleCode = \Utils\Post::get($params, "code", null);
 
                 if (!empty($googleCode)) {
@@ -183,7 +184,7 @@ class Acesso {
                 } else {
                     throw new \Exception("Recaptcha inválido.");
                 }
-            };
+            };*/
             $usuario = new Usuario(Array("email" => $email, "senha" => $senha));
             
             $tokenApiRn = new \Models\Modules\Cadastro\TokenApiRn();
