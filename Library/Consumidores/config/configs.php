@@ -1,7 +1,7 @@
 <?php
 return [
     'application' => [
-        'base_url' => 'http://broker.exchange.local/',
+        'base_url' => 'http://177.38.215.100/',
         'language' => 'pt-BR'
     ],
     'db' => [
@@ -38,6 +38,16 @@ return [
     ],
     'caf' => [
         'token' => ''
-    ]
+    ],
+    'mandrill' => [
+        'host' => 'smtp.mandrillapp.com',
+        'port' => 587,
+        'user' => 'any username will work - try "navi" for example',
+        'pass' => 'fjHTcoqqNAe45zJgqWkCQQ',
+        'from' => [
+            'mail' => 'no-reply@navi.inf.br',
+            'name' => 'Nav inf'
+        ]
 
+    ]
 ];

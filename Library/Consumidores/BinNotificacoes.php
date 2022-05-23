@@ -21,16 +21,8 @@ class BinNotificacoes extends Consumer
     public function __construct()
     {
         parent::__construct();
-        $this->config_mandril = [
-            'host' => 'smtp.mandrillapp.com',
-            'port' => 587,
-            'user' => 'any username will work - try "navi" for example',
-            'pass' => 'fjHTcoqqNAe45zJgqWkCQQ',
-            'from' => [
-                'mail' => 'no-reply@navi.inf.br',
-                'name' => 'Nav inf'
-            ]
-        ];
+        $loadingConfig = include 'config/configs.php';
+        $this->config_mandril = $loadingConfig['mandrill'];
         $this->rabbit = new Consumer();
         $this->phpmailler = new PHPMailer();
     }
