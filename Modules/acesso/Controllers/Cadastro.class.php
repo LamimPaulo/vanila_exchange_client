@@ -19,6 +19,7 @@ class Cadastro {
     {
         try {
 
+            echo 'Processo de cadastro iniciando';
             $method = strtoupper($_SERVER['REQUEST_METHOD']);
 
             if (strtoupper($method) != "POST") {
@@ -86,6 +87,7 @@ class Cadastro {
                 throw new \Exception("Por favor, tente novamente mais tarde.");
             }
 
+            echo 'Processo de cadastro aconteceu';
 
             $json["sucesso"] = true;
             /* $json["mensagem"] = $this->idioma->getText("cadastroSucesso") ?? 'Cadastrado com sucesso';*/
