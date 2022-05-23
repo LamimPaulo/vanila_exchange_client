@@ -19,14 +19,11 @@ class Cadastro {
     {
         try {
 
-            echo 'Processo de cadastro iniciando';
             $method = strtoupper($_SERVER['REQUEST_METHOD']);
 
             if (strtoupper($method) != "POST") {
                 throw new \Exception("Cadastro inválido", 500);
             }
-
-
 
             $nome = \Utils\Post::get($params, "nome", null);
             $email = strtolower(\Utils\Post::get($params, "email", null));
@@ -87,7 +84,6 @@ class Cadastro {
                 throw new \Exception("Por favor, tente novamente mais tarde.");
             }
 
-            echo 'Processo de cadastro aconteceu';
 
             $json["sucesso"] = true;
             /* $json["mensagem"] = $this->idioma->getText("cadastroSucesso") ?? 'Cadastrado com sucesso';*/
