@@ -77,7 +77,6 @@ $(document).ready(function () {
                         $('#conta-gratis').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
                     },
                     success: function (json) {
-                        alert(json);
                         try {
                             if (json.sucesso) {
                                 $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
