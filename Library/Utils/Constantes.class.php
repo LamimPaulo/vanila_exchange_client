@@ -146,6 +146,7 @@ class Constantes {
     
     const DOC = "D";
     const TED = "T";
+    const PIX = "P";
     const DINHEIRO = "R";
     const TRANSF_ENTRE_CONTAS = "E";
     const GERENCIA_NET = "G";
@@ -155,6 +156,8 @@ class Constantes {
     
     const ORDEM_COMPRA = "C";
     const ORDEM_VENDA = "V";
+    const COLOR_COMPRA = '#00b692';
+    const COLOR_VENDA = '#ff4561';
     
     const ORDEM_PASSIVA = "P";
     const ORDEM_ATIVA = "A";
@@ -266,6 +269,8 @@ class Constantes {
     const QUEUE_COMANDO_USER_CADASTRAR = "user.cadastrar";
     const QUEUE_COMANDO_DADOS_CRIPTOGRAFAR = "dados.criptografar";
     const QUEUE_COMANDO_DADOS_DESCRIPTOGRAFAR = "dados.descriptografar";
+    const QUEUE_GRAVAR_CARTEIRAS = "carteira.gravar";
+    const QUEUE_COMANDO_MOEDA_DEPOSITAR = "moeda.depositar";
     
     
 }

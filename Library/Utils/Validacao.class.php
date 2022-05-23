@@ -263,7 +263,7 @@ class Validacao {
      * @return string String com os valores
      */
     public static function acesso($codigoModulo) {
-        $idioma = new \Utils\PropertiesUtils("utils", IDIOMA);
+        $idioma = new \Utils\PropertiesUtils("utils", 'IDIOMA');
         //Verificação da permissão de acesso
         $excecao = null;
         $json["resultado"] = array('sucesso' => false);

@@ -1,0 +1,128 @@
+recuperar.phtml<?php
+$idioma1 = new \Utils\PropertiesUtils("recuperar", 'IDIOMA');
+$mensagem = isset($_data["mensagem"]) ? $_data["mensagem"] : "";
+$brand = Models\Modules\Cadastro\BrandRn::getBrand();
+$empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
+$idioma = (isset($_SESSION['lang']) ? $_SESSION['lang'] : "pt-br");
+include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php if(AMBIENTE == "producao") { ?>
+        <!-- Google Tag Manager
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MSSF6SZ');</script>
+    End Google Tag Manager -->
+    <?php } ?>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <title><?php echo TITULO ?></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 2030 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo FAVICON ?>apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo FAVICON ?>favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo FAVICON ?>favicon-16x16.png">
+    <link rel="manifest" href="<?php echo FAVICON ?>site.webmanifest">
+    <link rel="mask-icon" href="<?php echo FAVICON ?>safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <link href="<?php echo TEMA; ?>css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css/style.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+<div class="passwordBox animated fadeInDown">
+    <div class="row" style=" padding: 0px !important; border: 1px solid #e4c254;border-top: 10px solid #b1822b ; background-color: white !important;" >
+
+        <div class="col-md-12">
+            <div class="ibox-content">
+                <div class="row text-center">
+                    <a href="<?php echo $empresa->homePage ?>">
+                        <img alt="image"  width="150px" src="<?php echo IMAGES; ?>logo-isistrade.png" class="logo">
+                    </a>
+                </div>
+                <div class="row text-center m-t-md">
+                    <h2 class="font-bold  text-center" >Recuperar senha</h2>
+                </div>
+
+                <div class="row text-center m-t-md">
+                    <p>
+                        Digite seu endereço de e-mail e sua senha será redefinida e enviada para você.
+                    </p>
+                </div>
+
+
+
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <form class="form-login mt-lg-4" method="post" id="form-recover" action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_RECUPERACAO ?>">
+                            <div class="form-group">
+                                <input style="border-radius: 3px; background-color: transparent !important;" type="text" id="email" name='email' class="form-control" placeholder="<?php echo $idioma1->getText("digiteEmailCadastrado") ?>" >
+                            </div>
+                            <div class="form-group m-t-lg">
+                                <div style="text-align: center;">
+                                    <div  id="google" name="google" atrpage="recovery" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo getenv('EnvGoogleSite');?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary block full-width m-b" disabled="disabled" type="button" onclick="validarDados();" id="btn-send">
+                                <?php echo $idioma1->getText("recuperarSenha") ?>
+                            </button>
+
+                            <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGIN ?>" >  <small><?php echo $idioma1->getText("entrar"); ?></small></a>
+
+                            <p class="text-muted text-center">
+                                <small>Não tem uma conta?</small>
+                            </p>
+                            <a class="btn btn-sm btn-white btn-block"  href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_REGISTER ?>" style="color: #e5e6e7;"><?php echo $idioma1->getText("cadastrar"); ?></a>
+
+                        </form>
+                        <p class="m-t">
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-t">
+        <div class="col-md-6 text-sm-left">
+            © <?php echo $empresa->nomeEmpresarial ?>
+        </div>
+        <div class="col-md-6 text-right">
+            <small><?php echo $empresa->anoInicio ?> - <?php echo date('Y');?></small>
+        </div>
+    </div>
+</div>
+
+
+<div class="overlay"></div>
+<script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script>
+<script src="<?php echo TEMA; ?>js/bootstrap.min.js"></script>
+<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+<?php Utils\Layout::append("inspina/notificacao", null); ?>
+</body>
+
+
+
+<?php if(AMBIENTE == "producao") { ?>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MSSF6SZ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<?php } ?>
+</html>

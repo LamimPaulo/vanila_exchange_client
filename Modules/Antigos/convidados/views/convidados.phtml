@@ -1,0 +1,234 @@
+<?php 
+$configuracao = (isset($_data["configuracao"]) ? $_data["configuracao"] : new \Models\Modules\Cadastro\Configuracao());
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+$cliente = Utils\Geral::getCliente();
+
+
+
+$idioma = new \Utils\PropertiesUtils("convidados", 'IDIOMA');
+
+$_data["idiomaMenu"] = $idioma;
+?>
+<style>
+    .border-edit {
+        border: 1px solid #1c84c6 !important;
+    }
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<?php Utils\Layout::append("inspina/breadcrumb", $_data) ?>
+
+<br>    
+<div>
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    
+                    <!-- /.panel-heading -->
+                    
+                    
+                    <div class="panel-body">
+                        
+                        
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <div class="row">
+                                    <div class="col col-lg-6 col-xs-12">
+                                       <div class="alert alert-info">
+                                            <div class="text-left">
+                                            <label><?php echo $idioma->getText("compartilheSeuLink") ?></label><br>
+                                            <div class="col-xs-6 col-lg-2 text-center">
+                                            <a class="btn dim" style="background-color: #25d366; text-decoration: none; color: #fff;" href="https://api.whatsapp.com/send?text= <?php echo $idioma->getText("sejaBemVindo") . URL_SITE . "/" . Utils\Criptografia::encriptyPostId($cliente->id)?>"><i class="fa fa-whatsapp fa-2x"></i></a>
+                                            </div>
+                                            <div class="col-xs-6 col-lg-2 text-center mobile desktop-hide">
+                                            <a class="btn dim" style="background-color: #3b5998; text-decoration: none; color: #fff;" href="fb-messenger://share?link=<?php echo "https://newc.com.br/" . Utils\Criptografia::encriptyPostId($cliente->id)?>"><i class="fa fa-facebook-square fa-2x"></i></a>
+                                             <br>
+                                           <br>
+                                            </div>
+                                            </div>
+                                           <br>
+                                           <br>
+                                           <br>
+                    
+                                            <?php echo $idioma->getText("oSeuLinkDeCadastro") ?>: <br>
+                                            
+                                            <input type="input" class="full-width" readonly="true" id="link" value="<?php echo  "https://newc.com.br/" . Utils\Criptografia::encriptyPostId($cliente->id)?>">
+
+                                            <div class="row">
+                                           
+                                            <button class="btn-link full-width text-center" id="btn-link-ref" data-clipboard-target="#link">
+                                                <?php echo $idioma->getText("cliqueAquiCopie") ?> <i class="fa fa-copy"></i>
+                                            </button>
+                                            
+                                            </div>
+                                    </div>
+                                </div>
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <?php echo $idioma->getText("vocePodeEnviar") ?> <?php echo number_format($configuracao->comissaoConvite, 2, ".", "")?>% <?php echo $idioma->getText("daComissaoCobrada") ?>
+                                    <br>
+                                    <br>
+                                    <?php echo $idioma->getText("maisAbaixoVoce") ?>
+                                    <br><br>
+                                    <strong><?php echo $idioma->getText("umaPessoaPode") ?></strong>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-10 m-t-xs">
+                                <input id="emailConvite" name="emailConvite" placeholder="<?php echo $idioma->getText("digiteEmailConvidado") ?>" type="text" class="form-control" > 
+                            </div>
+                            
+                            
+                            <div class="col-xs-12 col-sm-2 text-center m-t-xs">
+                                
+                                <button type="button" class="btn btn-primary full-width" onclick="convidar();" id="btn-convidar">
+                                    <?php echo $idioma->getText("convidar") ?>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="panel-body">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h4 class="page-header"><?php echo $idioma->getText("convitesCadastrados") ?>  <strong id="totalizadores">(<?php echo $idioma->getText("qtd") ?> <span id="total-clientes"></span>, <?php echo $idioma->getText("valorTotal") ?>: R$ <span id="total-valor"></span>)</strong></h4>
+                <div class="table-responsive">
+                <table class="table table-hover table-striped table-bordered table-condensed" style="font-size: 10px; background-color: #fff">
+                    <thead>
+                        <tr>
+                            <th><?php echo $idioma->getText("nome") ?></th>
+                            <th><?php echo $idioma->getText("email") ?></th>
+                            <th class="text-center"><?php echo $idioma->getText("dataCadastro") ?></th>
+                            <th class="text-center"><?php echo $idioma->getText("horaCadastro") ?></th>
+                            <th class="text-center"><?php echo $idioma->getText("movimento") ?></th>
+                            <th class="text-center"><?php echo $idioma->getText("comissao") ?></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="lista-convidados">
+
+                    </tbody>
+                    
+                    <tfoot>
+                        <tr>
+                            <th>
+                                <?php echo $idioma->getText("valorTotalTb") ?>
+                            </th>
+                            <th colspan="5" class="text-right" id="valor-total">
+                                
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+                </div>
+
+            </div>
+        </div>
+            </div>
+
+
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        listar();
+        
+        setInterval(function() {
+                    listar();
+                  },60000);
+    });
+    
+    new Clipboard("#btn-link-ref");
+    
+    function whatsapp() {
+    var link = "https://api.whatsapp.com/send?text=" + <?php echo $idioma->getText("sejaBemVindoJS")?>  + "<?php echo URL_SITE . "/" . Utils\Criptografia::encriptyPostId($cliente->id)?>";
+    window.open(link);
+    
+    }
+    
+    function convidar() {
+        $("#btn-convidar").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CONVITES_ENVIAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                email : $("#emailConvite").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        $("#emailConvite").val("");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-convidar").prop("disabled", false);
+            }
+        });
+        
+    }
+    
+    function listar() {
+        $("#lista-convidados").html("<tr><td colspan='6' class='text-center' ><img src='<?php echo IMAGES ?>loader.gif' /></td></tr>");
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CONVITES_CONVIDADOS_LISTAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                email : $("#emailConvite").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista-convidados").html(json.html);
+                        $("#valor-total").html("R$ " + json.total);
+                        
+                        $("#total-clientes").html(json.clientes);
+                        $("#total-valor").html(json.total);
+                        
+                        if (json.clientes > 0) {
+                            $("#totalizadores").show();
+                        } else {
+                            $("#totalizadores").hide();
+                        }
+                    } else {
+                        $("#lista-convidados").html("<tr><td colspan='6' class='text-center' >"+json.mensagem+"</td></tr>");
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $("#lista-convidados").html("<tr><td colspan='6' class='text-center' >"+e+"</td></tr>");
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-convidar").prop("disabled", false);
+            }
+        });
+        
+    }
+    
+</script>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data)?>
+</body>
+</html>

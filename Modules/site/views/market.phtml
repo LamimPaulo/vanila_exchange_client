@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<?php Utils\Layout::append("site/head") ?>
+<style>
+    .cv-spinner {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px #ddd solid;
+        border-top: 4px #2e93e6 solid;
+        border-radius: 50%;
+        animation: sp-anime 0.8s infinite linear;
+    }
+</style>
+<body>
+<?php Utils\Layout::append("site/header") ?>
+<section class="breadcrumb-area bread-bg">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="breadcrumb-content d-flex flex-wrap align-items-center justify-content-between position-relative">
+            <h2 class="sec-title text-white my-2">Nosso mercado</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center">
+                    <li class="breadcrumb-item"><a href="<?php echo URLBASE_CLIENT; ?>">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Nosso mercado</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+<?php Utils\Layout::append("site/section/cta_market") ?>
+<?php Utils\Layout::append("site/section/cta_marketprice") ?>
+<?php Utils\Layout::append("site/footer") ?>
+<?php Utils\Layout::append("site/script") ?>
+<script>
+    $( document ).ready(function() {
+        listMarket();
+        listParBook();
+        function listParBook() {
+            let url = "<?php echo URLBASE_CLIENT . \Utils\Rotas::API_MARKET_SUMMARIES  . "?basemarket=BRL";?>";
+            let trHTML = "";
+            try {
+                $.ajax(ajaxSettings("GET",url))
+                    .done(function (json, status) {
+                        if(json.success == true){
+                            let data = json.result
+                            for(let i = 0; i < data.length; i++){
+                                if(data[i]['isActive'] == true) {
+                                    trHTML += '\
+                        <tr>\n\
+                        <td class="d-flex align-items-center crypto-name-wrap"><img src="' + data[i]['marketImageData'] +' " class="flex-shrink-0 mr-2" alt="' + data[i]['marketAssetName'] +'"/><p class="line-height-18 text-left">' + data[i]['marketAssetName'] +' <span class="d-block font-size-11 text-gray">' + data[i]['marketAsset'] +'</span></p></td>\n\
+                        <td><span class="d-flex align-items-center crypto-name-wrap">' + nmb(data[i]['last'],2) + '</td>\n\
+                        <td><span class="d-flex align-items-center crypto-name-wrap">' + nmb(data[i]['high'],2) + '</td>\n\
+                        <td><span class="d-flex align-items-center crypto-name-wrap">' + nmb(data[i]['low'],2) + '</td>\n\
+                        <td><span class="d-flex align-items-center crypto-name-wrap">' + vol(data[i]['volume'],4) + '</td>\n\
+                        <td><a href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK; ?>/' + data[i]['marketName'] + '" class="btn btn-sm btn-success">Negociar</a></td>\n\
+                        </tr>';
+                                }
+                            };
+                        }
+                        $('#body-pars').html(trHTML);
+                        setTimeout(listParBook, 10000);
+                    })
+                    .fail(function () {
+                        setTimeout(listParBook, 20000);
+                    })
+            } catch (e) {setTimeout(listParBook, 20000)}
+        }
+        function listMarket() {
+            let url = "<?php echo URLBASE_CLIENT . \Utils\Rotas::API_MARKETS  . "?basemarket=BRL";?>";
+            let trHTML = "";
+            try {
+                $.ajax(ajaxSettings("GET",url))
+                    .done(function (json, status) {
+                        if(json.success == true){
+                            let data = json.result
+                            for(let i = 0; i < data.length; i++){
+                                trHTML += '\
+                            <div class="col-lg-3 col-md-6">\n\
+                            <div class="card hover-y">\n\
+                            <div class="card-body">\n\
+                            <img src="' + data[i]['marketImageData'] +' " class="flex-shrink-0 mb-2" style="max-width: 60px;" alt="' + data[i]['marketAssetName'] +'"/>\n\
+                            <h4 class="card-title text-uppercase mb-1">'+ parseFloat(100 / data[i]['ask']).toFixed(4).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1') + ' ' + data[i]['marketAsset'] + '</h4>\n\
+                            <p class="text-black mb-1">por</p>\n\
+                            <h3 class="mb-2 font-size-40 text-color font-weight-bold">R$100</h3>\n\
+                            <a href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK; ?>/' + data[i]['marketName'] + '" class="btn btn-sm btn-primary"><i class="fal fa-shopping-cart mr-1 font-size-14"></i>Comprar agora</a>\n\
+                            </div>\n\
+                            </div>\n\
+                            </div>';
+                            };
+                        }
+                        $('#body-market').html(trHTML);
+                        setTimeout(listMarket, 10000);
+                    })
+                    .fail(function () {
+                        setTimeout(listMarket, 20000);
+                    })
+            } catch (e) {setTimeout(listMarket, 20000)}
+        }
+    });
+</script>
+</body>
+</html>

@@ -20,7 +20,7 @@ class ClienteHasDocumentoSistemaRn {
     public $idioma = null;
     
     public function __construct(\Io\BancoDados $adapter = null) {
-        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
+        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
         if ($adapter == null) {
             $this->conexao = new GenericModel(\Dduo::conexao(), new ClienteHasDocumentoSistema());
         } else {

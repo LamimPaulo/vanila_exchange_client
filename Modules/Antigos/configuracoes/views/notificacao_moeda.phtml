@@ -1,0 +1,321 @@
+<?php 
+$moedaRn = new \Models\Modules\Cadastro\MoedaRn();
+$moedas = $moedaRn->listar();
+?>
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Notificação Moeda</h2>
+            <ol class="breadcrumb">
+                <li>
+                    Configurações
+                </li>
+                <li class="active">
+                    <strong>Notificação Moeda</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    
+</div>  
+
+<br>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <br><br>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Qtd. Notificação</label></br>
+                                    <span id="qtdNotificacao"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Qtd. Notificação Ativa</label></br>
+                                    <span id="qtdNotificacaoAtiva"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3"></div>
+                            <div class="col-lg-3">
+                                <button class="btn btn-success pull-right" type="button" onclick="modalCadastroShow();">
+                                    <i class="fa fa-plus"></i> Criar Notificação
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-lg-12 table-responsive">                            
+                    <ul id="lista" style="list-style-type: none; padding-left: 0px;">                                
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a  id="openOrder" target="_BLANK"></a>
+</section>
+    
+<div class="clearfix"></div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        filtrar();
+        $("#modalCadastroDataInicial").datepicker({format: "dd/mm/yyyy"}).mask("99/99/9999");
+        $("#modalCadastroDataFinal").datepicker({format: "dd/mm/yyyy"}).mask("99/99/9999");
+        $(".numeric").numeric();
+        
+        
+        $("#form-notificacao-moeda").ajaxForm({
+            dataType: 'json',
+            beforeSubmit: function () {
+                $("#modalCadastroFechar, #modalCadastroSalvar").prop("disabled", true);
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrar();
+                        $("#modalCadastroFechar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCadastroFechar, #modalCadastroSalvar").prop("disabled", false);
+            }
+        });
+    });
+    
+    
+    
+    function filtrar() {
+        $("#lista").html("<li class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></li>");
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_NOTIFICACAO_MOEDA_LISTAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista").html(json.html);
+                        $("#qtdNotificacao").html(json.qtdNotificacao);
+                        $("#qtdNotificacaoAtiva").html(json.qtdNotificacaoAtiva);
+                    } else {
+                        $("#lista").html("<li>"+json.mensagem+"</li>");
+                    }
+                } catch (e) {
+                    $("#lista").html("<li>"+e+"</li>");
+                }
+            }
+        });
+        
+    }
+    
+    function salvar() {
+        $("#form-notificacao-moeda").submit();
+    }
+    
+    function modalCadastroShow() {
+        $('#modalCadastro').modal('show');
+        $("#modalCadastroId").val("");
+        $("#modalCadastroTituloPort").val("");
+        $("#modalCadastroTituloIng").val("");
+        $("#modalCadastroTextoPort").val("");
+        $("#modalCadastroTextoIng").val("");
+        $("#modalCadastroDataInicial").datepicker('setDate', null);
+        $("#modalCadastroDataFinal").datepicker('setDate',null);
+        $("#idMoedas").val("");
+        $("#prioridade").val("");
+        $("#publicacao").val("");     
+    }
+    
+    function editarNotificacao(id) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_NOTIFICACAO_MOEDA_EDITAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: id
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $('#modalCadastro').modal('show');
+                        
+                        $("#modalCadastroId").val(json.id);
+                        $("#modalCadastroTituloPort").val(json.tituloPortugues);
+                        $("#modalCadastroTituloIng").val(json.tituloIngles);
+                        $("#modalCadastroTextoPort").val(json.descricaoPortugues);
+                        $("#modalCadastroTextoIng").val(json.descricaoIngles);
+                        $("#modalCadastroDataInicial").datepicker('setDate', json.dataInicial);
+                        $("#modalCadastroDataFinal").datepicker('setDate',json.dataFinal);
+                        $("#idMoedas").val(json.idMoeda);
+                        $("#prioridade").val(json.prioridade);
+                        $("#publicacao").val(json.publicacao);                    
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+        
+    }    
+    
+    function alterarStatusPublicado(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_NOTIFICACAO_MOEDA_STATUS_PUBLICADO ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        filtrar();                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+       
+</script>
+
+<div class="modal inmodal" id="modalCadastro" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content animated fadein">
+            
+            <div class="modal-header">
+                <h3 style="color: #00cf7a;">Cadastro de Notificação</h3>
+            </div>
+
+            <div class="modal-body">
+                <form id="form-notificacao-moeda" action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_NOTIFICACAO_MOEDA_SALVAR ?>" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="modalCadastroId" name="codigo"  />
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <label>Titulo Português</label>
+                                <input type="text" id="modalCadastroTituloPort" name="tituloPort" class="form-control" maxlength="200" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <label>Descrição Português</label>
+                                <textarea class="form-control" id="modalCadastroTextoPort" name="descricaoPort"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <label>Titulo Inglês</label>
+                                <input type="text" id="modalCadastroTituloIng" name="tituloIng" class="form-control" maxlength="200" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <label>Descrição Inglês</label>
+                                <textarea class="form-control" id="modalCadastroTextoIng" name="descricaoIng"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-xs-3">
+                            <div class="form-group">
+                                <label>Data Inicial</label>
+                                <input type="text" id="modalCadastroDataInicial" name="dataInicial" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col col-xs-3">
+                            <div class="form-group">
+                                <label>Data Final</label>
+                                <input type="text" id="modalCadastroDataFinal" name="dataFinal" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col col-xs-6">
+                            <div class="form-group">
+                                <label>Selecione a Moeda</label>
+                                <select class="form-control" id="idMoedas" name="idMoedas" style="width: 100%;">
+                                    <option value="0">Selecione uma moeda</option>
+                                    <?php
+                                    foreach ($moedas as $moeda) {
+                                        ?>
+                                        <option value="<?php echo $moeda->id ?>">
+                                            <?php echo $moeda->nome ?>
+                                        </option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Prioridade</label>
+                                <select class="form-control" id="prioridade" name="prioridade" style="width: 100%;">
+                                    <option>Selecione uma prioridade</option>
+                                    <option value="3">Baixa</option>
+                                    <option value="2">Média</option>
+                                    <option value="1">Alta</option> 
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Publicação</label>
+                                <select class="form-control" id="publicacao" name="publicacao" style="width: 100%;">
+                                    <option>Selecione uma opção</option>
+                                    <option value="1">Ativado</option>
+                                    <option value="0">Desativado</option>
+                                </select>
+                            </div>                        
+                        </div>                        
+                    </div>
+                
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalCadastroFechar">Fechar</button>
+                <button type="button" class="btn btn-primary" id="modalCadastroSalvar" onclick="salvar();" >Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -18,7 +18,7 @@ class Imagem {
      * @throws Exception
      */
     public static function enviaImagem(Arquivo $imagem, $cliente = null, $subdir = null, $public = false) {
-        $idioma = new \Utils\PropertiesUtils("utils", IDIOMA);
+        $idioma = new \Utils\PropertiesUtils("utils", 'IDIOMA');
         Imagem::validaImagem($imagem);
         
         try {
@@ -29,7 +29,7 @@ class Imagem {
             } else {
                 $imagem->diretorio_saida = PUBLIC_IMAGES;
             }
-            
+
             
             if (!$public) {
                 if ($cliente != null && $cliente->id > 0) {
@@ -38,8 +38,8 @@ class Imagem {
                         mkdir($imagem->diretorio_saida);
                     }
                 }
-            }  
-            
+            }
+
             if ($subdir != null && !empty($subdir)) {
                 $imagem->diretorio_saida .= "{$subdir}/";
                 if (!file_exists($imagem->diretorio_saida)) {
@@ -47,7 +47,6 @@ class Imagem {
                 }
             }
 
-            
             if (file_exists($imagem->diretorio_saida . $imagem->nome_saida)) {
                 $valida = false;
                 $i = 1;
@@ -58,17 +57,16 @@ class Imagem {
                         $valida = true;
                         $imagem->nome_saida = $novoNome;
                     }
-
                     $i++;
                 }
             }
-            
+
             $canvas->carrega($imagem->getDiretorioTemp());
             
             if ($imagem->largura != null && $imagem->altura != null) {
                 $canvas->redimensiona($imagem->largura, $imagem->altura, "preenchimento");
             }
-            
+
             $canvas->grava($imagem->diretorio_saida . $imagem->nome_saida); 
             if (file_exists($imagem->diretorio_saida . $imagem->nome_saida)) {
                 $imagem->upado = true;
@@ -93,7 +91,7 @@ class Imagem {
      * @throws \Exception
      */
     public static function validaImagem(Arquivo $imagem) {
-        $idioma = new \Utils\PropertiesUtils("utils", IDIOMA);
+        $idioma = new \Utils\PropertiesUtils("utils", 'IDIOMA');
         // Valida a extensÃ£o da imagem
         $formatosAceitos = Array("gif", "jpg", "jpeg", "png", "bmp");
         

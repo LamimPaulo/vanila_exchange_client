@@ -21,7 +21,7 @@ class UsuarioRn {
     private $idioma = null;
     
     public function __construct(\Io\BancoDados $adapter = null) {
-        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
+        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
         if ($adapter == null) {
             $this->conexao = new GenericModel(\Dduo::conexao(), new Usuario());
         } else {
@@ -327,7 +327,17 @@ class UsuarioRn {
 
             $hash = ["hash" => $hash];
 
-            LambdaNotificacao::notificar($cliente, true, 19, false, $hash);
+            $bodyMail = [
+                'nome' => $cliente->nome,
+                'email' => $cliente->email,
+                'params' => [
+                    "cliente_senha" => $hash
+                ],
+                'template_name' => 'system.security.recoverypassword'
+            ];
+            $rabbit = new \RabbitMq\Client();
+            $sendRabbit = $rabbit->sendQueue('notificacoes', $bodyMail);
+
 
         } else {
             throw new \Exception($this->idioma->getText("nenhumUserCPFinformado"), 99);

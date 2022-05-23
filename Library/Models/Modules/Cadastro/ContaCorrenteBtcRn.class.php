@@ -21,26 +21,24 @@ class ContaCorrenteBtcRn {
     public $enviarNotificacao = true;
 
     public function __construct(\Io\BancoDados $adapter = null, $enviarNotificacao = true) {
-        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
-        
+        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+
         if ($adapter == null) {
-            
             $this->conexao = new GenericModel(\Dduo::conexao(), new ContaCorrenteBtc());
-            
         } else {
             $this->conexao = new GenericModel($adapter, new ContaCorrenteBtc());
         }
-        
+
         $this->enviarNotificacao = $enviarNotificacao;
     }
 
 
     public function gerarContaCorrente(ContaCorrenteBtc &$contaCorrenteBtc, $token = null) {
         $novo = ($contaCorrenteBtc->id <= 0);
-            
-            
-            
-            
+
+
+
+
             if ($contaCorrenteBtc->id > 0) {
                 $aux = new ContaCorrenteBtc(Array("id" => $contaCorrenteBtc->id));
                 $this->conexao->carregar($aux);

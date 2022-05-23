@@ -121,6 +121,7 @@ class ConfiguracaoRn {
      * @return \Models\Modules\Cadastro\Configuracao
      */
     public static function get() {
+
         if (self::$configuracao == null) {
             self::$configuracao = new Configuracao(Array("id" => 1));
             $configuracaoRn = new ConfiguracaoRn();
@@ -128,6 +129,9 @@ class ConfiguracaoRn {
         }
         return self::$configuracao;
     }
+
+
+
     
     
     public static function getMeioAutenticacao() {

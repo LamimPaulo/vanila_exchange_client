@@ -78,6 +78,14 @@ class ParidadeRn {
         $paridadeRn->carregar($paridade, true, true, true);
         return $paridade;
     }
+
+    public static function getSymbol($idParidade = null) {
+        $paridadeRn = new ParidadeRn();
+        $paridade = new Paridade(Array("symbol" => $idParidade));
+
+        $paridadeRn->carregar($paridade, true, true, true);
+        return $paridade;
+    }
     
     public function listar($where = null, $order = null, $offset = null, $limit = null, $carregarMoedaBook = true, $carregarMoedaTrade = true) {
       $result = $this->conexao->listar($where, $order, $offset, $limit);
@@ -108,8 +116,7 @@ class ParidadeRn {
     }
     
     public function getListaParidadesByMoeda(Moeda $moeda, $mostrarTodos = true, $statusMercado = false) {
-        
-        
+
         $wAtivo = ($mostrarTodos ? " " : " AND p.ativo = 1 ");
         
         if($statusMercado){

@@ -20,7 +20,7 @@ class DepositoRn {
     public $idioma=null;
     
     public function __construct(\Io\BancoDados $adapter = null) {
-        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
+        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
         if ($adapter == null) {
             $this->conexao = new GenericModel(\Dduo::conexao(), new Deposito());
         } else {
@@ -97,6 +97,7 @@ class DepositoRn {
         
         $arrayTipos = Array(
             \Utils\Constantes::DOC,
+            \Utils\Constantes::PIX,
             \Utils\Constantes::TED,
             \Utils\Constantes::DINHEIRO,
             \Utils\Constantes::TRANSF_ENTRE_CONTAS,

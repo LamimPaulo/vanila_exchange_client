@@ -19,10 +19,7 @@ $(document).ready(function () {
     });
 
     
-    
-    
     $('#form-cadastro').on('submit', function(e){
-
             var Nome = $('#nome').val(),
                 EmailCadastro = $('#email').val(),
                 Senha =  $('#senha').val(),
@@ -64,7 +61,6 @@ $(document).ready(function () {
                 $('#senha').focus();
                 
             } else {
-
                 $.ajax({
                     url: '<?php echo URLBASE_CLIENT . "api/signup" ?>',
                     method: 'POST',
@@ -75,13 +71,13 @@ $(document).ready(function () {
                         email: EmailCadastro,
                         senha: btoa(Senha),
                         confirmarSenha: btoa(SenhaConfirmar),
-                        code: $('#g-recaptcha-response').val()
+                        code: $('#g-recaptcha-response').val() ?? null
                     },
                     beforeSend: function(){
                         $('#conta-gratis').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
                     },
                     success: function (json) {
-                        
+                        alert(json);
                         try {
                             if (json.sucesso) {
                                 $('#conta-gratis').html('<?php echo $lang['home14']; ?>');

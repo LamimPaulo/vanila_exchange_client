@@ -1,0 +1,343 @@
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Roadmap</h2>
+            <ol class="breadcrumb">
+                <li>
+                    Configurações
+                </li>
+                <li class="active">
+                    <strong>Roadmap</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    
+</div>  
+
+<br>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <br><br>
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <button class="btn btn-success pull-right" type="button" onclick="cadastro('<?php echo \Utils\Criptografia::encriptyPostId(0) ?>');">
+                                Criar Step
+                            </button>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="row">
+
+                        <div class="col col-lg-12 table-responsive">
+
+                            <table class="table table-hover table-bordered table-condensed table-stripped">
+
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Posição</th>
+                                        <th class="text-center">Título</th>
+                                        <th class="text-center">Data</th>
+                                        <th class="text-center">Editar</th>
+                                        <th class="text-center">Excluir</th>
+                                        <th class="text-center">Concluído</th>
+                                        <th class="text-center">Publicado</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="lista">
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <a  id="openOrder" target="_BLANK"></a>
+</section>
+    
+<div class="clearfix"></div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        filtrar();
+        $("#modalCadastroData").datepicker({format: "dd/mm/yyyy"}).mask("99/99/9999");
+        $(".numeric").numeric();
+        
+        
+        $("#form-roadmap").ajaxForm({
+            dataType: 'json',
+            beforeSubmit: function () {
+                $("#modalCadastroFechar, #modalCadastroSalvar").prop("disabled", true);
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrar();
+                        $("#modalCadastroFechar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCadastroFechar, #modalCadastroSalvar").prop("disabled", false);
+            }
+        });
+    });
+    
+    
+    
+    function filtrar() {
+        $("#lista").html("<tr><td class='text-center' colspan='7'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_ROADMAP_LISTAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#lista").html(json.html);
+                    } else {
+                        $("#lista").html("<tr><td class='text-center' colspan='7'>"+json.mensagem+"</td></tr>");
+                    }
+                } catch (e) {
+                    $("#lista").html("<tr><td class='text-center' colspan='7'>"+e+"</td></tr>");
+                }
+            }
+        });
+        
+    }
+    
+    function cadastro(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ROADMAP_CADASTRAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalCadastroId").val(json.roadmap.id);
+                        $("#modalCadastroTitulo").val(json.roadmap.titulo);
+                        $("#modalCadastroTexto").val(json.roadmap.texto);
+                        $("#modalCadastroPosicao").val(json.roadmap.posicao);
+                        $("#modalCadastroData").val(json.roadmap.data);
+                        $("#modalCadastroImagem").val("");
+                        
+                        $("#modalCadastro").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function salvar() {
+        $("#form-roadmap").submit();
+    }
+    
+    
+    function modalExcluir(codigo) {
+        $("#modalExcluirId").val(codigo);
+        $("#modalExcluir").modal();
+    }
+    
+    function alterarStatusConcluido(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ROADMAP_STATUS_CONCLUIDO ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    
+    function alterarStatusPublicado(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ROADMAP_STATUS_PUBLICADO ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrar();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    
+    function excluir() {
+        $("#modalExcluirFechar, #modalExcluirSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ROADMAP_EXCLUIR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#modalExcluirId").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        filtrar();
+                        $("#modalExcluirFechar").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalExcluirFechar, #modalExcluirSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+</script>
+
+<div class="modal inmodal" id="modalCadastro" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadein">
+            
+            <div class="modal-header">
+                <h3 style="color: #00cf7a;">Cadastro de Roadmap</h3>
+            </div>
+
+            <div class="modal-body">
+                <form id="form-roadmap" action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_ROADMAP_SALVAR ?>" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="modalCadastroId" name="codigo"  />
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <label>Titulo</label>
+                                <input type="text" id="modalCadastroTitulo" name="titulo" class="form-control" maxlength="200" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <label>Descrição </label>
+                                <textarea class="form-control" id="modalCadastroTexto" name="texto"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-xs-6">
+                            <div class="form-group">
+                                <label>Imagem</label>
+                                <input type="file" id="modalCadastroImagem" name="imagem" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col col-xs-6">
+                            <div class="form-group">
+                                <label>Posição</label>
+                                <input type="text" id="modalCadastroPosicao" name="posicao" class="form-control numeric" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-xs-12">
+                            <div class="form-group">
+                                <label>Data</label>
+                                <input type="text" id="modalCadastroData" name="data" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalCadastroFechar">Fechar</button>
+                <button type="button" class="btn btn-primary" id="modalCadastroSalvar" onclick="salvar();" >Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal inmodal" id="modalExcluir" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadein">
+            
+            <div class="modal-header">
+                <h3 style="color: #00cf7a;">Excluir Roadmap</h3>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="modalExcluirId"  />
+                <p>
+                    Deseja realmente excluir o Roadmap?
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalExcluirFechar">Fechar</button>
+                <button type="button" class="btn btn-danger" id="modalExcluirSalvar" onclick="excluir();" >Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>

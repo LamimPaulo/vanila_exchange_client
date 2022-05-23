@@ -751,9 +751,12 @@ class Cliente {
      * @param String $dados Array contendo os dados do objeto
      */
     public function __construct($dados = null) {
+
         if (!is_null($dados)) {
+
             $this->exchangeArray($dados);
         }
+
     }
 
     /**

@@ -1,0 +1,130 @@
+<?php
+$cartoes = isset($_data["cartoes"]) ? $_data["cartoes"] : Array();
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+$usuarioLogado = Utils\Geral::getLogado();
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+
+
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+                <div class="col-lg-10">
+                    <h2>Consulta de Extrato</h2>
+                    <ol class="breadcrumb" style="background-color: transparent !important;">
+                        <li>
+                            Cartões
+                        </li>
+                        <li class="active">
+                            <strong>Consulta de Extrato</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>
+    <br>
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            
+            <?php if (Utils\Geral::isUsuario() && $usuarioLogado->tipo == Utils\Constantes::ADMINISTRADOR) { ?>
+            <div class="col col-lg-12" >
+                <div class="form-group">
+                    <label>Informe o número do cartão</label>
+                    <input type="text" class="form-control" id="numeroCartao"  />
+                </div>
+            </div>
+            
+            <?php } else { ?>
+            <div class="col col-lg-12" >
+                <div class="form-group">
+                    <label>Selecione o cartão</label>
+                    <select class="form-control" id="numeroCartao">
+                        <option value="">Selecione um cartão</option>
+                        <?php foreach ($cartoes as $cartao) { ?>
+                        <option value="<?php echo $cartao->numeroCartao ?>"><?php echo $cartao->numeroCartao ?></option>
+                        <?php }?>
+                    </select>
+                </div>
+            </div>
+            <?php } ?>
+            
+            
+        </div>
+        
+        <div class="row">
+            <div class="col col-lg-12" id="extratoCartao">
+                
+            </div>
+        </div>
+        
+        
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        <?php if (Utils\Geral::isUsuario() && $usuarioLogado->tipo == Utils\Constantes::ADMINISTRADOR) { ?>
+        $("#numeroCartao").mask("9999-9999-9999-9999");
+        $("#numeroCartao").keyup(function () {
+            consultarSaldo();
+        });
+        <?php } else { ?>
+        
+        $("#numeroCartao").change(function () {
+            consultarExtrato();
+        });
+        <?php } ?>
+    });
+    
+    function consultarSaldo() {
+        var numero = "";
+        var i = 0;
+        for (i = 0; i < $("#numeroCartao").val().length; i++) {
+            if ($("#numeroCartao").val().charAt(i) !== "_" && $("#numeroCartao").val().charAt(i) !== "-") {
+                numero += $("#numeroCartao").val().charAt(i);
+            }
+        }
+        
+        if (numero.length === 16) {
+            $("#extratoCartao").html("<div class='col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+            $("#mensagemErro").html("");
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INVOICES_CARTAO_EXTRATO ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    numeroCartao:$("#numeroCartao").val()
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#extratoCartao").html(json.html);
+                        } else {
+                            $("#extratoCartao").html(json.mensagem);
+                        }
+                    } catch (e) {
+                        $("#extratoCartao").html(e);
+                    }
+                }
+            });
+        }
+    }
+    
+</script>
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>

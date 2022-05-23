@@ -9,7 +9,8 @@ use Zend\Db\Adapter\Adapter;
 /**
  * Classe de Banco de dados
  */
-class BancoDados extends Adapter {
+class BancoDados extends Adapter
+{
 
     protected $driver;
     protected $username;
@@ -27,72 +28,53 @@ class BancoDados extends Adapter {
     /**
      * Construtor da classe
      *
-     * @param $dadosConexao: Dados da conexão
+     * @param $dadosConexao : Dados da conexão
      * @param timezone: Timezone da conexão
      */
-    function __construct($bd = null) {
+    function __construct($bd = null)
+    {
 
-        $this->timezone = getenv("EnvTimeZone");
-        $this->url = getenv("EnvBdUrl");
-        $this->user = getenv("EnvBdUser");
-        $this->pass = getenv("EnvBdPass");
-        $this->name = getenv("EnvBdName");
 
-        $urlBdBook = getenv("EnvBdUrlBook");
-        $urlBdGrafico = getenv("EnvBdUrlGrafico");
+        $this->timezone = !empty( getenv("EnvTimeZone") ) ? getenv("EnvTimeZone") : DBZONE;
+        $this->url = !empty(getenv("EnvBdUrl")) ? getenv("EnvBdUrl") :  BDHOST;
+        $this->user = !empty(getenv("EnvBdUser")) ? getenv("EnvBdUser") :  BDUSER;
+        $this->pass = !empty(getenv("EnvBdPass")) ? getenv("EnvBdPass") :  BDPASS;
+        $this->name = !empty(getenv("EnvBdName")) ? getenv("EnvBdName") :   BDNAME;
+
+        /*        $this->timezone = DBZONE;
+                $this->url = BDHOST;
+                $this->user = BDUSER;
+                $this->pass = BDPASS;
+                $this->name = BDNAME;*/
+
 
         $pdoParams = array(
             \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
         );
 
+        $this->driver = "PDO_MYSQL";
+        $this->username = $this->user;
+        $this->password = $this->pass;
+        $this->dsn = "mysql:host={$this->url};dbname={$this->name};charset=utf8;";
 
 
-        switch ($bd){
-            case null:
-                $this->driver = "PDO_MYSQL";
-                $this->username = $this->user;
-                $this->password = $this->pass;
-                $this->dsn = "mysql:host={$this->url};dbname={$this->name};charset=utf8;";
-                break;
-            case BDBOOK:
-                //Banco de Dados Somente Leitura - Book
-                $this->driver = "PDO_MYSQL";
-                $this->username = $this->user;
-                $this->password = $this->pass;
-                $this->dsn = "mysql:host={$urlBdBook};dbname={$this->name};charset=utf8;";
-                break;
-            case BDGRAFICO:
-                //Banco de Dados Somente Leitura - Grafico
-                $this->driver = "PDO_MYSQL";
-                $this->username = $this->user;
-                $this->password = $this->pass;
-                $this->dsn = "mysql:host={$urlBdGrafico};dbname={$this->name};charset=utf8;";
-                break;
-            default:
-                $this->driver = "PDO_MYSQL";
-                $this->username = $this->user;
-                $this->password = $this->pass;
-                $this->dsn = "mysql:host={$this->url};dbname={$this->name};charset=utf8;";
-                break;
-        }
-
-        parent::__construct(Array("driver" => $this->driver, "username" => $this->username, "password" => $this->password, "dsn" => $this->dsn, "driver_oprions" => $pdoParams));
+        parent::__construct(array("driver" => $this->driver, "username" => $this->username, "password" => $this->password, "dsn" => $this->dsn, "driver_oprions" => $pdoParams));
     }
 
 
-
-
-    public function onTransaction() {
+    public function onTransaction()
+    {
         return $this->transactionStarted;
     }
 
     /**
      * sequencia() Retorna o próximo valor da sequência
      *
-     * @param  nomeSequencia: Nome da sequência do postgres
+     * @param nomeSequencia: Nome da sequência do postgres
      * @return Integer: Valor da sequência passada
      */
-    function sequencia($nomeSequencia) {
+    function sequencia($nomeSequencia)
+    {
         $oResultSet = $this->query("SELECT NEXTVAL('{$nomeSequencia}') AS valor_sequencia")->execute();
         foreach ($oResultSet as $sequencia) {
             return $sequencia ['valor_sequencia'];
@@ -102,7 +84,8 @@ class BancoDados extends Adapter {
     /**
      * iniciar() Inicia uma transação
      */
-    function iniciar() {
+    function iniciar()
+    {
         $this->query("BEGIN;")->execute();
         $this->transactionStarted = true;
     }
@@ -110,7 +93,8 @@ class BancoDados extends Adapter {
     /**
      * finalizar() Finaliza e confirma uma transação
      */
-    function finalizar() {
+    function finalizar()
+    {
         $this->query("COMMIT;")->execute();
         $this->transactionStarted = false;
     }
@@ -118,7 +102,8 @@ class BancoDados extends Adapter {
     /**
      * cancelar() Cancela e desfaz uma transação
      */
-    function cancelar() {
+    function cancelar()
+    {
         $this->query("ROLLBACK;")->execute();
         $this->transactionStarted = false;
     }
@@ -128,14 +113,16 @@ class BancoDados extends Adapter {
      *
      * @return String: Valor da hora passada
      */
-    function dataHoraAtual() {
+    function dataHoraAtual()
+    {
         $oResultSet = $this->query("SELECT NOW() AS data_hora_atual")->execute();
         foreach ($oResultSet as $dataHoraAtual) {
             return new Data(substr($dataHoraAtual ['data_hora_atual'], 0, 19));
         }
     }
 
-    public function getTimeZone() {
+    public function getTimeZone()
+    {
         return $this->timezone;
     }
 

@@ -60,7 +60,7 @@ class Senha {
 
     
     public static function gerarMobile($senha) {
-        $idioma = new \Utils\PropertiesUtils("utils", IDIOMA);
+        $idioma = new \Utils\PropertiesUtils("utils", 'IDIOMA');
         if (trim($senha) != '') {
             //String gerada exclusivamente para a geração do valor criptografado
             $salt = "adlnadnslanwifwqp8or7w8oo172853r284573yrowqihfwqbpi387234209-ekwpodjqpuq9wwq84pq4pq2p4ip230432jwmd23mmmi4r9032842-302-";

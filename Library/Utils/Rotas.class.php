@@ -5,20 +5,52 @@ namespace Utils;
 class Rotas {
     
     public static $rotas = Array(
-        
-      
-        
-        //"socket-book"                                 => Array("url" => "ws/bookSocketIo/index" ,                                                 "modulo" => "",                    "rotina" => "" ),
-        //"socket-history"                              => Array("url" => "ws/BookSocketHistory/index" ,                                          "modulo" => "",                    "rotina" => "" ),
-        //"socket-ticker"                             => Array("url" => "ws/BookSocketIo/index" ,                                                "modulo" => "",                    "rotina" => "" ),
-        
-        //direto no BD
-        //"book-history"                            => Array("url" => "ws/BookSocketHistory/bookOrdemExecutadas" ,                                          "modulo" => "",                    "rotina" => "" ),
-        //"socket-book-v2"                             => Array("url" => "ws/bookSocketIo/bookSocket" ,                                                 "modulo" => "",                    "rotina" => "" ),
 
-        "lbd"                                   => Array("url" => "api/procedimentosPerigosos/testeLbd" ,                       "modulo" => "api",                    "rotina" => "coins" ),
+        //PUBLICA
+        "api/public/ticker"                                                     => Array("url" => "publica/ticker/ticker" ,                  "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/markets"                                                    => Array("url" => "publica/Ticker/markets",                  "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/marketsummary"                                              => Array("url" => "publica/Ticker/marketSummary",            "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/marketsummaries"                                            => Array("url" => "publica/Ticker/marketSummaries",          "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/marketsummariesSite"                                        => Array("url" => "publica/Ticker/marketSummariesSite",          "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/assets"                                                     => Array("url" => "publica/Asset/assets",                    "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/markethistory"                                              => Array("url" => "publica/MarketHistory/history",           "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/orderbook"                                                  => Array("url" => "publica/OrderBook/getOrderbook",          "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/getlastorders"                                              => Array("url" => "publica/Trades/index",                    "modulo" => "ws",  "rotina" => "ws" ),
+
+
+        //SITE
+        "home"                                                                  => Array("url" => "site/Site/index" ,                        "modulo" => "ws",  "rotina" => "ws" ),
+        "aboutus"                                                               => Array("url" => "site/Site/aboutus" ,                      "modulo" => "ws",  "rotina" => "ws" ),
+        "contact"                                                               => Array("url" => "site/Site/contacts" ,                     "modulo" => "ws",  "rotina" => "ws" ),
+        "faqs"                                                                  => Array("url" => "site/Site/faqs" ,                         "modulo" => "ws",  "rotina" => "ws" ),
+        "privacy"                                                               => Array("url" => "site/Site/privacy" ,                      "modulo" => "ws",  "rotina" => "ws" ),
+        "terms"                                                                 => Array("url" => "site/Site/terms" ,                        "modulo" => "ws",  "rotina" => "ws" ),
+        "docsapi"                                                               => Array("url" => "site/Site/docsapi" ,                      "modulo" => "ws",  "rotina" => "ws" ),
+        "market"                                                               => Array("url" => "site/Site/market" ,                        "modulo" => "ws",  "rotina" => "ws" ),
+        "compliance"                                                           => Array("url" => "site/Site/compliance" ,                    "modulo" => "ws",  "rotina" => "ws" ),
+        "in1888"                                                               => Array("url" => "site/Site/in1888" ,                        "modulo" => "ws",  "rotina" => "ws" ),
+
+        //CANDLES
+        "api/public/getcandles"                                                 => Array("url" => "grafico/Candles/history",                 "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/getcandles/history"                                         => Array("url" => "grafico/Candles/history",                 "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/getcandles/symbols"                                         => Array("url" => "grafico/Candles/symbols",                 "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/getcandles/symbol_info"                                     => Array("url" => "grafico/Candles/symbol_info",             "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/getcandles/config"                                          => Array("url" => "grafico/Candles/config",                  "modulo" => "ws",  "rotina" => "ws" ),
+        "api/public/getcandles/time"                                            => Array("url" => "grafico/Candles/time",                    "modulo" => "ws",  "rotina" => "ws" ),
+        
+        //PRIVADA
+        "api/private/balance"                                                   => Array("url" => "privado/Account/balance",                  "modulo" => "ws",  "rotina" => "ws" ),
+        "api/private/myorders"                                                  => Array("url" => "privado/Book/myOrders",                    "modulo" => "ws",  "rotina" => "ws" ),
+        "api/private/cancelorder"                                               => Array("url" => "privado/Book/deleteOrder",                 "modulo" => "ws",  "rotina" => "ws" ),
+        "api/private/cancelallorders"                                           => Array("url" => "privado/Book/deleteAllOrders",             "modulo" => "ws",  "rotina" => "ws" ),
+        "api/private/buy"                                                       => Array("url" => "privado/Book/buy",                         "modulo" => "ws",  "rotina" => "ws" ),
+        "api/private/sell"                                                      => Array("url" => "privado/Book/sell",                        "modulo" => "ws",  "rotina" => "ws" ),
+        "api/private/replaceallorders"                                          => Array("url" => "privado/Book/replaceAllOrders",            "modulo" => "ws",  "rotina" => "ws" ),
+        "api/private/bot"                                                       => Array("url" => "privado/BotCliente/information",           "modulo" => "ws",  "rotina" => "ws" ),
+
+
+        //"lbd"                                   => Array("url" => "api/procedimentosPerigosos/testeLbd" ,                       "modulo" => "api",                    "rotina" => "coins" ),
         //"lbdEmail"                              => Array("url" => "api/procedimentosPerigosos/testeEmail" ,                     "modulo" => "api",                    "rotina" => "coins" ),
-
         //"negociacaoCliente"                    => Array("url" => "api/procedimentosPerigosos/negociacao" ,                     "modulo" => "api",                    "rotina" => "coins" ),
         //"testesql"                              => Array("url" => "api/procedimentosPerigosos/testeSql" ,                     "modulo" => "api",                    "rotina" => "coins" ),
         //"ws/teste/api"                           => Array("url" => "ws/atar/callBackTeste" ,                                            "modulo" => "",                    "rotina" => "" ),
@@ -26,7 +58,7 @@ class Rotas {
 
         
         
-        "api/trade/fees"                        => Array("url" => "api/trade/fees" ,                                            "modulo" => "api",                    "rotina" => "coins" ),
+        //"api/trade/fees"                        => Array("url" => "api/trade/fees" ,                                            "modulo" => "api",                    "rotina" => "coins" ),
 
 //        
 //        "apiv2/ordens"                          => Array("url" => "apiv2/ordens/index" ,                                          "modulo" => "apiv2",                    "rotina" => "coins" ),
@@ -35,41 +67,42 @@ class Rotas {
 //        "apiv2/ticket/markets"                  => Array("url" => "apiv2/ticket/markets" ,                                        "modulo" => "api",                    "rotina" => "ticket" ),
 //        "apiv2/ticket/market"                   => Array("url" => "apiv2/ticket/market" ,                                         "modulo" => "api",                    "rotina" => "ticket" ),
 //        
-        "apiv2/udfchart/history"                => Array("url" => "apiv2/UDFChart/history" ,                                      "modulo" => "apiv2",                    "rotina" => "udfchart" ),
-        "apiv2/udfchart/symbols"                => Array("url" => "apiv2/UDFChart/symbols" ,                                      "modulo" => "apiv2",                    "rotina" => "udfchart" ),
-        "apiv2/udfchart/symbol_info"            => Array("url" => "apiv2/UDFChart/symbol_info" ,                                  "modulo" => "apiv2",                    "rotina" => "udfchart" ),
-        "apiv2/udfchart/config"                 => Array("url" => "apiv2/UDFChart/config" ,                                       "modulo" => "apiv2",                    "rotina" => "udfchart" ),
-        "apiv2/udfchart/time"                   => Array("url" => "apiv2/UDFChart/time" ,                                         "modulo" => "apiv2",                    "rotina" => "udfchart" ),
+        //"apiv2/udfchart/history"                => Array("url" => "apiv2/UDFChart/history" ,                                      "modulo" => "apiv2",                    "rotina" => "udfchart" ),
+        //"apiv2/udfchart/symbols"                => Array("url" => "apiv2/UDFChart/symbols" ,                                      "modulo" => "apiv2",                    "rotina" => "udfchart" ),
+        //"apiv2/udfchart/symbol_info"            => Array("url" => "apiv2/UDFChart/symbol_info" ,                                  "modulo" => "apiv2",                    "rotina" => "udfchart" ),
+       // "apiv2/udfchart/config"                 => Array("url" => "apiv2/UDFChart/config" ,                                       "modulo" => "apiv2",                    "rotina" => "udfchart" ),
+        //"apiv2/udfchart/time"                   => Array("url" => "apiv2/UDFChart/time" ,                                         "modulo" => "apiv2",                    "rotina" => "udfchart" ),
         
-        "filesmanager"                            => Array("url" => "acesso/FilesManager/file" ,                                            "modulo" => "acesso",                    "rotina" => "filesmanager" ),
+        //"filesmanager"                            => Array("url" => "acesso/FilesManager/file" ,                                            "modulo" => "acesso",                    "rotina" => "filesmanager" ),
  
-        "ws/lbdmain"                           => Array("url" => "ws/Lambda/lambdaMain" ,                                      "modulo" => "api",                    "rotina" => "coins" ),
+        "ws/queuemain"                           => Array("url" => "ws/Queue/main" ,                                            "modulo" => "api",                    "rotina" => "coins" ),
 
        // "ws/pdvs/callbacks"                            => Array("url" => "ws/pdvs/callbacks" ,                                            "modulo" => "apiv2",                    "rotina" => "auth" ),
-        "ws/ranking/gerar"                     => Array("url" => "ws/ranking/gerar" ,                                          "modulo" => "apiv2",                    "rotina" => "auth" ),
-        "ws/atar/saldo"                        => Array("url" => "ws/atar/index" ,                                             "modulo" => "",                    "rotina" => "" ),
-        "ws/atar/extrato"                      => Array("url" => "ws/atar/extrato" ,                                           "modulo" => "",                    "rotina" => "" ),
-        "ws/atar/inserir"                      => Array("url" => "ws/atar/inserir" ,                                           "modulo" => "",                    "rotina" => "" ),
-        "ws/atar/callback"                     => Array("url" => "ws/atar/callback" ,                                          "modulo" => "",                    "rotina" => "" ),
-        "ws/atar/checarDeposito"               => Array("url" => "ws/atar/checarDepositos" ,                                   "modulo" => "",                    "rotina" => "" ),
+       // "ws/ranking/gerar"                     => Array("url" => "ws/ranking/gerar" ,                                          "modulo" => "apiv2",                    "rotina" => "auth" ),
+        //"ws/atar/saldo"                        => Array("url" => "ws/atar/index" ,                                             "modulo" => "",                    "rotina" => "" ),
+        //"ws/atar/extrato"                      => Array("url" => "ws/atar/extrato" ,                                           "modulo" => "",                    "rotina" => "" ),
+        //"ws/atar/inserir"                      => Array("url" => "ws/atar/inserir" ,                                           "modulo" => "",                    "rotina" => "" ),
+       // "ws/atar/callback"                     => Array("url" => "ws/atar/callback" ,                                          "modulo" => "",                    "rotina" => "" ),
+       // "ws/atar/checarDeposito"               => Array("url" => "ws/atar/checarDepositos" ,                                   "modulo" => "",                    "rotina" => "" ),
 
-        "ws/tokens/registrar"                  => Array("url" => "ws/tokens/registrar" ,                                        "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/tokens/registrar"                  => Array("url" => "ws/tokens/registrar" ,                                        "modulo" => "ws",                    "rotina" => "ws" ),
         //"ws/tokens/balance"                    => Array("url" => "ws/tokens/balanceErc20" ,                                     "modulo" => "ws",                    "rotina" => "ws" ),
-        "ws/tokens/ethereum"                   => Array("url" => "ws/tokens/callEthereum" ,                                     "modulo" => "ws",                    "rotina" => "ws" ),
-        "ws/tokens/empresa"                    => Array("url" => "ws/tokens/saldoEmpresaErc20" ,                                "modulo" => "ws",                    "rotina" => "ws" ),
-        "ws/tokens/taxa"                       => Array("url" => "ws/tokens/atualizarTaxaErc20" ,                               "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/tokens/ethereum"                   => Array("url" => "ws/tokens/callEthereum" ,                                     "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/tokens/empresa"                    => Array("url" => "ws/tokens/saldoEmpresaErc20" ,                                "modulo" => "ws",                    "rotina" => "ws" ),
+       // "ws/tokens/taxa"                       => Array("url" => "ws/tokens/atualizarTaxaErc20" ,                               "modulo" => "ws",                    "rotina" => "ws" ),
         "ws/tokens/webhook"                    => Array("url" => "ws/tokens/webhook" ,                                          "modulo" => "ws",                    "rotina" => "ws" ),
         //"ws/tokens/saque"                      => Array("url" => "ws/tokens/saqueEth" ,                                          "modulo" => "ws",                    "rotina" => "ws" ),
-        "ws/tokens/wallet"                     => Array("url" => "ws/tokens/criarWalletEth" ,                                    "modulo" => "ws",                    "rotina" => "ws" ),
-        "ws/tokens/erc20Ethereum"              => Array("url" => "ws/tokens/depositoErc20Ethereum" ,                             "modulo" => "ws",                    "rotina" => "ws" ),
-        "ws/tokens/internal"                   => Array("url" => "ws/tokens/ethereumBalance" ,                                   "modulo" => "ws",                    "rotina" => "ws" ),
-        "ws/tokens/movebalance"                => Array("url" => "ws/tokens/moverSaldo" ,                                        "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/tokens/wallet"                     => Array("url" => "ws/tokens/criarWalletEth" ,                                    "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/tokens/erc20Ethereum"              => Array("url" => "ws/tokens/depositoErc20Ethereum" ,                             "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/tokens/internal"                   => Array("url" => "ws/tokens/ethereumBalance" ,                                   "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/tokens/movebalance"                => Array("url" => "ws/tokens/moverSaldo" ,                                        "modulo" => "ws",                    "rotina" => "ws" ),
+        "ws/caf/inbound"                                => Array("url" => "ws/cafReturn/inbound" ,                                        "modulo" => "ws",                    "rotina" => "ws" ),
 
-        "ws/laraboletos/campainha"              => Array("url" => "ws/laraBoleto/campainha" ,                                        "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/laraboletos/campainha"              => Array("url" => "ws/laraBoleto/campainha" ,                                        "modulo" => "ws",                    "rotina" => "ws" ),
 
-        "ws/dinamize/adicionar"                 => Array("url" => "ws/dinamize/adicionarClienteDia" ,                            "modulo" => "ws",                    "rotina" => "ws" ),
-        "ws/dinamize/atualizar"                 => Array("url" => "ws/dinamize/atualizarClientes" ,                            "modulo" => "ws",                    "rotina" => "ws" ),
-        "ws/dinamize/remover"                   => Array("url" => "ws/dinamize/removerClientes" ,                            "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/dinamize/adicionar"                 => Array("url" => "ws/dinamize/adicionarClienteDia" ,                            "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/dinamize/atualizar"                 => Array("url" => "ws/dinamize/atualizarClientes" ,                            "modulo" => "ws",                    "rotina" => "ws" ),
+        //"ws/dinamize/remover"                   => Array("url" => "ws/dinamize/removerClientes" ,                            "modulo" => "ws",                    "rotina" => "ws" ),
         //"ws/dinamize/listar"                   => Array("url" => "ws/dinamize/listarCliente" ,                            "modulo" => "ws",                    "rotina" => "ws" ),
 
         
@@ -86,15 +119,15 @@ class Rotas {
 //        "painel/ico/dadosfases"                 => Array("url" => "monitoramento/painelIco/progressoFases" ,                       "modulo" => "monitoramento",            "rotina" => "painel/ico" ),
 //        
         // Acesso confirmarEmail
-        "app/account"                => Array("url" => "acesso/acesso/ativarContaApp" ,                    "modulo" => "acesso",                       "rotina" => "acesso"),
-        "activation"                => Array("url" => "acesso/acesso/novoCadastro" ,                    "modulo" => "acesso",                       "rotina" => "acesso"),
+        //"app/account"                => Array("url" => "acesso/acesso/ativarContaApp" ,                    "modulo" => "acesso",                       "rotina" => "acesso"),
+        "activation"                    => Array("url" => "acesso/acesso/novoCadastro" ,                    "modulo" => "acesso",                       "rotina" => "acesso"),
         "idioma/change"                 => Array("url" => "principal/principal/mudarIdioma" ,               "modulo" => "acesso",                       "rotina" => "acesso"),
         "login"                         => Array("url" => "acesso/acesso/index" ,                           "modulo" => "acesso",                       "rotina" => "acesso"),
         "register"                      => Array("url" => "acesso/acesso/register" ,                        "modulo" => "acesso",                       "rotina" => "acesso"),
         "logar"                         => Array("url" => "acesso/acesso/logar" ,                           "modulo" => "acesso",                       "rotina" => "acesso"),
         "logarapi"                      => Array("url" => "acesso/acesso/logarapi" ,                        "modulo" => "acesso",                       "rotina" => "acesso"),
         "logout"                        => Array("url" => "acesso/acesso/logout" ,                          "modulo" => "acesso",                       "rotina" => "acesso"),
-        "recovery"                   => Array("url" => "acesso/acesso/recuperar" ,                       "modulo" => "acesso",                       "rotina" => "acesso"),
+        "recovery"                      => Array("url" => "acesso/acesso/recuperar" ,                       "modulo" => "acesso",                       "rotina" => "acesso"),
         "revogar"                       => Array("url" => "acesso/acesso/revogarAcesso" ,                   "modulo" => "acesso",                       "rotina" => "acesso"),
         "recover"                       => Array("url" => "acesso/acesso/newPassword" ,                       "modulo" => "acesso",                       "rotina" => "acesso"),
         "mail/confirmation"             => Array("url" => "acesso/acesso/confirmarEmail" ,                       "modulo" => "acesso",                       "rotina" => "acesso"),
@@ -102,14 +135,14 @@ class Rotas {
         "authrecover"                   => Array("url" => "acesso/acesso/authRecover" ,                       "modulo" => "acesso",                       "rotina" => "acesso"),
         "docs/aceitacao"                => Array("url" => "acesso/docs/index" ,                             "modulo" => "acesso",                       "rotina" => "acesso"),
         "docs/aceitacao/salvar"         => Array("url" => "acesso/docs/salvar" ,                            "modulo" => "acesso",                       "rotina" => "acesso"),
-        "notificacaoMoeda/Cliente"      => Array("url" => "acesso/notificacaoMoeda/index" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
-        "notificacaomoeda/listarCliente" => Array("url" => "acesso/notificacaoMoeda/listarCliente" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
-        "notificacaomoeda/marcarComoLido" => Array("url" => "acesso/notificacaoMoeda/marcarComoLido" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
+        //"notificacaoMoeda/Cliente"      => Array("url" => "acesso/notificacaoMoeda/index" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
+        //"notificacaomoeda/listarCliente" => Array("url" => "acesso/notificacaoMoeda/listarCliente" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
+        //"notificacaomoeda/marcarComoLido" => Array("url" => "acesso/notificacaoMoeda/marcarComoLido" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
         
         //Marketing
-        "marketingImagem/onlyView"       => Array("url" => "acesso/marketingImagem/index" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
-        "marketingImagem/listar"         => Array("url" => "acesso/marketingImagem/listarCliente" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
-        "marketingImagem/marcarComoLido" => Array("url" => "acesso/marketingImagem/marcarComoLido" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
+        //"marketingImagem/onlyView"       => Array("url" => "acesso/marketingImagem/index" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
+        //"marketingImagem/listar"         => Array("url" => "acesso/marketingImagem/listarCliente" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
+        //"marketingImagem/marcarComoLido" => Array("url" => "acesso/marketingImagem/marcarComoLido" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
         
         
         //"confirmacao"                   => Array("url" => "acesso/acesso/confirmation" ,                    "modulo" => "acesso",                       "rotina" => "acesso"),
@@ -121,38 +154,38 @@ class Rotas {
         "initpage"                      => Array("url" => "principal/principal/init" ,                      "modulo" => "acesso",                       "rotina" => "sms"),
         "online"                        => Array("url" => "principal/principal/online" ,                      "modulo" => "acesso",                       "rotina" => "sms"),
         "currency"                      => Array("url" => "principal/principal/setCurrency" ,               "modulo" => "acesso",                       "rotina" => "principal"),
-        "consultacpf"                   => Array("url" => "site/cadastro/cpf" ,                             "modulo" => "site",                         "rotina" => "cadastro"),
-        "cadastro/senha/forca"          => Array("url" => "site/cadastro/forcaSenha" ,                      "modulo" => "site",                         "rotina" => "cadastro" ),
-        "transferencias"                => Array("url" => "contas/btc/transferencia" ,                      "modulo" => "transferencias",                "rotina" => "cadastro" ),
-        "clientes/promocao/pagar"       => Array("url" => "cadastros/clientes/enviarCreditosCampanha" ,                      "modulo" => "transferencias",               "rotina" => "transferencias" ),
-        "cotacoes/get"                  => Array("url" => "principal/principal/getListaCotacoes" ,          "modulo" => "principal",               "rotina" => "principal" ),
+        //"consultacpf"                   => Array("url" => "site/cadastro/cpf" ,                             "modulo" => "site",                         "rotina" => "cadastro"),
+        //"cadastro/senha/forca"          => Array("url" => "site/cadastro/forcaSenha" ,                      "modulo" => "site",                         "rotina" => "cadastro" ),
+        //"transferencias"                => Array("url" => "contas/btc/transferencia" ,                      "modulo" => "transferencias",                "rotina" => "cadastro" ),
+        //"clientes/promocao/pagar"       => Array("url" => "cadastros/clientes/enviarCreditosCampanha" ,                      "modulo" => "transferencias",               "rotina" => "transferencias" ),
+        //"cotacoes/get"                  => Array("url" => "principal/principal/getListaCotacoes" ,          "modulo" => "principal",               "rotina" => "principal" ),
         
         //"testeEmail"                  => Array("url" => "principal/principal/testeEmail" ,          "modulo" => "principal",               "rotina" => "principal" ),
 
         
         // Contas Bancárias
-        "contasbancarias/listar"        => Array("url" => "cadastros/contas/getContasCliente" ,             "modulo" => "saques",               "rotina" => "contasbancarias" ),
-        "contasbancarias/status/alterar"=> Array("url" => "cadastros/contas/alterarStatus" ,                "modulo" => "saques",               "rotina" => "contasbancarias" ),
+        //"contasbancarias/listar"        => Array("url" => "cadastros/contas/getContasCliente" ,             "modulo" => "saques",               "rotina" => "contasbancarias" ),
+        //"contasbancarias/status/alterar"=> Array("url" => "cadastros/contas/alterarStatus" ,                "modulo" => "saques",               "rotina" => "contasbancarias" ),
         
-        "service/correio/buscacep"         => Array("url" => "services/correios/enderecoPorCep" ,           "modulo" => "services",                     "rotina" => "correios"),
-        "service/correio/buscacoordenadas" => Array("url" => "services/correios/buscarCoordenadas" ,        "modulo" => "services",                     "rotina" => "correios"),
+        //"service/correio/buscacep"         => Array("url" => "services/correios/enderecoPorCep" ,           "modulo" => "services",                     "rotina" => "correios"),
+        //"service/correio/buscacoordenadas" => Array("url" => "services/correios/buscarCoordenadas" ,        "modulo" => "services",                     "rotina" => "correios"),
         
         // DASHBOARD
-        "dashboard"                     => Array("url" => "principal/dashboard/index" ,                     "modulo" => "principal",                    "rotina" => "dashboard"),
-        "dashboard/saldos/clientes"     => Array("url" => "principal/dashboardAdm/getSaldosMoedasClientes" ,             "modulo" => "principal",                    "rotina" => "dashboard"),
-        "dashboard/saldos/empresa"     => Array("url" => "principal/dashboardAdm/getSaldosMoedasEmpresa" ,             "modulo" => "principal",                    "rotina" => "dashboard"),
-        "dashboard/ordens/executadas"   => Array("url" => "principal/dashboard/listarMinhasOrdensExecutadas" ,   "modulo" => "principal",                    "rotina" => "dashboard"),
-        "dashboard/minhasmoedas"        => Array("url" => "principal/dashboard/htmlItemMinhasMoedas" ,           "modulo" => "principal",                    "rotina" => "dashboard"),
-        "dashboard/minhasmoedas/novo"        => Array("url" => "principal/dashboard/minhasMoedas" ,               "modulo" => "principal",                    "rotina" => "dashboard"),
-        "dashboard/setMoedaFavorita"    => Array("url" => "principal/dashboard/setMoedaFavorita" ,           "modulo" => "principal",                    "rotina" => "dashboard"),
-        "dashboard/calculaSaldo"    => Array("url" => "principal/dashboard/calculaSaldoDashboard" ,           "modulo" => "principal",                    "rotina" => "dashboard"),
-        "dashboard/redirect"            => Array("url" => "principal/principal/setCurrencyAndRedirect" ,           "modulo" => "principal",                    "rotina" => "dashboard"),
+        //"dashboard"                     => Array("url" => "principal/dashboard/index" ,                     "modulo" => "principal",                    "rotina" => "dashboard"),
+        //"dashboard/saldos/clientes"     => Array("url" => "principal/dashboardAdm/getSaldosMoedasClientes" ,             "modulo" => "principal",                    "rotina" => "dashboard"),
+        //"dashboard/saldos/empresa"     => Array("url" => "principal/dashboardAdm/getSaldosMoedasEmpresa" ,             "modulo" => "principal",                    "rotina" => "dashboard"),
+        //"dashboard/ordens/executadas"   => Array("url" => "principal/dashboard/listarMinhasOrdensExecutadas" ,   "modulo" => "principal",                    "rotina" => "dashboard"),
+        //"dashboard/minhasmoedas"        => Array("url" => "principal/dashboard/htmlItemMinhasMoedas" ,           "modulo" => "principal",                    "rotina" => "dashboard"),
+        //"dashboard/minhasmoedas/novo"        => Array("url" => "principal/dashboard/minhasMoedas" ,               "modulo" => "principal",                    "rotina" => "dashboard"),
+        //"dashboard/setMoedaFavorita"    => Array("url" => "principal/dashboard/setMoedaFavorita" ,           "modulo" => "principal",                    "rotina" => "dashboard"),
+        //"dashboard/calculaSaldo"    => Array("url" => "principal/dashboard/calculaSaldoDashboard" ,           "modulo" => "principal",                    "rotina" => "dashboard"),
+        //"dashboard/redirect"            => Array("url" => "principal/principal/setCurrencyAndRedirect" ,           "modulo" => "principal",                    "rotina" => "dashboard"),
         //"dashboard/tasks/pendentes"     => Array("url" => "principal/principal/getTasksPendentes" ,           "modulo" => "principal",                    "rotina" => "dashboard"),
         
         // PERFIL
         "myprofile"                     => Array("url" => "perfil/meusDados/index" ,                        "modulo" => "perfil",                       "rotina" => "meusdados" ),
         "postgetcidadesperfil"          => Array("url" => "perfil/meusDados/getCidades" ,                   "modulo" => "perfil",                       "rotina" => "meusdados" ),
-        "postremoverdocumentoperfil"    => Array("url" => "perfil/meusDados/removerDocumento" ,             "modulo" => "perfil",                       "rotina" => "meusdados" ),
+        //"postremoverdocumentoperfil"    => Array("url" => "perfil/meusDados/removerDocumento" ,             "modulo" => "perfil",                       "rotina" => "meusdados" ),
         "market/salvar"                 => Array("url" => "perfil/meusDados/marketupdate" ,             "modulo" => "perfil",                       "rotina" => "meusdados" ),
         
         /*
@@ -185,11 +218,11 @@ class Rotas {
         //"referal"                    => Array("url" => "principal/indicacoes/index" ,                    "modulo" => "principal",                    "rotina" => "indicacoes" ),
         
         // BITCOIN
-        "contacorrentebtc"              => Array("url" => "contas/btc/lancamentos" ,                        "modulo" => "btc",                          "rotina" => "contacorrentebtc" ),
-        "contasbtc"                     => Array("url" => "contas/btc/index" ,                              "modulo" => "btc",                          "rotina" => "contasbtc" ),
-        "transferenciabtc"              => Array("url" => "contas/btc/transferencia" ,                      "modulo" => "btc",                          "rotina" => "transferenciabtc" ),
+        //"contacorrentebtc"              => Array("url" => "contas/btc/lancamentos" ,                        "modulo" => "btc",                          "rotina" => "contacorrentebtc" ),
+        //"contasbtc"                     => Array("url" => "contas/btc/index" ,                              "modulo" => "btc",                          "rotina" => "contasbtc" ),
+        //"transferenciabtc"              => Array("url" => "contas/btc/transferencia" ,                      "modulo" => "btc",                          "rotina" => "transferenciabtc" ),
         //"ccempresabtc"                  => Array("url" => "contas/btcEmpresa/index" ,                       "modulo" => "btc",                          "rotina" => "ccempresabtc" ),
-        "painelbtc"                     => Array("url" => "contas/painelBtc/index" ,                        "modulo" => "btc",                          "rotina" => "painelbtc" ),
+        //"painelbtc"                     => Array("url" => "contas/painelBtc/index" ,                        "modulo" => "btc",                          "rotina" => "painelbtc" ),
         //"contabtcempresa"               => Array("url" => "contas/btcEmpresa/index" ,                       "modulo" => "btc",                          "rotina" => "contabtcempresa" ),
         //"transacoespendentes"           => Array("url" => "contas/painelBtc/index" ,                        "modulo" => "monitoramento",                "rotina" => "transacoespendentes" ),
         
@@ -197,23 +230,23 @@ class Rotas {
         //"chat"                          => Array("url" => "comunidade/chat/index" ,                         "modulo" => "comunidade",                   "rotina" => "chat" ),
         
         // REAIS
-        "contacorrentereais"            => Array("url" => "contas/reais/lancamentos" ,                      "modulo" => "reais",                        "rotina" => "contacorrentereais" ),
-        "contasreais"                   => Array("url" => "contas/reais/index" ,                            "modulo" => "reais",                        "rotina" => "contasreais" ),
-        "transferenciareais"            => Array("url" => "contas/reais/transferencia" ,                    "modulo" => "reais",                        "rotina" => "transferenciareais" ),
-        "depositos"                     => Array("url" => "contas/depositos/index" ,                        "modulo" => "depositos",                    "rotina" => "depositos"),
+        //"contacorrentereais"            => Array("url" => "contas/reais/lancamentos" ,                      "modulo" => "reais",                        "rotina" => "contacorrentereais" ),
+        //"contasreais"                   => Array("url" => "contas/reais/index" ,                            "modulo" => "reais",                        "rotina" => "contasreais" ),
+        //"transferenciareais"            => Array("url" => "contas/reais/transferencia" ,                    "modulo" => "reais",                        "rotina" => "transferenciareais" ),
+        //"depositos"                     => Array("url" => "contas/depositos/index" ,                        "modulo" => "depositos",                    "rotina" => "depositos"),
         "withdraw"                        => Array("url" => "contas/saques/index" ,                           "modulo" => "saques",                       "rotina" => "saques" ),
-        "contareaisempresa"             => Array("url" => "contas/reaisEmpresa/index" ,                     "modulo" => "reais",                        "rotina" => "contareaisempresa" ),
+       // "contareaisempresa"             => Array("url" => "contas/reaisEmpresa/index" ,                     "modulo" => "reais",                        "rotina" => "contareaisempresa" ),
  
         //Atar
-        "atar/token"                    => Array("url" => "contas/atar/token" ,                           "modulo" => "saques",                       "rotina" => "saques" ),
-        "atar/salvar"                   => Array("url" => "contas/atar/salvar" ,                          "modulo" => "saques",                       "rotina" => "saques" ),
-        "atar/listar"                   => Array("url" => "contas/atar/listar" ,                          "modulo" => "saques",                       "rotina" => "saques" ),
-        "atar/saldo"                    => Array("url" => "contas/atar/atarSaldo" ,                        "modulo" => "saques",                       "rotina" => "saques" ),
+        //"atar/token"                    => Array("url" => "contas/atar/token" ,                           "modulo" => "saques",                       "rotina" => "saques" ),
+       // "atar/salvar"                   => Array("url" => "contas/atar/salvar" ,                          "modulo" => "saques",                       "rotina" => "saques" ),
+       // "atar/listar"                   => Array("url" => "contas/atar/listar" ,                          "modulo" => "saques",                       "rotina" => "saques" ),
+       // "atar/saldo"                    => Array("url" => "contas/atar/atarSaldo" ,                        "modulo" => "saques",                       "rotina" => "saques" ),
         
         // Financeiro
-        "operacoes"                     => Array("url" => "financeiro/operacoes/index" ,                    "modulo" => "financeiro" ,                  "rotina" => "operacoes"),
-        "processos"                     => Array("url" => "financeiro/processos/index" ,                    "modulo" => "financeiro" ,                  "rotina" => "processos"),
-        "moedas"                        => Array("url" => "financeiro/moedas/index" ,                       "modulo" => "financeiro",                   "rotina" => "moedas" ),
+       // "operacoes"                     => Array("url" => "financeiro/operacoes/index" ,                    "modulo" => "financeiro" ,                  "rotina" => "operacoes"),
+        //"processos"                     => Array("url" => "financeiro/processos/index" ,                    "modulo" => "financeiro" ,                  "rotina" => "processos"),
+        //"moedas"                        => Array("url" => "financeiro/moedas/index" ,                       "modulo" => "financeiro",                   "rotina" => "moedas" ),
         
         
         // Configuracoes
@@ -232,15 +265,15 @@ class Rotas {
         
         
         // Cadastros
-        "atar/deposito/listar"          => Array("url" => "cadastros/atar/listar" ,                       "modulo" => "cadastros",                    "rotina" => "carteiras" ),
-        "atar/deposito/salvar"          => Array("url" => "cadastros/atar/salvar" ,                         "modulo" => "cadastros",                    "rotina" => "carteiras" ),
-        "atar/deposito/token"          => Array("url" => "cadastros/atar/token" ,                         "modulo" => "cadastros",                    "rotina" => "carteiras" ),
+       // "atar/deposito/listar"          => Array("url" => "cadastros/atar/listar" ,                       "modulo" => "cadastros",                    "rotina" => "carteiras" ),
+       // "atar/deposito/salvar"          => Array("url" => "cadastros/atar/salvar" ,                         "modulo" => "cadastros",                    "rotina" => "carteiras" ),
+       // "atar/deposito/token"          => Array("url" => "cadastros/atar/token" ,                         "modulo" => "cadastros",                    "rotina" => "carteiras" ),
         
         //"usuarios"                      => Array("url" => "cadastros/usuarios/index" ,                      "modulo" => "cadastros" ,                   "rotina" => "usuarios"),
-        "clientes"                      => Array("url" => "cadastros/clientes/index" ,                      "modulo" => "cadastros",                    "rotina" => "clientes" ),
-        "carteiras/listar"              => Array("url" => "cadastros/carteiras/listar" ,                    "modulo" => "cadastros",                    "rotina" => "carteiras" ),
-        "carteiras/nova"                => Array("url" => "cadastros/carteiras/criarCarteira" ,             "modulo" => "cadastros",                    "rotina" => "carteiras" ),
-        "carteiras/principal"           => Array("url" => "cadastros/carteiras/marcarComoPrincipal" ,       "modulo" => "cadastros",                    "rotina" => "carteiras" ),
+        //"clientes"                      => Array("url" => "cadastros/clientes/index" ,                      "modulo" => "cadastros",                    "rotina" => "clientes" ),
+        //"carteiras/listar"              => Array("url" => "cadastros/carteiras/listar" ,                    "modulo" => "cadastros",                    "rotina" => "carteiras" ),
+        //"carteiras/nova"                => Array("url" => "cadastros/carteiras/criarCarteira" ,             "modulo" => "cadastros",                    "rotina" => "carteiras" ),
+        //"carteiras/principal"           => Array("url" => "cadastros/carteiras/marcarComoPrincipal" ,       "modulo" => "cadastros",                    "rotina" => "carteiras" ),
         //"clientes/franquia/status"      => Array("url" => "cadastros/clientes/alterarStatusFranquia" ,      "modulo" => "cadastros",                    "rotina" => "clientes" ),
         //"clientes/franquia/cancelar"    => Array("url" => "cadastros/clientes/cancelarFranquia" ,           "modulo" => "cadastros",                    "rotina" => "clientes" ),
         //"clientes/taxas/listar"         => Array("url" => "cadastros/taxasClientes/carregarTaxasClientes" , "modulo" => "cadastros",                    "rotina" => "clientes" ),
@@ -305,8 +338,8 @@ class Rotas {
         
         // SITE
         //"cadastro"                      => Array("url" => "site/cadastro/index" ,                                       "modulo" => "site",                "rotina" => "cadastro" ),
-        "cadastro/cidades/listar"       => Array("url" => "site/cadastro/getCidades" ,                                  "modulo" => "site",                "rotina" => "cadastro" ),
-        "cadastro/cliente/aderir"       => Array("url" => "acesso/cartoes/aderirSimplificado" ,                         "modulo" => "site",                "rotina" => "cadastro" ),
+        //"cadastro/cidades/listar"       => Array("url" => "site/cadastro/getCidades" ,                                  "modulo" => "site",                "rotina" => "cadastro" ),
+        //"cadastro/cliente/aderir"       => Array("url" => "acesso/cartoes/aderirSimplificado" ,                         "modulo" => "site",                "rotina" => "cadastro" ),
         
         // Documentaçao - API
         //"doc/api/transferencia"            => Array("url" => "doc/transferencia/index" ,                                "modulo" => "docs",                 "rotina" => "doc/api/transferencia" ),
@@ -406,17 +439,17 @@ class Rotas {
 //        "telegram/mensagem/salvar"      => Array("url" => "configuracoes/TelegramMensagens/salvar" ,       "modulo" => "configuracoes",        "rotina" => "painelcontrole" ),
 //        
         // Menu BTC
-        "btc/contas/resumo"                     => Array("url" => "contas/btc/resumo" ,                     "modulo" => "btc",                    "rotina" => "contasbtc" ),
-        "btc/conta/lancamentos"                 => Array("url" => "contas/btc/filtrar" ,                    "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
-        "btc/conta/filtrarsaldo"                => Array("url" => "contas/btc/filtrarsaldo" ,               "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
-        "btc/lancamento/cadastro"               => Array("url" => "contas/btc/cadastro" ,                   "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
-        "btc/lancamento/salvar"                 => Array("url" => "contas/btc/salvar" ,                     "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
-        "btc/lancamento/excluir"                => Array("url" => "contas/btc/excluir" ,                    "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
-        "btc/lancamentos/imprimir"              => Array("url" => "contas/btc/imprimir" ,                   "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
-        "btc/transferir"                        => Array("url" => "contas/btc/transferir" ,                 "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
-        "btc/transferencias/filtrar"            => Array("url" => "contas/btc/filtrarTransferencias" ,      "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
-        "btc/transferencias/imprimir"           => Array("url" => "contas/btc/imprimirtransferencias" ,     "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
-        "btc/autorizacao/token"                 => Array("url" => "contas/btc/token" ,                      "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
+        //"btc/contas/resumo"                     => Array("url" => "contas/btc/resumo" ,                     "modulo" => "btc",                    "rotina" => "contasbtc" ),
+        "deposit/criptocurrency"                 => Array("url" => "contas/btc/filtrar" ,                    "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
+        //"btc/conta/filtrarsaldo"                => Array("url" => "contas/btc/filtrarsaldo" ,               "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
+        //"btc/lancamento/cadastro"               => Array("url" => "contas/btc/cadastro" ,                   "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
+        //"btc/lancamento/salvar"                 => Array("url" => "contas/btc/salvar" ,                     "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
+        //"btc/lancamento/excluir"                => Array("url" => "contas/btc/excluir" ,                    "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
+        //"btc/lancamentos/imprimir"              => Array("url" => "contas/btc/imprimir" ,                   "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
+        //"btc/transferir"                        => Array("url" => "contas/btc/transferir" ,                 "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
+        //"btc/transferencias/filtrar"            => Array("url" => "contas/btc/filtrarTransferencias" ,      "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
+        //"btc/transferencias/imprimir"           => Array("url" => "contas/btc/imprimirtransferencias" ,     "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
+        //"btc/autorizacao/token"                 => Array("url" => "contas/btc/token" ,                      "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
         
 //        "btc/empresa/imprimir"                  => Array("url" => "contas/btcEmpresa/imprimir" ,            "modulo" => "btc",                    "rotina" => "ccempresabtc" ),
 //        "btc/log"                               => Array("url" => "contas/logBtc/index" ,                   "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
@@ -464,18 +497,18 @@ class Rotas {
         "clientes/states/list"                  => Array("url" => "cadastros/clientes/getEstadosByPais",                           "modulo" => "perfil",                       "rotina" => "meusdados" ),
         
         // Menu Reais
-        "reais/contas/resumo"                   => Array("url" => "contas/reais/resumo" ,                   "modulo" => "reais",                    "rotina" => "contasreais" ),
-        "reais/conta/lancamentos"               => Array("url" => "contas/reais/filtrar" ,                  "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
-        "reais/conta/filtrarsaldo"              => Array("url" => "contas/reais/filtrarSaldo" ,             "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
-        "reais/lancamento/cadastro"             => Array("url" => "contas/reais/cadastro" ,                 "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
-        "reais/lancamento/salvar"               => Array("url" => "contas/reais/salvar" ,                   "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
-        "reais/lancamento/excluir"              => Array("url" => "contas/reais/excluir" ,                  "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
-        "reais/lancamentos/imprimir"            => Array("url" => "contas/reais/imprimir" ,                 "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
-        "reais/transferir"                      => Array("url" => "contas/reais/transferir" ,               "modulo" => "reais",                    "rotina" => "transferenciareais" ),
-        "empresa/transferir"                    => Array("url" => "contas/transferencias/transferirParaEmpresa" ,"modulo" => "reais",                    "rotina" => "transferenciareais" ),
-        "reais/transferencias/filtrar"          => Array("url" => "contas/reais/filtrarTransferencias" ,    "modulo" => "reais",                    "rotina" => "transferenciareais" ),
-        "reais/transferencias/imprimir"         => Array("url" => "contas/reais/imprimirtransferencias" ,   "modulo" => "reais",                    "rotina" => "transferenciareais" ),
-        "reais/autorizacao/token"               => Array("url" => "contas/reais/token" ,                    "modulo" => "reais",                    "rotina" => "transferenciareais" ),
+        //"reais/contas/resumo"                   => Array("url" => "contas/reais/resumo" ,                   "modulo" => "reais",                    "rotina" => "contasreais" ),
+        //"reais/conta/lancamentos"               => Array("url" => "contas/reais/filtrar" ,                  "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
+        //"reais/conta/filtrarsaldo"              => Array("url" => "contas/reais/filtrarSaldo" ,             "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
+        //"reais/lancamento/cadastro"             => Array("url" => "contas/reais/cadastro" ,                 "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
+        //"reais/lancamento/salvar"               => Array("url" => "contas/reais/salvar" ,                   "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
+        //"reais/lancamento/excluir"              => Array("url" => "contas/reais/excluir" ,                  "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
+        //"reais/lancamentos/imprimir"            => Array("url" => "contas/reais/imprimir" ,                 "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
+        //"reais/transferir"                      => Array("url" => "contas/reais/transferir" ,               "modulo" => "reais",                    "rotina" => "transferenciareais" ),
+        //"empresa/transferir"                    => Array("url" => "contas/transferencias/transferirParaEmpresa" ,"modulo" => "reais",                    "rotina" => "transferenciareais" ),
+        //"reais/transferencias/filtrar"          => Array("url" => "contas/reais/filtrarTransferencias" ,    "modulo" => "reais",                    "rotina" => "transferenciareais" ),
+        //"reais/transferencias/imprimir"         => Array("url" => "contas/reais/imprimirtransferencias" ,   "modulo" => "reais",                    "rotina" => "transferenciareais" ),
+        //"reais/autorizacao/token"               => Array("url" => "contas/reais/token" ,                    "modulo" => "reais",                    "rotina" => "transferenciareais" ),
 //        
 //        "empresa/autorizacao/token"             => Array("url" => "contas/transferencias/tokenEmpresa" ,     "modulo" => "reais",                    "rotina" => "transferenciareais" ),
 //        "reais/log"                             => Array("url" => "contas/logReais/index" ,                 "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
@@ -487,33 +520,33 @@ class Rotas {
 //        
         
         //"reais/empresa/imprimir"                => Array("url" => "contas/reaisEmpresa/imprimir" ,          "modulo" => "reais",                    "rotina" => "ccempresareais" ),
-        "reais/depositos/solicitar"             => Array("url" => "contas/depositos/solicitar" ,            "modulo" => "reais",                    "rotina" => "depositos" ),
-        "reais/depositos/listar"                => Array("url" => "contas/depositos/listar" ,               "modulo" => "reais",                    "rotina" => "depositos" ),
-        "reais/depositos/dadosconta"            => Array("url" => "contas/depositos/getDadosContaBancaria", "modulo" => "reais",                    "rotina" => "depositos" ),
-        "reais/depositos/salvar"                => Array("url" => "contas/depositos/salvar" ,               "modulo" => "reais",                    "rotina" => "depositos" ),
-        "reais/depositos/analisar"              => Array("url" => "contas/depositos/aprovar" ,              "modulo" => "reais",                    "rotina" => "depositos" ),
+        //"reais/depositos/solicitar"             => Array("url" => "contas/depositos/solicitar" ,            "modulo" => "reais",                    "rotina" => "depositos" ),
+        "deposits/fiat"                           => Array("url" => "contas/depositos/listar" ,               "modulo" => "reais",                    "rotina" => "depositos" ),
+        //"reais/depositos/dadosconta"            => Array("url" => "contas/depositos/getDadosContaBancaria", "modulo" => "reais",                    "rotina" => "depositos" ),
+        "deposits/save"                            => Array("url" => "contas/depositos/salvar" ,               "modulo" => "reais",                    "rotina" => "depositos" ),
+        //"reais/depositos/analisar"              => Array("url" => "contas/depositos/aprovar" ,              "modulo" => "reais",                    "rotina" => "depositos" ),
         //"reais/depositos/aprovar"               => Array("url" => "contas/depositos/aprovarDeposito" ,      "modulo" => "reais",                    "rotina" => "depositos" ),
         //"reais/depositos/cancelar"              => Array("url" => "contas/depositos/cancelar" ,             "modulo" => "reais",                    "rotina" => "depositos" ),
         //"reais/depositos/imprimir"              => Array("url" => "contas/depositos/imprimir" ,             "modulo" => "reais",                    "rotina" => "depositos" ),
-        "reais/saques/listar"                   => Array("url" => "contas/saques/listar" ,                  "modulo" => "reais",                    "rotina" => "saques" ),
-        "reais/saques/listarReais"              => Array("url" => "contas/saques/listarReais" ,             "modulo" => "reais",                    "rotina" => "saques" ),
-        "reais/saques/saldos"                   => Array("url" => "contas/saques/saldoCliente" ,             "modulo" => "reais",                    "rotina" => "saques" ),
-        "reais/saques/dadosconta"               => Array("url" => "contas/saques/getDadosContaBancaria",    "modulo" => "reais",                    "rotina" => "saques" ),
-        "reais/saques/extratoCliente"           => Array("url" => "contas/saques/extratoCliente",           "modulo" => "reais",                    "rotina" => "saques" ),
-        "deposito/boleto/gerar"                 => Array("url" => "contas/gerenciaNet/gerarBoleto" ,        "modulo" => "reais",                    "rotina" => "depositos" ),
-        "deposito/boletolara/gerar"             => Array("url" => "contas/laraBoleto/gerarBoleto" ,        "modulo" => "reais",                    "rotina" => "depositos" ),
-        "deposito/boleto/token"                 => Array("url" => "contas/gerenciaNet/token" ,              "modulo" => "reais",                    "rotina" => "depositos" ),
+        //"reais/saques/listar"                   => Array("url" => "contas/saques/listar" ,                  "modulo" => "reais",                    "rotina" => "saques" ),
+        //"reais/saques/listarReais"              => Array("url" => "contas/saques/listarReais" ,             "modulo" => "reais",                    "rotina" => "saques" ),
+        //"reais/saques/saldos"                   => Array("url" => "contas/saques/saldoCliente" ,             "modulo" => "reais",                    "rotina" => "saques" ),
+        //"reais/saques/dadosconta"               => Array("url" => "contas/saques/getDadosContaBancaria",    "modulo" => "reais",                    "rotina" => "saques" ),
+        //"reais/saques/extratoCliente"           => Array("url" => "contas/saques/extratoCliente",           "modulo" => "reais",                    "rotina" => "saques" ),
+        //"deposito/boleto/gerar"                 => Array("url" => "contas/gerenciaNet/gerarBoleto" ,        "modulo" => "reais",                    "rotina" => "depositos" ),
+        //"deposito/boletolara/gerar"             => Array("url" => "contas/laraBoleto/gerarBoleto" ,        "modulo" => "reais",                    "rotina" => "depositos" ),
+       // "deposito/boleto/token"                 => Array("url" => "contas/gerenciaNet/token" ,              "modulo" => "reais",                    "rotina" => "depositos" ),
 
-        "reais/saques/salvar"                   => Array("url" => "contas/saques/salvar" ,                  "modulo" => "reais",                    "rotina" => "saques" ),
+        //"reais/saques/salvar"                   => Array("url" => "contas/saques/salvar" ,                  "modulo" => "reais",                    "rotina" => "saques" ),
         //"reais/saques/aprovar"                  => Array("url" => "contas/saques/aprovarSaque" ,            "modulo" => "reais",                    "rotina" => "saques" ),
         //"reais/saques/analisar"                 => Array("url" => "contas/saques/aprovar" ,                 "modulo" => "reais",                    "rotina" => "saques" ),
-        "reais/saques/cancelar"                 => Array("url" => "contas/saques/cancelar" ,                "modulo" => "reais",                    "rotina" => "saques" ),
+        //"reais/saques/cancelar"                 => Array("url" => "contas/saques/cancelar" ,                "modulo" => "reais",                    "rotina" => "saques" ),
         //"reais/saques/imprimir"                 => Array("url" => "contas/saques/imprimir" ,                "modulo" => "reais",                    "rotina" => "saques" ),
-        "reais/saques/solicitar"                => Array("url" => "contas/saques/solicitar" ,               "modulo" => "reais",                    "rotina" => "saques" ),
-        "reais/saques/showDados"                => Array("url" => "contas/saques/showDados" ,               "modulo" => "reais",                    "rotina" => "saques" ),
-        "reais/saques/ultimosSaques"            => Array("url" => "contas/saques/ultimosSaques" ,           "modulo" => "reais",                    "rotina" => "saques" ),
-        "reais/clientes/findbywallet"           => Array("url" => "contas/reais/findByWallet" ,             "modulo" => "reais",                    "rotina" => "transferencias" ),
-        "reais/clientes/findbyemail"           => Array("url" => "contas/saques/findByEmail" ,              "modulo" => "reais",                    "rotina" => "transferencias" ),
+        //"reais/saques/solicitar"                => Array("url" => "contas/saques/solicitar" ,               "modulo" => "reais",                    "rotina" => "saques" ),
+        //"reais/saques/showDados"                => Array("url" => "contas/saques/showDados" ,               "modulo" => "reais",                    "rotina" => "saques" ),
+        //"reais/saques/ultimosSaques"            => Array("url" => "contas/saques/ultimosSaques" ,           "modulo" => "reais",                    "rotina" => "saques" ),
+        //"reais/clientes/findbywallet"           => Array("url" => "contas/reais/findByWallet" ,             "modulo" => "reais",                    "rotina" => "transferencias" ),
+        //"reais/clientes/findbyemail"           => Array("url" => "contas/saques/findByEmail" ,              "modulo" => "reais",                    "rotina" => "transferencias" ),
         "reais/saques/getTaxas"                => Array("url" => "contas/saques/getTaxaTokens" ,            "modulo" => "reais",                    "rotina" => "saques" ),
 
         // Cartoes
@@ -590,13 +623,13 @@ class Rotas {
         "meudados/kyc/smsresend"                            => Array("url" => "perfil/meusDados/kycSmsResend",                               "modulo" => "perfil",                       "rotina" => "meusdados" ),
 
         // DASHBOARD
-        "dashboard/referencias/vendedor"                    => Array("url" => "principal/dashboard/carregarValorMensalPorVendedor" ,        "modulo" => "principal",                       "rotina" => "dashboard" ),
-        "dashboard/referencias/adm"                         => Array("url" => "principal/dashboard/carregarValorMensalVendedores" ,         "modulo" => "principal",                       "rotina" => "meusdados" ),
-        "dashboard/referencias/extrato"                     => Array("url" => "principal/dashboard/extrato" ,                               "modulo" => "principal",                       "rotina" => "meusdados" ),
-        "dashboard/extrato/carregar"                        => Array("url" => "principal/dashboard/carregarExtrato" ,                       "modulo" => "principal",                       "rotina" => "meusdados" ),
-        "dashboard/referencias/pagar"                       => Array("url" => "principal/dashboard/pagarComissao" ,                         "modulo" => "principal",                       "rotina" => "meusdados" ),
-        "dashboard/referencias/calculartotal"               => Array("url" => "principal/dashboard/calcularValorTotalPago" ,                "modulo" => "principal",                       "rotina" => "meusdados" ),
-        "indicacoes/calcularresgate"                        => Array("url" => "principal/indicacoes/getValorResgate" ,                      "modulo" => "principal",                       "rotina" => "indicacoes" ),
+        //"dashboard/referencias/vendedor"                    => Array("url" => "principal/dashboard/carregarValorMensalPorVendedor" ,        "modulo" => "principal",                       "rotina" => "dashboard" ),
+        //"dashboard/referencias/adm"                         => Array("url" => "principal/dashboard/carregarValorMensalVendedores" ,         "modulo" => "principal",                       "rotina" => "meusdados" ),
+        //"dashboard/referencias/extrato"                     => Array("url" => "principal/dashboard/extrato" ,                               "modulo" => "principal",                       "rotina" => "meusdados" ),
+        //"dashboard/extrato/carregar"                        => Array("url" => "principal/dashboard/carregarExtrato" ,                       "modulo" => "principal",                       "rotina" => "meusdados" ),
+       // "dashboard/referencias/pagar"                       => Array("url" => "principal/dashboard/pagarComissao" ,                         "modulo" => "principal",                       "rotina" => "meusdados" ),
+        //"dashboard/referencias/calculartotal"               => Array("url" => "principal/dashboard/calcularValorTotalPago" ,                "modulo" => "principal",                       "rotina" => "meusdados" ),
+        //"indicacoes/calcularresgate"                        => Array("url" => "principal/indicacoes/getValorResgate" ,                      "modulo" => "principal",                       "rotina" => "indicacoes" ),
 //        
 //        "indicacoes/resgate"                                => Array("url" => "principal/indicacoes/resgatar" ,                             "modulo" => "principal",                       "rotina" => "indicacoes" ),
 //        "indicacoes/transferir"                             => Array("url" => "principal/indicacoes/transferir" ,                           "modulo" => "principal",                       "rotina" => "indicacoes" ),
@@ -616,24 +649,24 @@ class Rotas {
 //        "notificacoes/read"                                 => Array("url" => "notificacoes/notificacoes/marcarComoLida" ,                  "modulo" => "notificacoes",                     "rotina" => "notificacoes/read" ),
 //     
         //Notificação Moeda
-        "notificacaomoeda"                                  => Array("url" => "configuracoes/notificacaoMoeda/index" ,                               "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
-        "notificacaomoedaOnlyView"                          => Array("url" => "configuracoes/notificacaoMoedaOnlyView/index" ,                       "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
-        "notificacaomoeda/salvar"                           => Array("url" => "configuracoes/notificacaoMoeda/salvar" ,                              "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
-        "notificacaomoeda/listar"                           => Array("url" => "configuracoes/notificacaoMoeda/listar" ,                              "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
-        "notificacaomoedaOnlyView/listar"                   => Array("url" => "configuracoes/notificacaoMoedaOnlyView/listar" ,                      "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
-        "notificacaomoeda/status/publicado"                 => Array("url" => "configuracoes/notificacaoMoeda/alterarStatus" ,                       "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
-        "notificacaomoeda/editar"                           => Array("url" => "configuracoes/notificacaoMoeda/editarNotificacao" ,                   "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
+        //"notificacaomoeda"                                  => Array("url" => "configuracoes/notificacaoMoeda/index" ,                               "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
+       // "notificacaomoedaOnlyView"                          => Array("url" => "configuracoes/notificacaoMoedaOnlyView/index" ,                       "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
+        //"notificacaomoeda/salvar"                           => Array("url" => "configuracoes/notificacaoMoeda/salvar" ,                              "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
+        //"notificacaomoeda/listar"                           => Array("url" => "configuracoes/notificacaoMoeda/listar" ,                              "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
+        //"notificacaomoedaOnlyView/listar"                   => Array("url" => "configuracoes/notificacaoMoedaOnlyView/listar" ,                      "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
+        //"notificacaomoeda/status/publicado"                 => Array("url" => "configuracoes/notificacaoMoeda/alterarStatus" ,                       "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
+        //"notificacaomoeda/editar"                           => Array("url" => "configuracoes/notificacaoMoeda/editarNotificacao" ,                   "modulo" => "configuracoes",                     "rotina" => "notificacaomoeda" ),
 
         "extract"                                           => Array("url" => "extrato/extrato/index" ,                                              "modulo" => "extrato",                            "rotina" => "extrato" ),
         "extrato/listar"                                    => Array("url" => "extrato/extrato/listarExtrato" ,                                      "modulo" => "extrato",                            "rotina" => "extrato" ),
         
-        "referal"                                        => Array("url" => "referencia/referencia/index" ,                                        "modulo" => "referencia",                            "rotina" => "extrato" ),
-        "referencia/listar"                                 => Array("url" => "referencia/referencia/listarReferencia" ,                             "modulo" => "referencia",                            "rotina" => "extrato" ),
+        //"referal"                                        => Array("url" => "referencia/referencia/index" ,                                        "modulo" => "referencia",                            "rotina" => "extrato" ),
+        //"referencia/listar"                                 => Array("url" => "referencia/referencia/listarReferencia" ,                             "modulo" => "referencia",                            "rotina" => "extrato" ),
 
         
         // CONtas
-        "contas/empresa/btc"                                => Array("url" => "contas/btcEmpresa/index" ,                                   "modulo" => "contasempresa",                     "rotina" => "contas/empresa/btc" ),
-        "contas/empresa/reais"                              => Array("url" => "contas/reaisEmpresa/index" ,                                 "modulo" => "contasempresa",                     "rotina" => "contas/empresa/reais" ),
+        //"contas/empresa/btc"                                => Array("url" => "contas/btcEmpresa/index" ,                                   "modulo" => "contasempresa",                     "rotina" => "contas/empresa/btc" ),
+        //"contas/empresa/reais"                              => Array("url" => "contas/reaisEmpresa/index" ,                                 "modulo" => "contasempresa",                     "rotina" => "contas/empresa/reais" ),
 
         /// TRADE 
         "book/layout/salvar"                                => Array("url" => "trade/BookNew/salvarLayout" ,                                 "modulo" => "trade",                    "rotina" => "book" ),
@@ -674,10 +707,10 @@ class Rotas {
         //"book/negociacoes/dados"                            => Array("url" => "trade/negociacoes/getDadosNegociacoes" ,                      "modulo" => "trade",                    "rotina" => "book/negociacoes" ),
         
         "book/paridades/listar"                             => Array("url" => "trade/book/getParidadesByMoeda" ,                      "modulo" => "trade",                    "rotina" => "book" ),
-        "book/paridades/listarnew"                          => Array("url" => "trade/bookNew/getParidadesByMoeda" ,                      "modulo" => "trade",                    "rotina" => "book" ),
+        //"book/paridades/listarnew"                          => Array("url" => "trade/bookNew/getParidadesByMoeda" ,                      "modulo" => "trade",                    "rotina" => "book" ),
         "book/moedas/saldos"                                => Array("url" => "trade/book/getTableBalances" ,                         "modulo" => "trade",                    "rotina" => "book" ),
         
-        "bookweb"                                              => Array("url" => "trade/bookWeb/index" ,                                           "modulo" => "trade",                    "rotina" => "book" ),
+        //"bookweb"                                              => Array("url" => "trade/bookWeb/index" ,                                           "modulo" => "trade",                    "rotina" => "book" ),
 
 //        "book/ico"                                          => Array("url" => "trade/CompraIco/index" ,                                      "modulo" => "trade",                    "rotina" => "book/ico" ),
 //        "book/ico/comprar"                                  => Array("url" => "trade/CompraIco/comprar" ,                                    "modulo" => "trade",                    "rotina" => "book/ico" ),
@@ -714,14 +747,14 @@ class Rotas {
 //        "dashboard/historico/remotewallets"                  => Array("url" => "principal/dashboard/listarUltimasTransacoesCarteirasRemotas" ,  "modulo" => "contasempresa",               "rotina" => "p2p" ),
 //        "dashboard/historico/remoteinvoices"                 => Array("url" => "principal/dashboard/listarUltimasTransacoesInvoices" ,          "modulo" => "contasempresa",               "rotina" => "p2p" ),
 //        
-        "dispositivos/listar"                                => Array("url" => "perfil/dispositivosMobile/listar" ,                             "modulo" => "perfil",                      "rotina" => "perfil" ),
-        "dispositivos/alterarStatus"                         => Array("url" => "perfil/dispositivosMobile/alterarStatusAtivo" ,                 "modulo" => "perfil",                      "rotina" => "perfil" ),
-        "dispositivos/parear"                                => Array("url" => "perfil/dispositivosMobile/parear" ,                             "modulo" => "perfil",                      "rotina" => "perfil" ),
-        "dispositivos/pareamento"                            => Array("url" => "perfil/dispositivosMobile/ativarPareamento" ,                   "modulo" => "perfil",                      "rotina" => "perfil" ),
+        //"dispositivos/listar"                                => Array("url" => "perfil/dispositivosMobile/listar" ,                             "modulo" => "perfil",                      "rotina" => "perfil" ),
+        //"dispositivos/alterarStatus"                         => Array("url" => "perfil/dispositivosMobile/alterarStatusAtivo" ,                 "modulo" => "perfil",                      "rotina" => "perfil" ),
+        //"dispositivos/parear"                                => Array("url" => "perfil/dispositivosMobile/parear" ,                             "modulo" => "perfil",                      "rotina" => "perfil" ),
+        //"dispositivos/pareamento"                            => Array("url" => "perfil/dispositivosMobile/ativarPareamento" ,                   "modulo" => "perfil",                      "rotina" => "perfil" ),
 
         
         
-        "afiliados/listar"                                   => Array("url" => "perfil/afiliados/listar" ,                                      "modulo" => "perfil",                      "rotina" => "perfil" ),
+        //"afiliados/listar"                                   => Array("url" => "perfil/afiliados/listar" ,                                      "modulo" => "perfil",                      "rotina" => "perfil" ),
         
         
 //        // Pré-venda
@@ -745,9 +778,9 @@ class Rotas {
         
         // WS 
         //"ws/nf/notification"                                => Array("url" => "ws/notaFiscal/notification" ,                             "modulo" => "principal",                 "rotina" => "dashboard" ),
-        "ws/gerencianet/notification"                       => Array("url" => "ws/gerenciaNet/notification" ,                            "modulo" => "principal",                 "rotina" => "dashboard" ),
-        "ws/gerencianet/cancelar"                           => Array("url" => "ws/gerenciaNet/cancelarBoletos" ,                         "modulo" => "principal",                 "rotina" => "dashboard" ),
-        "ws/gerencianet/consultar"                          => Array("url" => "ws/gerenciaNet/gerenciaNetConsultar" ,                    "modulo" => "principal",                 "rotina" => "dashboard" ),
+       // "ws/gerencianet/notification"                       => Array("url" => "ws/gerenciaNet/notification" ,                            "modulo" => "principal",                 "rotina" => "dashboard" ),
+       // "ws/gerencianet/cancelar"                           => Array("url" => "ws/gerenciaNet/cancelarBoletos" ,                         "modulo" => "principal",                 "rotina" => "dashboard" ),
+       // "ws/gerencianet/consultar"                          => Array("url" => "ws/gerenciaNet/gerenciaNetConsultar" ,                    "modulo" => "principal",                 "rotina" => "dashboard" ),
         //"ws/convites"                                       => Array("url" => "ws/convites/index" ,                                      "modulo" => "principal",                 "rotina" => "dashboard" ),
         
         /*
@@ -786,11 +819,26 @@ class Rotas {
 //        "telegram"                                => Array("url" => "ws/telegram/index" ,                               "modulo" => "principal",                 "rotina" => "dashboard" )
 //        
 //        
-//        
-        
-        
+//
     );
-    
+
+    const API_PUBLIC_MARKET_HISTORY = "api/public/markethistory";
+    const API_MARKET_SUMMARIES = "api/public/marketsummaries";
+    const API_MARKETS = "api/public/marketsummariesSite";
+    const API_TICKER = "api/public/ticker";
+    const API_ORDERBOOK = "api/public/orderbook";
+
+    const SITE_HOME = "home";
+    const SITE_ABOUTUS = "aboutus";
+    const SITE_CONTACT = "contact";
+    const SITE_FAQS = "faqs";
+    const SITE_TERMS = "terms";
+    const SITE_PRIVACY = "privacy";
+    const SITE_API = "docsapi";
+    const SITE_IN1888 = "in1888";
+    const SITE_MARKET = "market";
+    const SITE_COMPLIANCE = "compliance";
+
     const R_CLIENTES_PROMOCAO_PAGAR = "clientes/promocao/pagar";
     
     const M_ACESSO = "acesso";
@@ -825,21 +873,21 @@ class Rotas {
     
     const R_FILESMANAGER = "filesmanager";
     
-    const R_VOTACAO = "votacao";
-    const R_VOTACAO_LISTAR = "votacao/listar";
-    const R_VOTACAO_SALVAR = "votacao/salvar";
-    const R_VOTACAO_VOTAR =  "votacao/votar";
-    const R_VOTACAO_APROVAR =  "votacao/aprovar";
-    const R_VOTACAO_NEGAR =  "votacao/negar";
+   // const R_VOTACAO = "votacao";
+   // const R_VOTACAO_LISTAR = "votacao/listar";
+   // const R_VOTACAO_SALVAR = "votacao/salvar";
+   // const R_VOTACAO_VOTAR =  "votacao/votar";
+   // const R_VOTACAO_APROVAR =  "votacao/aprovar";
+   // const R_VOTACAO_NEGAR =  "votacao/negar";
     
     
     
     
     
-    const R_PAINEL_ICO = "painel/ico";
-    const R_PAINEL_ICO_ULTIMASCOMPRAS = "painel/ico/ultimascompras";
-    const R_PAINEL_ICO_ULTIMASBONIFICACOES = "painel/ico/ultimasbonificacoes";
-    const R_PAINEL_ICO_DADOSFASES = "painel/ico/dadosfases";
+   // const R_PAINEL_ICO = "painel/ico";
+   // const R_PAINEL_ICO_ULTIMASCOMPRAS = "painel/ico/ultimascompras";
+   // const R_PAINEL_ICO_ULTIMASBONIFICACOES = "painel/ico/ultimasbonificacoes";
+   // const R_PAINEL_ICO_DADOSFASES = "painel/ico/dadosfases";
     
     const R_IDIOMA_CHANGE = "idioma/change";
     const R_INIT = "initpage";
@@ -983,7 +1031,7 @@ class Rotas {
     const R_CONFIGURACOES_PAINEL_SALVAR = "configuracoes/painel/salvar";
     
     const R_BTC_CONTAS_RESUMO = "btc/contas/resumo";
-    const R_BTC_CONTA_LANCAMENTOS = "btc/conta/lancamentos";
+    const R_BTC_CONTA_LANCAMENTOS = "deposit/criptocurrency";
     const R_BTC_CONTA_FILTRARSALDO = "btc/conta/filtrarsaldo";
     const R_BTC_LANCAMENTO_CADASTRO = "btc/lancamento/cadastro";
     const R_BTC_LANCAMENTO_SALVAR = "btc/lancamento/salvar";
@@ -1038,10 +1086,10 @@ class Rotas {
     const R_REAIS_LOGEMPRESA_IMPRIMIR =     "reais/logempresa/imprimir";
     const R_REAIS_EMPRESA_IMPRIMIR =     "reais/empresa/imprimir";
     const R_REAIS_DEPOSITOS_SOLICITAR = "reais/depositos/solicitar";
-    const R_REAIS_DEPOSITOS_LISTAR =     "reais/depositos/listar";
+    const R_REAIS_DEPOSITOS_LISTAR =     "deposits/fiat";
     const R_REAIS_DEPOSITOS_ANALISAR =     "reais/depositos/analisar";
     const R_REAIS_DEPOSITOS_DADOSCONTA =     "reais/depositos/dadosconta";
-    const R_REAIS_DEPOSITOS_SALVAR =     "reais/depositos/salvar";
+    const R_REAIS_DEPOSITOS_SALVAR =     "deposits/save";
     const R_REAIS_DEPOSITOS_APROVAR =     "reais/depositos/aprovar";
     const R_REAIS_DEPOSITOS_CANCELAR =     "reais/depositos/cancelar";
     const R_REAIS_DEPOSITOS_IMPRIMIR =     "reais/depositos/imprimir";
@@ -1051,10 +1099,10 @@ class Rotas {
     const R_DEPOSITO_BOLETO_TOKEN = "deposito/boleto/token";
     
     
-    const R_ATAR_TOKEN = "atar/token";
-    const R_ATAR_SALVAR = "atar/salvar";
-    const R_ATAR_LISTAR = "atar/listar";
-    const R_ATAR_SALDO = "atar/saldo";
+    //const R_ATAR_TOKEN = "atar/token";
+    //const R_ATAR_SALVAR = "atar/salvar";
+    //const R_ATAR_LISTAR = "atar/listar";
+   // const R_ATAR_SALDO = "atar/saldo";
     
     const R_REAIS_SAQUES_LISTAR =     "reais/saques/listar";
     const R_REAIS_SAQUES_FILTRAR =     "reais/saques/listarReais";
@@ -1072,7 +1120,7 @@ class Rotas {
     const R_REAIS_SAQUES_GET_TAXAS_ERC20 = "reais/saques/getTaxas";
     const R_REAIS_CLIENTES_FINDBYWALLET = "reais/clientes/findbywallet";
     const R_REAIS_CLIENTES_FINDBYEMAIL = "reais/clientes/findbyemail";
-    const R_ADMINISTRATIVO_CARTOES_FILTRAR = "administrativo/cartoes/filtrar";
+    /*const R_ADMINISTRATIVO_CARTOES_FILTRAR = "administrativo/cartoes/filtrar";
     const R_ADMINISTRATIVO_CARTOES_CADASTRO = "administrativo/cartoes/cadastro";
     const R_ADMINISTRATIVO_CARTOES_SALVAR = "administrativo/cartoes/salvar";
     const R_ADMINISTRATIVO_CARTOES_EXCLUIR = "administrativo/cartoes/excluir";
@@ -1083,10 +1131,10 @@ class Rotas {
     const R_CARTOES_SALDOS = "cartoes/saldos";
     const R_CARTOES_EXTRATOS = "cartoes/extratos";
     const R_CARTOES_CONSULTARSALDO = "cartoes/consultar/saldo";
-    const R_CARTOES_VISA_RECARREGAR = "cartoes/visa/recarregar";
+    const R_CARTOES_VISA_RECARREGAR = "cartoes/visa/recarregar";*/
     
     
-    const R_INVOICES_FILTRAR = "invoices/filtrar";
+    /*const R_INVOICES_FILTRAR = "invoices/filtrar";
     const R_INVOICES_GET = "invoices/get";
     const R_MEUSCARTOES_DADOS = "meuscartoes/dados";
     const R_INVOICES_CARTAO_SALVAR =  "invoices/cartao/salvar";
@@ -1098,48 +1146,48 @@ class Rotas {
     const R_MEUSCARTOES_PIN_VALIDAR = "meuscartoes/pin/validar";
     const R_MEUSCARTOES_SENHA_MOSTRAR = "meuscartoes/senha/mostrar";
     const R_INVOICES_CARTAO_EXTRATO = "invoices/cartao/extrato";
-    const R_MEUSCARTOES_LISTAR =  "meuscartoes/listar";
+    const R_MEUSCARTOES_LISTAR =  "meuscartoes/listar";*/
     
     
     
-    const R_MENSALIDADES_LISTAR = "mensalidades/listar";
-    const R_MENSALIDADES_CLIENTES_CARTOES = "mensalidade/clientes/cartoes";
-    
-    
-    
-    const R_MENSALIDADES_LISTAR_PAGAVEIS = "mensalidades/listar/pagaveis";
-    const R_MENSALIDADES_PAGAR = "mensalidades/pagar";
-    const R_MENSALIDADES_INVOICE_GERAR = "mensalidades/invoice/gerar";
-    const R_MENSALIDADES_INVOICE_STATUS = "mensalidades/invoice/status";
-    const R_MENSALIDADES_INVOICE_COMPROVANTE = "mensalidades/invoice/comprovante";
-    const R_RECHARGES_FILTRAR =  "recharges/filtrar";
-    const R_RECHARGES_FINALIZAR = "recharges/finalizar";
-    const R_RECHARGES_PAGAMENTO_DADOS = "recharges/pagamento/dados";
-    const R_RECHARGES_CARTAO_DADOS = "recharges/cartao/dados";
-    const R_RECHARGES_CARTAO_VALIDAR = "recharges/cartao/validar";
-    const R_REMRET_LISTAR = "remret/listar";
-    const R_REMRET_DOWNLOAD = "remret/download";
-    const R_REMRET_UPLOAD = "remret/retorno/upload";
-    const R_MONITORAMENTO_REFRESH = "monitoramento/refresh";
-    const R_COMPROVANTES_INVOICE = "comprovantes/invoice";
-    
-    const R_PONTOSPDVS_CHAVES_GERAR = "pontospdvs/chaves/gerar";
-    const R_PONTOSPDVS_CHAVES_PREPARAR = "pontospdvs/chaves/preparar";
-    const R_PONTOSPDVS_CHAVES_MOSTRAR = "pontospdvs/chaves/mostrar";
-    const R_PONTOSPDVS_CHAVES_DESATIVAR = "pontospdvs/chaves/desativar";
-    const R_ESTABELECIMENTOS_LISTAR = "estabelecimentos/listar";
-    const R_ESTABELECIMENTOS_CADASTRO = "estabelecimentos/cadastro";
-    const R_ESTABELECIMENTOS_SALVAR = "estabelecimentos/salvar";
-    const R_ESTABELECIMENTOS_EXCLUIR = "estabelecimentos/excluir";
-    const R_ESTABELECIMENTOS_ALTERARSTATUS = "estabelecimentos/alterarStatus";
-    const R_ESTABELECIMENTOS_CIDADES_LISTAR = "estabelecimentos/cidades/listar";
-    const R_ESTABELECIMENTOS_HTML_ESTABELECIMENTOSPORCLIENTE = "estabelecimentos/html/estalecimenosporcliente";
-    const R_ESTABELECIMENTOS_WALLETS_LISTAR = "estabelecimentos/wallets/listar";
-    const R_PONTOSPDVS_LISTAR = "pontospdvs/listar";
-    const R_PONTOSPDVS_CADASTRO = "pontospdvs/cadastro";
-    const R_PONTOSPDVS_SALVAR = "pontospdvs/salvar";
-    const R_PONTOSPDVS_EXCLUIR = "pontospdvs/excluir";
-    const R_PONTOSPDVS_ALTERARSTATUS = "pontospdvs/alterarStatus";
+//    const R_MENSALIDADES_LISTAR = "mensalidades/listar";
+//    const R_MENSALIDADES_CLIENTES_CARTOES = "mensalidade/clientes/cartoes";
+//
+//
+//
+//    const R_MENSALIDADES_LISTAR_PAGAVEIS = "mensalidades/listar/pagaveis";
+//    const R_MENSALIDADES_PAGAR = "mensalidades/pagar";
+//    const R_MENSALIDADES_INVOICE_GERAR = "mensalidades/invoice/gerar";
+//    const R_MENSALIDADES_INVOICE_STATUS = "mensalidades/invoice/status";
+//    const R_MENSALIDADES_INVOICE_COMPROVANTE = "mensalidades/invoice/comprovante";
+//    const R_RECHARGES_FILTRAR =  "recharges/filtrar";
+//    const R_RECHARGES_FINALIZAR = "recharges/finalizar";
+//    const R_RECHARGES_PAGAMENTO_DADOS = "recharges/pagamento/dados";
+//    const R_RECHARGES_CARTAO_DADOS = "recharges/cartao/dados";
+//    const R_RECHARGES_CARTAO_VALIDAR = "recharges/cartao/validar";
+//    const R_REMRET_LISTAR = "remret/listar";
+//    const R_REMRET_DOWNLOAD = "remret/download";
+//    const R_REMRET_UPLOAD = "remret/retorno/upload";
+//    const R_MONITORAMENTO_REFRESH = "monitoramento/refresh";
+//    const R_COMPROVANTES_INVOICE = "comprovantes/invoice";
+//
+//    const R_PONTOSPDVS_CHAVES_GERAR = "pontospdvs/chaves/gerar";
+//    const R_PONTOSPDVS_CHAVES_PREPARAR = "pontospdvs/chaves/preparar";
+//    const R_PONTOSPDVS_CHAVES_MOSTRAR = "pontospdvs/chaves/mostrar";
+//    const R_PONTOSPDVS_CHAVES_DESATIVAR = "pontospdvs/chaves/desativar";
+//    const R_ESTABELECIMENTOS_LISTAR = "estabelecimentos/listar";
+//    const R_ESTABELECIMENTOS_CADASTRO = "estabelecimentos/cadastro";
+//    const R_ESTABELECIMENTOS_SALVAR = "estabelecimentos/salvar";
+//    const R_ESTABELECIMENTOS_EXCLUIR = "estabelecimentos/excluir";
+//    const R_ESTABELECIMENTOS_ALTERARSTATUS = "estabelecimentos/alterarStatus";
+//    const R_ESTABELECIMENTOS_CIDADES_LISTAR = "estabelecimentos/cidades/listar";
+//    const R_ESTABELECIMENTOS_HTML_ESTABELECIMENTOSPORCLIENTE = "estabelecimentos/html/estalecimenosporcliente";
+//    const R_ESTABELECIMENTOS_WALLETS_LISTAR = "estabelecimentos/wallets/listar";
+//    const R_PONTOSPDVS_LISTAR = "pontospdvs/listar";
+//    const R_PONTOSPDVS_CADASTRO = "pontospdvs/cadastro";
+//    const R_PONTOSPDVS_SALVAR = "pontospdvs/salvar";
+//    const R_PONTOSPDVS_EXCLUIR = "pontospdvs/excluir";
+//    const R_PONTOSPDVS_ALTERARSTATUS = "pontospdvs/alterarStatus";
         
     const R_MEUSDADOS_CONTA_STATUS = "meusdados/conta/status";
     const R_MEUSDADOS_SALVAR = "meusdados/salvar";
@@ -1177,16 +1225,16 @@ class Rotas {
     const R_INDICACOES_GETCLIENTEBYEMAIL = "indicacoes/getclientebyemail";
     const R_INDICACOES_RESGATAR = "indicacoes/resgatar";
         
-    const R_RECARGAS_CARTAO_GET = "recargas/cartao/get";
+    /*const R_RECARGAS_CARTAO_GET = "recargas/cartao/get";
     const R_RECARGAS_VALIDATE = "recargas/validate";
     const R_RECARGAS_INVOICE = "recargas/invoice";
     const R_RECARGAS_INVOICE_GET = "recargas/invoice/get";
     const R_RECARGAS_STATUS_GET = "recargas/status/get";
     const R_RECARGAS_INVOICE_COMPROVANTE = "recargas/invoice/comprovante";
-    const R_RECARGAS_CARTAO = "recargas/cartao";
+    const R_RECARGAS_CARTAO = "recargas/cartao";*/
         
     
-    const R_BOLETOS_SALVAR = "boletos/salvar";
+    /*const R_BOLETOS_SALVAR = "boletos/salvar";
     const R_BOLETOS_FILTRAR = "boletos/filtrar";
     const R_BOLETOS_DADOS = "boletos/dadosPagamento";
     const R_BOLETOS_FINALIZAR = "boletos/finalizar";
@@ -1203,13 +1251,13 @@ class Rotas {
     const R_REMESSAS_FINALIZAR = "remessas/finalizar";
     const R_REMESSAS_CADASTRO = "remessas/cadastro";
     const R_REMESSAS_COMPROVANTE = "remessas/comprovante";
-    const R_REMESSAS_PAGAR = "remessas/pagar";
+    const R_REMESSAS_PAGAR = "remessas/pagar";*/
     
     
-    const R_ATAR_DEP_LISTAR = "atar/deposito/listar";
+   /* const R_ATAR_DEP_LISTAR = "atar/deposito/listar";
     const R_ATAR_DEP_DEPOSITAR = "atar/deposito/salvar";
     const R_ATAR_DEP_TOKEN = "atar/deposito/token";
-    const R_ATAR_DEP_SALVAR = "atar/deposito/salvar";
+    const R_ATAR_DEP_SALVAR = "atar/deposito/salvar";*/
     
     const R_CARTEIRAS_LISTAR = "carteiras/listar";
     const R_CARTEIRAS_NOVA = "carteiras/nova";
@@ -1220,7 +1268,7 @@ class Rotas {
     const R_CADASTRO_CLIENTE_ADERIR = "cadastro/cliente/aderir";
     const R_MEUSDADOS_ALERTAS_ATUALIZAR = "meusdados/alertas/atualizar";
     
-    const R_COMERCIOS = "comercios";
+    /*const R_COMERCIOS = "comercios";
     const R_COMERCIOS_CADASTRO = "comercios/cadastro";
     const R_COMERCIOS_SALVAR = "comercios/salvar";
     const R_COMERCIOS_EXCLUIR = "comercios/excluir";
@@ -1236,11 +1284,11 @@ class Rotas {
     const R_COMERCIOS_SEGMENTOS_CADASTRO = "comercios/segmentos/cadastro";
     const R_COMERCIOS_SEGMENTOS_EXCLUIR = "comercios/segmentos/excluir";
     const R_COMERCIOS_SEGMENTOS_SALVAR = "comercios/segmentos/salvar";
-    const R_COMERCIOS_SEGMENTOS_STATUS = "comercios/segmentos/status";
+    const R_COMERCIOS_SEGMENTOS_STATUS = "comercios/segmentos/status";*/
     
     
-    const R_SERVICE_CORREIO_BUSCACEP = "service/correio/buscacep";
-    const R_SERVICE_CORREIO_BUSCACOORDENADAS = "service/correio/buscacoordenadas";
+    /*const R_SERVICE_CORREIO_BUSCACEP = "service/correio/buscacep";
+    const R_SERVICE_CORREIO_BUSCACOORDENADAS = "service/correio/buscacoordenadas";*/
     const R_CONSULTA_CPF = "consultacpf";
     const R_CURRENCY = "currency";
     
@@ -1257,7 +1305,7 @@ class Rotas {
     const R_MEUSDADOS_AUTORIZACAO_TOKEN = "meusdados/autorizacao/token";
      const R_MEUSDADOS_GOOGLEAUTH_GETSECRET ="meusdados/googleauth/getsecret";
     
-    const R_FRANQUIADO_CLIENTES = "vendedor/clientes";
+    /*const R_FRANQUIADO_CLIENTES = "vendedor/clientes";
     const R_FRANQUIADO_CLIENTES_LISTAR = "vendedor/clientes/listar";
     const R_FRANQUIADO_CLIENTES_COMISSAO = "vendedor/financas/comissaoCliente";
     const R_FRANQUIADO_FINANCAS = "vendedor/financas";
@@ -1276,7 +1324,7 @@ class Rotas {
     const R_FRANQUIADO_CLIENTE_APROVARREJEITARDOCUMENTO = "vendedor/cliente/aprovarrejeitardocumento";
     const R_VENDEDOR_FINANCAS_DADOS = "vendedor/financas/dados";
     const R_VENDEDOR_FINANCAS_FILTRARCLIENTES = "vendedor/financas/filtrarClientes";
-    const R_VENDEDOR_FINANCAS_GRAFICO = "vendedor/financas/grafico";
+    const R_VENDEDOR_FINANCAS_GRAFICO = "vendedor/financas/grafico";*/
     
     const R_CRIAR_CARTEIRA_NEWC = "currency/dados/newc";
     const R_CURRENCY_DADOS = "currency/dados" ;
@@ -1390,7 +1438,7 @@ class Rotas {
     const R_CONTAS_EMPRESA_FILTRARCURRENCY = "contas/empresa/filtrarcurrency";
     
     
-    const  R_LICENCAS = "licencas";
+    /*const  R_LICENCAS = "licencas";
     const  R_LICENCAS_LISTAR = "licencas/listar";
     const  R_LICENCAS_CADASTRAR = "licencas/cadastrar";
     const  R_LICENCAS_SALVAR = "licencas/salvar";
@@ -1401,15 +1449,15 @@ class Rotas {
     const  R_LICENCAS_RECURSOS_SALVAR = "licencas/recursos/salvar";
     const  R_LICENCAS_RECURSOS_EXCLUIR = "licencas/recursos/excluir";
     const  R_LICENCAS_RECURSOS_ATRIBUIR = "licencas/recursos/atribuir";
-    const  R_LICENCAS_RECURSOS_REMOVER = "licencas/recursos/remover";
+    const  R_LICENCAS_RECURSOS_REMOVER = "licencas/recursos/remover";*/
     
-    const  R_ROADMAP = "roadmap";
+    /*const  R_ROADMAP = "roadmap";
     const  R_ROADMAP_LISTAR = "roadmap/listar";
     const  R_ROADMAP_CADASTRAR = "roadmap/cadastrar";
     const  R_ROADMAP_SALVAR = "roadmap/salvar";
     const  R_ROADMAP_EXCLUIR = "roadmap/excluir";
     const  R_ROADMAP_STATUS_CONCLUIDO = "roadmap/status/concluido";
-    const  R_ROADMAP_STATUS_PUBLICADO = "roadmap/status/publicado";
+    const  R_ROADMAP_STATUS_PUBLICADO = "roadmap/status/publicado";*/
     
     const  R_NOTIFICACAO_MOEDA = "notificacaomoeda";
     const  R_NOTIFICACAO_MOEDA_LISTAR = "notificacaomoeda/listar";
@@ -1423,7 +1471,6 @@ class Rotas {
     const R_MARKETING_IMAGEM_HAS_LIDO = "marketingImagem/marcarComoLido";
     const R_MARKETING_IMAGEM_HAS_LIDO_LISTAR = "marketingImagem/listar";
     const R_MARKETING_IMAGEM_ONLY_VIEW = "marketingImagem/onlyView";
-    
     const R_NOTIFICACAO_HAS_MOEDA = "notificacaomoeda/marcarComoLido";
     const  R_NOTIFICACAO_MOEDA_ONLY_VIEW = "notificacaomoedaOnlyView";
     const  R_NOTIFICACAO_MOEDA_ONLY_VIEW_LISTAR = "notificacaomoedaOnlyView/listar";
@@ -1461,7 +1508,7 @@ class Rotas {
     const R_CLIENTE_EMAIL_ANALISAR = "cliente/email/analisar";
     const R_CLIENTE_DASHBOARD = "clientes/dados/listarMoedas";
     
-    const R_COFRE = "investimento";
+    /*const R_COFRE = "investimento";
     const R_COFRE_TOKEN = "investimento/token";
     const R_COFRE_DEPOSITAR = "investimento/depositar";
     const R_COFRE_RETIRADA_SOLICITAR = "investimento/retirada/solicitar";
@@ -1503,7 +1550,7 @@ class Rotas {
     const R_P2P_CADASTRO = "p2p/cadastro";
     const R_P2P_SALVAR = "p2p/salvar";
     const R_P2P_EXCLUIR = "p2p/excluir";
-    const R_P2P_STATUS = "p2p/status";
+    const R_P2P_STATUS = "p2p/status";*/
     
     const R_DISPOSITIVOS_PAREAMENTO = "dispositivos/pareamento";
     const R_DISPOSITIVOS_PAREAR = "dispositivos/parear";
@@ -1540,28 +1587,29 @@ class Rotas {
     const R_PREVENDA_COMPRAR = "prevendas/comprar";
     const R_PREVENDA_SALDODISPONIVEL = "prevendas/getSaldoDisponivel";
 
-    public static function getRota($param) {
-        if (!empty($param) && isset(self::$rotas[$param])) {
-            return self::$rotas[$param]["url"];
-        }
-        return "";
-    }
-    
+
+      public static function getRota($param) {
+          if (!empty($param) && isset(self::$rotas[$param])) {
+              return self::$rotas[$param]["url"];
+          }
+          return "";
+      }
+
     public static function getModulo($rota) {
         if (!empty($rota) && isset(self::$rotas[$rota])) {
             return self::$rotas[$rota]["modulo"];
         }
         return "";
     }
-    
+
     public static function getSecondLevel($rota) {
         if (!empty($rota) && isset(self::$rotas[$rota]) && isset(self::$rotas[$rota]["second"])) {
             return self::$rotas[$rota]["second"];
         }
         return "";
     }
-    
-    
+
+
     public static function getRotina($rota) {
         if (!empty($rota) && isset(self::$rotas[$rota])) {
             return self::$rotas[$rota]["rotina"];

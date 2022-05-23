@@ -24,7 +24,7 @@ class Excecao {
             
             if ($exception instanceof \Zend\Mail\Exception\RuntimeException || is_numeric(strpos(strtolower($mensagem), "sqlstate")) || is_numeric(strpos(strtolower($mensagem), "statement")) ) {
                 if (AMBIENTE == "producao") {
-                    $idioma = new \Utils\PropertiesUtils("utils", IDIOMA);
+                    $idioma = new \Utils\PropertiesUtils("utils", 'IDIOMA');
                     $mensagem = $idioma->getText("falhaDesconhecida");
                 }
             }

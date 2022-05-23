@@ -1,6 +1,5 @@
 <?php
 namespace Utils;
-require_once 'Core/Dduo.class.php';
 class Geral {
     public static function printVar($var, $_active = false) {
         if ($_active === true) {

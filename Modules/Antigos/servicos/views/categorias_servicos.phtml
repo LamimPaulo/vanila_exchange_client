@@ -1,0 +1,257 @@
+<?PHP 
+$idioma = new \Utils\PropertiesUtils("categoria_servico", 'IDIOMA');
+?>
+<script>
+
+    $(document).ready(function () {
+        
+    });
+    
+    function listarCategoriasServicos() {
+        $("#listaCategoriasServicos").html("<div class='col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_SERVICOS_CATEGORIAS_LISTAR ?>',
+            method: 'post',
+            dataType: 'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaCategoriasServicos").html(json.html);
+                        $("#modalCategoriasServicos").modal();
+                        
+                        try {
+                            listarComboBoxCategorias();
+                        } catch(e){}
+                        
+                    } else {
+                        $("#listaCategoriasServicos").html("<div class='col-lg-12 text-center'>"+json.mensagem+"</div>");
+                    }
+                } catch (e) {
+                    $("#listaCategoriasServicos").html("<div class='col-lg-12 text-center'>"+e+"</div>");
+                }
+            }
+        });
+    }
+    
+    function listarComboBoxCategorias() {
+        var val = $("#idCategoriaServico").val();
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_SERVICOS_CATEGORIAS_LISTAROPTIONS ?>',
+            method: 'post',
+            dataType: 'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#idCategoriaServico").html(json.html);
+                        $("#idCategoriaServico").val(val);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    function cadastroCatagoriasServicos(idCategoria) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_SERVICOS_CATEGORIAS_CADASTRO ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {id: idCategoria},
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalCadastroCategoriaServicoId").val(json.categoria.id);
+                        $("#modalCadastroCategoriaServicoDescricao").val(json.categoria.descricao);
+                        $("#modalCadastroCategoriaServico").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+  function salvarCategoriasServicos() {
+        $("#modalCadastroCategoriaServicoClose, #modalCadastroCategoriaServicoSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_SERVICOS_CATEGORIAS_SALVAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                id: $("#modalCadastroCategoriaServicoId").val(),
+                descricao: $("#modalCadastroCategoriaServicoDescricao").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalCadastroCategoriaServicoClose").prop("disabled", false);
+                        $("#modalCadastroCategoriaServicoClose").trigger("click");
+                        listarCategoriasServicos();
+                        showNotyAlert("<?php echo $idioma->getText("catCadSucesso")?>", "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                
+                $("#modalCadastroCategoriaServicoClose, #modalCadastroCategoriaServicoSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function modalExcluirCategoriasServicos(idCategoriaa) {
+        $("#modalExcluirCategoriaServicoId").val(idCategoriaa);
+        $("#modalExcluirCategoriaServico").modal();
+    }
+    
+    function excluirCategoriaServico() {
+        $("#modalExcluirCategoriaServicoExcluir, #modalExcluirCategoriaServicoClose").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_SERVICOS_CATEGORIAS_EXCLUIR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {id: $("#modalExcluirCategoriaServicoId").val()},
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalExcluirCategoriaServicoClose").prop("disabled", false).trigger("click");
+                        listarCategoriasServicos();
+                        showNotyAlert("<?php echo $idioma->getText("catExcSucesso")?>", "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalExcluirCategoriaServicoExcluir, #modalExcluirCategoriaServicoClose").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    
+    function alterarStatusCategoriaServico(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_SERVICOS_CATEGORIAS_ALTERARSTATUS ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {id: codigo},
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarCategoriasServicos();
+                        showNotyAlert("<?php echo $idioma->getText("statusAltSucesso")?>", "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+</script>
+
+
+
+<div class="modal fade" id="modalCategoriasServicos" tabindex="-1" role="dialog" aria-labelledby="modalCCategoriasServicos" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCadastroCategoriaServicoLabel"><?php echo $idioma->getText("listaServi") ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-12">
+                        
+                        <br>
+                        <button class="btn btn-primary pull-right" onclick="cadastroCatagoriasServicos('<?php echo \Utils\Criptografia::encriptyPostId(0); ?>');">
+                            <?php echo $idioma->getText("cadNova") ?>
+                        </button>
+                        <br><br><br>
+                        
+                        <table class="table table-bordered table-condensed table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th><?php echo $idioma->getText("desc") ?></th>
+                                    <th><?php echo $idioma->getText("altStatus") ?></th>
+                                    <th><?php echo $idioma->getText("editar") ?></th>
+                                    <th><?php echo $idioma->getText("excluir") ?></th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody id="listaCategoriasServicos">
+                                
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalCategoriaServicoClose" data-dismiss="modal"><?php echo $idioma->getText("fechar")?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modalCadastroCategoriaServico" tabindex="-1" role="dialog" aria-labelledby="modalCadastroCategoriaServico" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalCadastroCategoriaServicoLabel"><?php echo $idioma->getText("cadCarServ") ?></h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modalCadastroCategoriaServicoId" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label><?php echo $idioma->getText("desc") ?> </label>
+                            <input type="text" class="form-control" id="modalCadastroCategoriaServicoDescricao" name="modalCadastroCategoriaServicoDescricao" />
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalCadastroCategoriaServicoClose" data-dismiss="modal"><?php echo $idioma->getText("fechar") ?></button>
+                <button type="button" class="btn btn-primary" onclick="salvarCategoriasServicos();" id="modalCadastroCategoriaServicoSalvar" ><?php echo $idioma->getText("salvar") ?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modalExcluirCategoriaServico" tabindex="-1" role="dialog" aria-labelledby="modalExcluirCategoriaServico" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalExcluirCategoriaServicoLabel"><?php echo $idioma->getText("excluirCatServico") ?></h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modalExcluirCategoriaServicoId" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <?php echo $idioma->getText("desejaRealExcluir") ?>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalExcluirCategoriaServicoClose" data-dismiss="modal"><?php echo $idioma->getText("fechar") ?></button>
+                <button type="button" class="btn btn-danger" onclick="excluirCategoriaServico();" id="modalExcluirCategoriaServicoExcluir" ><?php echo $idioma->getText("excluir") ?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

@@ -22,11 +22,12 @@ class TokenApiRn {
     const SEED = "COINT%ASD%&*SEED2*$5&THrHd-Ingr*#";
     
     public function __construct(\Io\BancoDados $adapter = null) {
-        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
+
+        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
         if ($adapter == null) {
-            $this->conexao = new GenericModel(\Dduo::conexao(), new TokenApi()); 
+            $this->conexao = new GenericModel(\Dduo::conexao(), new TokenApi());
         } else {
-            $this->conexao = new GenericModel($adapter, new TokenApi()); 
+            $this->conexao = new GenericModel($adapter, new TokenApi());
         }
     }
     

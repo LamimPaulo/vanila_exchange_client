@@ -107,6 +107,12 @@ class TaxaMoeda {
      * @var Integer 
      */
     public $idMoedaTaxa;
+
+    /**
+     *
+     * @var Integer
+     */
+    public $poolSize;
     
     /**
      *
@@ -149,6 +155,7 @@ class TaxaMoeda {
         $this->valorMinimoDeposito = ((isset($dados ['valor_minimo_deposito'])) ? ($dados ['valor_minimo_deposito']) : (null));
         $this->taxaMoedaTransferencia = ((isset($dados ['taxa_moeda_transferencia'])) ? ($dados ['taxa_moeda_transferencia']) : (null));
         $this->idMoedaTaxa = ((isset($dados ['id_moeda_taxa'])) ? ($dados ['id_moeda_taxa']) : (null));
+        $this->poolSize = ((isset($dados ['pool_size'])) ? ($dados ['pool_size']) : (null));
     }
 
     public function getTable() {

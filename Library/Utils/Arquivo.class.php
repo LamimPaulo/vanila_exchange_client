@@ -84,7 +84,7 @@ class Arquivo {
     public $idioma = null;
     
     public function __construct ($arquivo) {
-        $this->idioma = new \Utils\PropertiesUtils("utils", IDIOMA);
+        $this->idioma = new \Utils\PropertiesUtils("utils", 'IDIOMA');
         if (is_array($arquivo)) {
             //exit(print_r($arquivo));
             if (!$arquivo["error"]) {
@@ -151,24 +151,24 @@ class Arquivo {
                          break;
             //case "gif" : $tipo = "IMG";
                          //break;
-            case "txt" : $tipo = "DOC";
+//            case "txt" : $tipo = "DOC";
                          break;
             case "pdf" : $tipo = "PDF";
                          break;
-            case "xps" : $tipo = "DOC";
+//            case "xps" : $tipo = "DOC";
                          break;
-            case "doc" : $tipo = "DOC";
+//            case "doc" : $tipo = "DOC";
                          break;
             case "docx" : $tipo = "DOC";
                          break;
-            case "ppt" : $tipo = "DOC";
+//            case "ppt" : $tipo = "DOC";
+//                         break;
+//            case "xls" : $tipo = "DOC";
                          break;
-            case "xls" : $tipo = "DOC";
-                         break;
-            case "rar" : $tipo = "RAR";
-                break;
-            case "zip" : $tipo = "ZIP";
-                break;
+//            case "rar" : $tipo = "RAR";
+//                break;
+//            case "zip" : $tipo = "ZIP";
+//                break;
             default: $tipo = null;
             
         }
@@ -183,13 +183,14 @@ class Arquivo {
     function uploadArquivo($cliente = null , $modulo = null) {
         //exit($this->tamanho . "");
         // Limita o tamanho máximo do arquivo a 3MB
-        if ($this->tamanho > (10*1024*1024)) {
+        if ($this->tamanho > (3*1024*1024)) {
             throw new \Exception($this->idioma->getText("tamanhoMaximoArq"));
         }
         
         try {
             // Se for uma imagem, o controle é redirecionado para a classe de imagens.
             if ($this->obtemExtensaoArquivo() == "IMG") {
+
                 Imagem::enviaImagem($this, $cliente, $modulo, $this->publicDirectory);
             } else {
                 
