@@ -133,6 +133,7 @@ class BinUserNew extends Consumer
                 );
                 if ($addCustomer['sucesso']) {
                     $dados = $addCustomer['dados'];
+                    echo sprintf('Dados do cadastro %s'.PHP_EOL, json_encode($dados));
                     $rabbitmq = new Consumer();
                     $rabbitmq->push(
                         uniqid(),
