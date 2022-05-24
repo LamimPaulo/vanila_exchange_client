@@ -135,7 +135,7 @@ class Cadastro {
             $object = json_decode($object);
             $cliente = new \Models\Modules\Cadastro\Cliente();
 
-            $cliente->email = strtolower(\Utils\SQLInjection::clean($object->email));
+            $cliente->email = strtolower(\Utils\SQLInjection::cleanc($object->email));
 
             $cliente->nome = \Utils\SQLInjection::clean($object->nome);
             $cliente->senha = \Utils\Criptografia::decriptyPostId($object->senha);

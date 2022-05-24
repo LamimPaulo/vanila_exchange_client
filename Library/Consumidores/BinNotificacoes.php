@@ -48,14 +48,7 @@ class BinNotificacoes extends Consumer
 
             //Recipients
             $this->phpmailler->setFrom($this->config_mandril['from']['mail'] ?? null, $this->config_mandril['from']['name'] ?? null);
-            $this->phpmailler->addAddress($to['mail'], $to['name']);     //Add a recipient
-            /*  $mail->addReplyTo('info@example.com', 'Information');
-              $mail->addCC('cc@example.com');
-              $mail->addBCC('bcc@example.com');*/
-
-            //Attachments
-            /*$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-            $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name*/
+            $this->phpmailler->addAddress($to['email'], $to['nome']);     //Add a recipient
 
             //Content
             $htmlTemplate = sprintf('Titulo: %s<br>Params: %s', $template, json_encode($params));
@@ -65,12 +58,15 @@ class BinNotificacoes extends Consumer
             $this->phpmailler->AltBody = $htmlTemplate;
 
             $this->phpmailler->send();
+            // Time para respeitar os limites de envio do provedor
+            sleep(2);
+            return [
+                'sucesso' => true,
+                'message' => sprintf( 'Message has been sent %s  %s', $to['nome'], $to['email'])
+            ];
 
-            echo 'Message has been sent' . PHP_EOL;
 
         } catch (\Exception $e) {
-            echo '***** Falhando aqui ******' . PHP_EOL;
-
             throw new \Exception(sprintf('Error %s', $e->getMessage()));
         }
 
@@ -89,8 +85,8 @@ class BinNotificacoes extends Consumer
             }
 
             $send = $this->sendMail([
-                'name' => $body['nome'],
-                'mail' => $body['email']
+                'nome' => $body['nome'],
+                'email' => $body['email']
             ],
             $body['template_name'],
             $body['params'] ?? []);
