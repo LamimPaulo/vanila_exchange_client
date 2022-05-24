@@ -122,8 +122,6 @@ class BinUserNew extends Consumer
     {
         try {
             $params = $body;
-            echo sprintf('Dados Recebido %s'.PHP_EOL, json_encode($params));
-
             $process = $this->requestIport('GET', $params);
             if ($process['sucesso']) {
                 $addCustomer = $this->saveCustomer($params);
@@ -135,7 +133,6 @@ class BinUserNew extends Consumer
                 );
                 if ($addCustomer['sucesso']) {
                     $dados = $addCustomer['dados'];
-                    echo sprintf('Dados do cadastro %s'.PHP_EOL, json_encode($dados));
                     $rabbitmq = new Consumer();
                     $rabbitmq->push(
                         uniqid(),

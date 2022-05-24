@@ -54,7 +54,8 @@ include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
                 <div  id="google" name="google" atrpage="recovery" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo GOOGLESITE; ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
             </div>
         </div>
-        <button class="btn btn-primary block full-width m-b pss-dados" disabled="disabled" type="button" onclick="validarDados();" id="btn-send">
+        <!--  disabled="disabled" -->
+        <button class="btn btn-primary block full-width m-b pss-dados"type="button" onclick="validarDados();" id="btn-send">
             <?php echo $idioma1->getText("recuperarSenha") ?> 
         </button>
     </div>   
