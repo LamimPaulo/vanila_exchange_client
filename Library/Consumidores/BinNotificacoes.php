@@ -24,7 +24,7 @@ class BinNotificacoes extends Consumer
         $loadingConfig = include 'config/configs.php';
         $this->config_mandril = $loadingConfig['mandrill'];
         $this->rabbit = new Consumer();
-        $this->phpmailler = new PHPMailer();
+
     }
 
     private function sendMail(array $to = [], string $template = '', array $params = [])
@@ -36,7 +36,7 @@ class BinNotificacoes extends Consumer
                 throw new \Exception('Necessário informar destinatário');
             }
 
-
+            $this->phpmailler = new PHPMailer();
             $this->phpmailler->SMTPDebug = false;                      //Enable verbose debug output
             $this->phpmailler->isSMTP();                                            //Send using SMTP
             $this->phpmailler->Host = $this->config_mandril['host'] ?? null;                     //Set the SMTP server to send through
