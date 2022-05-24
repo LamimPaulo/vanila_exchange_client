@@ -424,7 +424,7 @@ class Acesso {
             ];
 
             $rabbit = new \RabbitMq\Client();
-            $result = $rabbit->sendQueue('user_new', $bodyMail);
+            $result = $rabbit->sendQueue('notificacoes', $bodyMail);
             
           /*  \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 12, false, $dados);*/
             
