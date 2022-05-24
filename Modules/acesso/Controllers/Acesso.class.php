@@ -416,9 +416,17 @@ class Acesso {
 
             $clienteRn->conexao->update(Array("senha"=> $senha, "bloquear_recuperacao_senha" => 0, "quantidade_tentativas_recuperacao" => 0, "hash_recuperacao_senha" => null, "data_update_senha" => date("Y-m-d H:i:s")), Array("id"=>$cliente->id));
 
-            $dados["senha"] = $cliente->senha;
+
+            $bodyMail = [
+                'nome' => $cliente->nome,
+                'email' => $cliente->email,
+                'senha' => $cliente->senha
+            ];
+
+            $rabbit = new \RabbitMq\Client();
+            $result = $rabbit->sendQueue('user_new', $bodyMail);
             
-            \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 12, false, $dados);
+          /*  \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 12, false, $dados);*/
             
             
             $json["sucesso"] = true;

@@ -60,6 +60,7 @@ class BinNotificacoes extends Consumer
             $this->phpmailler->send();
             // Time para respeitar os limites de envio do provedor
             sleep(2);
+
             return [
                 'sucesso' => true,
                 'message' => sprintf( 'Message has been sent %s  %s', $to['nome'], $to['email'])
