@@ -36,6 +36,7 @@ class BinSendgrid extends Consumer
                 'teste' => 'd-e44c82ff97eb42dd9096234367994452',
                 'system.security.logacesso' => 'd-75d19d43e3354748843467bbc9ac8597',
                 'system.security.twofa' => 'd-27c70cc1cc644dc99d5fa2fb4e3abd20',
+                'system.security.newpassword' => 'd-27c70cc1cc644dc99d5fa2fb4e3abd20',
                 'system.security.recoverypassword' => 'd-bea7d3f70061419db07a7f32f08dffca',
                 'system.user.validaccount' => 'd-19ec55d72a1a4b5bb28ea13a2e5c0377',
                 'system.user.accountreproved' => ' d-c439a5948a3f49dbbf817f91395e7491',

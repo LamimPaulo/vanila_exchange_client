@@ -417,10 +417,17 @@ class Acesso {
             $clienteRn->conexao->update(Array("senha"=> $senha, "bloquear_recuperacao_senha" => 0, "quantidade_tentativas_recuperacao" => 0, "hash_recuperacao_senha" => null, "data_update_senha" => date("Y-m-d H:i:s")), Array("id"=>$cliente->id));
 
 
+
             $bodyMail = [
                 'nome' => $cliente->nome,
                 'email' => $cliente->email,
-                'senha' => $cliente->senha
+                'params' => [
+                    "senha" => $cliente->senha,
+                    "cliente_nome" => $cliente->nome,
+                    "cliente_email" => $cliente->email,
+
+                ],
+                'template_name' => 'system.security.newpassword'
             ];
 
             $rabbit = new \RabbitMq\Client();
