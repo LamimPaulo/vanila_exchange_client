@@ -13,7 +13,7 @@ return [
     ],
     'rabbit' => [
         'host' => '177.38.215.101',
-        'port' => 5672,
+        'port' => 15672,
         'user' => 'admin',
         'pass' => 'admin',
         'vhost' => '/',
