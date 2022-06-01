@@ -446,7 +446,7 @@ class Rotas {
         //"btc/lancamento/salvar"                 => Array("url" => "contas/btc/salvar" ,                     "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
         //"btc/lancamento/excluir"                => Array("url" => "contas/btc/excluir" ,                    "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
         //"btc/lancamentos/imprimir"              => Array("url" => "contas/btc/imprimir" ,                   "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
-        //"btc/transferir"                        => Array("url" => "contas/btc/transferir" ,                 "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
+        "btc/transferir"                        => Array("url" => "contas/btc/transferir" ,                 "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
         "btc/transferencias/filtrar"            => Array("url" => "contas/btc/filtrarTransferencias" ,      "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
         //"btc/transferencias/imprimir"           => Array("url" => "contas/btc/imprimirtransferencias" ,     "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
         "btc/autorizacao/token"                 => Array("url" => "contas/btc/token" ,                      "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
