@@ -164,8 +164,8 @@ class Rotas {
 
         
         // Contas Bancárias
-        //"contasbancarias/listar"        => Array("url" => "cadastros/contas/getContasCliente" ,             "modulo" => "saques",               "rotina" => "contasbancarias" ),
-        //"contasbancarias/status/alterar"=> Array("url" => "cadastros/contas/alterarStatus" ,                "modulo" => "saques",               "rotina" => "contasbancarias" ),
+        "contasbancarias/listar"        => Array("url" => "cadastros/contas/getContasCliente" ,             "modulo" => "saques",               "rotina" => "contasbancarias" ),
+        "contasbancarias/status/alterar"=> Array("url" => "cadastros/contas/alterarStatus" ,                "modulo" => "saques",               "rotina" => "contasbancarias" ),
         
         //"service/correio/buscacep"         => Array("url" => "services/correios/enderecoPorCep" ,           "modulo" => "services",                     "rotina" => "correios"),
         //"service/correio/buscacoordenadas" => Array("url" => "services/correios/buscarCoordenadas" ,        "modulo" => "services",                     "rotina" => "correios"),
