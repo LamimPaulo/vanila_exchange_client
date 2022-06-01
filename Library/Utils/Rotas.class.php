@@ -449,7 +449,7 @@ class Rotas {
         //"btc/transferir"                        => Array("url" => "contas/btc/transferir" ,                 "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
         "btc/transferencias/filtrar"            => Array("url" => "contas/btc/filtrarTransferencias" ,      "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
         //"btc/transferencias/imprimir"           => Array("url" => "contas/btc/imprimirtransferencias" ,     "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
-        //"btc/autorizacao/token"                 => Array("url" => "contas/btc/token" ,                      "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
+        "btc/autorizacao/token"                 => Array("url" => "contas/btc/token" ,                      "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
         
 //        "btc/empresa/imprimir"                  => Array("url" => "contas/btcEmpresa/imprimir" ,            "modulo" => "btc",                    "rotina" => "ccempresabtc" ),
 //        "btc/log"                               => Array("url" => "contas/logBtc/index" ,                   "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
