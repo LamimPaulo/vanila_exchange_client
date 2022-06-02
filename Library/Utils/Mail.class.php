@@ -4,6 +4,7 @@
  */
 namespace Utils;
 
+use PHPMailer\PHPMailer\PHPMailer;
 use Zend\Config\Reader\Xml;
 use Zend\Mail\Message;
 use Zend\Mime\Message as MimeMessage;
@@ -96,15 +97,15 @@ class Mail {
         //Anexo do conteúdo principal
         $parts[] = $part;
         //Incluo a lista de anexos
-        foreach ($this->listaAnexos as $aux) {
-            $anexo = new Part(fopen($aux, 'r'));
-            $arquivo = new Arquivo($aux);
-            $anexo->type = $arquivo->tipo;
-            $anexo->filename = $arquivo->nome;
-            $anexo->disposition = Mime::DISPOSITION_ATTACHMENT;
-            $anexo->encoding = Mime::ENCODING_BASE64;
-            $parts[] = $anexo;
-        }
+//        foreach ($this->listaAnexos as $aux) {
+//            $anexo = new Part(fopen($aux, 'r'));
+//            $arquivo = new Arquivo($aux);
+//            $anexo->type = $arquivo->tipo;
+//            $anexo->filename = $arquivo->nome;
+//            $anexo->disposition = Mime::DISPOSITION_ATTACHMENT;
+//            $anexo->encoding = Mime::ENCODING_BASE64;
+//            $parts[] = $anexo;
+//        }
 
         //Adição do conteúdo 
         $mimeMessage = new MimeMessage();
@@ -129,27 +130,27 @@ class Mail {
     public function send () {
         try {
             // Inicia a classe PHPMailer
-
-            $mail = new \PHPMailer();
+            $mail = new PHPMailer(true);
 
             $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
             $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
             $configuracaoRn->conexao->carregar($configuracao);
 
+
             // Define os dados do servidor e tipo de conexÃ£o
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
             $mail->IsSMTP(); // Define que a mensagem serÃ¡ SMTP
-            //$mail->SMTPDebug = 1; // Mostra as mensagens de erro
+            $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_CONNECTION; // Mostra as mensagens de erro
             $mail->Host = $configuracao->emailSmtp; // EndereÃ§o do servidor SMTP
             $mail->SMTPAuth = ($configuracao->emailSmtpAuth > 0); // Usa autenticaÃ§Ã£o SMTP? (opcional)
             $mail->Port = $configuracao->emailPorta;
             $mail->Username = $configuracao->emailUsuario; // UsuÃ¡rio do servidor SMTP
-            $mail->SMTPSecure = "tls";
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Password = getenv("EnvPassEmail"); // Senha do servidor SMTP
             // Define o remetente
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            
+
             //$mail->From = $configuracao->emailUsuario; // Seu e-mail
              $mail->SetFrom($configuracao->emailNome, $this->fromName);
             //$mail->FromName = $configuracao->emailNome; // Seu nome
@@ -167,12 +168,12 @@ class Mail {
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
             $mail->IsHTML(true); // Define que o e-mail serÃ¡ enviado como HTML
+
             $mail->CharSet = 'utf-8'; // Charset da mensagem (opcional)
             // Define a mensagem (Texto e Assunto)
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
             $mail->Subject = $this->assunto; // Assunto da mensagem
-
             $mail->Body = $this->conteudo;
             $mail->AltBody = $this->conteudo;
 
@@ -189,6 +190,8 @@ class Mail {
                 } else {
                     throw new \Exception("Não foi possível enviar o email." . htmlentities($mail->ErrorInfo));
                 }
+            } else {
+                exit(print_r($enviado) . " - " . " Eniado");
             }
 
 
@@ -300,7 +303,15 @@ class Mail {
                             <td bgcolor="#FFFFFF" width="30">&nbsp;</td>
                             <td bgcolor="#FFFFFF" align="left" style="font-family: Helvetica, arial, sans-serif; 
                                 font-size: 14px; color: #4F4F4F; line-height: 15px;">
-                                <?php echo($conteudo); ?>
+                                <?php
+                                    if(is_array($conteudo)){
+                                        foreach ($conteudo as $key => $value){
+                                            echo $key . ": " . $value . "<br>";
+                                        }
+                                    } else {
+                                        echo($conteudo);
+                                    }
+                                 ?>
                             </td>
                             <td bgcolor="#FFFFFF" width="30">&nbsp;</td>
                         </tr>

@@ -2,6 +2,8 @@
 
 namespace Modules\api\Controllers;
 
+use Utils\Mail;
+
 class ProcedimentosPerigosos {
     
     public function modulos() {
@@ -225,26 +227,25 @@ class ProcedimentosPerigosos {
         
          try
         {
-            $json = file_get_contents('php://input');
-            
-            $mensagem = "Teste de fila com JSON e cliente";
-            $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-            $clienteWillian = new \Models\Modules\Cadastro\Cliente(Array("id" => 15093064543895)); //renato 15093064543893 willian 15093064543895
-            $clienteRn->conexao->carregar($clienteWillian);
-            
-            $dados["codigo"] = 123456;
-            $dados["clienteUrl"] = URLBASE_CLIENT;
-            
-            \Cointrade\LambdaNotificacao::notificar($clienteWillian, true, 10, false, $dados);
-        
-            return true;
+
+            $conteudo = Mail::template(Array("nome" => "Willian", "email" => "willianchiquetto@gmail.com", "nome1" => "Willian1", "email1" => "willianchiquetto@gmail.com1", "nome2" => "Willian2", "email2" => "2willianchiquetto@gmail.com"), "Teste cabeçalho", "Teste titulo", "teste rodape");
+
+            //exit($conteudo);
+
+            $listaEnvio = Array(
+                Array("nome" => "Willian", "email" => "willianchiquetto@gmail.com")
+            );
+
+            $mail = new \Utils\Mail("Empresa Nome", "Teste", $conteudo, $listaEnvio);
+            $mail->send();
+
         }
         
         catch(\Aws\Exception\AwsException  $e)
         {   
             
             var_dump($e->getMessage());
-            return false;
+            //return false;
         }
     }
     
@@ -284,7 +285,7 @@ class ProcedimentosPerigosos {
          
         $ipSet = $clientSQS->getIPSet($paramsSQS);
         
-        $ips = $ipSet->data
+        //$ips = $ipSet->data
                 
                 /*
 
@@ -300,14 +301,14 @@ class ProcedimentosPerigosos {
         
         
             
-        $paramsSQS = [
-            'Addresses' => $ipSet->, // REQUIRED
-            'Description' => '',
-            'Id' => '953c7dd1-1ef9-410d-9897-761ac5c9f4e1', // REQUIRED
-            'LockToken' => '90325b71-3f0f-443b-871b-00d472146c21', // REQUIRED
-            'Name' => 'bloqueados', // REQUIRED
-            'Scope' => 'REGIONAL', // REQUIRED
-        ];
+//        $paramsSQS = [
+//            'Addresses' => $ipSet->, // REQUIRED
+//            'Description' => '',
+//            'Id' => '953c7dd1-1ef9-410d-9897-761ac5c9f4e1', // REQUIRED
+//            'LockToken' => '90325b71-3f0f-443b-871b-00d472146c21', // REQUIRED
+//            'Name' => 'bloqueados', // REQUIRED
+//            'Scope' => 'REGIONAL', // REQUIRED
+//        ];
 
          
          $paramsSQS = [

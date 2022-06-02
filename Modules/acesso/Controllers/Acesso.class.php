@@ -2,6 +2,7 @@
 
 namespace Modules\acesso\Controllers;
 
+use Email\BoasVindas;
 use Models\Modules\Cadastro\UsuarioRn;
 use Models\Modules\Cadastro\Usuario;
 use Utils\Session;
@@ -82,6 +83,8 @@ class Acesso {
                                     ];
                             
                             \LambdaAWS\QueueKYC::sendLog("seguranca_localizacao", null, $json);
+
+                            BoasVindas::send();
                     }
                     
                     Geral::setAutenticado(false);

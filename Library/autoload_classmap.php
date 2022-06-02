@@ -151,6 +151,7 @@ require_once __DIR__ . '/Utils/Criptografia.class.php' ;
 require_once __DIR__ . '/Utils/Data.class.php' ;
 require_once __DIR__ . '/Utils/Excecao.class.php' ;
 require_once __DIR__ . '/Utils/Geral.class.php' ;
+require_once __DIR__ . '/Utils/Mail.class.php' ;
 require_once __DIR__ . '/Utils/Imagem.class.php' ;
 require_once __DIR__ . '/Utils/Layout.class.php' ;
 require_once __DIR__ . '/Utils/Senha.class.php' ;
@@ -168,6 +169,9 @@ require_once __DIR__ . '/Utils/ValidarLimiteOperacional.class.php' ;
 require_once __DIR__ . '/Utils/EmailBlacklist.class.php' ;
 require_once __DIR__ . '/Utils/DownloadManager.class.php' ;
 
+require_once __DIR__ . '/vendor/phpmailer/phpmailer/src/PHPMailer.php' ;
+require_once __DIR__ . '/vendor/phpmailer/phpmailer/src/Exception.php' ;
+require_once __DIR__ . '/vendor/phpmailer/phpmailer/src/SMTP.php' ;
 
 require_once getcwd() . '/Modules/principal/Controllers/Principal.class.php';
 require_once getcwd() . '/Modules/error/Controllers/Error.class.php';
