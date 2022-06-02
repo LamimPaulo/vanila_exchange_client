@@ -183,7 +183,7 @@ class Mail {
             //$mail->AddAttachment("c:/temp/documento.pdf", "novo_nome.pdf");  // Insere um anexo
             // Envia o e-mail
 
-            $enviado = $mail->Send();
+            $enviado = $mail->send();
             if (!$enviado) {
                 if (AMBIENTE == 'producao') {
                     throw new \Exception("Não foi possível enviar o email.");
