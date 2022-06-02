@@ -36,12 +36,6 @@ class Paridade {
      * @var Integer 
      */
     public $ativo;
-
-    /**
-     *
-     * @var Integer
-     */
-    public $ativoApi;
     
     /**
      *
@@ -170,7 +164,6 @@ class Paridade {
         $this->idMoedaBook = ((isset($dados ["{$pre}id_moeda_book"])) ? ($dados ["{$pre}id_moeda_book"]) : (null));
         $this->idMoedaTrade = ((isset($dados ["{$pre}id_moeda_trade"])) ? ($dados ["{$pre}id_moeda_trade"]) : (null));
         $this->ativo = ((isset($dados ["{$pre}ativo"])) ? ($dados ["{$pre}ativo"]) : (null));
-        $this->ativoApi = ((isset($dados ["{$pre}ativo_api"])) ? ($dados ["{$pre}ativo_api"]) : (null));
         $this->statusMercado = ((isset($dados ["{$pre}status_mercado"])) ? ($dados ["{$pre}status_mercado"]) : (null));
         $this->symbol = ((isset($dados ["{$pre}symbol"])) ? ($dados ["{$pre}symbol"]) : (null));
         
@@ -201,7 +194,6 @@ class Paridade {
         . "{$alias}status_mercado AS {$pre}status_mercado, "
         . "{$alias}symbol AS {$pre}symbol, "
         . "{$alias}ativo AS {$pre}ativo, "
-        . "{$alias}ativo_api AS {$pre}ativo_api, "
         . "{$alias}volume AS {$pre}volume, "
         . "{$alias}menor_preco AS {$pre}menor_preco, "
         . "{$alias}preco_venda AS  {$pre}preco_venda, "

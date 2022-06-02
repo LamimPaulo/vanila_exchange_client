@@ -20,7 +20,7 @@ class SaqueRn {
     public $idioma = null;
     
     public function __construct(\Io\BancoDados $adapter = null) {
-        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         if ($adapter == null) {
             $this->conexao = new GenericModel(\Dduo::conexao(), new Saque());
         } else {
@@ -166,7 +166,7 @@ class SaqueRn {
                 $contaBancariaRn = new ContaBancariaRn();
                 $contaBancariaRn->conexao->carregar($contaBancaria);
             } catch (\Exception $ex) {
-                throw new \Exception($this->idioma->getText("contaBancariaInvalida"));
+                throw new\ Exception($this->idioma->getText("contaBancariaInvalida"));
             }
             
             if (in_array($contaBancaria->idBanco, $bancosEmpresa)) {

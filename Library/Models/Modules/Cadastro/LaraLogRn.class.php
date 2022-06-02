@@ -30,7 +30,7 @@ class LaraLogRn {
         } else {
             $this->conexao = new GenericModel($adapter, new LaraLog());
         }
-        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
     }
     
     public function salvar(LaraLog &$laraLog) {

@@ -30,7 +30,7 @@ class LayoutRn {
         } else {
             $this->conexao = new GenericModel($adapter, new Layout());
         }
-        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
     }
     
     public function salvarOrderBook(Layout &$layout) {

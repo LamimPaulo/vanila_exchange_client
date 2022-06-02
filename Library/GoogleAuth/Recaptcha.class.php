@@ -13,8 +13,9 @@ class Recaptcha
 {
     
 public static  function validarRecaptcha($code) {
+
     $url = 'https://www.google.com/recaptcha/api/siteverify';
-    $data1 = array('secret' => GOOGLESECRET, 'response' => $code);
+    $data1 = array('secret' => "6Ld9i6AaAAAAABrjtE_TLv0SCwP5icgCiZ1AfWAb", 'response' => $code);
     
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);

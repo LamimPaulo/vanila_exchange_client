@@ -46,14 +46,14 @@ class Layout {
 
     public static function menu($_data) {
         try {
-            $idioma = new \Utils\PropertiesUtils("menu", 'IDIOMA'); 
+            $idioma = new \Utils\PropertiesUtils("menu", IDIOMA); 
             $rota = $_data["_rota"];
             $dadosMenu = Geral::getMenu();
             $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
             if (Geral::isCliente()) {
                 $permissoes = \Models\Modules\Acesso\PermissaoClienteRn::getPermissoesCliente(\Utils\Geral::getLogado());
             } else {
-
+                exit("CointradeCX");
             }
             ob_start();
             foreach ($permissoes as $modulo) {
@@ -98,7 +98,7 @@ class Layout {
                     $url = (empty($modulo["url"]) ? "#" :trim($modulo["url"]));
                     $dropdown = (empty(trim($modulo["url"])) ? "class='dropdown-toggle' data-toggle='dropdown'" : "");
                     ?>
-                    <li class="dropdown menu_new_style">
+                    <li class="dropdown">
                         <a aria-expanded="false" role="button" href="<?php echo $url ?>" <?php echo $dropdown ?>>
                             <?php echo $idioma->getText("sidebarMenu{$modulo["id"]}"); ?>               
                             <?php if (empty(trim($modulo["url"]))) { ?>

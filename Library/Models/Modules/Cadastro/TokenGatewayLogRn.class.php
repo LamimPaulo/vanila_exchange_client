@@ -30,7 +30,7 @@ class TokenGatewayLogRn {
         } else {
             $this->conexao = new GenericModel($adapter, new TokenGatewayLog());
         }
-        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
     }
     
     public function salvar(TokenGatewayLog &$tokenLog) {

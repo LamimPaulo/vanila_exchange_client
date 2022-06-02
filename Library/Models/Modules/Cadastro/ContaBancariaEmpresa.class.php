@@ -72,12 +72,6 @@ class ContaBancariaEmpresa {
      * @var Banco 
      */
     public $banco;
-
-    /**
-     *
-     * @var String
-     */
-    public $chavePix;
     
     
     /**
@@ -107,7 +101,6 @@ class ContaBancariaEmpresa {
         $this->titular = ((isset($dados ['titular'])) ? ($dados ['titular']) : (null));
         $this->cnpj = ((isset($dados ['cnpj'])) ? ($dados ['cnpj']) : (null));
         $this->ativo = ((isset($dados ['ativo'])) ? ($dados ['ativo']) : (null));
-        $this->chavePix = ((isset($dados ['chave_pix'])) ? ($dados ['chave_pix']) : (null));
     }
     
     public function getTable() {

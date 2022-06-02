@@ -248,15 +248,15 @@ class RemessaDinheiro {
     public function getStatus() {
         switch ($this->status) {
             case \Utils\Constantes::STATUS_REMESSA_DINHEIRO_AGUARDANDO:
-                return \Utils\Idiomas::get("aguardandoPagamento", 'IDIOMA');
+                return \Utils\Idiomas::get("aguardandoPagamento", IDIOMA);
             case \Utils\Constantes::STATUS_REMESSA_DINHEIRO_CANCELADO:
-                return \Utils\Idiomas::get("solicitacaoCancelada", 'IDIOMA');
+                return \Utils\Idiomas::get("solicitacaoCancelada", IDIOMA);
             case \Utils\Constantes::STATUS_REMESSA_DINHEIRO_FINALIZADO:
-                return \Utils\Idiomas::get("transferenciaEfetuada", 'IDIOMA');
+                return \Utils\Idiomas::get("transferenciaEfetuada", IDIOMA);
             case \Utils\Constantes::STATUS_REMESSA_DINHEIRO_PAGO:
-                return \Utils\Idiomas::get("pagamentoRecebido", 'IDIOMA');
+                return \Utils\Idiomas::get("pagamentoRecebido", IDIOMA);
             default:
-                \Utils\Idiomas::get("desconhecido", 'IDIOMA');
+                \Utils\Idiomas::get("desconhecido", IDIOMA);
         }
     }
 }

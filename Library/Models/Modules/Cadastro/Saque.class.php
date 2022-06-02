@@ -195,11 +195,11 @@ class Saque {
     public function getStatus() {
         switch ($this->status) {
             case \Utils\Constantes::STATUS_SAQUE_PENDENTE:
-                return \Utils\Idiomas::get("saqueStatusPendente", 'IDIOMA');
+                return \Utils\Idiomas::get("saqueStatusPendente", IDIOMA);
             case \Utils\Constantes::STATUS_SAQUE_CONFIRMADO:
-                return \Utils\Idiomas::get("saqueStatusConfirmado", 'IDIOMA');
+                return \Utils\Idiomas::get("saqueStatusConfirmado", IDIOMA);
             case \Utils\Constantes::STATUS_SAQUE_CANCELADO:
-                return \Utils\Idiomas::get("saqueStatusCancelado", 'IDIOMA');
+                return \Utils\Idiomas::get("saqueStatusCancelado", IDIOMA);
         }
         return "";
     }

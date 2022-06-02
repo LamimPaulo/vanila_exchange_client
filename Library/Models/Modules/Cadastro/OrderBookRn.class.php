@@ -3,7 +3,13 @@
 namespace Models\Modules\Cadastro;
 
 use \Models\Modules\Model\GenericModel;
-
+/**
+ * Classe que contém as regras de negócio da entidade OrderBook
+ *
+ * @copyright Copyright (c) 2012 DDuo Sistemas Ltda (http://www.dduo.com.br)
+ * @package Models_Modules
+ * @subpackage Acesso
+ */
 class OrderBookRn {
     
     /**
@@ -21,7 +27,7 @@ class OrderBookRn {
     public function __construct(\Io\BancoDados $adapter = null) {
         
         if ($this->idioma == null) {
-            $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+            $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         }
         
         if ($adapter == null) {
@@ -37,6 +43,17 @@ class OrderBookRn {
     
     public function salvar(OrderBook &$orderBook) {
         try {
+            
+            $this->conexao->adapter->iniciar();
+            
+            $paridade = new Paridade(Array("id" => $orderBook->idParidade));
+            try {
+                $paridadeRn = new ParidadeRn();
+                $paridadeRn->carregar($paridade);
+            } catch (\Exception $ex) {
+                throw new \Exception($this->idioma->getText("moedaInvalida"));
+            }
+            
             $orderBook->id = 0;
             $orderBook->executada = 0;
             $orderBook->cancelada = 0;
@@ -45,42 +62,43 @@ class OrderBookRn {
             $orderBook->valorTaxa = 0;
             $orderBook->valorTaxaExecutada = 0;
             
-            $orderBook->idMoedaBook = $orderBook->paridade->idMoedaBook;
-            $orderBook->idMoedaTrade = $orderBook->paridade->idMoedaTrade;
-            $orderBook->symbol = $orderBook->paridade->symbol;
-            $orderBook->symbolMoedaBook = $orderBook->paridade->moedaBook->simbolo;
-            $orderBook->symbolMoedaTrade = $orderBook->paridade->moedaTrade->simbolo;
-
+            $orderBook->idMoedaBook = $paridade->idMoedaBook;
+            $orderBook->idMoedaTrade = $paridade->idMoedaTrade;
+            $orderBook->symbol = $paridade->symbol;
+            $orderBook->symbolMoedaBook = $paridade->moedaBook->simbolo;
+            $orderBook->symbolMoedaTrade = $paridade->moedaTrade->simbolo;
+            
+            $cliente = new Cliente(Array("id" => $orderBook->idCliente));
+            
             $configuracao = ConfiguracaoRn::get();
-
             $taxaRn = new TaxaMoedaRn();
+            
             $taxa = $taxaRn->getByMoeda($orderBook->idMoedaBook);
-
+            
             if ($orderBook->volumeCurrency < $taxa->volumeMinimoNegociacao) {
                 throw new \Exception($this->idioma->getText("valorMinimoNegRS"). " " . $taxa->volumeMinimoNegociacao . " " . $orderBook->symbolMoedaBook);
             }
             
-            if ($orderBook->paridade->idMoedaTrade == 1) {
+            if ($paridade->idMoedaTrade == 1) { 
                 if (($orderBook->valorCotacao * $orderBook->volumeCurrency) < $configuracao->valorMinimoNegociacaoBrl) {
-                    throw new \Exception($this->idioma->getText("valorMinimoNegRS"). " R$ " . number_format($configuracao->valorMinimoNegociacaoBrl, $orderBook->paridade->moedaTrade->casasDecimais, ",", "."));
+                    throw new \Exception($this->idioma->getText("valorMinimoNegRS"). " R$ " . number_format($configuracao->valorMinimoNegociacaoBrl, $paridade->moedaTrade->casasDecimais, ",", "."));
                 }
             }
             
-            if ($orderBook->paridade->ativo != 1) {
+            if ($paridade->ativo < 1) {
                 throw new \Exception($this->idioma->getText("mercadoMoedaSuspenso"));
             }
             
-            if ($orderBook->paridade->statusMercado != 1) {
+            if ($paridade->statusMercado < 1) {
                 throw new \Exception($this->idioma->getText("mercadoTempSuspenso"));
             }
             
             $clienteRn = new ClienteRn();
-            $cliente = new Cliente(Array("id" => $orderBook->idCliente));
             $clienteRn->conexao->carregar($cliente);
             
             $orderBook->nomeCliente = $cliente->nome;
             
-            if ($cliente->statusMercado != 1 || $cliente->status != 1) {
+            if ($cliente->statusMercado < 1) {
                 throw new \Exception($this->idioma->getText("negBloqParaSuaConta"));
             }
             
@@ -92,9 +110,10 @@ class OrderBookRn {
             if (!in_array($orderBook->tipo, $tipos)) {
                 throw new \Exception("Tipo de ordem inválida");
             }
-
+            
             $clienteHasTaxaRn = new \Models\Modules\Cadastro\ClienteHasTaxaRn();
-            $taxas = $clienteHasTaxaRn->getTaxaCliente($cliente, $orderBook->paridade->idMoedaBook, false);
+            $taxas = $clienteHasTaxaRn->getTaxaCliente($cliente, $paridade->idMoedaBook, false);
+            
             
             if ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA) { 
                 $orderBook->percentualTaxa = number_format($taxas["compra"], 2, ".", "");
@@ -103,76 +122,98 @@ class OrderBookRn {
             }
             
             if ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA) { 
-                $orderBook->valorTaxa = (number_format((($orderBook->percentualTaxa / 100) * $orderBook->volumeCurrency), $orderBook->paridade->moedaBook->casasDecimais, ".", ""));
+                $orderBook->valorTaxa = (number_format((($orderBook->percentualTaxa / 100) * $orderBook->volumeCurrency), $paridade->moedaBook->casasDecimais, ".", ""));
             } else {
-                $orderBook->valorTaxa = (number_format((($orderBook->percentualTaxa / 100) * ($orderBook->volumeCurrency *$orderBook->valorCotacao) / $orderBook->valorCotacao), $orderBook->paridade->moedaBook->casasDecimais, ".", ""));
+                $orderBook->valorTaxa = (number_format((($orderBook->percentualTaxa / 100) * ($orderBook->volumeCurrency *$orderBook->valorCotacao) / $orderBook->valorCotacao), $paridade->moedaBook->casasDecimais, ".", ""));
             }
             
-            $orderBook->volumeCurrency = number_format(($orderBook->volumeCurrency - $orderBook->valorTaxa), $orderBook->paridade->moedaBook->casasDecimais, ".", "");
+            $orderBook->volumeCurrency = number_format(($orderBook->volumeCurrency - $orderBook->valorTaxa), $paridade->moedaBook->casasDecimais, ".", "");
             
             if ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA) {
-                $orderBook->volumeBloqueado = number_format(( ($orderBook->volumeCurrency + $orderBook->valorTaxa - $orderBook->volumeExecutado - $orderBook->valorTaxaExecutada) * $orderBook->valorCotacao ), $orderBook->paridade->moedaBook->casasDecimais, ".", "");
+                $orderBook->volumeBloqueado = number_format(( ($orderBook->volumeCurrency + $orderBook->valorTaxa - $orderBook->volumeExecutado - $orderBook->valorTaxaExecutada) * $orderBook->valorCotacao ), $paridade->moedaBook->casasDecimais, ".", "");
                 $orderBook->idMoedaBloqueada = $orderBook->idMoedaTrade;
             } else {
-                $orderBook->volumeBloqueado = number_format(($orderBook->volumeCurrency + $orderBook->valorTaxa - $orderBook->volumeExecutado - $orderBook->valorTaxaExecutada), $orderBook->paridade->moedaBook->casasDecimais, ".", "");
+                $orderBook->volumeBloqueado = number_format(($orderBook->volumeCurrency + $orderBook->valorTaxa - $orderBook->volumeExecutado - $orderBook->valorTaxaExecutada), $paridade->moedaBook->casasDecimais, ".", "");
                 $orderBook->idMoedaBloqueada = $orderBook->idMoedaBook;
             }
             
-            if ($orderBook->valorTaxa < 0 || $orderBook->valorTaxaExecutada < 0 || $orderBook->percentualTaxa < 0 ||
-                $orderBook->volumeCurrency < 0 || $orderBook->volumeBloqueado < 0) {
-
-                $cliente->status = 2;
-                $cliente->analiseCliente = 1;
+            if ($orderBook->valorTaxa < 0 || $orderBook->valorTaxaExecutada < 0 || $orderBook->percentualTaxa < 0 || $orderBook->volumeCurrency < 0) {
+                $clienteRn = new ClienteRn($this->conexao->adapter);
                 
-                $clienteRn->alterarStatusCliente($cliente);
+                $clienteFraude = new Cliente(Array("id" => $orderBook->idCliente));
+                $clienteRn->conexao->carregar($clienteFraude);
+                $clienteFraude->status = 2;
+                $clienteFraude->analiseCliente = 1;    
+                
+                $clienteRn->alterarStatusCliente($clienteFraude);
                                 
-                $msg = "Tentativa cliente fraude de taxa negativa - " . $cliente->nome;
+                $msg = "Tentativa cliente fraude de taxa negativa - " . $clienteFraude->nome;
 
-                \Utils\Notificacao::notificar($msg, true, true, $cliente);
+                \Utils\Notificacao::notificar($msg, true, true, $clienteFraude);
+                
                 
                 $observacaoCliente = new ObservacaoCliente();
-                $observacaoCliente->idCliente = $cliente->id;
+                $observacaoCliente->idCliente = $clienteFraude->id;
                 $observacaoCliente->observacoes = "Taxa negativa: POST = " . implode("|", $_POST) . " - GET = " . implode("|", $_GET) . " - _SERVER['QUERY_STRING']: " . $_SERVER['QUERY_STRING'] . " -  _SERVER['HTTP_REFERER']: " . $_SERVER["HTTP_REFERER"];
 
-                $observacaoClienteRn = new ObservacaoClienteRn();
+                $observacaoClienteRn = new ObservacaoClienteRn($this->conexao->adapter);
                 $observacaoClienteRn->salvar($observacaoCliente);
                 
                 throw new \Exception("Tipo de ordem inválida");
             }
 
+
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+                if (strpos($ip, ',') !== false) {
+                    $ip = substr($ip, 0, strpos($ip, ','));
+                }
+            $orderBook->idSession = session_id();
+            $orderBook->ipSession = $ip;
+            
+            unset($orderBook->paridade);
+            
+            $this->conexao->salvar($orderBook);
+            
+            
+            
             if ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA) {
-                if ($orderBook->paridade->idMoedaTrade == 1) {
+                
+                if ($paridade->idMoedaTrade == 1) { 
+                   
                     $contaCorrenteReaisRn = new ContaCorrenteReaisRn();
                     $saldoDisponivel = $contaCorrenteReaisRn->calcularSaldoConta($cliente);
-
                 } else {
                     $contaCorrenteBtcRn = new ContaCorrenteBtcRn();
-                    $saldoDisponivel = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $orderBook->paridade->idMoedaTrade, false);
+                    $saldoDisponivel = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $paridade->idMoedaTrade, false);
                 }
 
-                if ($saldoDisponivel <= 0 || $saldoDisponivel < ($orderBook->volumeCurrency * $orderBook->valorCotacao)) {
+                if ($saldoDisponivel < 0) {
+                    $this->conexao->delete("id = {$orderBook->id}");
+                    
                     throw new \Exception($this->idioma->getText("saldoInsuficiente"));
                 }
-
-            } else {
-                $contaCorrenteBtcRn = new ContaCorrenteBtcRn();
-                $saldoDisponivel = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $orderBook->paridade->idMoedaBook);
                 
-                if ($saldoDisponivel <= 0 || $saldoDisponivel < ($orderBook->volumeCurrency - $orderBook->valorTaxa)) {
+            } else {
+                
+                $contaCorrenteBtcRn = new ContaCorrenteBtcRn();
+                $saldoDisponivel = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $paridade->idMoedaBook);
+                
+                if ($saldoDisponivel < 0) {
+                    $this->conexao->delete("id = {$orderBook->id}");
+                    
                     throw new \Exception($this->idioma->getText("saldoInsuficiente"));
                 }
+                
             }
-
-            unset($orderBook->paridade);
-
-            $paramsQueue = Array(
-                "order" => $orderBook
-            );
-
-            $rabbit = new \RabbitMq\Client();
-            $rabbit->sendQueue('order_book_execute', $paramsQueue);
+            
+            $orderBook->paridade = $paridade;
+            $this->executarOrdemPassiva($orderBook, $configuracao);
+            
+            $this->conexao->adapter->finalizar();
+            
             
         } catch(\Exception $e) {
+            $this->conexao->adapter->cancelar();
             throw new \Exception(\Utils\Excecao::mensagem($e));
         }
     }
@@ -342,23 +383,11 @@ class OrderBookRn {
     
     public function registrarOrdemCompra($volume, $preco, Paridade $paridade, $direta = true, $reference = 0, $cliente = null) {
         try {
-
-            if ($paridade == null || !($paridade instanceof Paridade)) {
-                throw new \Exception($this->idioma->getText("moedaInvalida"));
-            }
-
-            if ($cliente == null || !($cliente instanceof Cliente)) {
-                throw new \Exception("Cliente invalido");
-            }
-
-            if (!$volume > 0) {
-                throw new \Exception($this->idioma->getText("volumeInvalido"));
-            }
-
-            if (!$preco > 0) {
-                throw new \Exception($this->idioma->getText("cotacaoInvalido"));
-            }
-
+            
+            $configuracao = new Configuracao(Array("id" => 1));
+            $configuracaoRn = new ConfiguracaoRn();
+            $configuracaoRn->conexao->carregar($configuracao);
+            
             if(!empty($paridade->casasDecimaisMoedaTrade) && $paridade->casasDecimaisMoedaTrade > 0){
                $paridade->moedaTrade->casasDecimais = $paridade->casasDecimaisMoedaTrade;
             }
@@ -367,9 +396,31 @@ class OrderBookRn {
                $paridade->moedaBook->casasDecimais = $paridade->casasDecimaisMoedaBook;
             }
             
+            
+            if ($paridade == null || !($paridade instanceof Paridade)) {
+                throw new \Exception($this->idioma->getText("moedaInvalida"));
+            }
+            
+            if (!$volume > 0) {
+                throw new \Exception($this->idioma->getText("volumeInvalido"));
+            }
+            
+            if (!$preco > 0) {
+                throw new \Exception($this->idioma->getText("cotacaoInvalido"));
+            }
+            
             if ($preco < $paridade->precoMinimo) {
                 throw new \Exception(str_replace("{var}", number_format($paridade->precoMinimo, $paridade->moedaTrade->casasDecimais, ",", ".") . " " . $paridade->moedaTrade->simbolo .".", $this->idioma->getText("volumeMinimo")));
             }
+            
+            if ($cliente == null) {
+                $cliente = \Utils\Geral::getCliente();
+            }
+            
+            if ($cliente == null || !($cliente instanceof Cliente)) {
+                throw new \Exception($this->idioma->getText("sessaInvalida"));
+            }
+            
             
             if ($paridade->idMoedaTrade == 1) {
                 $contaCorrenteReaisRn = new ContaCorrenteReaisRn();
@@ -379,7 +430,7 @@ class OrderBookRn {
                 $saldoDisponivel = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $paridade->idMoedaTrade, false, false);
             }
                         
-            if ($saldoDisponivel <= 0 || $saldoDisponivel < ($volume * $preco)) {
+            if ($saldoDisponivel < ($volume * $preco)) {
                 throw new \Exception($this->idioma->getText("saldoInsuficiente"));
             }
             
@@ -398,9 +449,6 @@ class OrderBookRn {
                 $orderBook->direta = 0;
                 $orderBook->valorCotacaoReferencia = 0;
             }
-
-            $orderBook->paridade = $paridade;
-
             $this->salvar($orderBook);
                         
             return $orderBook;
@@ -413,10 +461,6 @@ class OrderBookRn {
     
     public function registrarOrdemVenda($volume, $preco, Paridade $paridade, $direta = true, $cliente = null) {
         try {
-            if ($cliente == null || !($cliente instanceof Cliente)) {
-                throw new \Exception("Cliente não identificado");
-            }
-
             if ($paridade == null || !($paridade instanceof Paridade)) {
                 throw new \Exception($this->idioma->getText("moedaInvalida"));
             }
@@ -439,6 +483,14 @@ class OrderBookRn {
             
             if ($preco < $paridade->precoMinimo) {
                 throw new \Exception(str_replace("{var}", number_format($paridade->precoMinimo, $paridade->moedaTrade->casasDecimais, ",", ".") . " " . $paridade->moedaTrade->simbolo .".", $this->idioma->getText("volumeMinimo")));
+            }
+            
+            if ($cliente == null) {
+                $cliente = \Utils\Geral::getCliente();
+            }
+            
+            if ($cliente == null || !($cliente instanceof Cliente)) {
+                throw new \Exception($this->idioma->getText("sessaInvalida"));
             }
             
             $orderBook = new OrderBook();
@@ -786,6 +838,7 @@ class OrderBookRn {
             $statement = $sql->prepareStatementForSqlObject($select);
 
             $ordens = $statement->execute();
+
         }
         
         $valorInicialTaxaDescontada = number_format(($orderBook->valorTaxa - $orderBook->valorTaxaExecutada), $paridade->moedaBook->casasDecimais, ".", "");
@@ -827,10 +880,10 @@ class OrderBookRn {
                         
                     } else {
                         
-                        $ordemExecutada->idClienteComprador = $ordem->idCliente;
-                        $ordemExecutada->idClienteVendedor = $orderBook->idCliente;
+                        $ordemExecutada->idClienteComprador = $orderBook->idCliente;
+                        $ordemExecutada->idClienteVendedor = $ordem->idCliente;
                         $ordemExecutada->nomeComprador = $dados["nome_cliente"];
-                        $ordemExecutada->nomeVendedor = $orderBook->nomeCliente;
+                        $ordemExecutada->nomeVendedor =$orderBook->nomeCliente;
                         
                     }
                     
@@ -874,6 +927,7 @@ class OrderBookRn {
                         $valorTotalExecutadoOrdemPlotada += number_format(($ordemExecutada->valorCotacao * $ordemExecutada->volumeExecutado), $paridade->moedaTrade->casasDecimais, ".", "");
                         
                         $valorOrdem = number_format(($ordemExecutada->valorCotacao * $ordemExecutada->volumeExecutado), $paridade->moedaTrade->casasDecimais, ".", "");
+                        //exit($valorOrdem . " - " . $valorTotalExecutadoOrdemPlotada);
                         $this->calcularExecucaoOrdem($ordem, $ordemExecutada->volumeExecutado, $paridade, $valorOrdem, "Passiva");
                         $this->calcularSaldoBloqueadoOrdem($ordem);
                     }
@@ -882,6 +936,7 @@ class OrderBookRn {
                 }
             } // fim do foreach
 
+            //$volumeExecutadoOrdemAtiva = number_format((($orderBook->volumeCurrency - $orderBook->volumeExecutado) - $volumeRestante), $paridade->moedaBook->casasDecimais, ".", "");
             $volumeExecutadoOrdemAtiva = number_format(($volumeParaSerExecutado - $volumeRestante), $paridade->moedaBook->casasDecimais, ".", "");
             
             if ($volumeExecutadoOrdemAtiva > 0) {
@@ -1180,6 +1235,78 @@ class OrderBookRn {
         $this->conexao->update(Array("valor_taxa_executada" => number_format($orderBook->valorTaxaExecutada, $paridade->moedaBook->casasDecimais, ".", "")), Array("id" => $orderBook->id));
         
     }
+    
+    
+//    public function getPrecos($idParidade) {
+//        
+//        $configuracao = new Configuracao(Array("id" => 1));
+//        $configuracaoRn = new ConfiguracaoRn();
+//        $configuracaoRn->conexao->carregar($configuracao);
+//        
+//        $paridade = new Paridade(Array("id" => $idParidade));
+//        $paridadeRn = new ParidadeRn();
+//        $paridadeRn->carregar($paridade);
+//        
+//        $casasDecimais = ($paridade->idMoedaTrade == 1 ? $configuracao->qtdCasasDecimais : 8);
+//        
+//        // preço para compra
+//        $queryCompra =  " SELECT ob_r.* FROM order_book ob_r "
+//                . " WHERE  "
+//                . " tipo = '".\Utils\Constantes::ORDEM_COMPRA."' AND "
+//                . " id_paridade = {$paridade->id} "
+//                . " AND executada = 0 "
+//                . " AND cancelada = 0 "
+//                . " AND (volume_currency - volume_executado) > 0 "
+//                . " ORDER BY valor_cotacao DESC, data_cadastro ASC"
+//                . " LIMIT 1; ";
+//                
+//                
+//        // preço para venda
+//        $queryVenda =  " SELECT ob_r.* FROM order_book ob_r "
+//                . " WHERE  "
+//                . " tipo = '".\Utils\Constantes::ORDEM_VENDA."' AND "
+//                . " id_paridade = {$paridade->id} "
+//                . " AND executada = 0 "
+//                . " AND cancelada = 0 "
+//                . " AND (volume_currency - volume_executado) > 0 "
+//                . " ORDER BY valor_cotacao ASC, data_cadastro ASC"
+//                . " LIMIT 1; ";
+//                
+//        $tipoCompra = \Utils\Constantes::ORDEM_COMPRA; 
+//        $tipoVenda = \Utils\Constantes::ORDEM_VENDA;        
+//        $queryUltimoPreco = " SELECT oe.valor_cotacao "
+//                . " FROM ordens_executadas oe "
+//                . " INNER JOIN order_book ob ON ((oe.tipo = '{$tipoVenda}' AND oe.id_order_book_venda = ob.id) OR (oe.tipo = '{$tipoCompra}' AND oe.id_order_book_compra = ob.id) ) "
+//                . " WHERE ob.id_paridade = {$paridade->id} "
+//                . " ORDER BY oe.data_execucao DESC, oe.id DESC "
+//                . " LIMIT 1 ";
+//        
+//        
+//        
+//        $compra = 0;
+//        $venda = 0;
+//        $ultimo = 0;
+//        
+//        $dadosCompra = $this->conexao->executeSql($queryCompra);
+//        $dadosVenda = $this->conexao->executeSql($queryVenda);
+//        $dadosUltimoPreco = $this->conexao->executeSql($queryUltimoPreco);
+//        
+//        foreach ($dadosCompra as $dc) {
+//            $compra = number_format($dc["valor_cotacao"], $paridade->moedaTrade->casasDecimais, ".", "");
+//        }
+//        
+//        foreach ($dadosVenda as $dv) {
+//            $venda = number_format($dv["valor_cotacao"], $paridade->moedaTrade->casasDecimais, ".", "");
+//        }
+//        
+//        
+//        foreach ($dadosUltimoPreco as $du) {
+//            $ultimo = number_format($du["valor_cotacao"], $paridade->moedaTrade->casasDecimais, ".", "");
+//        }
+//        
+//        return Array("compra" => $compra, "venda" => $venda, "ultimo" => $ultimo);
+//    }
+    
     
     
     public function getExtrato($idParidade = 0, \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null, $tipo = "T", $executada = "S", $cancelada = "T", $limit = 0, $idCliente = 0, $direto = "T") {

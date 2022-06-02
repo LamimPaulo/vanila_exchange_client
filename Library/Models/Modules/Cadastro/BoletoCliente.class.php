@@ -208,15 +208,15 @@ class BoletoCliente {
     public function getStatus() {
         switch ($this->status) {
             case \Utils\Constantes::STATUS_BOLETO_CLIENTE_AGUARDANDO:
-                return \Utils\Idiomas::get("aguardandoPagamento", 'IDIOMA');
+                return \Utils\Idiomas::get("aguardandoPagamento", IDIOMA);
             case \Utils\Constantes::STATUS_BOLETO_CLIENTE_CANCELADO:
-                return \Utils\Idiomas::get("solicitacaoCancelada", 'IDIOMA');
+                return \Utils\Idiomas::get("solicitacaoCancelada", IDIOMA);
             case \Utils\Constantes::STATUS_BOLETO_CLIENTE_FINALIZADO:
-                return \Utils\Idiomas::get("boletoPago", 'IDIOMA');
+                return \Utils\Idiomas::get("boletoPago", IDIOMA);
             case \Utils\Constantes::STATUS_BOLETO_CLIENTE_PAGO:
-                return \Utils\Idiomas::get("pagamentoRecebido", 'IDIOMA');
+                return \Utils\Idiomas::get("pagamentoRecebido", IDIOMA);
             default:
-                \Utils\Idiomas::get("desconhecido", 'IDIOMA');
+                \Utils\Idiomas::get("desconhecido", IDIOMA);
         }
     }
 

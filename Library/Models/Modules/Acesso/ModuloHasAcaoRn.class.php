@@ -2,7 +2,6 @@
 
 namespace Models\Modules\Acesso;
 
-use Io\BancoDados;
 use \Models\Modules\Model\GenericModel;
 /**
  * 
@@ -46,23 +45,19 @@ class ModuloHasAcaoRn {
     
     
     public function carregar(ModuloHasAcao &$moduloHasAcao, $carregar = true, $carregarAcao = true) {
-        $db_ = new BancoDados();
         if ($carregar) {
             $this->conexao->carregar($moduloHasAcao);
-
         }
-
+        
         if ($carregarAcao && $moduloHasAcao->idAcao > 0) {
             $moduloHasAcao->acao = new Acao(Array("id" => $moduloHasAcao->idAcao));
-
-            $acaoRn = new AcaoRn($db_);
+            $acaoRn = new AcaoRn();
             $acaoRn->conexao->carregar($moduloHasAcao->acao);
         }
     }
     
     public function listar($where = null, $order = null, $offset = null, $limit = null, $carregarAcao = true) {
         $result = $this->conexao->listar($where, $order, $offset, $limit);
-
         $lista = Array();
         foreach ($result as $moduloHasAcao) {
             $this->carregar($moduloHasAcao, false, $carregarAcao);

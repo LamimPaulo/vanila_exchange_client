@@ -182,11 +182,11 @@ class Cofre {
     public function getStatus() {
         
         if ($this->saqueSolicitado < 1) {
-            return \Utils\Idiomas::get("cofreSaldoInvestido", 'IDIOMA');
+            return \Utils\Idiomas::get("cofreSaldoInvestido", IDIOMA);
         } else if ($this->sacado < 1) {
-            return \Utils\Idiomas::get("cofreSaldoEmProvisionamento", 'IDIOMA');
+            return \Utils\Idiomas::get("cofreSaldoEmProvisionamento", IDIOMA);
         } else if ($this->sacado > 0) {
-            return \Utils\Idiomas::get("cofreSaldoSacado", 'IDIOMA');
+            return \Utils\Idiomas::get("cofreSaldoSacado", IDIOMA);
         }
         return "";
     }

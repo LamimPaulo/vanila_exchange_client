@@ -30,7 +30,7 @@ class AtarContasRn {
         } else {
             $this->conexao = new GenericModel($adapter, new AtarContas());
         }
-        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
     }
     
     public function salvarTransacao(AtarContas &$atarContas) {

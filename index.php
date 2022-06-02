@@ -16,10 +16,6 @@ $erro = getenv('ERRO');
 $urlBase = getenv("EnvUrlProd");
 $bdBook = getenv("EnvBdUrlBookName");
 $bdGrafico = getenv("EnvBdUrlGraficoName");
-$googleSite = getenv("GoogleSite");
-$googleSecret= getenv("GooleSecret");
-
-
 
 define("AMBIENTE", $ambiente);
 define("EMPRESA", $empresa);
@@ -27,8 +23,6 @@ define("TITULO", $titulo);
 define("GRAFICO", $grafico);
 define("BDBOOK", $bdBook);
 define("BDGRAFICO", $bdGrafico);
-define("GOOGLESITE", $googleSite);
-define("GOOGLESECRET", $googleSecret);
 
 if ($ambiente == 'desenvolvimento') {
     error_reporting(E_ERROR);
@@ -37,7 +31,7 @@ if ($ambiente == 'desenvolvimento') {
 
 } else if ($ambiente == 'producao') {
     //Se não, os erros são omitidos
-    error_reporting(E_ERROR);
+    error_reporting(0);
 }
 
 

@@ -8,13 +8,11 @@ use Utils\Session;
 use Utils\Layout;
 use Utils\Geral;
 
-class Acesso
-{
+class Acesso {
 
     public $idioma = null;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->idioma = new \Utils\PropertiesUtils("login", IDIOMA);
         header('Access-Control-Allow-Origin: *');
     }
@@ -24,8 +22,7 @@ class Acesso
      * Função responsável pela exibição da view
      * @param array $params Array com os dados do controller passado automaticamente pelo route
      */
-    function index($params)
-    {
+    function index($params) {
 
         if (Geral::isLogado()) {
             Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD, 0);
@@ -54,7 +51,7 @@ class Acesso
                         Geral::setLogado($logado, null);
                     } else {
 
-                        $clienteRn->conexao->update(array("email_confirmado" => 1), array("id" => $logado->id));
+                        $clienteRn->conexao->update(Array("email_confirmado" => 1), Array("id" => $logado->id));
 
                         $auth->idCliente = $logado->id;
                         Geral::setLogado(null, $logado);
@@ -64,37 +61,27 @@ class Acesso
 
                         $navegador = $this->verificarSessao($cliente);
 
-                        $idClienteEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($cliente->id));
-                        $idNavegadorEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($navegador->id));
+                         $idClienteEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($cliente->id));
+                            $idNavegadorEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($navegador->id));
 
-                        $linkRevogar = URLBASE_CLIENT . \Utils\Rotas::R_REVOGAR . "?nnc={$idNavegadorEncripty}&cnc={$idClienteEncripty}";
+                            $linkRevogar = URLBASE_CLIENT . \Utils\Rotas::R_REVOGAR . "?nnc={$idNavegadorEncripty}&cnc={$idClienteEncripty}";
 
-                        $dataAtual = new \Utils\Data(date("d/m/Y H:i"));
+                            $dataAtual = new \Utils\Data(date("d/m/Y H:i"));
 
-                        $bodyMail = [
-                            'nome' => $cliente->nome,
-                            'email' => $cliente->email,
-                            'params' => [
-                                "cliente_nome" => $cliente->nome,
-                                "cliente_email" => $cliente->email,
-                                "sistema_operacional" => $navegador->sistemaOperacional,
-                                "navegador" => $navegador->navegador,
-                                "data_hora" => $dataAtual->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP),
-                                "ip" => $navegador->ipUltimoAcesso,
-                                "id_session" => $navegador->idSession,
-                                "link_revogar" => $linkRevogar,
-                                "id_cliente" => $cliente->id,
-                                "notificar" => $cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL ? false : true,
-                                "id_usuario" => ""
+                            $json = ["comando" => "seg.acesso",
+                                     "parametros" => [
+                                        "sistema_operacional" => $navegador->sistemaOperacional,
+                                        "navegador" => $navegador->navegador,
+                                        "data_hora" => $dataAtual->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP) ,
+                                        "ip" => $navegador->ipUltimoAcesso,
+                                        "id_session" => $navegador->idSession,
+                                        "link_revogar" => $linkRevogar,
+                                        "id_cliente" => $cliente->id,
+                                        "notificar" => $cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL ? false : true,
+                                        "id_usuario" => "",]
+                                    ];
 
-                            ],
-                            'template_name' => 'system.security.newpassword'
-                        ];
-
-                        $rabbit = new \RabbitMq\Client();
-                        $result = $rabbit->sendQueue('log_acesso', $bodyMail);
-
-
+                            \LambdaAWS\QueueKYC::sendLog("seguranca_localizacao", null, $json);
                     }
 
                     Geral::setAutenticado(false);
@@ -105,24 +92,24 @@ class Acesso
                     Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_TWOFACTORAUTH);
 
 
+
                 } catch (\Exception $e) {
-                    Layout::view("login", $params);
+                    Layout::view("home", $params);
                 }
             } else {
 
                 $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
-                $configuracao = new \Models\Modules\Cadastro\Configuracao(array("id" => 1));
+                $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
                 $configuracaoRn->conexao->carregar($configuracao);
                 $params["configuracao"] = $configuracao;
 
-                Layout::view("login", $params);
+                Layout::view("home", $params);
             }
 
         }
     }
 
-    public function verificarSessao(\Models\Modules\Cadastro\Cliente $cliente)
-    {
+    public function verificarSessao(\Models\Modules\Cadastro\Cliente $cliente) {
 
         $navegadorRn = new \Models\Modules\Cadastro\NavegadorRn();
         $navegador = $navegadorRn->conexao->listar(" id_cliente = {$cliente->id}", "id DESC", null, 1);
@@ -159,15 +146,14 @@ class Acesso
      * Método responsável por logar o usuário no sistema
      * @param array $params Array com os dados do controller passado automaticamente pelo route
      */
-    public function logar($params)
-    {
+    public function logar($params) {
         try {
             unset($_SESSION["login"]);
 
             $email = \Utils\Post::get($params, "email", NULL);
             $senha = \Utils\Post::get($params, "senha", NULL);
 
-            $usuario = new Usuario(array("email" => $email, "senha" => $senha));
+            $usuario = new Usuario(Array("email" => $email, "senha" => $senha));
             $usuarioRn = new UsuarioRn();
             $usuarioRn->logar($usuario);
             Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
@@ -180,27 +166,23 @@ class Acesso
      * Método responsável por logar o usuário no sistema
      * @param array $params Array com os dados do controller passado automaticamente pelo route
      */
-    public function logarapi($params)
-    {
+    public function logarapi($params) {
         try {
-
             unset($_SESSION["login"]);
             $email = \Utils\Post::get($params, "email", NULL);
             $senha = \Utils\Post::get($params, "senha", NULL);
+            $googleCode = \Utils\Post::get($params, "code", null);
 
-            /* if(AMBIENTE == "producao") {
-                 $googleCode = \Utils\Post::get($params, "code", null);
+            if (!empty($googleCode)) {
+                $validate = \GoogleAuth\Recaptcha::validarRecaptcha($googleCode);
+                if (!$validate) {
+                    throw new \Exception("Recaptcha inválido.");
+                }
+            } else {
+                throw new \Exception("Recaptcha inválido.");
+            }
 
-                 if (!empty($googleCode)) {
-                     $validate = \GoogleAuth\Recaptcha::validarRecaptcha($googleCode);
-                     if (!$validate) {
-                         throw new \Exception("Recaptcha inválido.");
-                     }
-                 } else {
-                     throw new \Exception("Recaptcha inválido.");
-                 }
-             };*/
-            $usuario = new Usuario(array("email" => $email, "senha" => $senha));
+            $usuario = new Usuario(Array("email" => $email, "senha" => $senha));
 
             $tokenApiRn = new \Models\Modules\Cadastro\TokenApiRn();
             $token = $tokenApiRn->login($usuario->email, $usuario->senha);
@@ -218,10 +200,9 @@ class Acesso
      * Método responsável pelo processo de recuperação de senha do cadastro de usuário
      * @param array $params Array com os dados do controller passado automaticamente pelo route
      */
-    public function recuperar($params)
-    {
+    public function recuperar($params) {
         if (\Utils\Geral::isLogado() || \Utils\Geral::isAutenticado()) {
-            Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
+             Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
         }
 
         Layout::view("recuperar", $params);
@@ -231,16 +212,14 @@ class Acesso
      * Método responsável pelo processo de recuperação de senha do cadastro de usuário
      * @param array $params Array com os dados do controller passado automaticamente pelo route
      */
-    public function register($params)
-    {
+    public function register($params) {
         if (\Utils\Geral::isLogado() || \Utils\Geral::isAutenticado()) {
-            Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
+             Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
         }
         Layout::view("cadastro", $params);
     }
 
-    public function validarDadosRecuperacao($params)
-    {
+    public function validarDadosRecuperacao($params) {
         try {
 
             $googleCode = \Utils\Post::get($params, "code", null);
@@ -255,7 +234,7 @@ class Acesso
             }
 
             $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
-            $configuracao = new \Models\Modules\Cadastro\Configuracao(array("id" => 1));
+            $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
             $configuracaoRn->conexao->carregar($configuracao);
 
             if ($configuracao->statusLoginSistema < 1) {
@@ -277,7 +256,7 @@ class Acesso
 
             if ($cliente->bloquearRecuperacaoSenha > 0) {
 
-                if ($cliente->dataUltimaTentativaRecuperar != null) {
+                if ($cliente->dataUltimaTentativaRecuperar != null ) {
                     $diff = $cliente->dataUltimaTentativaRecuperar->diferenca(new \Utils\Data(date("d/m/Y H:i:s")));
                     if (($diff->h + $diff->d + $diff->m + $diff->y) == 0 && $diff->i < 5) {
                         throw new \Exception($this->idioma->getText("login1"));
@@ -296,17 +275,17 @@ class Acesso
             $authRn->salvar($auth, null);
 
 
-            if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL) {
+            if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL)  {
                 $json["placeholder"] = $this->idioma->getText("placeHolderInputTokEmail");
                 $json["mensagem"] = $this->idioma->getText("placeHolderInputTokEmail");
             }
 
-            if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_SMS) {
-                $json["placeholder"] = $this->idioma->getText("placeHolderInputTokSMS");
-                $json["mensagem"] = $this->idioma->getText("placeHolderInputTokSMS");
+            if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_SMS){
+               $json["placeholder"] = $this->idioma->getText("placeHolderInputTokSMS");
+               $json["mensagem"] = $this->idioma->getText("placeHolderInputTokSMS");
             }
 
-            if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_GOOGLE) {
+            if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_GOOGLE){
                 $json["placeholder"] = $this->idioma->getText("placeHolderInputTokGoogle");
                 $json["mensagem"] = $this->idioma->getText("placeHolderInputTokGoogle");
             }
@@ -319,12 +298,11 @@ class Acesso
         print json_encode($json);
     }
 
-    public function authRecover($params)
-    {
+    public function authRecover($params) {
         try {
 
             $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
-            $configuracao = new \Models\Modules\Cadastro\Configuracao(array("id" => 1));
+            $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
             $configuracaoRn->conexao->carregar($configuracao);
 
             if ($configuracao->statusLoginSistema < 1) {
@@ -339,7 +317,7 @@ class Acesso
             }
 
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-            $cliente = $clienteRn->getByEmail($email);
+            $cliente  = $clienteRn->getByEmail($email);
 
             $authRn = new \Models\Modules\Cadastro\AuthRn();
             $authRn->validar($token, $cliente);
@@ -350,7 +328,7 @@ class Acesso
             }
             if ($cliente->bloquearRecuperacaoSenha > 0) {
 
-                if ($cliente->dataUltimaTentativaRecuperar != null) {
+                if ($cliente->dataUltimaTentativaRecuperar != null ) {
                     $diff = $cliente->dataUltimaTentativaRecuperar->diferenca(new \Utils\Data(date("d/m/Y H:i:s")));
                     if (($diff->h + $diff->d + $diff->m + $diff->y) == 0 && $diff->i < 5) {
                         throw new \Exception($this->idioma->getText("login1"));
@@ -359,7 +337,7 @@ class Acesso
             }
 
             $usuarioRn = new UsuarioRn();
-            $usuarioRn->recuperar(new Usuario(array("email" => $email)));
+            $usuarioRn->recuperar(new Usuario(Array("email" => $email)));
 
 
             $json["mensagem"] = $this->idioma->getText("chaveEnviadaJson");
@@ -376,19 +354,17 @@ class Acesso
     /**
      * Método responsável por encerrar o login de usuário
      */
-    public function logout()
-    {
+    public function logout() {
         $logado = Geral::getLogado();
         Session::close();
         Geral::redirect(URLBASE_CLIENT);
     }
 
-    public function newPassword($params)
-    {
+    public function newPassword($params) {
         try {
 
             $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
-            $configuracao = new \Models\Modules\Cadastro\Configuracao(array("id" => 1));
+            $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
             $configuracaoRn->conexao->carregar($configuracao);
 
             if ($configuracao->statusLoginSistema < 1) {
@@ -433,27 +409,13 @@ class Acesso
             $seedNovaSenha = sha1("@Nova{$time}SenhaNewCash");
 
             $cliente->senha = substr($seedNovaSenha, 0, 10);
-            $senha = sha1($cliente->senha . \Utils\Constantes::SEED_SENHA);
+            $senha = sha1($cliente->senha.\Utils\Constantes::SEED_SENHA);
 
-            $clienteRn->conexao->update(array("senha" => $senha, "bloquear_recuperacao_senha" => 0, "quantidade_tentativas_recuperacao" => 0, "hash_recuperacao_senha" => null, "data_update_senha" => date("Y-m-d H:i:s")), array("id" => $cliente->id));
+            $clienteRn->conexao->update(Array("senha"=> $senha, "bloquear_recuperacao_senha" => 0, "quantidade_tentativas_recuperacao" => 0, "hash_recuperacao_senha" => null, "data_update_senha" => date("Y-m-d H:i:s")), Array("id"=>$cliente->id));
 
+            $dados["senha"] = $cliente->senha;
 
-            $bodyMail = [
-                'nome' => $cliente->nome,
-                'email' => $cliente->email,
-                'params' => [
-                    "senha" => $cliente->senha,
-                    "cliente_nome" => $cliente->nome,
-                    "cliente_email" => $cliente->email,
-
-                ],
-                'template_name' => 'system.security.newpassword'
-            ];
-
-            $rabbit = new \RabbitMq\Client();
-            $result = $rabbit->sendQueue('notificacoes', $bodyMail);
-
-            /*  \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 12, false, $dados);*/
+            \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 12, false, $dados);
 
 
             $json["sucesso"] = true;
@@ -465,8 +427,7 @@ class Acesso
         print json_encode($json);
     }
 
-    public function confirmation($params)
-    {
+    public function confirmation($params) {
         try {
 
             $params["sucesso"] = true;
@@ -477,8 +438,7 @@ class Acesso
         Layout::view("confirmacao_email", $params);
     }
 
-    public function confirmarEmail($params)
-    {
+    public function confirmarEmail($params) {
         try {
             $hash = \Utils\Post::get($params, "key", NULL);
 
@@ -498,19 +458,19 @@ class Acesso
                 }
 
                 $senhaTemp = substr(sha1($cliente->email . \Utils\Constantes::SEED_SENHA), 0, 10);
-                $cliente->senha = sha1($senhaTemp . \Utils\Constantes::SEED_SENHA);
+                $cliente->senha = sha1($senhaTemp.\Utils\Constantes::SEED_SENHA);
 
                 $clienteRn->conexao->update(
-                    array(
-                        "email_confirmado" => 1,
-                        "senha" => $cliente->senha,
-                        "hash_validacao_email" => null,
-                        "validade_hash_validacao_email" => null
-                    ),
-                    array(
-                        "id" => $cliente->id
-                    )
-                );
+                        Array(
+                            "email_confirmado" => 1,
+                            "senha" => $cliente->senha,
+                            "hash_validacao_email" => null,
+                            "validade_hash_validacao_email" => null
+                        ),
+                        Array(
+                            "id" => $cliente->id
+                        )
+                    );
 
                 $cliente->senha = $senhaTemp;
 
@@ -531,8 +491,7 @@ class Acesso
         print json_encode($json);
     }
 
-    public function revogarAcesso($params)
-    {
+    public function revogarAcesso($params) {
         try {
             $idCliente = \Utils\Get::getEncrypted($params, "cnc");
             //$idNavegador = \Utils\Get::getEncrypted($params, "nnc");
@@ -562,7 +521,7 @@ class Acesso
             $observacoesCliente = new \Models\Modules\Cadastro\ObservacaoCliente();
             $observacoesCliente->idCliente = $cliente->id;
             $observacoesCliente->observacoes = "Conta revogada na data {$dataAtual->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO)}"
-                . " - IP: {$navegador->ipUltimoAcesso} - Navegador: {$navegador->navegador} - Localidade: {$navegador->localizacao}";
+            . " - IP: {$navegador->ipUltimoAcesso} - Navegador: {$navegador->navegador} - Localidade: {$navegador->localizacao}";
             $observacaoClienteRn = new \Models\Modules\Cadastro\ObservacaoClienteRn();
 
             $observacaoClienteRn->salvar($observacoesCliente);
@@ -583,18 +542,17 @@ class Acesso
 
         }
 
-        Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGOUT);
+       Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGOUT);
     }
 
-    public function novoCadastro($params)
-    {
+    public function novoCadastro($params) {
         try {
 
             unset($_SESSION["login"]);
 
             $method = strtoupper($_SERVER['REQUEST_METHOD']);
 
-            if (!in_array($method, array(\Utils\Constantes::POST, \Utils\Constantes::GET))) {
+            if (!in_array($method, Array(\Utils\Constantes::POST, \Utils\Constantes::GET))) {
                 throw new \Exception("Método inválido.", 400);
             }
 
@@ -625,7 +583,7 @@ class Acesso
 
             $redirecionando = false;
 
-            if ($cliente->emailConfirmado == 1 || $cliente->status != 0 || $token == null || empty($token) || $email == null || empty($email)) {
+            if($cliente->emailConfirmado == 1 || $cliente->status != 0 || $token == null || empty($token) || $email == null || empty($email)){
                 $redirecionando = true;
                 Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
             }
@@ -635,7 +593,7 @@ class Acesso
                 $tokenCliente = $tokenApiRn->getClienteByToken($token, false);
             }
 
-            if (empty($token) || $tokenCliente->idCliente != $cliente->id || $token != $tokenCliente->token) {
+            if(empty($token) || $tokenCliente->idCliente != $cliente->id || $token != $tokenCliente->token){
                 $redirecionando = true;
                 Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
             }
@@ -652,17 +610,15 @@ class Acesso
                 Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
             }
         } catch (\Exception $ex) {
-            Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
+           Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
         }
     }
 
-
-    public function ativarContaApp($params)
-    {
+    public function ativarContaApp($params) {
         try {
             $get = \Utils\Get::getEncrypted($params, "at", null);
 
-            if (empty($get)) {
+            if(empty($get)){
                 Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
             }
 
@@ -675,9 +631,9 @@ class Acesso
 
             $result = $clienteRn->conexao->listar(" api_key = '{$dados[0]}' AND data_cadastro = '{$dados[1]}' ");
 
-            if (sizeof($result) > 0) {
+            if(sizeof($result) > 0){
                 $cliente = $result->current();
-                $clienteRn->conexao->update(array("email_confirmado" => 1), array("id" => $cliente->id));
+                $clienteRn->conexao->update(Array("email_confirmado" => 1), Array("id" => $cliente->id ));
                 echo "Cliente ativado.";
             } else {
                 echo "Verifique seu link de ativação.";

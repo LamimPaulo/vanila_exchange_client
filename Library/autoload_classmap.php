@@ -6,8 +6,6 @@ require_once __DIR__ . '/Ethereum/BitWalletAPI.class.php' ;
 require_once __DIR__ . '/Utils/Idiomas.class.php' ;
 require_once __DIR__ . '/Utils/ValidarSeguranca.class.php' ;
 require_once __DIR__ . '/Utils/Notificacao.class.php' ;
-require_once __DIR__ . '/RabbitMq/RabbitMq.class.php' ;
-require_once __DIR__ . '/RabbitMq/RabbitMain.class.php' ;
 require_once __DIR__ . '/Utils/Converter.class.php' ;
 require_once __DIR__ . '/GoogleAuth/GoogleAuthenticator.class.php' ;
 require_once __DIR__ . '/GoogleAuth/Recaptcha.class.php' ;
@@ -170,13 +168,13 @@ require_once __DIR__ . '/Utils/ValidarLimiteOperacional.class.php' ;
 require_once __DIR__ . '/Utils/EmailBlacklist.class.php' ;
 require_once __DIR__ . '/Utils/DownloadManager.class.php' ;
 
-/*
+
 require_once getcwd() . '/Modules/principal/Controllers/Principal.class.php';
 require_once getcwd() . '/Modules/error/Controllers/Error.class.php';
 require_once getcwd() . '/Modules/ws/Controllers/Tokens.class.php';
 require_once getcwd() . '/Modules/ws/Controllers/Lambda.class.php';
 require_once getcwd() . '/Modules/ws/Controllers/GerenciaNet.class.php';
-require_once getcwd() . '/Modules/ws/Controllers/Atar.class.php';*/
+require_once getcwd() . '/Modules/ws/Controllers/Atar.class.php';
 
 
 

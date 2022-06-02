@@ -20,7 +20,7 @@ class NotificacaoRn {
     private $idioma = null;
     
     public function __construct() {
-        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         $this->conexao = new GenericModel(\Dduo::conexao(), new Notificacao());
     }
     

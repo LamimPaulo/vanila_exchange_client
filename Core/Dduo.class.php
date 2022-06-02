@@ -228,15 +228,10 @@ class Dduo {
 
             //Verifica se o módulo foi passado pela URL
             if ($module == null || $module == 'index') {
-                $module = 'home';
+                $module = 'trade';
             }
-
             if ($method == null) {
-                if ($module == 'home') {
-                    $method = 'home';
-                }else{
-                    $method = 'index';
-                }
+                $method = 'index';
             }
 
             $_parameters['_PATH'] = DIR_MODULES . $module . "/views";

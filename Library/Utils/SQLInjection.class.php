@@ -196,15 +196,13 @@ class SQLInjection {
                 $file = fopen($name, 'a');
                 fwrite($file, $content);
                 fclose($file);
-
-                $value = null;
                 
                 
                 
                 //\Utils\Geral::setAutenticado(false);
                 
                 //\Cloudflare\ZoneFirewallAccessRule::block($_SERVER["REMOTE_ADDR"], "Bloqueio automático devido a inserção de conteudo suspeito de SQLInjection.");
-                throw new \Exception("Cliente inválido.");
+                //throw new \Exception("Cliente inválido.");
             }
         }
        

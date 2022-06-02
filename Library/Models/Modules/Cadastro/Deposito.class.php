@@ -230,11 +230,11 @@ class Deposito {
     public function getStatus() {
         switch ($this->status) {
             case \Utils\Constantes::STATUS_DEPOSITO_PENDENTE:
-                return \Utils\Idiomas::get("depositoStatusPendente", 'IDIOMA');
+                return \Utils\Idiomas::get("depositoStatusPendente", IDIOMA);
             case \Utils\Constantes::STATUS_DEPOSITO_CONFIRMADO:
-                return \Utils\Idiomas::get("depositoStatusConfirmado", 'IDIOMA');
+                return \Utils\Idiomas::get("depositoStatusConfirmado", IDIOMA);
             case \Utils\Constantes::STATUS_DEPOSITO_CANCELADO:
-                return \Utils\Idiomas::get("depositoStatusCancelado", 'IDIOMA');
+                return \Utils\Idiomas::get("depositoStatusCancelado", IDIOMA);
         }
         return "";
     }

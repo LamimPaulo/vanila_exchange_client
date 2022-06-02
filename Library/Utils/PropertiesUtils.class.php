@@ -47,16 +47,7 @@ class PropertiesUtils {
         
         $file = "./resources/idiomas/{$this->arquivo}-{$this->idioma}.lang";
         $defaultFile = "./resources/idiomas/{$this->arquivo}-{$this->idiomaPadrao}.lang";
-
-        if (!file_exists($defaultFile)) {
-            if($this->idioma === 'IDIOMA'){
-                $this->idioma = 'pt-BR';
-            }
-            $file = __DIR__ . "/../../resources/idiomas/{$this->arquivo}-{$this->idioma}.lang";
-            $defaultFile = __DIR__ . "/../../resources/idiomas/{$this->arquivo}-{$this->idioma}.lang";
-
-        }
-
+        
         $this->dados = Array();
         $this->dadosDefault = Array();        
         

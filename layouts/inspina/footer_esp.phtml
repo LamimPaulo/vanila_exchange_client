@@ -56,6 +56,7 @@ $paridade = Modules\principal\Controllers\Principal::getParity();
 <script src="<?php echo JS; ?>currencymask.js"></script>
 <script src="<?php echo TEMA; ?>js/jAlert/jAlert-functions.js?<?php echo time(); ?>"></script>
 <script src="<?php echo TEMA; ?>js/jAlert/jAlert.js?<?php echo time(); ?>"></script>
+<script src="<?php echo JS; ?>pusher.min.js"></script>
 
 
 <?php //\Utils\Layout::append("notificacoes/cadastro_notificacao", $_data)?>
@@ -74,7 +75,20 @@ $(document).ready(function () {
 
 
 
+        //CONNECT PUSHER
+        var pusherBook = new Pusher('6d6796b91c225c158e45', {
+            cluster: 'mt1'
+        });
 
+        var channel = pusherBook.subscribe('channel_<?php echo $channelConnect?>');
+
+        channel.bind('notificacoes', function (json) {
+
+            const data = json.message
+
+            $('.'+data.queueReturnUid).html(data.msg)
+            showNotyAlert(data.msg, 's');
+        });
         
         $('#sair,#logout').click(function () {
             swal({

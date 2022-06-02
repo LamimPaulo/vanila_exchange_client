@@ -20,7 +20,7 @@ class AuthRn {
     public $idioma = null;
     
     public function __construct(\Io\BancoDados $adapter = null) {
-        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         if ($adapter == null) {
             $this->conexao = new GenericModel(\Dduo::conexao(), new Auth());
         } else {
@@ -156,21 +156,8 @@ class AuthRn {
     private function enviarPorEmail($codigo, $cliente) {
         
         $dados["codigo"] = $codigo;
-
-        $bodyMail = [
-            'nome' => $cliente->nome,
-            'email' => $cliente->email,
-            'params' => [
-                "cliente_2fa" => $codigo,
-                "cliente_nome" => $cliente->nome,
-                "cliente_email" => $cliente->email,
-
-            ],
-            'template_name' => 'system.security.twofa'
-        ];
-        $rabbit = new \RabbitMq\Client();
-        $sendRabbit = $rabbit->sendQueue('notificacoes', $bodyMail);
         
+        \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 10, false, $dados);
     }
     
     private function enviarPorSms($celular, $codigo, $nome, $email) {

@@ -15,7 +15,7 @@ class CarteiraGeradaRn {
     public $idioma = null;
     
     public function __construct(\Io\BancoDados $adapter = null) {
-        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         if ($adapter == null) {
             $this->conexao = new GenericModel(\Dduo::conexao(), new CarteiraGerada());
         } else {
@@ -111,33 +111,10 @@ class CarteiraGeradaRn {
         } else {
             throw new \Exception($this->idioma->getText("naoPossivelGerarCarteira"));
         }
+        
+        
     }
-
-    public function contarCarteiras($idMoeda) {
-
-        $gerarCarteira = false;
-        $qtd = 0;
-        if(is_numeric($idMoeda)){
-            $queryCarteiras = " SELECT COUNT(*) AS carteiras  FROM  carteiras_geradas WHERE utilizada < 1 AND inutilizada  < 1 AND id_moeda = {$idMoeda}";
-            $resultCarteiras = $this->conexao->executeSql($queryCarteiras);
-            if (sizeof($resultCarteiras) > 0) {
-                $carteirasLivres = $resultCarteiras->current();
-                $carteirasLivres = (isset($dadosCarteiras["carteiras"]) ? $dadosCarteiras["carteiras"] : 0);
-            }
-
-            $taxaMoedaRn = new TaxaMoedaRn();
-            $taxaMoeda = $taxaMoedaRn->getByMoeda($idMoeda);
-
-            if($carteirasLivres < $taxaMoeda->poolSize){
-                $gerarCarteira = true;
-
-                $qtd = $taxaMoeda->poolSize - $carteirasLivres;
-            }
-        }
-        return Array("id_moeda" => $idMoeda,
-            "gerar_carteiras" => $gerarCarteira,
-            "qtd" => $qtd);
-    }
+    
 }
 
 ?>

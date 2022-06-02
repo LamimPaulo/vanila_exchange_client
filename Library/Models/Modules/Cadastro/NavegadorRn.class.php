@@ -60,8 +60,8 @@ class NavegadorRn {
         $navegador->navegador = $browser["name"];
         $navegador->sistemaOperacional = $browser["platform"];
         
-        /*$navegadorRn = new NavegadorRn();
-        $navegador = $navegadorRn->salvar($navegador);*/
+        //$navegadorRn = new NavegadorRn();
+        //$navegador = $navegadorRn->salvar($navegador);
         
         return $navegador;
     }

@@ -25,7 +25,7 @@ class ContaCorrenteReaisRn {
     public $enviarNotificacao = true;
     
     public function __construct(\Io\BancoDados $adapter = null, $enviarNotificacao = true) {
-        $this->idioma = new \Utils\PropertiesUtils("exception", 'IDIOMA');
+        $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         
         if ($adapter == null) {
             $this->conexao = new GenericModel(\Dduo::conexao(), new ContaCorrenteReais());
