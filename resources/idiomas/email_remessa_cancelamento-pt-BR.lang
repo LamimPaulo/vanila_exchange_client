@@ -1,0 +1,35 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#REMESSA CANCELADA
+#
+#--VIEW
+
+##--
+#Textos da View
+assunto=Remessa de Valores Cancelada
+titulo=NewCash - Remessa de Valores Cancelada
+titulo2=Remessa de Valores Cancelada!
+ola=Olá
+fraseSeguranca=Sua frase de segurança é:
+remessaSucesso=A remessa de valores abaixo precisou ser cancelada.
+banco=Instituição Bancária
+titular=Titular:
+tipoConta=Tipo de conta:
+corrente=Corrente
+conta=Conta:
+dataCancelamento=Data de Cancelamento:
+agencia=Agência:
+valor=Valor:
+motivoCancelamento=Motivo do Cancelamento:
+
+
+infAcesso=Informações do acesso:
+dataHora=Data/Hora:
+ipAcesso=IP do Acesso:
+newCashEndereco=Cointrade | 
+emailDoSistema=Este é um e-mail do sistema. Por favor, não responda.
+casoNaoTenhaCadastro=Caso não tenha efetuado o cadastro, entrar em contato através de nossos canais de atendimento.
+
+

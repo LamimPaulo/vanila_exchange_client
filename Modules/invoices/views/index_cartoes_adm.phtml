@@ -1,0 +1,296 @@
+<?php
+$dataInicial = new Utils\Data(date("d/m/Y"));
+$dataFinal = new Utils\Data(date("d/m/Y"));
+$dataInicial->subtrair(0, 0, 30);
+
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+$paises = isset($_data["paises"]) ? $_data["paises"] : Array();
+?>
+
+
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+      
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+                <div class="col-lg-10">
+                    <h2>Cartões</h2>
+                    <ol class="breadcrumb" style="background-color: transparent !important;">
+                        <li>
+                            Cartões
+                        </li>
+                        <li class="active">
+                            <strong>Cartões</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>
+    <br>
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Listagem de Cartões 
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="row">
+
+                            <div class="col col-lg-3">
+                                <div class="form-group">
+                                    <label class="control-label">País</label>
+                                    <select class="form-control" id="pais" >
+                                        <option value="000" >Qualquer</option>
+                                        <?php foreach ($paises as $pais) {
+                                            ?>
+                                        <option value="<?php echo $pais->codigo ?>" ><?php echo $pais->nome ?></option>
+                                        <?php
+                                        }?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col col-lg-3">
+                                <div class="form-group">
+                                    <label class="control-label">Status do Cartão</label>
+                                    <select class="form-control" id="ativo" >
+                                        <option value="T" >Qualquer</option>
+                                        <option value="1" >Ativo</option>
+                                        <option value="0" >Inativo</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col col-lg-3">
+                                <div class="form-group">
+                                    <label class="control-label">Cancelados</label>
+                                    <select class="form-control" id="cancelado" >
+                                        <option value="T" >Todos</option>
+                                        <option value="0" >Não</option>
+                                        <option value="1" >Sim</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col col-lg-3">
+                                <div class="form-group">
+                                    <label class="control-label">Bandeira</label>
+                                    <select class="form-control" id="bandeira" >
+                                        <option value="T" >Todos</option>
+                                        <option value="<?php echo Utils\Constantes::CARTAO_MASTER ?>" >Master</option>
+                                        <option value="<?php echo Utils\Constantes::CARTAO_VISA ?>" >Visa</option>
+                                        <option value="N" >Nenhum</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <div class="form-group">
+                                    <label>Filtro Geral</label>
+                                    <input type="text" id="filtro" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col col-lg-12 text-center">
+                                <br>
+                                <button class="btn btn-primary" onclick="listarCartoes();">
+                                    <i class="fa fa-refresh"></i> Atualizar
+                                </button>
+                                <br>
+                            </div>
+                        </div>
+                        </br>
+                        <div class="row">
+                            <div class="col col-lg-12 ">
+                                <ul class="list-group ">
+                                    <li class="list-group-item  bg-aqua">
+                                        <div class="row">
+                                            <div class="col col-xs-6 col-sm-4">
+                                                Cartões Ativos: <span id="cartoesAtivos"></span>
+                                            </div>
+                                            <div class="col col-xs-6 col-sm-4">
+                                                Cartões Inativos: <span id="cartoesInativos"></span>
+                                            </div>
+                                            <div class="col col-xs-6 col-sm-4">
+                                                Cartões Cancelados: <span id="cartoesCancelados"></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <ul class="list-group"  id="listaCartoes">
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+        
+        listarCartoes();
+        
+        //$("#dataInicial, #dataFinal").datepicker().mask("99/99/9999");
+        
+    });
+    
+    function listarCartoes() {
+        $("#listaCartoes").html("<div class='col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CARTOES_LISTAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                dataInicial:$("#dataInicial").val(),
+                dataFinal:$("#dataFinal").val(),
+                status:$("#status").val(),
+                pais:$("#pais").val(),
+                ativo:$("#ativo").val(),
+                cancelado:$("#cancelado").val(),
+                bandeira:$("#bandeira").val(),
+                filtro: $("#filtro").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaCartoes").html(json.html);
+                        $("#cartoesAtivos").html(json.cartoesAtivos);
+                        $("#cartoesInativos").html(json.cartoesInativos);
+                        $("#cartoesCancelados").html(json.cartoesCancelados);
+                    } else {
+                        $("#listaCartoes").html("<div class='col-lg-12 text-center'>"+json.mensagem+"</div>");
+                        
+                        $("#cartoesAtivos").html("0");
+                        $("#cartoesInativos").html("0");
+                        $("#cartoesCancelados").html("0");
+                    }
+                } catch (e) {
+                    $("#listaCartoes").html("<div class='col-lg-12 text-center'>"+e+"</div>");
+                    $("#cartoesAtivos").html("0");
+                    $("#cartoesInativos").html("0");
+                    $("#cartoesCancelados").html("0");
+                }
+            }
+        });
+    }
+    
+    
+    
+    function alterarStatusCartao(idPedidoCartao) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CARTOES_ALTERARSTATUS  ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idPedidoCartao: idPedidoCartao
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#html-cartao-id-"+idPedidoCartao).replaceWith(json.html);
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    
+    function dialogCancelarCartao(idPedidoCartao) {
+        $("#dialogCancelarCartaoIdPedidoCartao").val(idPedidoCartao);
+        $("#dialogCancelarCartao").modal();
+    }
+    
+    
+    function confirmarCancelamentoPedido() {
+        $("#dialogDetalhesInvoiceFechar, #dialogDetalhesInvoiceConfirmar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CARTOES_CANCELAR?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idPedidoCartao: $("#dialogCancelarCartaoIdPedidoCartao").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#html-cartao-id-"+$("#dialogCancelarCartaoIdPedidoCartao").val()).replaceWith(json.html);
+                        $("#dialogDetalhesInvoiceFechar").prop("disabled", false).trigger("click");
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogDetalhesInvoiceFechar, #dialogDetalhesInvoiceConfirmar").prop("disabled", false);
+            }
+        });
+    }
+</script>
+
+
+<div class="modal fade" id="dialogCancelarCartao" tabindex="-1" role="dialog" aria-labelledby="dialogCancelarCartao" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogCancelarCartaoLabel">Cancelar Cartão</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="dialogCancelarCartaoIdPedidoCartao" />
+                <div class="row">
+                    <div class="col col-lg-12" >
+                        Tem certeza que deseja cancelar o cartão?
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogDetalhesInvoiceFechar" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" id="dialogDetalhesInvoiceConfirmar" onclick="confirmarCancelamentoPedido();">Confirmar Cancelamento</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

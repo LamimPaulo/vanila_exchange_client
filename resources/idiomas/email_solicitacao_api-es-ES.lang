@@ -1,0 +1,36 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EMAIL CONTA ACEITA
+#
+#
+#--VIEW
+#Modules\layouts\inspinia\contaaceita
+##--
+#Textos da View
+assunto=Actualización de estado de la cuenta 
+titulo=NewCash - Cuenta Liberada
+titulo2=Cuenta Liberada! 
+suaFraseSeguranca=Su Pregunta de seguridad es:
+clientId=CLIENT ID:
+apiKey=API KEY:
+ola=Hola
+aceita=Aceptada
+agoraPodeEfetuarLogin=Utilice sus credenciales de forma segura.
+estamosDisposicao=Estamos a su disposición en caso de cualquier duda o pregunta.
+contato=Contacto
+
+
+infAcesso=Información de acceso:
+dataHora=Fecha/Hora:
+ipAcesso=IP de Acceso:
+newCashEndereco=Cointrade | 
+emailDoSistema=Este es un e-mail del sistema. Por favor, no responder.
+casoNaoTenhaCadastro=En caso de no haberse efectuado el registro, entre en contacto a través de nuestros canales de atención al cliente.
+
+
+
+
+
+

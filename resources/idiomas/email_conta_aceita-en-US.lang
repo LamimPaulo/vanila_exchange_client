@@ -1,0 +1,33 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#EMAIL CONTA ACEITA
+#
+#
+#--VIEW
+#Modules\layouts\inspinia\contaaceita
+##--
+#Textos da View
+assunto=Updating Account Status 
+titulo=NewCash - Account ready to use
+titulo2=Ready Account ready to use! 
+suaFraseSeguranca=Your safety phrase is:
+statusConta=Account satus:
+ola=Hi
+aceita=Accepts
+agoraPodeEfetuarLogin=You can now log in to Cointrade, so you can send your documents for analysis as soon as possible if you have not sent them yet.
+estamosDisposicao=We are at your disposal for any clarification.
+contato=Contact
+
+
+infAcesso=Access Information:
+dataHora=Date/Time:
+ipAcesso=Access IP:
+newCashEndereco=Cointrade | 
+emailDoSistema=This is an email system. Please do not answer.
+casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.
+
+
+
+

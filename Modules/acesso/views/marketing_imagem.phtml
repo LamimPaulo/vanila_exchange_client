@@ -1,0 +1,128 @@
+<?php
+$idioma = new \Utils\PropertiesUtils("docs_aceitacao", IDIOMA);
+
+$id = ((isset($_data['code'])) ? ($_data['code']) : "");
+
+//exit("Teste - "  . Utils\Criptografia::decriptyPostId($id));
+
+$mensagem = ((isset($_data['mensagem'])) ? ($_data['mensagem']) : "");
+$sucesso = (isset($_data['sucesso']) ? ($_data['sucesso']) : false);
+
+$cliente = \Utils\Geral::getCliente();
+
+$brand = \Models\Modules\Cadastro\BrandRn::getBrand();
+
+?>
+
+
+
+<!DOCTYPE html>
+<html class="wide wow-animation smoothscroll scrollTo" lang="pt-br">
+<head>
+<title><?php echo TITULO ?></title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="Tue, 01 Jan 2030 1:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<link href="<?php echo TEMA; ?>css/bootstrap.min.css" rel="stylesheet">
+<link href="<?php echo TEMA; ?>font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
+<link href="<?php echo TEMA; ?>css/style.css" rel="stylesheet">
+<link href="<?php echo TEMA; ?>css/plugins/iCheck/custom.css" rel="stylesheet">
+</head>
+<body style="background-color: <?php echo $brand->colorBackground ?>" >
+<style>
+    .container4 {
+        margin: 0;        
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%) 
+    }   
+
+</style>
+    <div class="row">
+        <div class="col-lg-12 text-center container4">           
+            <a onclick="" id="linkLido"><img src='<?php echo IMAGES ?>loading.gif' id="imagemMoeda" alt=""/></a></br></br>
+            <button class="btn btn-primary" id="marcarComoLido" onclick="">Continue&nbsp;&nbsp;<i class="fa fa-arrow-circle-o-right"></i></button>
+        </div>
+    </div>
+</body>
+<!-- Bootstrap 3.3.6 -->
+<script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script>
+<script src="<?php echo TEMA; ?>bootstrap/js/bootstrap.min.js"></script>
+<script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
+<script>
+     $(document).ready(function () {
+         listarMensagensMoeda();
+    });
+    
+    function listarMensagensMoeda() {    
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MARKETING_IMAGEM_HAS_LIDO_LISTAR ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                code: '<?php echo $id ?>'      
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        if(json.ativa){                            
+                            $("#imagemMoeda").attr("src", json.imagemMoeda);                            
+                            $("#marcarComoLido").attr("onClick", "javascript:marcarComoLido('"+ json.id + "');");
+                            $("#linkLido").attr("onClick", "javascript:marcarComoLido('"+ json.id + "');");
+                        } else {                            
+                            $("#marcarComoLido").html("Redirecionando...");
+                            $("#marcarComoLido").attr("disabled","disabled");
+                            $("#marcarComoLido").prop("disable", true);
+                            location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DASHBOARD ?>";
+                        }                       
+                    } else {
+                    }
+                } catch (e) {
+                }
+            }
+        });
+    }    
+
+    function marcarComoLido(idNotificacao) {
+        $("#marcarComoLido").attr("disabled","disabled");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MARKETING_IMAGEM_HAS_LIDO ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                idNotificacao: idNotificacao
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {                        
+                        $("#marcarComoLido").html("Redirecionando...");
+                        $("#marcarComoLido").attr("disabled","disabled");
+                        $("#marcarComoLido").prop("disable", true);
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DASHBOARD ?>";
+                    } else {                        
+                        
+                    }
+                } catch (e) {                    
+                   
+                }
+            }
+        });
+        $("#marcarComoLido").removeAttr("disabled");
+    } 
+    
+</script>
+</body>
+</html>

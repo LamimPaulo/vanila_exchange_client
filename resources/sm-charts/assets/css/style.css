@@ -1,0 +1,126 @@
+.smc-chart-container {
+  position: relative; }
+  .smc-chart-container .smc-chart-comparison {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1; }
+    .smc-chart-container .smc-chart-comparison input {
+      margin: 0;
+      height: auto;
+      border: 0;
+      box-shadow: none; }
+  .smc-chart-container .smc-chart {
+    width: 100%;
+    height: 100%; }
+    .smc-chart-container .smc-chart .amChartsButton, .smc-chart-container .smc-chart .amChartsButtonSelected {
+      cursor: pointer;
+      display: inline-block;
+      min-height: 1em;
+      outline: 0;
+      border: none;
+      vertical-align: baseline;
+      background: #E0E1E2;
+      color: inherit;
+      margin: 0 .2em 0 0;
+      padding: .78571429em 1em;
+      text-transform: none;
+      text-shadow: none;
+      line-height: 1em;
+      font-style: normal;
+      text-align: center;
+      text-decoration: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease;
+      transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease;
+      -webkit-tap-highlight-color: transparent;
+      background: 0 0 !important;
+      font-size: 1em;
+      font-weight: 400;
+      border-radius: .4em;
+      box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset; }
+    .smc-chart-container .smc-chart .amChartsButtonSelected {
+      background: transparent !important;
+      font-weight: bold;
+      box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.35) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset; }
+    .smc-chart-container .smc-chart .amChartsPeriodSelector {
+      float: right;
+      margin-right: 35px; }
+      .smc-chart-container .smc-chart .amChartsPeriodSelector > fieldset > div {
+        line-height: 1em; }
+      .smc-chart-container .smc-chart .amChartsPeriodSelector > div {
+        float: none !important; }
+    .smc-chart-container .smc-chart .amcharts-export-menu {
+      font-size: inherit;
+      color: inherit; }
+      .smc-chart-container .smc-chart .amcharts-export-menu .export-main > a {
+        box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset; }
+        .smc-chart-container .smc-chart .amcharts-export-menu .export-main > a:hover {
+          box-shadow: none; }
+      .smc-chart-container .smc-chart .amcharts-export-menu .export-main a {
+        margin: 0; }
+      .smc-chart-container .smc-chart .amcharts-export-menu .export-main li a {
+        color: inherit; }
+      .smc-chart-container .smc-chart .amcharts-export-menu .export-main li:hover a, .smc-chart-container .smc-chart .amcharts-export-menu .export-main li.active a {
+        background: none;
+        font-weight: bold; }
+    .smc-chart-container .smc-chart .amcharts-chart-div a {
+      color: rgba(0, 0, 0, 0.3) !important;
+      text-decoration: none !important;
+      border: 0 !important; }
+    .smc-chart-container .smc-chart .amcharts-tooltip {
+      white-space: nowrap; }
+      .smc-chart-container .smc-chart .amcharts-tooltip div {
+        text-align: center; }
+      .smc-chart-container .smc-chart .amcharts-tooltip table {
+        margin: 0;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        width: 95%; }
+        .smc-chart-container .smc-chart .amcharts-tooltip table tr {
+          border: none; }
+          .smc-chart-container .smc-chart .amcharts-tooltip table tr td {
+            padding: 0;
+            border: none;
+            white-space: nowrap; }
+            .smc-chart-container .smc-chart .amcharts-tooltip table tr td:last-child {
+              text-align: right; }
+    .smc-chart-container .smc-chart .amcharts-balloon-div > div {
+      max-width: 9999px !important; }
+
+.smc-select2-container {
+  font-size: inherit;
+  min-width: 300px;
+  background: transparent !important; }
+  .smc-select2-container.select2-selection--single {
+    position: relative; }
+  .smc-select2-container.select2-selection--multiple .select2-selection__rendered {
+    max-height: 250px;
+    overflow-y: auto; }
+
+.smc-asset-autocomplete {
+  display: none; }
+
+.smc-select2-dropdown {
+  font-size: 1rem;
+  min-width: 300px; }
+  .smc-select2-dropdown .smc-symbol-search-row {
+    line-height: 30px; }
+  .smc-select2-dropdown .smc-symbol-search-symbol {
+    display: inline;
+    color: #0081f2; }
+  .smc-select2-dropdown .smc-symbol-search-exch {
+    float: right; }
+
+@media screen and (max-width: 768px) {
+  .smc-chart-container .smc-chart-comparison {
+    position: relative;
+    margin-bottom: 5px; }
+    .smc-chart-container .smc-chart-comparison .select2-container {
+      width: 100% !important; }
+  .smc-chart-container .smc-chart .amChartsPeriodSelector {
+    float: left; } }

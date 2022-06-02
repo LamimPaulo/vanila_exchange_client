@@ -1,0 +1,647 @@
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+
+#PERFIL
+#
+#
+#--VIEW
+#Modules\Perfil\views\perfil.phtml
+##--
+#Textos da View
+titulo=My Info
+subTitulo=My Profile
+minhasInformacoes=Status e my information.
+abaDadosPessoais=Personal Data
+abaDocumentos=Documents
+abaSeguranca=Security
+abaLicenca=License
+abaAlertas=Alerts
+abaPessoaJuridica=Legal Person
+abaSenha=Password
+abaApi=API
+dadosPessoais=Personal data
+clienteDesde=Customer since
+conta={var} Account
+fraseSeguranca=Security Phrase:
+fraseSeguranca1=Security Phrase
+perfilEsta=Your profile is
+completo=complete
+concluido=COMPLETED
+pendente=PENDING
+emAnalise=IN ANALYSIS
+selfie=Selfie
+compResidencia=Proof-Of-Residence
+atualizarImagemPerfil=Update Profile Image
+preVisualizacao=Preview
+carregueUmaImagem=Upload an image by clicking the button below:
+informacoesPreenchimentoPerfil=Information for completing your profile:
+todosOsCamposDevem=All fields must be filled in according to the documents that will/have been sent.
+casoNaoTenhaAlgum=If you do not have the name of the parent in some document, insert "not included".
+parabens=Congratulations:
+documentosLiberado=Access the "Documents" tab and upload your documents.
+agoraQueVocePreencheu=Now that you have filled in all your cadastral data how about sending your documents to prove the information provided?
+bastaClicar=Just click the "Documents" tab that has been released at the top of this session.
+dadosPessoais2=Personal Data
+agoraQueVoce2=After filling in all required fields, please submit the required documents for account validation.
+digiteNomeCompleto=Enter your full name.
+endereco=Address
+digitoSenha=8 digits
+segurancaSuaConta=Your account security
+entreContatoSac=Contact SAC if you need to reset the PIN.
+informacoesSeguranca=SECURITY INFORMATION
+pinText=PIN:
+informacoes=INFORMATION
+oPinDeSegurancaCodigo=Your security PIN is a 4-digit number code, it will be asked to increase the security of your account during transactions.
+fraseDeSegurancaPin=Security Phrase:
+aFraseDeSegurancaFormaReduzir=The Security Phrase is a way to reduce the risk of phishing - a common criminal technique where the fraudster creates a site identical to that of Cointrade to capture user data.
+autenticacaoDoisPasso2=Two-Factor Authentication:
+aAutenticaoEmDoisPassos=Two-Factor authentication is an additional step that greatly increases the security of your account. You can receive TOKEN by email or SMS, and you can also use Google Authenticator to validate your authentication.
+licencaDeUsoSoftware=Software Use License
+documentos1=Documents
+anexeUmaSelfie=Attach a selfie holding your document
+alertaAjudaSaber=The alert helps the customer to know the movements that are being carried out his account.
+informOrdemCompraVenda=Informs the customer if his purchase/sale order has been executed.
+oClienteUsarTodos=The customer can use all or just one communication service.
+infEnvioArquivos=FILE UPLOAD INFORMATION
+tamanhoMaximo3mb=Maximum size of 3MB.
+oNomeDoArquivoPonto=The file name can not have periods, spaces, or symbols.
+documentoSelfie=The submitted document needs to be the same of selfie.
+compResidenciaTresMeses=Send proof-of-residence of no more than three months ago.
+compResidenciaValido=Proof-of-residence accepts: Water account, power account, telephone and mobile account, internet account and others data services.
+envieArquivosFacilLeiutura=Send files of easy reading and identification.
+envieDocDentroRealidade=Send documents within validity.
+exemploComprovante=Example: (invoice_1050.jpg, invoice_98.pdf).
+alterarRecebimentoAlertas=Notifications
+receberAlertasMovimentacoes=Receive account movement alerts
+formEnvioDocPj=Legal Persons
+informações=Information
+criarVinculoBancario=Create banking link between legal entity and individual.
+arquivosAceitos=Files Accepted:
+arquivosSuportados=Supported Files: JPEG, JPG, PNG, BMP, DOC, DOCX, PDF e XPS.
+versoOpcional=Document Verse is only required when the photo is not on the same line as the CPF and other data. Ex .: RG.
+preencherMeusDados=Fill in all required data on the My Data tab to upload the files.
+tamanhoMax=Maximum size of 3MB.
+nomeArquivoNaoPonto=The filename can not have a period, eg. firstname.lastname
+arquivosFacilLeitura=Send files of easy reading and identification.
+documentosValidade=Send documents within validity.
+formAlteracaoSenha=Security
+criacaoSenha=PASSWORD CREATION
+naoCrieSequencia=Do not create a sequence-based password (123, abc, etc.).
+naoUseDadosPessoais=Do not use personal data of easy access (Date of birth, car plate, names, etc.).
+mistureCaracteresEspeciais=Mix letters, numbers, and special characters (# $%! * & - @%? \).
+useLetrasMaiusculas=Use uppercase and lowercase letters, (M, m, N, n A, a, B, b).
+10digito=10 digits
+1letraMinuscula=1 lowercase letter
+1letraMaiuscula=1 uppercase letter
+1numero=1 number
+1caractereEspecial=1 special character
+apiKeys=API Keys
+chaveAcessoPagamentos=API KEY
+voceAindaNaoCriouApi=You have not yet created an API Key
+cuidadosComSuaApi=CARING FOR YOUR CREDENTIAL
+essaChaveSecreta=This key is secret and untransferable.
+naoPodeSerCompartilhada=It can not be shared.
+naoPodeUsadaOutrosSistemas=Can not be used on other systems.
+essaKeyApiNewCash=This key is used in the Cointrade Payments API.
+necessarioPreencherCampos="It is necessary to fill in the following fields: "
+voceAindaNaoCriou="You have not yet created an API Key"
+gerarApiKey=Gerar API Key
+paraGerarUmaApiKey=To generate a new KEY API you need to enter your registered PIN.
+visualizarApi=View API Key
+paraVisualizaInformarPin=To view the Key API you need to enter your registered PIN.
+cancelarApiKey=Cancel API Key
+cancelarPaiPinCadastrado=To cancel the API Key you must enter your registered PIN.
+desativarKeyBtn=Disable Key
+confirmarAlteracao=Confirm Change
+informarToker=Enter the token:
+verificadaPj=VERIFIED PJ
+verificada=VERIFIED
+basica=BASIC
+frente=Font:
+verso=Back:
+autenticacaoGoogleAut=Authentication by 2FA
+preencherTodosDadosPelfil=Fill in all profile data
+pinSeguranca=Safety PIN
+paisNaturalidade=Nationality
+campoEspContratoSocial=Specific field for articles of organization 
+contratoSocialDados=In the articles of association, the company representative must have the same data as the platform account holder.
+senhaDeveConter=The password must contain at least:
+tipoDocumento=Document Type
+pendente1=Pending
+tipodocumentoenvio=Document
+dataenvio=Send Date
+dataatualizacao=Analyze Date
+documentostatus=Status
+acao=Action
+documentoaprovado=Approved
+documentoanalise=Under Review
+documentorejeitado=Not Approved
+residencia=Residence
+empresa=Company
+empresaLateral=COMPANY
+alterarSenha=Change Password
+pinFrase=PIN - Security Phrase - 2FA
+
+compResidenciaTitulo=Proof-of-residence
+documentoTitulo=Document
+selfieTitulo=Selfie
+
+
+#Labels
+carregarImagemCortar=Upload Image to Cut
+nome=Name
+email=E-mail
+sexo=Gender
+mae=Mother
+pai=Father
+codPais=Country Code
+celular=Cell phone
+nascimento=Birth
+rg=ID Number
+cnpj=Registered Number
+documentofrente=Document Front
+documentoverso=Document Verse
+endereco2=Address
+numero=Number
+complemento=Complement
+codigoPostal=Postal Code
+bairro=Neighborhood
+pais=Country
+estado=State
+cidade=City
+pin=PIN
+confirmePin=Confirm PIN
+fraseSeguranca2=Security Phrase
+autenticacao2passos=Two-Factor Authentication
+emailOp=E-mail
+smsOp=SMS
+googleOp=2FA Authenticator (recommended)
+chaveSecreta=Secret key:
+digiteCodigoAcimaGoogle=Enter the code above into your 2FA Authenticator app or read the QRCode using your mobile device. After that, save the key in a safe place. In case of loss or exchange of smartphone this key will be necessary to re-enable the generation of tokens in your cell phone.
+informeCodigoGerado=Enter the code generated in your Google Authenticator application to enable authentication.
+anexeUmaSelfie=Attach a selfie holding your document
+baixarDocumento=Download attached document
+verificada=Verified
+emAnalise=In analysis
+anexeSeuDocumentoFotoCpf=Attach your document that contains photo and ID
+frente=Front
+verso=Back
+anexeCompResidenciaAtual=Attach your most current proof-of-residence
+anexeDocPj=Attach a company document or Legal Person
+senhaAtual=Current Password
+novaSenha=New Password
+confirmarSenha=Confirm Password
+naoPasseSuaSenha=Do not pass your password on to other people, your password is not transferable.
+aconselhamosUsoGoogle=We encourage you to use Google Authenticator as TOKEN.
+informeSeuPin=Enter your PIN: 
+
+
+senhaLogoff=AFTER ANY SECURITY UPDATE, CUSTOMER WILL NEED TO LOGIN AGAIN.
+
+documento=Document ID
+rgDocumento=Register ID
+
+
+
+#Buttons
+alterarBtn=Change
+cancelEdicaoBtn=Cancel Edition
+salvarFotoPerfilBtn=Save Profile Photo
+salvarAlteracaoPerfilBtn=Save Profile Changes
+salvarConfiguracoesSegurancaBtn=Save Security Settings
+selecionarBtn=Select
+removerBtn=Remove
+removerDocumentoBtn=Remove document
+enviarSelfieBtn=Send Selfie
+enviarDocComFoto=Send Document with photo
+enviarCompResidencia=Send proof-of-residence
+alterarConfigBtn=Change settings
+enviarDocumento=Send document
+altararSenhaBtn=Change Password
+mostrarKeyBtn=Show Key
+gerarNovaApiBtn=Generate new API Key
+desativarChaveBtn=Disable Key
+cancelarBtn=Cancel
+gerarChaveBtn=Generate Key
+validarBtn=Validate
+reenviarBtn=Resend
+enviarBtn=Submit
+confirmarBtn=Confirm
+
+#inputs
+
+
+
+#Placeholder
+
+
+
+#Links
+
+
+
+
+#Options
+masculino=Male
+feminino=Female
+selecionePais=Select a country
+selecionePaisNaturalidade=Select nationality
+selecioneEstado=Select a state
+selecioneCidade=Select a city
+emailOp=E-mail
+smsOp=SMS
+naoReceberOp=Do not receive 
+
+
+
+
+#Tabela
+
+
+#Sucesso
+
+
+
+
+##--------------------
+
+#--CONTROLLER
+#Modules\Perfil\Controllers\MeusDados.class.php
+##--
+#Textos da View
+
+
+
+                                                                
+
+#Labels
+investimento=Investiment
+duracaoLicenca=License Duration
+tempoLiberacao=Release time for deposits and withdrawals
+comissao=Fee
+aSuaSolicitacaoDeUpgrade=Your software license upgrade request is under review. We will soon return to you.
+
+#Buttons
+solicitarLicenca=Request License Change
+
+#inputs
+
+
+
+#Placeholder
+
+
+#Links
+
+
+
+#Options
+
+
+#Tabela
+nenhumaLicenca=No license registered.
+
+
+#Sucesso
+senhaSucesso=Password changed successfully!
+configAlertaSucesso=Alert settings updated successfully!
+chaveSucesso=Key Generated Successfully!
+parabensVoceCliente=Congratulations. You are a customer!
+
+
+
+tipoDocumentoTitulo=Type
+tipoDocumento1=ID Card
+tipoDocumento2=Social Security Card
+tipoDocumento3=Work register booklet
+tipoDocumento4=Passport
+tipoDocumento5=Functional Identification
+tipoDocumento6=CPF
+tipoDocumento7=Driver License
+tipoDocumento8=Registered Number
+tipoDocumento9=Social Security Number
+desejaDepositarValoresReal=Will you withdraw or deposit amounts in Brazilian Real (BRL)?
+
+
+
+#Erro
+necessarioGoogle=You need to enter the Google Authenticator Token.
+googleInvalido=Invalid Google Authenticator Token.
+necessarioPreencherTodosCampos=All fields must be filled out.
+necessarioInformarDocumentos=It is necessary to inform the documents.
+senhaMuitoFraca=The password is too weak. Please enter a stronger password.
+precisCadastrarPin=You need to register a PIN to perform this operation.
+informePin=Enter the registered PIN to carry out the operation.
+pinInvalido=Invalid PIN.
+configRecebimentoInvalida=Receiving alert of invalid movement setting.
+voceNaoSelecionouImagem=You did not select an image.
+vocePrecisaRegistrarCliente=You must register as a customer to perform this operation.
+vocePrecisaCadastrarPinAcesseNovamente=You need to register a PIN to perform this operation. Access your profile and try again.
+voceCadastrarPin=You must enter your PIN.
+oPinInformadoNãoConfere=The entered PIN does not match the registered PIN.
+clienteNaoLocalizado=Customer not found.
+voceNaoCadastrouApi=You have not yet registered an API Key.
+foiEnviadoEmail=A confirmation token has been sent to your email
+porFavorInsiraToken=. Please enter the token below to complete the transaction.
+foiEnviadoSMS=A confirmation token was sent to your mobile phone
+useGoogle=Please use your Google Authenticator to enter the token below.
+
+
+
+##--------------------
+
+perfil1=Mobile Devices
+perfil2=Brand/Manufacturer
+perfil3=Model
+perfil4=Device Number
+perfil5=Serial Number
+perfil6=Operational System
+perfil7=Version
+perfil8=Status
+perfil9=Registration Date
+perfil10=Enable/Disable
+
+perfil11=Customer information.
+perfil12=Change password, PIN and 2FA.
+perfil13=Increase the security of your account.
+perfil14=Options to you receive information from your account.
+perfil15=Associate your account with a CNPJ.
+perfil16=Generate key for API.
+perfil17=Enable or Disable smartphone.
+perfil18=Notifications
+perfil19=Notification of operations.
+perfil20=API - Access
+perfil21=Access History
+perfil22=History of the last access.
+perfil23=Notification
+perfil24=My Limits
+perfil25=Fees and operational limits.
+perfil26=Affiliate
+perfil27=Affiliate program and referral link.
+perfil28=Search
+perfil29=Amount Received
+perfil30=Day
+perfil31=Week
+perfil32=Month
+perfil33=All
+perfil34=Search
+perfil35=Reward Description
+perfil36=Amount
+perfil37=Bonus received by indication
+perfil38=Commission received from indication
+perfil39=The moment your referral has the verified account, you will earn R$ 1,00.
+perfil40=You earn commission from exchange fees for deposits and withdrawals made by your referral.
+perfil41=Fees And Operational Limits
+perfil42=Affiliate Program and Referral Program
+perfil43=Share your referral link and earn lots of benefits.
+perfil44=Encourage your reference to validate the account. Only then will you earn your bonuses.
+perfil45=Referral Link
+perfil46=Verify your account to have higher limits.
+perfil47=Basic Account
+perfil48=Verified Account
+perfil49=Withdraw and deposit limits refer to 24 hours
+perfil50=My Banks
+perfil51=My bank accounts.
+perfil52=Purchase Order Fee
+perfil53=Sell Order Fee
+perfil54=Register My Data
+perfil55=Password / PIN / TOKEN
+perfil56=Register Bank Accounts
+perfil57=Register your company's CNPJ to make withdrawals and deposits with your legal account.
+perfil58=After registering the CNPJ, register your legal account in the My Banks tab.
+perfil59=Configure Notifications
+perfil60=Request Credentials
+perfil61=Request your API credentials by clicking the button below. The credentials will be sent to your email.
+perfil62=Enter your token:
+perfil63=Request Credentials
+perfil64=Request Credentials
+perfil65=Check My Accesses
+perfil66=Configure Devices
+perfil67=Pair Device
+perfil68=Read the QRCODE with your device to allow access to the application.
+perfil69=Limits & Fees
+perfil70=It is only allowed to generate a new credential after 24 hours, the old credential is deactivated.
+perfil71=To generate your credential, you must have 2FA Authenticator enabled on your account.
+perfil72=
+perfil73=
+perfil74=
+perfil75=Preferences
+perfil76=Notifications
+perfil77=Receive news, news and cotações
+
+operacao1=Withdraw Real
+operacao2=Deposit Real
+operacao3=Withdraw Cryptocurrency
+operacao4=Deposit Cryptocurrency
+operacao5=Login
+operacao6=Order Executed
+
+
+comunicacao1=Disable
+comunicacao2=E-mail
+comunicacao3=SMS
+comunicacao4=Whatsapp
+comunicacao5=Telegram
+
+
+notaFiscal=Nota Fiscal
+notafiscal1=Date Authorization
+notafiscal3=Total Amount
+notafiscal4=Service
+notafiscal5=Code
+notafiscal6=Date
+notafiscal7=Invoive Number
+notafiscal8=Status
+notafiscal9=Service
+notafiscal10=Day
+notafiscal11=Wek
+notafiscal12=Month
+notafiscal13=All
+notafiscal14=Search
+notafiscal15=Deposit
+notafiscal16=Withdraw
+notafiscal17=Ticket Payments
+notafiscal18=Amount
+notafiscal19=Serviçes
+notafiscal20=Money Remittances
+notafiscal21=All
+notafiscal22=File
+notafiscal23=Allowed
+notafiscal24=Canceled
+notafiscal25=Denied
+notafiscal26=No invoice for reported filters.
+notafiscal27=Activate Nota Fiscal for the services below:
+notafiscal28=Operation
+notafiscal29=Action
+notafiscal30=Deposit
+notafiscal31=Withdraw
+notafiscal32=After the operation is activated, your CPF will be inserted in the nota fiscal.
+notafiscal33=Settings of Nota Fiscal.
+notafiscal34=INFORMATION
+notafiscal35=Nota Fiscal operation updated successfully.
+
+navegadores=Browsers
+navegador1=Browser
+navegador2=Location
+navegador3=Operational Systems
+navegador4=Last Access IP
+navegador5=Date
+navegador6=Deny
+
+meusDados=My Data
+enviarDocumentos=Submit documents and validate account.
+documentos=Documents
+
+ativarMobile=Enable
+desativarMobile=Disable
+respostaFiltroMobile=No device registered
+statusMobile=Status changed successfully!
+
+validacao1=Please fill in the "Name" field.
+validacao2=Please fill in the "Document" field.
+validacao3=Please fill in the "Mother Name" field.
+validacao4=Please fill in the "Birth" field.
+validacao5=Please fill in the field "Naturalidade".
+validacao6=Please fill in the "RG" field.
+validacao7=Please fill in the "Address" field.
+validacao8=Please fill in the "CEP" field.
+validacao9=Please fill in the "Country" field.
+validacao10=Please fill in the "Gender" field.
+
+
+
+dadosSalvoSucesso=Data saved successfully.
+arquivoEnviadoSucesso=File uploaded successfully.
+contaNaoVerificada=Account not verified. Submit your documents.
+desconhecido=Unknown
+notificacaoSucesso=Notification changed successfully.
+
+limite1=Real Deposit
+limite2=Cash Out
+limite3=Transfer Real
+limite4=Deposit Cryptocurrency
+limite5=Withdraw Cryptocurrency
+limite6=Referral Program
+limite7=Affiliate Commissions
+limite8=No limits
+limite9=R$ 0,00
+limite10=0%
+limite11=R$ 100.000,00
+limite12=R$ 50.000,00
+limite13=0
+limite14=5,00%
+limite15=My Account
+limite17=Logo
+limite18=Initials
+limite19=Name
+limite20=Transfer Fee
+limite21=Network Confirmation
+limite22=Search
+limite23=Cryptocurrency, Real, Fees and Network
+limite24=Real - Fees
+limite25=Cryptocurrency - Fees and Network
+limite26=Description
+limite27=Type
+limite28=Amount
+limite29=Taker Buy
+limite30=Taker Sell
+limite31=Maker Buy
+limite32=Maker Sell
+
+taxaDeposito=Deposit Fee if using TED or DOC
+estornoDeposito=Chargeback for Third-party bank transfer
+prazoMaximoDeposito=TED or DOC deposit processing time
+prazoMedioDeposito=Average deposit processing time for TED or DOC
+
+percentualDepositoZeroAteDoisMil=Cash deposit fee untill R$2.000,00
+percentualDepositoDoisAteCincoMil=Cash deposit fee from R$2.000,00 until R$4.999,99
+percentualDepositoCincoAteDezMil=Cash deposit fee from R$5.000,00 until R$9.999,99
+percentualDepositoDezAteCinquentaMil=Cash deposit fee from R$10.000,00 until R$49.999,99
+percentualDepositoAcimaCinquentaMil=Cash deposit fee above R$50.000,00
+prazoMaximoDepositoEsp=Processing time for cash deposit
+prazoMedioDepositoEsp=Average cash deposit processing time
+
+percentualSaque=Withdraw fee in Reais
+tarifaTed=TED - Transfers for other banks 
+tarifaMesmoBanco=Transfers between banks 
+valorMinimoSaque=Minimum amount for withdrawal in Reais
+prazoMaximoSaque=Processing time for withdrawal in Reais
+prazoMedioSaque=Average time of last processed withdrawal in Reais
+           
+percentualCompraAtiva=Take buy order 
+percentualCompraPassiva=Make buy order 
+percentualVendaAtiva=Take sell order 
+percentualVendaPassiva=Make sell order 
+
+comissaoTransferenciaInternaReais=Fee for transfering Reais between users
+comissaoTransferenciaReaisMinima=Minimum amount for transfer in Reais
+
+prazoMaximoAtendimento=Average time for support
+prazoMaximoValidaConta=Average time for documentation analisys and validation
+
+
+cartaoMensalidade=Monthly payment
+prazoPAC=Delivery time
+taxaRecarga=Recharge fee
+tempoRecarga=Recharge time
+valorAquisicao=Acquisition value
+
+depositoTaxa=Deposit
+saqueTaxa=Withdraw
+transTaxa=Transfer
+depositoCripto=Crypto Deposit
+compraVendaTaxa=Buy & Sell
+depositoCriptoLabel= Crypto deposit fee
+
+insiraGoogleAuth=Enter your current Google Authenticator token
+insiraEmailEnviado=A token has been sent to your email, insert the token below -
+reenviarToken=Resend Token
+
+
+
+
+#--VIEW
+#Modules\contas\views\contas_bancarias.phtml
+##--
+#Textos da View
+cadastreApenas=Register only bank accounts of the Cointrade account holder.
+instituicaoBancariaC=Banking institution
+seleInstiBancariaC=Select a banking institution
+                     
+
+#Labels
+tipoContaC=Account type
+agenciaC=Agency
+agenciaDigitoC=Digit
+contaC=Account
+contaDigitoC=Digit
+
+
+#Buttons
+cancelarC=Cancel
+salvarContaC=Save Account
+
+#option
+contaCorrenteC=Account
+
+
+#Tabela
+codBancoC=Bank Code
+bancoC=Bank Name
+agenciaDigC=Agency - Dig.
+contaDigC=Account - Dig.
+tipoC=Type
+statusA=Active
+ativarC=Activate/Disable
+
+chaveAcessoCliente=ClientID
+
+
+nomeTitular=Name of the account holder
+documentoCpf=CPF Document
+
+documentoCpfConta=CPF Document
+nomeConta=Holder Name
+
+cadastrePin=Regiser your PIN and your Phrase security.

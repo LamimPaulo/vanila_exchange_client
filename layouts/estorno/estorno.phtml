@@ -1,0 +1,295 @@
+<?php 
+$bancoRn = new Models\Modules\Cadastro\BancoRn();
+$bancos = $bancoRn->conexao->listar("ativo > 0", "codigo, nome");
+
+?>
+<div class="modal fade" id="modalContaBancariaEstorno" tabindex="-1" role="dialog" aria-labelledby="modalContaBancariaEstorno" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalContaBancariaEstornoLabel">Estorno - Conta Bancária</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalContaBancariaEstornoEstorno" />
+                
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="alert alert-info">
+                            Sentimos informar que o seu depósito número <strong id="modalContaBancariaEstornoNumeroDeposito"></strong> no valor de R$ <strong id="modalContaBancariaEstornoValorDeposito"></strong> não foi 
+                            aceito por estar em desacordo com nossa política de depósitos. <br>
+                            De acordo com nossa política de depósitos o valor depositado será estornado para a conta de origem. Você deverá informar abaixo a conta de origem dos valores. Caso não seja uma conta de sua 
+                            titularidade você pode selecionar a opção <strong>Utilizar conta não cadastrada</strong> abaixo e informe os dados corretos. <br><br>
+                            <strong>Atenção: </strong> será cobrada a taxa de estorno de depósito de <strong id="modalContaBancariaEstornoTaxaExtorno"></strong>% mais a tarifa de TED no valor de R$ 
+                            <strong id="modalContaBancariaEstornoTarifaTed"></strong>. O valor a ser creditado em sua conta será de R$ <strong id="modalContaBancariaEstornoValorExtorno"></strong>.
+                        </div>
+                        
+                        <div class="alert alert-danger" id="modalContaBancariaEstornoMsgRejeitada">
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="checkbox m-r-xs">
+                            <input type="checkbox" id="modalContaBancariaEstornoUtilizarCadastrada">
+                            <label for="modalContaBancariaEstornoUtilizarCadastrada">
+                                Utilizar uma conta bancária cadastrada
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" id="modalContaBancariaEstornoRowConta">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label>Selecione uma conta bancária: </label>
+                            <select class="form-control select2" id="modalContaBancariaEstornoIdContaBancaria" style="width: 100%;">
+                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" >
+                    <div class="col col-lg-12">
+                        <div class="checkbox m-r-xs">
+                            <input type="checkbox" id="modalContaBancariaEstornoUtilizarNaoCadastrada">
+                            <label for="modalContaBancariaEstornoUtilizarNaoCadastrada">
+                                Utilizar conta não cadastrada
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" id="modalContaBancariaEstornoRowCadastro">
+                    <div class="col col-lg-12">
+                        
+                        <div class="row">
+                            <div class="col col-lg-7">
+                                <div class="form-group">
+                                    <label>Titular</label>
+                                    <input type="text" maxlength="150" id="modalContaBancariaEstornoTitular" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col col-lg-5">
+                                <div class="form-group">
+                                    <label>CPF/CNPJ Titular</label>
+                                    <input type="text" maxlength="150" id="modalContaBancariaEstornoCnpjCpf" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <div class="form-group">
+                                    <label>Banco</label>
+                                    <select class="form-control select2" id="modalContaBancariaEstornoBanco" style="width: 100%;"  >
+                                        <?php
+                                        foreach ($bancos as $banco) {
+                                            ?>
+                                            <option value="<?php echo \Utils\Criptografia::encriptyPostId($banco->id) ?>"><?php echo $banco->nome ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col col-lg-4">
+                                <div class="form-group">
+                                    <label>Agencia</label>
+                                    <input type="text" maxlength="10" id="modalContaBancariaEstornoAgencia" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col col-lg-4">
+                                <div class="form-group">
+                                    <label>Conta</label>
+                                    <input type="text" maxlength="10" id="modalContaBancariaEstornoConta" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col col-lg-4">
+                                <div class="form-group">
+                                    <label>Tipo de conta</label>
+                                    <select class="form-control" id="modalContaBancariaEstornoTipoConta">
+                                        <option value="<?php echo \Utils\Constantes::CONTA_CORRENTE ?>">Conta Corrente</option>
+                                        <option value="<?php echo \Utils\Constantes::CONTA_POUPANCA ?>">Conta Poupança</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalContaBancariaEstornoClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-success" onclick="salvarDadosBancarios();" id="modalContaBancariaEstornoConfirmar" >Enviar Dados</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<div class="modal fade" id="modalConfirmacaoDadosEstorno" tabindex="-1" role="dialog" aria-labelledby="modalConfirmacaoDadosEstorno" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalConfirmacaoDadosEstornoLabel">Confirmação</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <br><br>
+                        Dados enviados com sucesso! <br>
+                        Nossa equipe irá analisar os dados e havendo tudo certo com os mesmos o estorno será realizado na conta informada.
+                        <br><br>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="modalConfirmacaoDadosEstornoClose" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script>
+    
+    $(document).ready(function () {
+        
+        $(".select2").select2();
+        
+        $("#modalContaBancariaEstornoUtilizarCadastrada").change(function () {
+            if ($(this).is(":checked")) {
+                $("#modalContaBancariaEstornoRowConta").show();
+                $("#modalContaBancariaEstornoRowCadastro").hide();
+                $("#modalContaBancariaEstornoUtilizarNaoCadastrada").prop("checked", false);
+            } else {
+                $("#modalContaBancariaEstornoRowConta").hide();
+                $("#modalContaBancariaEstornoRowCadastro").show();
+                $("#modalContaBancariaEstornoUtilizarNaoCadastrada").prop("checked", true);
+            }
+        });
+        
+        $("#modalContaBancariaEstornoUtilizarNaoCadastrada").change(function () {
+            if ($(this).is(":checked")) {
+                $("#modalContaBancariaEstornoRowCadastro").show();
+                $("#modalContaBancariaEstornoRowConta").hide();
+                $("#modalContaBancariaEstornoUtilizarCadastrada").prop("checked", false);
+            } else {
+                $("#modalContaBancariaEstornoRowCadastro").hide();
+                $("#modalContaBancariaEstornoRowConta").show();
+                $("#modalContaBancariaEstornoUtilizarCadastrada").prop("checked", true);
+            }
+        });
+        
+    });
+    
+    function abrirModalContaEstorno(codigo) {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DEPOSITO_EXTORNO_CONTAS ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo : codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalContaBancariaEstornoIdContaBancaria").html(json.htmlContas);
+                        $("#modalContaBancariaEstornoEstorno").val(codigo);
+                        
+                        if (!json.rejeitado && json.temContas) {
+                            $("#modalContaBancariaEstornoUtilizarCadastrada").prop("checked", true);
+                            $("#modalContaBancariaEstornoUtilizarNaoCadastrada").prop("checked", false);
+                        } else {
+                            $("#modalContaBancariaEstornoUtilizarCadastrada").prop("checked", false);
+                            $("#modalContaBancariaEstornoUtilizarNaoCadastrada").prop("checked", true);
+                        }
+                        
+                        if (json.rejeitado) {
+                            $("#modalContaBancariaEstornoMsgRejeitada").show();
+                            $("#modalContaBancariaEstornoMsgRejeitada").html("Dados rejeitados. Motivo: " + json.motivoRejeicao);
+                        } else {
+                            $("#modalContaBancariaEstornoMsgRejeitada").hide();
+                            $("#modalContaBancariaEstornoMsgRejeitada").html("");
+                        }
+                        
+                        $("#modalContaBancariaEstornoNumeroDeposito").html(json.numeroDeposito);
+                        $("#modalContaBancariaEstornoValorDeposito").html(json.valorDeposito);
+                        $("#modalContaBancariaEstornoTaxaExtorno").html(json.taxaExtorno);
+                        $("#modalContaBancariaEstornoTarifaTed").html(json.tarifaTed);
+                        $("#modalContaBancariaEstornoValorExtorno").html(json.valorExtorno);
+                        
+                        $("#modalContaBancariaEstornoUtilizarCadastrada").trigger("change");
+                        
+                        $("#modalContaBancariaEstornoIdContaBancaria").children("option").first().prop("selected", true);
+                        $("#modalContaBancariaEstornoTitular").val(json.nomeTitular);
+                        $("#modalContaBancariaEstornoCnpjCpf").val(json.cpfCnpj);
+                        $("#modalContaBancariaEstornoBanco").val(json.banco);
+                        $("#modalContaBancariaEstornoAgencia").val(json.agencia);
+                        $("#modalContaBancariaEstornoConta").val(json.conta);
+                        $("#modalContaBancariaEstornoTipoConta").val(json.tipoConta);
+                        
+                        $("#modalContaBancariaEstorno").modal();
+                    } else {
+                        showNotyAlert(json.mensagem);
+                    }
+                } catch (e) {
+                    showNotyAlert(e);
+                }
+            }
+        });
+        
+    }
+    
+    
+    function salvarDadosBancarios() {
+        $("#modalContaBancariaEstornoClose, #modalContaBancariaEstornoConfirmar").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DEPOSITO_EXTORNO_SALVAR_DADOS_BANCARIOS ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                codigo: $("#modalContaBancariaEstornoEstorno").val(),
+                utilizarContaBancaria: $("#modalContaBancariaEstornoUtilizarCadastrada").is(":checked"),
+                contaBancaria: $("#modalContaBancariaEstornoIdContaBancaria").val(),
+                utilizarContaNaoCadastrada: $("#modalContaBancariaEstornoUtilizarNaoCadastrada").is(":checked"),
+                titular: $("#modalContaBancariaEstornoTitular").val(),
+                cpfCnpj: $("#modalContaBancariaEstornoCnpjCpf").val(),
+                banco: $("#modalContaBancariaEstornoBanco").val(),
+                agencia: $("#modalContaBancariaEstornoAgencia").val(),
+                conta: $("#modalContaBancariaEstornoConta").val(),
+                tipoConta: $("#modalContaBancariaEstornoTipoConta").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#modalContaBancariaEstornoClose").prop("disabled", false).trigger("click");
+                        
+                        $("#modalConfirmacaoDadosEstorno").modal();
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalContaBancariaEstornoClose, #modalContaBancariaEstornoConfirmar").prop("disabled", false);
+            }
+        });
+    }
+    
+</script>

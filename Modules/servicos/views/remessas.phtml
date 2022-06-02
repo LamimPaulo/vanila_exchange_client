@@ -1,0 +1,1267 @@
+<?php
+$idioma = new \Utils\PropertiesUtils("remessa", IDIOMA);
+$dataInicial = new Utils\Data(date("d/m/Y"));
+$dataFinal = new Utils\Data(date("d/m/Y"));
+$dataInicial->subtrair(0, 0, 30);
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+$bancos = isset($_data["bancos"]) ? $_data["bancos"] : Array();
+$contas = isset($_data["contas"]) ? $_data["contas"] : Array();
+$configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
+$isCliente = \Utils\Geral::isCliente();
+$comissao = $configuracao->taxaRemessa;
+$tarifaTed = $configuracao->tarifaTed;
+$categorias = (isset($_data["categorias"]) ? $_data["categorias"] : Array());
+
+$_data["idiomaMenu"] = $idioma;
+?>
+<style>
+    .border-edit {
+        border: 1px solid #1c84c6 !important;
+    }
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<?php Utils\Layout::append("inspina/breadcrumb", $_data) ?>
+<script src="<?php echo JS ?>highcharts/code/highcharts.js"></script>
+
+<script src="<?php echo JS ?>highcharts/code/modules/exporting.js"></script>
+<script src="<?php echo JS ?>highcharts/code/modules/export-data.js"></script>
+<!--[if lt IE 9]>
+<script src="<?php echo JS ?>highcharts/code/modules/oldie.js"></script>
+<![endif]-->
+
+
+
+    <link href="<?php echo TEMA ?>css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
+    <link href="<?php echo TEMA ?>css/plugins/fullcalendar/fullcalendar.print.css" rel='stylesheet' media='print'>
+
+
+    
+<div>
+<br>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <?php if($isCliente){ ?>
+                    <li class="active"><a data-toggle="tab" href="#tab-1" data-target="#tab-1" aria-expanded="false"><?php echo $idioma->getText("abaRemessa") ?></a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-2" data-target="#tab-2" aria-expanded="true"><?php echo $idioma->getText("abaExtrato") ?></a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-6" data-target="#tab-6" aria-expanded="false" ><?php echo $idioma->getText("abaCalendario") ?></a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-3" data-target="#tab-3" aria-expanded="false"><?php echo $idioma->getText("abaRemessaCategoria") ?></a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-4" data-target="#tab-4" aria-expanded="false"><?php echo $idioma->getText("abaRemessaMes") ?></a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-5" data-target="#tab-5" aria-expanded="false"><?php echo $idioma->getText("abaRemessaMesCategoria") ?></a></li>
+                    <?php } ?>
+                   
+                </ul>
+        
+                <div class="tab-content">
+
+                    <div id="tab-2" class="tab-pane <?php echo (Utils\Geral::isUsuario() ? "active" : "") ?>">
+
+                        <div class="panel-body">
+                            <form id="pesquisa">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("dtInicial") ?></label>
+                                                    <input type="text" id="dataInicial" class="form-control" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>"/>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("dtFinal") ?></label>
+                                                    <input type="text" id="dataFinal" class="form-control" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("status") ?></label>
+                                                    <select class="form-control" id="status" onchange="listarRemessas();" />
+                                                    <option value="T" ><?php echo $idioma->getText("todosOp") ?></option>
+                                                    <option value="<?php echo \Utils\Constantes::STATUS_REMESSA_DINHEIRO_AGUARDANDO ?>" ><?php echo $idioma->getText("aguardOp") ?></option>
+                                                    <option value="<?php echo \Utils\Constantes::STATUS_REMESSA_DINHEIRO_CANCELADO ?>" ><?php echo $idioma->getText("cancelOp") ?></option>
+                                                    <option value="<?php echo \Utils\Constantes::STATUS_REMESSA_DINHEIRO_FINALIZADO ?>" ><?php echo $idioma->getText("finalizadoOp") ?></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("registros") ?></label>
+                                                    <select class="form-control" id="nresultado" >
+                                                        <option value="10" >10</option>
+                                                        <option value="20" >20</option>
+                                                        <option value="50" >50</option>
+                                                        <option value="100" >100</option>
+                                                        <option value="T" ><?php echo $idioma->getText("todosOp") ?></option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("filtroGeral") ?></label>
+                                                    <input type="text" id="filtro" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">&nbsp;</label>
+                                                    <button type="button" class="btn btn-white full-width form-control"><?php echo $idioma->getText("filtro") ?></button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                            
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <br>
+                        <div class="row">
+                            <div class="col col-lg-12" style="font-size: 11px">
+                                <div class="table-responsive">
+                                <table class="table table-hover table-condensed table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <?php if (\Utils\Geral::isUsuario()) { ?>
+                                                <th class="text-center"><?php echo $idioma->getText("cliente") ?></th>
+                                            <?php } ?>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("controle") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("data") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("titular") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("contaBancaria") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("valor") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("taxa") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("creditado") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("comprovante") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("nf") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("status") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("acao") ?></strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listaRemessas" style="background-color: #fff">
+
+                                    </tbody>
+                                </table>
+                                    <br><br>
+                                </div>
+                            </div>
+                            <br>
+                                        
+                        </div>
+                    </div>
+                    <?php if($isCliente){ ?>
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="row">
+                            <div class="col-lg-12">
+
+                                <div class="panel-body">
+                                    <div class="row">
+                                            <div class="col col-lg-12">
+                                                <div class="alert alert-info">
+                                                    <label><?php echo $idioma->getText("infRemessaValores") ?></label>
+                                                    <ul>
+                                                        <li><?php echo $idioma->getText("taxaCobrada") ?> <?php echo number_format($comissao, 2, ",", "") ?>%</li>
+                                                        <li><?php echo $idioma->getText("tarifaTed") ?> R$ <?php echo number_format($tarifaTed, 2, ",", "") ?></li>
+                                                        <li><?php echo $idioma->getText("pagamentoSeraRealizado") ?></li>
+                                                        <li><?php echo $idioma->getText("saldoDebitadoNoMomento") ?></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <?php if(sizeof($contas) > 0) { ?>
+                                    <div class="row">
+                                            <div class="col col-lg-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("contasCadastradas") ?></label><br>
+                                                    <select class="form-control select2-selection__rendered" id="idContas" name="idContas">
+                                                        <option value="0"><?php echo $idioma->getText("selecioneContaCadastradaOp") ?></option>
+                                                        <?php
+                                                        foreach ($contas as $conta) {
+                                                            ?>
+                                                            <option value="<?php echo $conta->id ?>"><?php echo $conta->titular . " | AG: "  . $conta->agencia . ($conta->agenciaDigito != null ? "-".$conta->agenciaDigito : "") ." | CC: " . $conta->conta . ($conta->contaDigito != null ? "-".$conta->contaDigito : "") ?></option>
+                                                            <?php } ?>                                                        
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <hr>
+                                    <?php } ?>
+
+                                    <form id="form-remessa" action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_SALVAR ?>" method="post" enctype="multipart/form-data">
+                                       
+                                        <div class="row">
+                                            
+                                            <div class="col col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("titularLb") ?></label>
+                                                    <input type="text" id="titular" name="titular" class="form-control" maxlength="200" value="" />
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">CNPJ / CPF</label>
+                                                    <input type="text" id="documento" name="documento" class="form-control" maxlength="14" value="" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col col-lg-7">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("instituicaoBancaria") ?></label><br>
+                                                    <select class="form-control select2-selection__rendered" id="idBanco" name="idBanco">
+                                                        <option value="0"><?php echo $idioma->getText("selecioneBancoOp") ?></option>
+                                                        <?php
+                                                        foreach ($bancos as $banco) { ?>
+                                                            <option value="<?php echo $banco->id ?>"><?php echo $banco->codigo . " - " . $banco->nome ?></option>
+                                                            <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("tipoConta") ?></label>
+                                                    <select class="form-control" id="tipoConta" name="tipoConta">
+                                                        <option value="0"><?php echo $idioma->getText("selecioneTipoConta") ?></option>
+                                                        <option value="<?php echo Utils\Constantes::CONTA_CORRENTE ?>"><?php echo $idioma->getText("contaCorrente") ?></option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-1">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("operacao") ?></label>
+                                                    <input type="text" id="operacao" name="operacao" class="form-control" maxlength="5"  value="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <div class="row">
+                                            <div class="col col-lg-11 col-xs-11">
+                                                <div class="form-group">
+                                                    <label><?php echo $idioma->getText("categoriaServico") ?></label>
+                                                    <select id="idCategoriaServico" name="idCategoriaServico" data-categoria="<?php echo $remessa->idCategoriaServico?>" class="form-control">
+                                                        <option value="<?php echo \Utils\Criptografia::encriptyPostId(0)?>"><?php echo $idioma->getText("selecioneCategoriaServico") ?></option>
+                                                        <?php
+                                                        if (sizeof($categorias) > 0) {
+                                                            foreach ($categorias as $categoria) {
+                                                                $selected = ($categoria->id == $remessa->idCategoriaServico);
+                                                                ?>
+                                                                <option value="<?php echo \Utils\Criptografia::encriptyPostId($categoria->id)?>" <?php echo ($selected ? "selected='true'" : "")?>><?php echo $categoria->descricao ?></option>
+                                                                <?php
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-1 col-xs-1">
+                                                <br>
+                                                <button onclick="cadastroCatagoriasServicos('<?php echo \Utils\Criptografia::encriptyPostId(0)?>')" class="btn btn-primary" type="button">
+                                                    <i class="fa fa-plus fa-1x"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+
+                                        <div class="row">
+                                            <div class="col col-lg-3">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("agencia") ?></label>
+                                                    <input type="text" id="agencia" name="agencia" class="form-control" maxlength="10"  value="" />
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-1">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("digitoAgencia") ?></label>
+                                                    <input type="text" id="agenciaDigito" name="agenciaDigito" class="form-control" maxlength="10"  value="" />
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-3">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("conta") ?></label>
+                                                    <input type="text" id="conta" name="conta" class="form-control" maxlength="15"  value="" />
+                                                </div>
+                                            </div>
+                                            <div class="col col-lg-1">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("digitoConta") ?></label>
+                                                    <input type="text" id="contaDigito" name="contaDigito" class="form-control" maxlength="15"  value="" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="control-label"><?php echo $idioma->getText("valorLb") ?></label>
+                                                    <input type="text" id="valor" name="valor" class="form-control"  value="<?php echo number_format($deposito->valorDepositado, 2, ",", ".") ?>" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                                
+                                        
+                                        <div class="form-group">
+                                            <div class="i-checks">
+                                                <label class=""> 
+                                                    <div class="icheckbox_square-green" style="position: relative;">
+                                                        <input type="checkbox" id="aceitaNota" name="aceitaNota" value="1" unchecked>
+                                                    </div> <?php echo $idioma->getText("cpfNf") ?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col col-lg-12">
+                                                <br>
+                                                <label style="font-size: 15px;"><?php echo $idioma->getText("seraDebitadoSuaConta") ?> </label> <strong id="valorCreditado2"> <?php echo (isset($valorCreditado2)  ? $valorCreditado2 : "R$ 0,00") ?></strong>
+                                                <br><br>
+                                            </div>
+                                        </div>
+                                                    
+
+                                        <br>
+
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                            </div>
+                                            <div class="col col-lg-2 col-xs-12 text-center m-b-xs">
+                                                <a class="btn btn-default full-width" href="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS ?>">
+                                                    <?php echo $idioma->getText("voltarBtn") ?>
+                                                </a>
+                                            </div>
+                                            <div class="col col-lg-2 col-xs-12 text-center m-b-xs">
+                                                <button class="btn btn-primary full-width" type="button" onclick="modalDialogPagar();" id="btn-cadastrar">
+                                                    <?php echo $idioma->getText("cadastrarBtn") ?>
+                                                </button>
+                                            </div>
+                                            <div class="col-lg-4">
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div id="tab-3" class="tab-pane">
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col col-lg-4">
+                                    <div class="form-group">
+                                        <label><?php echo $idioma->getText("dtInicial") ?></label>
+                                        <input type="text" id="filtroConsumoPorCategoriaDataInicial" class="form-control"  />
+                                    </div>
+                                </div>
+                                <div class="col col-lg-4">
+                                    <div class="form-group">
+                                        <label><?php echo $idioma->getText("dtFinal") ?></label>
+                                        <input type="text" id="filtroConsumoPorCategoriaDataFinal"  class="form-control"  />
+                                    </div>
+                                </div>
+                                <div class="col col-lg-4">
+                                    <div class="form-group">
+                                        <label><?php echo $idioma->getText("tipoData") ?></label>
+                                        <select id="filtroConsumoPorCategoriaTipoData"  class="form-control" >
+                                            <option value="A"><?php echo $idioma->getText("dataPagamento") ?></option>
+                                            <option value="B"><?php echo $idioma->getText("dataCadastro") ?></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-lg-12 text-center">
+                                    <br>
+                                    <button class="btn btn-primary" onclick="pieChartCategorias();">
+                                        <?php echo $idioma->getText("atualizarGrafico") ?>
+                                    </button>
+                                    <br><br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-lg-12" id="pieChartCategorias" style="height: 500px;">
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div id="tab-4" class="tab-pane">
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col col-lg-4">
+                                    <div class="form-group">
+                                        <label><?php echo $idioma->getText("dtInicial") ?></label>
+                                        <input type="text" id="filtroConsumoPorMesDataInicial" class="form-control"  />
+                                    </div>
+                                </div>
+                                <div class="col col-lg-4">
+                                    <div class="form-group">
+                                        <label><?php echo $idioma->getText("dtFinal") ?></label>
+                                        <input type="text" id="filtroConsumoPorMesDataFinal"  class="form-control"  />
+                                    </div>
+                                </div>
+                                <div class="col col-lg-4">
+                                    <div class="form-group">
+                                        <label><?php echo $idioma->getText("tipoData") ?></label>
+                                        <select id="filtroConsumoPorMesTipoData"  class="form-control" >
+                                            <option value="A"><?php echo $idioma->getText("dataPagamento") ?></option>
+                                            <option value="B"><?php echo $idioma->getText("dataCadastro") ?></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-lg-12 text-center">
+                                    <br>
+                                    <button class="btn btn-primary" onclick="barChartConsumoPorMes();">
+                                        <?php echo $idioma->getText("atualizarGrafico") ?>
+                                    </button>
+                                    <br><br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-lg-12" id="barChartConsumoPorMes" style="height: 500px;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-5" class="tab-pane">
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col col-lg-4">
+                                    <div class="form-group">
+                                        <label><?php echo $idioma->getText("dtInicial") ?></label>
+                                        <input type="text" id="filtroConsumoPorMesPorCategoriaDataInicial" class="form-control"  />
+                                    </div>
+                                </div>
+                                <div class="col col-lg-4">
+                                    <div class="form-group">
+                                        <label><?php echo $idioma->getText("dtFinal") ?></label>
+                                        <input type="text" id="filtroConsumoPorMesPorCategoriaDataFinal"  class="form-control"  />
+                                    </div>
+                                </div>
+                                <div class="col col-lg-4">
+                                    <div class="form-group">
+                                        <label><?php echo $idioma->getText("tipoData") ?></label>
+                                        <select id="filtroConsumoPorMesPorCategoriaTipoData"  class="form-control" >
+                                            <option value="A"><?php echo $idioma->getText("dataPagamento") ?></option>
+                                            <option value="B"><?php echo $idioma->getText("dataCadastro") ?></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-lg-12 text-center">
+                                    <br>
+                                    <button class="btn btn-primary" onclick="barChartConsumoPorMesPorCategoria();">
+                                       <?php echo $idioma->getText("atualizarGrafico") ?>
+                                    </button>
+                                    <br><br>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-lg-12" id="barChartConsumoPorMesPorCategoria" style="height: 500px;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="tab-6" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5><?php echo $idioma->getText("lancamentosRegistrados") ?></h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div id="calendar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <?php } ?>
+
+                </div>
+
+            </div>
+    
+        <br><br>
+        
+            <?php \Utils\Layout::view("categorias_servicos", $_data) ?>
+
+        <a  id="openOrder" target="_BLANK"></a>
+    </section>
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<!-- Full Calendar -->
+<script src="<?php echo TEMA ?>js/plugins/fullcalendar/moment.min.js"></script>
+<script src="<?php echo TEMA ?>js/plugins/fullcalendar/fullcalendar.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        
+        <?php if (Utils\Geral::isCliente()) { ?>
+        pieChartCategorias();
+        barChartConsumoPorMes();
+        barChartConsumoPorMesPorCategoria();
+        initializeCalendar();
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            if ($(this).attr("href") === "#tab-6") {
+                $('#calendar').fullCalendar('render');
+            }
+        });
+
+        $("#filtroConsumoPorCategoriaDataInicial, #filtroConsumoPorCategoriaDataFinal").mask("99/99/9999").datepicker({format: "dd/mm/yyyy"});
+        $("#filtroConsumoPorMesDataInicial, #filtroConsumoPorMesDataFinal").mask("99/99/9999").datepicker({format: "dd/mm/yyyy"});
+        $("#filtroConsumoPorMesPorCategoriaDataInicial, #filtroConsumoPorMesPorCategoriaDataFinal").mask("99/99/9999").datepicker({format: "dd/mm/yyyy"});
+        
+        <?php } ?>
+        $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green'
+        });
+       
+        $("#dataInicial,#dataFinal").datepicker({
+            format: "dd/mm/yyyy",
+            todayBtn: "linked",
+            language: "pt-BR",
+            orientation: "top left",
+            autoclose: true,
+            todayHighlight: true,
+            toggleActive: true,
+            });
+            
+        $("#dataInicial, #dataFinal").datepicker({format: 'dd/mm/yyyy'}).mask("99/99/9999");
+        
+        function filtrar(){
+        $('#pesquisa').each (function(){
+          this.reset();
+          listarRemessas();
+        });
+        }
+       
+        listarRemessas();
+
+        
+    $("#valor").keydown(function (event) {
+        $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+        calcularValorCreditado();
+        event.preventDefault();
+    });
+        
+    $("#idBanco").select2();
+    $("#idContas").select2();
+    
+    $('#idContas').on('select2:select', function () {
+
+        $.ajax({
+        url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_CONTAS ?>',
+        method: 'post',
+        dataType: 'json',
+        data: {
+            idRemessa: $("#idContas").val()
+        },
+        success: function (json) {
+            try {
+                if (json.sucesso) {
+                   $("#titular").val(json.remessa.titular); 
+                   $("#documento").val(json.remessa.documento);
+                   $("#conta").val(json.remessa.conta);
+                   $("#contaDigito").val(json.remessa.contaDigito);
+                   $("#agencia").val(json.remessa.agencia);
+                   $("#agenciaDigito").val(json.remessa.agenciaDigito);                   
+                   $("#idBanco").val(json.remessa.idBanco).trigger('change.select2');
+                   $("#operacao").val(json.remessa.operacao);
+                   $("#tipoConta").val(json.remessa.tipoConta);
+                    
+                    
+
+                } else {
+                    showNotyAlert(json.mensagem, "e");
+                }
+            } catch (e) {
+
+            }
+        }
+    });   
+
+    });
+        
+    $("#form-remessa").ajaxForm({
+        dataType: "json",
+        beforeSubmit: function () {
+            $("#dialogPagarRemessaFechar, #dialogPagarSalvar").prop("disabled", true);
+        },
+        success: function (json) {
+            try {
+                if (json.sucesso) {
+                    $("#dialogPagarRemessaFechar").prop("disabled", false).trigger("click");
+                    listarRemessas();
+                    showNotyAlert(json.mensagem, "s");
+                    $("#dialogConfirmacaoPagamento").modal();
+                    limpar();
+                    
+                } else {
+                    showNotyAlert(json.mensagem, "e");
+                }
+            } catch (e) {
+                showNotyAlert(e, "e");
+            }
+            $("#dialogPagarRemessaFechar, #dialogPagarSalvar").prop("disabled", false);
+            listarRemessas();
+        }
+        
+    });
+    
+    $("#form-finalizar").ajaxForm({
+        dataType: "json",
+        beforeSubmit: function () {
+            $("#dialogFinalizarRemessaFechar, #dialogFinalizarRemessaConfirmar").prop("disabled", true);
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+            $("#progressDocumentsContainer").show();
+            var percentVal = percentComplete + '%';
+            $("#progressDocuments").width(percentVal);
+            $("#progressDocumentsLegend").html("Carregando: "+percentVal + "%");
+            },
+        success: function (json) {
+            try {
+                if (json.sucesso) {
+                    $("#dialogFinalizarRemessaFechar").prop("disabled", false).trigger("click");
+                    listarRemessas();
+                    showNotyAlert(json.mensagem, "s");
+                } else {
+                    showNotyAlert(json.mensagem, "e");
+                }
+            } catch (e) {
+                showNotyAlert(e, "e");
+            }
+            $("#dialogFinalizarRemessaFechar, #dialogFinalizarRemessaConfirmar").prop("disabled", false);
+            $("#comprovante").val("");
+            $("#progressDocumentsContainer").hide();
+            $("#progressDocuments").width("0%");
+            $("#progressDocumentsLegend").html("");
+            listarRemessas();
+        }
+    });
+    
+    $("#form-cancelar").ajaxForm({
+        dataType: "json",
+        beforeSubmit: function () {
+            $("#dialogCancelarRemessaFechar, #dialogCancelarRemessaConfirmar").prop("disabled", true);
+        },
+        success: function (json) {
+            try {
+                if (json.sucesso) {
+                    $("#dialogCancelarRemessaFechar").prop("disabled", false).trigger("click");
+                    listarRemessas();
+                    showNotyAlert(json.mensagem, "s");
+                    
+                } else {
+                    showNotyAlert(json.mensagem, "e");
+                }
+            } catch (e) {
+                showNotyAlert(e, "e");
+            }
+            $("#dialogCancelarRemessaFechar, #dialogCancelarRemessaConfirmar").prop("disabled", false);
+            $("#motivoCancelamento").val();
+            listarRemessas();
+        }
+    });
+        
+            
+                $("#documento").numeric();
+              $("#documento").unmask();
+              $("#documento").focusout(function() {
+                $("#documento").unmask();
+                var tamanho = $("#documento").val().replace(/\D/g, '').length;
+                if (tamanho === 11) {
+                  $("#documento").mask("999.999.999-99");
+                } else if (tamanho === 14) {
+                  $("#documento").mask("99.999.999/9999-99");
+                }
+              });
+              $("#documento").focusout(function() {
+                $("#documento").unmask();
+              });
+              
+        
+});
+    
+    function listarRemessas() {
+        $("#listaRemessas").html("<tr class='text-center'><td  class='text-center' colspan='11'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_FILTRAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                dataInicial:$("#dataInicial").val(),
+                dataFinal:$("#dataFinal").val(),
+                status:$("#status").val(),
+                tipoData:$("#tipoData").val(),
+                idBanco:$("#idBanco").val(),
+                email:$("#email").val(),
+                agencia:$("#agencia").val(),
+                conta:$("#conta").val(),
+                titular:$("#filtro").val(),
+                nresultado: $("#nresultado").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaRemessas").html(json.html);
+                        $("#aguardando").html(json.dados.aguardando);
+                        $("#pago").html(json.dados.pago);
+                        $("#finalizados").html(json.dados.finalizado);
+                        $("#cancelados").html(json.dados.cancelado);
+                    } else {
+                        $("#listaRemessas").html("<tr class='text-center'><td  class='text-center' colspan='11'>"+json.mensagem+"</td></tr>");
+                        $("#aguardando").html("0");
+                        $("#pago").html("0");
+                        $("#finalizados").html("0");
+                        $("#cancelados").html("0");
+                    }
+                } catch (e) {
+                    $("#listaRemessas").html("<tr class='text-center'><td  class='text-center' colspan='11'>"+e+"</td></tr>");
+                    $("#aguardando").html("0");
+                    $("#pago").html("0");
+                    $("#finalizados").html("0");
+                    $("#cancelados").html("0");
+                }
+           
+        }
+    });
+    }
+ 
+
+    function confirmarCancelarRemessa() {
+        $("#form-cancelar").submit();
+    }
+    
+    function modalCancelarRemessa(idRemessa) {
+        $("#dialogCancelarRemessa").modal();
+        $("#dialogCancelarRemessaIdRmessa").val(idRemessa);
+    }
+
+    function modalDialogPagar() {
+        $("#dialogPagar").modal();
+    }
+    
+    function confirmarFinalizarRemessa() {
+        $("#form-finalizar").submit();
+    }
+
+    function confirmarPagamento() {
+        $("#form-remessa").submit();
+    }
+    
+    function modalDialogConfirmacaoPagamento() {
+        $("#dialogConfirmacaoPagamento").modal();
+    }
+    
+    function modalFinalizarRemessa(idRemessa) {
+        $.ajax({
+        url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_DADOS ?>',
+        method: 'post',
+        dataType: 'json',
+        data: {
+            idRemessa:idRemessa
+        },
+        success: function (json) {
+            try {
+                if (json.sucesso) {
+                    $("#dadosPagamento").html(json.dados);
+                    $("#dialogFinalizarRemessaIdRemessa").val(idRemessa);
+                    $("#dialogFinalizarRemessa").modal();
+                } else {
+                    
+                }
+            } catch (e) {
+
+            }
+        }
+    });
+
+    }
+    
+        function limpar(){
+        $("#valor, #titular, #documento, #agencia, #conta, #agenciaDigito, #contaDigito, #operacao, #tipoConta").val("");
+        $("#valorCreditado2").html("R$ 0,00");
+        $("#idCategoriaServico").val(1);
+        $("#idBanco").select2("val", "");
+        $("#comprovante").val("");
+        
+        listarRemessas();
+        
+    
+    }
+
+    function calcularValorCreditado() {
+            var valor = ($("#valor").val().length > 0 ? parseFloat(toFloat($("#valor").val())) : 0);
+            var comissao = <?php echo number_format($comissao, 2, ".", "")?>;
+            var tarifaTed = <?php echo number_format($tarifaTed, 2, ".", "")?>;
+            var resultado = (valor + (valor * comissao / 100) + tarifaTed);
+            $("#valorCreditado2").html("R$ " + mascaraValor(resultado.toFixed(2)));
+        }
+
+
+   
+     function pieChartCategorias() {
+         
+         $.ajax({
+             url: '<?php echo URLBASE_CLIENT  . Utils\Rotas::R_REMESSAS_RELATORIOS_CONSUMOPORCATEGORIA  ?>',
+             method: 'post',
+             dataType: 'json',
+             data: {
+                 dataInicial: $("#filtroConsumoPorCategoriaDataInicial").val(),
+                 dataFinal: $("#filtroConsumoPorCategoriaDataFinal").val(),
+                 tipoData: $("#filtroConsumoPorCategoriaTipoData").val()
+             },
+             success: function (json) {
+                 try {
+                     if (json.sucesso) {
+                         var data = [];
+                         var i = 0;
+                         var maior = 0;
+                         var iMaior = 0;
+                        for (i = 0; i < json.dados.length; i++) {
+                            if (json.dados[i].total > maior) {
+                                maior = json.dados[i].total;
+                                iMaior = i;
+                            }
+                            
+                            var d = [json.dados[i].categoria, parseFloat(json.dados[i].total), false, false];
+                            data.push(d);
+                        }
+                        
+                        if (data.length > 0) {
+                            data[iMaior][2] = true;
+                            data[iMaior][3] = true;
+                        }
+                         
+                        Highcharts.chart('pieChartCategorias', {
+                            title: {
+                                text: <?php echo $idioma->getText("graficoRemessaCategoria") ?>
+                            },
+                            credits: {
+                                enabled: true,
+                                href: "<?php echo URLBASE_CLIENT ?>",
+                                text: "<?php echo URLBASE_CLIENT ?>"
+                            },
+                            xAxis: {
+                                categories: json.categorias
+                            },
+                            series: [{
+                                type: 'pie',
+                                name: 'Valor total R$:',
+                                allowPointSelect: true,
+                                keys: ['name', 'y', 'selected', 'sliced'],
+                                data: data,
+                                showInLegend: true
+                            }]
+                        });
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+ <?php if (Utils\Geral::isCliente()) { ?>   
+    function barChartConsumoPorMes() {
+         
+         $.ajax({
+             url: '<?php echo URLBASE_CLIENT  . Utils\Rotas::R_REMESSAS_RELATORIOS_CONSUMOPORMES  ?>',
+             method: 'post',
+             dataType: 'json',
+             data: {
+                 dataInicial: $("#filtroConsumoPorMesDataInicial").val(),
+                 dataFinal: $("#filtroConsumoPorMesDataFinal").val(),
+                 tipoData: $("#filtroConsumoPorMesTipoData").val()
+             },
+             success: function (json) {
+                 try {
+                     if (json.sucesso) {
+                         var data = [];
+                         var i = 0;
+                         
+                        for (i = 0; i < json.meses.length; i++) {
+                            var d = [json.meses[i].mes, parseFloat(json.meses[i].total), false, false];
+                            data.push(d);
+                        }
+                        
+                        Highcharts.chart('barChartConsumoPorMes', {
+                            chart: {
+                                type: 'column'
+                            },
+                            title: {
+                                text: <?php echo $idioma->getText("enviosPorMes")?>
+                            },
+                            credits: {
+                                enabled: true,
+                                href: "<?php echo URLBASE_CLIENT ?>",
+                                text: "<?php echo URLBASE_CLIENT ?>"
+                            },
+                            xAxis: {
+                                type: 'category',
+                                labels: {
+                                    rotation: -45,
+                                    style: {
+                                        fontSize: '13px',
+                                        fontFamily: 'Verdana, sans-serif'
+                                    }
+                                }
+                            },
+                            yAxis: {
+                                min: 0,
+                                title: {
+                                    text: 'Valor total: R$ '
+                                }
+                            },
+                            legend: {
+                                enabled: false
+                            },
+                            tooltip: {
+                                pointFormat: 'Valor total: <b>R$ {point.y:.2f}</b>'
+                            },
+                            series: [{
+                                name: 'Mês/Ano',
+                                data: data,
+                                dataLabels: {
+                                    enabled: true,
+                                    rotation: -90,
+                                    color: '#FFFFFF',
+                                    align: 'right',
+                                    format: 'R$ {point.y:.2f}', // one decimal
+                                    y: 10, // 10 pixels down from the top
+                                    style: {
+                                        fontSize: '13px',
+                                        fontFamily: 'Verdana, sans-serif'
+                                    }
+                                }
+                            }]
+                        });
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    function barChartConsumoPorMesPorCategoria() {
+         
+         $.ajax({
+             url: '<?php echo URLBASE_CLIENT  . Utils\Rotas::R_REMESSAS_RELATORIOS_CONSUMOPORMESPORCATEGORIA  ?>',
+             method: 'post',
+             dataType: 'json',
+             data: {
+                 dataInicial: $("#filtroConsumoPorMesPorCategoriaDataInicial").val(),
+                 dataFinal: $("#filtroConsumoPorMesPorCategoriaDataFinal").val(),
+                 tipoData: $("#filtroConsumoPorMesPorCategoriaTipoData").val()
+             },
+             success: function (json) {
+                 try {
+                     if (json.sucesso) {
+                         var data = [];
+                         var i = 0;
+                        for (i = 0; i < json.grafico.length; i++) {
+                            var val = [];
+                            var valores = json.grafico[i].totais;
+                            var z = 0;
+                            for(z=0; z < valores.length; z++) {
+                                val.push(parseFloat(valores[z]));
+                            }
+                            
+                            var series = {
+                                name: json.grafico[i].categoria,
+                                data: val
+                            };
+                            
+                            data.push(series);
+                        }
+                        
+                        Highcharts.chart('barChartConsumoPorMesPorCategoria', {
+                            chart: {
+                                type: 'column'
+                            },
+                            title: {
+                                text: <?php echo $idioma->getText("graficoEnviosMesCategorias")?>
+                            },
+                            credits: {
+                                enabled: true,
+                                href: "<?php echo URLBASE_CLIENT ?>",
+                                text: "<?php echo URLBASE_CLIENT ?>"
+                            },
+                            xAxis: {
+                                categories: json.meses
+                            },
+                            yAxis: {
+                                min: 0,
+                                title: {
+                                    text: <?php echo $idioma->getText("remessaPorCategoria") ?>
+                                },
+                                stackLabels: {
+                                    enabled: true,
+                                    style: {
+                                        fontWeight: 'bold',
+                                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                                    }
+                                }
+                            },
+                            legend: {
+                                align: 'right',
+                                x: -30,
+                                verticalAlign: 'top',
+                                y: 25,
+                                floating: true,
+                                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                                borderColor: '#CCC',
+                                borderWidth: 1,
+                                shadow: false
+                            },
+                            tooltip: {
+                                headerFormat: '<b>{point.x}</b><br/>',
+                                pointFormat: '{series.name}: R$ {point.y:.2f}<br/>Total: R$ {point.stackTotal:.2f}'
+                            },
+                            plotOptions: {
+                                column: {
+                                    stacking: 'normal',
+                                    dataLabels: {
+                                        enabled: true,
+                                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                                    }
+                                }
+                            },
+                            series: data
+                        });
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    
+    function initializeCalendar() {
+        $.ajax({
+             url: '<?php echo URLBASE_CLIENT  . Utils\Rotas::R_REMESSAS_RELATORIOS_CARREGAREVENTOS ?>',
+             method: 'post',
+             dataType: 'json',
+             success: function (json) {
+                 try {
+                     if (json.sucesso) {
+                        $('#calendar').fullCalendar({
+                            defaultView: 'month',
+                            header: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'month,agendaWeek,agendaDay'
+                            },
+                            editable: false,
+                            droppable: false,
+                            events: json.eventos
+                        });
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+ <?php } ?>
+</script>
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+<div class="modal fade" id="dialogFinalizarRemessa" tabindex="-1" role="dialog" aria-labelledby="dialogFinalizarRemessa" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogFinalizarRemessaLabel"><?php echo $idioma->getText("marcarRemessaFinalizada") ?></h4>
+            </div>
+            <div class="modal-body">
+                <form id="form-finalizar" action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_FINALIZAR ?>" method="post">
+                    <input type="hidden" id="dialogFinalizarRemessaIdRemessa" name="idRemessa" />
+                    <div class="row">
+                        <div class="col col-lg-12" >
+                            <?php echo $idioma->getText("marcarRemessaDesejaContinuar") ?>
+                            <br><br>
+                        </div>
+                        
+                        <div id="dadosPagamento">
+                        </div>   
+                    </div>
+                    <br><br>
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <div class="form-group">
+                                <label><?php echo $idioma->getText("anexarComprovante") ?></label>
+                                <input type="file" id="comprovante" name="comprovante" class="form-control" />
+                                <div class="row" id="progressDocumentsContainer">
+                                    <div class="col col-lg-12">
+                                        <div class="progress">
+                                            <div style="width: 0%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" id="progressDocuments" class="progress-bar progress-bar-success">
+                                                <span class="sr-only" id="progressDocumentsLegend"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogFinalizarRemessaFechar" data-dismiss="modal"><?php echo $idioma->getText("fecharBtn") ?></button>
+                <button type="button" class="btn btn-success" id="dialogFinalizarRemessaConfirmar" onclick="confirmarFinalizarRemessa();"><?php echo $idioma->getText("confirmarFinalizacao") ?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+<div class="modal fade" id="dialogCancelarRemessa" tabindex="-1" role="dialog" aria-labelledby="dialogCancelarRemessa" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="dialogCancelarRemessaLabel"><?php echo $idioma->getText("cancelarRemessaValores") ?></h3>
+            </div>
+            <div class="modal-body">
+                <div class="col col-lg-12" >
+                <form id="form-cancelar" action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REMESSAS_CANCELAR ?>" method="post">
+                    <input type="hidden" id="dialogCancelarRemessaIdRmessa" name="idRemessa" />
+                    <br>
+                    <br>
+                        <div class="row">                            
+                            <h3><?php echo $idioma->getText("desejaRealmenteCancelar") ?></h3>
+                        </div>
+                    <?php if(Utils\Geral::isUsuario()){ ?>
+                    <label><?php echo $idioma->getText("motivoCancelamento") ?></label>
+                    <textarea type="text" class="form-control" id="motivoCancelamento" name="motivoCancelamento" rows="3" maxlength="1500" style="resize: none;"></textarea>  
+                    <?php } ?>
+                     <br>
+                    <br>
+                      <br>
+                    <br>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogCancelarRemessaFechar" data-dismiss="modal"><?php echo $idioma->getText("fecharBtn") ?></button>
+                <button type="button" class="btn btn-success" id="dialogCancelarRemessaConfirmar" onclick="confirmarCancelarRemessa();" ><?php echo $idioma->getText("cancelarPagamento") ?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+        </div>
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="dialogPagar" tabindex="-1" role="dialog" aria-labelledby="dialogPagar" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" ><?php echo $idioma->getText("pagarRemessa") ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    
+                    <div class="col col-lg-12">
+                       <?php echo $idioma->getText("valorDaRemessaSeraDebitado") ?>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogPagarRemessaFechar" data-dismiss="modal"><?php echo $idioma->getText("fecharBtn") ?></button>
+                <button type="button" class="btn btn-primary" onclick="confirmarPagamento();" id="dialogPagarSalvar" ><?php echo $idioma->getText("pagarRemessa") ?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="dialogConfirmacaoPagamento" tabindex="-1" role="dialog" aria-labelledby="dialogConfirmacaoPagamento" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" ><?php echo $idioma->getText("pagamentoEfetuado") ?></h4>
+            </div>
+            <div class="modal-body">
+                <br><br>
+                <div class="row">
+                    
+                    <div class="col col-lg-12">
+                        <?php echo $idioma->getText("recebemosSeuPagamento") ?>
+                    </div>
+                    
+                </div>
+                <br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogConfirmacaoPagamentoClose" data-dismiss="modal"><?php echo $idioma->getText("fecharBtn") ?></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+

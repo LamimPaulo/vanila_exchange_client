@@ -1,0 +1,753 @@
+<?php
+$casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"]  : 2);
+
+$taxaCompra = (isset($_data["taxaCompra"]) ? number_format($_data["taxaCompra"], $casasDecimais, ".", "")  : 0);
+$taxaVenda = (isset($_data["taxaVenda"]) ? number_format($_data["taxaVenda"], $casasDecimais, ".", "")  : 0 );
+
+$moeda = Modules\principal\Controllers\Principal::getCurrency();
+$cliente = Utils\Geral::getCliente();
+
+$mostrarBotoes = ($moeda->ativo > 0 && $moeda->statusMercado > 0 && $cliente->statusMercado > 0);
+
+$mostrarAlerta = false;
+$mensagemAlerta = "";
+
+if ($moeda->ativo < 1) {
+    $mostrarAlerta = true;
+    $mensagemAlerta = "O mercado da moeda foi encerrado!";
+} else if ($moeda->statusMercado < 1) {
+    $mostrarAlerta = true;         
+    $mensagemAlerta = "O mercado da moeda está temporariamente suspenso!";                  
+} else if ($cliente->statusMercado < 1) {
+    $mensagemAlerta = "A compra e venda de criptomoedas está temporariamente suspensa na sua conta!";
+    $mostrarAlerta = true;
+}
+
+$usuariosPermitidos = Array(15093064536678, 15040296455292, 15093064536716, 15093064536715, 15093064536725);
+
+$idioma = new \Utils\PropertiesUtils("book", IDIOMA);
+?>
+
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+<script src="<?php echo JS ?>highstock/code/highstock.js"></script>
+<script src="<?php echo JS ?>highstock/code/modules/drag-panes.js"></script>
+<script src="<?php echo JS ?>highcharts/code/modules/exporting.js"></script>
+<script src="<?php echo JS ?>highcharts/code/themes/sand-signika.js"></script>
+<script src="<?php echo JS ?>highcharts/code/themes/sand-signika.js.map"></script>
+<script src="<?php echo JS ?>highcharts/code/themes/sand-signika.src.js"></script>
+<script src="<?php echo JS ?>highcharts-lang-pt_br.js"></script>
+<!--[if lt IE 9]>
+<script src="<?php echo JS ?>highcharts/code/modules/oldie.js"></script>
+<![endif]-->
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+<style type="text/css">
+</style>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="row wrapper border-bottom white-bg page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+        <div class="col-lg-10">
+            <h2><?php echo $idioma->getText("titulo") ?></h2>
+            <ol class="breadcrumb" style="background-color: transparent !important;">
+                <li>
+                    <?php echo $idioma->getText("subTitulo") ?>
+                </li>
+                <li class="active">
+                    <strong><?php echo $idioma->getText("titulo") ?></strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+    <!-- Main content -->
+<section class="content">
+    <!-- Profile Image -->
+    
+    <?php if ($mostrarAlerta) { ?>
+    <div class="row">
+        <div class="col col-lg-12">
+            <br><br>
+            <div class="alert alert-warning text-center">
+                <h4><i class="fa fa-exclamation-triangle fa-2x" ></i> &nbsp;&nbsp; <span ><?php echo $mensagemAlerta ?> </span></h4>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+    
+    <div class="row mobile-hide">
+        <br>
+        <div class="col col-lg-12" id="coin-chart" style="height: 500px;">
+
+
+
+        </div>
+    </div>
+    
+    <div class="row">
+        
+        <br>
+        
+        <div class="col col-lg-4">
+            
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#tab-1" id="tab-compra"> <?php echo $idioma->getText("comprar") ?> - <?php echo $moeda->simbolo ?></a></li>
+                    <li class="">
+                        <a data-toggle="tab" href="#tab-2" id="tab-venda"><?php echo $idioma->getText("vender") ?> - <?php echo $moeda->simbolo ?></a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        
+                            <div class="panel panel-primary">
+
+                                <div class="panel-body" >
+                                    
+                                    
+
+                                    <div class="row">
+                                        <div class="col col-lg-12">
+
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("volumeComprar") ?></label>
+                                                <div class="input-group m-b">
+                                                    <input type="hidden" class="form-control" id="buyamountwithfee"> 
+                                                    <input type="text" class="form-control digital-currency" id="buyamount"> 
+                                                    <span class="input-group-addon" onclick="init('b', 'a');" style="cursor: pointer;"><?php echo $moeda->simbolo ?></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("preco") ?></label>
+                                                <div class="input-group m-b">
+                                                    <input type="text" class="form-control real" id="buyprice"> 
+                                                    <span class="input-group-addon" onclick="init('b', 'p');" style="cursor: pointer;"> R$ </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("totalComprar") ?></label>
+                                                <div class="input-group m-b">
+                                                    <input type="text" class="form-control real" id="buytotal"> 
+                                                    <span class="input-group-addon" onclick="init('b', 't');" style="cursor: pointer;"> R$ </span>
+                                                </div>
+                                                <!--<p>
+                                                    Taxa cobrada pela transação: <br><strong id="buytax"></strong> <br>
+                                                    Você irá receber aproximadamente: <br><strong id="buyreceive"></strong>
+                                                </p>-->
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("taxa") ?>  <label id="taxLabelBuy"></label></label>
+                                                <div class="full-width input-group m-b">
+                                                    <input type="text" disabled="true" class="form-control real disabled" id="buytaxIn" style="background-color: #e7eaec">
+                                                    <span class="input-group-addon" style="cursor: pointer;"><?php echo $moeda->simbolo ?></span>                                                    
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("receberaAprox") ?></label>
+                                                <div class="full-width input-group m-b">
+                                                    <input type="text" disabled="true" class="form-control real disabled" id="buyreceiveIn" style="background-color: #e7eaec; font-weight: bold;">
+                                                    <span class="input-group-addon" style="cursor: pointer;"><?php echo $moeda->simbolo ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-xs-12">
+                                        <div class="form-actions text-center">
+                                            <?php if (\Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_BOOK, \Utils\Constantes::CADASTRAR)) {  ?>
+                                            
+                                            <?php if ($mostrarBotoes) { ?>
+                                            <button type="button" class="btn btn-primary full-width" id="btn-order-buy" onclick="salvarOrdemCompra();">
+                                                <?php echo $idioma->getText("compraRegistrarOrdemBtn") ?>
+                                            </button>
+                                            <?php } ?>
+                                            
+                                            <?php } ?>
+                                            </div>
+                                            </div>
+                                       
+                                        
+                                    </div>
+
+                                </div>
+                            </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane m-t-0">
+                            <div class="panel panel-danger" >
+
+
+                                <div class="panel-body" >
+
+                                    <div class="row">
+                                        <div class="col col-lg-12">
+
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("volumeVender") ?></label>
+                                                <div class="input-group m-b">
+                                                    <input type="text" class="form-control digital-currency" id="sellamount"> 
+                                                    <span class="input-group-addon" onclick="init('s', 'a');" style="cursor: pointer;"><?php echo $moeda->simbolo ?></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("preco") ?></label>
+                                                <div class="input-group m-b">
+                                                    <input type="text" class="form-control real" id="sellprice"> 
+                                                    <span class="input-group-addon" onclick="init('s', 'p');" style="cursor: pointer;"> R$ </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("totalVender") ?></label>
+                                                <div class="input-group m-b">
+                                                    <input type="text" class="form-control real" id="selltotal"> 
+                                                    <span class="input-group-addon"> R$ </span>
+                                                <!--</div>
+                                                <p>
+                                                    Taxa cobrada pela transação: <br><strong id="selltax"></strong> <br>
+                                                    Você irá receber aproximadamente: <br><strong id="sellreceive"></strong>
+                                                </p>-->
+                                            </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("taxa") ?> <label id="taxLabelSell"></label></label>
+                                                <div class="full-width input-group m-b">
+                                                    <input type="text" disabled="true" class="form-control real" id="selltaxIn" style="background-color: #e7eaec"> 
+                                                    <span class="input-group-addon" style="cursor: pointer;"> R$ </span>                                                      
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label><?php echo $idioma->getText("receberaAproxVender") ?></label>
+                                                <div class="full-width input-group m-b">
+                                                    <input type="text" disabled="true" class="form-control real" id="sellreceiveIn" style="background-color: #e7eaec; font-weight: bold;">    
+                                                    <span class="input-group-addon" style="cursor: pointer;"> R$ </span>  
+                                                </div>
+                                            </div>
+                                            </div>
+                                       
+                                        
+                                        <div class="col-xs-12">
+                                        <div class="form-actions text-center">
+                                            
+                                            <?php if (\Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_BOOK, \Utils\Constantes::CADASTRAR)) {  ?>
+                                            
+                                            <?php if ($mostrarBotoes) { ?>
+                                            <button type="button" class="btn btn-danger full-width" id="btn-order-sell" onclick="salvarOrdemVenda();">
+                                                <?php echo $idioma->getText("vendaRegistrarOrdemBtn") ?>
+                                            </button>
+                                            <?php } ?>
+                                            
+                                            <?php }  ?>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="col col-lg-4 m-t-0">
+                <div class="panel-body"  style="min-height: 300px; max-height: 300px;">
+                   <div class="panel-heading" style="color: #fff;text-align: center;background-color: #1ab394">
+                    <strong><?php echo $idioma->getText("ordensDeCompra") ?></strong> 
+                </div> 
+                    
+                    <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 11px;background-color: #fff">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><?php echo $idioma->getText("cotacaoCompra") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("volumeCompra") ?> - <?php echo $moeda->simbolo ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("valorTotalCtb") ?></th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody id="buy-list">
+                            
+                        </tbody>
+                    </table>
+                    
+                </div>
+           <br><br><br><br><br><br><br><br><br>
+        </div>
+        
+        
+        <div class="col col-lg-4 m-t-0">
+                <div class="panel-body"  style="min-height: 300px; max-height: 300px;">
+                   <div class="panel-heading" style="color: #fff;text-align: center;background-color: #ed5565">
+                    <strong>Ordens de Venda</strong> 
+                </div> 
+                    <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 11px;background-color: #fff">
+                        <thead>
+                            <tr>
+                                <th class="text-center" ><?php echo $idioma->getText("cotacaoVenda") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("volumeVenda") ?> - <?php echo $moeda->simbolo ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("valorTotalVtb") ?></th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody id="sell-list">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+       <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+
+<div class="row">
+  <div class="col col-lg-12">
+                <div class="panel-body"  style="min-height: 300px">
+                   <div class="panel-heading" style="color: #fff;text-align: center;background-color: #23c6c8">
+                    
+                    <!--<button class="btn btn-success pull-right btn-xs" type="button" onclick="listarMinhasOrdens();"> 
+                        <i class="fa fa-refresh"></i> Atualizar
+                    </button>-->
+                       
+                    <strong><?php echo $idioma->getText("minhasOrdens") ?> - <?php echo $moeda->nome ?></strong>
+                    <div class="pull-left">   
+                    <input type="checkbox" class="" id="todas" name="todas" value="1"><label>&nbsp;<?php echo $idioma->getText("todas") ?>&nbsp;</label>
+                    </div>   
+
+                    
+                </div> 
+                    <div class="table-responsive">
+                    <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 11px;background-color: #fff">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><?php echo $idioma->getText("moeda") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("movimento") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("dataTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("cotacaoTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("volumeTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("valorTotalTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("executado") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("pendente") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("statusTb") ?></th>
+                                <th class="text-center"><?php echo $idioma->getText("acaoTb") ?></th>
+
+                            </tr>
+                        </thead>
+                        
+                        <tbody id="orders-list">
+                            
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+    </div>  
+</div>
+
+    <br><br>
+</section>
+    
+<div class="clearfix"></div>
+<script src="<?php echo JS ?>graficos/book.js"></script>
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+
+
+    $(document).ready(function () {
+        
+        bookCandlestick('<?php echo $moeda->simbolo ?>', 15, "min");
+        
+        $(".real").keydown(function (event) {
+            if (event.keyCode !== 9) { 
+                $(this).val(currency($(this).val(), <?php echo $casasDecimais ?>, 8, event.keyCode));
+                event.preventDefault();
+            }
+        });
+        
+        $(".digital-currency").keydown(function (event) {
+            if (event.keyCode !== 9) { 
+                $(this).val(currency($(this).val(), 8, 8, event.keyCode));
+                event.preventDefault();
+            }
+        });
+        
+        $("#buyamount").keyup(function () {
+            calcularTotal("b", "a");
+        });
+        
+        
+        $("#buyprice").keyup(function () {
+            calcularTotal("b", "p");
+        });
+        
+        
+        $("#buytotal").keyup(function () {
+            calcularTotal("b", "t");
+        });
+        
+        
+        $("#sellamount").keyup(function () {
+            calcularTotal("s", "a");
+        });
+        
+        $("#sellprice").keyup(function () {
+            calcularTotal("s", "p");
+        });
+        
+        $("#selltotal").keyup(function () {
+            calcularTotal("s", "t");
+        });
+        
+        
+        $("#tab-compra").click(function(){
+          $("#tab-compra").css("background-color", "#1ab394");
+          $("#tab-venda").css("background-color", "#fff");
+          $("#tab-compra").css("color", "#fff");
+          $("#tab-venda").css("color", "#676a6c");
+        });
+        $("#tab-venda").click(function(){
+          $(this).css("background-color", "#ed5565");
+          $("#tab-compra").css("background-color", "#fff");
+          $("#tab-venda").css("color", "#fff");
+          $("#tab-compra").css("color", "#676a6c");
+        });
+        $("#tab-compra").css("background-color", "#1ab394");
+          $("#tab-venda").css("background-color", "#fff");
+          $("#tab-compra").css("color", "#fff");
+          $("#tab-venda").css("color", "#676a6c");
+        
+        listarMinhasOrdens();
+    });
+
+    
+
+    setInterval(
+        function() {
+            listarCompras();
+            listarVendas();
+            listarMinhasOrdens();
+        },1500);
+        
+    function calcularTotal(m, f) {
+        let fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
+        let fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
+        let fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
+        
+        let amo = ($(fieldAmount).val().length > 0 ? parseFloat($(fieldAmount).val().replace(",", ".")) : 0);;
+        let fee = (m === 'b' ? parseFloat(   ($("#buyamountwithfee").val().length > 0 ? $("#buyamountwithfee").val(): 0) ): 0);
+        let amount = amo + fee;
+        let price = ($(fieldPrice).val().length > 0 ? parseFloat($(fieldPrice).val().replace(",", ".")) : 0);;
+        let total = ($(fieldTotal).val().length > 0 ? parseFloat($(fieldTotal).val().replace(",", ".")) : 0);;
+        
+        let perTax = (m === 'b' ? <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?> : <?php echo number_format($taxaVenda, $casasDecimais, ".", "")?>);
+        
+        if (f === "a") { // o usuário inseriu dados no campo amount
+            if (price > 0) { 
+                total = (amount * price);
+                $(fieldTotal).val(total.toFixed(<?php echo $casasDecimais ?>).replace(".",","));
+            } else if (total > 0) {
+                price = (amount > 0 ? (total / amount) : 0);
+                $(fieldPrice).val(price.toFixed(<?php echo $casasDecimais ?>).replace(".",","));
+            }
+        } else if (f === "p") { // o usuário inseriu dados no campo price
+            if (amount > 0) { 
+                total = (amount * price);
+                $(fieldTotal).val(total.toFixed(<?php echo $casasDecimais ?>).replace(".",","));
+            } else if (total > 0) {
+                amount = (price > 0 ? (total / price) : 0);
+                $(fieldAmount).val(amo.toFixed(8).replace(".",","));
+            }
+        } else if (f === "t") { // o usuário inseriu dados no campo total
+            if (price > 0) {
+                amount = (price > 0 ? (total / price) : 0 );
+                $(fieldAmount).val(amount.toFixed(8).replace(".",","));
+            } else if (amount > 0) { 
+                price = (amount > 0 ? (total / amount) : 0);
+                $(fieldPrice).val(price.toFixed(<?php echo $casasDecimais ?>).replace(".",","));
+            } 
+        }
+        
+        if (m === 'b') {
+            let valorTaxa = parseFloat( (amount * (perTax / 100)) );
+            let receber = parseFloat( (amount - valorTaxa) );
+            
+            //$("#buytax").html(valorTaxa.toFixed(8) + " <?php echo $moeda->simbolo ?>" + " (" + perTax.toFixed(<?php echo $casasDecimais ?>).replace(".", ",") + "%)" );
+            $("#buytaxIn").val(valorTaxa.toFixed(8));
+            $("#taxLabelBuy").html(" (" + perTax.toFixed(<?php echo $casasDecimais ?>).replace(".", ",") + "%)" );
+            //$("#buyreceive").html(receber.toFixed(8) + " <?php echo $moeda->simbolo ?>");
+            $("#buyreceiveIn").val(receber.toFixed(8));
+        } else {
+            let valorTaxa = parseFloat( (total * (perTax / 100)) );
+            let receber = parseFloat( (total - valorTaxa) );
+            
+            //$("#selltax").html(" R$ " + (valorTaxa.toFixed(<?php echo $casasDecimais ?>).replace(".",",")) + " (" + perTax.toFixed(<?php echo $casasDecimais ?>).replace(".", ",") + "%)" );
+            $("#selltaxIn").val((valorTaxa.toFixed(<?php echo $casasDecimais ?>).replace(".",",")));
+            $("#taxLabelSell").html(" (" + perTax.toFixed(<?php echo $casasDecimais ?>).replace(".", ",") + "%)" );
+            //$("#sellreceive").html(" R$ " + (receber.toFixed(<?php echo $casasDecimais ?>)).replace(".",",") );
+            $("#sellreceiveIn").val((receber.toFixed(<?php echo $casasDecimais ?>)).replace(".",",") );
+        }
+        
+    }
+
+    function salvarOrdemCompra() {
+        $("#btn-order-buy").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_COMPRAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                amount: $("#buyamount").val(),
+                price: $("#buyprice").val()
+            }, 
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarMinhasOrdens();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-order-buy").prop("disabled", false);
+            }
+        });
+    }
+    
+    function salvarOrdemVenda() {
+        $("#btn-order-sell").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_VENDER ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                amount: $("#sellamount").val(),
+                price: $("#sellprice").val()
+            }, 
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarMinhasOrdens();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-order-sell").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    function listarCompras() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_COMPRA_LISTAR ?>',
+            method: 'post',
+            dataType:'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $(".order-item-<?php echo \Utils\Constantes::ORDEM_COMPRA ?>").remove();
+                        $("#buy-list").append(json.html);
+                    } else {
+                        $(".order-item-<?php echo \Utils\Constantes::ORDEM_COMPRA ?>").remove();
+                        showNotyAlert(json.mensagem, "e");
+                        
+                        if (json.redirect) {
+                            location = json.url;
+                        }
+                    }
+                } catch (e) {
+                    $(".order-item-<?php echo \Utils\Constantes::ORDEM_COMPRA ?>").remove();
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function listarVendas() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_VENDA_LISTAR ?>',
+            method: 'post',
+            dataType:'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $(".order-item-<?php echo \Utils\Constantes::ORDEM_VENDA ?>").remove();
+                        $("#sell-list").append(json.html);
+                    } else {
+                        $(".order-item-<?php echo \Utils\Constantes::ORDEM_VENDA ?>").remove();
+                        showNotyAlert(json.mensagem, "e");
+                        if (json.redirect) {
+                            location = json.url;
+                        }
+                    }
+                } catch (e) {
+                    $(".order-item-<?php echo \Utils\Constantes::ORDEM_VENDA ?>").remove();
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function listarMinhasOrdens() {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_LISTAR ?>',
+            method: 'post',
+            dataType:'json',
+            data:{ 
+                todas: $("#todas").is(":checked")  
+            },  
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $(".my-order-item").remove();
+                        $("#orders-list").append( $(json.html));
+                    } else {
+                        $(".my-order-item").remove();
+                        showNotyAlert(json.mensagem, "e");
+                        if (json.redirect) {
+                            location = json.url;
+                        }
+                    }
+                } catch (e) {
+                    $(".my-order-item").remove();
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function modalCancelar(order) {
+        $("#modalCancelarOrdem").modal();
+        $("#modalCancelarOrdemCodigo").val(order);
+    }
+    
+    function cancelar(order) {
+        $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_CANCELAR ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                ordem: order
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        //$("#modalCancelarOrdemClose").prop("disabled", false).trigger("click");
+                        listarMinhasOrdens();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function configOrder(tipo, cotacao, volume) {
+        if (tipo === "<?php echo \Utils\Constantes::ORDEM_COMPRA ?>") {
+            
+            $("#tab-compra").trigger("click");
+            $("#buyamount").val(volume);
+            $("#buyprice").val(cotacao).trigger("keyup");
+        } else {
+            volume = parseFloat(volume);
+            var fee = parseFloat((volume / (1- <?php echo number_format($taxaVenda, $casasDecimais, ".", "")?> / 100)) - volume);
+            $("#buyamountwithfee").val(fee.toFixed(8));
+            $("#tab-venda").trigger("click");
+            $("#sellamount").val(volume.toFixed(8));
+            $("#sellprice").val(cotacao).trigger("keyup");
+        }
+    }
+    
+    
+    
+    function init(m, f) {
+        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INIT ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        var fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
+                        var fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
+                        var fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
+                        
+                        if (f === 'a') {
+                            if (m === 'b') {
+                                $(fieldTotal).val(json.saldobrl.replace(".", ""));
+                            } else {
+                                $(fieldAmount).val(json.saldobtc.replace(".", ","));
+                            }
+                        } else if (f === 'p') {
+                            if (m === 'b') {
+                                $(fieldPrice).val(json.venda);
+                            } else {
+                                $(fieldPrice).val(json.compra);
+                            }
+                        } else if (f === 't') {
+                            $(fieldTotal).val(json.saldobrl.replace(".", ""));
+                        }
+                        
+                        calcularTotal(m, f);
+                    }
+                } catch (e) {
+                }
+                
+            }
+        });
+    }
+    
+</script>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+
+
+
+
+<div class="modal inmodal" id="modalCancelarOrdem" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <h4 class="modal-title"><?php echo $idioma->getText("cancelarOrdem") ?></h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <?php echo $idioma->getText("certezaCancelarOrdem") ?>
+                </p>
+                <input type="hidden"  class="form-control" id="modalCancelarOrdemCodigo">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal" id="modalCancelarOrdemClose"><?php echo $idioma->getText("voltarBtn") ?></button>
+                <button type="button" class="btn btn-danger" onclick="cancelar();"  id="modalCancelarOrdemConfirmar"><?php echo $idioma->getText("cancelarBtn") ?></button>
+            </div>
+        </div>
+    </div>
+</div>

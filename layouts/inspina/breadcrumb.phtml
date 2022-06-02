@@ -1,0 +1,26 @@
+
+<?php
+$paridade = Modules\principal\Controllers\Principal::getParity();
+$idioma = (isset($_data["idiomaMenu"]) ? $_data["idiomaMenu"] : null);
+?>
+
+<div class="content-wrapper">
+  <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $paridade->moedaBook->mainColor ?>) !important;">
+    <div class="col-xs-8">
+      <ol class="breadcrumb m-t-md" style="background-color: transparent !important;">
+          <?php if ($idioma->has("subTitulo")) {?>
+          <li>
+            <?php echo $idioma->getText("subTitulo") ?>
+          </li>
+          <?php } ?>
+          <li class="active">
+              <strong><?php echo $idioma->getText("titulo") ?></strong>
+          </li>
+      </ol>
+    </div>
+
+    <div class="col-xs-4">
+    <?php Utils\Layout::append("inspina/flags", $_data) ?>
+    </div>
+  </div>
+</div>

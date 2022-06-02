@@ -1,0 +1,124 @@
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php
+$moeda = \Modules\principal\Controllers\Principal::getCurrency();
+?>
+<style>
+    code {
+        white-space: pre-wrap;
+        color: #047cc1;
+    }
+    code i {
+        color: #545454;
+    }
+</style>
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+    
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+                <div class="col-lg-10">
+                    <h2>Contato</h2>
+                    <ol class="breadcrumb" style="background-color: transparent !important;">
+                        <li>
+                            Documentação - API
+                        </li>
+                        <li class="active">
+                            <strong>Contato</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>
+<br>     
+<div class="wrapper wrapper-content">
+    <div class="col-lg-12">
+                    <div class="wrapper wrapper-content animated fadeInRight">
+
+                        <div class="ibox-content m-b-sm border-bottom">
+                            <div class="text-center p-lg">
+                                <h2>Contato</h2>
+                                
+                            </div>
+                        </div>
+
+                        
+                        <div class="faq-item">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <a data-toggle="collapse" href="#faq1" class="faq-question collapsed" aria-expanded="false">Enviar Contato</a>
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="fa fa-clock-o"></i> <small>Terça-feira 18:21 - 15/05/2018</small>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div id="faq1" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                        <div class="faq-answer">
+                                            Método responsável por enviar um email de contato. <br>
+
+Endpoint: <b>/api/contato/send</b></br>
+Verbo: <b>POST</b></p>
+    
+<b>Parâmetros:</b> </br>
+<b>@param String email</b>          =   (Obrigatório) Email do cliente</br>
+<b>@param String nome</b>           =   (Obrigatório) Nome do cliente</br>
+<b>@param String telefone</b>       =   (Obrigatório) Telefone do cliente</br>
+<b>@param String departamento</b>   =   (Obrigatório) Departamento para o qual a mensagem é encaminhada</br>
+<b>@param String mensagem</b>       =   (Obrigatório) Mensagem</br>
+
+<br><br>
+<b>Exemplo de retorno com sucesso:</b><br><br>
+
+
+<code>
+    {
+        "sucesso": true
+    }
+</code>
+
+<b>Exemplo de retorno com erro:</b></p> 
+<code>
+{
+    "sucesso": false,
+    "mensagem": "Mensagem descritiva de erro"
+}
+</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                    </div>
+</div>
+</div>
+
+
+    
+    <div class="clearfix"></div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+         $(document).ready(function(){
+
+             var editor_one = CodeMirror.fromTextArea(document.getElementById("code1"), {
+                 lineNumbers: true,
+                 matchBrackets: true,
+                 styleActiveLine: true,
+                 theme:"ambiance"
+             });
+        });
+    </script>
+
+

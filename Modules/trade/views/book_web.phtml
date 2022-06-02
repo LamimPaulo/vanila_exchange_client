@@ -1,0 +1,2029 @@
+<?php
+
+$idioma = new \Utils\PropertiesUtils("book", IDIOMA);
+$casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"]  : 2);
+
+$taxaCompra = (isset($_data["compra"]) ? number_format($_data["compra"], $casasDecimais, ".", "")  : 0);
+$taxaVenda = (isset($_data["venda"]) ? number_format($_data["venda"], $casasDecimais, ".", "")  : 0 );
+
+$paridade = Modules\principal\Controllers\Principal::getParity();
+
+$cliente = Utils\Geral::getCliente();
+
+$mostrarBotoes = ($paridade->ativo > 0 && $paridade->statusMercado > 0 && $cliente->statusMercado > 0 && $paridade->moedaBook->statusMercado > 0 && $paridade->moedaBook->ativo > 0);
+
+$mostrarAlerta = false;
+$mensagemAlerta = "";
+
+if ($paridade->ativo < 1 || $paridade->moedaBook->ativo < 1) {
+    $mostrarAlerta = true;
+    $mensagemAlerta = $idioma->getText("mercadoEncerrado");
+} else if ($paridade->statusMercado < 1 || $paridade->moedaBook->statusMercado < 1) {
+    $mostrarAlerta = true;         
+    $mensagemAlerta = $idioma->getText("mercadoSupenso");                  
+} else if ($cliente->statusMercado < 1) {
+    $mensagemAlerta = $idioma->getText("compraVendaSuspensaConta");
+    $mostrarAlerta = true;
+}
+
+$_data["idiomaMenu"] = $idioma;
+?>
+<style>
+
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts_book", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+
+<div id="container">
+    <div id="theme" class="crypt-light">
+        <div class="container-fluid">
+            <div class="row sm-gutters ">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-2">
+                    <div class="crypt-market-status mt-4">
+                        <div>
+                            <ul class="nav nav-tabs" id="crypt-tab">
+                                <li role="presentation"><a href="#usd" class="active" data-toggle="tab">usdt</a></li>
+                                <li role="presentation"><a href="#btc" data-toggle="tab">btc</a></li>
+                                <li role="presentation"><a href="#eth" data-toggle="tab">eth</a></li>
+                            </ul>
+                            <div class="tab-content crypt-tab-content">
+                                <div role="tabpanel" class="tab-pane active mb-4" id="usd">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Coin</th>
+                                            <th scope="text-center">Last Price</th>
+                                            <th class="text-right">Change</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="crypt-table-hover">
+                                        <tr>
+                                            <td class="align-middle">
+                                                <img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> BTC/USDT</td>
+                                            <td class="crypt-down">
+                                                <span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00004356</span>
+                                            </td>
+                                            <td class="text-right">
+                                                <b class="crypt-down">-5.4%</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> LTC/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00005640</span></td>
+                                            <td class="text-right"><b class="crypt-up">+6.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ETH/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00002340</span></td>
+                                            <td class="text-right"><b class="crypt-down">-7.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> DOGE/USDT</td>
+                                            <td class="crypt-up align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00003644</span></td>
+                                            <td class="text-right"><b class="crypt-up">+3.7%</b> </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ERC20/USDT</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td class="text-right"> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> RIF/USDT</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td class="text-right"><span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> BTC/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00004356</span></td>
+                                            <td class="text-right"><b class="crypt-down">-5.4%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> LTC/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00005640</span></td>
+                                            <td class="text-right"><b class="crypt-up">+6.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ETH/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00002340</span></td>
+                                            <td class="text-right"><b class="crypt-down">-7.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> DOGE/USDT</td>
+                                            <td class="crypt-up align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00003644</span></td>
+                                            <td class="text-right"><b class="crypt-up">+3.7%</b> </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ERC20/USDT</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td class="text-right"> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> RIF/USDT</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td class="text-right"><span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> BTC/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00004356</span></td>
+                                            <td class="text-right"><b class="crypt-down">-5.4%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> LTC/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00005640</span></td>
+                                            <td class="text-right"><b class="crypt-up">+6.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ETH/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00002340</span></td>
+                                            <td class="text-right"><b class="crypt-down">-7.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> DOGE/USDT</td>
+                                            <td class="crypt-up align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00003644</span></td>
+                                            <td class="text-right"><b class="crypt-up">+3.7%</b> </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ERC20/USDT</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td class="text-right"> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> RIF/USDT</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td class="text-right"><span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> BTC/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00004356</span></td>
+                                            <td class="text-right"><b class="crypt-down">-5.4%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> LTC/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00005640</span></td>
+                                            <td class="text-right"><b class="crypt-up">+6.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ETH/USDT</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00002340</span></td>
+                                            <td class="text-right"><b class="crypt-down">-7.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> DOGE/USDT</td>
+                                            <td class="crypt-up align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.00003644</span></td>
+                                            <td class="text-right"><b class="crypt-up">+3.7%</b> </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ERC20/USDT</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td class="text-right"> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> RIF/USDT</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td class="text-right"><span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="btc">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Coin</th>
+                                            <th scope="col">Last Price</th>
+                                            <th scope="col">Change</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ETH/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.0000234</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <b class="crypt-down">-7.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> EOS/BTC</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000056</span></td>
+                                            <td> <span class="d-block">5.3424984</span> <b class="crypt-down">-5.4%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> LTC/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.0000564</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> DOGE/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <b class="crypt-up">+3.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> XMR/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span>3.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> LINK/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> FTN/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> RIF/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> NEO/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> TRX/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> LSK/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> XRP/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> CNB/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> VEN/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> DASH/BTC</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="eth">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Coin</th>
+                                            <th scope="col">Last Price</th>
+                                            <th scope="col">Change</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> BTC/ETH</td>
+                                            <td class="crypt-down align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000056</span></td>
+                                            <td> <span class="d-block">5.3424984</span> <b class="crypt-down">-5.4%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> LTC/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.0000564</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> ERC20/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.0000234</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <b class="crypt-down">-7.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> DOGE/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <b class="crypt-up">+3.7%</b> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> XMR/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span>3.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> HMB/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> FTN/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> MGC/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> IOTE/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> YTA/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> PQR/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> PAX/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.000344</span></td>
+                                            <td> <span class="d-block">6.6768876</span> <span class="crypt-up"><b>+3.7%</b></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> VBT/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> CCE/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> QTUM/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><img class="crypt-star pr-1" alt="star" src="images/star.svg" width="15"> BOA/ETH</td>
+                                            <td class="align-middle"><span class="pr-2" data-toggle="tooltip" data-placement="right" title="$ 0.05">0.56723</span></td>
+                                            <td> <span class="d-block">9.34546</span> <span>6.7%</span> </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-8">
+                    <div class="crypt-gross-market-cap mt-4">
+                        <div class="row">
+                            <div class="col-3 col-sm-6 col-md-6 col-lg-6">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-6 col-lg-6">
+                                        <p>84568.85</p>
+                                        <p>≈$8378.6850 USDT</p>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6 col-lg-6">
+                                        <p>24H Change</p>
+                                        <p class="crypt-down">-0.0234230 -3.35%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 col-sm-2 col-md-3 col-lg-2">
+                                <p>24H High</p>
+                                <p class="crypt-up">0.435453</p>
+                            </div>
+                            <div class="col-3 col-sm-2 col-md-3 col-lg-2">
+                                <p>24H Low</p>
+                                <p class="crypt-down">0.09945</p>
+                            </div>
+                            <div class="col-3 col-sm-2 col-md-3 col-lg-2">
+                                <p>24H Volume</p>
+                                <p>12.33445</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tradingview-widget-container">
+                        <div id="tv" width="100%" height="55%"></div>
+                        <!--
+                        <iframe style="border: none;" seamless="seamless" src="<?php //echo DIR_TV ?>/index.html?lang=<?php //echo $idioma->getLang()?>&symbol=<?php //echo $paridade->symbol ?>" width="100%" height="55%"></iframe>
+                        -->
+
+
+
+                        <div class="crypt-boxed-area">
+
+                            <div class="row no-gutters">
+                                <div class="col-md-6">
+                                    <div class="crypt-buy-sell-form">
+                                        <p>Buy <span class="crypt-up">BTC</span> <span class="fright">Available: <b class="crypt-up">0.00 BTC</b></span></p>
+                                        <div class="crypt-buy">
+                                            <div class="input-group mb-1">
+                                                <div class="input-group-prepend"> <span class="input-group-text">Price</span> </div>
+                                                <input type="text" class="form-control" placeholder="0.02323476" readonly>
+                                                <div class="input-group-append"> <span class="input-group-text">USDT</span> </div>
+                                            </div>
+                                            <div class="input-group mb-1">
+                                                <div class="input-group-prepend"> <span class="input-group-text">Amount</span> </div>
+                                                <input type="number" class="form-control">
+                                                <div class="input-group-append"> <span class="input-group-text">BTC</span> </div>
+                                            </div>
+                                            <div class="input-group mb-1">
+                                                <div class="input-group-prepend"> <span class="input-group-text">Total</span> </div>
+                                                <input type="text" class="form-control" readonly>
+                                                <div class="input-group-append"> <span class="input-group-text">BTC</span> </div>
+                                            </div>
+                                            <div>
+                                                <p>Fee: <span class="fright">100%x0.2=0.02</span></p>
+                                            </div>
+                                            <div class="text-center mt-1 mb-1 crypt-up">
+                                                <p style="margin-bottom: 0.6rem !important;">You will approximately pay</p>
+                                                <h4>0.09834 BTC</h4></div>
+                                            <div class="menu-green"><a href="" class="crypt-button-green-full">Buy</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="crypt-buy-sell-form">
+                                        <p>Sell <span class="crypt-down">BTC</span> <span class="fright">Available: <b class="crypt-down">0.00 BTC</b></span></p>
+                                        <div class="crypt-sell">
+                                            <div class="input-group mb-1">
+                                                <div class="input-group-prepend"> <span class="input-group-text">Price</span> </div>
+                                                <input type="text" class="form-control" placeholder="0.02323476" readonly>
+                                                <div class="input-group-append"> <span class="input-group-text">USDT</span> </div>
+                                            </div>
+                                            <div class="input-group mb-1">
+                                                <div class="input-group-prepend"> <span class="input-group-text">Amount</span> </div>
+                                                <input type="number" class="form-control">
+                                                <div class="input-group-append"> <span class="input-group-text">BTC</span> </div>
+                                            </div>
+                                            <div class="input-group mb-1">
+                                                <div class="input-group-prepend"> <span class="input-group-text">Total</span> </div>
+                                                <input type="text" class="form-control" readonly>
+                                                <div class="input-group-append"> <span class="input-group-text">BTC</span> </div>
+                                            </div>
+                                            <div>
+                                                <p style="margin-bottom: 0.6rem !important;">Fee: <span class="fright">100%x0.2=0.02</span></p>
+                                            </div>
+                                            <div class="text-center mt-1 mb-1 crypt-down">
+                                                <p>You will approximately pay</p>
+                                                <h4>0.09834 BTC</h4></div>
+                                            <div class=" menu-green"><a href="" class="crypt-button-red-full">Sell</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-3 col-xxl-2">
+                    <div class="crypt-market-status mt-4">
+                        <div>
+                            <ul class="nav nav-tabs">
+                                <li role="presentation"><a href="#history" class="active" data-toggle="tab">Order Book</a></li>
+                                <li role="presentation"><a href="#market-trading" data-toggle="tab">market trading</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="history">
+                                    <table class="table table-striped" style="margin-bottom: 0 !important;">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Price</th>
+                                            <th class="text-right" scope="col">Quantity</th>
+                                            <th class="text-right" scope="col">Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr><tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr><tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-down">6590.08</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <h6 class="text-center">29384798 <span>938475</span></h6>
+                                    <table class="table table-striped">
+                                        <tbody>
+                                        <tr>
+                                            <td class="crypt-up">4300.67</td>
+                                            <td class="text-right">0.0000567</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">9510.56</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">9080.67</td>
+                                            <td class="text-right">0.000056</td>
+                                            <td class="text-right">5.3424984</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">2346.64</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">5478.87</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">5689.78</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">4518.56</td>
+                                            <td class="text-right">0.0000567</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">6900.67</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">6898.56</td>
+                                            <td class="text-right">0.0000567</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">7894.34</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">8765.90</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">5674.76</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">3452.09</td>
+                                            <td class="text-right">0.0000567</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">7689.65</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">3468.34</td>
+                                            <td class="text-right">0.0000567</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">8794.12</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">2315.86</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">463.98</td>
+                                            <td class="text-right">0.0000234</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="crypt-up">673.67</td>
+                                            <td class="text-right">0.0000567</td>
+                                            <td class="text-right">4.3456600</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="market-trading">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Time</th>
+                                            <th class="text-right">Amount</th>
+                                            <th class="text-right">Volume</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody >
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">22:35:59</td>
+                                            <td class="text-right">0.0000564</td>
+                                            <td class="text-right">6.6768876</td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row sm-gutters">
+                <div class="col-xl-5">
+
+                </div>
+                <div class="col-xl-12">
+                    <div>
+                        <div class="crypt-market-status">
+                            <div>
+                                <ul class="nav nav-tabs">
+                                    <li role="presentation"><a href="#active-orders" class="active" data-toggle="tab">Active Orders</a></li>
+                                    <li role="presentation"><a href="#closed-orders" data-toggle="tab">Closed Orders</a></li>
+                                    <li role="presentation"><a href="#balance" data-toggle="tab">Balance</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="active-orders">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Moeda</th>
+                                                <th scope="col">Movimento</th>
+                                                <th scope="col">Data</th>
+                                                <th scope="col">Cotação</th>
+                                                <th scope="col">Volume</th>
+                                                <th scope="col">Valor Total</th>
+                                                <th scope="col">Pendente</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                        <div class="no-orders text-center p-160"><img src="images/empty.svg" alt="no-orders"></div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="closed-orders">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Moeda</th>
+                                                <th scope="col">Movimento</th>
+                                                <th scope="col">Data</th>
+                                                <th scope="col">Cotação</th>
+                                                <th scope="col">Volume</th>
+                                                <th scope="col">Valor Total</th>
+                                                <th scope="col">Pendente</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="closed-orders">
+                                            <tr>
+                                                <th>22:35:59</th>
+                                                <td class="crypt-up">Buy</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.0003456</td>
+                                                <td>5.3424984</td>
+                                            </tr>
+                                            <tr>
+                                                <th>22:35:59</th>
+                                                <td class="crypt-down">Sell</td>
+                                                <td class="crypt-down">0.000056</td>
+                                                <td class="crypt-down">0.000056</td>
+                                                <td class="crypt-down">0.0003456</td>
+                                                <td>5.3424984</td>
+                                            </tr>
+                                            <tr>
+                                                <th>22:35:59</th>
+                                                <td class="crypt-up">Buy</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.0003456</td>
+                                                <td>5.3424984</td>
+                                            </tr>
+                                            <tr>
+                                                <th>22:35:59</th>
+                                                <td class="crypt-down">Sell</td>
+                                                <td class="crypt-down">0.000056</td>
+                                                <td class="crypt-down">0.000056</td>
+                                                <td class="crypt-down">0.0003456</td>
+                                                <td>5.3424984</td>
+                                            </tr>
+                                            <tr>
+                                                <th>22:35:59</th>
+                                                <td class="crypt-up">Buy</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.0003456</td>
+                                                <td>5.3424984</td>
+                                            </tr>
+                                            <tr>
+                                                <th>22:35:59</th>
+                                                <td class="crypt-down">Sell</td>
+                                                <td class="crypt-down">0.000056</td>
+                                                <td class="crypt-down">0.000056</td>
+                                                <td class="crypt-down">0.0003456</td>
+                                                <td>5.3424984</td>
+                                            </tr>
+                                            <tr>
+                                                <th>22:35:59</th>
+                                                <td class="crypt-up">Buy</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.0003456</td>
+                                                <td>5.3424984</td>
+                                            </tr>
+                                            <tr>
+                                                <th>22:35:59</th>
+                                                <td class="crypt-down">Sell</td>
+                                                <td class="crypt-down">0.000056</td>
+                                                <td class="crypt-down">0.000056</td>
+                                                <td class="crypt-down">0.0003456</td>
+                                                <td>5.3424984</td>
+                                            </tr>
+                                            <tr>
+                                                <th>22:35:59</th>
+                                                <td class="crypt-up">Buy</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.000056</td>
+                                                <td class="crypt-up">0.0003456</td>
+                                                <td>5.3424984</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="balance">
+                                        <table class="table table-striped ">
+                                            <thead>
+                                            <tr>
+                                                <th width="30px"></th>
+                                                <th class="text-left">Moeda</th>
+                                                <th class="text-center">Em Ordem</th>
+                                                <th class="text-right">Disponivel</th>
+                                                <th class="text-right">Total</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="balance">
+                                            <tr>
+                                                <th width="30px"></th>
+                                                <th>BTC</th>
+                                                <td class="text-center">0.0000564</td>
+                                                <td class="text-right">6.6768876</td>
+                                                <td class="text-right">6.6768876</td>
+                                            </tr>
+                                            <tr>
+                                                <th width="30px"></th>
+
+                                                <th>ETC</th>
+                                                <td class="text-center">0.000056</td>
+                                                <td class="text-right">5.3424984</td>
+                                                <td class="text-right">6.6768876</td>
+                                            </tr>
+                                            <tr>
+                                                <th width="30px"></th>
+                                                <th>LTC</th>
+                                                <td class="text-center">0.0000234</td>
+                                                <td class="text-right">4.3456600</td>
+                                                <td class="text-right">6.6768876</td>
+                                            </tr>
+                                            <tr>
+                                                <th width="30px"></th>
+                                                <th>XMR</th>
+                                                <td class="text-center">0.0000234</td>
+                                                <td class="text-right">4.3456600</td>
+                                                <td class="text-right">6.6768876</td>
+                                            </tr>
+                                            <tr>
+                                                <th width="30px"></th>
+                                                <th>BIT</th>
+                                                <td class="text-center">0.0000567</td>
+                                                <td class="text-right">4.3456600</td>
+                                                <td class="text-right">6.6768876</td>
+                                            </tr>
+                                            <tr>
+                                                <th width="30px"></th>
+                                                <th>EGF</th>
+                                                <td class="text-center">0.0000234</td>
+                                                <td class="text-right">4.3456600</td>
+                                                <td class="text-right">6.6768876</td>
+                                            </tr>
+                                            <tr>
+                                                <th width="30px"></th>
+                                                <th>EER</th>
+                                                <td class="text-center">0.0000567</td>
+                                                <td class="text-right">4.3456600</td>
+                                                <td class="text-right">6.6768876</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<script src="<?php echo JS; ?>underscore-min.js"></script>
+<script src="https://js.pusher.com/6.0/pusher.min.js"></script>
+<script src="<?php echo JS; ?>underscore-min.js"></script>
+<script src="https://js.pusher.com/6.0/pusher.min.js"></script>
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+<div class="thirds-row">
+    <script type="text/javascript">
+        new TradingView.widget({
+            "container_id": 'tv',
+            "symbol": "BITSTAMP:BTCUSD",
+            "interval": "D",
+            "timezone": "exchange",
+            "style": "1",
+            "toolbar_bg": "#f1f3f6",
+            "withdateranges": true,
+            "hide_side_toolbar": true,
+            "hide_top_toolbar": true,
+            "hideideas": true,
+            "allow_symbol_change": false,
+            "save_image": false,
+            "hideideas": true,
+            "show_popup_button": false
+        });
+    </script>
+
+<script>
+            var amountCompra = 0;
+            var amountVenda = 0;
+            var precoCompra = 0;
+            var precoVenda = 0;
+            var balanceMode = 1;
+            var somenteFavoritas = false;
+            var casasDecimaisReal = <?php echo $paridade->moedaTrade->casasDecimais ?>;
+            var pageWidth, pageHeight;
+            var data = "todos";
+            var tipo = "todos";
+            var limite = 10;
+            var listMinhasOrdens = "";
+            var listTrade = "";
+            var basePage = {
+                width: 2048,
+                height: 768,
+                scale: 1,
+                scaleX: 1,
+                scaleY: 1
+              };
+        
+            
+    $(document).ready(function () {
+        //listarBook();
+        //listarParidadesBook();
+        //listarSaldoMoedasBook();
+        //setInterval(listarParidadesBook, 10000);
+       // setInterval(listarSaldoMoedasBook, 5000);
+        //setInterval(listarBook, 3000);   
+        
+        // Enable pusher logging - don't include this in production
+        //Pusher.logToConsole = true;
+
+        //BOOK
+        var pusherBook = new Pusher('6d6796b91c225c158e45', {
+          cluster: 'mt1'
+          /*auth: {
+            params: {
+              param1: 'value1'
+                }
+            }*/
+        });
+        
+//        var pusherHistory = new Pusher('d440a9423226d7d609c1', {
+//          cluster: 'mt1'
+//          /*auth: {
+//            params: {
+//              param1: 'value1'
+//                }
+//            }*/
+//        });
+
+        var channel = pusherBook.subscribe('<?php echo str_replace(":", "_", $paridade->symbol) ; ?>');
+        channel.bind('book', function(json) {
+            console.log(JSON.stringify(json));
+            if (json.success) {
+                listarBookVenda(json.result.sell);
+                listarBookCompra(json.result.buy);
+            } else {
+                showNotyAlert(json.mensagem, "e");
+            }
+        });
+        
+//        var channel = pusherHistory.subscribe('<?php //echo Utils\Criptografia::encriptyPostId($paridade->id); ?>');
+//        channel.bind('history', function(json) {
+//            //console.log(JSON.stringify(json));
+//            if (json.sucesso) {
+//                
+//                console.log(json);
+//                
+//                
+//            } else {
+//                showNotyAlert(json.mensagem, "e");
+//            }
+//        });
+        
+
+        $("#radioDatas input").on('change', function(){
+            data = $('input[name="optionsBtc"]:checked', '#radioDatas').val();
+            extratoCliente();
+        });
+
+        $("#radioTipoBtc input").on('change', function(){
+            tipo = $('input[name="optionsBtc"]:checked', '#radioTipoBtc').val();
+            extratoCliente();
+        });
+        
+        $("#radioLimite input").on('change', function(){
+            limite = $('input[name="optionsBtc"]:checked', '#radioLimite').val();
+            extratoCliente();
+        });
+                
+        $(".real").each(function () {
+            currencymask($(this), 8, casasDecimaisReal, ",");
+        });
+        $(".digital-currency").each(function () {
+            currencymask($(this), 8, <?php echo $paridade->moedaBook->casasDecimais ?>, ",");
+        });
+
+       $("#ticker-paridade").change(function () {
+            listarParidadesBook();
+        }); 
+
+        $("#ticker-search").keyup(function () {
+            filtrarParidadesBook();
+        });
+
+        $("#balances-search").keyup(function () {
+            filtrarMoedasBook();
+        });
+        
+        $("#btn-blocked-balance-show").click(function () {
+            $(".table-blocked-balance").show();
+            balanceMode = 1;
+        });
+
+        $("#btn-blocked-balance-hide").click(function () {
+            $(".table-blocked-balance").hide();
+            balanceMode = 2;
+        });
+       
+        $("#buyamount").keyup(function () {
+            calcularTotal("b", "a");
+        });
+        
+        
+        $("#buyprice").keyup(function () {
+            calcularTotal("b", "p");
+        });
+        
+        
+        $("#buytotal").keyup(function () {
+            calcularTotal("b", "t");
+        });
+        
+        
+        $("#sellamount").keyup(function () {
+            calcularTotal("s", "a");
+        });
+        
+        $("#sellprice").keyup(function () {
+            calcularTotal("s", "p");
+        });
+        
+        $("#selltotal").keyup(function () {
+            calcularTotal("s", "t");
+        });
+        
+
+    });
+    
+        $("#tab-market").click(function () {
+            $("#tab-market").css( 'font-weight', 'bold' ); 
+            $("#tab-myorders").css( 'font-weight', 'normal' );
+            $("#tab-tradehistoric").css( 'font-weight', 'normal' );  
+            $("#tab-mytrades").css( 'font-weight', 'normal' ); 
+            clearInterval(listMinhasOrdens);
+            clearInterval(listTrade);
+        });
+        
+        $("#tab-myorders").click(function () {
+            $("#tab-myorders").css( 'font-weight', 'bold' );  
+            $("#tab-market").css( 'font-weight', 'normal' );
+            $("#tab-tradehistoric").css( 'font-weight', 'normal' );  
+            $("#tab-mytrades").css( 'font-weight', 'normal' ); 
+            listarMinhasOrdens();
+            listMinhasOrdens = setInterval(listarMinhasOrdens, 5000);
+            clearInterval(listTrade);
+        });
+        
+        $("#tab-tradehistoric").click(function () {
+            $("#tab-tradehistoric").css( 'font-weight', 'bold' );    
+            $("#tab-market").css( 'font-weight', 'normal' );
+            $("#tab-myorders").css( 'font-weight', 'normal' );  
+            $("#tab-mytrades").css( 'font-weight', 'normal' );
+            listarTrade();
+            listTrade = setInterval(listarTrade, 5000);
+            clearInterval(listMinhasOrdens);
+        });
+        
+        $("#tab-mytrades").click(function () {
+            $("#tab-mytrades").css( 'font-weight', 'bold' );   
+            $("#tab-tradehistoric").css( 'font-weight', 'normal' );
+            $("#tab-market").css( 'font-weight', 'normal' );
+            $("#tab-myorders").css( 'font-weight', 'normal' ); 
+            extratoCliente();
+            clearInterval(listMinhasOrdens);
+            clearInterval(listTrade);
+            
+        });
+        
+        
+        
+        $(function(){
+          var $page = $('.page_content');
+
+          getPageSize();
+          scalePages($page, pageWidth, pageHeight);
+          $(window).resize(_.debounce(function () {
+            getPageSize();            
+            scalePages($page, pageWidth, pageHeight);
+          }, 150));
+
+
+        function getPageSize() {
+          pageHeight = $('#container').height();
+          pageWidth = $('#container').width();
+        }
+
+        function scalePages(page, maxWidth, maxHeight) {                              
+          scaleX = maxWidth / basePage.width;
+          scaleY = maxHeight / basePage.height;
+          basePage.scaleX = scaleX;
+          basePage.scaleY = scaleY;
+          basePage.scale = (scaleX > scaleY) ? scaleY : scaleX;
+
+          var newLeftPos = Math.abs(Math.floor(((basePage.width * basePage.scale) - maxWidth)/2));
+          var newTopPos = Math.abs(Math.floor(((basePage.height * basePage.scale) - maxHeight)/2));
+
+          page.attr('style', '-webkit-transform:scale(' + basePage.scale + ');left:' + newLeftPos + 'px;top:' + newTopPos + 'px;');
+        }
+        });
+        
+
+    
+    
+    function extratoCliente() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_EXTRATO_FILTRAR ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                data: data,
+                tipo: tipo,
+                limite: limite
+            },
+            beforeSend: function () {
+                $(".btn-filtro-extrato").addClass("disabled");
+                //$(".btn-filtro-extrato").trigger("change");
+            },
+            error: function () {
+                $(".btn-filtro-extrato").removeClass("disabled");
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {                        
+                        $("#myTrades").html(json.html);
+                    } else {
+                        
+                    }
+                } catch (e) {
+                   
+                }
+                $(".btn-filtro-extrato").removeClass("disabled");
+            }
+        });
+    }
+
+    function mudarParidade(paridade) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CURRENCY ?>',
+            dataType: 'json',
+            method: 'post',
+            data: {
+                codigo: paridade
+            },
+            beforeSend: function () {
+
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+
+                        location = location.href;
+
+                    } else {
+                        
+                    }
+                } catch (e) {
+                   
+                }
+
+            },
+            complete: function () {
+
+            }
+        });
+    }
+
+    function setSomenteFavoritas() {
+        somenteFavoritas = !somenteFavoritas;
+
+        if (somenteFavoritas) {
+            $("#filtro-favoritas").removeClass("fa-star-o").addClass("fa-star");
+        } else {
+            $("#filtro-favoritas").removeClass("fa-star").addClass("fa-star-o");
+        }
+
+        filtrarParidadesBook();
+    }
+
+    function filtrarParidadesBook() {
+
+        var filtro = $("#ticker-search").val().toLowerCase();
+        $("#body-paridades tr").each(function () {
+            var mostrar = true;
+
+            if (filtro.length > 0) {
+                var name = $(this).children("td.column-paridade").first().attr("data-name").toLowerCase();
+                var content = $(this).children("td.column-paridade").first().html().toLowerCase();
+
+                var mostrar = (name.indexOf(filtro) !== -1 || content.indexOf(filtro) !== -1);
+
+            } 
+
+            if (mostrar && somenteFavoritas) {
+                mostrar = $(this).hasClass("favorite-parity");
+            }
+
+            if (mostrar) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+
+        });
+
+    }
+
+    function filtrarMoedasBook() {
+
+        var filtro = $("#balances-search").val().toLowerCase();
+
+        $("#body-balances tr").each(function () {
+            if (filtro.length > 0) {
+                var name = $(this).children("td.column-balance").first().attr("data-name").toLowerCase();
+                var content = $(this).children("td.column-balance").first().html().toLowerCase();
+
+                if (name.indexOf(filtro) !== -1 || content.indexOf(filtro) !== -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            } else {
+                $(this).show();
+            }
+        });
+
+    }
+
+    var flagAddParidadeFavorita = true;
+    function addFavorito(codigo) {
+        if (flagAddParidadeFavorita) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_FAVORITO_ADD ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    paridade: codigo
+                },
+                beforeSend: function () {
+                    flagAddParidadeFavorita = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#btn-favorito-"+json.codigo).html(json.html);
+
+
+                        } else {
+                            
+                        }
+                    } catch (e) {
+                        
+                    }
+                    flagAddParidadeFavorita = true;
+                },
+                complete: function () {
+                    flagAddParidadeFavorita = true;
+                }
+            });
+        }
+    }
+
+    var flagRemoverParidadeFavorita = true;
+    function removerFavorito(codigo) {
+        if (flagRemoverParidadeFavorita) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_FAVORITO_REMOVE ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    paridade: codigo
+                },
+                beforeSend: function () {
+                    flagRemoverParidadeFavorita = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#btn-favorito-"+json.codigo).html(json.html);
+
+
+                        } else {
+                            
+                        }
+                    } catch (e) {
+                       
+                    }
+                    flagRemoverParidadeFavorita = true;
+                },
+                complete: function () {
+                    flagRemoverParidadeFavorita = true;
+                }
+            });
+        }
+    }
+
+    var flagParidadesBook = true;
+    function listarParidadesBook() {
+        if (flagParidadesBook) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_PARIDADES_LISTAR ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    moeda: $("#ticker-paridade").val()
+                },
+                beforeSend: function () {
+                    flagParidadesBook = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#body-paridades").html(json.html);
+
+                            $(".change-parity").each(function () {
+                                $(this).click(function () {
+                                    var paridade = $(this).parent("tr").attr("data-paridade");
+                                    mudarParidade(paridade);
+                                });
+                            });
+
+                            filtrarParidadesBook();
+                        } else {
+                            
+                        }
+                    } catch (e) {
+                       
+                    }
+                    flagParidadesBook = true;
+                },
+                complete: function () {
+                    flagParidadesBook = true;
+                }
+            });
+        }
+    }
+
+
+    var flagSaldoMoedas = true;
+    function listarSaldoMoedasBook() {
+        if (flagSaldoMoedas) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_MOEDAS_SALDO ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    balanceMode: balanceMode
+                },
+                beforeSend: function () {
+                    flagSaldoMoedas = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#body-balances").html(json.html);
+
+                            if(balanceMode === 2) {
+                                $(".table-blocked-balance").hide();
+                            } else {
+                                $(".table-blocked-balance").show();
+                            }
+
+                            filtrarMoedasBook();
+                        } else {
+                            
+                        }
+                    } catch (e) {
+                        
+                    }
+                    flagSaldoMoedas = true;
+                },
+                complete: function () {
+                    flagSaldoMoedas = true;
+                }
+            });
+        }
+    }
+    
+        function listarBookVenda(json) {        
+
+            var acumulado = 0;
+            if (json.sucesso) {
+                
+                var trHTML = '';
+                for(var i = 0; i < json.htmlVenda.length; i++){
+                    
+                    acumulado += json.htmlVenda[i].volume;
+                    
+                    trHTML += '<tr onclick="configOrder("V", "' + json.htmlVenda[i].valor +'", "' + acumulado + '");">\n\
+                                    <td class="text-left td-price" style="padding-top: 1px !important; padding-bottom: 1px !important; color: #ed5565; ">' + json.htmlVenda[i].valor + '</td>\n\
+                                    <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;">' + json.htmlVenda[i].volume + '</td>\n\
+                                    <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;">' + json.htmlVenda[i].total + '</td>\n\
+                                </tr>';
+                }
+
+                
+                $('#ordersSells').html(trHTML);
+                $("#differenceV").html(json.diferenca);
+
+                var porc = parseFloat(json.diferencaPorcentagem);
+
+                if(porc >= 0){
+                    $("#differenceP").html(json.diferencaPorcentagem + "%");
+                } else {
+                    $("#differenceP").html("");
+                }
+                $("#tblVenda").css('margin-top', json.adjusttbl+"%");
+            } else {
+                showNotyAlert(json.mensagem, "e");
+
+            }
+
+    }
+    
+        function listarBookCompra(json) {        
+
+           // if (json.sucesso) {
+                //$("#ordersBuys").html(json.htmlCompra); 
+                var trHTML = '';
+                for(var i = 0; i < json.length; i++){
+                    trHTML += '<tr>\n\
+                                    <td class="text-left td-price" style="padding-top: 1px !important; padding-bottom: 1px !important; color: #1ab394; ">' + json[i].price + '</td>\n\
+                                    <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;">' + json[i].quantity + '</td>\n\
+                                    <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;">' + (json[i].price * json[i].quantity) + '</td>\n\
+                                </tr>';
+                }
+                //$('#ordersBuys').destroy();
+                $('#ordersBuys').html(trHTML);
+
+            //} else {
+               // showNotyAlert(json.mensagem, "e");
+
+            //}
+    }
+    
+    var flagBook = true;
+    function listarBook(json) {        
+//        if (flagBook) {
+//            $.ajax({
+//                url: '<?php //echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_LISTAR ?>',
+//                method: 'post',
+//                dataType:'json',
+//                beforeSend: function () {
+//                    flagBook = false;
+//                },
+//                success: function (json) {
+//                    try {
+                        if (json.sucesso) {
+                            $("#ordersBuys").html(json.htmlCompra); 
+                            $("#ordersSells").html(json.htmlVenda);
+                            $("#differenceV").html(json.diferenca);
+                            
+                            var porc = parseFloat(json.diferencaPorcentagem);
+                            
+                            if(porc >= 0){
+                                $("#differenceP").html(json.diferencaPorcentagem + "%");
+                            } else {
+                                $("#differenceP").html("");
+                            }
+                            $("#tblVenda").css('margin-top', json.adjusttbl+"%");
+                        } else {
+                            showNotyAlert(json.mensagem, "e");
+                            
+                        }
+//                    } catch (e) {
+//                        
+//                        showNotyAlert(e, "e");
+//                    }
+//                    flagBook = true;
+//                },
+//                complete: function () {
+//                    flagBook = true;
+//                }
+//            });
+        //}
+    }
+    
+    var flagMinharOrdens = true;
+    function listarMinhasOrdens() {
+    if (flagMinharOrdens) {
+    $.ajax({
+        url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_LISTAR ?>',
+        method: 'post',
+        dataType:'json',
+        data:{ 
+            todas: $("#todas").is(":checked")  
+        },  
+        beforeSend: function () {
+            flagMinharOrdens = false;
+        },        
+        success: function (json) {
+            try {
+                if (json.sucesso) {
+                    $(".my-order-item").remove();
+                    $("#orders-list").append( $(json.html));
+                } else {
+                    $(".my-order-item").remove();
+                    showNotyAlert(json.mensagem, "e");
+                    if (json.redirect) {
+                        location = json.url;
+                    }
+                }
+            } catch (e) {
+                $(".my-order-item").remove();
+                showNotyAlert(e, "e");
+            }
+            flagMinharOrdens = true;
+        },
+        complete: function () {
+            flagMinharOrdens = true;
+        }
+        
+        });
+        }
+    }
+    
+    function calcularTotal(m, f) {
+        let fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
+        let fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
+        let fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
+        
+        let amo = ($(fieldAmount).val().length > 0 ? parseFloat($(fieldAmount).val().replace(",", ".")) : 0);;
+        let fee = (m === 'b' ? parseFloat(   ($("#buyamountwithfee").val().length > 0 ? $("#buyamountwithfee").val(): 0) ): 0);
+        let amount = amo + fee;
+        let price = ($(fieldPrice).val().length > 0 ? parseFloat($(fieldPrice).val().replace(",", ".")) : 0);;
+        let total = ($(fieldTotal).val().length > 0 ? parseFloat($(fieldTotal).val().replace(",", ".")) : 0);;
+        
+        let perTax = (m === 'b' ? <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?> : <?php echo number_format($taxaVenda, $casasDecimais, ".", "")?>);
+        
+        if (f === "a") { // o usuário inseriu dados no campo amount
+            if (price > 0) { 
+                total = (amount * price);
+                $(fieldTotal).val(total.toFixed(casasDecimaisReal).replace(".",","));
+            } else if (total > 0) {
+                price = (amount > 0 ? (total / amount) : 0);
+                $(fieldPrice).val(price.toFixed(casasDecimaisReal).replace(".",","));
+            }
+        } else if (f === "p") { // o usuário inseriu dados no campo price
+            if (amount > 0) { 
+                total = (amount * price);
+                $(fieldTotal).val(total.toFixed(casasDecimaisReal).replace(".",","));
+            } else if (total > 0) {
+                amount = (price > 0 ? (total / price) : 0);
+                $(fieldAmount).val(amo.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).replace(".",","));
+            }
+        } else if (f === "t") { // o usuário inseriu dados no campo total
+            if (price > 0) {
+                amount = (price > 0 ? (total / price) : 0 );
+                $(fieldAmount).val(amount.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).replace(".",","));
+            } else if (amount > 0) { 
+                price = (amount > 0 ? (total / amount) : 0);
+                $(fieldPrice).val(price.toFixed(casasDecimaisReal).replace(".",","));
+            } 
+        }
+        
+        if (m === 'b') {
+            let valorTaxa = parseFloat( (amount * (perTax / 100)) );
+            let receber = parseFloat( (amount - valorTaxa) );
+            
+            $("#buytaxIn").val(valorTaxa.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>));
+            $("#taxLabelBuy").html(" (" + perTax.toFixed(casasDecimaisReal).replace(".", ",") + "%)" );
+            $("#buyreceiveIn").val(receber.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>));
+        } else {
+            let valorTaxa = parseFloat( (total * (perTax / 100)) );
+            let receber = parseFloat( (total - valorTaxa) );
+            
+            $("#selltaxIn").val((valorTaxa.toFixed(casasDecimaisReal).replace(".",",")));
+            $("#taxLabelSell").html(" (" + perTax.toFixed(casasDecimaisReal).replace(".", ",") + "%)" );
+            $("#sellreceiveIn").val((receber.toFixed(casasDecimaisReal)).replace(".",",") );
+        }
+        
+    }
+    
+    function salvarOrdemCompra() {
+        $("#btn-order-buy").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_COMPRAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                amount: $("#buyamount").val(),
+                price: $("#buyprice").val()
+            }, 
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarBook();
+                        listarMinhasOrdens();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-order-buy").prop("disabled", false);
+            }
+        });
+    }
+    
+    function salvarOrdemVenda() {
+        $("#btn-order-sell").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_VENDER ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                amount: $("#sellamount").val(),
+                price: $("#sellprice").val()
+            }, 
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarBook();
+                        listarMinhasOrdens();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-order-sell").prop("disabled", false);
+            }
+        });
+    }
+    
+    function modalCancelar(order) {
+        $("#modalCancelarOrdem").modal();
+        $("#modalCancelarOrdemCodigo").val(order);
+    }
+    
+    function cancelar(order) {
+        $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_CANCELAR ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                ordem: order
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarBook();
+                        listarMinhasOrdens();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function initbuysell(m, f) {
+    
+    
+        if (f === 'p') {
+            consultarPreco(m);
+            calcularTotal(m, f);
+        } else { 
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INIT ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            var fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
+                            
+                            var fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
+
+                            if (f === 'a') {
+                                if (m === 'b') {
+                                    $(fieldTotal).val(json.saldobrl.replace(".", ""));
+
+                                    atualizarTotalCompra();
+                                } else {
+                                    $(fieldAmount).val(json.saldobtc);
+                                }
+
+                            } else if (f === 't') {
+                                $(fieldTotal).val(json.saldobrl.replace(".", ""));
+                            }
+                            
+                            calcularTotal(m, f);
+                        }
+                    } catch (e) {
+                    }
+
+                }
+            });
+        }
+    }
+    
+    function consultarPreco(m) {
+        var fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
+        var tr = null;
+        if (m === 's') {
+           tr = $("#ordersBuys tr").first();
+           
+        } else {
+           tr = $("#ordersSells tr").last();
+           
+        }
+        
+        var preco = parseFloat($(tr).children(".td-price").first().children("span").first().html().replace(",", "?").replace(".", "").replace("?", ".")).toFixed(casasDecimaisReal);
+        
+        $(fieldPrice).val(preco);
+    }
+    
+    function init(m, f) {        
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INIT ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        var fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
+                        var fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
+                        var fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
+                        
+                        var saldobrl = parseFloat(json.saldobrl.replace(".", "").replace(",", "."));
+                        var saldobtc = parseFloat(json.saldobtc);
+                        
+                        
+                        if (f === 'a') {
+                            if (m === 'b') {
+                                $(fieldTotal).val(saldobrl.replace(".", ","));
+                            } else {
+                                $(fieldAmount).val(saldobtc.replace(".", ","));
+                            }
+                        } else if (f === 'p') {
+                            if (m === 'b') {
+                                $(fieldPrice).val(json.venda);
+                            } else {
+                                $(fieldPrice).val(json.compra);
+                            }
+                        } else if (f === 't') {
+                            $(fieldTotal).val(saldobrl.replace(".", ","));
+                        }
+                        
+                        calcularTotal(m, f);
+                    }
+                } catch (e) {
+                }
+                
+            }
+        });
+    }
+    
+    var flagListarTrade = true;
+    function listarTrade() { 
+        if(flagListarTrade){
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_NEGOCIACOES_FILTRARTRADE ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+               otc: $("#otc").is(":checked") 
+            },
+            beforeSend: function () {
+                flagListarTrade = false;
+                
+            },        
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $(".order-item-trade").remove();
+                        $("#trade-list").append(json.html);
+                    } else {
+                        $(".order-item-trade").remove();
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $(".order-item-trade").remove();
+                    showNotyAlert(e, "e");
+                }
+                flagListarTrade = true;
+            },
+            complete: function () {
+                flagListarTrade = true;
+            }
+        });
+        }
+    }
+        
+    function configOrder(tipo, cotacao, volume) {
+               
+        if (tipo === "<?php echo \Utils\Constantes::ORDEM_COMPRA ?>") {
+            
+            var volumeC = parseFloat(volume);
+            var cotacaoC = parseFloat(cotacao);
+            var total = volumeC * cotacaoC;
+                    
+            $("#tab-compra").trigger("click");
+            $("#buyamount").val(volumeC.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+            $("#buyprice").val(cotacaoC.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
+            $("#buytotal").val(total.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
+            
+            var taxa = <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?>;                
+            var fee = (volumeC * taxa) / 100;
+            var receber = parseFloat(volumeC - fee);
+            
+            $("#buytaxIn").val(fee.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+            $("#taxLabelBuy").html(" (" + taxa.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).replace(".", ",") + "%)" );
+            $("#buyreceiveIn").val(receber.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+            
+        } else {
+            var volumeV = parseFloat(volume);
+            var cotacaoV = parseFloat(cotacao);            
+            var taxa = <?php echo number_format($taxaVenda, $casasDecimais, ".", "") ?>;
+            
+            var fee = (volumeV * taxa) / 100;            
+            var volumeToSell = volumeV;
+            
+            $("#buyamountwithfee").val(fee.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+            $("#tab-venda").trigger("click");
+            $("#sellamount").val(volumeToSell.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+            $("#sellprice").val(cotacaoV.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ',')).trigger("keyup");
+        }
+    }
+
+</script>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+

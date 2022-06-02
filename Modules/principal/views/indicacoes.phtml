@@ -1,0 +1,499 @@
+<?php
+$comissoesCartoes = isset($_data["cartoes"]) ? $_data["cartoes"] : Array();
+$comissoesMensalidades = isset($_data["mensalidades"]) ? $_data["mensalidades"] : Array();
+$comissoesRecargas = isset($_data["recargas"]) ? $_data["recargas"] : Array();
+$comissoesBoletos = isset($_data["boletos"]) ? $_data["boletos"] : Array();
+$comissoesRemessas = isset($_data["remessas"]) ? $_data["remessas"] : Array();
+$transferencias = isset($_data["transferencias"]) ? $_data["transferencias"] : Array();
+$configuracao = isset($_data["configuracao"]) ? $_data["configuracao"] : Array();
+$cartoes = isset($_data["pedidosCartoes"]) ? $_data["pedidosCartoes"] : Array();
+$qtdCartoes = isset($comissoesCartoes["qtd"]) ? $comissoesCartoes["qtd"] : 0;
+$valorCartoes = isset($comissoesCartoes["total"]) ? $comissoesCartoes["total"] : 0;
+$qtdMensalidades = isset($comissoesMensalidades["qtd"]) ? $comissoesMensalidades["qtd"] : 0;
+$valorMensalidades = isset($comissoesMensalidades["total"]) ? $comissoesMensalidades["total"] : 0;
+$valorRecargas = isset($comissoesRecargas["valor"]) ? $comissoesRecargas["valor"] : 0;
+$comissaoRecargas = isset($comissoesRecargas["comissao"]) ? $comissoesRecargas["comissao"] : 0;
+$valorBoletos = isset($comissoesBoletos["valor"]) ? $comissoesBoletos["valor"] : 0;
+$comissaoBoletos = isset($comissoesBoletos["comissao"]) ? $comissoesBoletos["comissao"] : 0;
+$valorRemessas = isset($comissoesRemessas["valor"]) ? $comissoesRemessas["valor"] : 0;
+$comissaoRemessas = isset($comissoesRemessas["comissao"]) ? $comissoesRemessas["comissao"] : 0;
+$acumulado = ($valorCartoes+$valorMensalidades+$comissaoRecargas+$comissaoBoletos+$comissaoRemessas);
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+
+
+
+
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Indicações</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            Dashboards
+                        </li>
+                        <li class="active">
+                            <strong>Indicações</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+<br>
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Indicações <small class="m-l-sm">Relatório de Comissão Sobre Indicações</small></h5>
+                        
+                    </div>
+
+
+                    <div class="ibox-content">
+
+                        <div class="row">
+                            <div class="row">
+            <div class="col col-lg-12">
+                
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-lg-6">
+                                <strong>Produto</strong>
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                <strong>Referência</strong>
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                <strong>Comissão</strong>
+                            </div>
+                        </div>
+                    </li> 
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-lg-6">
+                                Solicitações de Cartão
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                <?php echo $qtdCartoes ?>
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                R$ <?php echo number_format($valorCartoes, 2, ",", ".") ?>
+                            </div>
+                        </div>
+                    </li> 
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-lg-6">
+                                Mensalidades de Cartão
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                <?php echo $qtdMensalidades ?>
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                R$ <?php echo number_format($valorMensalidades, 2, ",", ".") ?>
+                            </div>
+                        </div>
+                    </li>  
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-lg-6">
+                                Recargas de Cartão
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                R$ <?php echo number_format($valorRecargas, 2, ",", ".") ?>
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                R$ <?php echo number_format($comissaoRecargas, 2, ",", ".") ?>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-lg-6">
+                                Pagamentos de Boletos
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                R$ <?php echo number_format($valorBoletos, 2, ",", ".") ?>
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                R$ <?php echo number_format($comissaoBoletos, 2, ",", ".") ?>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-lg-6">
+                                Remessas de Valores
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                R$ <?php echo number_format($valorRemessas, 2, ",", ".") ?>
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                R$ <?php echo number_format($comissaoRemessas, 2, ",", ".") ?>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <?php foreach ($transferencias as $transferencia) {
+                        $acumulado += $transferencia["valor"];
+                        ?>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col col-lg-6">
+                                <strong>Transferência de <?php echo $transferencia["nome"] ?></strong>
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                
+                            </div>
+                            <div class="col col-lg-3 text-center">
+                                R$ <?php echo number_format($transferencia["valor"], 2, ",", ".") ?>
+                            </div>
+                        </div>
+                    </li>
+                        <?php
+                    }?>
+                    
+                    <li class="list-group-item">
+                        <br><br>
+                        <div class="row">
+                            <div class="col col-lg-6">
+                                <strong style="font-size: 16px" >Comissão Acumulada</strong>
+                            </div>
+                            <div class="col col-lg-6 text-center">
+                                <strong style="font-size: 16px">R$ <?php echo number_format($acumulado, 2, ",", ".") ?></strong>
+                            </div>
+                        </div>
+                    </li> 
+                    
+                </ul>
+                
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <!--
+            <div class="col col-lg-6 text-center">
+                <?php if ($acumulado >= $configuracao->valorMinimoResgateComissao) { ?>
+                <button class="btn btn-info" onclick="dialogTransferir();">
+                    Transferir Saldo
+                </button>
+                <?php } ?>
+            </div>
+            <div class="col col-lg-6 text-center">
+                <?php if ($acumulado >= $configuracao->valorMinimoResgateComissao) { ?>
+                <button class="btn btn-primary" onclick="dialogResgate();">
+                    Recarregar Cartão
+                </button>
+                <?php } ?>
+            </div>
+            -->
+            
+            <div class="col col-lg-12 text-center">
+                <?php if ($acumulado >= $configuracao->valorMinimoResgateComissao) { ?>
+                <button class="btn btn-primary" onclick="modalDialogResgatarSaldo();">
+                    Resgatar Saldo
+                </button>
+                <?php } ?>
+            </div>
+        </div>
+                        </div>
+                    </div>
+                    
+                </div>
+</div>
+
+
+        
+        
+        
+    
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+
+<script>
+    
+    
+    function dialogResgate() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DASHBOARD_REFERENCIAS_CALCULADORTOTAL ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogResgatarValor").html(json.valor);
+                        $("#dialogResgatar").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function confirmarResgate() {
+        $("#dialogResgatarFechar, #dialogResgatarSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INDICACOES_RESGATAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idPedidoCartao: $("#dialogResgatarIdPedidoCartao").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogResgatarFechar").prop("disabled", false);
+                        showNotyAlert(json.mensagem, "s");
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_INDICACOES ?>";
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(json.mensagem, "e");
+                }
+                $("#dialogResgatarFechar, #dialogResgatarSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function dialogTransferir() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INDICACOES_CALCULARRESGATE ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogTransferirValor").html(json.valor);
+                        $("#dialogTransferirIdCliente").val(0);
+                        $("#dialogTransferirCliente").html("");
+                        $("#dialogTransferir").modal();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function confirmarTransferencia() {
+        $("#dialogTransferirFechar, #dialogTransferirSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INDICACOES_TRANSFERIR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: $("#dialogTransferirIdCliente").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogTransferirFechar").prop("disabled", false);
+                        showNotyAlert(json.mensagem, "s");
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_INDICACOES ?>";
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogTransferirFechar, #dialogTransferirSalvar").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    
+    function pesquisarCliente() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INDICACOES_GETCLIENTEBYEMAIL ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                email: $("#dialogTransferirEmail").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogTransferirCliente").html(json.cliente.nome);
+                        $("#dialogTransferirIdCliente").val(json.cliente.id);
+                        $("#dialogTransferirNomeCliente").css("color", "green");
+                    } else {
+                        $("#dialogTransferirCliente").html(json.mensagem);
+                        $("#dialogTransferirNomeCliente").css("color", "red");
+                    }
+                } catch (e) {
+                    $("#dialogTransferirCliente").html(e);
+                        $("#dialogTransferirNomeCliente").css("color", "red");
+                }
+            }
+        });
+    }
+    
+    
+    
+    function modalDialogResgatarSaldo() {
+        $("#dialogResgatarSaldo").modal();
+    }
+    
+    function resgatarSaldo() {
+        $("#dialogResgatarSaldoFechar, #dialogResgatarSaldoSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT  . Utils\Rotas::R_INDICACOES_RESGATAR ?>',
+            method: 'post',
+            dataType: 'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogResgatarSaldoFechar").prop("disabled", false);
+                        showNotyAlert(json.mensagem, "s");
+                        location = "<?php echo URLBASE_CLIENT ?>principal/indicacoes";
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogResgatarSaldoFechar, #dialogResgatarSaldoSalvar").prop("disabled", false);
+            }
+        });
+    }
+</script>
+
+
+
+<div class="modal fade" id="dialogResgatar" tabindex="-1" role="dialog" aria-labelledby="dialogResgatar" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogResgatarLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label>Selecione o Cartão para resgate do valor</label>
+                            <select class="form-control" id="dialogResgatarIdPedidoCartao">
+                                <?php foreach ($cartoes as $pedidoCartao) {
+                                    ?>
+                                    <option value="<?php echo $pedidoCartao->id ?>"><?php echo $pedidoCartao->numeroCartao ?></option>
+                                    <?php
+                                }?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-lg-12">
+                        O valor a ser resgatado é de : R$ <span id="dialogResgatarValor"></span>.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogResgatarFechar" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="confirmarResgate();" id="dialogResgatarSalvar" >Recarregar Cartão</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="dialogTransferir" tabindex="-1" role="dialog" aria-labelledby="dialogTransferir" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogTransferirLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="dialogTransferirIdCliente" />
+                <div class="row">
+                    <div class="col col-lg-10">
+                        <div class="form-group">
+                            <label>Informe o email para localização da pessoa e clique em pesquisar</label>
+                            <input type="email" id="dialogTransferirEmail" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col col-lg-2 text-center">
+                        <br>
+                        <button class="btn btn-primary" type="button" onclick="pesquisarCliente();">
+                            Pesquisar
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <strong id="dialogTransferirNomeCliente" style="color: green;">Nome do cliente: <span id="dialogTransferirCliente"></span></strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-lg-12">
+                        O valor a ser resgatado é de : R$ <span id="dialogTransferirValor"></span>.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogTransferirFechar" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="confirmarTransferencia();" id="dialogTransferirSalvar" >Transferir Comissão</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dialogResgatarSaldo" tabindex="-1" role="dialog" aria-labelledby="dialogResgatarSaldo" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dialogResgatarSaldoLabel">Resgatar Saldo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <p>
+                            O saldo será transferido para sua conta. Deseja continuar?
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogResgatarSaldoFechar" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="resgatarSaldo();" id="dialogResgatarSaldoSalvar" >Resgatar Saldo</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>

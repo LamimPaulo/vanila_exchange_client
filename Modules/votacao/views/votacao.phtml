@@ -1,0 +1,517 @@
+<?php
+use Utils\Rotas;
+$isAdm = Utils\Geral::isUsuario();
+
+$comunidades = (isset($_data[ "comunidades"]) ? $_data[ "comunidades"] : Array());
+$saldo = (isset($_data[ "saldo"]) ? $_data[ "saldo"] : 0);
+
+$moeda = (isset($_data[ "moeda"]) ? $_data[ "moeda"] : new \Models\Modules\Cadastro\Moeda());
+$site = (isset($_data[ "site"]) ? $_data[ "site"] : 0);
+$configuracao = (isset($_data[ "configuracao"]) ? $_data[ "configuracao"] : null);
+
+$idioma = new \Utils\PropertiesUtils("votacao", IDIOMA);
+
+$_data["idiomaMenu"] = $idioma;
+?>
+<style>
+    .border-edit {
+        border: 1px solid #1c84c6 !important;
+    }
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<div class="row">
+    <div class="col-lg-12 col-xs-12">
+        <div class="fh-breadcrumb">
+            <div class="fh-column">
+                <ul class="list-group elements-list">
+                    <a data-toggle="tab" href="#tab-votacao-1" aria-expanded="false" onclick="menuDinamico('liVotacao'); listarVotacao();">
+                        <li id="liVotacao" class="list-group-item" style="padding-bottom: 5px !important; padding-top: 8px !important; padding-left: 15px !important; padding-right: 15px !important;" >                                
+                            <strong> <?php echo $idioma->getText("tituloTabUm") ?> </strong>
+                            <div class="small m-t-xs">
+                                <p>
+                                    <?php echo $idioma->getText("votacaoAbertaClientes") ?>
+                                </p>
+                            </div>                                
+                        </li>
+                    </a>
+                    <a data-toggle="tab" href="#tab-votacao-2" aria-expanded="false" onclick="menuDinamico('votacaoEncerrada');">
+                        <li id="votacaoEncerrada" class="list-group-item" style="padding-bottom: 5px !important; padding-top: 8px !important; padding-left: 15px !important; padding-right: 15px !important;" >
+                            <strong> <?php echo $idioma->getText("tituloTabDois") ?> </strong>
+                            <div class="small m-t-xs">
+                                <p>
+                                    <?php echo $idioma->getText("votacaoEncerradas") ?>
+                                </p>
+                            </div>
+                        </li>
+                    </a>
+  
+                    <a data-toggle="tab" href="#tab-votacao-4" aria-expanded="false" onclick="menuDinamico('criptoPendente');">
+                        <li id="criptoPendente" class="list-group-item" style="padding-bottom: 5px !important; padding-top: 8px !important; padding-left: 15px !important; padding-right: 15px !important;" >                                
+                            <strong> <?php echo $idioma->getText("tituloTabQuatro") ?> </strong>
+                            <div class="small m-t-xs">
+                                <p>
+                                    <?php echo $idioma->getText("criptoAprovacaoPendente") ?>
+                                </p>
+                            </div>                                
+                        </li>
+                    </a> 
+                    <a data-toggle="tab" href="#tab-votacao-6" aria-expanded="false" onclick="menuDinamico('moedaVotada');">
+                        <li id="moedaVotada" class="list-group-item" style="padding-bottom: 5px !important; padding-top: 8px !important; padding-left: 15px !important; padding-right: 15px !important;" >                                
+                            <strong> <?php echo $idioma->getText("tituloTabSeis") ?> </strong>
+                            <div class="small m-t-xs">
+                                <p>
+                                    <?php echo $idioma->getText("criptoMoedaVotada") ?>
+                                </p>
+                            </div>                                
+                        </li>
+                    </a> 
+                    <a data-toggle="tab" href="#tab-votacao-5" aria-expanded="false" onclick="menuDinamico('cadastrarMoeda'); modalCadastrarMoeda();">
+                        <li id="cadastrarMoeda" class="list-group-item" style="padding-bottom: 5px !important; padding-top: 8px !important; padding-left: 15px !important; padding-right: 15px !important;" >                                
+                            <strong> <?php echo $idioma->getText("cadastroMoeda") ?> </strong>
+                            <div class="small m-t-xs">
+                                <p><?php if($saldo >= \Utils\Constantes::QTD_MIN_TOKENS_CADASTRO_MOEDA){
+                                        echo $idioma->getText("cadastroCriptoAnalise");
+                                    } else {
+                                        echo str_replace("{var1}", $configuracao->votacaoMinimoSaldo . $moeda->simbolo, $idioma->getText("vocePrecisaNewCash"));
+                                    } ?>
+                                </p>
+                            </div>                                
+                        </li>
+                    </a>
+                </ul>
+            </div>
+
+            <div class="full-height">
+                <div class="full-height-scroll white-bg border-left" style="overflow: hidden; width: auto; height: 100%;">
+                    <div class="element-detail-box">
+                        <div class="tab-content">
+                            <div id="tab-votacao-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col col-lg-12">
+                                            <div class="">
+                                                <h2 class="page-header" style="margin-top: 0px !important;"><strong><?php echo $idioma->getText("tituloTabUm") ?></strong></h2>
+                                            </div>                                                                                       
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <table class="table table-striped" style="font-size: 11px;">
+                                                <thead>
+                                                    <tr>
+                                                        <th><?php echo $idioma->getText("descricao") ?></th>
+                                                        <th><?php echo $idioma->getText("volume") ?></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="">
+                                                    <tr>
+                                                        <td><?php echo str_replace("{var}", $moeda->nome, $idioma->getText("saldoNewCash")) ?></td>   
+                                                        <td id="saldo">0.00000000</td>
+                                                    </tr>                                                       
+                                                </tbody>
+                                            </table> 
+                                        </div>                                            
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-lg-12">
+                                            <div class="row" id="lista-votacao-um"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-votacao-2" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col col-lg-12">
+                                            <div class="">
+                                                <h2 class="page-header" style="margin-top: 0px !important;"><strong><?php echo $idioma->getText("tituloTabDois") ?></strong></h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="lista-votacao-dois">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tab-votacao-4" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col col-lg-12">
+                                            <div class="">
+                                                <h2 class="page-header" style="margin-top: 0px !important;"><strong><?php echo $idioma->getText("tituloTabQuatro") ?></strong></h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="lista-votacao-quatro">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-votacao-6" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col col-lg-12">
+                                            <div class="">
+                                                <h2 class="page-header" style="margin-top: 0px !important;"><strong><?php echo $idioma->getText("tituloTabSeis") ?></strong></h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="lista-votacao-seis">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-votacao-5" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col col-lg-12">
+                                            <div class="">
+                                                <h2 class="page-header" style="margin-top: 0px !important;"><strong><?php echo $idioma->getText("cadastroMoeda") ?></strong></h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-lg-7">
+                                            <?php if($saldo >= \Utils\Constantes::QTD_MIN_TOKENS_CADASTRO_MOEDA){ ?>
+                                            <div id="cadastro">
+                                            <form id="modalCadastrarMoedaForm" action="<?php echo URLBASE_CLIENT . Rotas::R_VOTACAO_SALVAR ?>" method="POST" enctype="multipart/form-data">
+                                                <input type="hidden" id="redesSociaisSelecionadas" name="redesSociaisSelecionadas" />
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="modalCadastrarMoedaNome"><?php echo $idioma->getText("nomeMoeda") ?></label>
+                                                            <input type="text" id="modalCadastrarMoedaNome" name="modalCadastrarMoedaName" class="form-control" maxlength="40" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="modalCadastrarMoedaSigla"><?php echo $idioma->getText("siglaMoeda") ?></label>
+                                                            <input type="text" id="modalCadastrarMoedaSigla" name="modalCadastrarMoedaSigla" class="form-control" maxlength="5" />
+                                                        </div>
+                                                    </div>
+                                                </div>                                                    
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="modalCadastrarMoedaSite"><?php echo $idioma->getText("modalCadastroMoeda1") ?></label>
+                                                            <input type="text" id="modalCadastrarMoedaSite" name="modalCadastrarMoedaSite" class="form-control" maxlength="2000" />
+                                                        </div> 
+                                                    </div>
+                                                    <div class="col-lg-6"> 
+                                                        <div class="form-group">
+                                                            <label for="modalCadastrarMoedaLinkWhitepapper"><?php echo $idioma->getText("modalCadastroMoeda2") ?></label>
+                                                            <input type="text" id="modalCadastrarMoedaLinkWhitepapper" name="modalCadastrarMoedaLinkWhitepapper" class="form-control" maxlength="2000" />
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="modalCadastrarMarketcap"><?php echo $idioma->getText("votacao5") ?></label>
+                                                            <input type="text" id="modalCadastrarMarketcap" name="modalCadastrarMarketcap" class="form-control" maxlength="200" />
+                                                        </div> 
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="modalCadastrarMoedaBase"><?php echo $idioma->getText("moedaBase") ?></label>
+                                                            <input type="text" id="modalCadastrarMoedaBase" name="modalCadastrarMoedaBase" class="form-control" maxlength="200" />
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="modalCadastrarMoedaResponsavel"><?php echo $idioma->getText("nomeResponsavel") ?></label>
+                                                            <input type="text" id="modalCadastrarMoedaResponsavel" name="modalCadastrarMoedaResponsavel" class="form-control" maxlength="200" />
+                                                        </div> 
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="modalCadastrarMoedaEmail"><?php echo $idioma->getText("emailContato") ?></label>
+                                                            <input type="text" id="modalCadastrarMoedaEmail" name="modalCadastrarMoedaEmail" class="form-control" maxlength="200" />
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="modalCadastrarMoedaCasasDecimais"><?php echo $idioma->getText("quantidadeCasasDecimais") ?></label>
+                                                            <input type="text" id="modalCadastrarMoedaCasasDecimais" name="modalCadastrarMoedaCasasDecimais" class="form-control" maxlength="5" />                                                                
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                        <label for="modalCadastrarMoedaLogo"><?php echo $idioma->getText("logoMoeda") ?></label>
+                                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                            <div class="form-control" data-trigger="fileinput">
+                                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                                <span class="fileinput-filename"></span>
+                                                            </div>
+                                                            <span class="input-group-addon btn btn-primary btn-file">
+                                                                <span class="fileinput-new ">&nbsp;<i class="fa fa-search"></i></span>
+                                                                <input type="file" accept="image/jpeg, image/bmp, image/jpg, image/png" id="modalCadastrarMoedaLogo" name="modalCadastrarMoedaLogo" class=""/>
+                                                            </span>
+                                                            <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>                                                
+                                                <div class="form-group">
+                                                    <label for="modalCadastrarMoedaDescricao"><?php echo $idioma->getText("descricaoProjeto") ?></label>
+                                                    <textarea id="modalCadastrarMoedaDescricao" name="modalCadastrarMoedaDescricao" class="form-control" maxlength="200" ></textarea>
+                                                </div> 
+                                                <div class="form-group">
+                                                    <label for="modalCadastrarDescricaoComunidade"><?php echo $idioma->getText("votacao1") ?></label>
+                                                    <textarea id="modalCadastrarDescricaoComunidade" name="modalCadastrarDescricaoComunidade" class="form-control" maxlength="200" ></textarea>
+                                                </div> 
+                                                <div class="row">
+                                                    <div class="col col-xs-10">
+                                                        <div class="form-group">
+                                                            <label for=""><?php echo $idioma->getText("votacao2") ?></label>
+                                                            <select id="modalCadastrarMidiasSociais"  class="form-control" >
+                                                                <?php
+                                                                foreach ($comunidades as $comunidade) {
+                                                                    ?>
+                                                                    <option value="<?php echo $comunidade->id ?>"><?php echo $comunidade->nome ?></option>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col col-xs-2">
+                                                        <button type="button" class="btn btn-primary full-width m-t-xl" onclick="addRedeSocial();" >
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-xs-12 m-t-xs">
+                                                    <button type="button" class="btn btn-white full-width" data-dismiss="modal" id="modalCadastrarMoedaCancelar"><?php echo $idioma->getText("modalCadastroMoedaCancelar") ?></button>
+                                                </div>
+                                                <div class="col-lg-6 col-xs-12 m-t-xs">
+                                                    <button type="button" class="btn btn-success full-width" onclick="cadastrar();"  id="modalCadastrarMoedaConfirmar"><?php echo $idioma->getText("modalCadastroMoedaConfirmar") ?></button>
+                                                </div>
+                                            </div>
+                                                </br>
+                                            <div class="form-group" id="modalCadastrarMoedaProgressContainer">
+                                                <div class="progress progress-bar-default">
+                                                    <div style="width: 0%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" class="progress-bar" id="modalCadastrarMoedaProgress">
+                                                        <span class="sr-only"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <?php } else { ?>
+                                            <div id="informacao">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <strong><?php echo str_replace("{var1}", $configuracao->votacaoMinimoSaldo . $moeda->simbolo, $idioma->getText("vocePrecisaNewCashCripto")); ?></strong></br></br>
+                                                        <?php echo str_replace("{var}", $moeda->nome, $idioma->getText("inf4")) ?>: &nbsp;
+                                                        <a href="<?php echo $site ?>" target="_BLANK"><?php echo $site ?></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                            </br>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+                                                <div class="vertical-timeline-block">
+                                                    <div class="vertical-timeline-icon blue-bg">
+                                                        <i class="fa fa-info fa-1x"></i>
+                                                    </div>
+                                                    <div class="vertical-timeline-content">
+                                                        <strong class="text-center"><h5><?php echo $idioma->getText("informacoes") ?></h5></strong>
+                                                        <small><ul>
+                                                                <li class="m-t-xs"><?php echo $idioma->getText("inf1") ?></li>
+                                                                <li class="m-t-xs"><?php echo $idioma->getText("inf2") ?></li>
+                                                                <li class="m-t-xs"><?php echo str_replace("{var}", $moeda->nome, $idioma->getText("inf3")) ?></li>
+                                                                <li class="m-t-xs"><?php echo str_replace("{var}", $moeda->nome, $idioma->getText("inf4")) ?>:</br>
+                                                                    <a href="<?php echo $site ?>" target="_BLANK"><?php echo $site ?></a></li>
+                                                            </ul></small> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+
+
+<script>
+    
+    $(document).ready(function () {
+        
+        menuDinamico('liVotacao');
+        
+        $("#modalAprovarMoedaDataInicial, #modalAprovarMoedaDataFinal").datepicker({format:'dd/mm/yyyy' }).mask("99/99/9999");
+        
+        $("#modalCadastrarMoedaForm").ajaxForm({
+            dataType: "json",
+            beforeSubmit: function () {
+                $("#modalCadastrarMoedaCancelar, #modalCadastrarMoedaConfirmar").prop("disabled", true);
+                $("#modalCadastrarMoedaProgressContainer").show();
+                $("#modalCadastrarMoedaProgress").width('0%');
+                $("#modalCadastrarMoedaProgress").attr('aria-valuenow', 0);
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                $("#modalCadastrarMoedaProgress").attr('aria-valuenow', percentComplete);
+                $("#modalCadastrarMoedaProgress").width(percentComplete+'%');
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        $("#modalCadastrarMoedaCancelar").prop("disabled", false).trigger("click");
+                        modalCadastrarMoeda();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCadastrarMoedaCancelar, #modalCadastrarMoedaConfirmar").prop("disabled", false);
+            }
+        });
+        
+        $("#modalCadastrarMoedaCasasDecimais").numeric();
+        
+        listarVotacao();
+    });
+    
+    
+    function listarVotacao() {
+    
+        $("#lista-votacao-um, #lista-votacao-dois, #lista-votacao-tres, #lista-votacao-quatro, #lista-votacao-seis").html("<div class='col-lg-12 text-center'> <img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Rotas::R_VOTACAO_LISTAR ?>",
+            method: "post",
+            dataType: "json",
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#saldo").html(json.saldo);
+                        $("#lista-votacao-um").html(json.htmlEmVotacao);
+                        $("#lista-votacao-dois").html(json.htmlEncerradas);
+                        $("#lista-votacao-tres").html(json.htmlFuturas);
+                        $("#lista-votacao-quatro").html(json.htmlPendentes);
+                        $("#lista-votacao-seis").html(json.htmlImplantacao);
+                        
+                        $(".votacao").numeric();
+                    } else {
+                        $("#lista-votacao-um, #lista-votacao-dois, #lista-votacao-tres, #lista-votacao-quatro, #lista-votacao-seis").html("<div class='col-lg-12 text-center'>"+json.mensagem+"</div>");
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch(e) {
+                    $("#lista-votacao-um, #lista-votacao-dois, #lista-votacao-tres, #lista-votacao-quatro, #lista-votacao-seis").html("<div class='col-lg-12 text-center'>"+e+"</div>");
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    } 
+    
+    function modalCadastrarMoeda() {
+        $("#redesSociaisSelecionadas").val("");
+        $(".group-redes-sociais").each(function () {
+            $(this).remove();
+        });
+        $("#modalCadastrarMoedaProgressContainer").hide();
+        $("#modalCadastrarMarketcap, #modalCadastrarDescricaoComunidade, #modalCadastrarMoedaDescricaoComunidade, #modalCadastrarMoedaLinkWhitepapper, #modalCadastrarMoedaSite, #modalCadastrarMoedaNome, #modalCadastrarMoedaSigla, #modalCadastrarMoedaBase, #modalCadastrarMoedaResponsavel, #modalCadastrarMoedaLogo, #modalCadastrarMoedaEmail, #modalCadastrarMoedaDescricao, #modalCadastrarMoedaCasasDecimais").val("");
+    }
+    
+    function cadastrar() {
+        $("#modalCadastrarMoedaForm").submit();
+    }
+    
+    
+    function votar(codigo) {
+        $("#btn-votar-"+codigo).prop("disabled", true);
+        $("#votacao-"+codigo).prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Rotas::R_VOTACAO_VOTAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                id: codigo,
+                votos: $("#votacao-"+codigo).val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#saldo").html(json.saldo);
+                        $("#acquired-votes-"+codigo).html(json.votosRecebidos);
+                        $("#needed-votes-"+codigo).html(json.votosNecessarios);
+                        $("#progress-voting-"+codigo).attr('aria-valuenow', json.percentual);
+                        $("#progress-voting-"+codigo).width(json.percentual+'%');
+                        
+                        showNotyAlert(json.mensagem, "s");
+                        
+                    } else {                        
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-votar-"+codigo).prop("disabled", false);
+                $("#votacao-"+codigo).prop("disabled", false);
+            }
+        });
+    }
+
+    
+    function addRedeSocial() {
+        var codigo = $("#modalCadastrarMidiasSociais").val();
+        
+        var field = $("#link-"+codigo).val();
+        
+        
+        if (typeof field === 'undefined') {
+            
+            var redesocial = $("#modalCadastrarMidiasSociais").children("option:selected").html();
+            
+            $("#redesSociaisSelecionadas").val($("#redesSociaisSelecionadas").val().length === 0 ? redesocial : ($("#redesSociaisSelecionadas").val()+"," + redesocial));
+            
+            
+            var labelLink = "<?php echo  str_replace("{var1}", $moeda->nome, $idioma->getText("votacao3")); ?>";
+            var labelMembros = "<?php echo  str_replace("{var1}", $moeda->nome, $idioma->getText("votacao4")); ?>";
+            labelLink = labelLink.replace("{var1}", redesocial);
+            labelMembros = labelMembros.replace("{var1}", redesocial);
+            
+            
+                
+            var fields = "<div class='form-group group-redes-sociais'>"
+                                +"<label for='membros-"+codigo+"'>"+labelMembros+"</label>"
+                                +"<input type='text' id='link-"+codigo+"' name='link"+redesocial.toLowerCase()+"' class='form-control' maxlength='2000' />" 
+                                +"<input type='hidden' id='codigo-"+codigo+"' name='codigo"+redesocial.toLowerCase()+"'  value='"+codigo+"' />"
+                            + "</div>"
+                            + "<div class='form-group group-redes-sociais'>"
+                                + "<label for='link-"+codigo+"'>"+labelLink+"</label>" 
+                                +"<input type='text' id='membros-"+codigo+"' name='membros"+redesocial.toLowerCase()+"' class='form-control' maxlength='10' />" 
+                            +"</div>";
+                console.log(fields);
+            $("#modalCadastrarMoedaForm").append(fields);
+            $("#membros-"+codigo).numeric();
+        }    
+    }
+    
+    function menuDinamico(li) {
+        $("li").removeClass("active");
+        $("#"+li).addClass("active");
+    }
+    
+</script>
+
+

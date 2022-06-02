@@ -1,0 +1,20 @@
+titulo=Buy NEWC Token
+subTitulo=Negotiations
+
+compraico1=You can use the balance in the Cointrade to purchase the NEWC Token. Use your favorite currency below and make your purchase now.
+compraico2=Buy with
+compraico3=Enter the volume of
+compraico4=You receive
+compraico5=Bonus
+compraico6=Buy with
+compraico7=Your balance
+compraico8=Cancel
+compraico9=Confirm Purchase
+compraico10=Buy NEWC Token
+compraico11=Did you confirm the purchase of {var1} NEWC Tokens for {var2} {var3}?
+compraico12=This purchase will give you a bonus of {var1} NEWC Tokens.
+compraico13=The volume of {var1} must be greater than zero.
+compraico14=Inserted Volume is insufficient to purchase NEWC Tokens.
+compraico15=Invalid currency
+compraico16=The volume must be greater than zero
+compraico17=Congratulations. You purchased {var1} NEWC Token and won {var2} for bonus.

@@ -1,0 +1,3261 @@
+<?php
+$usuarioLogado = Utils\Geral::getLogado();
+$usuarios = isset($_data["usuarios"]) ? $_data["usuarios"] : Array();
+
+$cidades = isset($_data["cidades"]) ? $_data["cidades"] : Array();
+$paises = isset($_data["paises"]) ? $_data["paises"] : Array();
+$licencas = isset($_data["licencas"]) ? $_data["licencas"] : Array();
+
+$idioma = new \Utils\PropertiesUtils("motivo_documentos", IDIOMA);
+
+?>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+
+
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+
+
+
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Clientes</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            Cadastros 
+                        </li>
+                        <li class="active">
+                            <strong>Clientes</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+</div>  
+<br>    
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col col-lg-3">
+                            <div class="form-group">
+                                <label>Data inicial</label>
+                                <input type="text" class="form-control" id="dataInicial" name="dataInicial"  />
+                            </div>
+                        </div>
+                        <div class="col col-lg-3">
+                            <div class="form-group">
+                                <label>Data final</label>
+                                <input type="text" class="form-control" id="dataFinal" name="dataFinal"   />
+                            </div>
+                        </div>
+                        <div class="col col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Tipo de data</label>
+                                <select class="form-control" id="tipoData"  >
+                                    <option value="A" >Data de cadastro</option>
+                                    <option value="B" >Data de nascimento</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Oline / Offline</label>
+                                <select class="form-control" id="status-online"  >
+                                    <option value="S" >Online</option>
+                                    <option value="T" >Todos</option>
+                                    <option value="N" >Offline</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <?php if (Utils\Geral::isUsuario()) { ?>
+                    <div class="row">
+
+                        <div class="col col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Status</label>
+                                <select class="form-control" id="status" >
+                                    <option value="3" >Todos</option>
+                                    <option value="0" >Aguardando</option>
+                                    <option value="1" >Aprovados</option>
+                                    <option value="2" >Bloqueados</option>
+                                    <option value="4" >Login Bloqueado</option>
+                                    <option value="5" >Cliente em atenção</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Situação dos documentos</label>
+                                <select class="form-control" id="statusDocumentos" >
+                                    <option value="A" >Todos os registros</option>
+                                    <option value="G" >Aguardando análise PF</option>
+                                    <option value="D" >Documentos Pendentes PF</option>
+                                    <option value="B" >Com todos os documentos informados</option>
+                                    <option value="C" >Faltando documento</option>
+                                    <option value="F" >Aguardando análise PJ</option>
+                                    <option value="E" >Em análise</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Licença</label>
+                                <select class="form-control" id="filtroPerfil"  >
+                                    <option value="<?php echo Utils\Criptografia::encriptyPostId(0) ?>" >Todos</option>
+                                    <?php 
+                                    foreach ($licencas as $licenca) {
+                                        ?>
+                                        <option value="<?php echo Utils\Criptografia::encriptyPostId($licenca->id) ?>" ><?php echo $licenca->nome ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Ordenação</label>
+                                <select class="form-control" id="ordenacao" >
+                                    <option value="A" >Nome (Ascendente)</option>
+                                    <option value="B" >Nome (Decrescente)</option>
+                                    <option value="C" >Data de cadastro (Ascendente)</option>
+                                    <option value="D" >Data de cadastro (Decrescente)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" >
+                            <div class="form-group has-success">
+                            <input type="text" placeholder="Pesquisar por: Nome / E-mail / Documento / Celular / Telefone" class="input-sm form-control" id='filtro' >
+                             </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col col-lg-12 text-center">
+
+                            <br><br>
+                            <button class="btn btn-success" onclick="listarClientes();">
+                                Filtrar Clientes
+                            </button>
+                            <br><br>
+
+                        </div>
+                    </div>
+
+                    <?php } ?>
+
+                    <div class="row">
+                        <div class="col col-xs-12">
+                            <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-condensed table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>Listando: <span id="clientesListando"></span></td>
+                                        <td>Em espera: <span id="clientesAguardando"></span></td>
+                                        <td>Cadastros Ativos: <span id="clientesAprovados"></span></td>
+                                        <td>Bloqueados: <span id="clientesNegados"></span></td>
+                                        <td>Total de clientes: <span id="clientesTodos"></span></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="row">
+                        <div class="col col-lg-12" >
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped table-condensed">
+                                    <tbody id="listaClientes">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+                    <!-- /.panel-body -->
+
+        </div>
+    </div>
+        <!-- /#page-wrapper -->
+
+
+</section>
+    
+    <div class="clearfix"></div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<script>
+    $(document).ready(function () {
+       
+        $('[data-toggle="tooltip"]').tooltip(); 
+        $("#consultaCnpj").mask("99.999.999/9999-99");
+        $("#dataInicial, #dataFinal").datepicker({format: "dd/mm/yyyy"}).mask("99/99/9999");
+        
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+        
+        
+
+        $(".permissao-modulo").change(function () {
+            let cod = $(this).val();
+            $(".mod-"+cod).prop("checked", $(this).is(":checked"));
+        });
+        
+        $("#checkUncheckAll").change(function () {
+            $(".permissao-modulo, .permissao-rotina").prop("checked", $(this).is(":checked"));
+        });
+
+        $("#cadastroTotalAno, #excelAno").numeric();
+        $("#cadastroTotalDeposito, #cadastroTotalCompra, #cadastroTotalSaque, #cadastroClienteTaxaComissaoDeposito, #cadastroClienteTaxaComissaoSaque").keydown(function (event) {
+            $(this).val(currency($(this).val(), 2, 8, event.keyCode));
+            event.preventDefault();
+        });
+        
+        $("#cadastroClienteTaxaTransferenciaRemota, #cadastroClienteTaxaComissaoTransfenciaCurrency, #cadastroClienteTaxaInvoicePdv").keydown(function (event) {
+            $(this).val(currency($(this).val(), 8, 8, event.keyCode));
+            event.preventDefault();
+        });
+        
+        $("#cadastroTotalVenda").keydown(function (event) {
+            $(this).val(currency($(this).val(), 8, 8, event.keyCode));
+            event.preventDefault();
+        });
+
+        $("#cadastroTotalMes").change(function () {
+            buscarDadosValorMensal();
+        });
+
+        $("#cadastroTotalAno").keyup(function () {
+            buscarDadosValorMensal();
+        });
+
+        //$("#cadastroClienteCelular").mask("(99) 99999 - 9999"); Desativado mascara do campo Celular
+        $("#cadastroClienteDocumento").mask("999.999.999-99");
+        $("#cadastroClienteCep").mask("99999-999");
+        $("#cadastroClienteDataNascimento").datepicker({format: 'dd/mm/yyyy'}).mask("99/99/9999");
+        
+        $("#cadastroClienteEstado").change(function () {
+            getCidades(null);
+        });
+
+<?php if ($usuarioLogado->tipo == \Utils\Constantes::ADMINISTRADOR) { ?>
+            $("#idUsuario, #pais").change(function () {
+                listarClientes();
+            });
+<?php } ?>
+        $("#status").change(function () {
+            listarClientes();
+        });
+
+
+        $("#formulario-importacao-excel").ajaxForm({
+            beforeSubmit: function () {
+                $("#importarExcelFechar, #importarExcelSalvar").prop("disabled", true);
+            },
+            dataType: 'json',
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+
+                $("#importarExcelFechar, #importarExcelSalvar").prop("disabled", false);
+            }
+        });
+        
+        
+        
+        listarClientes();
+    });
+
+
+    function pagarPromocao(cliente) {
+        $("#btn-promocao-"+cliente).prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTES_PROMOCAO_PAGAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                cliente: cliente
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        $("#btn-promocao-"+cliente).remove();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                        $("#btn-promocao-"+cliente).prop("disabled", false);
+                    }
+                } catch (e) {
+                        showNotyAlert(json.mensagem, "e");
+                        $("#btn-promocao-"+cliente).prop("disabled", false);
+                }
+            }
+        });
+    }
+
+
+    function listarClientes() {
+        $("#listaClientes").html("<div class='col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTLISTARCLIENTES ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                u: $("#idUsuario").val(),
+                s: $("#status").val(),
+                p: $("#pais").val(),
+                f: $("#filtro").val(),
+                d: $("#statusDocumentos").val(),
+                l: $("#filtroPerfil").val(),
+                o: $("#ordenacao").val(),
+                di: $("#dataInicial").val(),
+                df: $("#dataFinal").val(),
+                td: $("#tipoData").val(),
+                online: $("#status-online").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaClientes").html(json.html);
+                        $("#clientesTodos").html(json.cadastrados);
+                        $("#clientesListando").html(json.total);
+                        $("#clientesAguardando").html(json.aguardando);
+                        $("#clientesAprovados").html(json.aprovados);
+                        $("#clientesNegados").html(json.negados);
+                    } else {
+                        $("#listaClientes").html("<div class='col-lg-12 text-center'>" + json.mensagem + "</div>");
+                        $("#clientesTodos").html("0");
+                        $("#clientesListando").html("0");
+                        $("#clientesAguardando").html("0");
+                        $("#clientesAprovados").html("0");
+                        $("#clientesNegados").html("0");
+                    }
+                } catch (e) {
+                    $("#listaClientes").html("<div class='col-lg-12 text-center'>" + e + "</div>");
+                    $("#clientesTodos").html("0");
+                    $("#clientesListando").html("0");
+                    $("#clientesAguardando").html("0");
+                    $("#clientesAprovados").html("0");
+                    $("#clientesNegados").html("0");
+                }
+            }
+        });
+    }
+
+    function alterarStatusFranquia(idCliente) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_FRANQUIA_STATUS?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: idCliente
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                    if(json.franquia > 0){
+                        $("#btnHabilitarLicenca").removeClass("btn-primary");
+                        $("#btnHabilitarLicenca").addClass("btn-danger");
+                        $("#btnHabilitarLicenca").html("Bloquear Licença");
+                    } else {
+                        $("#btnHabilitarLicenca").removeClass("btn-danger");
+                        $("#btnHabilitarLicenca").addClass("btn-primary");
+                        $("#btnHabilitarLicenca").html("Habilitar Licença");
+                        
+                     }                          
+                        listarClientes();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+
+    function cadastroCliente(idCliente) {
+
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTCADASTROCLIENTES?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: idCliente
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroClienteCodigo").val(json.codigo);
+                        
+                        if (json.cliente.emAnalise > 0) {
+                            $("#cadastroClienteIniciarAnalise").hide();
+                            $("#cadastroClienteFinalizarAnalise").show();
+                        } else {
+                            $("#cadastroClienteFinalizarAnalise").hide();
+                            $("#cadastroClienteIniciarAnalise").show();
+                        }
+                        $("#acao").html(json.acao);
+                        $("#cadastroClienteId").val(json.cliente.id);
+                        $("#cadastroClienteDdi").val(json.cliente.ddi);
+                        $("#cadastroClienteNome").val(json.cliente.nome);
+                        $("#cadastroClienteEmail").val(json.cliente.email);
+                        $("#cadastroClienteCelular").val(json.cliente.celular);
+                        $("#cadastroClienteTaxaTransferenciaRemota").val(json.cliente.taxaTransferenciaRemota);
+                        $("#cadastroClienteTaxaInvoicePdv").val(json.cliente.taxaInvoicesPdv);
+                        $("#cadastroClienteAnotacoes").val(json.cliente.anotacoes);
+                        $("#cadastroClienteRG").val(json.cliente.rg);
+                        $("#cadastroClienteDocumento").val(json.cliente.documento);
+                        
+                        $("#cadastroClienteJsonAnaliseEmail").html(json.cliente.retornoAnaliseEmail);
+                        $("#cadastroClientePaisNaturalidade").val(json.cliente.idPaisNaturalidade);
+                        
+                        if (json.cliente.utilizaSaqueDepositoBrl > 0) { 
+                            $("#cadastroClienteUtilizaSaqueDepositoBrl").iCheck('check');
+                        } else {
+                            $("#cadastroClienteUtilizaSaqueDepositoBrl").iCheck('uncheck');
+                        }
+                        
+                        $("#cadastroClientePais").val(json.cliente.idPais);
+                        getEstados(json.cliente.estado, json.cliente.cidade);
+                        //$("#cadastroClienteCidade").val(json.cliente.cidade);
+                        $("#cadastroClienteNomeMae").val(json.cliente.nomeMae);
+                        $("#cadastroClienteNomePai").val(json.cliente.nomePai);
+                        $("#cadastroClienteEndereco").val(json.cliente.endereco);
+                        $("#cadastroClienteNumero").val(json.cliente.numero);
+                        $("#cadastroClienteComplemento").val(json.cliente.complemento);
+                        $("#cadastroClienteBairro").val(json.cliente.bairro);
+                        $("#cadastroClienteCep").val(json.cliente.cep);
+                        $("#cadastroClienteDataNascimento").val(json.cliente.dataNascimento);
+                        $("#cadastroClienteFraseSeguranca").val(json.cliente.fraseSeguranca);
+                        
+                        $("#cadastroClientePin").val((json.cliente.pin !== null && json.cliente.pin.length > 0 ? json.cliente.pin : "Não cadastrado."));
+                        if (json.cliente.pin !== null && json.cliente.pin.length > 0) {
+                            $("#cadastroClienteBtnZerarPin").show();
+                        } else {
+                            $("#cadastroClienteBtnZerarPin").hide();
+                        }
+                        
+                        if(json.cliente.tipoAutenticacao === '<?php echo \Utils\Constantes::TIPO_AUTH_SMS?>') {
+                            $("#cadastroClienteTipoAuthSms").prop("checked", true);
+                            $("#cadastroClienteTipoAuthEmail").prop("checked", false);
+                            $("#cadastroClienteTipoAuthGoogle").prop("checked", false);
+                        } else if(json.cliente.tipoAutenticacao === '<?php echo \Utils\Constantes::TIPO_AUTH_EMAIL?>') {
+                            $("#cadastroClienteTipoAuthSms").prop("checked", false);
+                            $("#cadastroClienteTipoAuthEmail").prop("checked", true);
+                            $("#cadastroClienteTipoAuthGoogle").prop("checked", false);
+                        } else {
+                            $("#cadastroClienteTipoAuthSms").prop("checked", false);
+                            $("#cadastroClienteTipoAuthEmail").prop("checked", false);
+                            $("#cadastroClienteTipoAuthGoogle").prop("checked", true);
+                        }
+                        
+                        $("#cadastroClienteSexoM").prop("checked", (json.cliente.sexo !== 'F'));
+                        $("#cadastroClienteSexoF").prop("checked", (json.cliente.sexo === 'F'));
+                        
+                        if ((json.cliente.fotoDocumento !== null && json.cliente.fotoDocumento.length > 0) || (json.cliente.fotoDocumentoVerso !== null && json.cliente.fotoDocumentoVerso.length > 0)) {
+                            $("#cadastroClienteContainerFotoDocumento").show();
+                            
+                            if (json.cliente.fotoDocumento !== null && json.cliente.fotoDocumento.length > 0) { 
+                                $("#cadastroClienteFotoDocumentoLink").html("Frente do documento ");
+                                $("#cadastroClienteFotoDocumentoLink").attr("href", "<?php echo URLBASE_CLIENT . UPLOADS ?>"+json.cliente.fotoDocumento);
+                            } else {
+                                $("#cadastroClienteFotoDocumentoLink").html("");
+                                $("#cadastroClienteFotoDocumentoLink").attr("href", "");
+                            }
+                            
+                            if (json.cliente.fotoDocumentoVerso !== null && json.cliente.fotoDocumentoVerso.length > 0) { 
+                                $("#cadastroClienteFotoDocumentoVersoLink").html("Verso do documento ");
+                                $("#cadastroClienteFotoDocumentoVersoLink").attr("href", "<?php echo URLBASE_CLIENT . UPLOADS ?>"+json.cliente.fotoDocumentoVerso);
+                            } else {
+                                $("#cadastroClienteFotoDocumentoVersoLink").html("");
+                                $("#cadastroClienteFotoDocumentoVersoLink").attr("href", "");
+                            }
+                            
+                            if (json.cliente.fotoDocumentoVerificada > 0) {
+                                $("#cadastroClienteFotoDocumentoVerificada").show();
+                                $(".btn-doc-rj").show();
+                                $(".btn-doc-ap").hide();
+                            } else {
+                                $("#cadastroClienteFotoDocumentoVerificada").hide();
+                                $(".btn-doc-rj").show();
+                                $(".btn-doc-ap").show();
+                            }
+                        } else {
+                            $("#cadastroClienteContainerFotoDocumento").hide();
+                        }
+                        
+                        
+                        if (json.cliente.fotoResidencia !== null && json.cliente.fotoResidencia.length > 0) {
+                            $("#cadastroClienteContainerFotoResidencia").show();
+                            $("#cadastroClienteFotoResidenciaLink").html(json.cliente.fotoResidencia);
+                            $("#cadastroClienteFotoResidenciaLink").attr("href", "<?php echo URLBASE_CLIENT . UPLOADS ?>"+json.cliente.fotoResidencia);
+                            if (json.cliente.fotoResidenciaVerificada > 0) {
+                                $("#cadastroClienteFotoResidenciaVerificada").show();
+                                $(".btn-res-rj").show();
+                                $(".btn-res-ap").hide();
+                            } else {
+                                $("#cadastroClienteFotoResidenciaVerificada").hide();
+                                $(".btn-res-rj").show();
+                                $(".btn-res-ap").show();
+                            }
+                        } else {
+                            $("#cadastroClienteContainerFotoResidencia").hide();
+                        }
+                        
+                        
+                        if (json.cliente.fotoCliente !== null && json.cliente.fotoCliente.length > 0) {
+                            $("#cadastroClienteContainerFotoCliente").show();
+                            $("#cadastroClienteFotoClienteLink").html(json.cliente.fotoCliente);
+                            $("#cadastroClienteFotoClienteLink").attr("href", "<?php echo URLBASE_CLIENT . UPLOADS ?>"+json.cliente.fotoCliente);
+                            
+                            if (json.cliente.fotoClienteVerificada > 0) {
+                                $("#cadastroClienteFotoClienteVerificada").show();
+                                $(".btn-selfie-rj").show();
+                                $(".btn-selfie-ap").hide();
+                            } else {
+                                $("#cadastroClienteFotoClienteVerificada").hide();
+                                $(".btn-selfie-rj").show();
+                                $(".btn-selfie-ap").show();
+                            }
+                        } else {
+                            $("#cadastroClienteContainerFotoCliente").hide();
+                        }
+                        
+                        
+                        if ((json.cliente.fotoOutroDocumento !== null && json.cliente.fotoOutroDocumento.length > 0)) {
+                            $("#cadastroClienteContainerFotoOutroDocumento").show();
+                            
+                            $("#cadastroClienteFotoOutroDocumentoLink").html(json.cliente.fotoOutroDocumento);
+                            $("#cadastroClienteFotoOutroDocumentoLink").attr("href", "<?php echo URLBASE_CLIENT . UPLOADS ?>"+json.cliente.fotoOutroDocumento);
+                            
+                            
+                            if (json.cliente.fotoOutroDocumentoVerificada > 0) {
+                                $("#cadastroClienteFotoOutroDocumentoVerificada").show();
+                                $(".btn-pj-rj").show();
+                                $(".btn-pj-ap").hide();
+                            } else {
+                                $("#cadastroClienteFotoOutroDocumentoVerificada").hide();
+                                $(".btn-pj-rj").show();
+                                $(".btn-pj-ap").show();
+                            }
+                        } else {
+                            $("#cadastroClienteContainerFotoOutroDocumento").hide();
+                        }
+                        
+                        $("#cadastroClienteMostrarIndicacoes").prop("checked", json.cliente.mostrarIndicacoes > 0);
+                        $("#cadastroClienteConsiderarTaxaDepositoCliente").prop("checked", (json.cliente.considerarTaxaDepositoCliente > 0));
+                        $("#cadastroClienteConsiderarTaxaSaqueCliente").prop("checked", (json.cliente.considerarTaxaSaqueCliente > 0));
+                        $("#cadastroClienteTaxaComissaoSaque").val(json.cliente.taxaComissaoSaque);
+                        $("#cadastroClienteTaxaComissaoDeposito").val(json.cliente.taxaComissaoDeposito);
+                        $("#cadastroClienteTaxaComissaoTransfenciaCurrency").val(json.cliente.taxaComissaoTransfenciaCurrency);
+                        $("#cadastroClienteConsiderarTaxaTransferenciaCurrency").prop("checked", (json.cliente.considerarTaxaTransferenciaCurrency > 0));
+                        $("#cadastroClienteTipoTaxaCarteiraRemota").val(json.cliente.tipoTaxaCarteiraRemota);
+                        $("#cadastroClienteTipoTaxaInvoicePdv").val(json.cliente.tipoTaxaInvoicePdv);
+                        
+                        
+                        $("#cadastroClienteStatusDepositoCurrency").prop("checked", json.cliente.statusDepositoCurrency > 0);
+                        $("#cadastroClienteStatusSaqueCurrency").prop("checked", json.cliente.statusSaqueCurrency > 0);
+                        $("#cadastroClienteStatusDepositoBrl").prop("checked", json.cliente.statusDepositoBrl > 0);
+                        $("#cadastroClienteStatusSaqueBrl").prop("checked", json.cliente.statusSaqueBrl > 0);
+                        $("#cadastroClienteStatusResgatePdv").prop("checked", json.cliente.statusResgatePdv > 0);
+                        
+                        $("#cadastroClienteForcarAnaliseSaques").prop("checked", json.cliente.forcarAnaliseSaques > 0);
+
+                        $("#qtdEnviosLink").html(json.cliente.qtdEnviosEmailsRecuperacao + (json.cliente.qtdEnviosEmailsRecuperacao === 1 ? " vez " : " vezes "));
+
+                        $("#cadastroClienteSituacaoSelfie").html(json.situacaoSelfie);
+                        $("#cadastroClienteSituacaoDocumento").html(json.situacaoDocumento);
+                        $("#cadastroClienteSituacaoResidencia").html(json.situacaoResidencia);
+                        $("#cadastroClienteSituacaoAutenticacao").html(json.situacaoAutenticacao);
+                        $("#cadastroClienteSituacaoPin").html(json.situacaoPin);
+                        $("#cadastroClienteSituacaoFraseSeguranca").html(json.situacaoFraseSeguranca);
+                        
+                        
+
+                        $(".permissao-rotina").prop("checked", false);
+                        if (typeof json.permissoesRotinas !== "undefined") {
+                            let i = 0;
+                            for(i = 0; i < json.permissoesRotinas.length; i++) {
+                                $("#per-"+json.permissoesRotinas[i]).prop("checked", true);
+                            }
+                        }
+                        
+                        $(".permissao-modulo").prop("checked", false);
+                        if (typeof json.permissoesModulos !== "undefined") {
+                            let i = 0;
+                            for(i = 0; i < json.permissoesModulos.length; i++) {
+                                $("#mod-"+json.permissoesModulos[i]).prop("checked", true);
+                            }
+                        }
+                        
+                        
+                        if (json.emailConfirmacao) {
+                            $("#btn-reenviar-boasvindas").show();
+                            $("#btn-reenviar-confirmacao").hide();
+                        } else {
+                            $("#btn-reenviar-boasvindas").show();
+                            $("#btn-reenviar-confirmacao").hide();
+                        }
+                        
+                        
+                        if (json.emailBoasVindas) {
+                            $("#btn-reenviar-boasvindas").show();
+                        } else {
+                            $("#btn-reenviar-boasvindas").hide();
+                        }
+
+                        $("#consultaCnpj").val(json.cliente.cnpj);
+                        if (json.consulta !== null) {
+                            $("#consultaCnpj").val(json.cliente.cnpj);
+                            $("#empresaSocios").html(json.consulta.socios);
+                            $("#empresaNomeResponsavel").html(json.consulta.nomeResponsavel);
+                            $("#empresaCpfResponsavel").html(json.consulta.cpfResponsavel);
+                            $("#empresaEmail").html(json.consulta.email);
+                            $("#empresaTelefone").html(json.consulta.telefone);
+                            $("#empresaCep").html(json.consulta.cep);
+                            $("#empresaUf").html(json.consulta.uf);
+                            $("#empresaMunicipio").html(json.consulta.municipio);
+                            $("#empresaBairro").html(json.consulta.bairro);
+                            $("#empresaComplemento").html(json.consulta.complemento);
+                            $("#empresaNumero").html(json.consulta.numero);
+                            $("#empresaLogradouro").html(json.consulta.logradouro);
+                            $("#empresaNaturezaJuridica").html(json.consulta.naturezaJuridica);
+                            $("#empresaAtividadesSecundarias").html(json.consulta.atividadesSecundarias);
+                            $("#empresaAtividadePrincipal").html(json.consulta.atividadePrincipal);
+                            $("#empresaDataSituacaoEspecial").html(json.consulta.dataSituacaoEspecial);
+                            $("#empresaSituacaoEspecial").html(json.consulta.situacaoEspecial);
+                            $("#empresaMotivoSituacaoCadastral").html(json.consulta.motivoSituacaoCadastral);
+                            $("#empresaDataSituacaoCadastral").html(json.consulta.dataSituacaoCadastral);
+                            $("#empresaSituacaoCadastral").html(json.consulta.situacaoCadastral);
+                            $("#empresaNomeFantasia").html(json.consulta.nomeFantasia);
+                            $("#empresaTipo").html(json.consulta.tipo);
+                            $("#empresaDataAbertura").html(json.consulta.dataAbertura);
+                            $("#empresaCapitalSocial").html(json.consulta.capitalSocial);
+                            $("#empresaNomeEmpresa").html(json.consulta.nomeEmpresa);
+                            $("#empresaUsuarioConsulta").html(json.consulta.usuario.nome);
+                            $("#empresaDataConsulta").html(json.consulta.datahora);
+                        } else {
+                            $("#consultaCnpj").val("");
+                            $("#empresaSocios").html("");
+                            $("#empresaNomeResponsavel").html("");
+                            $("#empresaCpfResponsavel").html("");
+                            $("#empresaEmail").html("");
+                            $("#empresaTelefone").html("");
+                            $("#empresaCep").html("");
+                            $("#empresaUf").html("");
+                            $("#empresaMunicipio").html("");
+                            $("#empresaBairro").html("");
+                            $("#empresaComplemento").html("");
+                            $("#empresaNumero").html("");
+                            $("#empresaLogradouro").html("");
+                            $("#empresaNaturezaJuridica").html("");
+                            $("#empresaAtividadesSecundarias").html("");
+                            $("#empresaAtividadePrincipal").html("");
+                            $("#empresaDataSituacaoEspecial").html("");
+                            $("#empresaSituacaoEspecial").html("");
+                            $("#empresaMotivoSituacaoCadastral").html("");
+                            $("#empresaDataSituacaoCadastral").html("");
+                            $("#empresaSituacaoCadastral").html("");
+                            $("#empresaNomeFantasia").html("");
+                            $("#empresaTipo").html("");
+                            $("#empresaDataAbertura").html("");
+                            $("#empresaCapitalSocial").html("");
+                            $("#empresaNomeEmpresa").html("");
+                            $("#empresaUsuarioConsulta").html("");
+                            $("#empresaDataConsulta").html("");
+                        }
+                        
+                        $("#consultaCPFDocumento").html((json.consultaCpf !== null ? json.consultaCpf.cpf : ""));
+                        $("#consultaCPFDataConsulta").html((json.consultaCpf !== null ? json.consultaCpf.dataConsulta : ""));
+                        $("#consultaCPFDataNascimento").html((json.consultaCpf !== null ? json.consultaCpf.dataNascimento : ""));
+                        $("#consultaCPFDataInscricao").html((json.consultaCpf !== null ? json.consultaCpf.dataInscricao : ""));
+                        $("#consultaCPFTitular").html((json.consultaCpf !== null ? json.consultaCpf.titular : ""));
+                        $("#consultaCPFMae").html((json.consultaCpf !== null ? json.consultaCpf.nomeMae : ""));
+                        $("#consultaCPFCep").html((json.consultaCpf !== null ? json.consultaCpf.cep : ""));
+                        $("#consultaCPFAnoObito").html((json.consultaCpf !== null ? json.consultaCpf.anoObito : ""));
+                        $("#consultaCPFBairro").html((json.consultaCpf !== null ? json.consultaCpf.bairro : ""));
+                        $("#consultaCPFCidade").html((json.consultaCpf !== null ? json.consultaCpf.cidade : ""));
+                        $("#consultaCPFUf").html((json.consultaCpf !== null ? json.consultaCpf.uf : ""));
+                        $("#consultaCPFLogradouro").html((json.consultaCpf !== null ? json.consultaCpf.logradouro : ""));
+                        $("#consultaCPFNumero").html((json.consultaCpf !== null ? json.consultaCpf.numero : ""));
+                        $("#consultaCPFComplemento").html((json.consultaCpf !== null ? json.consultaCpf.complemento : ""));
+                        $("#consultaCPFGenero").html((json.consultaCpf !== null ? json.consultaCpf.genero : ""));
+                        $("#consultaCPFSituacao").html((json.consultaCpf !== null ? json.consultaCpf.situacao : ""));
+                        
+                        if (json.cliente.analiseCliente === "1") {
+                            $("#analiseCliente").iCheck("check");   
+                        } else {
+                            $("#analiseCliente").iCheck("uncheck"); 
+                        }
+                        
+                        
+                        if (json.salvar) { 
+                            $("#cadastroClienteSalvar").show();
+                        } else {
+                            $("#cadastroClienteSalvar").hide();
+                        }
+
+                        $("#cadastroCliente").modal({
+                            'close' : function () {
+                                alert("ok");
+                            }
+                        });
+                        
+                        
+                        $("#cadastroClienteTipoDocumento").val(json.cliente.documentoTipo);
+                        
+                        listarMinhasMoedas();
+                        listarComentariosCliente();
+                        listarDispositivosMobile();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+
+    function salvarCliente() {
+        let permissoesRotina = [];
+        let permissoesModulo = [];
+        
+        $(".permissao-rotina").each(function () {
+            if ($(this).is(":checked")) {
+                permissoesRotina.push($(this).val());
+            }
+        });
+        
+        $(".permissao-modulo").each(function () {
+            if ($(this).is(":checked")) {
+                permissoesModulo.push($(this).val());
+            }
+        });
+        
+        $("#cadastroClienteFechar, #cadastroClienteSalvar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTSALVARCLIENTES ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: $("#cadastroClienteId").val(),
+                nome: $("#cadastroClienteNome").val(),
+                email: $("#cadastroClienteEmail").val(),
+                celular: $("#cadastroClienteCelular").val(),
+                ddi: $("#cadastroClienteDdi").val(),
+                cidade: $("#cadastroClienteCidade").val(),
+                pais: $("#cadastroClientePais").val(),
+                anotacoes: $("#cadastroClienteAnotacoes").val(),
+                rg: $("#cadastroClienteRG").val(),
+                documento: $("#cadastroClienteDocumento").val(),
+                tipoAutenticacao: $("input:radio[name='cadastroClienteTipoAuth']:checked").val(),
+                nomeMae: $("#cadastroClienteNomeMae").val(),
+                nomePai: $("#cadastroClienteNomePai").val(),
+                endereco: $("#cadastroClienteEndereco").val(),
+                numero: $("#cadastroClienteNumero").val(),
+                complemento: $("#cadastroClienteComplemento").val(),
+                bairro: $("#cadastroClienteBairro").val(),
+                cep: $("#cadastroClienteCep").val(),
+                estado: $("#cadastroClienteEstado").val(),
+                sexo: $("input:radio[name='cadastroClienteSexo']:checked").val(),
+                codigoPais: $("#cadastroClienteCodigoPais").val(),
+                dataNascimento: $("#cadastroClienteDataNascimento").val(),
+                fraseSeguranca: $("#cadastroClienteFraseSeguranca").val(),
+                taxaComissaoDeposito: $("#cadastroClienteTaxaComissaoDeposito").val(),
+                taxaComissaoTransfenciaCurrency: $("#cadastroClienteTaxaComissaoTransfenciaCurrency").val(),
+                taxaInvoicesPdv: $("#cadastroClienteTaxaInvoicePdv").val(),
+                taxaComissaoSaque: $("#cadastroClienteTaxaComissaoSaque").val(),
+                taxaTransferenciaRemota: $("#cadastroClienteTaxaTransferenciaRemota").val(),
+                considerarTaxaDepositoCliente: ($("#cadastroClienteConsiderarTaxaDepositoCliente").is(":checked") ? 1 : 0),
+                considerarTaxaSaqueCliente: ($("#cadastroClienteConsiderarTaxaSaqueCliente").is(":checked") ? 1 : 0),
+                considerarTaxaTransferenciaCurrency: ($("#cadastroClienteConsiderarTaxaTransferenciaCurrency").is(":checked") ? 1 : 0),
+                mostrarIndicacoes: ($("#cadastroClienteMostrarIndicacoes").is(":checked") ? 1 : 0),
+                statusDepositoCurrency : ($("#cadastroClienteStatusDepositoCurrency").is(":checked") ? 1 : 0),
+                statusSaqueCurrency : ($("#cadastroClienteStatusSaqueCurrency").is(":checked") ? 1 : 0),
+                statusDepositoBrl : ($("#cadastroClienteStatusDepositoBrl").is(":checked") ? 1 : 0),
+                statusSaqueBrl : ($("#cadastroClienteStatusSaqueBrl").is(":checked") ? 1 : 0),
+                statusResgatePdv: ($("#cadastroClienteStatusResgatePdv").is(":checked") ? 1 : 0),
+                analiseCliente: ($("#analiseCliente").is(":checked") ? 1 : 0),
+                tentativaLogin: ($("#tentativaLogin").is(":checked") ? 1 : 0),
+                forcarAnaliseSaques: ($("#cadastroClienteForcarAnaliseSaques").is(":checked") ? 1 : 0),
+                tipoCliente: $("#cadastroClienteTipoDocumento").val(),
+                tipoTaxaCarteiraRemota: $("#cadastroClienteTipoTaxaCarteiraRemota").val(),
+                tipoTaxaInvoicePdv : $("#cadastroClienteTipoTaxaInvoicePdv").val(),
+                permissoesRotina: permissoesRotina,
+                permissoesModulo: permissoesModulo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroClienteFechar").prop("disabled", false);
+                        $("#cadastroClienteFechar").trigger("click");
+                        listarClientes();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+
+                $("#cadastroClienteFechar, #cadastroClienteSalvar").prop("disabled", false);
+            }
+        });
+    }
+
+    function deletarCliente(id) {
+        if (id > 0) {
+            dialogConfirmar = $("#confirmarExclusao").dialog({
+                resizable: false,
+                height: 200,
+                modal: true,
+                buttons: {
+                    "Cancelar": function () {
+                        $(this).dialog("close");
+                    },
+                    "Confirmar": function () {
+                        $.ajax({
+                            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTEXCLUIRCLIENTES ?>',
+                            method: 'post',
+                            dataType: 'json',
+                            data: {
+                                idCliente: id
+                            },
+                            success: function (json) {
+                                try {
+                                    if (json.sucesso) {
+                                        $("#cliente-" + id).remove();
+                                        $(dialogConfirmar).dialog("close");
+                                        showNotyAlert(json.mensagem, "s");
+                                    } else {
+                                        showNotyAlert(json.mensagem, "e");
+                                    }
+                                } catch (e) {
+                                    showNotyAlert(e, "e");
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+        }
+    }
+    function rejeitarCliente(id) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTREJEITARCLIENTES ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: id
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cliente-" + id).replaceWith(json.html);
+                        
+                    if(json.bloquear === "2"){                        
+                        $("#btnBloquear").addClass("disabled");
+                        $("#btnBloquear").prop("disabled", true);
+                        $("#btnBloquear").html("Bloquear");
+                        $("#btnAtivar").removeClass("disabled");
+                        $("#btnAtivar").removeAttr("disabled");
+                        
+                    } else {
+                        $("#btnBloquear").removeClass("disabled");
+                        $("#btnBloquear").removeAttr("disabled");
+                        
+                    }
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+               
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+        function liberarCliente(id) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTLIBERARCLIENTES ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: id
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cliente-" + id).replaceWith(json.html);
+                        
+                    if(json.liberado === "1"){                        
+                        $("#btnLiberaLogin").addClass("disabled");
+                        $("#btnLiberaLogin").prop("disabled", true);
+                        
+                    } else {
+                        $("#btnLiberaLogin").prop("disabled", false);
+                        $("#btnLiberaLogin").addClass("disabled");
+                     } 
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+        function colocarEmEspera(id) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTE_STATUS_COLOCAREMESPERA ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: id
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cliente-" + id).replaceWith(json.html);
+                    if(json.emEspera > 0){   
+                        $("#btnEspera").removeAttr("disabled");
+                        $("#btnEspera").removeClass("disabled");
+                        $("#btnEspera").html("Espera");
+                        $("#btnAtivar").prop("disabled", true);
+                        $("#btnAtivar").addClass("disabled");
+                        
+                    } else {
+                        $("#btnEspera").addClass("disabled");
+                        $("#btnEspera").prop("disabled", true);
+                        $("#btnAtivar").removeClass("disabled");
+                        $("#btnAtivar").removeAttr("disabled");
+
+                        
+                     } 
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+
+    function aceitarCliente(id) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTACEITARCLIENTES ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: id
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cliente-" + id).replaceWith(json.html);
+                        
+                    if(json.ativo === "1"){                        
+                        $("#btnAtivar").addClass("disabled");
+                        $("#btnAtivar").prop("disabled", true);
+                        $("#btnAtivar").html("Ativar");
+                        $("#btnEspera").removeAttr("disabled");
+                        $("#btnEspera").removeClass("disabled");
+                        $("#btnBloquear").removeClass("disabled");
+                        $("#btnBloquear").removeAttr("disabled");
+                        
+                    } else {
+                        $("#btnAtivar").removeAttr("disabled");
+                        $("#btnAtivar").removeClass("disabled");
+
+
+                     } 
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function alterarStatusMercado(codigo) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTE_MERCADO_STATUS ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: codigo
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cliente-" + json.id).replaceWith(json.html);
+                        
+                    if(json.status > 0){
+                        $("#btnAtivarMercado").removeClass("btn-primary");
+                        $("#btnAtivarMercado").addClass("btn-danger");
+                        $("#btnAtivarMercado").html("Desativar Mercado");
+                    } else {
+                     
+                        $("#btnAtivarMercado").removeClass("btn-danger");
+                        $("#btnAtivarMercado").addClass("btn-primary");
+                        $("#btnAtivarMercado").html("Ativar Mercado");                        
+                     } 
+
+                        
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+
+    
+    function getCidades(cidade) {
+        $("#loadingCidades").show();
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTGETCIDADESCLIENTE ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                estado:$("#cadastroClienteEstado").val(),
+                cidade:cidade
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroClienteCidade").html(json.html);
+                        if (typeof cidade === "undefined" || !cidade > 0) {
+                            $("#cadastroClienteCidade").val(cidade);
+                        }
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#loadingCidades").hide();
+            }
+        });
+    }
+    
+    
+    function getEstados(estado, cidade) {
+        $("#loadingEstados").show();
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTES_STATES_LIST ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                pais:$("#cadastroClientePais").val(),
+                estado:estado
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroClienteEstado").html(json.html);
+                        if (typeof estado === "undefined" || !estado > 0) {
+                            $("#cadastroClienteEstado").val(estado);
+                        }
+                        
+                        getCidades(cidade);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#loadingEstados").hide();
+            }
+        });
+    }
+    
+    
+    function zerarPin() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTZERARPINCLIENTE ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente:$("#cadastroClienteId").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroClientePin").val("");
+                        $("#cadastroClienteBtnZerarPin").hide();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function dialogRejeitarFoto(doc, aceitar) {
+        $("#dialogRejeitarFotoMotivo").val("");
+        $("#dialogRejeitarFotoObservacoes").val("");
+        $("#dialogRejeitarFotoDoc").val(doc);
+        $("#dialogRejeitarFotoAceitar").val(aceitar);
+        $("#dialogRejeitarFoto").modal();
+    }
+    
+    function callRejeitarFoto() {
+        rejeitarAceitarFoto($("#dialogRejeitarFotoDoc").val(), $("#dialogRejeitarFotoAceitar").val(), $("#dialogRejeitarFotoMotivo").val(), $("#dialogRejeitarFotoObservacoes").val());
+        $("#dialogRejeitarFotoClose, #dialogRejeitarFotoRejeitar").prop("disabled", false);
+        $("#dialogRejeitarFotoClose").trigger("click");
+    }
+    
+    var teveAlteracaoDoc = false;
+    function rejeitarAceitarFoto(doc, aceitar, motivo, observacoes) {
+        if (typeof motivo === 'undefined' || motivo === null) {
+            motivo = "";
+        }
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTACEITARREHEITARFOTOCLIENTE ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                doc:doc,
+                aceitar:aceitar,
+                idCliente: $("#cadastroClienteId").val(),
+                motivo: motivo,
+                observacoes:observacoes
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                        if (doc === 'd') {
+                            if (aceitar > 0) {
+                                $("#cadastroClienteFotoDocumentoVerificada").show();
+                                $(".btn-doc-ap").hide();
+                            } else {
+                                $("#cadastroClienteFotoDocumento").attr("src", "");
+                                $("#cadastroClienteContainerFotoDocumento").hide();
+                                $(".btn-doc").hide();
+                            }
+                            
+                        } else if (doc === 'r') {
+                            if (aceitar > 0) {
+                                $("#cadastroClienteFotoResidenciaVerificada").show();
+                                $(".btn-res-ap").hide();
+                            } else {
+                                $("#cadastroClienteFotoResidencia").attr("src", "");
+                                $("#cadastroClienteContainerFotoResidencia").hide();
+                                $(".btn-res").hide();
+                            }
+                            
+                        } else if (doc === 'c') {
+                            if (aceitar > 0) {
+                                $("#cadastroClienteFotoClienteVerificada").show();
+                                $(".btn-selfie-ap").hide();
+                            } else {
+                                $("#cadastroClienteFotoCliente").attr("src", "");
+                                $("#cadastroClienteContainerFotoCliente").hide();
+                                $(".btn-selfie").hide();
+                            }
+                            
+                        } else if (doc === 'o') {
+                            if (aceitar > 0) {
+                                $("#cadastroClienteFotoOutroDocumentoVerificada").show();
+                                $(".btn-pj-ap").hide();
+                            } else {
+                                $("#cadastroClienteFotoOutroDocumento").attr("src", "");
+                                $("#cadastroClienteContainerFotoOutroDocumento").hide();
+                                $(".btn-pj").hide();
+                            }
+                            
+                        }
+                        
+                        teveAlteracaoDoc = true;
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function dialogCancelarFranquia(idCliente) {
+        $("#dialogCancelarFranquiaIdCliente").val(idCliente);
+        $("#dialogCancelarFranquia").modal();
+    }
+    
+    
+    function cancelarFranquia() {
+        $("#dialogCancelarFranquiaClose, #dialogCancelarFranquiaConfirmar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_FRANQUIA_CANCELAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: $("#dialogCancelarFranquiaIdCliente").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#dialogCancelarFranquiaClose").prop("disabled", false).trigger("click");
+                        $("#btnCancelarFranquia").addClass("disabled");
+                        listarClientes();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogCancelarFranquiaClose, #dialogCancelarFranquiaConfirmar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function enviarLinkConfirmacao() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTE_EMAIL_REENVIARCONFIRMACAO ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: $("#cadastroClienteId").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert("Email enviado com sucesso", "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function enviarLinkBoasVidas() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTE_EMAIL_REENVIARBOASVINDAS ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: $("#cadastroClienteId").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert("Email enviado com sucesso", "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    function consultarCnpj() {
+        $("#btn-consultar-cnpj").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_CONSULTAS_CNPJ ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                idCliente: $("#cadastroClienteId").val(),
+                cnpj: $("#consultaCnpj").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#consultaCnpj").val(json.cliente.cnpj);
+                        $("#empresaSocios").html(json.consulta.socios);
+                        $("#empresaNomeResponsavel").html(json.consulta.nomeResponsavel);
+                        $("#empresaCpfResponsavel").html(json.consulta.cpfResponsavel);
+                        $("#empresaEmail").html(json.consulta.email);
+                        $("#empresaTelefone").html(json.consulta.telefone);
+                        $("#empresaCep").html(json.consulta.cep);
+                        $("#empresaUf").html(json.consulta.uf);
+                        $("#empresaMunicipio").html(json.consulta.municipio);
+                        $("#empresaBairro").html(json.consulta.bairro);
+                        $("#empresaComplemento").html(json.consulta.complemento);
+                        $("#empresaNumero").html(json.consulta.numero);
+                        $("#empresaLogradouro").html(json.consulta.logradouro);
+                        $("#empresaNaturezaJuridica").html(json.consulta.naturezaJuridica);
+                        $("#empresaAtividadesSecundarias").html(json.consulta.atividadesSecundarias);
+                        $("#empresaAtividadePrincipal").html(json.consulta.atividadePrincipal);
+                        $("#empresaDataSituacaoEspecial").html(json.consulta.dataSituacaoEspecial);
+                        $("#empresaSituacaoEspecial").html(json.consulta.situacaoEspecial);
+                        $("#empresaMotivoSituacaoCadastral").html(json.consulta.motivoSituacaoCadastral);
+                        $("#empresaDataSituacaoCadastral").html(json.consulta.dataSituacaoCadastral);
+                        $("#empresaSituacaoCadastral").html(json.consulta.situacaoCadastral);
+                        $("#empresaNomeFantasia").html(json.consulta.nomeFantasia);
+                        $("#empresaTipo").html(json.consulta.tipo);
+                        $("#empresaDataAbertura").html(json.consulta.dataAbertura);
+                        $("#empresaCapitalSocial").html(json.consulta.capitalSocial);
+                        $("#empresaNomeEmpresa").html(json.consulta.nomeEmpresa);
+                        $("#empresaUsuarioConsulta").html(json.consulta.usuario.nome);
+                        $("#empresaDataConsulta").html(json.consulta.dataHora);
+                        
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-consultar-cnpj").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    function consultarCpf() {
+        $("#btn-consultar-cpf").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTES_CONSULTAS_CPF ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                idCliente: $("#cadastroClienteId").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#consultaCPFDocumento").html((json.consultaCpf !== null ? json.consultaCpf.cpf : ""));
+                        $("#consultaCPFDataConsulta").html((json.consultaCpf !== null ? json.consultaCpf.dataConsulta : ""));
+                        $("#consultaCPFDataNascimento").html((json.consultaCpf !== null ? json.consultaCpf.dataNascimento : ""));
+                        $("#consultaCPFDataInscricao").html((json.consultaCpf !== null ? json.consultaCpf.dataInscricao : ""));
+                        $("#consultaCPFTitular").html((json.consultaCpf !== null ? json.consultaCpf.titular : ""));
+                        $("#consultaCPFMae").html((json.consultaCpf !== null ? json.consultaCpf.nomeMae : ""));
+                        $("#consultaCPFCep").html((json.consultaCpf !== null ? json.consultaCpf.cep : ""));
+                        $("#consultaCPFAnoObito").html((json.consultaCpf !== null ? json.consultaCpf.anoObito : ""));
+                        $("#consultaCPFBairro").html((json.consultaCpf !== null ? json.consultaCpf.bairro : ""));
+                        $("#consultaCPFCidade").html((json.consultaCpf !== null ? json.consultaCpf.cidade : ""));
+                        $("#consultaCPFUf").html((json.consultaCpf !== null ? json.consultaCpf.uf : ""));
+                        $("#consultaCPFLogradouro").html((json.consultaCpf !== null ? json.consultaCpf.logradouro : ""));
+                        $("#consultaCPFNumero").html((json.consultaCpf !== null ? json.consultaCpf.numero : ""));
+                        $("#consultaCPFComplemento").html((json.consultaCpf !== null ? json.consultaCpf.complemento : ""));
+                        $("#consultaCPFGenero").html((json.consultaCpf !== null ? json.consultaCpf.genero : ""));
+                        $("#consultaCPFSituacao").html((json.consultaCpf !== null ? json.consultaCpf.situacao : ""));
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-consultar-cpf").prop("disabled", false);
+            }
+        });
+    }
+    
+    function iniciarAnaliseCliente() {
+        $("#cadastroClienteIniciarAnalise").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTE_ANALISE_INICIAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                codigo: $("#cadastroClienteCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        
+                        $("#cadastroClienteIniciarAnalise").hide();
+                        $("#cadastroClienteFinalizarAnalise").show();
+                        
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#cadastroClienteIniciarAnalise").prop("disabled", false);
+            }
+        });
+    }
+    
+    function finalizarAnaliseCliente() {
+        $("#cadastroClienteFinalizarAnalise").prop("disabled", true);
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_CLIENTE_ANALISE_FINALIZAR ?>",
+            method: "post",
+            dataType: "json",
+            data: {
+                codigo: $("#cadastroClienteCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroClienteIniciarAnalise").show();
+                        $("#cadastroClienteFinalizarAnalise").hide();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#cadastroClienteFinalizarAnalise").prop("disabled", false);
+            }
+        });
+    }
+    
+    
+    
+    
+    function notificarStatusAnalise() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTE_ANALISE_NOTIFICAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                codigo: $("#cadastroClienteCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+
+
+    function listarComentariosCliente() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTES_COMENTARIOS_LISTAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                cliente: $("#cadastroClienteCodigo").val()
+            }, 
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaComentariosCliente").html(json.html);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+
+
+    function dialogComentario() {
+        $("#dialogComentarioObservacaoCliente").modal();
+        $("#dialogComentarioObservacaoClienteComentario").val("");
+    }
+    
+    
+    function salvarComentario() {
+        $("#dialogComentarioObservacaoClienteClose, #dialogComentarioObservacaoClienteConfirmar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTES_COMENTARIOS_SALVAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                cliente: $("#cadastroClienteCodigo").val(),
+                anotacoes: $("#dialogComentarioObservacaoClienteComentario").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarComentariosCliente();
+                        $("#dialogComentarioObservacaoClienteClose").prop("disabled", false).trigger("click");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#dialogComentarioObservacaoClienteClose, #dialogComentarioObservacaoClienteConfirmar").prop("disabled", false);
+            }
+        });
+    }
+    
+    function analisarEmail() {
+        $("#cadastroClienteBtnAnalisarEmail").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTE_EMAIL_ANALISAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                cliente: $("#cadastroClienteCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#cadastroClienteJsonAnaliseEmail").html(json.json);
+
+
+
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#cadastroClienteBtnAnalisarEmail").prop("disabled", false);
+            }
+        });
+    }
+    
+    function listarMinhasMoedas() {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTE_DASHBOARD ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                cliente: $("#cadastroClienteCodigo").val()
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#minhas-moedas").html(json.html);
+                    } else {
+                        $("#minhas-moedas").html("");
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $("#minhas-moedas").html("");
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+    
+    
+    
+        function listarDispositivosMobile() {
+            
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DISPOSITIVOS_LISTAR ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    cliente: $("#cadastroClienteCodigo").val()
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#lista-dispositivos-mobile").html(json.html);
+                        } else {
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
+                        showNotyAlert(e, "e");
+                    }
+                }
+            });
+        }  
+        
+                  
+        
+        function alterarStatusAtivoDispositivoMobile(codigo) {
+            
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DISPOSITIVOS_ALTERARSTATUS ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {codigo: codigo},
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            showNotyAlert(json.mensagem, "s");
+                            listarDispositivosMobile();
+                        } else {
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
+                        showNotyAlert(e, "e");
+                    }
+                }
+            });
+        }
+</script>
+
+
+<div class="modal fade" id="cadastroCliente" tabindex="-1" role="dialog" aria-labelledby="cadastroCliente" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" style="width: 1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="cadastroClienteLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="cadastroClienteId" />
+                <input type="hidden" class="form-control" id="cadastroClienteCodigo" />
+                
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">Dados Pessoais</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">Endereço</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">Taxas</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false">Documentos</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-10" aria-expanded="false">CPF</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-7" aria-expanded="false">Permissões</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-5" aria-expanded="false">Anotações</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false">Consulta</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-8" aria-expanded="false">Status</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-9" aria-expanded="false">Permissões de Acesso</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-11" aria-expanded="false">Análise de Email</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-12" aria-expanded="false">Dashboard Cliente</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-13" aria-expanded="false">Dispositivos Mobile</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        
+                        
+                        
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Nome</label>
+                                            <input type="text" disabled="true" class="form-control" id="cadastroClienteNome" maxlength="200" />
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Email</label>
+                                            <input type="email" class="form-control" id="cadastroClienteEmail"  maxlength="200"  />
+                                            <button type="button" id="btn-reenviar-confirmacao" class="btn btn-warning btn-xs m-t-xs" onclick="enviarLinkConfirmacao()">
+                                                Reenviar link de confirmação
+                                            </button>
+                                            <button type="button" id="btn-reenviar-boasvindas" class="btn btn-warning btn-xs m-t-xs" onclick="enviarLinkBoasVidas()">
+                                            Reenviar link de boas vindas
+                                            </button>
+                                            
+                                            <!--(enviado <span id="qtdEnviosLink"></span>).-->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col col-lg-6">
+                                        <div class="form-group">
+                                            <label>Naturalidade</label>
+                                            <select class="form-control" disabled="true" id="cadastroClientePaisNaturalidade">
+                                                <option value="0">Selecione uma naturalidade</option>
+                                                <?php foreach ($paises as $pais) { ?>
+                                                <option value="<?php echo $pais->id ?>"><?php echo $pais->nome ?></option>
+                                                <?php }?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <br>
+                                        <div class="i-checks text-left">
+                                            <label class="" for="cadastroClienteUtilizaSaqueDepositoBrl"> 
+                                                <input type="checkbox" disabled="true" id="cadastroClienteUtilizaSaqueDepositoBrl" name="cadastroClienteUtilizaSaqueDepositoBrl" >
+                                                O cliente sacará e depositará valores em real brasileiro (BRL).
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label">RG</label>
+                                            <input type="text" disabled="true" class="form-control" id="cadastroClienteRG" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-lg-4 m-t-xs">
+                                        <div class="form-group">
+                                            <label>Tipo de documento</label>
+                                            <select id="tipoDocumento" name="cadastroClienteTipoDocumento" disabled="true" class="form-control">
+                                                <option value="<?php echo Utils\Constantes::DOCUMENTO_CPF ?>">CPF</option>
+                                                <option value="<?php echo Utils\Constantes::DOCUMENTO_CARTEIRA_PROFISSIONAL ?>">Carteira Profissional</option>
+                                                <option value="<?php echo Utils\Constantes::DOCUMENTO_CLT ?>">CLT</option>
+                                                <option value="<?php echo Utils\Constantes::DOCUMENTO_IDENTIDADE ?>">Carteira de Identidade</option>
+                                                <option value="<?php echo Utils\Constantes::DOCUMENTO_IDENTIFICACAO_FUNCIONAL ?>">Identificação Funcional</option>
+                                                <option value="<?php echo Utils\Constantes::DOCUMENTO_PASSAPORTE ?>">Passaporte</option>
+                                                <option value="<?php echo Utils\Constantes::DOCUMENTO_CARTEIRA_MOTORISTA ?>">Carteira de Motorista</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label">Documento</label>
+                                            <input type="text" disabled="true" class="form-control" id="cadastroClienteDocumento" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>Nome da Mãe</label>
+                                            <input class="form-control" disabled="true" id="cadastroClienteNomeMae"  maxlength="80"  />
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>Nome do Pai</label>
+                                            <input class="form-control" disabled="true" id="cadastroClienteNomePai" maxlength="80"  />
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-lg-1">
+                                        <div class="form-group">
+                                            <label class="control-label">DDI</label>
+                                            <input type="text" class="form-control" id="cadastroClienteDdi"  maxlength="5" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-lg-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Celular</label>
+                                            <input type="text" class="form-control" id="cadastroClienteCelular"  maxlength="17" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>Data de Nascimento</label>
+                                            <input type="text" disabled="true" class="form-control"  id="cadastroClienteDataNascimento" maxlength="10" />
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-6">
+                                        <div class="form-group">
+                                            <label>Frase de Segurança</label>
+                                            <input type="text" disabled="true" class="form-control"  id="cadastroClienteFraseSeguranca" maxlength="200" readonly />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col col-lg-2">
+                                        <label class="control-label">PIN</label>
+                                        <div class="input-group">
+
+                                                <input type="text" class="form-control" id="cadastroClientePin" readonly />
+                                                <span class="input-group-btn"> 
+                                                    <button type="button" class="btn btn-primary" onclick="zerarPin();">Reset</button>
+                                                </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>Sexo</label>
+                                            <div class="form-group">
+                                                <div class="radio radio-inline radio-info">
+                                                    <input type="radio" disabled="true" id="cadastroClienteSexoM" name="cadastroClienteSexo" value="M" >
+                                                    <label for="cadastroClienteSexo">
+                                                      Mas.
+                                                    </label>
+                                                </div>
+                                                <div class="radio radio-inline radio-info">
+                                                    <input type="radio" disabled="true" id="cadastroClienteSexoF" name="cadastroClienteSexo"  value="F" >
+                                                    <label for="cadastroClienteSexo">
+                                                      Fem.
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>Tipo de Autenticação</label>
+                                            <div class="form-group">
+                                                <div class="radio radio-inline radio-info">
+                                                    <input type="radio" name="cadastroClienteTipoAuth" id="cadastroClienteTipoAuthEmail" value="email" checked="">
+                                                    <label>E-mail</label>
+                                                </div>
+
+                                                <div class="radio radio-inline radio-info">
+                                                    <input type="radio" name="cadastroClienteTipoAuth" id="cadastroClienteTipoAuthSms" value="sms">
+                                                    <label>SMS</label>
+                                                </div>
+
+                                                <div class="radio radio-inline radio-info">
+                                                    <input type="radio" name="cadastroClienteTipoAuth" disabled id="cadastroClienteTipoAuthGoogle" value="google">
+                                                    <label>Google Authenticator</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col col-lg-10">
+                                        <div class="form-group">
+                                            <label>Endereço</label>
+                                            <input type="text" disabled="true" class="form-control" id="cadastroClienteEndereco" maxlength="200"  />
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-lg-2">
+                                        <div class="form-group">
+                                            <label>Número</label>
+                                            <input type="text" disabled="true" class="form-control"  id="cadastroClienteNumero" maxlength="20" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col col-lg-5">
+                                        <div class="form-group">
+                                            <label>Complemento</label>
+                                            <input type="text" disabled="true" class="form-control"  id="cadastroClienteComplemento"  maxlength="200"  />
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>Bairro</label>
+                                            <input type="text" disabled="true" class="form-control"  id="cadastroClienteBairro" maxlength="200"  />
+                                        </div>
+                                    </div>
+
+                                    <div class="col col-lg-3">
+                                        <div class="form-group">
+                                            <label>CEP</label>
+                                            <input type="text" disabled="true" class="form-control" id="cadastroClienteCep" maxlength="9" />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>País</label>
+                                            <select class="form-control" disabled="true" id="cadastroClientePais">
+                                                <option value="0">Selecione um país</option>
+                                                <?php foreach ($paises as $pais) { ?>
+                                                <option value="<?php echo $pais->id ?>"><?php echo $pais->nome ?></option>
+                                                <?php }?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>
+                                                <img src="<?php echo IMAGES ?>loading.gif" style="width: 20px; height: 20px; display: none;"  id="loadingEstados"/>
+                                                Estado
+                                            </label>
+                                            <select class="form-control" disabled="true" id="cadastroClienteEstado">
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>
+                                                <img src="<?php echo IMAGES ?>loading.gif" style="width: 20px; height: 20px; display: none;"  id="loadingCidades"/>
+                                                Cidade
+                                            </label>
+                                            <select class="form-control" disabled="true" id="cadastroClienteCidade">
+                                                <option value="">Selecione uma cidade</option>
+                                                <?php 
+                                                foreach ($cidades as $cid) { 
+                                                ?>
+                                                <option value="<?php echo $cid->codigo ?>" ><?php echo ($cid->nome) ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col col-lg-6">
+                                        <div class="form-group">
+                                            <label>Taxa saques</label>
+                                            <input type="text" class="form-control" id="cadastroClienteTaxaComissaoSaque" />
+                                            <div class="">
+                                                <label>
+                                                    <input type="checkbox" id="cadastroClienteConsiderarTaxaSaqueCliente" /> Utilizar esta
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-6">
+                                        <div class="form-group">
+                                            <label>Taxa depósitos</label>
+                                            <input type="text" class="form-control" id="cadastroClienteTaxaComissaoDeposito" />
+                                            <div >
+                                                <label>
+                                                    <input type="checkbox" id="cadastroClienteConsiderarTaxaDepositoCliente" /> Utilizar esta
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>Taxa transferência de criptomoedas</label>
+                                            <input type="text" class="form-control" id="cadastroClienteTaxaComissaoTransfenciaCurrency" />
+                                            <div >
+                                                <label>
+                                                    <input type="checkbox" id="cadastroClienteConsiderarTaxaTransferenciaCurrency" /> Utilizar esta
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col col-lg-4">
+                                        
+                                        <div class="form-group">
+                                            <label>Taxa transferencia remota</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="cadastroClienteTaxaTransferenciaRemota" />
+                                                <div class="input-group-addon">
+
+                                                    <select name="cadastroClienteTipoTaxaCarteiraRemota" id="cadastroClienteTipoTaxaCarteiraRemota">
+                                                        <option value="p" >%</option>
+                                                        <option value="v" >BTC</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    
+                                    <div class="col col-lg-4">
+                                        
+                                        <div class="form-group">
+                                            <label>Taxa Invoice PDV</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="cadastroClienteTaxaInvoicePdv" />
+                                                <div class="input-group-addon">
+
+                                                    <select name="cadastroClienteTipoTaxaInvoicePdv" id="cadastroClienteTipoTaxaInvoicePdv">
+                                                        <option value="p" >%</option>
+                                                        <option value="v" >BTC</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <div id="tab-4" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row" id="cadastroClienteContainerFotoDocumento">
+                                    <div class="col col-lg-8">
+                                        <div class="form-group" >
+                                            <label>Foto Documento</label> <br>
+                                            <a href="" target="_DOC" id="cadastroClienteFotoDocumentoLink"><br>
+                                            </a>
+                                            <br>
+                                            <a href="" target="_DOC" id="cadastroClienteFotoDocumentoVersoLink">
+                                            </a>
+                                            <div class="alert alert-success text-center" id="cadastroClienteFotoDocumentoVerificada" >
+                                                Verificada
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col col-lg-2 text-center">
+                                        <button class="btn btn-danger full-width btn-xs m-t-xs btn-doc btn-doc-rj" type="button" onclick="dialogRejeitarFoto('d', 0)">
+                                            Rejeitar
+                                        </button>
+                                    </div>
+                                    <div class="col col-lg-2 text-center">
+                                        <button class="btn btn-success full-width btn-xs m-t-xs btn-doc btn-doc-ap" type="button" onclick="rejeitarAceitarFoto('d', 1)">
+                                            Aprovar
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row" id="cadastroClienteContainerFotoResidencia">
+                                    <div class="col col-lg-8">
+                                        <div class="form-group"  >
+                                            <label>Foto do comprovante de residência</label><br>
+
+                                            <a href="" target="_RES" id="cadastroClienteFotoResidenciaLink">
+                                            </a>
+                                           
+                                            <div class="alert alert-success text-center" id="cadastroClienteFotoResidenciaVerificada" >
+                                                Verificada
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-2 text-center">
+                                        <button class="btn btn-danger full-width btn-xs m-t-xs btn-res btn-res-rj" type="button" onclick="dialogRejeitarFoto('r', 0)">
+                                            Rejeitar
+                                        </button>
+                                    </div>
+                                    <div class="col col-lg-2 text-center">
+                                        <button class="btn btn-success full-width btn-xs m-t-xs btn-res btn-res-ap" type="button" onclick="rejeitarAceitarFoto('r', 1)">
+                                            Aprovar
+                                        </button>
+                                    </div>
+                                </div>
+                                 <hr>
+                                <div class="row" id="cadastroClienteContainerFotoCliente">
+                                    <div class="col col-lg-8">
+                                        <div class="form-group" >
+                                            <label>Envie uma selfie</label><br>
+
+                                            <a href="" target="_CLI" id="cadastroClienteFotoClienteLink">
+                                            </a>
+                                            <div class="alert alert-success text-center" id="cadastroClienteFotoClienteVerificada" >
+                                                Verificada
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-2 text-center">
+                                        <button class="btn btn-danger full-width btn-xs m-t-xs btn-selfie btn-selfie-rj" type="button" onclick="dialogRejeitarFoto('c', 0)">
+                                            Rejeitar
+                                        </button>
+                                    </div>
+                                    <div class="col col-lg-2 text-center">
+                                        <button class="btn btn-success full-width btn-xs m-t-xs btn-selfie btn-selfie-ap" type="button" onclick="rejeitarAceitarFoto('c', 1)">
+                                            Aprovar
+                                        </button>
+                                    </div>
+                                </div>
+                                 <hr>
+                                <div class="row" id="cadastroClienteContainerFotoOutroDocumento">
+                                    <div class="col col-lg-8">
+                                        <div class="form-group" >
+                                            <label>Documento PJ</label>
+                                            <a href="" target="_DOC" id="cadastroClienteFotoOutroDocumentoLink">
+                                            </a>
+                                            <div class="alert alert-success text-center" id="cadastroClienteFotoOutroDocumentoVerificada" >
+                                                Verificada
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-2 text-center">
+                                        <button class="btn btn-danger btn-xs m-t-xs btn-pj btn-pj-rj" type="button" onclick="dialogRejeitarFoto('o', 0)">
+                                            Rejeitar
+                                        </button>
+                                    </div>
+                                    <div class="col col-lg-2 text-center">
+                                        <button class="btn btn-success btn-xs m-t-xs btn-pj btn-pj-ap" type="button" onclick="rejeitarAceitarFoto('o', 1)">
+                                            Aprovar
+                                        </button>
+                                    </div>
+                                </div>
+                                 
+                                
+                                <div class="row">
+                                    <div class="col-lg-8"></div>
+                                    <div class="col col-lg-4 col-xs-12 text-righ">
+                                        <button type="button" class="btn btn-warning full-width" onclick="notificarStatusAnalise();">
+                                            Notificar Cliente
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <div id="tab-7" class="tab-pane">
+                            
+                            
+                            <div class="panel-body">
+                                
+                                <h4>As configurações de serviços abaixo serão aplicadas somente ao cliente em edição: </h4>
+                                
+                                <div class="row">
+                                    <div class="col col-lg-4">
+                                        
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading">
+                                                Criptomoedas
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" name="cadastroClienteStatusDepositoCurrency" id="cadastroClienteStatusDepositoCurrency">
+                                                    <label for="cadastroClienteStatusDepositoCurrency">
+                                                        Habilitar Depósito
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox">
+                                                    <input type="checkbox" name="cadastroClienteStatusSaqueCurrency" id="cadastroClienteStatusSaqueCurrency">
+                                                    <label for="cadastroClienteStatusSaqueCurrency">
+                                                        Habilitar Saque
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox">
+                                                    <input type="checkbox" name="cadastroClienteForcarAnaliseSaques" id="cadastroClienteForcarAnaliseSaques">
+                                                    <label for="cadastroClienteForcarAnaliseSaques">
+                                                        Forçar que os saques caiam sempre em análise.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    
+                                    <div class="col col-lg-4">
+                                        
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading">
+                                                Dinheiro
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" name="cadastroClienteStatusDepositoBrl" id="cadastroClienteStatusDepositoBrl">
+                                                    <label for="cadastroClienteStatusDepositoBrl">
+                                                        Habilitar Depósito
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox">
+                                                    <input type="checkbox" name="cadastroClienteStatusSaqueBrl" id="cadastroClienteStatusSaqueBrl">
+                                                    <label for="cadastroClienteStatusSaqueBrl">
+                                                        Habilitar Saque
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <div class="col col-lg-4">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading">
+                                                Carteiras Remotas
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" name="cadastroClienteStatusResgatePdv" id="cadastroClienteStatusResgatePdv">
+                                                    <label for="cadastroClienteStatusResgatePdv">
+                                                        Resgate de PDV
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="tab-5" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col col-lg-12">
+                                        
+                                            <label class="control-label">Anotações</label>
+                                            <br>
+                                            <div class="col-lg-6">   
+                                            <div class="i-checks text-left">
+                                                    <label class="" for="analiseCliente"> 
+                                                        <input type="checkbox" id="analiseCliente" name="analiseCliente">
+                                                        Analisar cliente com atenção
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                            <div class="text-right">
+                                                <button class="btn btn-primary text-center m-b-xs" id="adicionarComentario" name="adicionarComentario" onclick="dialogComentario();">Adicionar comentário</button>
+                                            </div>
+                                            </div>
+                                            <textarea class="form-control" style="height: 100px;;" id="cadastroClienteAnotacoes"></textarea>
+                                            <br>
+                                            <table class="table table-bordered table-condensed table-hover" style="background-color: #fff;">
+                                                <thead>
+                                                </thead>
+                                                <tbody id="listaComentariosCliente" style="max-height: 300px; overflow-y: scroll">
+                                                                                              
+                                                </tbody>
+                                            </table>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div id="tab-6" class="tab-pane">
+                            <div class="panel-body">
+                                
+                                <div class="row">
+                                    <div class="col col-lg-9">
+                                        <div class="form-group">
+                                            <label class="control-label">CNPJ</label>
+                                            <input type="text" id="consultaCnpj" name="consultaCnpj" class="form-control" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col col-lg-3 text-center">
+                                        <br>
+                                        <button class="btn btn-primary" type="button" id="btn-consultar-cnpj" onclick="consultarCnpj();"> 
+                                            Consultar
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <br>
+                                
+                                <div class="row">
+                                    <div class="col col-lg-12">
+                                        
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-6">
+                                                        <strong>Usuário: </strong> <span id="empresaUsuarioConsulta"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>Data da consulta: </strong> <span id="empresaDataConsulta"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-6">
+                                                        <strong>Tipo: </strong> <span id="empresaTipo"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>Data Abertura: </strong> <span id="empresaDataAbertura"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-12">
+                                                        <strong>Capital Social: </strong> <span id="empresaCapitalSocial"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-6">
+                                                        <strong>Nome da Empresa: </strong> <span id="empresaNomeEmpresa"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>Nome Fantasia: </strong> <span id="empresaNomeFantasia"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-4">
+                                                        <strong>Situação Cadastral: </strong> <span id="empresaSituacaoCadastral"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-4">
+                                                        <strong>Data Situação Cadastral: </strong> <span id="empresaDataSituacaoCadastral"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-4">
+                                                        <strong>Motivo Situação Cadastral: </strong> <span id="empresaMotivoSituacaoCadastral"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-6">
+                                                        <strong>Situação Especial: </strong> <span id="empresaSituacaoEspecial"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>Data Situação Especial: </strong> <span id="empresaDataSituacaoEspecial"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-12">
+                                                        <strong>Atividade Principal: </strong> <span id="empresaAtividadePrincipal"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-12">
+                                                        <strong>Atividades Secundárias: </strong> <span id="empresaAtividadesSecundarias"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-12">
+                                                        <strong>Natureza Jurídica: </strong> <span id="empresaNaturezaJuridica"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-5">
+                                                        <strong>Logradouro: </strong> <span id="empresaLogradouro"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-3">
+                                                        <strong>Numero: </strong> <span id="empresaNumero"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-4">
+                                                        <strong>Complemento: </strong> <span id="empresaComplemento"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-4">
+                                                        <strong>Bairro: </strong> <span id="empresaBairro"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-4">
+                                                        <strong>Municipio: </strong> <span id="empresaMunicipio"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-4">
+                                                         <strong>UF: </strong> <span id="empresaUf"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-3">
+                                                        <strong>CEP: </strong> <span id="empresaCep"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-3">
+                                                        <strong>Telefone: </strong> <span id="empresaTelefone"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>E-mail: </strong> <span id="empresaEmail"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-6">
+                                                        <strong>CPF do Responsável: </strong> <span id="empresaCpfResponsavel"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>Nome Responsável: </strong> <span id="empresaNomeResponsavel"  ></span>
+                                                    </div>
+                                                </div>
+                                                <p>
+                                                    
+                                                </p>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-12">
+                                                        <strong>Quadro de Sócios: </strong> <span id="empresaSocios"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        
+                                    </div>
+                                </div>
+                                
+                               
+                                
+                            </div>
+                        </div>
+                        
+                        <div id="tab-8" class="tab-pane">
+                            <div class="panel-body">
+                                
+                                <table class="table small m-b-xs">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Selfie
+                                            </td>
+                                            <td style="text-align: right;" id="cadastroClienteSituacaoSelfie"></td>
+
+                                        </tr>
+                                    <tr>
+                                        <td>
+                                            Documentos
+                                        </td>
+                                        <td style="text-align: right;" id="cadastroClienteSituacaoDocumento"></td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Comprovante de Residência
+                                        </td>
+                                        <td style="text-align: right;" id="cadastroClienteSituacaoResidencia"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Autenticação por Google Authenticator
+                                        </td>
+                                        <td style="text-align: right;" id="cadastroClienteSituacaoAutenticacao"> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            PIN de Segurança
+                                        </td>
+                                        <td style="text-align: right;" id="cadastroClienteSituacaoPin"> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Frase de Segurança
+                                        </td>
+                                        <td style="text-align: right;" id="cadastroClienteSituacaoFraseSeguranca"> </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                        
+                        <div id="tab-9" class="tab-pane">
+                            <div class="panel-body">
+                                
+                                <div class="row">
+                                    <div class="col col-lg-12 text-righ">
+                                        <div class="checkbox pull-right">
+                                            <input type="checkbox" id="checkUncheckAll"> 
+                                            <label for="checkUncheckAll">
+                                                Marcar / Desmarcar todos
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <ul class="list-group" style="height: 400px; overflow-y: scroll;">
+                                <?php 
+                                if (sizeof($arvore)  >0) { 
+                                    foreach ($arvore as $dadosModulo) {
+                                        $modulo = $dadosModulo["modulo"];
+                                        $rotinas = $dadosModulo["rotinas"];
+                                        $outrosNiveis = $dadosModulo["modulos"];
+                                        $acoes = $dadosModulo["acoes"];
+                                ?>
+                                    <li class="list-group-item">
+                                        <div class="alert alert-info">
+                                            <div class="row">
+                                                <div class="col col-md-6">
+                                                    <strong style="font-size: 15px;"><?php echo $modulo->nome ?></strong>
+                                                </div>
+
+                                                <div class="col col-md-6">
+                                                <?php 
+                                                foreach ($acoes as $moduloHasAcao) {
+                                                    ?>
+                                                    <div class="checkbox">
+                                                        <input type="checkbox" id="mod-<?php echo $moduloHasAcao->id ?>" class="permissao-modulo" value="<?php echo $moduloHasAcao->id ?>"> 
+                                                        <label for="mod-<?php echo $moduloHasAcao->id ?>">
+                                                            <?php echo $moduloHasAcao->acao->nome ?> - <?php echo $moduloHasAcao->acao->descricao ?>
+                                                        </label>
+                                                    </div>
+                                                    <?php
+                                                }
+                                                ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <ul class="list-group">
+                                            <?php
+                                            foreach ($rotinas as $dadosRotinas) {
+                                                $rotina = $dadosRotinas["rotina"];
+                                                $acoes = $dadosRotinas["acoes"];
+                                                ?>
+                                            <li class="list-group-item padd-horizontal-15">
+                                                <span class="label label-success"> 
+                                                    <?php echo $rotina->nome ?>
+                                                </span>
+                                                
+                                                    <?php 
+                                                    foreach ($acoes as $rotinaHasAcao) {
+                                                        ?>
+                                                        <div class="checkbox">
+                                                            <input type="checkbox" id="per-<?php echo $rotinaHasAcao->id ?>" class="permissao-rotina mod-<?php echo $moduloHasAcao->id ?>" value="<?php echo $rotinaHasAcao->id ?>"> 
+                                                            <label for="per-<?php echo $rotinaHasAcao->id ?>">
+                                                                <?php echo $rotinaHasAcao->acao->nome ?> - <?php echo $rotinaHasAcao->acao->descricao ?>
+                                                            </label>
+                                                        </div>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                
+                                            </li>
+                                                <?php
+                                            }
+                                            ?>
+                                            
+                                            
+                                            <?php
+                                            if (sizeof($outrosNiveis) > 0) {
+                                                foreach ($outrosNiveis as $dadosSubModulo) {
+                                                    $subModulo = $dadosSubModulo["modulo"];
+                                                    $subAcoes = $dadosSubModulo["acoes"];
+                                                    $subRotinas = $dadosSubModulo["rotinas"];
+                                                ?>
+                                                <li class="list-group-item padd-horizontal-15">
+                                                    <div class="alert alert-info">
+                                                        <strong style="font-size: 15px;"><?php echo $subModulo->nome ?></strong>
+
+                                                        <?php 
+                                                        foreach ($subAcoes as $subModuloHasAcao) {
+                                                            ?>
+                                                            <div class="checkbox pull-right">
+                                                                <input type="checkbox" id="mod-<?php echo $subModuloHasAcao->id ?>" class="permissao-modulo" value="<?php echo $subModuloHasAcao->id ?>"> 
+                                                                <label for="mod-<?php echo $subModuloHasAcao->id ?>">
+                                                                    <?php echo $subModuloHasAcao->acao->nome ?> - <?php echo $subModuloHasAcao->acao->descricao ?>
+                                                                </label>
+                                                            </div>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </div>
+
+                                                    <?php if (sizeof($subRotinas) > 0) { ?>
+                                                    <ul class="list-group padd-horizontal-15">
+                                                        
+                                                        <?php
+                                                            foreach ($subRotinas as $dadosSubRotinas) {
+                                                                $subRotina = $dadosSubRotinas["rotina"];
+                                                                $acoes = $dadosSubRotinas["acoes"];
+                                                                ?>
+                                                            <li class="list-group-item padd-horizontal-15">
+                                                                <span class="label label-success"> 
+                                                                    <?php echo $subRotina->nome ?>
+                                                                </span>
+
+                                                                    <?php 
+                                                                    foreach ($acoes as $rotinaHasAcao) {
+                                                                        ?>
+                                                                        <div class="checkbox">
+                                                                            <input type="checkbox" id="per-<?php echo $rotinaHasAcao->id ?>" class="permissao-rotina mod-<?php echo $subModuloHasAcao->id ?>" value="<?php echo $rotinaHasAcao->id ?>"> 
+                                                                            <label for="per-<?php echo $rotinaHasAcao->id ?>">
+                                                                                <?php echo $rotinaHasAcao->acao->nome ?> - <?php echo $rotinaHasAcao->acao->descricao ?>
+                                                                            </label>
+                                                                        </div>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
+
+                                                            </li>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                        
+                                                    </ul>
+                                                    <?php } ?>
+                                                </li>
+                                                <?php
+                                                }
+                                            }
+                                            ?>
+                                            
+                                        </ul>
+                                        
+                                    </li>
+                                <?php
+                                    }
+                                } 
+                                ?>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        
+                        <div id="tab-10" class="tab-pane">
+                            <div class="panel-body">
+                                
+                                <div class="row">
+                                    <div class="col col-lg-12 text-center">
+                                        <br>
+                                        <button class="btn btn-primary" type="button" id="btn-consultar-cpf" onclick="consultarCpf();"> 
+                                            Consultar
+                                        </button>
+                                        <br><br><br>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col col-lg-12">
+                                        
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-6">
+                                                        <strong>CPF: </strong> <span id="consultaCPFDocumento"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>Data da consulta: </strong> <span id="consultaCPFDataConsulta"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-6">
+                                                        <strong>Data de nascimento: </strong> <span id="consultaCPFDataNascimento"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>Data de inscrição: </strong> <span id="consultaCPFDataInscricao"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-12">
+                                                        <strong>Titular: </strong> <span id="consultaCPFTitular"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-12">
+                                                        <strong>Nome da Mãe: </strong> <span id="consultaCPFMae"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-6">
+                                                        <strong>Genero: </strong> <span id="consultaCPFGenero"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>Situação: </strong> <span id="consultaCPFSituacao"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-5">
+                                                        <strong>Logradouro: </strong> <span id="consultaCPFLogradouro"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-2">
+                                                        <strong>Número: </strong> <span id="consultaCPFNumero"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-5">
+                                                        <strong>Complemento: </strong> <span id="consultaCPFComplemento"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-5">
+                                                        <strong>Bairro: </strong> <span id="consultaCPFBairro"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-5">
+                                                        <strong>Cidade: </strong> <span id="consultaCPFCidade"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-2">
+                                                        <strong>UF: </strong> <span id="consultaCPFUf"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col col-lg-6">
+                                                        <strong>CEP: </strong> <span id="consultaCPFCep"  ></span>
+                                                    </div>
+                                                    <div class="col col-lg-6">
+                                                        <strong>Ano de óbito: </strong> <span id="consultaCPFAnoObito"  ></span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        
+                                    </div>
+                                </div>
+                                
+                               
+                                
+                            </div>
+                        </div>
+                        
+                        
+                        <div id="tab-11" class="tab-pane">
+                            <div class="panel-body">
+                                
+                                <div class="row">
+                                    <div class="col col-lg-12 text-center">
+                                        <br>
+                                        <button class="btn btn-primary text-center m-b-xs" id="cadastroClienteNomeBtnAnalisarEmail" name="cadastroClienteNomeBtnAnalisarEmail" onclick="analisarEmail();">Analisar E-mail</button>
+                                    </div>
+                                </div>
+                                <br><br>
+                                <div class="row">
+                                    <div class="col col-lg-12">
+                                        <label class="control-label">Análise de E-mail</label>
+                                        <br>
+<div class="ibox-content">
+
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+    <th>Resposta</th>
+    <th>Descrição</th>
+    </tr>
+    </thead>
+<tbody>
+    <tr>
+        <td class="center" id="ae1"></td>
+        <td>Informação de que um Email é realmente válido.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae2"></td>
+        <td>Informação de que a sintax de um Email é válido.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae3"></td>
+        <td>Informação de que um Email utiliza serviços de Emails temporário e são descartáveis.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae4"></td>
+        <td>Informação de que um Email é do tipo Gibberish ou apenas um Email com digitação randômica.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae5"></td>
+        <td>Informação de que o Email é de uma instituição Bancária.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae6"></td>
+        <td>Informação de que o Email é de uma instituição Governamental.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae7"></td>
+        <td>Informação de que o Email é gratuito.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae8"></td>
+        <td>Informação de que o Usuário do Email é um Nome Próprio.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae9"></td>
+        <td>Informação de que o Email é do tipo Regra de entraga.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae10"></td>
+        <td>Informação de que o Email é uma armadilha para capturar Spam.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae11"></td>
+        <td>Informação de que o Domínio é conhecido como diversos erros de envio.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae12"></td>
+        <td>Informação de que o Email ou o Domínio é um erro de digitação.</td>
+    </tr>
+    <tr>
+        <td class="center" id="ae13"></td>
+        <td>Informação de que o Domínio aceita qualquer tipo de Email, inválido ou não. </td>
+    </tr>
+</tbody>
+</table>
+</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="tab-12" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col col-lg-12">
+                                        <label class="control-label">Dashboard do Cliente</label>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-condensed table-hover" style="background-color: #fff;">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align: center;"><strong>Ícone</strong></th>
+                                                        <th style="text-align: center;"><strong>Ranking Mês</strong></th>
+                                                        <th style="text-align: center;"><strong>Volume</strong></th>
+                                                        <th style="text-align: center;"><strong>Ordem</strong></th>
+                                                        <th style="text-align: center;"><strong>Investido</strong></th>
+                                                        <th style="text-align: center;"><strong>Valor Total</strong></th>                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="minhas-moedas">
+                                                    <tr>
+                                                        <td colspan="5">
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div id="tab-13" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col col-lg-12">
+                                        <div class="ibox-title">
+                                            <h2 class="page-header"><strong>Dispositivos Mobile</strong></h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ibox-content">
+                                    <div class="col col-lg-12">
+
+                                        <table class="table table-hover table-bordered table-condensed table-striped">
+
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center"><strong>Marca/Fabricante</strong></th>
+                                                    <th class="text-center"><strong>Modelo</strong></th>
+                                                    <th class="text-center"><strong>Número do Dispositivo</strong></th>
+                                                    <th class="text-center"><strong>Número Serial</strong></th>
+                                                    <th class="text-center"><strong>Sistema Operacional</strong></th>
+                                                    <th class="text-center"><strong>Versão do S.O.</strong></th>
+                                                    <th class="text-center"><strong>Status</strong></th>
+                                                    <th class="text-center"><strong>Data de Cadastro</strong></th>
+                                                    <th class="text-center"><strong>Ativar/Desativar</strong></th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="lista-dispositivos-mobile">
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+
+                </div>
+                                
+                <div class="row">
+                    <div class="col col-lg-12 col-xs-12 text-center">
+                        <br><br>
+                        <div class="col-lg-3">
+                            <button type="button" class="btn btn-success" onclick="modalTaxasCliente($('#cadastroClienteCodigo').val());" >
+                                Taxas de Moedas
+                            </button>
+                        </div>
+                        
+                        <div class="col-lg-3">
+                            <button type="button" class="btn btn-info" onclick="cadastroClienteHasComissao($('#cadastroClienteCodigo').val());" >
+                                Comissões
+                            </button>
+                        </div>
+                        
+                        <div class="col-lg-3">
+                            <button type="button" class="btn btn-info" onclick="modalCreditosCliente($('#cadastroClienteCodigo').val());" >
+                                Créditos
+                            </button>
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="button" class="btn btn-primary full-width" id="cadastroClienteIniciarAnalise" onclick="iniciarAnaliseCliente();" >
+                                Iniciar Análise
+                            </button>
+                            <button type="button" class="btn btn-danger full-width" id="cadastroClienteFinalizarAnalise" onclick="finalizarAnaliseCliente();" style="display: none;">
+                                Finalizar Análise
+                            </button>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="ibox-content">
+                        <div class="col-lg-12 col-xs-12">
+                            <label><strong>Ação</strong></label>
+                            <div id="acao">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-8"></div>
+                <div class="col-lg-2 col-xs-12">
+                <button type="button" class="btn btn-default full-width m-t-xs text-center" id="cadastroClienteFechar" data-dismiss="modal">Fechar</button>
+                </div>
+                <div class="col-lg-2">
+                <button type="button" class="btn btn-primary full-width m-t-xs text-center" onclick="salvarCliente();" id="cadastroClienteSalvar" >Salvar</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="cadastroTotal" tabindex="-1" role="dialog" aria-labelledby="cadastroTotal" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="cadastroTotalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="cadastroTotalIdCliente" />
+                <div class="row">
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label class="control-label">Mês de Referência</label>
+                            <select class="form-control" id="cadastroTotalMes">
+                                <option value="01">Janeiro</option>
+                                <option value="02">Fevereiro</option>
+                                <option value="03">Março</option>
+                                <option value="04">Abril</option>
+                                <option value="05">Maio</option>
+                                <option value="06">Junho</option>
+                                <option value="07">Julho</option>
+                                <option value="08">Agosto</option>
+                                <option value="09">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col col-lg-6">
+                        <div class="form-group">
+                            <label class="control-label">Ano de referência (YY)</label>
+                            <input type="text" class="form-control" id="cadastroTotalAno"  maxlength="2"  />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="cadastroTotalLoader" style="display: none;">
+                    <div class="col col-lg-12 text-center" >
+                        <img src="<?php echo IMAGES ?>loading.gif" />
+                    </div>
+                </div>
+
+                <div class="row" id="cadastroTotalValores">
+                    <div class="col col-lg-3">
+                        <div class="form-group">
+                            <label class="control-label">Depósito (R$)</label>
+                            <input type="text" class="form-control" id="cadastroTotalDeposito" />
+                        </div>
+                    </div>
+                    <div class="col col-lg-3">
+                        <div class="form-group">
+                            <label class="control-label">Saque (R$)</label>
+                            <input type="text" class="form-control" id="cadastroTotalSaque" />
+                        </div>
+                    </div>
+                    <div class="col col-lg-3">
+                        <div class="form-group">
+                            <label class="control-label">Venda (BTC)</label>
+                            <input type="text" class="form-control" id="cadastroTotalVenda" />
+                        </div>
+                    </div>
+                    <div class="col col-lg-3">
+                        <div class="form-group">
+                            <label class="control-label">Compra (R$)</label>
+                            <input type="text" class="form-control" id="cadastroTotalCompra" />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="cadastroTotalFechar" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarValorMensal();" id="cadastroTotalSalvar" >Salvar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<div class="modal fade" id="importarExcel" tabindex="-1" role="dialog" aria-labelledby="importarExcel" aria-hidden="true" >
+    <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="importarExcelLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <form action="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_POSTIMPORTAREXCELDADOSMENSALCLIENTE ?>" id="formulario-importacao-excel" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col col-lg-4">
+                            <div class="form-group">
+                                <label class="control-label">Mês de Referência</label>
+                                <select class="form-control" id="excelMes" name="excelMes">
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-lg-4">
+                            <div class="form-group">
+                                <label class="control-label">Ano de referência (YY)</label>
+                                <input type="text" class="form-control" id="excelAno" name="excelAno"  maxlength="2"  />
+                            </div>
+                        </div>
+                        <div class="col col-lg-4">
+                            <div class="form-group">
+                                <label class="control-label">Tipo de Arquivo</label>
+                                <select class="form-control" id="tipo" name="tipo">
+                                    <option value="Excel5">Excel5</option>
+                                    <option value="Excel2003XML">Excel 2003</option>
+                                    <option value="Excel2007">Excel 2007</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <div class="form-group">
+                                <label>Arquivo Excel</label>
+                                <input type="file" id="dados" name="dados" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="importarExcelFechar" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="importarExcelValorMensal();" id="importarExcelSalvar" >Salvar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+<div class="modal fade" id="dialogRejeitarFoto" tabindex="-1" role="dialog" aria-labelledby="dialogRejeitarFoto" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="importarExcelLabel">Rejeitar Documento</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" value="" id="dialogRejeitarFotoDoc" />
+                <input type="hidden" value="" id="dialogRejeitarFotoAceitar" />
+                
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label class="control-label">Informe o motivo da rejeição</label>
+                            <select class="form-control" id="dialogRejeitarFotoMotivo">
+                                <option value="">Por favor, selecione o motivo da rejeição:</option>
+                                <optgroup label="Foto do Documento">
+                                    <option value="Não é um arquivo válido."><?php echo $idioma->getText("naoArqValido") ?></option>
+                                    <option value="Não possui foto no documento."><?php echo $idioma->getText("naoPossuiFotoDoc") ?></option>
+                                    <option value="Documento ilegível ou de difícil leitura."><?php echo $idioma->getText("docIlegivelDifLeitura") ?></option>
+                                    <option value="Documentos aceitos: CNH, RG, Passaporte, Identidade Militar, RNE."><?php echo $idioma->getText("docsAceitos") ?></option>
+                                    <option value="Documento não compatível com os dados informados."><?php echo $idioma->getText("docNaoCompativelDados") ?></option>
+                                    <option value="É necessário preencher todos os campos."><?php echo $idioma->getText("necessarioPreencherTodos") ?></option>
+                                    <option value="Documento vencido."><?php echo $idioma->getText("docVencido") ?></option>
+                                    <option value="É necessário o verso do documento."><?php echo $idioma->getText("necessarioVersoDoc") ?></option>
+                                    <option value="Obrigatório conter o CPF no documento."><?php echo $idioma->getText("obrigatorioConterCpf") ?></option>
+                                    <option value="O documento da selfie não é o mesmo do documento enviado."><?php echo $idioma->getText("docNaoMesmo") ?></option>
+                                </optgroup>
+                                
+                                <optgroup label="Foto do comprovante de residência.">
+                                    <option value="Comprovante de residência inválido."><?php echo $idioma->getText("compResidenciaInvalido") ?></option>
+                                    <option value="Documento ilegível ou de difícil leitura."><?php echo $idioma->getText("docIlegivelDifLeitura") ?></option>
+                                    <option value="Envie comprovante de residência de no máximo três meses atrás."><?php echo $idioma->getText("envieCompResidenciaTresMeses") ?></option>
+                                    <option value="Documentos aceitos: Contas de água, gás, energia elétrica ou telefone (fixo ou móvel)."><?php echo $idioma->getText("docAceitosResidencia") ?></option>
+                                    <option value="Documento não compatível com os dados informados."><?php echo $idioma->getText("docNaoCompativelDados") ?></option>
+                                    <option value="É necessário preencher todos os campos."><?php echo $idioma->getText("necessarioPreencherTodos") ?></option>
+                                </optgroup>
+                                
+                                <optgroup label="Selfie do cliente">
+                                    <option value="Impossível analizar."><?php echo $idioma->getText("impossivelAnalizar") ?></option>
+                                    <option value="Selfie não está legível."><?php echo $idioma->getText("selfieNaoEstaLegivel") ?></option>
+                                    <option value="Pessoa identificada na foto não corresponde ao documento enviado."><?php echo $idioma->getText("pessoaIdentificadaNaoCorresponde") ?></option>
+                                    <option value="Documento não compatível com os dados informados."><?php echo $idioma->getText("docNaoCompativelDados") ?></option>
+                                    <option value="O documento da selfie não é o mesmo do documento enviado."><?php echo $idioma->getText("oDocSelfieNaoMesmoEnviado") ?></option>
+                                </optgroup>
+                                
+                                <optgroup label="Outro Documento">
+                                    <option value="Não é um arquivo válido."><?php echo $idioma->getText("naoArqValido") ?></option>
+                                    <option value="Documento ilegível ou de difícil leitura."><?php echo $idioma->getText("docIlegivelDifLeitura") ?></option>
+                                    <option value="Documento não compatível com os dados informados."><?php echo $idioma->getText("docNaoCompativelDados") ?></option>
+                                </optgroup>
+                                
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Mensagem adicional</label>
+                            <textarea class="form-control" maxlength="1000" id="dialogRejeitarFotoObservacoes"></textarea>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogRejeitarFotoClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" onclick="callRejeitarFoto();" id="dialogRejeitarFotoRejeitar" >Rejeitar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="dialogCancelarFranquia" tabindex="-1" role="dialog" aria-labelledby="dialogCancelarFranquia" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="importarExcelLabel">Cancelamento de Licença</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" value="" id="dialogCancelarFranquiaIdCliente" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <h4>Deseja realmente cancelar a Licença?</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogCancelarFranquiaClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" onclick="cancelarFranquia();" id="dialogCancelarFranquiaConfirmar" >Confirmar Cancelamento</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+<div class="modal fade" id="dialogComentarioObservacaoCliente" tabindex="-1" role="dialog" aria-labelledby="dialogComentarioObservacaoCliente" aria-hidden="true" >
+    <div class="modal-dialog modal-lg" style="width: 1000px;" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="importarExcelLabel">Comentários sobre o cliente</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" value="" id="dialogComentarioObservacaoClienteIdCliente" />
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="form-group">
+                            <label>Informe o comenrário abaixo: </label>
+                            <textarea class="form-control" id="dialogComentarioObservacaoClienteComentario"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="dialogComentarioObservacaoClienteClose" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="salvarComentario();" id="dialogComentarioObservacaoClienteConfirmar" >Salvar Comentário</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<?php Utils\Layout::view("taxas_clientes", $_data) ?>
+<?php Utils\Layout::view("comissoes_clientes", $_data) ?>
+<?php Utils\Layout::view("creditos_clientes", $_data) ?>

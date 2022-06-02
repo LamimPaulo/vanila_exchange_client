@@ -1,0 +1,405 @@
+<?php
+
+//Apelidos usados apenas para facilitar a declaração das classes 
+use Zend\Loader\ClassMapAutoloader;
+use Zend\Config\Reader\Xml;
+use Io\BancoDados;
+use Utils\Geral;
+use Utils\Layout;
+use Models\ManagerModel;
+use Models\Manager;
+
+/**
+ * Classe de Relação principal com todo o sistema, contém funções comuns utilizadas
+ * pelo sistema.
+ *
+ * @copyright Copyright (c) 2012 DDuo Sistemas Ltda (http://www.dduo.com.br)
+ * @package Core
+ */
+class Dduo {
+
+    /**
+     *
+     * @var BancoDados
+     */
+    private static $_conexao = null;
+    public $_dadosConfiguracao = null;
+
+    function __construct() {
+        //Trecho de código responsável por incluir todas as classes no sistema
+        $this->_oClassMapAutoloader = new ClassMapAutoloader ();
+        $this->_oClassMapAutoloader->registerAutoloadMap('./Library/autoload_classmap.php');
+        $this->_oClassMapAutoloader->registerAutoloadMap('./Modules/autoload_classmap.php');
+        $this->_oClassMapAutoloader->register();
+        $this->carregarConfiguracoes();
+    }
+
+    private function carregarConfiguracoes() {
+        self::$_conexao = new BancoDados();
+        define('TITLE', "Sistema de Controle de Referências");
+        define('DESCRIPTION', "Sistema de controle de referências");
+        define('AUTHOR', "Vagner Carvalho");
+        define('KEYWORDS', "Controle de Referências");
+        define('ROBOTS', "index,follow");
+    }
+    
+    public function getTimeZone() {
+        return self::$_conexao->getTimeZone();
+    }
+
+    public static function layout($_name, $_data = null) {
+        return Layout::view($_name, $_data);
+    }
+
+    public static function conexao() {
+        return self::$_conexao;
+    }
+
+    /**
+     *  
+     * Método incluir automaticamente os arquivos de controllers no momento que for instanciar a classe.
+     * 
+     * 
+     * 
+     * @access   public
+     * @name     loader()
+     * @since    0.1 ~ 0.2
+     * 
+     * @param String $class Variável com o nome da classe 
+     */
+    public static function loader($class) {
+        /**
+         * Caminho completo para o controller.
+         * $var string
+         */
+        $class = null;
+        $state = true;
+        try {
+            $modules = _MODULE_;
+            if (!empty($modules)) {
+                $file = ucfirst($class) . '.class.php';                                           //Formata o nome correspondendo com o controller que será incluído.
+                $file = "Modules/" . _MODULE_ . "/Controllers/" . $file;                           //Caminho completo para o controller.
+
+                if (file_exists($file))                                                             //Verifica se existe o controller na pasta.
+                    require_once($file);                                                           //Inclui o arquivo antes de instanciar a classe.
+                else
+                    throw new Exception("[LOADER]:: FILENOTFOUND::: {$file}" . _MODULE_);                     //Se não for encontrado o arquivo gera um erro.
+            }
+        } catch (Exception $e) {
+            echo "<script>alert('" . $e->getMessage() . "')</script>";
+        }
+    }
+
+    /**
+     *  
+     * Método que verifica a URL que está sendo acessada, separa todos os parâmetros
+     * que está sendo passado seguindo a seguinte ordem:
+     * http://dares-laraujo/listar/01/02/03
+     * ou também pode ser enviado da forma comum de passar parâmetros por GET
+     * http://dares-laraujo/?controller=cliente&views=listar&param1=01&param2=02&param3=03
+     * <code>
+     *     $objDduo = new Dduo();
+     *     $params = $objDduo->checaURL(http://dares-laraujo/?modules=acesso&controller=listar&param1=01&param2=02&param3=03);
+     *     $objDduo->printVar($params);
+     *     //Este resultado abaixo representa todos os parâmetros preenchidos por meio de uma requisição do formulário
+     *     Array
+     *     (
+     *         [parameters] => Array
+     *             (
+     *                 [modules] => acesso
+     *                 [controller] => listar
+     *                 [param1] => 01
+     *                 [param2] => 02
+     *                 [param3] => 03
+     *                 [0] => cliente
+     *                 [1] => listar
+     *                 [2] => 01
+     *                 [3] => 02
+     *                 [4] => 0
+     *             )
+     * 
+     *         [post] => Array
+     *             (
+     *                  [modules] => acesso
+     *                  [controller] => listar
+     *             )
+     * 
+     *         [get] => Array
+     *             (
+     *                 [modules] => acesso
+     *                 [controller] => listar
+     *                 [param1] => 01
+     *                 [param2] => 02
+     *                 [param3] => 03
+     *             )
+     * 
+     *         [file] => Array
+     *             (
+     *                  [arquivo] => Array
+     *                      (
+     *                           [name] => Desert.jpg
+     *                           [type] => image/jpeg
+     *                           [tmp_name] => /tmp/phpLQWjgz
+     *                           [error] => 0
+     *                           [size] => 845941
+     *                      )
+     *             )
+     * 
+     *     )
+     * // Outro exemplo utilizando URL de forma amigável
+     *     $params = $objDduo->checaURL(http://dares-laraujo/cliente/listar/01/02/03);
+     *     $objDduo->printVar($params);
+     * 
+     *     Array
+     *     (
+     *         [param] => Array
+     *             (
+     *                 [modules] => cliente
+     *                 [controller] => listar
+     *                 [0] => 01
+     *                 [1] => 02
+     *                 [2] => 0
+     *             )
+     * 
+     *         [post] => Array
+     *             (
+     *             )
+     * 
+     *         [get] => Array
+     *             (
+     *                 [cliente/listar/01/02/03] =>
+     *             )
+     * 
+     *         [file] => Array
+     *             (
+     *             )
+     * 
+     *     )
+     * </code>
+     * @access   public
+     * @name     checaURL()
+     * @since    0.1 ~ 0.2
+     * 
+     * @param String $_url Recebe a URL completa 
+     * @return Array Retorna um Array com valores dos parâmetros POST, GET, FILE
+     */
+    public function checaURL($_url) {
+        $baseURL = array();
+        $parameters = array();//Resultado dos parâmetros já formatados
+        $lisPar = null;
+        //Lista com todos os parâmetros sem tratamento passado por GET
+        $uri = substr($_SERVER['REQUEST_URI'], 1);            //Retira do inicio a barra '/'
+        try {
+            //Verifica se os parâmetros estão sendo passado pela URL como GET
+            if (strpos($_url, '?')) {
+                $baseURL = parse_url($_url); //Faz parse da URL retornando um Array.
+                parse_str($baseURL['query'], $urlArr); //Faz parse dos parâmetros que foi passado pela URL.   
+                
+
+                isset($urlArr['client']) ? $parameters['_parameters']['_client'] = $urlArr['client'] : null;
+                isset($urlArr['modules']) ? $parameters['_parameters']['_modules'] = $urlArr['modules'] : null;
+                isset($urlArr['controller']) ? $parameters['_parameters']['_controller'] = $urlArr['controller'] : null;
+                isset($urlArr['method']) ? $parameters['_parameters']['_method'] = $urlArr['method'] : null;
+                $parameters['_GET'] = explode('/', $_url);  //Pega todos os valores passado por GET
+            } elseif ($uri !== false) {
+                //Verifica se existe parâmetro passado pela URL
+                if (substr($uri, -1, 1) == '/') {
+                    $lisPar = explode('/', substr($uri, 0, -1));
+                } else {
+                    $lisPar = explode('/', $uri);
+                }
+                //Em caso o sistema esteja num sub diretório
+                //unset($lisPar[0]);
+                foreach ($lisPar as $key => $value) {
+                    if ($key == 0) {
+                        $parameters['_parameters']['_modules'] = $value;
+                    } elseif ($key == 1) {
+                        $parameters['_parameters']['_controller'] = $value;
+                    } elseif ($key == 2) {
+                        $parameters['_parameters']['_method'] = $value;
+                    } else if ($key != 0) {
+                        $parameters['_parameters'][] = $value;
+                    }
+                }
+                
+                
+            }
+
+            $parameters['_GET'] = $_GET; //Pega todos os valores passado por GET
+            $parameters['_POST'] = $_POST; //Pega todos os valores passado por POST
+            $parameters['_FILE'] = $_FILES; //Pega todos os valores passado por FILES
+            
+            unset($_url, $baseURL, $listPar, $uri, $key, $value);
+            
+            return $parameters;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     *  
+     * Método que instancia a classe conforme os parâmetros passado pela URL.
+     * 
+     * Primeiro Ex:
+     * http://dominio.com/
+     * 
+     * Neste caso como não está sendo passado nada como parâmetro é instanciado a Classe principal do sistema.
+     * O método a ser chamado é como padrão 'principal'.
+     * 
+     * O controler quando não passado ou caso o controler passado seja 'index' é definido por padrão como 'principal'
+     * 
+     * O método quando não passado ou caso seja passado 'index' é definido por padrão como 'principal'
+     * 
+     * Segundo Ex:
+     * http://dominio.com/acesso
+     * 
+     * Neste caso já é passado por parâmetro o módulo e com isso se aplica outra regra:
+     * Quando passado um módulo por URL e não passado o controler e o método então será sempre definido por padrão.
+     * O método é definido como 'index' da Classe 'Acesso' 'Acesso.class.php'
+     * 
+     * O controler é definido como padrão o mesmo nome do módulo passado neste caso 'acesso' que será instanciado.
+     * 
+     * Terceito Ex;
+     * http://dominio.com/acesso/acesso
+     * ou
+     * http://dominio.com/acesso/index
+     * 
+     * Nestes dois casos o que muda é a forma de visualizar pois os 2 vai ter o mesmo resultado.
+     * Quando já é passado por URL o método e o controler então falta somente o método que é definido por padrão 'index'
+     * Assim só aplica a regra no método que foi o único que não está sendo passado pela URL.
+     * 
+     * 
+     * http://dominio.com/acesso/acesso/json/parametro1/parametro2
+     * Por padrão sempre o primeiro, segundo e terceiro parâmetro passado pela URL será fixo.
+     * [0] => acesso Módulo
+     * [1] => acesso Controller
+     * [2] => json Método
+     * [3] => parametro1 Parâmetro
+     * [4] => parametro2 Parâmetro
+     * [...]
+     * 
+     * 
+     * Obs:
+     * 
+     * Neste método é guardado a variável de sistema _PATH que é passado junto por parâmetro para dentro do controle.
+     * Esta variável é usado dentro das views:
+     * 
+     * <code>
+     * $_parameters['_PATH'] = DIR_MODULES . $module . "/views";
+     * </code>
+     * 
+     * Ex:
+     * 
+     * <link href="<?php echo $_PATH; ?>/css/base.css" media="screen" rel="stylesheet" type="text/css" >
+     * ou
+     * <img src="<?php echo $_PATH; ?>/images/logo.jpg" />
+     * 
+     * 
+     * @access   public
+     * @name     route()
+     * @since    0.1 ~ 0.2
+     * 
+     * @param Array $_parameters Parâmetros já tratado pela função checaURL();
+     */
+    public function route($_parameters) {
+        $instance = null;                                                     //Guarda o objeto Class instanciado
+        $controller = null;                                                     //Controller a ser chamado
+        $module = null;                                                     //Módulo a ser instanciado
+        $method = null;
+        $state = false; //Flag inicia em FALSE
+        try {
+            $module = isset($_parameters['_parameters']['_modules']) ? $_parameters['_parameters']['_modules'] : null;
+            $controller = isset($_parameters['_parameters']['_controller']) ? $_parameters['_parameters']['_controller'] : null;
+            $method = isset($_parameters['_parameters']['_method']) ? $_parameters['_parameters']['_method'] : null;
+            
+            if (trim($controller) != '') {
+                if (strpos($controller, '_') != false) {
+                    $auxArray = explode('_', $controller);
+                    $controller = '';
+                    foreach ($auxArray as $aux) {
+                        $controller.= ucfirst($aux) . '_';
+                    }
+                    $controller = substr($controller, 0, -1);
+                }
+            }
+            
+            //Verifica se o módulo foi passado pela URL
+            if ($module == null || $module == 'index') {
+                $module = 'site';
+            }
+            if ($method == null) {
+                $method = 'index';
+            }
+            
+            $_parameters['_PATH'] = DIR_MODULES . $module . "/views";
+            
+            if ($module == 'error') {
+                
+                if ($controller == null || $controller == 'index') {
+                    $controller = $module;
+                }
+                //Estas duas variáveis está na ordem de prioridade ao selecionar os modules sempre sendo como padrão
+                $nameClassDefault = "Modules\\{$module}\\Controllers\\" . ucfirst($controller);
+                
+                if (file_exists(str_replace('\\', '/', "{$nameClassDefault}.class.php"))) {
+                    define('_MODULE_', "{$module}");
+                    $instance = new $nameClassDefault($_parameters);
+                } else {
+                    throw new \Exception("Não foi encontrado o módulo.", 100);
+                }
+                
+                if (method_exists($instance, $method)) {
+                    $instance->$method($_parameters);
+                } else {
+                    throw new \Exception("Método não existe.", 103);
+                }
+            } else {
+                
+                //Verifica se foi passado o controler por URL e se o valor é diferente de index
+                if ($controller == null || $controller == 'index') {
+                    $controller = 'home';
+                }
+               
+                //Estas duas variáveis está na ordem de prioridade ao selecionar os Modules sempre sendo como padrão
+                $nameClassDefault = "Modules\\{$module}\\Controllers\\" . ucfirst($controller);
+                
+                if (file_exists(str_replace('\\', '/', "{$nameClassDefault}.class.php"))) {
+                    define('_MODULE_', "{$module}");
+                    $instance = new $nameClassDefault($_parameters);
+                } else {
+                    throw new \Exception("Não foi encontrada a rotina .", 109);
+                }
+
+                //Verifica se o método foi passado por URL e se existe na classe instanciada
+                if (method_exists($instance, $method)) {
+                    $instance->$method($_parameters);
+                } else {
+                    throw new \Exception("Método não existe.", 103);
+                }
+            }
+            if (is_object($instance)) {
+                $state = true;
+            }
+            unset($_parameters, $controller, $module, $method, $instance);       //Limpa as variáveis da memória.
+        } catch (\Exception $e) {
+            echo $e->getFile() . " " . $e->getLine(). "<br>";
+            echo $e->getTraceAsString() . "<br>";
+            exit(\Utils\Excecao::mensagem($e));
+            Geral::redirect(URLBASE_CLIENT . 'error/error/index/' . $e->getCode());
+        }
+    }
+
+    /**
+     * Método que efetua a verificação do sistema junto ao manager 
+     * @access public
+     * @name manager()
+     * @since 0.2 
+     */
+    public function manager() {
+        $managerModel = new ManagerModel(self::$_conexao);
+        $manager = ((isset($_SESSION['manager'])) ? (($_SESSION['manager'])) : (new Manager()));
+        $managerModel->validar($manager);
+    }
+
+}
