@@ -109,21 +109,6 @@ $sucesso = (isset($_data['sucesso']) ? ($_data['sucesso']) : false);
     <script src="<?php echo NEWCASH; ?>assets/js/script.js"></script>
 
         <?php if (isset($_SESSION["cadastrado"]) && $_SESSION["cadastrado"]) { ?>
-            <!-- Google Code for Conta Criada Conversion Page -->
-            <script type="text/javascript">
-            /* <![CDATA[ */
-            var google_conversion_id = 802526075;
-            var google_conversion_label = "JFLECKX8v4MBEPum1v4C";
-            var google_remarketing_only = false;
-            /* ]]> */
-            </script>
-            <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-            </script>
-            <noscript>
-            <div style="display:inline;">
-            <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/802526075/?label=JFLECKX8v4MBEPum1v4C&amp;guid=ON&amp;script=0"/>
-            </div>
-            </noscript>
             <?php unset($_SESSION["cadastrado"]); ?>
         <?php } ?>
 </body>
