@@ -136,12 +136,11 @@ class Mail {
             $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
             $configuracaoRn->conexao->carregar($configuracao);
 
-
             // Define os dados do servidor e tipo de conexÃ£o
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
             $mail->IsSMTP(); // Define que a mensagem serÃ¡ SMTP
-            $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_CONNECTION; // Mostra as mensagens de erro
+            $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_OFF; // Mostra as mensagens de erro
             $mail->Host = $configuracao->emailSmtp; // EndereÃ§o do servidor SMTP
             $mail->SMTPAuth = ($configuracao->emailSmtpAuth > 0); // Usa autenticaÃ§Ã£o SMTP? (opcional)
             $mail->Port = $configuracao->emailPorta;
@@ -190,10 +189,7 @@ class Mail {
                 } else {
                     throw new \Exception("Não foi possível enviar o email." . htmlentities($mail->ErrorInfo));
                 }
-            } else {
-                exit(print_r($enviado) . " - " . " Eniado");
             }
-
 
             // Limpa os destinatÃ¡rios e os anexos
             $mail->ClearAllRecipients();
