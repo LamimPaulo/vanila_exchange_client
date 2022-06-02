@@ -1759,11 +1759,23 @@ class ClienteRn
 
             $this->conexao->update(array("api_key" => $cliente->apiKey, "clientid" => $cliente->clientid, "data_update_api_key" => $cliente->dataUpdateApiKey), array("id" => $cliente->id));
 
-            $dados = array();
-            $dados["client_id"] = $cliente->clientid;
-            $dados["api_key"] = $cliente->apiKey;
+            $bodyMail = [
+                'nome' => $cliente->nome,
+                'email' => $cliente->email,
+                'params' => [
+                    "cliente_nome" => $cliente->nome,
+                    "cliente_email" => $cliente->email,
+                    "client_id" => $cliente->clientid,
+                    "api_key" => $cliente->apiKey,
+                    "data_hora" => $dataAtual->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP),
+                    "id_cliente" => $cliente->id,
+                    "id_usuario" => ""
+                ],
+                'template_name' => 'system.security.newapicredentials'
+            ];
 
-            \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 21, false, $dados);
+            $rabbit = new \RabbitMq\Client();
+            $result = $rabbit->sendQueue('notificacoes', $bodyMail);
 
         } else {
             throw new \Exception("Aguardar o período de 24 horas para renovar as credenciais.");
