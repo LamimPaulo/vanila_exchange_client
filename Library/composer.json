@@ -1,9 +1,0 @@
-{
-    "require": {
-        "zendframework/zend-db": "^2.9",
-        "google/apiclient": "^2.0",
-        "clue/socket-raw": "^1.4",
-        "aws/aws-sdk-php": "^3.100",
-        "predis/predis": "^1.1"
-    }
-}
