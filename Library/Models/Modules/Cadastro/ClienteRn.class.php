@@ -471,7 +471,7 @@ class ClienteRn {
             $cliente->retornoAnaliseEmail;
             
             //Salvar cliente
-            //$this->conexao->salvar($cliente);
+            $this->conexao->salvar($cliente);
            
 //            if (\Utils\Geral::isCliente() && \Utils\Geral::getCliente()->id == $cliente->id) {
 //                $usuario = (\Utils\Geral::isUsuario() ? \Utils\Geral::getLogado() : null);
@@ -1765,11 +1765,18 @@ class ClienteRn {
 
             $this->conexao->update(Array("api_key" => $cliente->apiKey, "clientid" => $cliente->clientid, "data_update_api_key" => $cliente->dataUpdateApiKey), Array("id" => $cliente->id));
 
-            $dados = Array();
-            $dados["client_id"] = $cliente->clientid;
-            $dados["api_key"] = $cliente->apiKey;
+            $conteudo = Array();
+            $conteudo["ClientID"] = $cliente->clientid;
+            $conteudo["ApiKEY"] = $cliente->apiKey;
 
-            \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 21, false, $dados);
+            $listaEnvio = Array(
+                Array("nome" => $cliente->nome, "email" => $cliente->email)
+            );
+
+            $conteudo = Mail::template($conteudo, "API Credenciais", "API Credenciais");
+
+            $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "API Credenciais", $conteudo, $listaEnvio);
+            $mail->send();
 
         } else {
             throw new \Exception("Aguardar o período de 24 horas para renovar as credenciais.");

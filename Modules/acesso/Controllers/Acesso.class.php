@@ -3,8 +3,10 @@
 namespace Modules\acesso\Controllers;
 
 use Email\BoasVindas;
+use Models\Modules\Cadastro\BrandRn;
 use Models\Modules\Cadastro\UsuarioRn;
 use Models\Modules\Cadastro\Usuario;
+use Utils\Mail;
 use Utils\Session;
 use Utils\Layout;
 use Utils\Geral;
@@ -63,28 +65,31 @@ class Acesso {
                         $navegador = $this->verificarSessao($cliente);
                         
                          $idClienteEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($cliente->id));
-                            $idNavegadorEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($navegador->id));
+                         $idNavegadorEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($navegador->id));
                             
-                            $linkRevogar = URLBASE_CLIENT . \Utils\Rotas::R_REVOGAR . "?nnc={$idNavegadorEncripty}&cnc={$idClienteEncripty}";
-                            
-                            $dataAtual = new \Utils\Data(date("d/m/Y H:i"));
-                            
-                            $json = ["comando" => "seg.acesso",
-                                     "parametros" => [
-                                        "sistema_operacional" => $navegador->sistemaOperacional,
-                                        "navegador" => $navegador->navegador,
-                                        "data_hora" => $dataAtual->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP) ,
-                                        "ip" => $navegador->ipUltimoAcesso,
-                                        "id_session" => $navegador->idSession,
-                                        "link_revogar" => $linkRevogar,
-                                        "id_cliente" => $cliente->id,
-                                        "notificar" => $cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL ? false : true,
-                                        "id_usuario" => "",]
-                                    ];
-                            
-                            \LambdaAWS\QueueKYC::sendLog("seguranca_localizacao", null, $json);
+                        $linkRevogar = URLBASE_CLIENT . \Utils\Rotas::R_REVOGAR . "?nnc={$idNavegadorEncripty}&cnc={$idClienteEncripty}";
 
-                            BoasVindas::send();
+                        $dataAtual = new \Utils\Data(date("d/m/Y H:i"));
+
+                        $listaEnvio = Array(
+                            Array("nome" => $cliente->nome, "email" => $cliente->email)
+                        );
+
+                        $conteudo = Array(
+                            "Sistema" => $navegador->sistemaOperacional,
+                            "Navegador" => $navegador->navegador,
+                            "Data" => $dataAtual->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP) ,
+                            "IP" => $navegador->ipUltimoAcesso,
+                            //"id_session" => $navegador->idSession,
+                            "Revogar" => $linkRevogar,
+                            //"id_cliente" => $cliente->id,
+                            //"notificar" => $cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL ? false : true,
+                        );
+
+                        $conteudo = Mail::template($conteudo, "Log Acesso", "Log Acesso");
+
+                        $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Log Acesso", $conteudo, $listaEnvio);
+                        $mail->send();
                     }
                     
                     Geral::setAutenticado(false);
@@ -416,9 +421,18 @@ class Acesso {
 
             $clienteRn->conexao->update(Array("senha"=> $senha, "bloquear_recuperacao_senha" => 0, "quantidade_tentativas_recuperacao" => 0, "hash_recuperacao_senha" => null, "data_update_senha" => date("Y-m-d H:i:s")), Array("id"=>$cliente->id));
 
-            $dados["senha"] = $cliente->senha;
-            
-            \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 12, false, $dados);
+            $listaEnvio = Array(
+                Array("nome" => $cliente->nome, "email" => $cliente->email)
+            );
+
+            $conteudo = Array(
+                "Senha" => $cliente->senha
+            );
+
+            $conteudo = Mail::template($conteudo, "Nova Senha", "Nova Senha");
+
+            $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Nova Senha", $conteudo, $listaEnvio);
+            $mail->send();
             
             
             $json["sucesso"] = true;
@@ -457,7 +471,7 @@ class Acesso {
                 
                 $dtAtual = new \Utils\Data(date("d/m/Y H:i:s"));
                 if ($cliente->validadeHashValidacaoEmail->menor($dtAtual)) {
-                    //throw new \Exception("Data expirada");
+                    throw new \Exception("Data expirada");
                 }
                 
                 $senhaTemp = substr(sha1($cliente->email . \Utils\Constantes::SEED_SENHA), 0, 10);
@@ -477,7 +491,18 @@ class Acesso {
 
                 $cliente->senha = $senhaTemp;
 
-                \Email\BoasVindas::send($cliente);
+                $listaEnvio = Array(
+                    Array("nome" => $cliente->nome, "email" => $cliente->email)
+                );
+
+                $conteudo = Array(
+                    "Mensagem" => "Conta ativada com sucesso."
+                );
+
+                $conteudo = Mail::template($conteudo, "Ativação Conta", "Ativação Conta");
+
+                $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Ativação Conta", $conteudo, $listaEnvio);
+                $mail->send();
                 
                 
             } else {
@@ -538,8 +563,19 @@ class Acesso {
             session_start();
             session_destroy();
             session_commit();
-            
-            \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 20, false, $cliente->status);
+
+            $listaEnvio = Array(
+                Array("nome" => $cliente->nome, "email" => $cliente->email)
+            );
+
+            $conteudo = Array(
+                "Status" => "Conta bloqueada"
+            );
+
+            $conteudo = Mail::template($conteudo, "Revogar Conta", "Revogar Conta");
+
+            $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Revogar Conta", $conteudo, $listaEnvio);
+            $mail->send();
             
         } catch (\Exception $ex) {
            

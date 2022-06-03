@@ -140,18 +140,20 @@ class Mail {
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
             $mail->IsSMTP(); // Define que a mensagem serÃ¡ SMTP
-            $mail->SMTPDebug = 2; // Mostra as mensagens de erro
+            $mail->SMTPDebug = 1; // Mostra as mensagens de erro
             $mail->Host = $configuracao->emailSmtp; // EndereÃ§o do servidor SMTP
-            $mail->SMTPAuth = true;//($configuracao->emailSmtpAuth > 0); // Usa autenticaÃ§Ã£o SMTP? (opcional)
+            $mail->SMTPAuth = ($configuracao->emailSmtpAuth > 0); // Usa autenticaÃ§Ã£o SMTP? (opcional)
             $mail->Port = $configuracao->emailPorta;
             $mail->Username = $configuracao->emailUsuario; // UsuÃ¡rio do servidor SMTP
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->SMTPSecure = "tls";
             $mail->Password = getenv("EnvPassEmail"); // Senha do servidor SMTP
+
             // Define o remetente
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            //exit(print_r($mail));
 
             //$mail->From = $configuracao->emailUsuario; // Seu e-mail
-             $mail->SetFrom($configuracao->emailNome, $this->fromName);
+             $mail->SetFrom($configuracao->emailUsuario, $this->fromName);
             //$mail->FromName = $configuracao->emailNome; // Seu nome
             // Define os destinatÃ¡rio(s)$
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -159,7 +161,6 @@ class Mail {
             foreach ($this->listaEnvio as $destinatario) {
                 $mail->AddAddress($destinatario["email"], $destinatario["nome"]);
             }
-            
             
             //$mail->AddCC('ciclano@site.net', 'Ciclano'); // Copia
             //$mail->AddBCC('fulano@dominio.com.br', 'Fulano da Silva'); // CÃ³pia Oculta

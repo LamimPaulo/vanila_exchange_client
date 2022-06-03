@@ -240,7 +240,7 @@ class ProcedimentosPerigosos {
 
         }
         
-        catch(\Aws\Exception\AwsException  $e)
+        catch(\Exception  $e)
         {   
             
             var_dump($e->getMessage());

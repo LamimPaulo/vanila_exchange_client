@@ -4,6 +4,8 @@ namespace Models\Modules\Cadastro;
 
 use LambdaAWS\LambdaNotificacao;
 use \Models\Modules\Model\GenericModel;
+use Utils\Mail;
+
 /**
  * Classe que contém as regras de negócio da entidade Usuario
  *
@@ -325,15 +327,22 @@ class UsuarioRn {
                     Array("id" => $cliente->id)
                 );
 
-            $hash = ["hash" => $hash];
+            $listaEnvio = Array(
+                Array("nome" => $cliente->nome, "email" => $cliente->email)
+            );
 
-            LambdaNotificacao::notificar($cliente, true, 19, false, $hash);
+            $conteudo = Array(
+                "Hash" => $hash
+            );
+
+            $conteudo = Mail::template($conteudo, "Recuperar Senha", "Hash");
+
+            $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Recuperar Senha", $conteudo, $listaEnvio);
+            $mail->send();
 
         } else {
             throw new \Exception($this->idioma->getText("nenhumUserCPFinformado"), 99);
         }
-        
-        
     }
     
     

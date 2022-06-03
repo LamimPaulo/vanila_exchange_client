@@ -3,6 +3,8 @@
 namespace Models\Modules\Cadastro;
 
 use \Models\Modules\Model\GenericModel;
+use Utils\Mail;
+
 /**
  * Classe que contém as regras de negócio da entidade Auth
  *
@@ -154,10 +156,20 @@ class AuthRn {
     
     
     private function enviarPorEmail($codigo, $cliente) {
-        
-        $dados["codigo"] = $codigo;
-        
-        \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 10, false, $dados);
+
+        $listaEnvio = Array(
+            Array("nome" => $cliente->nome, "email" => $cliente->email)
+        );
+
+        $conteudo = Array(
+            "Token" => $codigo
+        );
+
+        $conteudo = Mail::template($conteudo, "Token 2FA", "Token");
+
+        $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Token 2FA", $conteudo, $listaEnvio);
+        $mail->send();
+
     }
     
     private function enviarPorSms($celular, $codigo, $nome, $email) {
