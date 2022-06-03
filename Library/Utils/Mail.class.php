@@ -140,9 +140,9 @@ class Mail {
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
             $mail->IsSMTP(); // Define que a mensagem serÃ¡ SMTP
-            $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_OFF; // Mostra as mensagens de erro
+            $mail->SMTPDebug = 2; // Mostra as mensagens de erro
             $mail->Host = $configuracao->emailSmtp; // EndereÃ§o do servidor SMTP
-            $mail->SMTPAuth = ($configuracao->emailSmtpAuth > 0); // Usa autenticaÃ§Ã£o SMTP? (opcional)
+            $mail->SMTPAuth = true;//($configuracao->emailSmtpAuth > 0); // Usa autenticaÃ§Ã£o SMTP? (opcional)
             $mail->Port = $configuracao->emailPorta;
             $mail->Username = $configuracao->emailUsuario; // UsuÃ¡rio do servidor SMTP
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
@@ -181,8 +181,8 @@ class Mail {
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             //$mail->AddAttachment("c:/temp/documento.pdf", "novo_nome.pdf");  // Insere um anexo
             // Envia o e-mail
-
-            $enviado = $mail->send();
+            //exit(print_r($mail));
+            $enviado = $mail->Send();
             if (!$enviado) {
                 if (AMBIENTE == 'producao') {
                     throw new \Exception("Não foi possível enviar o email.");

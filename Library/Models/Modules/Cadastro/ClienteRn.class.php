@@ -3,6 +3,8 @@
 namespace Models\Modules\Cadastro;
 set_time_limit(200);
 use \Models\Modules\Model\GenericModel;
+use Utils\Mail;
+
 /**
  * Classe que contém as regras de negócio da entidade Cliente
  *
@@ -442,8 +444,6 @@ class ClienteRn {
             }
         }
         
-        
-        
         $tiposAuth = Array(
             \Utils\Constantes::TIPO_AUTH_EMAIL,
             \Utils\Constantes::TIPO_AUTH_SMS,
@@ -471,12 +471,12 @@ class ClienteRn {
             $cliente->retornoAnaliseEmail;
             
             //Salvar cliente
-            $this->conexao->salvar($cliente);
+            //$this->conexao->salvar($cliente);
            
-            if (\Utils\Geral::isCliente() && \Utils\Geral::getCliente()->id == $cliente->id) {
-                $usuario = (\Utils\Geral::isUsuario() ? \Utils\Geral::getLogado() : null);
-                \Utils\Geral::setLogado($usuario, $cliente);
-            }
+//            if (\Utils\Geral::isCliente() && \Utils\Geral::getCliente()->id == $cliente->id) {
+//                $usuario = (\Utils\Geral::isUsuario() ? \Utils\Geral::getLogado() : null);
+//                \Utils\Geral::setLogado($usuario, $cliente);
+//            }
             
             try {
                 if ($emailBoasVindas) {
@@ -505,15 +505,25 @@ class ClienteRn {
 
                         $token2 = \Utils\Criptografia::encriptyPostId(base64_encode($token . "]" . $cliente->email));
 
-                        $dados["cliente_url"] = URLBASE_CLIENT . \Utils\Rotas::R_ATIVACAO . "?at=" . $token2;
+                        $listaEnvio = Array(
+                            Array("nome" => $cliente->nome, "email" => $cliente->email)
+                        );
 
-                        \LambdaAWS\LambdaNotificacao::notificar($cliente, true, 11, false, $dados);
+                        $conteudo = Array(
+                            "Nome" => $cliente->nome,
+                            "E-mail" => $cliente->email,
+                            "Link" =>  URLBASE_CLIENT . \Utils\Rotas::R_ATIVACAO . "?at=" . $token2
+                        );
+
+                        $conteudo = Mail::template($conteudo, "Bem-Vindo", "Cadastro");
+
+                        $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Cadastro", $conteudo, $listaEnvio);
+                        $mail->send();
                         
                     } catch (\Exception $e) {
                         
                     }
                 }
-                
                 
             } catch (\Exception $ex) {
                 
