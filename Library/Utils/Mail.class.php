@@ -140,7 +140,7 @@ class Mail {
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
             $mail->IsSMTP(); // Define que a mensagem serÃ¡ SMTP
-            $mail->SMTPDebug = 1; // Mostra as mensagens de erro
+            $mail->SMTPDebug = 0; // Mostra as mensagens de erro
             $mail->Host = $configuracao->emailSmtp; // EndereÃ§o do servidor SMTP
             $mail->SMTPAuth = ($configuracao->emailSmtpAuth > 0); // Usa autenticaÃ§Ã£o SMTP? (opcional)
             $mail->Port = $configuracao->emailPorta;
