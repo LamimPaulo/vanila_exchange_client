@@ -59,16 +59,14 @@ class BancoDados extends Adapter {
                 $this->driver = "PDO_MYSQL";
                 $this->username = $this->user;
                 $this->password = $this->pass;
-                $this->dsn = "mysql:host={$this->url};dbname={$this->name};charset=utf8;";
-                //$this->dsn = "mysql:host={$urlBdBook};dbname={$this->name};charset=utf8;";
+                $this->dsn = "mysql:host={$urlBdBook};dbname={$this->name};charset=utf8;";
                 break;
             case BDGRAFICO:
                 //Banco de Dados Somente Leitura - Grafico
                 $this->driver = "PDO_MYSQL";
                 $this->username = $this->user;
                 $this->password = $this->pass;
-                $this->dsn = "mysql:host={$this->url};dbname={$this->name};charset=utf8;";
-                //$this->dsn = "mysql:host={$urlBdGrafico};dbname={$this->name};charset=utf8;";
+                $this->dsn = "mysql:host={$urlBdGrafico};dbname={$this->name};charset=utf8;";
                 break;
             default:
                 $this->driver = "PDO_MYSQL";
