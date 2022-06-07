@@ -141,7 +141,7 @@ $(document).ready(function () {
                     dataType: 'json',
                     data: {
                         email: EmailLogin,
-                        senha: SenhaLogin,
+                        senha: btoa(SenhaLogin),
                         code: $('#g-recaptcha-response').val()
                     },
                     beforeSend: function(){

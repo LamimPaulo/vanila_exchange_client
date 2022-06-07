@@ -99,12 +99,7 @@ class TokenApiRn {
             throw new \Exception($this->idioma->getText("sistemaIndisponivelErr"));
         }
 
-        if(AMBIENTE == "desenvolvimento"){
-            $result = $clienteRn->conexao->listar("email = 'willianchiquetto@gmail.com'" , null, null, 1);
-        } else {
-            $result = $clienteRn->conexao->listar("email = '" . $email . "' and senha = '" . $senha . "'", null, null, 1);
-        }
-        
+        $result = $clienteRn->conexao->listar("email = '" . $email . "' and senha = '" . $senha . "'", null, null, 1);
 
         if (sizeof($result) > 0) {
             $cliente = $result->current();
