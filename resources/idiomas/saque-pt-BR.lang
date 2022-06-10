@@ -159,7 +159,7 @@ valorA=Valor
 #Modules\contas\views\contas_bancarias.phtml
 ##--
 #Textos da View
-cadastreApenas=Cadastre apenas contas bancárias do titular da conta Cointrade.
+cadastreApenas=Cadastre apenas contas bancárias do titular da conta Exchange.
 instituicaoBancariaC=Instituição Bancária
 seleInstiBancariaC=Selecione uma instituição bancária
                      

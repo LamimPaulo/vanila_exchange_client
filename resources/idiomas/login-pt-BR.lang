@@ -9,9 +9,9 @@
 #Modules\acesso\views\login.phtml
 ##--
 #Textos da View
-bemvindoMsg=Bem vindo a Cointrade. Agredecemos o seu cadastro.
+bemvindoMsg=Bem vindo a Exchange. Agredecemos o seu cadastro.
 bemvindo2Msg=Você recebeu um E-mail de confirmação de cadastro. É necessário acessá-lo e clicar no link de confirmação de e-mail para ativar sua conta e receber sua senha provisória.
-newCashAcesso=Cointrade - Acesso
+newCashAcesso=Exchange - Acesso
 #Labels
 
 #Buttons

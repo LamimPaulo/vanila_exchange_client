@@ -160,7 +160,7 @@ valorA=Value
 #Modules\contas\views\contas_bancarias.phtml
 ##--
 #Textos da View
-cadastreApenas=Register only bank accounts of the Cointrade account holder.
+cadastreApenas=Register only bank accounts of the Exchange account holder.
 instituicaoBancariaC=Banking institution
 seleInstiBancariaC=Select a banking institution
                      

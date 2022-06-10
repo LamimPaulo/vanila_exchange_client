@@ -10,7 +10,7 @@
 #--VIEW
 #Modules\acesso\views\two_factor_auth.phtml
 #Textos da View
-newCashAcesso=Cointrade - Acceso
+newCashAcesso=Exchange - Acceso
 validarCodigo=Validar el código
 entrarButton=Entrar
 enviandoBtn=Enviando Token...

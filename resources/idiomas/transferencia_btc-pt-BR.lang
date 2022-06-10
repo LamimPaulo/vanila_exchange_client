@@ -13,7 +13,7 @@ titulo=Transferência
 subTitulo=Transferência
 abaTransfMoeda=Transferir
 abaTransfReais=Transferir Reais
-abaTransfNewCash=Transferir para Cointrade
+abaTransfNewCash=Transferir para Exchange
 enderDestino=Endereço de destino {var}
 descTransferencia=Descrição para essa transferência
 taxa=Taxa:
@@ -60,7 +60,7 @@ meuSaldoTotal=Meu Saldo Total
 meuVolumeTotalNc=Meu Volume Total
 meuSaldoTotalNc=Meu Saldo Total
 btTransferir=Transferir
-transfParaNc=Transferir para Cointrade
+transfParaNc=Transferir para Exchange
 limpar=Limpar
 reenviar=Reenviar
 cancelar=Cancelar
@@ -161,7 +161,7 @@ foiEnviadoSMS1=Foi enviado um token de confirmação para o seu celular
 useGoogle1=Por favor, use seu Google Authenticator para inserir o token abaixo.
 necessarioInfCarteira=É necessário informar uma carteira.
 voceNaoPodeTransContaCorrente=Você não pode transferir dinheiro para sua própria conta corrente.
-cartInformadaNaoNc=A carteira informada não é uma carteira Cointrade.
+cartInformadaNaoNc=A carteira informada não é uma carteira Exchange.
 
 #Labels
 statusNaoAutorizado=Não Autorizado

@@ -9,7 +9,7 @@
 #Modules\acesso\views\aceite_docs.phtml
 
 #Textos da View
-titulo=Cointrade - Required Documents
+titulo=Exchange - Required Documents
 docsLegais=Legal Documents
 paraSaberUtilizar=To continue to use the system you must read and accept the documents below:
 liEConcordo=I read and I agree

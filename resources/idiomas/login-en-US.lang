@@ -9,9 +9,9 @@
 #Modules\acesso\views\login.phtml
 ##--
 #Textos da View
-bemvindoMsg=Welcome to Cointrade. Thank for your registrering in our plataform.
+bemvindoMsg=Welcome to Exchange. Thank for your registrering in our plataform.
 bemvindo2Msg=You have received an e-mail confirming your registration. You must sign in and click on the email confirmation link to activate your account and receive a temporary password.
-newCashAcesso=Cointrade - Access
+newCashAcesso=Exchange - Access
 
 #Labels
 

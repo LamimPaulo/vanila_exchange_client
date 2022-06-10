@@ -9,7 +9,7 @@
 #Modules\acesso\views\login.phtml
 ##--
 #Textos da View
-bemvindoMsg=Bienvenido a Cointrade. Agradecemos su registro.
+bemvindoMsg=Bienvenido a Exchange. Agradecemos su registro.
 bemvindo2Msg=Recibió un E-mail de confirmación de registro. Es necesario clicar en el link de confirmación de e-mail para activar su cuenta y recibir una contraseña provisional.
 emailInvalido=E-mail inválido.
 recuperacaoBloqueadaSenha=La recuperación de contraseñas está bloqueada en su cuenta por exceso de intentos. Por favor, contacte a soporte para el desbloqueo!

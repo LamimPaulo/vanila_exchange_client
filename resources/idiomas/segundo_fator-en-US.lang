@@ -9,7 +9,7 @@
 #Modules\acesso\views\two_factor_auth.phtml
 ##--
 #Textos da View
-newCashAcesso=Cointrade - Access
+newCashAcesso=Exchange - Access
 validarCodigo=Validate the code
 
 

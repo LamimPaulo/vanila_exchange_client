@@ -9,7 +9,7 @@
 #Modules\acesso\views\recuperar.phtml
 ##--
 #Textos da View
-newCashRecuperar=Cointrade - Recuperação de Senha
+newCashRecuperar=Exchange - Recuperação de Senha
 validarCodigo=Validar o código
 
 

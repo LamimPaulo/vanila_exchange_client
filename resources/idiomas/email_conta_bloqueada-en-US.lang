@@ -10,7 +10,7 @@
 ##--
 #Textos da View
 assunto=Updating Account Status 
-titulo=Cointrade - Atualização status da conta
+titulo=Exchange - Atualização status da conta
 titulo2=Blocked Account!
 suaFraseSeguranca=Your safety phrase is:
 statusConta=Account status:
@@ -24,7 +24,7 @@ contato=Contact
 infAcesso=Access information:
 dataHora=Date/Time:
 ipAcesso=Access IP:
-newCashEndereco=Cointrade | 
+newCashEndereco=Exchange |
 emailDoSistema=This is an email system. Please do not answer.
 casoNaoTenhaCadastro=If you have not registered, please contact us through our service channels.
 

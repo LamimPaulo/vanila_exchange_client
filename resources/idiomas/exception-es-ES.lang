@@ -4,7 +4,7 @@
 
 #--------Arquivlo login
 #SMS
-smsOrdemExecutada=Cointrade informa: Su orden de {var1} de paridad {var2} fue ejecutada.
+smsOrdemExecutada=Exchange informa: Su orden de {var1} de paridad {var2} fue ejecutada.
 
 sistemaIndisponivelErr=Sistema no disponible actualmente.
 
@@ -142,7 +142,7 @@ necessarioInformarNomeCliente=Es necesario ingresar el nombre del cliente.
  
 cadastrarDDi=Es necesario registrar el DDI.
  
-sejaBemVindo=Bienvenido a Cointrade. Agradecemos su registro. Utilice la contraseña
+sejaBemVindo=Bienvenido a Exchange. Agradecemos su registro. Utilice la contraseña
  
 paraLogin= para su primer inicio de sesión.
  
@@ -206,17 +206,17 @@ autorizadoAutomaticamente= autorizado automaticamente.
  
 aguardandoAtutorizacao= en espera de autorización.
  
-newCashDeposito=Cointrade: Depósito
+newCashDeposito=Exchange: Depósito
  
 volume=Volumen
  
-newCashSaqueProcessando=Cointrade: PROCESANDO Retiro
+newCashSaqueProcessando=Exchange: PROCESANDO Retiro
  
-newCashSaqueAprovado=Cointrade: APROBADO Retiro
+newCashSaqueAprovado=Exchange: APROBADO Retiro
  
-newCashSaqueRealizado=Cointrade: REALIZADO Retiro
+newCashSaqueRealizado=Exchange: REALIZADO Retiro
  
-newCashSaqueCancelado=Cointrade: CANCELADO Retiro
+newCashSaqueCancelado=Exchange: CANCELADO Retiro
  
 dataInicialInformada=La fecha inicial debe ser ingresada.
  

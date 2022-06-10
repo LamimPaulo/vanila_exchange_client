@@ -2,7 +2,7 @@
 # To change this template file, choose Tools | Templates
 # and open the template in the editor.
 #SMS
-smsOrdemExecutada=Cointrade informa: Your {var1} order of parity {var2} was executed.
+smsOrdemExecutada=Exchange informa: Your {var1} order of parity {var2} was executed.
 
 
 clienteInvalido=Invalid customer.
@@ -95,7 +95,7 @@ necessarioInformarNomeCliente=You must enter the customer's name.
 
 cadastrarDDi=It is necessary to register the DDI.
 
-sejaBemVindo=Welcome to Cointrade. Thank you for registering. Use the password
+sejaBemVindo=Welcome to Exchange. Thank you for registering. Use the password
 
 paraLogin= for your first login.
 
@@ -159,15 +159,15 @@ autorizadoAutomaticamente= automatically authorized.
 
 aguardandoAtutorizacao= awaiting authorization.
 
-newCashDeposito=Cointrade: Deposit
+newCashDeposito=Exchange: Deposit
 
 volume=Amount
 
-newCashSaqueProcessando=Cointrade: PROCESSING Withdraw
+newCashSaqueProcessando=Exchange: PROCESSING Withdraw
 
-newCashSaqueAprovado=Cointrade: APPROVED Withdraw
+newCashSaqueAprovado=Exchange: APPROVED Withdraw
 
-newCashSaqueRealizado=Cointrade: ACCOMPLISHED Withdraw
+newCashSaqueRealizado=Exchange: ACCOMPLISHED Withdraw
 
 newCashSaqueCancelado=Cointrade: CANCELED Withdrae
 

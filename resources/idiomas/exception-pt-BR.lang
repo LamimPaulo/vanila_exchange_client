@@ -3,7 +3,7 @@
 # and open the template in the editor.
 
 #SMS
-smsOrdemExecutada=Cointrade informa: Sua ordem de {var1} de paridade {var2} foi executada.
+smsOrdemExecutada=Exchange informa: Sua ordem de {var1} de paridade {var2} foi executada.
 
 clienteInvalido=Cliente inválido.
 
@@ -93,7 +93,7 @@ necessarioInformarNomeCliente=É necessário informar o nome do cliente.
 
 cadastrarDDi=É necessário cadastrar o DDI.
 
-sejaBemVindo=Seja bem-vindo a Cointrade. Agradecemos pelo seu cadastro. Utilize a senha
+sejaBemVindo=Seja bem-vindo a Exchange. Agradecemos pelo seu cadastro. Utilize a senha
 
 paraLogin= para seu primeiro login.
 
@@ -157,17 +157,17 @@ autorizadoAutomaticamente= autorizado automaticamente.
 
 aguardandoAtutorizacao= aguardando autorização.
 
-newCashDeposito=Cointrade: Deposito
+newCashDeposito=Exchange: Deposito
 
 volume=Volume
 
-newCashSaqueProcessando=Cointrade: PROCESSANDO Saque
+newCashSaqueProcessando=Exchange: PROCESSANDO Saque
 
-newCashSaqueAprovado=Cointrade: APROVADO Saque
+newCashSaqueAprovado=Exchange: APROVADO Saque
 
-newCashSaqueRealizado=Cointrade: REALIZADO Saque
+newCashSaqueRealizado=Exchange: REALIZADO Saque
 
-newCashSaqueCancelado=Cointrade: CANCELADO Saque
+newCashSaqueCancelado=Exchange: CANCELADO Saque
 
 dataInicialInformada=A data inicial deve ser informada.
 
@@ -257,7 +257,7 @@ pagamentoComissaoDepositoReferencia=Pagamento comissão depósito Referência
 
 pagamentoComissaoDepositoConvidado=Pagamento comissão depósito convidado
 
-newCashDepositoAprovadoValorCreditado=Cointrade: Depósito aprovado. Valor creditado: R
+newCashDepositoAprovadoValorCreditado=Exchange: Depósito aprovado. Valor creditado: R
 
 depositoNaoEncontrado=Depósito não encontrado no sistema.
 
@@ -439,7 +439,7 @@ saqueJaCancelado=O saque já foi cancelado no sistema.
 
 necessarioEnviarCompDeposito=É necessário enviar o comprovante de depósito.
 
-newCashSaqueAprovado=Cointrade: Saque aprovado. Valor sacado: R$ 
+newCashSaqueAprovado=Exchange: Saque aprovado. Valor sacado: R$
 
 saqueNaoEncontrado=Saque não encontrado no sistema.
 
