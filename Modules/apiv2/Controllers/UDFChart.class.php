@@ -410,7 +410,7 @@ class UDFChart {
                 Array(
                     "desc" => "",
                     "name" => TITULO,
-                    "value" => "cointrade"
+                    "value" => "Exchange"
                 )
             );
             $suportedResolutions = Array(

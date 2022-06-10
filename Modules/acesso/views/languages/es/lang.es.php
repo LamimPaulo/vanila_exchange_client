@@ -49,7 +49,7 @@
   $lang['home15']      = 'El registro es gratuito.';
   $lang['home16']      = 'No cobramos mensualidad ni tasas de adhesión.';
   $lang['home17']      = 'Advertencia del riesgo: Los criptoactivos tienen extrema volatilidad.';
-  $lang['home18']      = 'Por qué abrir su cuenta digital con Cointrade';
+  $lang['home18']      = 'Por qué abrir su cuenta digital con Exchange';
   $lang['home19']      = '¿Cómo comprar un Criptoactivo?';
   $lang['home20']      = 'Vea lo fácil que es';
   $lang['home21']      = 'Conoce lo que nos hace destacar en el mercado de criptomonedas:';
@@ -104,7 +104,7 @@
 
 //Pagina Quem somos
   $lang['qs1']      = 'La Empresa';
-  $lang['qs2']      = 'Cointrade es una empresa de tecnología, que inició sus servicios en el mundo del Blockchain y de las criptomonedas negociando Bitcoin P2P y, posteriormente ofreciendo servicios de monederos virtuales a otras empresas del ramo. La iniciativa se ha ampliado para el desarrollo de recursos, procesos y herramientas que facilitan el acceso a servicios financieros digitales. El objetivo siempre fue el de ofrecer seguridad para atender las necesidades del mercado y de esa manera alcanzar la satisfacción completa de nuestros clientes';
+  $lang['qs2']      = 'Exchange es una empresa de tecnología, que inició sus servicios en el mundo del Blockchain y de las criptomonedas negociando Bitcoin P2P y, posteriormente ofreciendo servicios de monederos virtuales a otras empresas del ramo. La iniciativa se ha ampliado para el desarrollo de recursos, procesos y herramientas que facilitan el acceso a servicios financieros digitales. El objetivo siempre fue el de ofrecer seguridad para atender las necesidades del mercado y de esa manera alcanzar la satisfacción completa de nuestros clientes';
   $lang['qs3']      = ' Nuestra principal área de acción hoy en día es el ofrecer a la comunidad una plataforma segura para la negociación de las criptomonedas listadas en nuestro Exchange. También ofrecemos la creación y el desarrollo orientados al blockchain, criptomonedas y APIs para las más diversas soluciones en dichos mercados. Nuestra misión es brindar seguridad y soluciones prácticas a nuestros clientes. En esa dirección, planeamos en nuestra hoja de ruta el ofrecer productos diferenciados como el acceso a una caja fuerte para la custodia plena y segura de criptomonedas.';
   $lang['qs4']      = 'Su navegador no admite este formato de vídeo.';
   $lang['qs5']      = 'Nuestros Servicios';
@@ -114,7 +114,7 @@
   $lang['qs9']      = 'Trade';
   $lang['qs10']      = 'La negociación del Bitcoin y de las criptomonedas puede ser bastante ventajosa para profesionales del área y puede ser hecha directamente por medio de nuestra plataforma.';
   $lang['qs11']      = 'Lo que nos diferencia';
-  $lang['qs12']      = 'Cointrade Exchange ofrece una de las mayores portafolios de criptomoedas del mercado brasileño y la mayor cantidad de paridades de negociación entre las corredoras brasileñas.';
+  $lang['qs12']      = 'Exchange ofrece una de las mayores portafolios de criptomoedas del mercado brasileño y la mayor cantidad de paridades de negociación entre las corredoras brasileñas.';
 
 //Pagina Moedas
   $lang['cript1']      = 'Criptomonedas ';

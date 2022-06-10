@@ -163,7 +163,7 @@ class TesteArvoreComissao {
         $payload['score'] = '5.6';
  
         // notification title
-        $title = "Testando 2 Cointrade";
+        $title = "Testando 2 Exchange";
          
         // notification message
         $message = "Estamos 2 testando";

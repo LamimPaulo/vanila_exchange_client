@@ -106,7 +106,7 @@ class Saques {
                     
             $jsonContas->text = "Contas Bancárias";
             
-            $jsonCointrade->text = "Cointrade";
+            $jsonExchange->text = "Exchange";
             
             
             //Atar
@@ -202,7 +202,7 @@ class Saques {
                 //Atar
                 if ($configuracao->atarAtivo == 1 && $cliente->documentoVerificado == 1) {
 
-                    $jsonCointrade->text = "Cointrade";
+                    $jsonExchange->text = "Exchange";
 
                     $jsonAtar->text = "Atar";
                     $object = null;
@@ -904,7 +904,7 @@ class Saques {
                 $json["limiteDisponivel"] = "Limite Disponível: " . number_format($dados["limiteDisponivelMensal"], $moeda->casasDecimais, ",", ".") . " de " . number_format($dados["limiteMensal"], $moeda->casasDecimais, ",", ".") . " {$moeda->simbolo}";
             
                 if ($dados["limiteDisponivelMensal"] <= 0 ) {
-                    $json["limiteInformacao"] = "Para solicitar o aumento do limite de saque, por favor, envie um e-mail para support@cointradecx.com";
+                    $json["limiteInformacao"] = "Para solicitar o aumento do limite de saque, por favor, envie um e-mail para support@Exchangecx.com";
                 } else {
                     $json["limiteInformacao"] = "";
                 }

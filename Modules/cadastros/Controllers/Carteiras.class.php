@@ -226,7 +226,7 @@ class Carteiras {
                     $json["limiteDisponivel"] = "Limite Disponível: " . number_format($dados["limiteDisponivelMensal"], $moeda->casasDecimais, ",", ".") . " de " . number_format($dados["limiteMensal"], $moeda->casasDecimais, ",", ".") . " {$moeda->simbolo}";
                     
                     if($dados["limiteDisponivelMensal"] <= 0){
-                        $json["limiteInformacao"] = "PARA SOLICITAR O AUMENTO DO LIMITE DE DEPÓSITO, POR FAVOR, ENVIE UM E-MAIL PARA SUPPORT@COINTRADECX.COM";
+                        $json["limiteInformacao"] = "PARA SOLICITAR O AUMENTO DO LIMITE DE DEPÓSITO, POR FAVOR, ENVIE UM E-MAIL PARA SUPPORT@ExchangeCX.COM";
                     } else {
                         $json["limiteInformacao"] = "";
                     }

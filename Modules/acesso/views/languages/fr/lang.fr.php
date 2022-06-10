@@ -48,7 +48,7 @@
   $lang['home15']      = "L'inscription est gratuite.";
   $lang['home16']      = "Nous ne facturons pas de frais mensuels ni de frais d'adhésion.";
   $lang['home17']      = 'Avertissement de risque: Cryptoactif a une volatilité extrême.';
-  $lang['home18']      = 'Pourquoi ouvrir votre compte numérique avec Cointrade';
+  $lang['home18']      = 'Pourquoi ouvrir votre compte numérique avec Exchange';
   $lang['home19']      = 'Comment acheter un Cryptoactif?';
   $lang['home20']      = "Voyez comme c'est facile";
   $lang['home21']      = 'Apprenez à connaître nos différentiels sur le marché de la criptomonneis';
@@ -103,7 +103,7 @@
 
 //Pagina Quem somos
   $lang['qs1']      = "l'Entreprise";
-  $lang['qs2']      = "Cointrade est une société de technologie qui a commencé ses services dans le monde de la blockchain et des crypto-monnaies en échangeant des bitcoins P2P, puis en offrant des services de portefeuille à d'autres sociétés du secteur. L'initiative s'est élargie au développement de ressources, processus et outils facilitant l'accès aux services financiers numériques. L’objectif a toujours été de fournir une sécurité répondant aux besoins du marché et, ainsi, d’atteindre la satisfaction totale de nos clients.";
+  $lang['qs2']      = "Exchange est une société de technologie qui a commencé ses services dans le monde de la blockchain et des crypto-monnaies en échangeant des bitcoins P2P, puis en offrant des services de portefeuille à d'autres sociétés du secteur. L'initiative s'est élargie au développement de ressources, processus et outils facilitant l'accès aux services financiers numériques. L’objectif a toujours été de fournir une sécurité répondant aux besoins du marché et, ainsi, d’atteindre la satisfaction totale de nos clients.";
   $lang['qs3']      = 'Notre principal domaine d’activité consiste aujourd’hui à offrir à la communauté une plate-forme sécurisée pour le négoce des crypto-monnaies listées dans notre marché. Nous proposons également des services de création et de développement axés sur la blockchain, les crypto-monnaies et les API pour les solutions les plus diverses du marché. Notre mission est de fournir des solutions sécuritaires et pratiques à nos clients. Dans cette direction, nous prévoyons sur notre feuille de route d’offrir des produits différenciés, tels que l’accès à un coffre-fort pour la conservation en toute sécurité des pièces crypto-monnaies.';
   $lang['qs4']      = 'Votre navigateur ne supporte pas ce format vidéo.';
   $lang['qs5']      = 'Nos services';
@@ -113,7 +113,7 @@
   $lang['qs9']      = 'Trade';
   $lang['qs10']      = 'La négociation de Bitcoin et de Crypto-monnaies peut être très avantageuse pour les professionnels du secteur et peut être réalisée directement sur notre plateforme.';
   $lang['qs11']      = 'Différentiels';
-  $lang['qs12']      = "La Cointrade Exchange offre l'un des plus importants portefeuilles de crypto-monnaies du marché brésilien et le plus grand nombre de parités de négociation parmi les sociétés de courtage nationales.";
+  $lang['qs12']      = "La Exchange Exchange offre l'un des plus importants portefeuilles de crypto-monnaies du marché brésilien et le plus grand nombre de parités de négociation parmi les sociétés de courtage nationales.";
 
 //Pagina Moedas
   $lang['cript1']      = 'Crypto-monnaies';

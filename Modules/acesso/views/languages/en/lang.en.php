@@ -50,7 +50,7 @@
   $lang['home16']      = 'We do not charge monthly fees or membership fees.';
   $lang['home17']      = 'Risk warning: Cryptoassets have extreme volatility.';
 
-  $lang['home18']      = 'Why open your digital account with Cointrade';
+  $lang['home18']      = 'Why open your digital account with Exchange';
   $lang['home19']      = 'How to buy a Cryptocurrencies? ';
   $lang['home20']      = 'See how easy it is';
   $lang['home21']      = 'We have the best that differentiates us from the rest in the market';
@@ -105,7 +105,7 @@
 
 //Pagina Quem somos
   $lang['qs1']      = 'The company';
-  $lang['qs2']      = 'Cointrade is a technology company, which started its services in the world of Blockchain and cryptocurrencies negotiating Bitcoin P2P and later, offering virtual wallet services to other companies in the field. The initiative has been expanded to develop resources, processes and tools that facilitate access to digital financial services. The objective was always to offer security to meet the market needs and thus achieve the full satisfaction of our customers.';
+  $lang['qs2']      = 'Exchange is a technology company, which started its services in the world of Blockchain and cryptocurrencies negotiating Bitcoin P2P and later, offering virtual wallet services to other companies in the field. The initiative has been expanded to develop resources, processes and tools that facilitate access to digital financial services. The objective was always to offer security to meet the market needs and thus achieve the full satisfaction of our customers.';
   $lang['qs3']      = ' Our main area of action today is to offer the community a secure platform for negotiating the cryptocurrencies listed in our Exchange. We also offer creation and development oriented to blockchain, cryptocurrencies and APIs for the most diverse solutions in these markets. Our mission is to provide security and practical solutions to our customers. In that direction, we plan on our roadmap to offer differentiated products such as access to a safe box for the full and safe custody of their cryptocurrencies.';
   $lang['qs4']      = 'Your browser does not support this video format.';
   $lang['qs5']      = 'Our services';
@@ -115,7 +115,7 @@
   $lang['qs9']      = 'Trade';
   $lang['qs10']      = 'The trading of Bitcoin and cryptocurrencies can be quite advantageous for professionals of the area and can be done directly through our platform.';
   $lang['qs11']      = 'What makes us different';
-  $lang['qs12']      = 'Cointrade Exchange offers one of the largest portfolios of cryptocurrencies in the Brazilian market and the largest number of trading pairs among the brazilian exchanges.';
+  $lang['qs12']      = 'Exchange offers one of the largest portfolios of cryptocurrencies in the Brazilian market and the largest number of trading pairs among the brazilian exchanges.';
 
 //Pagina Moedas
   $lang['cript1']      = 'Cryptocurrencies ';

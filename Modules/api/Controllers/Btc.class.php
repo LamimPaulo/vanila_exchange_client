@@ -334,7 +334,7 @@ class Btc {
     
     public function sms($params) {
         try {
-            $msg = "Cointrade Servidor: ". \Utils\Post::get($params, "msg", "Alerta Bot Parado!");
+            $msg = "Exchange Servidor: ". \Utils\Post::get($params, "msg", "Alerta Bot Parado!");
             $cel1 = "11976066557";
             $cel2 = "11996531000";
             $cel3 = "11996574471";
