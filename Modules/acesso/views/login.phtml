@@ -42,15 +42,11 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
     var AMBIENTE = '<?php echo AMBIENTE ?>';    
 </script>
 <body class="m-lg" style="background-color: <?php echo $brand->colorBackground ?>">
-        <!-- Google Tag Manager (noscript) -->
-            <noscript>
-                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W3JFHGP" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-            </noscript>
-        <!-- End Google Tag Manager (noscript) -->
+
 <div class="middle-box text-center loginscreen animated fadeInDown">
     <div class="m-t-lg m-b-lg">
         <a href="<?php echo $empresa->homePage ?>">
-        <img alt="image"  width="150px" src="<?php echo IMAGES; ?>logo-Exchange.png" class="logo">
+        <img alt="image"  width="250px" src="<?php echo IMAGES; ?>logo-Exchange.png" class="logo">
         </a>
     </div>
     <form method="post" id="form-login" class="form-cadastro mt-lg-4">
