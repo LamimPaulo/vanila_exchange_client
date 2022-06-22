@@ -98,9 +98,9 @@ class Layout {
                     $url = (empty($modulo["url"]) ? "#" :trim($modulo["url"]));
                     $dropdown = (empty(trim($modulo["url"])) ? "class='dropdown-toggle' data-toggle='dropdown'" : "");
                     ?>
-                    <li class="dropdown">
-                        <a aria-expanded="false" role="button" href="<?php echo $url ?>" <?php echo $dropdown ?>>
-                            <?php echo $idioma->getText("sidebarMenu{$modulo["id"]}"); ?>               
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:#00dfff;" aria-expanded="false" role="button" href="<?php echo $url ?>" <?php echo $dropdown ?>>
+                            <?php echo $idioma->getText("sidebarMenu{$modulo["id"]}"); ?>
                             <?php if (empty(trim($modulo["url"]))) { ?>
                             <span class="caret"></span>
                             <?php } ?>

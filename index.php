@@ -62,7 +62,7 @@ date_default_timezone_set($dduo->getTimeZone());
 
 
 //Definição de urls para a inclusão de scripts JS, CSS, arquivos de imagens, ícones, etc.
-//define('IDIOMA', Modules\principal\Controllers\Principal::getIdioma());
+define('IDIOMA', Modules\principal\Controllers\Principal::getIdioma());
 define('URL', $urlBase . $_SERVER['REQUEST_URI']);
 define('URLBASE', $urlBase);
 define('CSS', $urlBase . '/resources/css/');

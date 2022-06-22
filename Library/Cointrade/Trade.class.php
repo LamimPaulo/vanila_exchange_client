@@ -1,6 +1,9 @@
 <?php
 
 namespace Cointrade;
+
+use Exception;
+
 /**
  * Description of Dinamize
  *

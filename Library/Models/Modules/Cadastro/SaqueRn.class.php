@@ -166,7 +166,7 @@ class SaqueRn {
                 $contaBancariaRn = new ContaBancariaRn();
                 $contaBancariaRn->conexao->carregar($contaBancaria);
             } catch (\Exception $ex) {
-                throw new\ Exception($this->idioma->getText("contaBancariaInvalida"));
+                throw new \Exception($this->idioma->getText("contaBancariaInvalida"));
             }
             
             if (in_array($contaBancaria->idBanco, $bancosEmpresa)) {

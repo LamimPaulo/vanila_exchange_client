@@ -17,20 +17,22 @@
  * limitations under the License.
  * ========================================================= */
 
-;(function ($, window, document, undefined) {
+; (function ($, window, document, undefined) {
 
 	"use strict";
 
 
 	// Create the defaults once
-	var pluginName = "pincodeInput";
-	var defaults = {
-		placeholders: undefined,							// seperate with a " "(space) to set an placeholder for each input box
+	let pluginName = "pincodeInput";
+	let defaults = {
+		placeholders: undefined,						// seperate with a " "(space) to set an placeholder for each input box
 		inputs: 4,									    // 4 input boxes = code of 4 digits long
 		hidedigits: true,								// hide digits
-		patern: '[0-9]*',
+		pattern: '[0-9]*',
 		inputtype: 'number',
 		inputmode: 'numeric',
+		inputclass: '',									// add custom class to input tag
+		characterwidth: null, 		// em width of PIN character; defaults to 0.54 (em width of a typical digit), or 0.4 if digits are hidden
 		keydown: function (e) {
 		},
 		change: function (input, value, inputnumber) {		// callback on every input on change (keyup event)
@@ -62,15 +64,19 @@
 
 		},
 		updateOriginalInput: function () {
-			var newValue = "";
+			let newValue = "";
 			$('.pincode-input-text', this._container).each(function (index, value) {
 				newValue += $(value).val().toString();
 			});
 			$(this.element).val(newValue);
+
+			if (newValue.length !== this.settings.inputs) {
+				$('.pincode-input-text', this._container).removeClass("filled");
+			}
 		},
 		check: function () {
-			var isComplete = true;
-			var code = "";
+			let isComplete = true;
+			let code = "";
 			$('.pincode-input-text', this._container).each(function (index, value) {
 				code += $(value).val().toString();
 				if (!$(value).val()) {
@@ -93,9 +99,9 @@
 			this._container = $('<div />').addClass('pincode-input-container');
 
 
-			var currentValue = [];
-			var placeholders = [];
-			var touchplaceholders = "";  //in touch mode we have just 1 big input box, and there is only 1 placeholder in this case
+			let currentValue = [];
+			let placeholders = [];
+			let touchplaceholders = "";  // in touch mode we have just 1 big input box, and there is only 1 placeholder in this case
 
 			if (this.settings.placeholders) {
 				placeholders = this.settings.placeholders.split(" ");
@@ -112,7 +118,7 @@
 			if (this.settings.hidedigits) {
 				this._pwcontainer = $('<div />').css("display", "none").appendTo(this._container);
 				this._pwfield = $('<input>').attr({
-                    'type': this.settings.inputtype,
+					'type': this.settings.inputtype,
 					'pattern': this.settings.pattern,
 					'inputmode': this.settings.inputmode,
 					'id': 'preventautofill',
@@ -121,44 +127,71 @@
 			}
 
 			if (this._isTouchDevice()) {
-				for (var i = 0; i < this.settings.inputs; i++) {
+				// set main class
+				$(this._container).addClass("touch");
 
-					var input = $('<input>').attr({
-						'type': 'text',
-						'maxlength': "1",
-						'autocomplete': 'off',
-						'placeholder': (placeholders[i] ? placeholders[i] : undefined)
-					}).addClass('form-control pincode-input-text').appendTo(this._container);
-					if (this.settings.hidedigits) {
-						// hide digits
-						input.addClass('pincode-input-text-masked');
+				// For touch devices we build a html table directly under the pincode textbox. The textbox will become transparent
+				// This table is used for styling only, it will display how many 'digits' the user should fill in.
+				// With CSS letter-spacing we try to put every digit visually insize each table cell.
+
+				let wrapper = $('<div />').addClass('touchwrapper touch' + this.settings.inputs).appendTo(this._container);
+				let input = $('<input>').attr({
+					'type': this.settings.inputtype,
+					'pattern': this.settings.pattern,
+					'inputmode': this.settings.inputmode,
+					'placeholder': touchplaceholders,
+					'maxLength': this.settings.inputs,
+					'autocomplete': 'off'
+				}).addClass(this.settings.inputclass + ' form-control pincode-input-text').appendTo(wrapper);
+
+				// calculate letter-spacing in Javascript since this isn't possible in CSS
+				let inputs = this.settings.inputs;
+				let digitEms = this.settings.characterwidth || (this.settings.hidedigits ? 0.4 : 0.54);
+				setTimeout(function () {
+					let digitWidth = parseFloat(getComputedStyle(input.get(0)).fontSize) * digitEms;
+					let spaceWidth = input.innerWidth() / inputs;
+					let spaceBetweenChars = spaceWidth - digitWidth;
+					$(input).css({
+						"margin-left": spaceBetweenChars / 2 + "px",
+						"width": "110%",  //this prevents pincode 'jumping'
+						"letter-spacing": spaceBetweenChars + "px"
+					});
+				}, 0);
+
+
+
+				let touchtable = $('<div>').addClass('touch-flex').appendTo(wrapper);
+				// create touch background elements (for showing user how many digits must be entered)
+				for (let i = 0; i < this.settings.inputs; i++) {
+					if (i == (this.settings.inputs - 1)) {
+						$('<div/>').addClass('touch-flex-cell').addClass('last').appendTo(touchtable);
 					} else {
-						// show digits, also include default value
-						input.val(currentValue[i]);
+						$('<div/>').addClass('touch-flex-cell').appendTo(touchtable);
 					}
-
-					if (i == 0) {
-						input.addClass('first');
-					} else if (i == (this.settings.inputs - 1)) {
-						input.addClass('last');
-					} else {
-						input.addClass('mid');
-					}
-
-					// add events
-					this._addEventsToInput(input, (i + 1));
 				}
+				if (this.settings.hidedigits) {
+					// hide digits
+					input.addClass('pincode-input-text-masked');
+				} else {
+					// show digits, also include default value
+					input.val($(this.element).val());
+				}
+
+				// add events
+				this._addEventsToInput(input, 1);
 
 			} else {
 				// for desktop mode we build one input for each digit
-				for (var i = 0; i < this.settings.inputs; i++) {
+				let width = (100 / this.settings.inputs) + '%';
+				for (let i = 0; i < this.settings.inputs; i++) {
 
-					var input = $('<input>').attr({
+					let input = $('<input>').attr({
 						'type': 'text',
 						'maxlength': "1",
 						'autocomplete': 'off',
 						'placeholder': (placeholders[i] ? placeholders[i] : undefined)
-					}).addClass('form-control pincode-input-text').appendTo(this._container);
+					}).addClass(this.settings.inputclass + ' form-control  pincode-input-text').appendTo(this._container);
+					input.css({ width: width })
 					if (this.settings.hidedigits) {
 						// hide digits
 						input.addClass('pincode-input-text-masked');
@@ -180,13 +213,13 @@
 				}
 			}
 
-
-			// error box
-			this._error = $('<div />').addClass('text-danger pincode-input-error').appendTo(this._container);
-
-			//hide original element and place this before it
+			// hide original element and place this before it
 			$(this.element).css("display", "none");
 			this._container.insertBefore(this.element);
+
+			// error box
+			this._error = $('<div />').addClass('text-danger pincode-input-error').insertBefore(this.element);
+
 		},
 		enable: function () {
 			$('.pincode-input-text', this._container).each(function (index, value) {
@@ -207,24 +240,81 @@
 			});
 			this.updateOriginalInput();
 		},
+		_setValue: function (newValue, e) {
+
+			// slice value
+			let value = newValue.substring(0, this.settings.inputs);
+
+			if (this._isTouchDevice()) {
+
+				// update value
+				$('.pincode-input-text', this._container).each(function (index, input) {
+					$(input).val(value);
+				});
+
+				// update original input box
+				this.updateOriginalInput();
+
+				// oncomplete check
+				if (this.check()) {
+					this.settings.complete($(this.element).val(), e, this._error);
+				}
+
+			} else {
+
+				let values = value.split('');
+
+				$('.pincode-input-text', this._container).each(function (index, input) {
+					$(input).val(values[index]);
+				});
+
+				// update original input box
+				this.updateOriginalInput();
+
+				// oncomplete check
+				if (this.check()) {
+					this.settings.complete($(this.element).val(), e, this._error);
+				}
+
+			}
+
+		},
 		_isTouchDevice: function () {
 			// I know, sniffing is a really bad idea, but it works 99% of the times
-//			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-//				return true;
-//			}
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				return true;
+			}
+			// iPad Pro pretends to be a Mac, but Macs don't have touch controls
+			if (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) {
+				return true;
+			}
 		},
 		_addEventsToInput: function (input, inputnumber) {
 
-			input.on('focus', function (e) {
-				this.select();  //automatically select current value
-			});
+			input.on('focus', $.proxy(function (e) {
+				if (this._isTouchDevice()) {
+					this._setValue("", e)  //always empty when we re-focus
+				}
+				input.select();  // automatically select current value
+			}, this));
+
+			// paste event should call onchange and oncomplete callbacks
+			input.on('paste', $.proxy(function (e) {
+				e.preventDefault();
+
+				let clipboardData = (e.originalEvent || e).clipboardData || window.clipboardData;
+				let pastedData = clipboardData.getData('text/plain');
+
+				this._setValue(pastedData, e);
+
+			}, this));
 
 			input.on('keydown', $.proxy(function (e) {
 				if (this._pwfield) {
 					// Because we need to prevent password saving by browser
 					// remove the value here and change the type!
 					// we do this every time the user types
-					$(this._pwfield).attr({'type': 'text'});
+					$(this._pwfield).attr({ 'type': 'text' });
 					$(this._pwfield).val("");
 				}
 
@@ -232,27 +322,26 @@
 				if (this._isTouchDevice()) {
 					if (e.keyCode == 8 || e.keyCode == 46) {
 						// do nothing on backspace and delete
-
-					} else {
-						if ($(this.element).val().length == this.settings.inputs) {
-							e.preventDefault();
-							e.stopPropagation();
-						}
+					} else if ($(this.element).val().length == this.settings.inputs) {
+						e.preventDefault();
+						e.stopPropagation();
+					} else if ($(this.element).val().length == (this.settings.inputs - 1)) {
+						$(e.currentTarget).addClass("filled");
 					}
 
 				} else {
 					// in desktop mode, check if an number was entered
 
-					if (!(e.keyCode == 8                                // backspace key
+					if (!(e.keyCode == 8                            // backspace key
 						|| e.keyCode == 9							// tab key
 						|| e.keyCode == 46                          // delete key
 						|| (e.keyCode >= 48 && e.keyCode <= 57)     // numbers on keyboard
-						|| (e.keyCode >= 96 && e.keyCode <= 105)   // number on keypad
-						|| (this.settings.inputtype != 'number' && e.keyCode >= 65 && e.keyCode <= 90))   // alfabet
+						|| (e.keyCode >= 96 && e.keyCode <= 105)    // number on keypad
+						|| (e.ctrlKey || e.metaKey) // paste
+						|| ((this.settings.inputtype != 'number' && this.settings.inputtype != 'tel') && e.keyCode >= 65 && e.keyCode <= 90))   // alphabet
 					) {
 						e.preventDefault();     // Prevent character input
 						e.stopPropagation();
-
 					}
 
 				}
@@ -268,41 +357,44 @@
 						// goto previous
 						$(e.currentTarget).prev().select();
 						$(e.currentTarget).prev().focus();
-					} else {
-						if ($(e.currentTarget).val() != "") {
-							$(e.currentTarget).next().select();
-							$(e.currentTarget).next().focus();
-						}
+					} else if ($(e.currentTarget).val() != "") {
+						$(e.currentTarget).next().select();
+						$(e.currentTarget).next().focus();
 					}
 				}
 
 				// update original input box
 				this.updateOriginalInput();
 
-				// oncomplete check
-				if (this.check()) {
-					this.settings.complete($(this.element).val(), e, this._error);
-				}
-
-				//onchange event for each input
+				// onchange event for each input
 				if (this.settings.change) {
 					this.settings.change(e.currentTarget, $(e.currentTarget).val(), inputnumber);
 				}
 
-
-				// prevent more input for touch device (we can't limit it)
 				if (this._isTouchDevice()) {
 					if (e.keyCode == 8 || e.keyCode == 46) {
 						// do nothing on backspace and delete
-					} else {
-						if ($(this.element).val().length == this.settings.inputs) {
-							$(e.currentTarget).blur();
-						}
+					} else if ($(this.element).val().length == this.settings.inputs) {
+						$(e.currentTarget).blur();
 					}
+				}
 
+				// oncomplete check
+				if (this.check()) {
+
+					if (this._isTouchDevice()) {
+						// oncomplete callback is fired 100ms after above 'blur' event
+						setTimeout($.proxy(function () {
+							this.settings.complete($(this.element).val(), e, this._error);
+						}, this), 100);
+					} else {
+						this.settings.complete($(this.element).val(), e, this._error);
+					}
 				}
 
 			}, this));
+
+
 		}
 
 

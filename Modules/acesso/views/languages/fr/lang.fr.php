@@ -39,7 +39,8 @@
   $lang['home6']      = 'Toutes nos infrastructures, équipements et serveurs sont évolutifs et redondants pour répondre à la demande du marché sans interruption de la fourniture de nos services.'; 
   $lang['home7']      = 'Notre Équipe'; 
   $lang['home8']      = 'Notre équipe est composée de personnes qualifiées qui vous offriront le meilleur support et les meilleurs services pour vos besoins, que ce soit par email, chat ou téléphone.'; 
-  $lang['home9']      = "S'inscrire"; 
+  $lang['home9']      = "Vous n'avez pas de compte ? "; 
+  $lang['home99']      = "S'inscrire ici"; 
   $lang['home10']      = 'Accéder'; 
   $lang['home11']      = 'Nom complet';
   $lang['home12']      = "J'accepte le ";

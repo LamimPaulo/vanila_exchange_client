@@ -221,11 +221,11 @@ class Validacao {
         } else {
             for ($t = 12; $t < 14; $t++) {
                 for ($d = 0, $p = $t - 7, $c = 0; $c < $t; $c++) {
-                    $d += $cnpj{$c} * $p;
+                    $d += $cnpj[$c] * $p;
                     $p = ($p < 3) ? 9 : --$p;
                 }
                 $d = ((10 * $d) % 11) % 10;
-                if ($cnpj{$c} != $d) {
+                if ($cnpj[$c] != $d) {
                     return false;
                 }
             }

@@ -16,21 +16,21 @@ $mostrarBotaoTransferir = (Utils\Geral::isCliente() && ($cliente->statusSaqueBrl
 
     <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-  <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
-    <div class="col-lg-9">
-      <ol class="breadcrumb m-t-md" style="background-color: transparent !important;">
-          <li>
-            <?php echo $idioma->getText("subTitulo") ?>
-          </li>
-          <li class="active">
-              <strong><?php echo $idioma->getText("titulo") ?>
-          </li>
-      </ol>
+    <div class="row wrapper border-bottom page-heading" style="background: linear-gradient(to right, #fff, <?php echo $moeda->mainColor ?>) !important;">
+        <div class="col-lg-9">
+        <ol class="breadcrumb m-t-md" style="background-color: transparent !important;">
+            <li>
+                <?php echo $idioma->getText("subTitulo") ?>
+            </li>
+            <li class="active">
+                <strong><?php echo $idioma->getText("titulo") ?>
+            </li>
+        </ol>
+        </div>
+        <div class="col-lg-3">
+        <?php Utils\Layout::append("inspina/flags", $_data) ?>
+        </div>
     </div>
-    <div class="col-lg-3">
-    <?php Utils\Layout::append("inspina/flags", $_data) ?>
-    </div>
-  </div>
 </div>
     
 <div>

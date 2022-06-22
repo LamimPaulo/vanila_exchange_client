@@ -271,114 +271,112 @@ class Book {
     }
     
     public function getBook($params) {
-        
         try {
             $paridade = \Modules\principal\Controllers\Principal::getParity();
             $cliente = \Utils\Geral::getCliente(); 
-            
+
             $bd = new \Io\BancoDados(BDBOOK);
             $orderBookRn = new \Models\Modules\Cadastro\OrderBookRn($bd);
-            
-            $listaCompra = $orderBookRn->getOrders($paridade, \Utils\Constantes::ORDEM_COMPRA, "N", "N", 17, 0, true);
-            $listaVenda = $orderBookRn->getOrders($paridade, \Utils\Constantes::ORDEM_VENDA, "N", "N", 16, 0, true);
-            
+
+            $listaCompra = $orderBookRn->getOrders($paridade, \Utils\Constantes::ORDEM_COMPRA, "N", "N", 9, 0, true);
+            $listaVenda = $orderBookRn->getOrders($paridade, \Utils\Constantes::ORDEM_VENDA, "N", "N", 9, 0, true);
+
             $venda = current($listaVenda);
-            $compra = current($listaCompra);   
-            
+            $compra = current($listaCompra);
+
             $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
-            if($compra->valorCotacao != $paridade->precoCompra && !empty($compra->valorCotacao)){              
+            if($compra->valorCotacao != $paridade->precoCompra && !empty($compra->valorCotacao)){
                 $paridadeRn->conexao->update(Array("preco_compra" => $compra->valorCotacao), Array("id" => $paridade->id));                
             }
-            
-            if($venda->valorCotacao != $paridade->precoVenda && !empty($venda->valorCotacao)){               
+
+            if($venda->valorCotacao != $paridade->precoVenda && !empty($venda->valorCotacao)){
                 $paridadeRn->conexao->update(Array("preco_venda" => $venda->valorCotacao), Array("id" => $paridade->id));                
             }
-            
+
             $diferencaPorcentagem = 0;
-            
+
             if(!empty($compra->valorCotacao) && !empty($venda->valorCotacao)){
-               $diferencaPorcentagem = number_format(100 * (1 - ($compra->valorCotacao) / (($venda->valorCotacao) * 1 )), 4, ",", "."); 
-               
-               if($diferencaPorcentagem >= 0){
-                   $diferencaPorcentagemShow = $diferencaPorcentagem;
-               } else {
-                   $diferencaPorcentagemShow = 0;
-               }
+               $diferencaPorcentagem = number_format(100 * (1 - ($compra->valorCotacao) / (($venda->valorCotacao) * 1 )), 2, ",", "."); 
+
+                if($diferencaPorcentagem >= 0){
+                    $diferencaPorcentagemShow = $diferencaPorcentagem;
+                } else {
+                    $diferencaPorcentagemShow = 0;
+                }
             }
-            
+
             $diferenca = ($venda->valorCotacao - $compra->valorCotacao) < 0 ? "" : $venda->valorCotacao - $compra->valorCotacao;
-            
+
             $json["diferenca"] = $paridade->moedaTrade->simbolo . " " . number_format($diferenca, $this->casasDecimaisMoedaTrade, ".", "");
             $json["diferencaPorcentagem"] = $diferencaPorcentagemShow;
+            $json["diferencaClass"] = $diferencaPorcentagemShow >= 0 ? 'green' : 'red';
             $json["adjusttbl"] = sizeof($listaVenda) < 16 ? (16 - sizeof($listaVenda)) * 4.77 : 0 ;
             $json["htmlCompra"] = $this->htmlOrdens($listaCompra, \Utils\Constantes::ORDEM_COMPRA, $cliente->id);
             $json["htmlVenda"] = $this->htmlOrdens($listaVenda, \Utils\Constantes::ORDEM_VENDA, $cliente->id);
-            
+
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
             $json["sucesso"] = false;
             $json["mensagem"] = \Utils\Excecao::mensagem($ex);
         }
         print json_encode($json);
-    }    
-    
-    private function htmlOrdens($lista, $tipo, $idCliente) {
+    }
 
+    private function htmlOrdens($lista, $tipo, $idCliente) {
         $listaAux = null;
         $volumeGeral = 0;
-        
+
         foreach ($lista as $dados) {
             $listaAux[] = $dados;
             $volumeGeral = $volumeGeral + $dados->volumeCurrency;
         }
-        
+
         if($tipo == \Utils\Constantes::ORDEM_VENDA){
             $listaAux = array_reverse($listaAux);
         }
-        
+
         $volumeAcumulado = 0;
         ob_start();
         if (sizeof($listaAux) > 0) {
-            foreach ($listaAux as $ordem) {  
+            foreach ($listaAux as $ordem) {
                 $volumeAcumulado += $ordem->volumeCurrency;
-                
+
                 $ac = ($tipo == \Utils\Constantes::ORDEM_COMPRA ? $volumeAcumulado : ($volumeGeral - $volumeAcumulado + $ordem->volumeCurrency));
-                
+
                 $this->htmlItemOrdem($ordem, $volumeGeral, $idCliente, $ac);
             }
         }
-        
+
         $html = ob_get_contents();
         ob_end_clean();
         return $html;
     }
-    
-    private function htmlItemOrdem(\Models\Modules\Cadastro\OrderBook $ordem, $volumeGeral, $idCliente, $volumeAcumulado) {
 
+    private function htmlItemOrdem(\Models\Modules\Cadastro\OrderBook $ordem, $volumeGeral, $idCliente, $volumeAcumulado) {
         $ordem->porcentagem =  ($ordem->volumeCurrency / $volumeGeral ) * 100;
         $ordemRemover = \Utils\Criptografia::encriptyPostId($ordem->id);
-        $color = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "26, 179, 148" : "255, 30, 30"); 
-        $colorHex = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "#1ab394" : "#ed5565"); 
-        
+        $color = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "26, 179, 148" : "255, 30, 30");
+        $colorHex = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "#26de8163" : "#ed5565");
+        $colorClass = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "green" : "red"); 
+        // $colorClass2 = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "green-bg-".number_format($ordem->porcentagem, 2, ".", "") : "red-bg-".number_format($ordem->porcentagem, 2, ".", "")); 
+        $colorClass2 = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "green-bg-".number_format($ordem->porcentagem, 0, ".", "") : "red-bg-".number_format($ordem->porcentagem, 0, ".", "")); 
         ?>
-        <tr style="background-image: linear-gradient(to left, rgba(<?php echo $color ?>, 0.2) <?php echo number_format($ordem->porcentagem, 2, ".", "") ?>%, rgba(<?php echo $color ?>, 0) <?php echo number_format($ordem->porcentagem, 2, ".", "") ?>%) !important; font-weight: <?php echo $ordem->idCliente == $idCliente ? "bold" : "normal" ?>"    
-            class="order-item" 
+
+        <tr style="font-weight: <?php echo $ordem->idCliente == $idCliente ? "bold" : "normal" ?>"    
+            class="order-item <?php echo $colorClass2 ?>" 
             onclick="configOrder('<?php echo ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? \Utils\Constantes::ORDEM_VENDA : \Utils\Constantes::ORDEM_COMPRA) ?>', '<?php echo number_format($ordem->valorCotacao, $this->casasDecimaisMoedaTrade, ".", "")?>', '<?php echo number_format($volumeAcumulado, $ordem->paridade->moedaBook->casasDecimais, ".", "")?>');" >
-            
-            <td class="text-left td-price" style="padding-top: 1px !important; padding-bottom: 1px !important; color: <?php echo $colorHex ?>; ">
+            <td class="<?php echo $colorClass ?>" ">
                 <span><?php echo number_format($ordem->valorCotacao, $this->casasDecimaisMoedaTrade, ",", ".") ?>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <?php if ($ordem->idCliente == $idCliente) { ?>
                     <a onclick="cancelar('<?php echo $ordemRemover ?>');"><i class='fa fa-times' style='color: #676a6c !important'></i></a>
                 <?php } ?>
             </td>
-            <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;"><?php echo number_format($ordem->volumeCurrency, $ordem->paridade->moedaBook->casasDecimais, ",", ".") ?></td>
-            <td class="text-right " style="padding-top: 1px !important; padding-bottom: 1px !important;"><?php echo number_format(($ordem->valorCotacao * $ordem->volumeCurrency), $this->casasDecimaisMoedaTrade, ",", ".") ?></td> 
-            
+            <td><?php echo number_format(($ordem->valorCotacao * $ordem->volumeCurrency), $this->casasDecimaisMoedaTrade, ",", ".") ?></td> 
+            <td><?php echo number_format($ordem->volumeCurrency, $ordem->paridade->moedaBook->casasDecimais, ",", ".") ?></td>
         </tr>
         <?php
-        
     }
-    
+
     public function listarMinhasOrdens($params) {
         try {
                         
@@ -403,7 +401,7 @@ class Book {
         }
         print json_encode($json);
     }
-    
+
     private function htmlMinhasOrdens($lista) {
         
         ob_start();
@@ -422,7 +420,7 @@ class Book {
         ob_end_clean();
         return $html;
     }
-    
+
     private function htmlItemMinhasOrdens(\Models\Modules\Cadastro\OrderBook $ordem) {
         
         if ($ordem->cancelada > 0) {
@@ -455,8 +453,7 @@ class Book {
         <?php
         
     }
-    
-    
+
     public function cancelar($params) {
         try {
             
@@ -473,8 +470,7 @@ class Book {
         }
         print json_encode($json);
     }
-    
-    
+
     public function adicionarFavorito($params) {
         try {
             
@@ -502,7 +498,7 @@ class Book {
         }
         print json_encode($json);
     }
-    
+
     public function removerFavorito($params) {
         try {
             

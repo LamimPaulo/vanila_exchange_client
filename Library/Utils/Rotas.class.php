@@ -3,15 +3,12 @@ namespace Utils;
 
   //
 class Rotas {
-    
-    public static $rotas = Array(
-        
-      
-        
+
+public static $rotas = Array(
         //"socket-book"                                 => Array("url" => "ws/bookSocketIo/index" ,                                                 "modulo" => "",                    "rotina" => "" ),
         //"socket-history"                              => Array("url" => "ws/BookSocketHistory/index" ,                                          "modulo" => "",                    "rotina" => "" ),
         //"socket-ticker"                             => Array("url" => "ws/BookSocketIo/index" ,                                                "modulo" => "",                    "rotina" => "" ),
-        
+
         //direto no BD
         //"book-history"                            => Array("url" => "ws/BookSocketHistory/bookOrdemExecutadas" ,                                          "modulo" => "",                    "rotina" => "" ),
         //"socket-book-v2"                             => Array("url" => "ws/bookSocketIo/bookSocket" ,                                                 "modulo" => "",                    "rotina" => "" ),
@@ -23,18 +20,14 @@ class Rotas {
         //"testesql"                              => Array("url" => "api/procedimentosPerigosos/testeSql" ,                     "modulo" => "api",                    "rotina" => "coins" ),
         //"ws/teste/api"                           => Array("url" => "ws/atar/callBackTeste" ,                                            "modulo" => "",                    "rotina" => "" ),
         //"modulos"                              => Array("url" => "api/procedimentosPerigosos/modulos" ,                         "modulo" => "api",                    "rotina" => "coins" ),
-
-        
-        
         "api/trade/fees"                        => Array("url" => "api/trade/fees" ,                                            "modulo" => "api",                    "rotina" => "coins" ),
 
-//        
 //        "apiv2/ordens"                          => Array("url" => "apiv2/ordens/index" ,                                          "modulo" => "apiv2",                    "rotina" => "coins" ),
 //        "apiv2/trades"                          => Array("url" => "apiv2/trades/index" ,                                          "modulo" => "apiv2",                    "rotina" => "coins" ),
 //        "apiv2/book"                            => Array("url" => "apiv2/Book/index" ,                                            "modulo" => "apiv2",                    "rotina" => "book" ),
 //        "apiv2/ticket/markets"                  => Array("url" => "apiv2/ticket/markets" ,                                        "modulo" => "api",                    "rotina" => "ticket" ),
 //        "apiv2/ticket/market"                   => Array("url" => "apiv2/ticket/market" ,                                         "modulo" => "api",                    "rotina" => "ticket" ),
-//        
+
         "apiv2/udfchart/history"                => Array("url" => "apiv2/UDFChart/history" ,                                      "modulo" => "apiv2",                    "rotina" => "udfchart" ),
         "apiv2/udfchart/symbols"                => Array("url" => "apiv2/UDFChart/symbols" ,                                      "modulo" => "apiv2",                    "rotina" => "udfchart" ),
         "apiv2/udfchart/symbol_info"            => Array("url" => "apiv2/UDFChart/symbol_info" ,                                  "modulo" => "apiv2",                    "rotina" => "udfchart" ),

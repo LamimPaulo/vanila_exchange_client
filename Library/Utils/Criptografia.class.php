@@ -124,7 +124,7 @@ class Criptografia {
         $c = sscanf( sprintf( '%s%s' , $a , $b ) , '%4s%4s%4s%4s' );
         $d = 1;
         for ( $i = 0 ; $i < 4 ; $i++ )
-        for ( $j = 0 ; $j < 4 ; $d += pow( ord( $c[ $i ]{ $j } ) , $i ) , $j++ );
+        for ( $j = 0 ; $j < 4 ; $d += pow( ord( $c[ $i ][ $j ] ) , $i ) , $j++ );
         $c[ 4 ] = $d;
         $token =  vsprintf('%s-%s-%s-%s-%05x' , $c );
         return $token;

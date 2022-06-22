@@ -81,7 +81,6 @@ $(document).ready(function () {
                         $('#conta-gratis').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
                     },
                     success: function (json) {
-                        
                         try {
                             if (json.sucesso) {
                                 $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
@@ -112,8 +111,9 @@ $(document).ready(function () {
                                 $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
                             }
                         } catch (e) {
+                            console.error(e.message)
                             console.log(e.message)
-                            $('#conta-gratis').html('<?php echo $lang['home14']; ?>');                         
+                            $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
                             showNotyAlert('Erro ao enviar os dados, tente mais tarde', "w");
                         }
                     }
@@ -121,8 +121,7 @@ $(document).ready(function () {
             }
             e.preventDefault();
         });
-    
-        
+
     $('#form-login').on('submit', function(e){
             var EmailLogin = $('#email_login').val(),
                 SenhaLogin = $('#senha').val(),
@@ -154,14 +153,21 @@ $(document).ready(function () {
                             $('#senha').val('');
                             $('#acessar-painel').html('<?php echo $lang['modal3']; ?>');
                             reloadCaptcha();
-                        }else{    
+                        }else{
                             window.location.href = '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGIN ?>/' + data.token;
                         }
                     },
-                    error: function(){
+                    error: function(xhr, status, error) {
+                        // console.error(error.message);
+                        console.error(xhr.responseText);
+
                         showNotyAlert('<?php echo $idioma1->getText("erroDados")?>', "w");
                         $('#acessar-painel').html('<?php echo $lang['modal3']; ?>');
                     }
+                    // error: function(){
+                    //     showNotyAlert('<?php echo $idioma1->getText("erroDados")?>', "w");
+                    //     $('#acessar-painel').html('<?php echo $lang['modal3']; ?>');
+                    // }
                 });
             }
             e.preventDefault();

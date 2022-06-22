@@ -24,7 +24,6 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
 
 <body class="" style="background-color: <?php echo $brand->colorBackground ?>">
     <div class="middle-box text-center loginscreen animated fadeInDown">
-        
             <div>
                     <a href="<?php echo $empresa->homePage ?>">
                     <img alt="image"  width="200px" class="rounded-circle" src="<?php echo IMAGES . $brand->logo ?>">
@@ -48,9 +47,7 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
             <p>
             </p>
             <p></p>
-                
             <br><br>
-            
             <?php foreach ($lista as $documentoSistema) { ?>
             <div class="row" id="container-<?php echo $documentoSistema->codigo ?>">
                 <div class="col col-lg-12">
@@ -67,19 +64,14 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
             </div>
             </div>
             <?php } ?>
-            
             <br><br>
-            
             <div class="row" id="container-alert" style="display: none;">
                 <div class="col col-lg-12">
                     <div class="alert alert-danger">
-                        
                     </div>
                 </div>
             </div>
-            
             <br><br>
-            
             <div class="row">
                 <div class="col-xs-12 col-lg-12 text-center">
                     <button class="btn btn-primary full-width" type="button" onclick="aceitar();" id="btn-aceitar">
@@ -88,8 +80,6 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
                 </div>
             </div>
             <br>
-            
-            
         </div>
     </div>
     </div>
@@ -99,8 +89,7 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
 <script src="<?php echo TEMA; ?>bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
 <script>
-     $(document).ready(function () {
-       
+    $(document).ready(function () {
         $('.i-checks').iCheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green'
@@ -117,7 +106,7 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
             dataType: 'json',
             method: 'post',
             data: {
-                <?php 
+                <?php
                 foreach ($lista as $doc) {
                     ?>
                     <?php echo $doc->codigo ?>: $("#<?php echo $doc->codigo ?>").is(":checked"),
@@ -161,8 +150,6 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
             }
         });
     }
-
-    
 </script>
 </body>
 </html>

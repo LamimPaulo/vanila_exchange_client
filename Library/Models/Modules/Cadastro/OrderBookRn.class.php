@@ -21,9 +21,7 @@ class OrderBookRn {
     private static $homolog = false;
     private $listOrdersHomolog = Array();
     public  $idioma=null;
-    
-    
-    
+
     public function __construct(\Io\BancoDados $adapter = null) {
         
         if ($this->idioma == null) {
@@ -36,11 +34,11 @@ class OrderBookRn {
             $this->conexao = new GenericModel($adapter, new OrderBook());
         }
     }
-    
+
     public function setHomolog($homolog = true) {
         self::$homolog = $homolog;
     }
-    
+
     public function salvar(OrderBook &$orderBook) {
         try {
             
@@ -217,7 +215,7 @@ class OrderBookRn {
             throw new \Exception(\Utils\Excecao::mensagem($e));
         }
     }
-    
+
     public function carregar(OrderBook &$orderBook, $carregar = true, $carregarParidade = true) {
         if ($carregar) {
             $this->conexao->carregar($orderBook);
@@ -229,7 +227,7 @@ class OrderBookRn {
             $paridadeRn->carregar($orderBook->paridade, true, true, true);
         }
     }
-    
+
     public function listar($where = null, $order = null, $offset = null, $limit = null) {
         $result = $this->conexao->listar($where, $order, $offset, $limit);
         
@@ -249,7 +247,7 @@ class OrderBookRn {
         }
         return $lista;
     }
-    
+
     public function calcularPreco($volume, $tipo, $idParidade) {
         
         $configuracao = new Configuracao(Array("id" => 1));
@@ -380,7 +378,7 @@ class OrderBookRn {
         
         return Array("menor" => $menor, "maior" => $maior, "preco" => $preco, "volume" => $volumeFinal);
     }
-    
+
     public function registrarOrdemCompra($volume, $preco, Paridade $paridade, $direta = true, $reference = 0, $cliente = null) {
         try {
             
@@ -456,9 +454,7 @@ class OrderBookRn {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
-    
-    
+
     public function registrarOrdemVenda($volume, $preco, Paridade $paridade, $direta = true, $cliente = null) {
         try {
             if ($paridade == null || !($paridade instanceof Paridade)) {
@@ -508,18 +504,16 @@ class OrderBookRn {
                 $orderBook->direta = 0;
                 $orderBook->valorCotacaoReferencia = 0;
             }
-            
+
             $this->salvar($orderBook);
-            
+
             return $orderBook;
         } catch (\Exception $ex) {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
-    
+
     public function getOrders(Paridade $paridade, $tipo = "T", $executada = "T", $cancelada = "T", $limit = 0, $idCliente = 0, $agrupar = false, $ordemVendaDesc = false, $ordemCompraDesc = false) {
-       
         $where = Array();
 
         if ($tipo != "T") {
@@ -558,9 +552,9 @@ class OrderBookRn {
         $having = "";
         if ($agrupar) {
             if ($tipo == \Utils\Constantes::ORDEM_COMPRA) { 
-                $columns = "SUM(ob.volume_currency - ob.volume_executado + ob.valor_taxa - ob.valor_taxa_executada) AS volume , SUM(ob.volume_executado) AS volume_executado, AVG(ob.valor_cotacao) AS valor_cotacao, ob.tipo, ob.id_paridade ";
+                $columns = "SUM(ob.volume_currency - ob.volume_executado + ob.valor_taxa - ob.valor_taxa_executada) AS volume , SUM(ob.volume_executado) AS volume_executado, AVG(ob.valor_cotacao) AS valor_cotacao, ob.tipo, ob.id_paridade, ob.id_cliente ";
             } else {
-                $columns = "SUM(ob.volume_currency - ob.volume_executado) AS volume , SUM(ob.volume_executado) AS volume_executado, AVG(ob.valor_cotacao) AS valor_cotacao, ob.tipo, ob.id_paridade ";
+                $columns = "SUM(ob.volume_currency - ob.volume_executado) AS volume , SUM(ob.volume_executado) AS volume_executado, AVG(ob.valor_cotacao) AS valor_cotacao, ob.tipo, ob.id_paridade, ob.id_cliente";
             }
             $groupby = " GROUP BY ob.valor_cotacao, ob.tipo, ob.id_paridade ";
             $having = " HAVING  volume > 0 ";
@@ -616,8 +610,7 @@ class OrderBookRn {
             
         return $lista;
     }
-    
-    
+
     public function getValorTotalOrdensReais(Cliente $cliente, Paridade $paridade) {
         
         $query = " SELECT SUM(volume_bloqueado) AS total FROM order_book WHERE id_moeda_bloqueada = {$paridade->idMoedaTrade} AND executada = 0 AND cancelada = 0 AND id_cliente = {$cliente->id};" ;
@@ -632,8 +625,7 @@ class OrderBookRn {
         
         return number_format($saldo, $paridade->moedaTrade->casasDecimais, ".", "");
     }
-    
-    
+
     public function getValorTotalOrdensPorMoeda(Cliente $cliente, $idMoeda) {
         $moeda = MoedaRn::get($idMoeda);
         
@@ -694,7 +686,7 @@ class OrderBookRn {
         return number_format($saldo, $moeda->casasDecimais, ".", "");
         
     }
-    
+
     public function getValorTotalOrdensCurrency(Cliente $cliente, $idParidade) {
         
         $paridade = ParidadeRn::get($idParidade);
@@ -731,7 +723,7 @@ class OrderBookRn {
         
         return number_format($saldo, $paridade->moedaTrade->casasDecimais, ".", "");
     }
-    
+
     public function cancelar(OrderBook $orderBook) {
         
         try {
@@ -747,8 +739,7 @@ class OrderBookRn {
         $this->calcularSaldoBloqueadoOrdem($orderBook);
         
     }
-    
-    
+
     public function calcularSaldoBloqueadoOrdem(OrderBook $orderBook) {
         
         if ($orderBook->cancelada > 0 || $orderBook->executada > 0) {
@@ -758,24 +749,22 @@ class OrderBookRn {
         } else {
             $update = "UPDATE order_book ob SET  volume_bloqueado = (ob.volume_currency - ob.volume_executado + ob.valor_taxa - ob.valor_taxa_executada) WHERE id = {$orderBook->id};";
         }
-        
+
         $this->conexao->adapter->query($update)->execute();
     }
-    
+
     public function finalizada(OrderBook $orderBook) {
         try {
             $this->conexao->carregar($orderBook);
         } catch (Exception $ex) {
             throw new \Exception($this->idioma->getText("ordemInvalidaNaoEncontrada"));
         }
-        
+
         $orderBook->executada = 1;
         $query = "UPDATE order_book AS ob_w set executada = 1 WHERE id = {$orderBook->id};";
         $this->conexao->adapter->query($query)->execute();
-        
     }
-    
-    
+
     public function executarOrdemPassiva(OrderBook $orderBook, $configuracao = null) {
         
         if ($configuracao == null) {
@@ -946,7 +935,7 @@ class OrderBookRn {
             
         }
     }
-    
+
     private function calcularExecucaoOrdem(OrderBook &$orderBook, $volumeExecutado, Paridade $paridade, $valorTotal, $tipoOrdem = null) {
 
             if ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA) {
@@ -1015,7 +1004,7 @@ class OrderBookRn {
             
             $this->registrarTaxaBtc($orderBook, $valorTaxa, $paridade);
     }
-    
+
     private function gerarContaCorrente(OrderBook $orderBook, $volumeExecutado, $valorReais, Paridade $paridade) {
         
         if ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA) {
@@ -1155,7 +1144,7 @@ class OrderBookRn {
             $contaCorrenteBtcRn->gerarContaCorrente($contaCorrenteBtc, NULL);
         }
     }
-    
+
     private function registrarTaxaBtc(OrderBook $orderBook, $valorTaxa, Paridade $paridade) {
         
         if ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA) {
@@ -1235,80 +1224,77 @@ class OrderBookRn {
         $this->conexao->update(Array("valor_taxa_executada" => number_format($orderBook->valorTaxaExecutada, $paridade->moedaBook->casasDecimais, ".", "")), Array("id" => $orderBook->id));
         
     }
+
+    public function getPrecos($idParidade) {
     
+        // $configuracao = new Configuracao(Array("id" => 1));
+        // $configuracaoRn = new ConfiguracaoRn();
+        // $configuracaoRn->conexao->carregar($configuracao);
     
-//    public function getPrecos($idParidade) {
-//        
-//        $configuracao = new Configuracao(Array("id" => 1));
-//        $configuracaoRn = new ConfiguracaoRn();
-//        $configuracaoRn->conexao->carregar($configuracao);
-//        
-//        $paridade = new Paridade(Array("id" => $idParidade));
-//        $paridadeRn = new ParidadeRn();
-//        $paridadeRn->carregar($paridade);
-//        
-//        $casasDecimais = ($paridade->idMoedaTrade == 1 ? $configuracao->qtdCasasDecimais : 8);
-//        
-//        // preço para compra
-//        $queryCompra =  " SELECT ob_r.* FROM order_book ob_r "
-//                . " WHERE  "
-//                . " tipo = '".\Utils\Constantes::ORDEM_COMPRA."' AND "
-//                . " id_paridade = {$paridade->id} "
-//                . " AND executada = 0 "
-//                . " AND cancelada = 0 "
-//                . " AND (volume_currency - volume_executado) > 0 "
-//                . " ORDER BY valor_cotacao DESC, data_cadastro ASC"
-//                . " LIMIT 1; ";
-//                
-//                
-//        // preço para venda
-//        $queryVenda =  " SELECT ob_r.* FROM order_book ob_r "
-//                . " WHERE  "
-//                . " tipo = '".\Utils\Constantes::ORDEM_VENDA."' AND "
-//                . " id_paridade = {$paridade->id} "
-//                . " AND executada = 0 "
-//                . " AND cancelada = 0 "
-//                . " AND (volume_currency - volume_executado) > 0 "
-//                . " ORDER BY valor_cotacao ASC, data_cadastro ASC"
-//                . " LIMIT 1; ";
-//                
-//        $tipoCompra = \Utils\Constantes::ORDEM_COMPRA; 
-//        $tipoVenda = \Utils\Constantes::ORDEM_VENDA;        
-//        $queryUltimoPreco = " SELECT oe.valor_cotacao "
-//                . " FROM ordens_executadas oe "
-//                . " INNER JOIN order_book ob ON ((oe.tipo = '{$tipoVenda}' AND oe.id_order_book_venda = ob.id) OR (oe.tipo = '{$tipoCompra}' AND oe.id_order_book_compra = ob.id) ) "
-//                . " WHERE ob.id_paridade = {$paridade->id} "
-//                . " ORDER BY oe.data_execucao DESC, oe.id DESC "
-//                . " LIMIT 1 ";
-//        
-//        
-//        
-//        $compra = 0;
-//        $venda = 0;
-//        $ultimo = 0;
-//        
-//        $dadosCompra = $this->conexao->executeSql($queryCompra);
-//        $dadosVenda = $this->conexao->executeSql($queryVenda);
-//        $dadosUltimoPreco = $this->conexao->executeSql($queryUltimoPreco);
-//        
-//        foreach ($dadosCompra as $dc) {
-//            $compra = number_format($dc["valor_cotacao"], $paridade->moedaTrade->casasDecimais, ".", "");
-//        }
-//        
-//        foreach ($dadosVenda as $dv) {
-//            $venda = number_format($dv["valor_cotacao"], $paridade->moedaTrade->casasDecimais, ".", "");
-//        }
-//        
-//        
-//        foreach ($dadosUltimoPreco as $du) {
-//            $ultimo = number_format($du["valor_cotacao"], $paridade->moedaTrade->casasDecimais, ".", "");
-//        }
-//        
-//        return Array("compra" => $compra, "venda" => $venda, "ultimo" => $ultimo);
-//    }
+        // $paridade = new Paridade(Array("id" => $idParidade));
+        // $paridadeRn = new ParidadeRn();
+        // $paridadeRn->carregar($paridade);
+    
+        // $casasDecimais = ($paridade->idMoedaTrade == 1 ? $configuracao->qtdCasasDecimais : 8);
+    
+        // // preço para compra
+        // $queryCompra =  " SELECT ob_r.* FROM order_book ob_r "
+        //         . " WHERE  "
+        //         . " tipo = '".\Utils\Constantes::ORDEM_COMPRA."' AND "
+        //         . " id_paridade = {$paridade->id} "
+        //         . " AND executada = 0 "
+        //         . " AND cancelada = 0 "
+        //         . " AND (volume_currency - volume_executado) > 0 "
+        //         . " ORDER BY valor_cotacao DESC, data_cadastro ASC"
+        //         . " LIMIT 1; ";
+            
+            
+        // // preço para venda
+        // $queryVenda =  " SELECT ob_r.* FROM order_book ob_r "
+        //         . " WHERE  "
+        //         . " tipo = '".\Utils\Constantes::ORDEM_VENDA."' AND "
+        //         . " id_paridade = {$paridade->id} "
+        //         . " AND executada = 0 "
+        //         . " AND cancelada = 0 "
+        //         . " AND (volume_currency - volume_executado) > 0 "
+        //         . " ORDER BY valor_cotacao ASC, data_cadastro ASC"
+        //         . " LIMIT 1; ";
+            
+        // $tipoCompra = \Utils\Constantes::ORDEM_COMPRA; 
+        // $tipoVenda = \Utils\Constantes::ORDEM_VENDA;        
+        // $queryUltimoPreco = " SELECT oe.valor_cotacao "
+        //         . " FROM ordens_executadas oe "
+        //         . " INNER JOIN order_book ob ON ((oe.tipo = '{$tipoVenda}' AND oe.id_order_book_venda = ob.id) OR (oe.tipo = '{$tipoCompra}' AND oe.id_order_book_compra = ob.id) ) "
+        //         . " WHERE ob.id_paridade = {$paridade->id} "
+        //         . " ORDER BY oe.data_execucao DESC, oe.id DESC "
+        //         . " LIMIT 1 ";
     
     
     
+        // $compra = 0;
+        // $venda = 0;
+        // $ultimo = 0;
+    
+        // $dadosCompra = $this->conexao->executeSql($queryCompra);
+        // $dadosVenda = $this->conexao->executeSql($queryVenda);
+        // $dadosUltimoPreco = $this->conexao->executeSql($queryUltimoPreco);
+    
+        // foreach ($dadosCompra as $dc) {
+        //     $compra = number_format($dc["valor_cotacao"], $paridade->moedaTrade->casasDecimais, ".", "");
+        // }
+    
+        // foreach ($dadosVenda as $dv) {
+        //     $venda = number_format($dv["valor_cotacao"], $paridade->moedaTrade->casasDecimais, ".", "");
+        // }
+    
+    
+        // foreach ($dadosUltimoPreco as $du) {
+        //     $ultimo = number_format($du["valor_cotacao"], $paridade->moedaTrade->casasDecimais, ".", "");
+        // }
+    
+        // return Array("compra" => $compra, "venda" => $venda, "ultimo" => $ultimo);
+    }
+
     public function getExtrato($idParidade = 0, \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null, $tipo = "T", $executada = "S", $cancelada = "T", $limit = 0, $idCliente = 0, $direto = "T") {
        
         $where = Array();
@@ -1381,7 +1367,7 @@ class OrderBookRn {
         }
         return $lista;
     }
-    
+
     public function getExtratoConsolidado(\Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null, $tipo = "T", $executada = "S", $cancelada = "T", $limit = 0, $idCliente = 0, $direto = "T") {
        
         $where = Array();
@@ -1452,9 +1438,7 @@ class OrderBookRn {
         }
         return $lista;
     }
-    
-    
-    
+
     public function getExtratoOrdensExecutadas(Paridade $paridade, \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null, $tipo = "T", $executada = "T", $cancelada = "T", $limit = 0, $idCliente = 0, $direto = "T") {
        
         $where = Array();
@@ -1541,8 +1525,7 @@ class OrderBookRn {
         }
         return $lista;
     }
-    
-    
+
     public function getPrimeiroPrecoDia(\Utils\Data $data, Paridade $paridade) {
         $preco = 0;
         
@@ -1601,8 +1584,7 @@ class OrderBookRn {
         return $preco;
         
     }
-    
-    
+
     public function getPrecoMinMaxDia(\Utils\Data $data, Paridade $paridade) {
         $min = 0;
         $max = 0;
@@ -1657,8 +1639,7 @@ class OrderBookRn {
         return Array("min" => $min, "max" => $max);
         
     }
-    
-    
+
     public function setArrayOrdemHomolog(OrderBook $orderBook) {
         
         return Array (
@@ -1679,7 +1660,7 @@ class OrderBookRn {
                 "valor_taxa" => $orderBook->valorTaxa,
             );
     }
-    
+
     public function generateOrdersHomolog($tipo, $minValue, $maxValue, $minCotValue = 0, $maxCotValue = 0, $qtd = 0, $idParidade = 1, $ordensForcadas = Array()) {
         
         
@@ -1771,11 +1752,11 @@ class OrderBookRn {
         }
         
     }
-    
+
     public function getBookHomolog() {
         return $this->listOrdersHomolog;
     }
-    
+
     public function extratoConsolidado(Cliente $cliente) {
         
         if (!$cliente->id > 0) {
@@ -1788,7 +1769,7 @@ class OrderBookRn {
         
         return $result;
     }
-    
+
     public function rankingMensal(Paridade $paridade, \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null) {
         
         $where=Array();
@@ -1847,7 +1828,6 @@ class OrderBookRn {
         $rankingRn = new RankingClienteMensalRn($this->conexao->adapter);
         $rankingRn->salvar($lista, $paridade);
     }
-    
 }
 
 ?>

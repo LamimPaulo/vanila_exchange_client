@@ -40,7 +40,8 @@
   $lang['home6']      = 'All our infrastructure, equipment and servers are scalable and redundant to meet market demand without interruptions in the offering of our services.'; 
   $lang['home7']      = 'Our team'; 
   $lang['home8']      = 'Our team is made up of qualified people who will offer you the best support and attention for what you need, either via e-mail, chat or phone'; 
-  $lang['home9']      = 'Sign in'; 
+  $lang['home9']      = "Don't have an account?"; 
+  $lang['home99']      = "Sign up here"; 
   $lang['home10']      = 'Login'; 
   $lang['home11']      = 'Full name';
   $lang['home12']      = 'I accept the ';

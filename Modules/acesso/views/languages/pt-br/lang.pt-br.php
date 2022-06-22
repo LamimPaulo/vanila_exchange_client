@@ -40,7 +40,8 @@
   $lang['home6']      = 'Toda a nossa infraestrutura, equipamentos e servidores são escaláveis e redundantes para atender a demanda do mercado sem interrupções no oferecimento de nossos serviços.'; 
   $lang['home7']      = 'Nosso Time'; 
   $lang['home8']      = 'Nosso time é formado por pessoas qualificadas que lhe oferecerão o melhor suporte e atendimento para aquilo que você precisar, seja ele por e-mail, chat ou telefone.'; 
-  $lang['home9']      = 'Cadastrar'; 
+  $lang['home9']      = 'Não tem uma conta?'; 
+  $lang['home99']      = 'Cadastre-se aqui'; 
   $lang['home10']      = 'Entrar'; 
   $lang['home11']      = 'Nome Completo';
   $lang['home12']      = 'Eu aceito os ';

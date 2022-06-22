@@ -180,7 +180,6 @@ class Acesso {
             $email = \Utils\Post::get($params, "email", NULL);
             $senha = base64_decode(\Utils\Post::get($params, "senha", null));
             $googleCode = \Utils\Post::get($params, "code", null);
-            
             if (!empty($googleCode)) {
                 $validate = \GoogleAuth\Recaptcha::validarRecaptcha($googleCode);
                 if (!$validate) {

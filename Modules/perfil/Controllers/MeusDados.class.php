@@ -18,8 +18,6 @@ use Utils\Data;
 
 class MeusDados
 {
-
-
     private $codigoModulo = "perfil";
     private $idioma = null;
 
@@ -28,7 +26,6 @@ class MeusDados
         $this->idioma = new \Utils\PropertiesUtils("perfil", IDIOMA);
         \Utils\Validacao::acesso($this->codigoModulo);
     }
-
 
     public function index($params)
     {
@@ -102,7 +99,6 @@ class MeusDados
 
         \Utils\Layout::view("perfil", $params);
     }
-
 
     public function getCidades($params)
     {
@@ -202,37 +198,37 @@ class MeusDados
                 if (\Utils\Validacao::cpf($cliente->documento)) {
                     $dataNascimento = $cliente->dataNascimento->formatar(\Utils\Data::FORMATO_PT_BR);
                     if (strlen($dataNascimento) >= 8) {
-//                        $iWebService = new \Documento\IWebService();
-//                        $dados = $iWebService->consultar($cliente->documento, $dataNascimento);
+                    //    $iWebService = new \Documento\IWebService();
+                    //    $dados = $iWebService->consultar($cliente->documento, $dataNascimento);
 
-//                        if (!empty($dados)) {
-//                            if ($dados["status"] == "regular") {
-//                                $cliente->nome = $dados["nome"];
-//                                $cliente->documento = \Utils\Validacao::limparString($cliente->documento);
-//                                $cliente->nomeMae = $dados["mae"];
-//                                $cliente->endereco = $dados["logradouro"];
-//                                $cliente->numero = $dados["numero"];
-//                                $cliente->complemento = $dados["complemento"];
-//                                $cliente->bairro = $dados["bairro"];
-//                                $cliente->cep = $dados["cep"];
-//                                $cliente->sexo = $dados["genero"] == "MASCULINO" ? "M" : "F";
-//                                $cliente->dataNascimento = new \Utils\Data(date('Y-m-d 00:00:00', strtotime(str_replace("/", "-", $dados["dataNascimento"]))));
-//                                $cliente->documentoVerificado = 0;
-//                            } else {
-//                                $observacaoCliente = new \Models\Modules\Cadastro\ObservacaoCliente();
-//                                $observacaoClienteRn = new \Models\Modules\Cadastro\ObservacaoClienteRn();
-//
-//                                $observacaoCliente->idCliente = $cliente->id;
-//                                $observacaoCliente->observacoes = $dados["response"];
-//                                $observacaoClienteRn->salvar($observacaoCliente);
-//
-//                                $cliente->anotacoes = "Cliente em espera por consulta de CPF";
-//                                $cliente->status = 0;
-//                                $clienteRn->alterarStatusCliente($cliente);
-//                            }
-//                        } else {
-//                            throw new \Exception("Por favor, tente novamente mais tarde.");
-//                        }
+                    //    if (!empty($dados)) {
+                    //        if ($dados["status"] == "regular") {
+                    //            $cliente->nome = $dados["nome"];
+                    //            $cliente->documento = \Utils\Validacao::limparString($cliente->documento);
+                    //            $cliente->nomeMae = $dados["mae"];
+                    //            $cliente->endereco = $dados["logradouro"];
+                    //            $cliente->numero = $dados["numero"];
+                    //            $cliente->complemento = $dados["complemento"];
+                    //            $cliente->bairro = $dados["bairro"];
+                    //            $cliente->cep = $dados["cep"];
+                    //            $cliente->sexo = $dados["genero"] == "MASCULINO" ? "M" : "F";
+                    //            $cliente->dataNascimento = new \Utils\Data(date('Y-m-d 00:00:00', strtotime(str_replace("/", "-", $dados["dataNascimento"]))));
+                    //            $cliente->documentoVerificado = 0;
+                    //        } else {
+                    //            $observacaoCliente = new \Models\Modules\Cadastro\ObservacaoCliente();
+                    //            $observacaoClienteRn = new \Models\Modules\Cadastro\ObservacaoClienteRn();
+
+                    //            $observacaoCliente->idCliente = $cliente->id;
+                    //            $observacaoCliente->observacoes = $dados["response"];
+                    //            $observacaoClienteRn->salvar($observacaoCliente);
+
+                    //            $cliente->anotacoes = "Cliente em espera por consulta de CPF";
+                    //            $cliente->status = 0;
+                    //            $clienteRn->alterarStatusCliente($cliente);
+                    //        }
+                    //    } else {
+                    //        throw new \Exception("Por favor, tente novamente mais tarde.");
+                    //    }
                     } else {
                         throw new \Exception($this->idioma->getText("validacao4"));
                     }
@@ -240,7 +236,7 @@ class MeusDados
                     throw new \Exception("Por favor, digite um CPF valído.");
                 }
             }
-            //exit(print_r($cliente));
+            // exit(print_r($cliente));
             $cliente->senha = null;
             $clienteRn->salvar($cliente, $confirmacaoSenha, null, null, false);
 
@@ -253,7 +249,6 @@ class MeusDados
         }
         print json_encode($json);
     }
-
 
     public function updateSeguranca($params)
     {
@@ -942,7 +937,6 @@ class MeusDados
         print json_encode($json);
     }
 
-
     public function removerDocumento($params)
     {
         try {
@@ -975,7 +969,6 @@ class MeusDados
         }
         print json_encode($json);
     }
-
 
     public function alterarSenha($params)
     {
@@ -1040,7 +1033,6 @@ class MeusDados
         print json_encode($json);
     }
 
-
     public function atualizarImagem($params)
     {
         try {
@@ -1093,7 +1085,6 @@ class MeusDados
         print json_encode($json);
     }
 
-
     public function forcaSenha($params)
     {
         try {
@@ -1110,7 +1101,6 @@ class MeusDados
         }
         print json_encode($json);
     }
-
 
     public function solicitarAlteracaoPerfil($params)
     {
@@ -1263,7 +1253,6 @@ class MeusDados
         print json_encode($json);
     }
 
-
     public static function htmlGradeLicencas(\Models\Modules\Cadastro\ClienteHasLicenca $licenca = null, \Models\Modules\Cadastro\ClienteHasLicenca $solicitacaoLicenca = null)
     {
 
@@ -1359,7 +1348,6 @@ class MeusDados
         print json_encode($json);
     }
 
-
     public function getCountryBrand($params)
     {
         try {
@@ -1385,7 +1373,6 @@ class MeusDados
         }
         print json_encode($json);
     }
-
 
     public function getEstadosByPais($params)
     {
@@ -1554,7 +1541,6 @@ class MeusDados
         }
         print json_encode($json);
     }
-
 
     public function salvarNotificacao($params)
     {
@@ -1741,7 +1727,6 @@ class MeusDados
         }
         print json_encode($json);
     }
-
 
     public function notaFiscalOperacao($params)
     {
