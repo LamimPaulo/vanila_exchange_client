@@ -140,16 +140,122 @@ $_data["idiomaMenu"] = $idioma;
 <?php Utils\Layout::append("inspina/metas", $_data) ?>
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
 <?php Utils\Layout::append("inspina/menu", $_data) ?>
-<link href="<?php echo TEMA; ?>css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
+<link href="<?php echo TEMA; ?>css.old/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
 
-<div class="row wrapper border-bottom white-bg page-heading">
+<!-- <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
-        <h2>Conversão de Ativos</h2>
     </div>
-</div>
+</div> -->
 
 <div class="wrapper wrapper-content mostrar">
-    <div class="row">
+
+    <div class="settings mtb15">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-lg-4">
+                </div>
+                <div class="col-md-12 col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Conversão de Ativos</h5>
+
+                            <div class="row p-md">
+                                <div class="row choose-position">
+                                    <div class="col-lg-6 box-conversion-custom">
+                                        <div class="form-group">
+                                            <label for="from" class="d-flex justify-content-between">
+                                                <div class="info_saldo">Saldo: <a href="javascript:inserirSaldo();"><span id="saldo_disponivel"></span></a></div>
+                                            </label>
+                                            <input type="text" class="form-control choose-input" id="from" placeholder="Valor para conversão">
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-6 box-conversion-custom">
+                                        <div class="form-group">
+                                            <label for="from" class="d-flex justify-content-between">
+                                                <div>De:</div>
+                                            </label>
+                                            <select id="cryptoFrom" class="crypto custom-select choose-position choose-position-input"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row p-md">
+                                <div class="row choose-position">
+                                    <div class="col-lg-6 box-conversion-custom">
+                                        <div class="form-group">
+                                            <label for="to" class="d-flex justify-content-between">
+                                                <div>Total Aproximado:</div>
+                                            </label>
+                                            <input type="text" class="form-control choose-input" id="to" placeholder="Insira o valor total">
+    
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-6 box-conversion-custom">
+                                        <div class="form-group">
+                                            <label for="to" class="d-flex justify-content-between">
+                                                <div>Para:</div>
+                                            </label>
+                                            <select id="cryptoTo" class="crypto custom-select"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-4">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings mtb15">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-lg-4">
+                </div>
+
+                <div class="col-md-12 col-lg-4">
+                    <div class="row choose-position">
+                                <div class="col-lg-12 p-5 box-conversion-custom p-3 text-center">
+
+                                    <div id="confirm-conversion" class="confirm-conversion">
+                                        <div class="justify-content-between " >
+                                            <span>Cotação:</span>&nbsp;<span id="cotacao">0,0000</span>
+                                            <br>
+                                        </div>
+                                        <div class="justify-content-between border-bottom">
+                                            <span>Será aproximadamente creditado em sua conta</span>
+                                            <h5 id="creditado_conta">0.00000000</h5>
+                                        </div>
+                                        <div class="justify-content-between" style="font-size: 12px;">
+                                            <span>Por favor, confirmar no tempo máximo de 15 Segundos.</span>
+                                        </div>
+                                        <div class="d-flex align-items-center" style="margin: 20px 0">
+                                            <button id="cancel" class="btn btn-back btn-lg btn-primary d-flex align-items-center justify-content-center" style="margin-right: 10px; flex: 1;">Recomeçar</button>
+                                            <button id="convert" onclick="inserirOrdem();" class="ladda-button btn btn-conversion btn-lg btn-primary d-flex align-items-center justify-content-center" data-style="expand-right" style="flex: 1;">Converter em (15s)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row ">
+                                    <div class="col-lg-12 p-5">
+                                        <button id="btn_conversao" class="btn btn-lg btn-primary full-width" onclick="consultarPreco();">
+                                            Calcular Conversão
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row">
         <div class="col-sm-offset-0 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8">
             <div class="ibox">
                 <div class="ibox-content box">
@@ -232,13 +338,14 @@ $_data["idiomaMenu"] = $idioma;
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 
 
 
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
 <script src="<?php echo JS; ?>maskMoney.min.js"></script>
 <script>
     var preco = 0;

@@ -3664,8 +3664,10 @@ body.rtls .vertical-timeline-icon i {
 .tooltip.left .tooltip-arrow {
   border-left-color: #2F4050;
 }
-
-/* .form-control,
+.float-e-margins .btn {
+  margin-bottom: 5px;
+}
+.form-control,
 .form-control:focus,
 .has-error .form-control:focus,
 .has-success .form-control:focus,
@@ -3680,8 +3682,82 @@ body.rtls .vertical-timeline-icon i {
 .progress,
 .progress-bar {
   box-shadow: none;
-} */
+}
+.ibox-content {
+  background-color: #ffffff;
+  color: inherit;
+  /*padding: 15px 25px 1px 40px;*/
+  border-color: #e7eaec;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 1px 0;
+}
+.full-width {
+  width: 100% !important;
+}
+.input-group-addon {
+  background-color: #fff;
+  border: 1px solid #E5E6E7;
+  border-radius: 1px;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  padding: 6px 12px;
+  text-align: center;
+}
+.p-xs {
+  padding: 10px;
+}
 
+.p-md {
+  padding: 25px;
+}
+
+.btn-white {
+  color: inherit;
+  background: white;
+  border: 1px solid #e7eaec;
+}
+
+.btn-white:hover,
+.btn-white:focus,
+.btn-white:active,
+.btn-white.active,
+.open .dropdown-toggle.btn-white,
+.btn-white:active:focus,
+.btn-white:active:hover,
+.btn-white.active:hover,
+.btn-white.active:focus {
+  color: inherit;
+  border: 1px solid #d2d2d2;
+}
+.btn-white:active,
+.btn-white.active {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) inset;
+}
+.btn-white:active,
+.btn-white.active,
+.open .dropdown-toggle.btn-white {
+  background-image: none;
+}
+.btn-white.disabled,
+.btn-white.disabled:hover,
+.btn-white.disabled:focus,
+.btn-white.disabled:active,
+.btn-white.disabled.active,
+.btn-white[disabled],
+.btn-white[disabled]:hover,
+.btn-white[disabled]:focus,
+.btn-white[disabled]:active,
+.btn-white.active[disabled],
+fieldset[disabled] .btn-white,
+fieldset[disabled] .btn-white:hover,
+fieldset[disabled] .btn-white:focus,
+fieldset[disabled] .btn-white:active,
+fieldset[disabled] .btn-white.active {
+  color: #cacaca;
+}
 
 @media only screen and (max-width: 1434px) {
   .market-pairs tbody {

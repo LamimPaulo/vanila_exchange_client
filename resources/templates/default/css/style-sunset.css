@@ -42528,9 +42528,9 @@ label span {
   display: none;
 }
 
-.select2 {
+/* .select2 {
   width: 100% !important;
-}
+} */
 
 .select2-container {
   box-sizing: border-box;

@@ -3,10 +3,10 @@
 namespace Modules\extrato\Controllers;
 
 class Extrato {
-    
+
     private $codigoModulo = "extrato";
     private $idioma = null;
-    
+
     public function __construct() {
                 
         if(\Utils\Geral::isUsuario()){
@@ -15,36 +15,36 @@ class Extrato {
         \Utils\Validacao::acesso($this->codigoModulo);
         $this->idioma = new \Utils\PropertiesUtils("extrato", IDIOMA);
     }
-    
+
     public function index($params) {
-        
+
         $moedaRn = new \Models\Modules\Cadastro\MoedaRn(); 
         $moedas = $moedaRn->listar(" id = 1 OR ativo = 1 AND (visualizar_deposito = 1 OR visualizar_saque = 1)", "nome ASC");
         $cliente = \Utils\Geral::getCliente();
-        
+
         if(empty($cliente->moedaFavorita)){
             $cliente->moedaFavorita = 2; //Bitcoin
         }
-        
+
         $dados = Array();
-        
+
         $object = null;
         $object->text = "Todos";
         $object->id = \Utils\Criptografia::encriptyPostId("todos");
         $object->icone = IMAGES . "transferencia.png";
         $dados[] = $object;
-        
+
         foreach ($moedas as $m) {
             $object = null;
             $object->text = $m->simbolo . " - " .$m->nome;
             $object->simbolo = $m->simbolo;
             $object->icone = IMAGES . "currencies/" .$m->icone;
             $object->id = \Utils\Criptografia::encriptyPostId($m->id);
-            
+
             if($cliente->moedaFavorita == $m->id){
                 $object->selected = true;
             }
-            
+
             $dados[] = $object;
         }
 
@@ -52,8 +52,7 @@ class Extrato {
 
         \Utils\Layout::view("index_extrato", $params);
     }
-    
-    
+
     public function listarExtrato($params) {
         try {
             
@@ -62,10 +61,10 @@ class Extrato {
             $dataFinal = \Utils\Post::getData($params, "dataFinal", null, "23:59:59");
             $idMoeda = \Utils\Post::getEncrypted($params, "moeda", null);
             $limite = \Utils\Post::get($params, "registros", null);
-            
+
             $contaCorrenteBtcRn = new \Models\Modules\Cadastro\ContaCorrenteBtcRn();
             $contaCorrenteReaisRn = new \Models\Modules\Cadastro\ContaCorrenteReaisRn();
-            
+
             $listaReais = null;
             $listaCripto = null;
             $listaGeral = Array();
@@ -73,18 +72,18 @@ class Extrato {
             $cripto = false;
             $todos = false;
             $anexo[] = '';
-            
+
             switch ($idMoeda) {
                 case "todos":
                     $real = true;
                     $cripto = true;
                     $todos = true;
                     break;
-                
+
                 case $idMoeda == 1:
-                    $real = true;                    
+                    $real = true;  
                     break;
-                
+
                 case $idMoeda > 1:                    
                     $cripto = true;
                     break;
@@ -181,18 +180,14 @@ class Extrato {
         }
         print json_encode($json);
     }
-    
-    
 
-    private function htmlExtrato($lista, $dataInicial, $dataFinal, $limite) {     
-
+    private function htmlExtrato($lista, $dataInicial, $dataFinal, $limite) {
         ob_start();
         if (sizeof($lista) > 0) {
             ?>
-                        
-                        <div class="ibox-title">
-                            <h5>Período de <?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) . " até " . $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?></h5>
-                        </div>
+                        <!-- <div class="card-title"> -->
+                            <h5 class="card-title">Período de <?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) . " até " . $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?></h5>
+                        <!-- </div> -->
                         <?php
                         $i = 0;
                         foreach ($lista as $extrato) {
@@ -206,7 +201,6 @@ class Extrato {
                                     break;
                                 }
                             }
-                            
                             $i++;
                         }
                     } else {
@@ -220,10 +214,9 @@ class Extrato {
         ob_end_clean();
         return $html;
     }
-    
-    
+
     private function htmlItemExtrato($extrato) {
-        
+
         if ($extrato->tipo == \Utils\Constantes::ENTRADA) {
             $color = "color: #1ab394;";
             $sinal = "+";
@@ -231,10 +224,9 @@ class Extrato {
             $color = "color: #ff1e1e;";
             $sinal = "-";
         }
-        
+
         if($extrato instanceof \Models\Modules\Cadastro\ContaCorrenteReais){
             $extrato->moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
-                
         ?>
             <div class="ibox-content">
                 <div class="row m-l-xs">
@@ -262,7 +254,7 @@ class Extrato {
             </div>
 
         <?php } else if ($extrato instanceof \Models\Modules\Cadastro\ContaCorrenteBtc) { 
-            
+
                 if(!empty($extrato->descricao)){
                     $descricao = $extrato->descricao;
                 } else {
@@ -280,24 +272,22 @@ class Extrato {
                     </div>
                     <div class="col-sm-3">
                         <small class="stats-label">Descrição</small>
-                        <h4><?php echo $descricao; ?></h4>
+                        <h5><?php echo $descricao; ?></h5>
                     </div>
                     <div class="col-sm-3">
                         <small class="stats-label">Data</small>
-                        <h4><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h4>
+                        <h5><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h5>
                     </div>
                     <div class="col-sm-2">
                         <small class="stats-label">Quantidade</small>
-                        <h4 style="<?php echo $color ?>"><strong><?php echo $sinal . " {$extrato->moeda->simbolo} " . number_format($extrato->valor, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h4>
+                        <h5 style="<?php echo $color ?>"><strong><?php echo $sinal . " {$extrato->moeda->simbolo} " . number_format($extrato->valor, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h5>
                     </div>  
                     <div class="col-sm-2">
                         <small class="stats-label">Saldo</small>
-                        <h4><strong><?php echo $extrato->moeda->simbolo . " ". number_format($extrato->saldo, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h4>
+                        <h5><strong><?php echo $extrato->moeda->simbolo . " ". number_format($extrato->saldo, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h5>
                     </div>
                 </div>
             </div>
-            
-            
         <?php } 
     }
     

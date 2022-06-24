@@ -3174,7 +3174,7 @@ a.forum-item-title:hover {
   font-size: 26px;
 }
 /* Select2 custom styles */
-.select2-container--default .select2-selection--single,
+/* .select2-container--default .select2-selection--single,
 .select2-container--default .select2-selection--multiple {
   border-color: #e7eaec;
 }

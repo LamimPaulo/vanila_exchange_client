@@ -46,7 +46,6 @@ $paridade = Modules\principal\Controllers\Principal::getParity();
 <script src="<?php echo TEMA; ?>js/plugins/codemirror/codemirror.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/codemirror/mode/xml/xml.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/nestable/jquery.nestable.js"></script>
-<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/footable/footable.all.min.js"></script>
@@ -57,6 +56,7 @@ $paridade = Modules\principal\Controllers\Principal::getParity();
 <script src="<?php echo TEMA; ?>js/jAlert/jAlert-functions.js?<?php echo time(); ?>"></script>
 <script src="<?php echo TEMA; ?>js/jAlert/jAlert.js?<?php echo time(); ?>"></script>
 <script src="<?php echo JS; ?>pusher.min.js"></script>
+<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
 
 
 <?php //\Utils\Layout::append("notificacoes/cadastro_notificacao", $_data)?>
@@ -188,7 +188,6 @@ $(document).ready(function () {
                 });
             },
             onHidden: function () {
-                
             }
         };
         

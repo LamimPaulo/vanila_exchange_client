@@ -2073,64 +2073,6 @@ $_data["idiomaMenu"] = $idioma;
                   </div>
                 </div>
               </div>
-              <div class="card settings-profile">
-                <div class="card-body">
-                  <h5 class="card-title">Create API Key</h5>
-                  <!-- <div class="form-row">
-                    <div class="col-md-6">
-                      <label for="generateKey">Generate key name</label>
-                      <input id="generateKey" type="text" class="form-control" placeholder="Enter your key name">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="rewritePassword">Confirm password</label>
-                      <input id="rewritePassword" type="password" class="form-control"
-                        placeholder="Confirm your password">
-                    </div>
-                    <div class="col-md-12">
-                      <input type="submit" value="Create API key">
-                    </div>
-                  </div> -->
-                  <div class="row m-t-md">
-                    <div class="col-lg-12">
-                        <div class="ibox-content">
-                            <div class="m-t-sm">
-                                <div class="row">
-                                    <div class="col-lg-12 table-responsive">
-                                        <table id="tblContasBancarias"
-                                                class="table table-striped text-center"
-                                                data-page-size="5" style="font-size: 11px;">
-                                            <thead>
-                                            <tr>
-                                                <th class="text-center"><?php echo $idioma->getText("nomeConta") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("documentoCpfConta") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("codBancoC") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("bancoC") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("agenciaDigC") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("contaDigC") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("tipoC") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("statusA") ?></th>
-                                                <th class="text-center"><?php echo $idioma->getText("ativarC") ?></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="listaContasBancarias">
-
-                                            </tbody>
-                                            <tfoot>
-                                            <tr>
-                                                <td colspan="7">
-                                                    <ul class="pagination pull-right"></ul>
-                                                </td>
-                                            </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div class="tab-pane fade" id="settings-company" role="tabpanel"
@@ -2402,83 +2344,83 @@ $_data["idiomaMenu"] = $idioma;
                   <h5 class="card-title"><?php echo $idioma->getText("limite25") ?></h5>
                     <div class="panel-body">
                     <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="ibox m-b-none">
-                                            <div class="ibox-content">
-                                                <div class="table-responsive" style="margin-top: 5px;">
-                                                    <input type="text"
-                                                           class="form-control input-sm m-b-xs col-offset-4 col-lg-2"
-                                                           id="filterCriptomoedas"
-                                                           placeholder="<?php echo $idioma->getText("limite22") ?>"
-                                                           style="margin-bottom: 10px !important;" autocomplete="false">
-                                                    <table id="tblCriptomoedas" class="table table-stripped text-center"
-                                                           data-page-size="8" data-filter=#filterCriptomoedas
-                                                           style="font-size: 11px;">
-                                                        <thead>
-                                                        <tr>
-                                                            <th class="text-center"><?php echo $idioma->getText("limite17") ?></th>
-                                                            <th class="text-center"><?php echo $idioma->getText("limite18") ?></th>
-                                                            <th class="text-center"><?php echo $idioma->getText("limite19") ?></th>
-                                                            <th class="text-center"><?php echo $idioma->getText("limite20") ?></th>
-                                                            <th class="text-center"><?php echo $idioma->getText("limite21") ?></th>
-                                                            <th class="text-center"><?php echo $idioma->getText("limite29") ?></th>
-                                                            <th class="text-center"><?php echo $idioma->getText("limite30") ?></th>
-                                                            <th class="text-center"><?php echo $idioma->getText("limite31") ?></th>
-                                                            <th class="text-center"><?php echo $idioma->getText("limite32") ?></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody id="">
-                                                        <?php foreach ($taxasMoedas as $infMoeda) { ?>
-                                                            <tr class="footable-even" style="">
-                                                                <td class="text-center"><img
-                                                                            src="<?php echo IMAGES ?>currencies/<?php echo $infMoeda["icone"] ?>"
-                                                                            style="width: 20px; height: 20px;"/></td>
-                                                                <td class="text-center"><?php echo $infMoeda["sigla"] ?></td>
-                                                                <td class="text-center"><?php echo $infMoeda["nome"] ?></td>
+                          <div class="col-lg-12">
+                              <div class="ibox m-b-none">
+                                  <div class="ibox-content">
+                                      <div class="table-responsive" style="margin-top: 5px;">
+                                          <input type="text"
+                                                  class="form-control input-sm m-b-xs col-offset-4 col-lg-2"
+                                                  id="filterCriptomoedas"
+                                                  placeholder="<?php echo $idioma->getText("limite22") ?>"
+                                                  style="margin-bottom: 10px !important;" autocomplete="false">
+                                          <table id="tblCriptomoedas" class="table table-stripped text-center"
+                                                  data-page-size="8" data-filter=#filterCriptomoedas
+                                                  style="font-size: 11px;">
+                                              <thead>
+                                              <tr>
+                                                  <th class="text-center"><?php echo $idioma->getText("limite17") ?></th>
+                                                  <th class="text-center"><?php echo $idioma->getText("limite18") ?></th>
+                                                  <th class="text-center"><?php echo $idioma->getText("limite19") ?></th>
+                                                  <th class="text-center"><?php echo $idioma->getText("limite20") ?></th>
+                                                  <th class="text-center"><?php echo $idioma->getText("limite21") ?></th>
+                                                  <th class="text-center"><?php echo $idioma->getText("limite29") ?></th>
+                                                  <th class="text-center"><?php echo $idioma->getText("limite30") ?></th>
+                                                  <th class="text-center"><?php echo $idioma->getText("limite31") ?></th>
+                                                  <th class="text-center"><?php echo $idioma->getText("limite32") ?></th>
+                                              </tr>
+                                              </thead>
+                                              <tbody id="">
+                                              <?php foreach ($taxasMoedas as $infMoeda) { ?>
+                                                  <tr class="" style="">
+                                                      <td class="text-center"><img
+                                                                  src="<?php echo IMAGES ?>currencies/<?php echo $infMoeda["icone"] ?>"
+                                                                  style="width: 20px; height: 20px;"/></td>
+                                                      <td class="text-center"><?php echo $infMoeda["sigla"] ?></td>
+                                                      <td class="text-center"><?php echo $infMoeda["nome"] ?></td>
 
 
-                                                                <td class="text-center"><?php
-                                                                    if (empty($infMoeda["moedaTaxa"])) {
-                                                                        echo $infMoeda["taxaTrans"] . " " . $infMoeda["sigla"];
-                                                                    } else {
-                                                                        if (empty($infMoeda["taxaMoedaTransferencia"])) {
-                                                                            echo $infMoeda["taxaMoedaTaxa"] . " " . $infMoeda["simboloMoedaTaxa"];
-                                                                        } else {
-                                                                            echo $infMoeda["taxaMoedaTransferencia"] . " " . $infMoeda["simboloMoedaTaxa"];
-                                                                        }
-                                                                    }
-                                                                    ?></td>
+                                                      <td class="text-center"><?php
+                                                          if (empty($infMoeda["moedaTaxa"])) {
+                                                              echo $infMoeda["taxaTrans"] . " " . $infMoeda["sigla"];
+                                                          } else {
+                                                              if (empty($infMoeda["taxaMoedaTransferencia"])) {
+                                                                  echo $infMoeda["taxaMoedaTaxa"] . " " . $infMoeda["simboloMoedaTaxa"];
+                                                              } else {
+                                                                  echo $infMoeda["taxaMoedaTransferencia"] . " " . $infMoeda["simboloMoedaTaxa"];
+                                                              }
+                                                          }
+                                                          ?></td>
 
 
-                                                                <td class="text-center"><?php echo $infMoeda["minConfirm"] ?></td>
-                                                                <td class="text-center"><?php echo $infMoeda["compraAtiva"] ?>
-                                                                    %
-                                                                </td>
-                                                                <td class="text-center"><?php echo $infMoeda["vendaAtiva"] ?>
-                                                                    %
-                                                                </td>
-                                                                <td class="text-center"><?php echo $infMoeda["compraPassiva"] ?>
-                                                                    %
-                                                                </td>
-                                                                <td class="text-center"><?php echo $infMoeda["vendaPassiva"] ?>
-                                                                    %
-                                                                </td>
-                                                            </tr>
-                                                        <?php } ?>
-                                                        </tbody>
-                                                        <tfoot>
-                                                        <tr>
-                                                            <td colspan="9">
-                                                                <ul class="pagination pull-right"></ul>
-                                                            </td>
-                                                        </tr>
-                                                        </tfoot>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                      <td class="text-center"><?php echo $infMoeda["minConfirm"] ?></td>
+                                                      <td class="text-center"><?php echo $infMoeda["compraAtiva"] ?>
+                                                          %
+                                                      </td>
+                                                      <td class="text-center"><?php echo $infMoeda["vendaAtiva"] ?>
+                                                          %
+                                                      </td>
+                                                      <td class="text-center"><?php echo $infMoeda["compraPassiva"] ?>
+                                                          %
+                                                      </td>
+                                                      <td class="text-center"><?php echo $infMoeda["vendaPassiva"] ?>
+                                                          %
+                                                      </td>
+                                                  </tr>
+                                              <?php } ?>
+                                              </tbody>
+                                              <tfoot>
+                                              <tr>
+                                                  <td colspan="9">
+                                                      <ul class="pagination pull-right"></ul>
+                                                  </td>
+                                              </tr>
+                                              </tfoot>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                     </div>
                 </div>
               </div>

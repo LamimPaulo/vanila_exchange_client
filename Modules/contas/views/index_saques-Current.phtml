@@ -718,8 +718,7 @@ if(!empty($cliente->moedaFavorita)){
     var codeContaBancaria = null;
     var tarifaAtar = 0;
 
-    $(document).ready(function () {  
-        
+    $(document).ready(function () {
         $("#selectCoins").select2({ data: <?php echo $jsonMoedas ?>, templateResult: formatState, closeOnSelect: true });
 
         $("#selectCoins").on('select2:select', function (e) {
@@ -824,7 +823,6 @@ if(!empty($cliente->moedaFavorita)){
             calcularValorTotal();
         });
     });
-        
 
     function contaBancaria(code) {
 
@@ -864,7 +862,7 @@ if(!empty($cliente->moedaFavorita)){
             filtrarReais();
                 break;
         }
-    }    
+    }
 
     function updateSaldo(ativa){
         if(ativa){
@@ -875,17 +873,17 @@ if(!empty($cliente->moedaFavorita)){
         }
     
     }
-    
+
     function formatState (state) {
         if (!state.id) {
-          return state.text;
+            return state.text;
         }
         var $state = $(
-          '<h3><img src="' + state.icone + '" height="25" width="25" />&nbsp;&nbsp;' + state.text + '</h3>'
+            '<h3><img src="' + state.icone + '" height="25" width="25" />&nbsp;&nbsp;' + state.text + '</h3>'
         );
         return $state;
     }
-    
+
     function tabelas(tabela){
         $("#tabelaReais").hide();
         $("#tabelaMoeda").hide();
@@ -895,7 +893,7 @@ if(!empty($cliente->moedaFavorita)){
         $("#infFiat").hide();
         $("#avisoFiat").hide();
         $("#avisoCurrency").hide();
-        
+
         switch (tabela) {
             case "reais":
                 $("#tabelaReais").show();
@@ -919,8 +917,7 @@ if(!empty($cliente->moedaFavorita)){
                 break;
         }
     }
-    
-    
+
     function confirmarTransferencia(){
         $("#infMoeda").hide();
         $("#token2fa").hide();
@@ -962,7 +959,7 @@ if(!empty($cliente->moedaFavorita)){
                 }
             });
     }
-            
+
     function transferirCurrency() {
         $("#infMoeda").hide();
         $("#token2fa").hide();
@@ -1006,8 +1003,7 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
     }
-    
-    
+
     function cancelarTransferencia(){
         $("#infMoeda").show();
         $("#token2fa").hide();     
@@ -1015,7 +1011,7 @@ if(!empty($cliente->moedaFavorita)){
         $("#token2faBrl").hide();  
         $("#infReais").show();
     }
-        
+
     function findCliente() {
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_CLIENTES_FINDBYEMAIL ?>',
@@ -1041,8 +1037,7 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
     }
-     
-    
+
     function getSaldoDisponivel(){
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_SAQUES_SALDOS ?>',
@@ -1080,8 +1075,8 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
         
-    }    
-    
+    }
+
     function saldos() {
     $.ajax({
         url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_SAQUES_SALDOS ?>',
@@ -1113,54 +1108,54 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
     }
-        
+
     function filtrarBtcAux(){
         dataCoin = "todos";
         filtrarBtc();
     }
-        
-    function filtrarBtc() {
-    $("#listaCripto").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
-    $.ajax({
-        url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_TRANSFERENCIAS_FILTRAR  ?>',
-        method: 'post',
-        dataType: 'json',
-        data: {
-            data: dataCoin,
-            filtro: $("#filtroTextoBtc").val(),
-            moeda: moeda                
-        },
-        success: function (json) {
-            try {
-                if (json.sucesso) {
-                    $("#listaCripto").html(json.html);
-                    $('#tbllistabtc').trigger('footable_initialize');
-                } else {
-                    $("#listaCripto").html("<tr><td colspan='6'>"+json.mensagem+"</td></tr>");
-                }
-            } catch (e) {
-                $("#listaCripto").html("<tr><td colspan='6'>"+e+"</td></tr>");
-            }
 
-        }
+    function filtrarBtc() {
+        $("#listaCripto").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_TRANSFERENCIAS_FILTRAR  ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                data: dataCoin,
+                filtro: $("#filtroTextoBtc").val(),
+                moeda: moeda                
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaCripto").html(json.html);
+                        $('#tbllistabtc').trigger('footable_initialize');
+                    } else {
+                        $("#listaCripto").html("<tr><td colspan='6'>"+json.mensagem+"</td></tr>");
+                    }
+                } catch (e) {
+                    $("#listaCripto").html("<tr><td colspan='6'>"+e+"</td></tr>");
+                }
+
+            }
         });
-    }  
-    
+    }
+
     function calcularValorSacado() {
         var tarifaTed = <?php echo number_format($tarifaTed, 2, ".", "") ?>;
         var tarifaTransf = <?php echo number_format($configuracao->taxaTransferenciaInternaReais, 2, ".", "") ?>;
         var valorMinimo = <?php echo number_format($valorMinReais, 2, ".", "") ?>;
-        
+
         if(codeContaBancaria == 1){
             var valor = ($("#valorReais").val().length > 0 ? parseFloat(toFloat($("#valorReais").val())) : 0);
             var comissao = 0;
             var resultado = (valor - tarifaTransf);
-            
+
         } else if(codeContaBancaria == 2){
-             var valor = ($("#valorReais").val().length > 0 ? parseFloat(toFloat($("#valorReais").val())) : 0);
-             var comissao = <?php echo number_format($configuracao->atarTaxaSaque, 2, ".", "") ?>;
-             var resultado = (valor - tarifaAtar - (valor * comissao / 100)) ;
-            
+                var valor = ($("#valorReais").val().length > 0 ? parseFloat(toFloat($("#valorReais").val())) : 0);
+                var comissao = <?php echo number_format($configuracao->atarTaxaSaque, 2, ".", "") ?>;
+                var resultado = (valor - tarifaAtar - (valor * comissao / 100)) ;
+
         } else {
             var valor = ($("#valorReais").val().length > 0 ? parseFloat(toFloat($("#valorReais").val())) : 0);
             var comissao = <?php echo number_format($comissao, 2, ".", "") ?>;
@@ -1169,7 +1164,7 @@ if(!empty($cliente->moedaFavorita)){
 
         if (resultado < 0) {
             resultado = 0;   
-             $("#btnSalvar").prop("disabled", true);
+                $("#btnSalvar").prop("disabled", true);
         } else {
             if(valor >= valorMinimo){
                 $("#btnSalvar").prop("disabled", false);
@@ -1177,13 +1172,13 @@ if(!empty($cliente->moedaFavorita)){
         }
 
         $("#valorSacado2").html("R$ " + mascaraValor(resultado.toFixed(2)));
-    }   
-    
+    }
+
     function calcularValorTotal() {
         if(simboloTaxa !== null){
             var valor = ($("#valor").val().length > 0 ? parseFloat(toFloat($("#valor").val())) : 0.00);
             $("#debitadoBtc").html(valor.toFixed(8) + " " + simbolo);
-            
+
         } else {
             var valor = ($("#valor").val().length > 0 ? parseFloat(toFloat($("#valor").val())) : 0.00);
             var taxa = parseFloat(taxaMoeda);
@@ -1192,19 +1187,16 @@ if(!empty($cliente->moedaFavorita)){
             $("#debitadoBtc").html(total.toFixed(8) + " " + simbolo);
         }
     }
- 
-        
+
     function ativaUltimosSaques(categoria){
-        $("#saqueMoedas").hide();                                           
-        $("#saqueReais").hide(); 
-        $("#ultimosSaques").show(); 
+        $("#saqueMoedas").hide();
+        $("#saqueReais").hide();
+        $("#ultimosSaques").show();
     }
-        
+
     function showCoin(codigo, tipo, rede) {
-                
         moeda = codigo;
         $("#infGerais").hide();
-        
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_SAQUES_SHOW_DADOS ?>',
             method: 'post',
@@ -1294,7 +1286,7 @@ if(!empty($cliente->moedaFavorita)){
                 }
             }
         });
-    }       
+    }
 
     function redeMoeda(rede){ 
         if(rede){
@@ -1305,8 +1297,8 @@ if(!empty($cliente->moedaFavorita)){
             $("#rede").html('');
         }  
     }
-        
-    function limpaSearchBtc(){    
+
+    function limpaSearchBtc(){
         $("#valor").val("");
         $("#endereco").val("");
         $("#pin").val("");
@@ -1321,9 +1313,8 @@ if(!empty($cliente->moedaFavorita)){
         dataCoin = "semana";
         filtrarBtc();
     }
-        
-    
-    function limpaSearchReal(){         
+
+    function limpaSearchReal(){
         $("#semanaReal").addClass("active");
         $("#filtroIdContaBancariaEmpresa").prop('selectedIndex',0);
         $("#filtroStatus").prop('selectedIndex',0);
@@ -1338,24 +1329,23 @@ if(!empty($cliente->moedaFavorita)){
         dataReal = "semana";
         filtrarReais();
     }
-    
-    
+
     function filtrarReaisAux(){
         dataReal = "todos";
         filtrarReais();
     }
-    
+
     function filtrarAtarAux(){
         dataAtar = "todos";
         filtrarAtar();
     }
-    
+
     function boletoAux(){
-       boleto = true;
-       filtrarReais();       
+        boleto = true;
+        filtrarReais();
     }
-    
-    function filtrarReais() {    
+
+    function filtrarReais() {
         $("#listaReais").html("<tr><td colspan='11' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_SAQUES_FILTRAR ?>',
@@ -1393,12 +1383,12 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
     }
-    
+
     function limparTransferir() {
-       $("#nomeCliente").html(""); 
-       $("#email").val("");
+        $("#nomeCliente").html(""); 
+        $("#email").val("");
     }
-        
+
     function limparCampos(){
         $("#idContaBancariaEmpresa").val("");
         $("#comprovante").val("");
@@ -1406,7 +1396,7 @@ if(!empty($cliente->moedaFavorita)){
         $("#valor").val("0,00");
         $("#valorBoleto").val("0,00");
     }
-    
+
     function saqueTransferir(processo){
         if(codeContaBancaria == 1){
             transferir();
@@ -1416,10 +1406,10 @@ if(!empty($cliente->moedaFavorita)){
             saque(processo);
         }
     }
-    
+
     <?php if($configuracao->atarAtivo == 1 ) { ?>
-    
-    function atarSaldo() {        
+
+    function atarSaldo() {
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_SALDO ?>',
             method: 'post',
@@ -1437,8 +1427,7 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
     }
-    
-    
+
     function atar() {
         $("#tokenAtar").val("");
         $("#pinAtar").val("");
@@ -1446,7 +1435,6 @@ if(!empty($cliente->moedaFavorita)){
         $("#infReais").hide();
         $("#carregaTokenBrl").show();
         $("#carregaTokenBrl").html("<img src='<?php echo IMAGES ?>loading.gif' />");        
-        
         $("#btnSalvar").prop("disabled", true);
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_TOKEN ?>',
@@ -1485,12 +1473,11 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
     }
-    
+
     function saqueAtar() {
         $("#token2faAtar").hide(); 
         $("#carregaTokenBrl").show();
-        $("#carregaTokenBrl").html("<img src='<?php echo IMAGES ?>loading.gif' />"); 
-        
+        $("#carregaTokenBrl").html("<img src='<?php echo IMAGES ?>loading.gif' />");
         $("#btnSalvar").prop("disabled", true);
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_SALVAR ?>',
@@ -1526,8 +1513,8 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
     }
-    
-    function filtrarAtar() {   
+
+    function filtrarAtar() {
         $("#listaAtar").html("<tr><td colspan='7' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_LISTAR ?>',
@@ -1622,7 +1609,7 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
     }
-      
+
     function transferir() {
         $("#btnSalvar").prop("disabled", true);
         $.ajax({
@@ -1654,7 +1641,7 @@ if(!empty($cliente->moedaFavorita)){
             }
         }); 
     }
-    
+
     function taxas() {
         $("#optionsRede").prop("disabled", true);
         $.ajax({
@@ -1686,8 +1673,8 @@ if(!empty($cliente->moedaFavorita)){
             }
         }); 
     }
-    
-    </script>    
+
+    </script>
     <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
     </body>
 </html>

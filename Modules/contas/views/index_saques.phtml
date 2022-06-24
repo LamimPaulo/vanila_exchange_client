@@ -130,16 +130,17 @@ if(!empty($cliente->moedaFavorita)){
 <?php Utils\Layout::append("inspina/menu", $_data) ?>
 <div class="carregando">
 </div>
-<div class="row wrapper border-bottom white-bg page-heading">
+<!-- <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
-        <h2><?php echo $idioma->getText("titulo") ?></h2>
+        <h5><?php echo $idioma->getText("titulo") ?></h2>
     </div>
-</div>
-<div class="wrapper wrapper-content mostrar">
+</div> -->
+<div class="card mostrar mtb15">
     <div class="row">
-        <div class="col-sm-offset-0 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
-            <div class="ibox">
-                <div class="ibox-content box">
+        <div class="card-content">
+        <h5 class="card-title"><?php echo $idioma->getText("titulo") ?></h2>
+            <div class="">
+                <div class="">
                     <div class="row p-md">
                         <div class="col-sm-12 select-box choose-position">
                             <select class="form-control-lg select2 chosen-select input-lg full-width" id="selectCoins">
