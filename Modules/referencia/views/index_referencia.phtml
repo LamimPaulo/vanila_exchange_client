@@ -25,14 +25,14 @@ $_data["idiomaMenu"] = $idioma;
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
 <?php Utils\Layout::append("inspina/menu", $_data) ?>
 <style>
-    button.btn-primary.dim.whatsapp{
+    button.btn-success.dim.whatsapp{
         box-shadow: inset 0 0 0 #25d366, 0 5px 0 0 #25d366, 0 10px 5px #999999;
     }
-    .btn-primary.btn-outline.whatsapp {
+    .btn-success.btn-outline.whatsapp {
         color: #25d366;
         border-color: #25d366;
     }
-    .btn-primary.whatsapp:hover {
+    .btn-success.whatsapp:hover {
         background-color: #128c7e;
     }
     
@@ -52,46 +52,159 @@ $_data["idiomaMenu"] = $idioma;
 </style>
 
 <div id="container">
-    <div class="page_content">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1>Indicação</h1>
-            </div>
-        </div>
+    <!-- <div class="col-md-12 col-lg-2">
+    </div> -->
+    <!-- <div class="col-md-12 col-lg-8"> -->
+        <div class="page_content">
+            <div class="settings mtb15">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Link Para Compartilhamento</h5>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="row">
+                                            <div class="col-xs-2 col-md-2">
+                                                <button class="btn btn-lg btn-outline dim btn-primary telegram  m-t-md " onclick="telegram();" ><i class="fa fa-telegram"></i></button>
+                                            </div>
+                                            <div class="col-xs-2 col-md-2">
+                                                <button class="btn btn-lg btn-outline dim btn-success whatsapp m-t-md " onclick="whatsapp();" ><i class="fa fa-whatsapp"></i></button>
 
-        <div class="row m-t-xs">
-            <div class="col-lg-12">
-                <h3><strong>Link Para Compartilhamento</strong></h3>
-                <div class="ibox ">   
-                    <div class="ibox-title">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-5">
-                                    <div class="row">
-                                        <div class="col-xs-2 col-md-2">
-                                            <button class="btn btn-lg btn-outline dim btn-primary telegram  m-t-md " onclick="telegram();" ><i class="fa fa-telegram"></i></button>
-                                        </div>
-                                        <div class="col-xs-2 col-md-2">
-                                            <button class="btn btn-lg btn-outline dim btn-primary whatsapp m-t-md " onclick="whatsapp();" ><i class="fa fa-whatsapp"></i></button>
+                                            </div>
+                                            <div class="col-xs-2 col-md-2">
+                                                <button class="btn btn-lg btn-outline dim btn-success m-t-md " onclick="facebook();" ><i class="fa fa-facebook-f"></i></button> 
 
-                                        </div>
-                                        <div class="col-xs-2 col-md-2">
-                                            <button class="btn btn-lg btn-outline dim btn-success m-t-md " onclick="facebook();" ><i class="fa fa-facebook-f"></i></button> 
+                                            </div>
+                                            <div class="col-xs-2 col-md-2">
+                                                <button class="btn btn-lg btn-outline dim btn-warning m-t-md " onclick="email();" ><i class="fa fa-envelope-o"></i></button> 
 
+                                            </div>
+                                            <div class="col-xs-2 col-md-2">
+                                                <button id="copyRef" class="btn btn-lg btn-outline dim btn-info m-t-md " data-clipboard-target="#linkReferencia"><i class="fa fa-copy"></i></button> 
+                                            </div>
                                         </div>
-                                        <div class="col-xs-2 col-md-2">
-                                            <button class="btn btn-lg btn-outline dim btn-warning m-t-md " onclick="email();" ><i class="fa fa-envelope-o"></i></button> 
-
-                                        </div>
-                                        <div class="col-xs-2 col-md-2">
-                                            <button id="copyRef" class="btn btn-lg btn-outline dim btn-info m-t-md " data-clipboard-target="#linkReferencia"><i class="fa fa-copy"></i></button> 
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="row">
+                                            <div class="alert alert-success m-t-md m-r-md">
+                                                <span id="linkReferencia" style="word-wrap: break-word;"><?php echo $linkCliente ?></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-7">
-                                    <div class="row">
-                                        <div class="alert alert-success m-t-md m-r-md">
-                                            <span id="linkReferencia" style="word-wrap: break-word;"><?php echo $linkCliente ?></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings mtb15">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Período</h5>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group" id="datas">
+                                            <label class="control-label">Período</label>
+                                            <div class="input-daterange input-group full-width" id="datepicker">
+                                                <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                                <span class="input-group-addon">Até</span>
+                                                <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Moedas</label>
+                                            <select class="form-control custom-select" id="idMoeda">
+                                                <?php foreach ($moedas as $m) { ?>
+                                                    <option value="<?php echo \Utils\Criptografia::encriptyPostId($m->id) ?>" <?php echo $m->id == $moedaFavorita ? "selected" : ""; ?>><?php echo $m->simbolo . " - " . $m->nome ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label><?php echo "Registro" ?></label>
+                                            <select class="form-control custom-select" id="registros">
+                                                <option value="30">30</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                                <option value="T"><?php echo "Todos" ?></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>&nbsp;</label>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-outline btn-default full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings mtb15">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Informações Gerais</h5>
+                            <div class="row m-l-xs">
+                                <div class="col-sm-1">
+                                    <small class="stats-label">Moeda</small></br>
+                                    <div id="moedaImg">-</div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <small class="stats-label">Qtd. Total Indicados</small>
+                                    <h4 id="qtdReferencias">-</h4>
+                                </div>
+                                <div class="col-sm-2">
+                                    <small class="stats-label">Total Depósitos</small>
+                                    <h4 id="totalDepositos">-</h4>
+                                </div>                                  
+                                <div class="col-sm-2">
+                                    <small class="stats-label">Total Compra/Venda</small>
+                                    <h4 id="totalCompraVenda">-</h4>
+                                </div>
+                                <div class="col-sm-2">
+                                    <small class="stats-label">Total Saques</small>
+                                    <h4 id="totalSaques">-</h4>
+                                </div>
+                                <div class="col-sm-2">
+                                    <small class="stats-label">Total no Período</small>
+                                    <h4><strong id="total">-</strong></h4>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-down"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings mtb15">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">Saldos</h5>
+                            <div class="row m-t-xs">            
+                                <div class="col-lg-12">                 
+                                    <div class="ibox float-e-margins ">                    
+                                        <div class="list-items" id="detalhesReferencias">
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -101,111 +214,10 @@ $_data["idiomaMenu"] = $idioma;
                 </div>
             </div>
         </div>
- 
-        <div class="ibox float-e-margins ">   
-            <div class="ibox-title">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group" id="datas">
-                            <label class="control-label">Período</label>
-                            <div class="input-daterange input-group full-width" id="datepicker">
-                                <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                <span class="input-group-addon">Até</span>
-                                <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label>Moedas</label>
-                            <select class="form-control" id="idMoeda">
-                                <?php foreach ($moedas as $m) { ?>
-                                    <option value="<?php echo \Utils\Criptografia::encriptyPostId($m->id) ?>" <?php echo $m->id == $moedaFavorita ? "selected" : ""; ?>><?php echo $m->simbolo . " - " . $m->nome ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label><?php echo "Registro" ?></label>
-                            <select class="form-control" id="registros">
-                                <option value="30">30</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="T"><?php echo "Todos" ?></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <label>&nbsp;</label>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-outline btn-default full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
-                        </div>
-                    </div>            
-                </div>
-            </div>
-        </div>        
-        
-        <div class="row m-t-xs">
-            <div class="col-lg-12">
-                <h3><strong>Informações Gerais</strong></h3>
-                
-                <div class="ibox float-e-margins border-bottom">
-                    <div class="ibox-title">
-                        <div class="row m-l-xs">
-                            <div class="col-sm-1">
-                                <small class="stats-label">Moeda</small></br>
-                                <div id="moedaImg">-</div>
-                            </div>
-                            <div class="col-sm-2">
-                                <small class="stats-label">Qtd. Total Indicados</small>
-                                <h4 id="qtdReferencias">-</h4>
-                            </div>
-                            <div class="col-sm-2">
-                                <small class="stats-label">Total Depósitos</small>
-                                <h4 id="totalDepositos">-</h4>
-                            </div>                                  
-                            <div class="col-sm-2">
-                                <small class="stats-label">Total Compra/Venda</small>
-                                <h4 id="totalCompraVenda">-</h4>
-                            </div>
-                            <div class="col-sm-2">
-                                <small class="stats-label">Total Saques</small>
-                                <h4 id="totalSaques">-</h4>
-                            </div>
-                            <div class="col-sm-2">
-                                <small class="stats-label">Total no Período</small>
-                                <h4><strong id="total">-</strong></h4>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="ibox-tools">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-down"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ibox-content list-indicados"  style="display: none;">
-                        
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-        <h3><strong>Saldos</strong></h3>
-        <div class="row m-t-xs">            
-            <div class="col-lg-12">                 
-                <div class="ibox float-e-margins ">                    
-                    <div class="list-items" id="detalhesReferencias">
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-            
-    </div>
+    <!-- </div> -->
+    <!-- <div class="col-md-12 col-lg-2">
+    </div> -->
+    
 </div>
 
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
