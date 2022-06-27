@@ -330,11 +330,11 @@ $(document).ready(function () {
                 try {
                     if (json.sucesso) {
                         $('#btn-key').html('<?php echo $idioma1->getText("validarChave") ?>');
-                        $(".pss-dados").remove();
-                        $(".pss-token").remove();
-                        $(".pss-key").remove();
-                        showNotyAlert(json.mensagem, "s");
+                        $(".pss-dados").show();
+                        $(".pss-token").hide();
+                        $(".pss-key").hide();
                         location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_LOGIN?>";
+                        showNotyAlert(json.mensagem, "s");
                     } else {
                         $('#btn-key').html('<?php echo $idioma1->getText("validarChave") ?>');
                         showNotyAlert(json.mensagem, "w");

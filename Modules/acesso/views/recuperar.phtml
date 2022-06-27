@@ -36,6 +36,7 @@ include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
     <!-- <link href="<?php echo TEMA; ?>css/styleD.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="<?php echo TEMA; ?>/css/style.css">
     <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+
 </head>
 
 
@@ -53,21 +54,33 @@ include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
         <form method="post" id="form-recover" class="form-cadastro mt-lg-4">
             <div class="pss-dados">
                 <span>Recuperar</span>
-
                 <div class="form-group">
                     <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="email" id="email" class="form-control" placeholder="<?php echo $idioma1->getText("digiteEmailCadastrado"); ?>">
                 </div>
                 <div style="text-align: center;">
                     <div  id="google" name="google" atrpage="recovery" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo getenv('GoogleSite'); ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
                 </div>
-                <button onclick="validarDados();" id="btn-send" disabled="disabled" style="background-color: #2351ff; border-color: #2351ff; color:black;" type="submit" class="btn btn-primary block full-width m-b" ><?php echo $idioma1->getText("recuperarSenha"); ?></button>
+                <button onclick="validarDados();" id="btn-send" disabled="disabled" style="background-color: #2351ff; border-color: #2351ff; color:black;" type="button" class="btn btn-primary block full-width m-b" ><?php echo $idioma1->getText("recuperarSenha"); ?></button>
             </div>
+
             <div class="pss-token">
-                <div class="form-group pss-token">
-                    <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="text" id="token" name="token" hidden class="form-control" placeholder="<?php echo ($tipo == \Utils\Constantes::TIPO_AUTH_EMAIL ? $idioma1->getText("codEnviadoEmail") : ($tipo == \Utils\Constantes::TIPO_AUTH_GOOGLE ? $idioma1->getText("googleAutherticator") : $idioma1->getText("codigoPorSMS"))) ?>">
+                <span>Token</span>
+                <div class="form-group">
+                    <input type="text" id="token" name="token" class="form-control" placeholder="<?php echo ($tipo == \Utils\Constantes::TIPO_AUTH_EMAIL ? $idioma1->getText("codEnviadoEmail") : ($tipo == \Utils\Constantes::TIPO_AUTH_GOOGLE ? $idioma1->getText("googleAutherticator") : $idioma1->getText("codigoPorSMS"))) ?>" style="border-radius: 3px; background-color: transparent !important; color: #000 !important;" >
                 </div>
+                <button class="btn btn-primary block full-width m-b pss-token" type="button" onclick="recuperar();" id="btn-validate">
+                    <?php echo $idioma1->getText("validarToken") ?>
+                </button>
             </div>
             <div class="pss-key">
+                <span>KEY</span>
+                <div class="form-group pss-key">
+                    <input type="text" id="key" name="key" class="form-control" placeholder="<?php echo $idioma1->getText("coleChave") ?>" style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  >
+                    <!-- <input type="text" id="key" name='key' class="form-control" placeholder="<?php echo $idioma1->getText("coleChave") ?>"> -->
+                </div>
+                <button class="btn btn-primary block full-width m-b pss-key" type="button" onclick="validar();" id="btn-key">
+                    <?php echo $idioma1->getText("validarChave") ?>
+                </button>
             </div>
     </form>
     <!-- <h2>Don't have an account? <a href="signup-light.html">Sign up here</a></h2> -->
@@ -94,7 +107,7 @@ include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
     <script src="assets/js/amcharts-core.min.js"></script>
     <script src="assets/js/amcharts.min.js"></script>
     <script src="assets/js/custom.js"></script>
-    <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+  <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
 
   <?php Utils\Layout::append("inspina/notificacao", null); ?>
 </body>
