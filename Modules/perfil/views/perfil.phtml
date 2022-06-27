@@ -611,10 +611,10 @@ $_data["idiomaMenu"] = $idioma;
 
                         <div class="col-md-2">
                           <div class="form-group <?php echo(empty($celular) ? "has-error" : "") ?>">
-                            <label for="Ddi">DDI</label>
-                            <select class="custom-select"
-                                    name="Ddi"
-                                    id="Ddi" <?php //echo $cliente->documentoVerificado == 0 ? "" : " disabled " ?>>
+                            <label for="ddi">DDI</label>
+                            <select class="custom-select custom-sl"
+                                    name="ddi"
+                                    id="ddi" <?php //echo $cliente->documentoVerificado == 0 ? "" : " disabled " ?>>
                                 <?php foreach ($paises as $pais) {
                                     if (!empty($pais->ddi)) { ?>
                                         <option value="<?php echo $pais->ddi ?>" <?php echo(empty($cliente->ddi) && $pais->id == Utils\Constantes::BRASIL ? "selected='true'" : !empty($cliente->ddi) && $cliente->ddi == $pais->ddi ? "selected='true'" : "") ?> ><?php echo $pais->nome . " - " . $pais->ddi ?></option>
@@ -623,6 +623,7 @@ $_data["idiomaMenu"] = $idioma;
                             </select>
                           </div>
                         </div>
+
                         <div class="col-md-4">
                           <div class="form-group <?php echo(empty($celular) ? "has-error" : "") ?>">
                             <label for="celular"><?php echo "DDD + " . $idioma->getText("celular") ?></label>
@@ -2665,7 +2666,7 @@ $_data["idiomaMenu"] = $idioma;
         $('#idPais').select2();
         $('#estado').select2();
         $('#cidade').select2();
-        $('#ddi').select2();
+        $('').select2();
 
         $("#estado").change(function () {
             //getCidades();
@@ -2960,7 +2961,6 @@ $_data["idiomaMenu"] = $idioma;
         });
     }
 
-
     function listaNavegadores() {
         $("#listaNavegadores").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
         $.ajax({
@@ -3008,7 +3008,6 @@ $_data["idiomaMenu"] = $idioma;
             }
         });
     }
-
 
     function forcaSenha() {
 
@@ -3145,7 +3144,6 @@ $_data["idiomaMenu"] = $idioma;
         $("#senha, #senhaAtual, #confirmacao, #pinAlterarSenha").val("");
     }
 
-
     function listarDispositivosMobile() {
         $("#lista-dispositivos-mobile").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
         $.ajax({
@@ -3166,7 +3164,6 @@ $_data["idiomaMenu"] = $idioma;
             }
         });
     }
-
 
     function parear() {
         $.ajax({
@@ -3336,7 +3333,6 @@ $_data["idiomaMenu"] = $idioma;
         });
     }
 
-
     function loadCheckBox() {
         var swObjs = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
         $("input[type=checkbox]").each(function (index, element) {
@@ -3414,7 +3410,6 @@ $_data["idiomaMenu"] = $idioma;
             }
         });
     }
-
 
     function alterarStatusContaBancaria(codigo) {
         $.ajax({
@@ -3548,7 +3543,5 @@ $_data["idiomaMenu"] = $idioma;
         });
     }
 
-
 </script>
-
 <?php Utils\Layout::append("mensage_text", $_data) ?>

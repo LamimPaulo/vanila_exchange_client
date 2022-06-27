@@ -3839,8 +3839,6 @@ button.dim:active:before {
   outline: none !important;
 }
 
-
-
 @media only screen and (max-width: 1434px) {
   .market-pairs tbody {
     height: 760px;

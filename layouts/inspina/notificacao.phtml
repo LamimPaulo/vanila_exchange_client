@@ -4,12 +4,13 @@ include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
 ?>
 <script src="<?php echo JS; ?>passwordRequirements.min.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="<?php echo JS; ?>jquery.form.js"></script>
 <script>
-$(document).ready(function () {    
-    
+$(document).ready(function () {
+
     $(".pss-token").hide();
     $(".pss-key").hide();
-    
+
     $(".pr-password").passwordRequirements({
         numCharacters: 8,
         useLowercase: true,
@@ -18,109 +19,105 @@ $(document).ready(function () {
         useSpecial: true
     });
 
-    
-    
-    
     $('#form-cadastro').on('submit', function(e){
-
-            var Nome = $('#nome').val(),
-                EmailCadastro = $('#email').val(),
-                Senha =  $('#senha').val(),
-                SenhaConfirmar = $('#senhaConfirmar').val(),
-                TermosAceite = $('#termos').is(':checked'),
-                ReferenciaCadastro = $('#referencia').val(),
-                TesteMail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
-            // Caique created 28/06/2019 - validate name
-             var validaNome = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/; 
-             var OK = validaNome.exec(Nome);
-             var stringsNome = Nome.split(" ");
-           
-            if(Nome == '' || Nome == null){
-                showNotyAlert('<?php echo $idioma1->getText("preeenchaNomeCorreto")?>', "w");
-                $('#nome').focus();
-            }
-            // Caique created 28/06/2019 - validate name
-            else if(!OK){
-                showNotyAlert('<?php echo $idioma1->getText("nomeCaracNum")?>', "w");
-                $('#nome').focus();   
-            }
-            else if(stringsNome[1] == null){
-                showNotyAlert('<?php echo $idioma1->getText("porFavorSobrenome")?>', "w");
-                $('#nome').focus();   
-            }
-            //end 28/06/2019
-            else if((!TesteMail.test(EmailCadastro))){
-                showNotyAlert('<?php echo $idioma1->getText("emailCorretamente")?>', "w");
-                $('#email').focus();
-                
-            }else if(!TermosAceite){
-                showNotyAlert('<?php echo $idioma1->getText("voceConcorda")?>', "w");
-                $('#termos').focus();
+        var Nome = $('#nome').val(),
+            EmailCadastro = $('#email').val(),
+            Senha =  $('#senha').val(),
+            SenhaConfirmar = $('#senhaConfirmar').val(),
+            TermosAceite = $('#termos').is(':checked'),
+            ReferenciaCadastro = $('#referencia').val(),
+            TesteMail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+        // Caique created 28/06/2019 - validate name
+            var validaNome = /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/; 
+            var OK = validaNome.exec(Nome);
+            var stringsNome = Nome.split(" ");
+        
+        if(Nome == '' || Nome == null){
+            showNotyAlert('<?php echo $idioma1->getText("preeenchaNomeCorreto")?>', "w");
+            $('#nome').focus();
+        }
+        // Caique created 28/06/2019 - validate name
+        else if(!OK){
+            showNotyAlert('<?php echo $idioma1->getText("nomeCaracNum")?>', "w");
+            $('#nome').focus();   
+        }
+        else if(stringsNome[1] == null){
+            showNotyAlert('<?php echo $idioma1->getText("porFavorSobrenome")?>', "w");
+            $('#nome').focus();   
+        }
+        //end 28/06/2019
+        else if((!TesteMail.test(EmailCadastro))){
+            showNotyAlert('<?php echo $idioma1->getText("emailCorretamente")?>', "w");
+            $('#email').focus();
             
-            }else if((Senha == '' || Senha == null || Senha < 8) || (SenhaConfirmar == '' || SenhaConfirmar == null || SenhaConfirmar < 8) ||
-                    (Senha !== SenhaConfirmar)){
-                
-                showNotyAlert('<?php echo "Senha inválida." ?>', "w");
-                $('#senha').focus();
-                
-            } else {
+        }else if(!TermosAceite){
+            showNotyAlert('<?php echo $idioma1->getText("voceConcorda")?>', "w");
+            $('#termos').focus();
+        
+        }else if((Senha == '' || Senha == null || Senha < 8) || (SenhaConfirmar == '' || SenhaConfirmar == null || SenhaConfirmar < 8) ||
+                (Senha !== SenhaConfirmar)){
+            
+            showNotyAlert('<?php echo "Senha inválida." ?>', "w");
+            $('#senha').focus();
+            
+        } else {
 
-                $.ajax({
-                    url: '<?php echo URLBASE_CLIENT . "api/signup" ?>',
-                    method: 'POST',
-                    dataType: 'json',
-                    data: {
-                        referencia: ReferenciaCadastro,
-                        nome: Nome,
-                        email: EmailCadastro,
-                        senha: btoa(Senha),
-                        confirmarSenha: btoa(SenhaConfirmar),
-                        code: $('#g-recaptcha-response').val()
-                    },
-                    beforeSend: function(){
-                        $('#conta-gratis').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
-                    },
-                    success: function (json) {
-                        try {
-                            if (json.sucesso) {
-                                $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
-                                swal({
-                                    title: "Pronto!",
-                                    text: json.mensagem,
-                                    type: "success",
-                                    showCancelButton: false,
-                                    confirmButtonColor: "#18a689",
-                                    confirmButtonText: "Ok!",
-                                    closeOnConfirm: false
-                                }, function () {
-                                    setTimeout(function () {
-
-                                        window.location.href = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_LOGIN ?>";
-                                    }, 1000);
-
-                                });
-
-
-
-
-                            } else {
-                                reloadCaptcha();
-                                $('#senha').val("");
-                                $('#senhaConfirmar').val("");
-                                showNotyAlert(json.mensagem, "w");
-                                $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
-                            }
-                        } catch (e) {
-                            console.error(e.message)
-                            console.log(e.message)
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . "api/signup" ?>',
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    referencia: ReferenciaCadastro,
+                    nome: Nome,
+                    email: EmailCadastro,
+                    senha: btoa(Senha),
+                    confirmarSenha: btoa(SenhaConfirmar),
+                    code: $('#g-recaptcha-response').val()
+                },
+                beforeSend: function(){
+                    $('#conta-gratis').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
                             $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
-                            showNotyAlert('Erro ao enviar os dados, tente mais tarde', "w");
+                            swal({
+                                title: "Pronto!",
+                                text: json.mensagem,
+                                type: "success",
+                                showCancelButton: false,
+                                confirmButtonColor: "#18a689",
+                                confirmButtonText: "Ok!",
+                                closeOnConfirm: false
+                            }, function () {
+                                setTimeout(function () {
+
+                                    window.location.href = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_LOGIN ?>";
+                                }, 1000);
+
+                            });
+
+
+
+
+                        } else {
+                            reloadCaptcha();
+                            $('#senha').val("");
+                            $('#senhaConfirmar').val("");
+                            showNotyAlert(json.mensagem, "w");
+                            $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
                         }
+                    } catch (e) {
+                        console.error(e.message)
+                        console.log(e.message)
+                        $('#conta-gratis').html('<?php echo $lang['home14']; ?>');
+                        showNotyAlert('Erro ao enviar os dados, tente mais tarde', "w");
                     }
-                });
-            }
-            e.preventDefault();
-        });
+                }
+            });
+        }
+        e.preventDefault();
+    });
 
     $('#form-login').on('submit', function(e){
             var EmailLogin = $('#email_login').val(),
@@ -173,7 +170,7 @@ $(document).ready(function () {
             e.preventDefault();
         });
     });
-    
+
     function showNotyAlert(mensagem, tipo) {
         toastr.options = {
             closeButton: true,
@@ -183,7 +180,7 @@ $(document).ready(function () {
             preventDuplicates: true,
             positionClass: "toast-top-left"
         };
-        
+
         if (tipo === "s") {
             toastr.success("<?php echo TITULO ?>", mensagem);
         } else if (tipo === "e") {
@@ -191,25 +188,27 @@ $(document).ready(function () {
         } else if (tipo === "w") {
             toastr.warning("<?php echo TITULO ?>", mensagem);
         }
-
     }
 
     function validarDados() {
         $("#error-msg").hide();
         $("#btn-send").prop("disabled", true);
+        console.log('aqui');
         $.ajax({
             url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_RECOVERVALIDATION?>",
             method: "post",
             dataType: "json",
             data: {
                 email: $("#email").val(),
-                code: $('#g-recaptcha-response').val() 
+                code: $('#g-recaptcha-response').val()
             },
             beforeSend: function(){
-                $('#btn-send').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+                // console.log('beforeSend')
+                // $('#btn-send').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
             },
             success: function (json) {
                 try {
+                    console.log(json);
                     if (json.sucesso) {
                         $('#btn-send').html(' <?php echo $idioma1->getText("recuperarSenha") ?> ');
                         $(".pss-dados").hide();
@@ -223,19 +222,21 @@ $(document).ready(function () {
                         showNotyAlert(json.mensagem, "w");
                     }
                 } catch (e) {
+                    console.log(e);
                     $('#btn-send').html(' <?php echo $idioma1->getText("recuperarSenha") ?> ');
                     showNotyAlert(e, "w");
                 }
                 $("#btn-send").prop("disabled", false);
             }
         });
+        console.log('teste')
     }
-    
+
     function reloadCaptcha(){
         grecaptcha.reset();
         desativarBotao();
     }
-    
+
     function desativarBotao(){
 
         var operacao = $("#google").attr("atrpage");
@@ -255,7 +256,7 @@ $(document).ready(function () {
                 break;
         }
     }
-    
+
     function validarBotao(){
     
         var operacao = $("#google").attr("atrpage");
@@ -275,7 +276,7 @@ $(document).ready(function () {
                 break;
         }
     }
-    
+
     function recuperar() {
         $("#error-msg").hide();
         $("#btn-validate").prop("disabled", true);
@@ -310,7 +311,7 @@ $(document).ready(function () {
             }
         });
     }
-    
+
     function validar() {
         $("#error-msg").hide();
         $("#btn-key").prop("disabled", true);
@@ -344,8 +345,5 @@ $(document).ready(function () {
                 $("#btn-key").prop("disabled", false);
             }
         });
-    }   
-
-
-  
+    }
 </script>

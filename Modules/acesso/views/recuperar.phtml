@@ -29,75 +29,74 @@ include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
     <link rel="manifest" href="/site.webmanifest">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
-    <link href="<?php echo TEMA; ?>css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="<?php echo TEMA; ?>css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="<?php echo TEMA; ?>font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/plugins/toastr/toastr.min.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/styleD.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css.old/animate.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- <link href="<?php echo TEMA; ?>css/styleD.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="<?php echo TEMA; ?>/css/style.css">
+    <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
 </head>
 
 
-<body class="m-lg" style="background-color: <?php echo $brand->colorBackground ?>">
-    <div class="middle-box text-center loginscreen  animated fadeInDown">
+<body>
+  <div class="vh-100 d-flex justify-content-center">
+    <div class="form-access my-auto middle-box text-center loginscreen animated fadeInDown">
+    <div class="m-t-lg m-b-lg">
+
         <div class="m-t-lg m-b-lg">
             <a href="<?php echo $empresa->homePage ?>">
-            <img alt="image"  width="150px" src="<?php echo IMAGES; ?>logo-Exchange.png" class="logo">
+                <img alt="image"  width="250px" src="<?php echo IMAGES; ?>logo-ca.png" class="logo">
             </a>
         </div>
-<form class="form-login mt-lg-4" method="post" id="form-recover" action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_RECUPERACAO ?>">
-    <div class="pss-dados">
-        <div class="form-group">
-            <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="text" id="email" name='email' class="form-control" placeholder="<?php echo $idioma1->getText("digiteEmailCadastrado") ?>" >
-        </div>  
-        <div class="form-group m-t-lg">
-            <div style="text-align: center;">
-                <div  id="google" name="google" atrpage="recovery" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo getenv('GoogleSite'); ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
+        <br>
+        <form method="post" id="form-recover" class="form-cadastro mt-lg-4">
+            <div class="pss-dados">
+                <span>Recuperar</span>
+
+                <div class="form-group">
+                    <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="email" id="email" class="form-control" placeholder="<?php echo $idioma1->getText("digiteEmailCadastrado"); ?>">
+                </div>
+                <div style="text-align: center;">
+                    <div  id="google" name="google" atrpage="recovery" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo getenv('GoogleSite'); ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
+                </div>
+                <button onclick="validarDados();" id="btn-send" disabled="disabled" style="background-color: #2351ff; border-color: #2351ff; color:black;" type="submit" class="btn btn-primary block full-width m-b" ><?php echo $idioma1->getText("recuperarSenha"); ?></button>
             </div>
-        </div>
-        <button class="btn btn-primary block full-width m-b pss-dados" disabled="disabled" type="button" onclick="validarDados();" id="btn-send">
-            <?php echo $idioma1->getText("recuperarSenha") ?> 
-        </button>
-    </div>   
-    <div class="pss-token" hidden="true">
-        <div class="form-group pss-token">
-            <input type="text" id="token" name='token' class="form-control" hidden placeholder="<?php echo ($tipo == \Utils\Constantes::TIPO_AUTH_EMAIL ? $idioma1->getText("codEnviadoEmail") : ($tipo == \Utils\Constantes::TIPO_AUTH_GOOGLE ? $idioma1->getText("googleAutherticator") : $idioma1->getText("codigoPorSMS"))) ?>">
-        </div>
-        <button class="btn btn-primary block full-width m-b pss-token" type="button" onclick="recuperar();" id="btn-validate">
-            <?php echo $idioma1->getText("validarToken") ?>
-        </button>
-    </div>  
-    <div class="pss-key" hidden="true">
-        <div class="form-group pss-key" hidden>
-            <input type="text" id="key" name='key' class="form-control" placeholder="<?php echo $idioma1->getText("coleChave") ?>">
-        </div>
-        <button class="btn btn-primary block full-width m-b pss-key" hidden type="button" onclick="validar();" id="btn-key">
-            <?php echo $idioma1->getText("validarChave") ?>
-        </button>
+            <div class="pss-token">
+                <div class="form-group pss-token">
+                    <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="text" id="token" name="token" hidden class="form-control" placeholder="<?php echo ($tipo == \Utils\Constantes::TIPO_AUTH_EMAIL ? $idioma1->getText("codEnviadoEmail") : ($tipo == \Utils\Constantes::TIPO_AUTH_GOOGLE ? $idioma1->getText("googleAutherticator") : $idioma1->getText("codigoPorSMS"))) ?>">
+                </div>
+            </div>
+            <div class="pss-key">
+            </div>
+    </form>
+    <!-- <h2>Don't have an account? <a href="signup-light.html">Sign up here</a></h2> -->
+    <div class="col-xs-6 text-center">
+        <h2>
+            <?php echo $lang['home9']; ?>
+            <a
+            class=""
+            href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_REGISTER ?>"
+            style="color: #2351ff;">
+                <?php echo $lang['home99']; ?>
+            </a>
+        </h2>
     </div>
-    <div class="form-group m-b-lg">
-            <div class="row">
-                <div class="col-xs-6 text-left">
-                    <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGIN ?>" style="color: #e5e6e7;"><?php echo $idioma1->getText("entrar"); ?></a>
-                </div>
-                <div class="col-xs-6 text-right">    
-                    <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_REGISTER ?>" style="color: #e5e6e7;"><?php echo $idioma1->getText("cadastrar"); ?></a>
-                </div>
-            </div>
-        </div>
-</form>
-</div>
-<div class="footer navbar-fixed-bottom center">
-    <small ><?php echo $empresa->nomeEmpresarial ?> <?php echo $empresa->anoInicio ?> - <?php echo date('Y');?></small> 
-</div>
-
-
-    
-    <div class="overlay"></div>
-    <script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script>
-    <script src="<?php echo TEMA; ?>js/bootstrap.min.js"></script>
+    </div>
+    <!-- <div class="footer navbar-fixed-bottom center">
+        <small ><?php echo $empresa->nomeEmpresarial ?> <?php echo $empresa->anoInicio ?> - <?php echo date('Y');?></small> 
+    </div> -->
+    </div>
     <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
-    <?php Utils\Layout::append("inspina/notificacao", null); ?>
-    
+    <script src="assets/js/jquery-3.4.1.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/amcharts-core.min.js"></script>
+    <script src="assets/js/amcharts.min.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+
+  <?php Utils\Layout::append("inspina/notificacao", null); ?>
 </body>
 <?php if(AMBIENTE == "producao") { ?>
 

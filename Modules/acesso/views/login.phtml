@@ -1,8 +1,8 @@
 <?php
 $available_langs = array('pt-br','en','es','fr');
-if(in_array($_POST['lang'], $available_langs)) {       
+if(in_array($_POST['lang'], $available_langs)) {
     $_SESSION['lang'] = $_POST['lang'];
-  }
+}
 $idioma = (isset($_SESSION['lang']) ? $_SESSION['lang'] : "pt-br");
 $homeBase = URLBASE_CLIENT . 'Modules/acesso/views/';
 include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
@@ -33,21 +33,24 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
     <meta name="msapplication-TileColor" content="#da532c">
     <!-- <link href="<?php echo TEMA; ?>css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="<?php echo TEMA; ?>font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css.old/animate.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
     <!-- <link href="<?php echo TEMA; ?>css/styleD.css" rel="stylesheet"> -->
-    
-     <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Crypo</title>
-  <link rel="icon" href="assets/img/favicon.png" type="image/x-icon">
-  <link rel="stylesheet" href="<?php echo TEMA; ?>/css/style.css">
+    <link rel="stylesheet" href="<?php echo TEMA; ?>/css/style.css">
+    <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Crypo</title>
+    <link rel="icon" href="assets/img/favicon.png" type="image/x-icon">
 
 </head>
 <script type="text/javascript">
-    var AMBIENTE = '<?php echo AMBIENTE ?>';    
+    var AMBIENTE = '<?php echo AMBIENTE ?>';
 </script>
+
 <body>
   <div class="vh-100 d-flex justify-content-center">
     <div class="form-access my-auto middle-box text-center loginscreen animated fadeInDown">
@@ -94,12 +97,16 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
         <small ><?php echo $empresa->nomeEmpresarial ?> <?php echo $empresa->anoInicio ?> - <?php echo date('Y');?></small> 
     </div> -->
   </div>
-  <script src="assets/js/jquery-3.4.1.min.js"></script>
-  <script src="assets/js/popper.min.js"></script>
-  <script src="assets/js/bootstrap.min.js"></script>
-  <script src="assets/js/amcharts-core.min.js"></script>
-  <script src="assets/js/amcharts.min.js"></script>
-  <script src="assets/js/custom.js"></script>
+    <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+    <script src="assets/js/jquery-3.4.1.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/amcharts-core.min.js"></script>
+    <script src="assets/js/amcharts.min.js"></script>
+    <script src="assets/js/custom.js"></script>
+
+  <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+
   <?php Utils\Layout::append("inspina/notificacao", null); ?>
 </body>
 

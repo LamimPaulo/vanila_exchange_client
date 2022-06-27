@@ -1,8 +1,8 @@
 <?php
 $available_langs = array('pt-br','en','es','fr');
-if(in_array($_POST['lang'], $available_langs)) {       
+if(in_array($_POST['lang'], $available_langs)) {
     $_SESSION['lang'] = $_POST['lang'];
-  }
+}
 $idioma = (isset($_SESSION['lang']) ? $_SESSION['lang'] : "pt-br");
 $homeBase = URLBASE_CLIENT . 'Modules/acesso/views/';
 include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
@@ -30,14 +30,16 @@ $idReferencia = \Utils\Get::get($_data, 0, "");
     <link rel="manifest" href="/site.webmanifest">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
-    <link href="<?php echo TEMA; ?>css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="<?php echo TEMA; ?>css.old/bootstrap.min.css" rel="stylesheet"> -->
     <link href="<?php echo TEMA; ?>font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/plugins/toastr/toastr.min.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/styleD.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css.old/animate.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css.old/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <!-- <link href="<?php echo TEMA; ?>css.old/styleD.css" rel="stylesheet"> -->
+    <link href="<?php echo TEMA; ?>css.old/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
     <link href="<?php echo CSS; ?>passwordRequirements.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo TEMA; ?>/css/style.css">
+    <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+
     
     <script src="https://www.google.com/recaptcha/api.js"></script>
     
@@ -45,71 +47,80 @@ $idReferencia = \Utils\Get::get($_data, 0, "");
 <script type="text/javascript">
     var AMBIENTE = '<?php echo AMBIENTE ?>';
 </script>
-<body class="m-lg" style="background-color: <?php echo $brand->colorBackground ?>">
-    <div class="middle-box text-center loginscreen  animated fadeInDown">
-                <div class="m-t-lg m-b-lg">
-                    <a href="<?php echo $empresa->homePage ?>">
-                    <img alt="image"  width="150px" src="<?php echo IMAGES; ?>logo-Exchange.png" class="logo">
-                    </a>
-                </div>
-            </br>
-            <form action="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CADASTRO?>" method="post" id="form-cadastro" class="form-cadastro mt-lg-4">
-                <div class="form-group">
-                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="text" class="form-control" id="nome" name="nome" placeholder="<?php echo $lang['home11']; ?>" class="input">
-                </div>
-                <div class="form-group">
-                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="email" class="form-control" id="email" name="email" placeholder="E-mail" class="input" autocomplete='email'>
-                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="hidden" id="referencia" name="referencia" value="<?php echo $idReferencia ?>" class="input">
-                </div>
-                <div class="form-group">
-                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="password" class="form-control pr-password" id="senha" name="senha" placeholder="<?php echo $lang['home36']; ?>" class="input">
-                </div>
-                <div class="form-group">
-                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="password" class="form-control" id="senhaConfirmar" name="senhaConfirmar" placeholder="<?php echo $lang['home37']; ?>" class="input">
-                </div>
-                <div class="form-group m-t-lg">
-                    <div style="text-align: center;">
-                        <div  id="google" name="google" atrpage="register" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo getenv('GoogleSite'); ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <div class="icheckbox_square-green">
-                        <label>
-                            <input type="checkbox" id="termos" name="termos" class="i-checks">
-                            <a href="https://broker.Exchangecx.com/resources/docs/2018/08/Contrato-de-Licenca-da-Interface-de-Programacao-de-Aplicacoes.pdf" target="_terms" style="color: #fff !important;" class="label-link"><?php echo $lang['home13']; ?></a>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <button id="conta-gratis" type="submit" disabled="disabled" class="btn btn-primary block full-width m-b"><?php echo $lang['home14']; ?></button>
-                </div>
-                <div class="form-group m-b-lg">
-                    <div class="row">
-                        <div class="col-xs-6 text-left">
-                            <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGIN ?>" style="color: #e5e6e7;"><?php echo $lang['home10']; ?></a>
-                        </div>
-                        <div class="col-xs-6 text-right">
-                            <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_RECUPERACAO ?>" style="color: #e5e6e7;"><?php echo $lang['modal4']; ?></a>
-                        </div>
-                    </div>
-                </div>
-            </form>
+<body>
+  <div class="vh-100 d-flex justify-content-center">
+    <div class="form-access my-auto middle-box text-center loginscreen animated fadeInDown">
+    <div class="m-t-lg m-b-lg">
+
+        <div class="m-t-lg m-b-lg">
+            <a href="<?php echo $empresa->homePage ?>">
+                <img alt="image"  width="250px" src="<?php echo IMAGES; ?>logo-ca.png" class="logo">
+            </a>
         </div>
-<div class="footer navbar-fixed-bottom center">
-    <small ><?php echo $empresa->nomeEmpresarial ?> <?php echo $empresa->anoInicio ?> - <?php echo date('Y');?></small> 
+        <br>
+        <form method="post" id="form-cadastro" class="form-cadastro mt-lg-4">
+            <span>Registro</span>
+
+            <div class="form-group">
+                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="text" name="nome" id="nome" class="form-control" placeholder="<?php echo $lang['home11']; ?>">
+            </div>
+            <div class="form-group">
+                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="email" name="email" id="email" class="form-control" placeholder="E-mail">
+            </div>
+            <div class="form-group">
+                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="hidden" name="referencia" id="referencia" class="form-control" value="<?php echo $idReferencia ?>">
+            </div>
+            <div class="form-group">
+                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="password" name="senha" id="senha" class="form-control" placeholder="<?php echo $lang['home36']; ?>">
+            </div>
+            <div class="form-group">
+                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="password" name="senhaConfirmar" id="senhaConfirmar" class="form-control" placeholder="<?php echo $lang['home37']; ?>">
+            </div>
+            <div class="form-group">
+                <div  id="google" name="google" atrpage="register" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo getenv('GoogleSite'); ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
+                <!-- <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="password" name="senhaConfirmar" id="senhaConfirmar" class="form-control" placeholder="<?php echo $lang['home37']; ?>"> -->
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" name="termos" id="termos">
+                <label class="custom-control-label" for="termos">Eu concordo com os <a href="#!" target="_terms" ><?php echo $lang['home13']; ?></a></label>
+            </div>
+            <button id="conta-gratis" disabled="disabled" style="background-color: #2351ff; border-color: #2351ff; color:black;" type="submit" class="btn btn-primary block full-width m-b" ><?php echo $lang['home14']; ?></button>
+    </form>
+    <!-- <h2>Don't have an account? <a href="signup-light.html">Sign up here</a></h2> -->
+        <div class="col-xs-6 text-center">
+            <h2>
+                <?php echo $lang['home9']; ?>
+                <a
+                class=""
+                href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGIN ?>"
+                style="color: #2351ff;">
+                    <?php echo $lang['home10']; ?>
+                </a>
+            </h2>
+        </div>
+    </div>
+    <!-- <div class="footer navbar-fixed-bottom center">
+        <small ><?php echo $empresa->nomeEmpresarial ?> <?php echo $empresa->anoInicio ?> - <?php echo date('Y');?></small> 
+    </div> -->
 </div>
-    <script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script>
+<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+  <script src="assets/js/jquery-3.4.1.min.js"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/amcharts-core.min.js"></script>
+  <script src="assets/js/amcharts.min.js"></script>
+  <script src="assets/js/custom.js"></script>
+  
+<!-- <script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script> -->
+<!-- <script src="<?php echo TEMA; ?>js/bootstrap.min.js"></script> -->
+<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
 
-    <script src="<?php echo TEMA; ?>js/bootstrap.min.js"></script>
-    <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
-    
-    
-    <?php Utils\Layout::append("inspina/notificacao", null); ?>
 
-    
-    <script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
+<?php Utils\Layout::append("inspina/notificacao", null); ?>
+
+
+<script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
+
 </body>
 
 <?php if(AMBIENTE == "producao") { ?>

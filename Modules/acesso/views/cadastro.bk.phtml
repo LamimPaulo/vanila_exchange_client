@@ -1,0 +1,66 @@
+<body class="m-lg" style="background-color: <?php echo $brand->colorBackground ?>">
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+                <div class="m-t-lg m-b-lg">
+                    <a href="<?php echo $empresa->homePage ?>">
+                    <img alt="image"  width="150px" src="<?php echo IMAGES; ?>logo-Exchange.png" class="logo">
+                    </a>
+                </div>
+            </br>
+            <form action="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CADASTRO?>" method="post" id="form-cadastro" class="form-cadastro mt-lg-4">
+                <div class="form-group">
+                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="text" class="form-control" id="nome" name="nome" placeholder="<?php echo $lang['home11']; ?>" class="input">
+                </div>
+                <div class="form-group">
+                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="email" class="form-control" id="email" name="email" placeholder="E-mail" class="input" autocomplete='email'>
+                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="hidden" id="referencia" name="referencia" value="<?php echo $idReferencia ?>" class="input">
+                </div>
+                <div class="form-group">
+                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="password" class="form-control pr-password" id="senha" name="senha" placeholder="<?php echo $lang['home36']; ?>" class="input">
+                </div>
+                <div class="form-group">
+                    <input style="border-radius: 3px; background-color: transparent !important; color: #fff !important;" type="password" class="form-control" id="senhaConfirmar" name="senhaConfirmar" placeholder="<?php echo $lang['home37']; ?>" class="input">
+                </div>
+                <div class="form-group m-t-lg">
+                    <div style="text-align: center;">
+                        <div  id="google" name="google" atrpage="register" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo getenv('GoogleSite'); ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="icheckbox_square-green">
+                        <label>
+                            <input type="checkbox" id="termos" name="termos" class="i-checks">
+                            <a href="https://broker.Exchangecx.com/resources/docs/2018/08/Contrato-de-Licenca-da-Interface-de-Programacao-de-Aplicacoes.pdf" target="_terms" style="color: #fff !important;" class="label-link"><?php echo $lang['home13']; ?></a>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button id="conta-gratis" type="submit" disabled="disabled" class="btn btn-primary block full-width m-b"><?php echo $lang['home14']; ?></button>
+                </div>
+                <div class="form-group m-b-lg">
+                    <div class="row">
+                        <div class="col-xs-6 text-left">
+                            <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGIN ?>" style="color: #e5e6e7;"><?php echo $lang['home10']; ?></a>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_RECUPERACAO ?>" style="color: #e5e6e7;"><?php echo $lang['modal4']; ?></a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    <div class="footer navbar-fixed-bottom center">
+        <small ><?php echo $empresa->nomeEmpresarial ?> <?php echo $empresa->anoInicio ?> - <?php echo date('Y');?></small> 
+    </div>
+    <script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script>
+
+    <script src="<?php echo TEMA; ?>js/bootstrap.min.js"></script>
+    <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+    
+    
+    <?php Utils\Layout::append("inspina/notificacao", null); ?>
+
+    
+    <script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
+</body>
