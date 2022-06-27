@@ -135,150 +135,316 @@ if(!empty($cliente->moedaFavorita)){
         <h5><?php echo $idioma->getText("titulo") ?></h2>
     </div>
 </div> -->
-<div class="card mostrar mtb15">
-    <div class="row">
-        <div class="card-content">
-        <h5 class="card-title"><?php echo $idioma->getText("titulo") ?></h2>
-            <div class="">
-                <div class="">
-                    <div class="row p-md">
-                        <div class="col-sm-12 select-box choose-position">
-                            <select class="form-control-lg select2 chosen-select input-lg full-width" id="selectCoins">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="" id="saqueReais" hidden="true">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="row p-md text-center">
-                                    <h2 class="m-l-sm p-md" style="display: inline;"><?php echo $idioma->getText("saqueReais") ?></h2>
+<body>
+    <div class="">
+        <div class="col-md-12 col-lg-9">
+            <div class="card mostrar mtb15">
+                <div class="row">
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo $idioma->getText("titulo") ?></h2>
+                        <div class="">
+                            <div class="">
+                                <div class="row p-md">
+                                    <div class="col-sm-12 select-box choose-position">
+                                        <select class="form-control-lg select2 chosen-select input-lg full-width" id="selectCoins">
+                                        </select>
+                                    </div>
                                 </div>
-                                <div id="saqueBrl p-md">
-                                    <div class="row p-md">
-                                        <div class="col-sm-4">
-                                            <div class="ibox float-e-margins">
-                                                <h4><?php echo $idioma->getText("saldoTotal") ?></h4>
-                                                <div class="ibox-content">
-                                                    <h3 class="" id="saldoTotalBrl">-</h3>
-                                                </div>
+                                <div class="" id="saqueReais">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="row p-md text-center">
+                                                <h2 class="m-l-sm p-md" style="display: inline;"><?php echo $idioma->getText("saqueReais") ?></h2>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="ibox float-e-margins">
-                                                <h4><?php echo $idioma->getText("saldoDisponivel") ?></h4>
-                                                <div class="ibox-content">
-                                                    <h3 class="" id="saldoBrl">-</h3>
+                                            <div id="saqueBrl p-md">
+                                                <div class="row p-md">
+                                                    <div class="col-sm-4">
+                                                        <div class="ibox float-e-margins">
+                                                            <h4><?php echo $idioma->getText("saldoTotal") ?></h4>
+                                                            <div class="ibox-content">
+                                                                <h3 class="" id="saldoTotalBrl">-</h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="ibox float-e-margins">
+                                                            <h4><?php echo $idioma->getText("saldoDisponivel") ?></h4>
+                                                            <div class="ibox-content">
+                                                                <h3 class="" id="saldoBrl">-</h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="ibox float-e-margins">
+                                                            <h4><?php echo $idioma->getText("saldoBloqueado") ?></h4>
+                                                            <div class="ibox-content">
+                                                                <h3 class="" id="saldoBloqueadoBrl">-</h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="ibox float-e-margins">
-                                                <h4><?php echo $idioma->getText("saldoBloqueado") ?></h4>
-                                                <div class="ibox-content">
-                                                    <h3 class="" id="saldoBloqueadoBrl">-</h3>
+                                                <div id="infReais">
+
+                                                    <div class="row p-md" id="emailCliente">
+                                                        <div class="col col-lg-12 ">
+                                                            <div class="form-group">
+                                                                <label><?php echo $idioma->getText("email") ?></label>
+                                                                <div class="input-group">
+                                                                    <input type="text"  class="form-control" id="email" name="email" value="" />
+                                                                    <span class="input-group-btn">
+                                                                        <button type="button" class="btn btn-primary" onclick="findCliente();">&nbsp;<i class="fa fa-search"></i></button>
+                                                                    </span>
+                                                                </div>
+                                                                <strong><span id="nomeCliente"></span></strong>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <?php if(!empty($atar) && $atar->ativo == true) {?>
+                                                    <div class="row p-md" id="atar">
+                                                        <div class="col-lg-12 ">
+                                                            <h3>O saque através da Atar é somente para o titular da conta.</h3>
+                                                            <div class="form-group">
+                                                                <label>Nome:</label>
+                                                                <input type="text"  class="form-control"  value="<?php echo $cliente->nome ?>" disabled="true"/>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Documento</label>
+                                                                <input type="text"  class="form-control"  value="<?php echo $cliente->documento ?>" disabled="true"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <?php } else { ?>
+                                                    <div class="row p-md" id="atar">
+                                                        <div class="col col-lg-12">
+                                                            <div class="form-group">
+                                                                <label><?php echo "Faça o cadastro de seu Atar ID ou CPF no menu Depósito." ?></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <?php } ?>
+
+                                                    <div class="row">
+                                                        <div class="col-sm-12 m-b-lg">
+                                                            <div class="form-group">
+                                                                <label><?php echo $idioma->getText("valor") ?></label>
+                                                                <div class="input-group">
+                                                                    <input type="text"  class="form-control" id="valorReais" name="valorReais" value="0,00" />
+                                                                    <span class="input-group-btn">
+                                                                        <button type="button" class="btn btn-primary full-width" onclick="getSaldoDisponivel();"><?php echo $idioma->getText("meuSaldoTotal") ?></button>
+                                                                    </span>
+                                                                </div>
+                                                                <label style="margin-top: 5px !important;">
+                                                                    <small><?php echo $idioma->getText("comiSaque") ?> <span id="comissaoCobradaSaque"><?php echo number_format($comissao, 2, ",", "") ?></span>%</small></br>
+                                                                    <small><?php echo $idioma->getText("tarifaTansfer") ?> <span id="tarifaTransferencia"></span></small></br>
+                                                                    <small><?php echo $idioma->getText("seraCreditadaNaConta") ?> <strong id="valorSacado2"></strong></small></br>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row p-md">
+                                                        <h3 class="m-l-md text-center" id="limiteDisponivelReal"></h3>
+                                                        <div class="col-lg-12 col-xs-12 col-sm-12">
+
+                                                            <div class="form-group">
+                                                                <button class="btn btn-primary full-width" type="button" onclick="saqueTransferir('<?php echo $processo1 ?>');" id="btnSalvar" disabled>
+                                                                    <?php echo $idioma->getText("confirmaSaque") ?>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                                <div id="carregaTokenBrl" class="text-center"></div>
+                                                <div class="row p-w-md" id="token2faBrl">
+                                                    <div class="col-lg-12">
+                                                        <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
+                                                        <dl class="dl-horizontal m-t-sm">
+                                                            <dt class="border-bottom">Nome Titular:</dt> <dd id="nomeTitular">-</dd>
+                                                            <dt class="border-bottom">Documento:</dt> <dd id="documentoCPF">-</dd>
+                                                            <dt class="border-bottom">Banco:</dt> <dd id="bancoInf">-</dd>
+                                                            <dt class="border-bottom">Agência:</dt> <dd id="agencia">-</dd>
+                                                            <dt class="border-bottom">Conta:</dt> <dd id="conta">-</dd>
+                                                            <dt class="border-bottom">Valor Solicitado:</dt> <dd id="valorSolicitado">-</dd>
+                                                            <dt class="border-bottom">Valor do Saque:</dt> <dd id="valorSaque">-</dd>
+                                                        </dl>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6 col-xs-12">
+                                                                <div class="form-group">
+                                                                    <label><?php echo $idioma->getText("pin") ?></label>
+                                                                    <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control" id="pinBrl"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 col-xs-12">
+                                                                <div class="form-group m-b-none">
+                                                                    <label><?php echo $idioma->getText("token2fa") ?></label>
+                                                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" id="tokenBrl"/>
+                                                                    <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
+                                                                        <a href="javascript:saqueTransferir('<?php echo $processo1 ?>');" id="reenviarLink"><?php echo $idioma->getText("reenviar2fa") ?></a>
+                                                                    <?php } ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row p-h-sm">
+                                                            <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                                <button class="btn btn-white full-width" onclick="cancelarTransferencia();"><?php echo $idioma->getText("cancelar") ?></button>
+                                                            </div>
+                                                            <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                                <button class="btn btn-success full-width"  onclick="saqueTransferir('<?php echo $processo2 ?>');"><?php echo $idioma->getText("confirmar") ?></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php if ($configuracao->atarAtivo == 1) { ?>
+                                                    <div class="row p-w-md" id="token2faAtar">
+                                                        <div class="col-lg-12">
+                                                            <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
+                                                            <dl class="dl-horizontal m-t-sm">
+                                                                <dt class="border-bottom">Documento:</dt> <dd id="documentoAtar">-</dd>
+                                                                <dt class="border-bottom">Valor Solicitado:</dt> <dd id="valorSolicitadoAtar">-</dd>
+                                                                <dt class="border-bottom">Valor do Saque:</dt> <dd id="valorSaqueAtar">-</dd>
+                                                            </dl>
+                                                            <div class="row">
+                                                                <div class="col-lg-12 col-xs-12">
+                                                                    <div class="form-group">
+                                                                        <label><?php echo $idioma->getText("pin") ?></label>
+                                                                        <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="pinAtar"/>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12 col-xs-12">
+                                                                    <div class="form-group m-b-none">
+                                                                        <label><?php echo $idioma->getText("token2fa") ?></label>
+                                                                        <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="tokenAtar"/>
+                                                                        <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
+                                                                            <a href="javascript:atar();" id="reenviarLinkAtar"><?php echo $idioma->getText("reenviar2fa") ?></a>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row p-h-sm">
+                                                                <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                                    <button class="btn btn-white full-width"  onclick="cancelarTransferencia();"><?php echo $idioma->getText("cancelar") ?></button>
+                                                                </div>
+                                                                <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                                    <button class="btn btn-success full-width"  onclick="saqueAtar();"><?php echo $idioma->getText("confirmar") ?></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="infReais">
-
-                                        <div class="row p-md" id="emailCliente" hidden="true">
-                                            <div class="col col-lg-12 ">
-                                                <div class="form-group">
-                                                    <label><?php echo $idioma->getText("email") ?></label>
-                                                    <div class="input-group">
-                                                        <input type="text"  class="form-control" id="email" name="email" value="" />
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-primary" onclick="findCliente();">&nbsp;<i class="fa fa-search"></i></button>
-                                                        </span>
+                                </div>
+                                <div id="saqueMoedas">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <div class="row text-left">
+                                                <h4 id="tituloMoeda" class="m-l-sm p-md text-center" style="display: inline;"><?php echo $idioma->getText("saqueCripto") ?></h4>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title"><?php echo $idioma->getText("saldoTotal") ?></h5>
+                                                            <h3 class="" id="saldoTotalCripto">-</h3>
+                                                        </div>
                                                     </div>
-                                                    <strong><span id="nomeCliente"></span></strong>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <?php if(!empty($atar) && $atar->ativo == true) {?>
-                                        <div class="row p-md" id="atar" hidden="true">
-                                            <div class="col-lg-12 ">
-                                                <h3>O saque através da Atar é somente para o titular da conta.</h3>
-                                                <div class="form-group">
-                                                    <label>Nome:</label>
-                                                    <input type="text"  class="form-control"  value="<?php echo $cliente->nome ?>" disabled="true"/>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Documento</label>
-                                                    <input type="text"  class="form-control"  value="<?php echo $cliente->documento ?>" disabled="true"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <?php } else { ?>
-                                        <div class="row p-md" id="atar" hidden="true">
-                                            <div class="col col-lg-12">
-                                                <div class="form-group">
-                                                    <label><?php echo "Faça o cadastro de seu Atar ID ou CPF no menu Depósito." ?></label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <?php } ?>
-
-                                        <div class="row p-md">
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label><?php echo $idioma->getText("valor") ?></label>
-                                                    <div class="input-group">
-                                                        <input type="text"  class="form-control" id="valorReais" name="valorReais" value="0,00" />
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-primary full-width" onclick="getSaldoDisponivel();"><?php echo $idioma->getText("meuSaldoTotal") ?></button>
-                                                        </span>
+                                                <div class="col-sm-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title"><?php echo $idioma->getText("saldoDisponivel") ?></h5>
+                                                            <h3 class="" id="saldoCripto">-</h3>
+                                                        </div>
                                                     </div>
-                                                    <label style="margin-top: 5px !important;">
-                                                        <small><?php echo $idioma->getText("comiSaque") ?> <span id="comissaoCobradaSaque"><?php echo number_format($comissao, 2, ",", "") ?></span>%</small></br>
-                                                        <small><?php echo $idioma->getText("tarifaTansfer") ?> <span id="tarifaTransferencia"></span></small></br>
-                                                        <small><?php echo $idioma->getText("seraCreditadaNaConta") ?> <strong id="valorSacado2"></strong></small></br>
-                                                    </label>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title"><?php echo $idioma->getText("saldoBloqueado") ?></h5>
+                                                            <h3 class="" id="saldoBloqueadoCripto">-</h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <br>
+                                            <div class="row">
+                                                <div id="infMoeda">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 m-b-lg">
+                                                            <div class="form-group">
+                                                                <label><?php echo $idioma->getText("carteiraDestino") ?></label>
+                                                                <input type="text" class="form-control" id="endereco"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="redeMoeda">
+                                                        <div class="">
+                                                            <label>Escolha a rede de saque: </label>
+                                                        </div>
+                                                        <div class="">
+                                                            <div data-toggle="buttons" class="btn-group" id="optionsRede">
+                                                                <label class="btn btn-white" id="erc20"> <input type="radio" name="optionRede" value="<?php echo \Utils\Constantes::REDE_ERC20 ?>">ERC20</label>
+                                                                <label class="btn btn-white" id="bep20"> <input type="radio" name="optionRede" value="<?php echo \Utils\Constantes::REDE_BEP20 ?>">BEP20</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 m-b-lg">
+                                                            <div class="form-group">
+                                                                <label><?php echo $idioma->getText("volume") ?></label>
+                                                                <div class="input-group">
+                                                                    <input type="text"  class="form-control" inputmode="numeric" pattern="[0-9]*" id="valor" name="valor" value="0.00000000" />
+                                                                    <span class="input-group-btn">
+                                                                        <button type="button" class="btn btn-primary" onclick="getSaldoDisponivel();"><?php echo $idioma->getText("meuSaldoTotal") ?></button>
+                                                                    </span>
+                                                                </div>
+                                                                <div>
+                                                                <label style="margin-top: 5px !important;">
+                                                                <span><?php echo $idioma->getText("taxa") ?>:</span> <span id="comissaoCobradaBtc"></span></br>
+                                                                <strong><span><?php echo $idioma->getText("seraDebitado") ?>:</span> <span id="debitadoBtc"></span></strong></br>
+                                                                </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="row p-md">
-                                            <h3 class="m-l-md text-center" id="limiteDisponivelReal"></h3>
+                                        <div class="row">
+                                            <h3 class="m-l-md text-center" id="limiteDisponivelCripto"></h3>
                                             <div class="col-lg-12 col-xs-12 col-sm-12">
-
-                                                <div class="form-group">
-                                                    <button class="btn btn-primary full-width" type="button" onclick="saqueTransferir('<?php echo $processo1 ?>');" id="btnSalvar" disabled>
-                                                        <?php echo $idioma->getText("confirmaSaque") ?>
-                                                    </button>
-                                                </div>
+                                                <button class="btn btn-primary full-width" id="btnTransferir" onclick="confirmarTransferencia();" disabled><?php echo $idioma->getText("transferir") ?></button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="carregaTokenBrl" class="text-center" hidden="true"></div>
-                                    <div class="row p-w-md" id="token2faBrl" hidden="true">
+                                    <div id="carregaToken" class="text-center"></div>
+                                    <div class="row  p-md" id="token2fa">
                                         <div class="col-lg-12">
                                             <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
                                             <dl class="dl-horizontal m-t-sm">
-                                                <dt class="border-bottom">Nome Titular:</dt> <dd id="nomeTitular">-</dd>
-                                                <dt class="border-bottom">Documento:</dt> <dd id="documentoCPF">-</dd>
-                                                <dt class="border-bottom">Banco:</dt> <dd id="bancoInf">-</dd>
-                                                <dt class="border-bottom">Agência:</dt> <dd id="agencia">-</dd>
-                                                <dt class="border-bottom">Conta:</dt> <dd id="conta">-</dd>
-                                                <dt class="border-bottom">Valor Solicitado:</dt> <dd id="valorSolicitado">-</dd>
-                                                <dt class="border-bottom">Valor do Saque:</dt> <dd id="valorSaque">-</dd>
+                                                <dt class="border-bottom"><?php echo $idioma->getText("volume") ?>: </dt> <dd id="volumeConfirmar">-</dd>
+                                                <dt class="border-bottom"><?php echo $idioma->getText("carteira") ?>:</dt> <dd id="enderecoConfirmar">-</dd>
+                                                <dt class="border-bottom" id="redeConfirmar"><?php echo "Rede" ?>:</dt> <dd id="rede">-</dd>
                                             </dl>
 
                                             <div class="row">
-                                                <div class="col-md-6 col-xs-12">
+                                                <div class="col-lg-6 col-xs-12">
                                                     <div class="form-group">
                                                         <label><?php echo $idioma->getText("pin") ?></label>
-                                                        <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control" id="pinBrl"/>
+                                                        <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="pin"/>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 col-xs-12">
+                                                <div class="col-lg-6 col-xs-12">
                                                     <div class="form-group m-b-none">
                                                         <label><?php echo $idioma->getText("token2fa") ?></label>
-                                                        <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" id="tokenBrl"/>
+                                                        <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="token"/>
                                                         <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
-                                                            <a href="javascript:saqueTransferir('<?php echo $processo1 ?>');" id="reenviarLink"><?php echo $idioma->getText("reenviar2fa") ?></a>
+                                                            <a href="javascript:confirmarTransferencia();" id="reenviarLink"><?php echo $idioma->getText("reenviar2fa") ?></a>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
@@ -286,260 +452,13 @@ if(!empty($cliente->moedaFavorita)){
 
                                             <div class="row p-h-sm">
                                                 <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                    <button class="btn btn-white full-width" onclick="cancelarTransferencia();"><?php echo $idioma->getText("cancelar") ?></button>
+                                                    <button class="btn btn-white full-width"  onclick="cancelarTransferencia();"><?php echo $idioma->getText("cancelar") ?></button>
                                                 </div>
                                                 <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                    <button class="btn btn-success full-width"  onclick="saqueTransferir('<?php echo $processo2 ?>');"><?php echo $idioma->getText("confirmar") ?></button>
+                                                    <button class="btn btn-success full-width" onclick="transferirCurrency();"><?php echo $idioma->getText("confirmar") ?></button>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <?php if ($configuracao->atarAtivo == 1) { ?>
-                                        <div class="row p-w-md" id="token2faAtar" hidden="true">
-                                            <div class="col-lg-12">
-                                                <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
-                                                <dl class="dl-horizontal m-t-sm">
-                                                    <dt class="border-bottom">Documento:</dt> <dd id="documentoAtar">-</dd>
-                                                    <dt class="border-bottom">Valor Solicitado:</dt> <dd id="valorSolicitadoAtar">-</dd>
-                                                    <dt class="border-bottom">Valor do Saque:</dt> <dd id="valorSaqueAtar">-</dd>
-                                                </dl>
-                                                <div class="row">
-                                                    <div class="col-lg-12 col-xs-12">
-                                                        <div class="form-group">
-                                                            <label><?php echo $idioma->getText("pin") ?></label>
-                                                            <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="pinAtar"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xs-12">
-                                                        <div class="form-group m-b-none">
-                                                            <label><?php echo $idioma->getText("token2fa") ?></label>
-                                                            <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="tokenAtar"/>
-                                                            <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
-                                                                <a href="javascript:atar();" id="reenviarLinkAtar"><?php echo $idioma->getText("reenviar2fa") ?></a>
-                                                            <?php } ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row p-h-sm">
-                                                    <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                        <button class="btn btn-white full-width"  onclick="cancelarTransferencia();"><?php echo $idioma->getText("cancelar") ?></button>
-                                                    </div>
-                                                    <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                        <button class="btn btn-success full-width"  onclick="saqueAtar();"><?php echo $idioma->getText("confirmar") ?></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php } ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="saqueMoedas" hidden="true">
-                        <div class="row">
-                            <div class="col-sm-12 col-xs-12">
-                                <div class="row p-md text-center">
-                                    <h2 id="tituloMoeda" class="m-l-sm p-md text-center" style="display: inline;"><?php echo $idioma->getText("saqueCripto") ?></h2>
-                                </div>
-                                <div class="row p-md">
-                                    <div class="col-sm-4">
-                                        <div class="ibox float-e-margins">
-                                            <h4><?php echo $idioma->getText("saldoTotal") ?></h4>
-                                            <div class="ibox-content">
-                                                <h3 class="" id="saldoTotalCripto">-</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="ibox float-e-margins">
-                                            <h4><?php echo $idioma->getText("saldoDisponivel") ?></h4>
-                                            <div class="ibox-content">
-                                                <h3 class="" id="saldoCripto">-</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="ibox float-e-margins">
-                                            <h4><?php echo $idioma->getText("saldoBloqueado") ?></h4>
-                                            <div class="ibox-content">
-                                                <h3 class="" id="saldoBloqueadoCripto">-</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row p-md">
-                                    <div id="infMoeda">
-                                        <div class="row  p-md">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label><?php echo $idioma->getText("carteiraDestino") ?></label>
-                                                    <input type="text" class="form-control" id="endereco"/>
-                                                </div>
-                                            </div>
-                                        </div>
 
-
-                                        <div class="row p-md" id="redeMoeda">
-                                            <div class="col-lg-12 col-xs-12 col-sm-12 text-center">
-                                                <label>Escolha a rede de saque: </label>
-                                            </div>
-                                            <div class="col-lg-12 col-xs-12 col-sm-12 text-center">
-                                                <div data-toggle="buttons" class="btn-group" id="optionsRede">
-                                                    <label class="btn btn-white" id="erc20"> <input type="radio" name="optionRede" value="<?php echo \Utils\Constantes::REDE_ERC20 ?>">ERC20</label>
-                                                    <label class="btn btn-white" id="bep20"> <input type="radio" name="optionRede" value="<?php echo \Utils\Constantes::REDE_BEP20 ?>">BEP20</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row  p-md">
-                                                <div class="form-group">
-                                                    <label><?php echo $idioma->getText("volume") ?></label>
-                                                    <div class="input-group">
-                                                        <input type="text"  class="form-control" inputmode="numeric" pattern="[0-9]*" id="valor" name="valor" value="0.00000000" />
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-primary" onclick="getSaldoDisponivel();"><?php echo $idioma->getText("meuSaldoTotal") ?></button>
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                    <label style="margin-top: 5px !important;">
-                                                    <span><?php echo $idioma->getText("taxa") ?>:</span> <span id="comissaoCobradaBtc"></span></br>
-                                                    <strong><span><?php echo $idioma->getText("seraDebitado") ?>:</span> <span id="debitadoBtc"></span></strong></br>
-                                                    </label>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                                    <div class="row p-md">
-                                        <h3 class="m-l-md text-center" id="limiteDisponivelCripto"></h3>
-                                        <div class="col-lg-12 col-xs-12 col-sm-12">
-                                            <button class="btn btn-primary full-width" id="btnTransferir" onclick="confirmarTransferencia();" disabled><?php echo $idioma->getText("transferir") ?></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="carregaToken" class="text-center" hidden="true"></div>
-                                <div class="row  p-md" id="token2fa" hidden="true">
-                                    <div class="col-lg-12">
-                                        <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
-                                        <dl class="dl-horizontal m-t-sm">
-                                            <dt class="border-bottom"><?php echo $idioma->getText("volume") ?>: </dt> <dd id="volumeConfirmar">-</dd>
-                                            <dt class="border-bottom"><?php echo $idioma->getText("carteira") ?>:</dt> <dd id="enderecoConfirmar">-</dd>
-                                            <dt class="border-bottom" id="redeConfirmar"><?php echo "Rede" ?>:</dt> <dd id="rede">-</dd>
-                                        </dl>
-
-                                        <div class="row">
-                                            <div class="col-lg-6 col-xs-12">
-                                                <div class="form-group">
-                                                    <label><?php echo $idioma->getText("pin") ?></label>
-                                                    <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="pin"/>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-xs-12">
-                                                <div class="form-group m-b-none">
-                                                    <label><?php echo $idioma->getText("token2fa") ?></label>
-                                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="token"/>
-                                                    <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
-                                                        <a href="javascript:confirmarTransferencia();" id="reenviarLink"><?php echo $idioma->getText("reenviar2fa") ?></a>
-                                                    <?php } ?>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row p-h-sm">
-                                            <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                <button class="btn btn-white full-width"  onclick="cancelarTransferencia();"><?php echo $idioma->getText("cancelar") ?></button>
-                                            </div>
-                                            <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                <button class="btn btn-success full-width" onclick="transferirCurrency();"><?php echo $idioma->getText("confirmar") ?></button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row" id="infGerais" hidden="true">
-        <div class="col-sm-offset-0 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
-            <div class="ibox">
-                <div class="ibox-content list-indicados box">
-                    <div class="row m-t-md p-md">
-                        <div class="col-sm-12">
-                            <div id="avisoFiat">
-                            </div>
-                            <div id="avisoCurrency" hidden>
-                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon yellow-bg">
-                                            <i class="fa fa-exclamation-triangle fa-1x"></i>
-                                        </div>
-                                        <div class="vertical-timeline-content">
-                                            <strong class="text-left"><h5><?php echo $idioma->getText("atencao") ?></h5></strong>
-                                            <small>
-                                                <ul>
-                                                    <li class="m-t-xs"><?php echo $idioma->getText("irreversiveis") ?></li>
-                                                    <li class="m-t-xs" id="aceitaRede"></li>
-                                                </ul>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="infFiat">
-                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                                    <?php if ($configuracao->atarAtivo == 1) { ?>
-                                        <div class="vertical-timeline-block">
-                                            <div class="vertical-timeline-icon blue-bg">
-                                                <i class="fa fa-info fa-1x"></i>
-                                            </div>
-                                            <div class="vertical-timeline-content">
-                                                <strong class="text-left"><h5><?php echo "ATAR PAY" ?> </h5></strong><!--informacoes-->
-                                                <small><ul>
-                                                        <li class="m-t-xs"><?php echo "Saques via Atar Pay são instantâneos e 24/7." ?></li>
-                                                        <li class="m-t-xs"><?php echo "Baixe o app Atar Pay e crie sua conta grátis em apenas 2 minutos." ?></li>
-                                                        <li class="m-t-xs"><a href="https://apps.apple.com/br/app/atar-pay/id1144625341" target="atar_pay"><?php echo "Link iOS" ?></a></li>
-                                                        <li class="m-t-xs"><a href="https://play.google.com/store/apps/details?id=com.wearatar.atarpay&hl=en" target="atar_pay"><?php echo "Link Android" ?></a></li>
-                                                        <li class="m-t-xs">Valor disponível para saque: <span id="atarSaldo">R$ 0,00</span></li>
-                                                    </ul></small>
-                                            </div>
-                                        </div>
-                                    <?php } ?>
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon blue-bg">
-                                            <i class="fa fa-info fa-1x"></i>
-                                        </div>
-                                        <div class="vertical-timeline-content">
-                                            <strong class="text-left"><h5><?php echo $idioma->getText("informacoes") ?> </h5></strong>
-                                            <small><ul>
-                                                    <li class="m-t-xs" id="limiteInformacaoReal"></li>
-                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque5"); ?></li>
-                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque6"); ?></li>
-                                                    <li class="m-t-xs"><?php echo str_replace("{var}", $valorMinReais, $idioma->getText("saque1")) ?></li>
-                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque2") ?></li>
-                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque3") ?></li>
-                                                    <li class="m-t-xs"><?php echo $idioma->getText("paraBrasileiro") ?></li>
-                                                </ul></small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="infCurrency" hidden>
-                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon blue-bg">
-                                            <i class="fa fa-info fa-1x"></i>
-                                        </div>
-                                        <div class="vertical-timeline-content">
-                                            <strong class="text-left"><h5><?php echo $idioma->getText("informacoes") ?></h5></strong>
-                                            <small><ul>
-                                                    <li class="m-t-xs" id="limiteInformacaoCripto"></li>
-                                                    <li class="m-t-xs" id="useCarteira"></li>
-                                                    <li class="m-t-xs" id="taxasMoeda"></li>
-                                                </ul></small>
                                         </div>
                                     </div>
                                 </div>
@@ -548,18 +467,12 @@ if(!empty($cliente->moedaFavorita)){
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-
-    <div class="row">
-         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-             <div class="ibox">
-                 <div class="ibox-content box">
-                     <div class="row m-t-md p-md">
-                        <div id="tabelaReais" hidden="true">
-
-                                <div class="row">
+            <div class="card mtb15">
+                <div class="row">
+                    <div class="card-body">
+                        <div id="tabelaReais">
+                                <div class="">
                                     <div class="col-sm-3 ">
                                         <div class=" p-xs">
                                             <select class="form-control input-sm" id="filtroStatus">
@@ -573,10 +486,14 @@ if(!empty($cliente->moedaFavorita)){
                                     </div>
                                     <div class="col-sm-5 ">
                                         <div data-toggle="buttons" class="btn-group p-xs" id="radioDatas">
-                                            <label class="btn btn-sm btn-white" id="diaReal"> <input type="radio"  name="options" value="dia"><?php echo $idioma->getText("dia") ?></label>
+                                            <!-- <label class="btn btn-sm btn-white" id="diaReal"> <input type="radio"  name="options" value="dia"><?php echo $idioma->getText("dia") ?></label>
                                             <label class="btn btn-sm btn-white active" id="semanaReal"> <input type="radio"  name="options" value="semana"><?php echo $idioma->getText("semana") ?></label>
                                             <label class="btn btn-sm btn-white" id="mesReal"> <input type="radio"  name="options" value="mes"><?php echo $idioma->getText("mes") ?></label>
-                                            <label class="btn btn-sm btn-white" id="todosReal"> <input type="radio"  name="options" value="todos"><?php echo $idioma->getText("todos") ?></label>
+                                            <label class="btn btn-sm btn-white" id="todosReal"> <input type="radio"  name="options" value="todos"><?php echo $idioma->getText("todos") ?></label> -->
+                                            <button type="button" class="btn-white" onclick="filterBtn('dia');" id="diaBtc"><?php echo $idioma->getText("dia") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtn('semana');" id="semanaBtc"><?php echo $idioma->getText("semana") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtn('mes');" id="mesBtc"><?php echo $idioma->getText("mes") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtn('todos');" id="todosBtc"><?php echo $idioma->getText("todos") ?></button>
                                         </div>
                                     </div>
                                     <div class="col-sm-4 ">
@@ -637,23 +554,29 @@ if(!empty($cliente->moedaFavorita)){
                                 </div>
 
                         </div>
-                        <div id="tabelaMoeda" hidden="true">
-
+                        <div id="tabelaMoeda">
                                 <div class="row">
-                                    <div class="col-sm-5 pull-left">
+                                    <div class="col-sm-6 pull-left">
                                         <div data-toggle="buttons" class="btn-group p-xs" id="radioDatasBtc">
-                                            <label class="btn btn-sm btn-white" id="diaBtc"> <input type="radio" id="" name="optionsBtc" value="dia"><?php echo $idioma->getText("dia") ?></label>
+                                            <!-- <label class="btn btn-sm btn-white" id="diaBtc"> <input type="radio" id="" name="optionsBtc" value="dia"><?php echo $idioma->getText("dia") ?></label>
                                             <label class="btn btn-sm btn-white active" id="semanaBtc"> <input type="radio" id="" name="optionsBtc" value="semana"><?php echo $idioma->getText("semana") ?></label>
                                             <label class="btn btn-sm btn-white" id="mesBtc"> <input type="radio" id="" name="optionsBtc" value="mes"><?php echo $idioma->getText("mes") ?></label>
                                             <label class="btn btn-sm btn-white" id="todosBtc"> <input type="radio" id="" name="optionsBtc" value="todos"><?php echo $idioma->getText("todos") ?></label>
+                                            -->
+                                            <button type="button" class="btn-white" onclick="filterBtn('dia');" id="diaBtc"><?php echo $idioma->getText("dia") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtn('semana');" id="semanaBtc"><?php echo $idioma->getText("semana") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtn('mes');" id="mesBtc"><?php echo $idioma->getText("mes") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtn('todos');" id="todosBtc"><?php echo $idioma->getText("todos") ?></button>
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-offset-3 col-sm-4 pull-left">
+                                    <div class="col-sm-offset-6 col-sm-4 pull-rigth">
                                         <div class="input-group p-xs">
                                             <input type="text" id="filtroTextoBtc" placeholder="<?php echo $idioma->getText("pesquisar") ?>" class="input-sm form-control"><span class="input-group-btn">
-                                                        <button type="button" class="btn btn-sm btn-primary" onclick="filtrarBtcAux();">&nbsp;<i class="fa fa-search"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-default" onclick="limpaSearchBtc();">&nbsp;<i class="fa fa-eraser"></i></button></span>
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-sm btn-primary" onclick="filtrarBtcAux();">&nbsp;<i class="fa fa-search"></i></button>
+                                                <button type="button" class="btn btn-sm btn-default" onclick="limpaSearchBtc();">&nbsp;<i class="fa fa-eraser"></i></button></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -682,8 +605,7 @@ if(!empty($cliente->moedaFavorita)){
                                 </div>
 
                         </div>
-                        <div id="tabelaAtar" hidden="true">
-
+                        <div id="tabelaAtar">
                                 <div class="row">
                                     <div class="col-sm-5">
                                         <div data-toggle="buttons" class="btn-group p-xs" id="radioDatasAtar" >
@@ -742,19 +664,110 @@ if(!empty($cliente->moedaFavorita)){
                                 </div>
 
                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-    </div>
-
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <div class="col-md-12 col-lg-3">
+            <div class="card mtb15">
+                <div class="card-body">
+                    <div class="row m-t-md m-l-sm" id="infGerais">
+                        <div class="col-sm-12 m-b-lg">
+                            <div class="">
+                                <div class="list-indicados">
+                                    <div class="">
+                                        <div class="col-sm-12">
+                                            <div id="avisoFiat">
+                                            </div>
+                                            <div id="avisoCurrency">
+                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+                                                    <div class="vertical-timeline-block">
+                                                        <div class="vertical-timeline-icon yellow-bg">
+                                                            <i class="fa fa-exclamation-triangle fa-1x"></i>
+                                                        </div>
+                                                        <div class="vertical-timeline-content">
+                                                            <strong class="text-left"><h5><?php echo $idioma->getText("atencao") ?></h5></strong>
+                                                            <small>
+                                                                <ul>
+                                                                    <li class="m-t-xs"><?php echo $idioma->getText("irreversiveis") ?></li>
+                                                                    <li class="m-t-xs" id="aceitaRede"></li>
+                                                                </ul>
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
+                                            <div id="infFiat">
+                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+                                                    <?php if ($configuracao->atarAtivo == 1) { ?>
+                                                        <div class="vertical-timeline-block">
+                                                            <div class="vertical-timeline-icon blue-bg">
+                                                                <i class="fa fa-info fa-1x"></i>
+                                                            </div>
+                                                            <div class="vertical-timeline-content">
+                                                                <strong class="text-left"><h5><?php echo "ATAR PAY" ?> </h5></strong><!--informacoes-->
+                                                                <small><ul>
+                                                                        <li class="m-t-xs"><?php echo "Saques via Atar Pay são instantâneos e 24/7." ?></li>
+                                                                        <li class="m-t-xs"><?php echo "Baixe o app Atar Pay e crie sua conta grátis em apenas 2 minutos." ?></li>
+                                                                        <li class="m-t-xs"><a href="https://apps.apple.com/br/app/atar-pay/id1144625341" target="atar_pay"><?php echo "Link iOS" ?></a></li>
+                                                                        <li class="m-t-xs"><a href="https://play.google.com/store/apps/details?id=com.wearatar.atarpay&hl=en" target="atar_pay"><?php echo "Link Android" ?></a></li>
+                                                                        <li class="m-t-xs">Valor disponível para saque: <span id="atarSaldo">R$ 0,00</span></li>
+                                                                    </ul></small>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                                    <div class="vertical-timeline-block">
+                                                        <div class="vertical-timeline-icon blue-bg">
+                                                            <i class="fa fa-info fa-1x"></i>
+                                                        </div>
+                                                        <div class="vertical-timeline-content">
+                                                            <strong class="text-left"><h5><?php echo $idioma->getText("informacoes") ?> </h5></strong>
+                                                            <small><ul>
+                                                                    <li class="m-t-xs" id="limiteInformacaoReal"></li>
+                                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque5"); ?></li>
+                                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque6"); ?></li>
+                                                                    <li class="m-t-xs"><?php echo str_replace("{var}", $valorMinReais, $idioma->getText("saque1")) ?></li>
+                                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque2") ?></li>
+                                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque3") ?></li>
+                                                                    <li class="m-t-xs"><?php echo $idioma->getText("paraBrasileiro") ?></li>
+                                                                </ul></small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="infCurrency">
+                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+                                                    <div class="vertical-timeline-block">
+                                                        <div class="vertical-timeline-icon blue-bg">
+                                                            <i class="fa fa-info fa-1x"></i>
+                                                        </div>
+                                                        <div class="vertical-timeline-content">
+                                                            <strong class="text-left"><h5><?php echo $idioma->getText("informacoes") ?></h5></strong>
+                                                            <small><ul>
+                                                                    <li class="m-t-xs" id="limiteInformacaoCripto"></li>
+                                                                    <li class="m-t-xs" id="useCarteira"></li>
+                                                                    <li class="m-t-xs" id="taxasMoeda"></li>
+                                                                </ul></small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
     <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
-    <script>
+<script>
     var comissao = <?php echo number_format($comissao, 2, ".", "")?>;
     var dataReal = "";
     var dataAtar = "";
@@ -775,53 +788,53 @@ if(!empty($cliente->moedaFavorita)){
 
 
 
-        $("#selectCoins").select2({
-            data: <?php echo $jsonMoedas ?>,
-            templateSelection: formatState,
-            templateResult: formatState,
-            closeOnSelect: true
-        });
+    $("#selectCoins").select2({
+        data: <?php echo $jsonMoedas ?>,
+        templateSelection: formatState,
+        templateResult: formatState,
+        closeOnSelect: true
+    });
 
-        $("#selectCoins").on('select2:select', function (e) {
-            var data = e.params.data;
-            moeda = data.id;
-            rede = "";
-            $("#btnTransferir").prop("disabled", true);
+    $("#selectCoins").on('select2:select', function (e) {
+        var data = e.params.data;
+        moeda = data.id;
+        rede = "";
+        $("#btnTransferir").prop("disabled", true);
 
-            if(data.tag == "real"){
-                showCoin(data.op, data.tipo);
-                calcularValorSacado();
-                codeContaBancaria = data.id;
-                contaBancaria(data.id);
-            } else {
-                showCoin(data.id, data.tipo, data.rede);
-            }
-        });
-
-        function formatState (state) {
-            if (!state.id) {
-                return state.text;
-            }
-            var $state = $(
-                '<span><img src="' + state.icone + '" height="25" width="25" />&nbsp;&nbsp;<span></span></span>'
-            );
-
-            $state.find("span").text(state.text);
-            $state.find("img").attr("src", state.icone);
-
-
-            return $state;
+        if(data.tag == "real"){
+            showCoin(data.op, data.tipo);
+            calcularValorSacado();
+            codeContaBancaria = data.id;
+            contaBancaria(data.id);
+        } else {
+            showCoin(data.id, data.tipo, data.rede);
         }
+    });
+
+    function formatState (state) {
+        if (!state.id) {
+            return state.text;
+        }
+        var $state = $(
+            '<span><img src="' + state.icone + '" height="25" width="25" />&nbsp;&nbsp;<span></span></span>'
+        );
+
+        $state.find("span").text(state.text);
+        $state.find("img").attr("src", state.icone);
 
 
-        if (('<?php echo $moedaSelecionado ?>' != '') && ('<?php echo $moedaCategoria ?>' != '')){
+        return $state;
+    }
 
-            showCoin('<?php echo $moedaSelecionado ?>', '<?php echo $moedaCategoria ?>');
 
-            if('<?php echo $moedaCategoria ?>' == 'b'){
-                calcularValorSacado();
-                contaBancaria();
-            }
+    if (('<?php echo $moedaSelecionado ?>' != '') && ('<?php echo $moedaCategoria ?>' != '')){
+
+        showCoin('<?php echo $moedaSelecionado ?>', '<?php echo $moedaCategoria ?>');
+
+        if('<?php echo $moedaCategoria ?>' == 'b'){
+            calcularValorSacado();
+            contaBancaria();
+        }
         }
 
         $("#btnSalvar").prop("disabled", true);
@@ -834,27 +847,27 @@ if(!empty($cliente->moedaFavorita)){
         $('#tbllistaAtar').footable();
 
         $("#filtroStatus").change(function () {
-           filtrarReais();
+        filtrarReais();
         });
 
         $("#filtroStatusBtc").change(function () {
-           filtrarBtc();
+        filtrarBtc();
         });
 
         $("#filtroIdContaBancaria").change(function () {
-           filtrarReais();
+        filtrarReais();
         });
 
         $("#radioDatas input").on('change', function(){
             dataReal = $('input[name="options"]:checked', '#radioDatas').val();
             filtrarReais();
-       });
+    });
         $("#radioDatasBtc input").on('change', function(){
             dataCoin = $('input[name="optionsBtc"]:checked', '#radioDatasBtc').val();
             filtrarBtc();
-       });
-       
-       $("#optionsRede input").on('change', function(){
+    });
+    
+    $("#optionsRede input").on('change', function(){
             rede = $('input[name="optionRede"]:checked', '#optionsRede').val();
 
             $("#redeConfirmar").show();
@@ -868,19 +881,19 @@ if(!empty($cliente->moedaFavorita)){
             }
 
             taxas();
-       });
+    });
 
 
-       <?php if($configuracao->atarAtivo == 1){ ?>
+    <?php if($configuracao->atarAtivo == 1){ ?>
 
         atarSaldo();
         setInterval(atarSaldo, 10000);
 
         $("#radioDatasAtar input").on('change', function(){
-             dataAtar = $('input[name="optionsAtar"]:checked', '#radioDatasAtar').val();
-             filtrarAtar();
+            dataAtar = $('input[name="optionsAtar"]:checked', '#radioDatasAtar').val();
+            filtrarAtar();
         });
-       <?php }?>
+    <?php }?>
 
         new Clipboard("#btn-link-ref");
 
@@ -889,7 +902,7 @@ if(!empty($cliente->moedaFavorita)){
         $("#moeda, #filtroMoeda").select2();
         $(".mostrar").show();
 
-       $("#valorReais").keydown(function (event) {
+    $("#valorReais").keydown(function (event) {
             $(this).val(currency($(this).val(), 2, 8, event.keyCode));
             event.preventDefault();
             calcularValorSacado();
@@ -942,6 +955,12 @@ if(!empty($cliente->moedaFavorita)){
                 break;
         }
     }
+
+    function filterBtn(data) {
+            console.log(data);
+            dataCoin = data;
+            filtrarBtc();
+        }
 
     function updateSaldo(ativa){
         if(ativa){
@@ -1102,7 +1121,7 @@ if(!empty($cliente->moedaFavorita)){
                             $("#nomeCliente").html("Não encontrado.");
                         }
                     } else {
-                       $("#nomeCliente").html("Não encontrado.");
+                    $("#nomeCliente").html("Não encontrado.");
                     }
                 } catch (e) {
                     showNotyAlert(e, "e");
@@ -1179,10 +1198,10 @@ if(!empty($cliente->moedaFavorita)){
                         saldoDisponivel = json.saldoDisp;
                     }
                 } else {
-                     showNotyAlert(json.mensagem, "e");
+                    showNotyAlert(json.mensagem, "e");
                 }
             } catch (e) {
-                 showNotyAlert(json.mensagem, "e");
+                showNotyAlert(json.mensagem, "e");
             }
             }
         });
@@ -1231,9 +1250,9 @@ if(!empty($cliente->moedaFavorita)){
             var resultado = (valor - tarifaTransf);
 
         } else if(codeContaBancaria == 2){
-             var valor = ($("#valorReais").val().length > 0 ? parseFloat(toFloat($("#valorReais").val())) : 0);
-             var comissao = <?php echo number_format($configuracao->atarTaxaSaque, 2, ".", "") ?>;
-             var resultado = (valor - tarifaAtar - (valor * comissao / 100)) ;
+            var valor = ($("#valorReais").val().length > 0 ? parseFloat(toFloat($("#valorReais").val())) : 0);
+            var comissao = <?php echo number_format($configuracao->atarTaxaSaque, 2, ".", "") ?>;
+            var resultado = (valor - tarifaAtar - (valor * comissao / 100)) ;
 
         } else {
             var valor = ($("#valorReais").val().length > 0 ? parseFloat(toFloat($("#valorReais").val())) : 0);
@@ -1243,7 +1262,7 @@ if(!empty($cliente->moedaFavorita)){
 
         if (resultado < 0) {
             resultado = 0;
-             $("#btnSalvar").prop("disabled", true);
+            $("#btnSalvar").prop("disabled", true);
         } else {
             if(valor >= valorMinimo){
                 $("#btnSalvar").prop("disabled", false);
@@ -1450,8 +1469,8 @@ if(!empty($cliente->moedaFavorita)){
     }
 
     function boletoAux(){
-       boleto = true;
-       filtrarReais();
+    boleto = true;
+    filtrarReais();
     }
 
     function filtrarReais() {
@@ -1497,8 +1516,8 @@ if(!empty($cliente->moedaFavorita)){
     }
 
     function limparTransferir() {
-       $("#nomeCliente").html("");
-       $("#email").val("");
+    $("#nomeCliente").html("");
+    $("#email").val("");
     }
 
     function limparCampos(){
@@ -1698,7 +1717,7 @@ if(!empty($cliente->moedaFavorita)){
                             $("#pinBrl").val("");
                             $("#carregaTokenBrl").hide();
                             $("#infReais").show();
-                           // $("#idContaBancaria").children("option").first().prop("selected", true);
+                        // $("#idContaBancaria").children("option").first().prop("selected", true);
                             $("#valorReais").val("0,00").trigger("keyup");
                             limpaSearchReal();
                             showNotyAlert(json.mensagem, "s");
@@ -1770,16 +1789,16 @@ if(!empty($cliente->moedaFavorita)){
             success: function (json) {
                 try {
                     if (json.sucesso) {
-                       $("#comissaoCobradaBtc").html(json.taxa + " " + json.simboloTaxa);
-                       $("#debitadoBtc").html("0.00000000");
-                       $("#valor").val("");
-                       
-                       if(json.somar){
-                           simboloTaxa = null;
-                           taxaMoeda = json.taxa;
-                       } else {
-                           taxaMoeda = 0;
-                       }
+                    $("#comissaoCobradaBtc").html(json.taxa + " " + json.simboloTaxa);
+                    $("#debitadoBtc").html("0.00000000");
+                    $("#valor").val("");
+                    
+                    if(json.somar){
+                        simboloTaxa = null;
+                        taxaMoeda = json.taxa;
+                    } else {
+                        taxaMoeda = 0;
+                    }
                     } else {
                         showNotyAlert(json.mensagem, "e");
                     }
@@ -1793,7 +1812,7 @@ if(!empty($cliente->moedaFavorita)){
 
 
 
-    </script>
+</script>
     <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
     </body>
 </html>

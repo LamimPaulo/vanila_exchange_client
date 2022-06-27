@@ -36,10 +36,9 @@ $_data["idiomaMenu"] = $idioma;
     <?php if (\Utils\Geral::isCliente()) { ?>
     <div class="row">
         <div class="col col-xs-12">
-            
+
             <div class="tabs-container">
                 <ul class="nav nav-tabs">
-                      
                     <?php if ($configuracao->statusDepositoBrl > 0 && $mostrarAbaDepositoReais) { ?>
                     <li class="active"><a data-toggle="tab" href="#tab-2" data-target="#tab-2, #tab-3" aria-expanded="false">
                             <img src="<?php echo IMAGES?>currencies/BRL.png" style="max-width: 20px; height: 20px;" />
@@ -47,7 +46,7 @@ $_data["idiomaMenu"] = $idioma;
                         </a>
                     </li>
                     <?php } ?>
-                    
+
                     <?php if ($configuracao->statusDepositoCurrency > 0 && $moeda->statusDeposito > 0) { ?>
                     <li class=""><a data-toggle="tab" href="#tab-1" data-target="#tab-1, #tab-4" aria-expanded="true">
                             <img src="<?php echo IMAGES?>currencies/<?php echo $moeda->icone ?>" style="max-width: 20px; height: 20px;" />
@@ -56,16 +55,11 @@ $_data["idiomaMenu"] = $idioma;
                     </li>
                     <?php } ?>
                 </ul>
-                    
-              
                 <div class="tab-content">
-                    
-                    
                     <?php if ($configuracao->statusDepositoCurrency > 0 && $moeda->statusDeposito > 0) { ?>
                     <div id="tab-1" class="tab-pane <?php echo ($mostrarAbaDepositoReais ? "" : "active") ?>">
                         <div class="panel-body">
                             <div class="col col-lg-6 text-center">
-                                
                                 <?php if ($configuracao->statusCarteiras > 0) { ?>
                                 <h2 class="page-header" style="margin-top: 10px"><?php echo str_replace("{var}", $moeda->nome, $idioma->getText("carteira")) ?></h2>
                                 <?php if ($carteira != null) { ?>
@@ -76,7 +70,7 @@ $_data["idiomaMenu"] = $idioma;
                                 </span>
                                 <br>
                                 <button class="btn-link m-t-xs" id="btn-link-ref" data-clipboard-target="#btncopy">
-                                       <?php echo $idioma->getText("copiarEndereco1") ?>
+                                    <?php echo $idioma->getText("copiarEndereco1") ?>
                                 </button>
                                 <?php } else { ?>
                                 <div class="alert alert-info">
@@ -110,7 +104,7 @@ $_data["idiomaMenu"] = $idioma;
                         </div>
                     </div>
                     <?php } ?>
-                    
+
                     <?php if ($configuracao->statusDepositoBrl > 0 && $mostrarAbaDepositoReais) { ?>
                     <div id="tab-2" class="tab-pane active">
                         <div class="panel-body">
@@ -296,11 +290,11 @@ $_data["idiomaMenu"] = $idioma;
                     </div>
                     <?php } ?>
                 </div>
-                
+
             </div>
         </div>
     </div>
-    <?php } // final if cliente?>    
+    <?php } // final if cliente?>
     <br>
 
 </section>
@@ -309,7 +303,6 @@ $_data["idiomaMenu"] = $idioma;
     <div class="row">
         <div class="col col-lg-12">
             <div class="tabs-container">
-                                 
                 <?php if (\Utils\Geral::isUsuario()) { ?>
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#tab-3" data-target="#tab-3" aria-expanded="false">
