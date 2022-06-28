@@ -236,19 +236,19 @@ class Extrato {
                     </div>
                     <div class="col-sm-3">
                         <small class="stats-label">Descrição</small>
-                        <h4><?php echo $extrato->descricao; ?></h4>
+                        <h6><?php echo $extrato->descricao; ?></h6>
                     </div>
                     <div class="col-sm-3">
                         <small class="stats-label">Data</small>
-                        <h4><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h4>
+                        <h6><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h6>
                     </div>
                     <div class="col-sm-2">
                         <small class="stats-label">Valor</small>
-                        <h4 style="<?php echo $color ?>"><strong><?php echo $sinal . " R$ " . number_format($extrato->valor, 2, ",", "."); ?></strong></h4>
+                        <h6 style="<?php echo $color ?>"><strong><?php echo $sinal . " R$ " . number_format($extrato->valor, 2, ",", "."); ?></strong></h6>
                     </div> 
                     <div class="col-sm-2">
                         <small class="stats-label">Saldo</small>
-                        <h4><strong><?php echo "R$ " . number_format($extrato->saldo, 2, ",", "."); ?></strong></h4>
+                        <h6><strong><?php echo "R$ " . number_format($extrato->saldo, 2, ",", "."); ?></strong></h6>
                     </div> 
                 </div>
             </div>
@@ -272,19 +272,19 @@ class Extrato {
                     </div>
                     <div class="col-sm-3">
                         <small class="stats-label">Descrição</small>
-                        <h5><?php echo $descricao; ?></h5>
+                        <h6><?php echo $descricao; ?></h6>
                     </div>
                     <div class="col-sm-3">
                         <small class="stats-label">Data</small>
-                        <h5><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h5>
+                        <h6><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h6>
                     </div>
                     <div class="col-sm-2">
                         <small class="stats-label">Quantidade</small>
-                        <h5 style="<?php echo $color ?>"><strong><?php echo $sinal . " {$extrato->moeda->simbolo} " . number_format($extrato->valor, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h5>
+                        <h6 style="<?php echo $color ?>"><strong><?php echo $sinal . " {$extrato->moeda->simbolo} " . number_format($extrato->valor, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h6>
                     </div>  
                     <div class="col-sm-2">
                         <small class="stats-label">Saldo</small>
-                        <h5><strong><?php echo $extrato->moeda->simbolo . " ". number_format($extrato->saldo, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h5>
+                        <h6><strong><?php echo $extrato->moeda->simbolo . " ". number_format($extrato->saldo, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h6>
                     </div>
                 </div>
             </div>

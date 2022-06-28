@@ -17,6 +17,7 @@ $comissao = isset($_data["comissao"]) ? $_data["comissao"] : new \Models\Modules
 $bancos = isset($_data["todosOsBancos"]) ? $_data["todosOsBancos"] : array();
 $clienteVerificado = isset($_data["clienteVerificado"]) ? $_data["clienteVerificado"] : null;
 $brand = \Models\Modules\Cadastro\BrandRn::getBrand();
+$idioma2 = new \Utils\PropertiesUtils("menu", IDIOMA);
 
 
 $nome = $cliente->nome;
@@ -392,6 +393,16 @@ $_data["idiomaMenu"] = $idioma;
           <div class="tab-content" id="v-pills-tabContent">
 
             <div class="tab-pane fade show active" id="settings-main" role="tabpanel" aria-labelledby="settings-main-tab">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title"><?php echo $idioma2->getText("idioma") ?></h5>
+                    <button class="btn btn-sm btn-primary" onclick="javascript:trocarIdioma('pt-BR');"> Português </button>
+                    <button class="btn btn-sm btn-primary" onclick="javascript:trocarIdioma('en-US');"> English </button>
+                    <button class="btn btn-sm btn-primary" onclick="javascript:trocarIdioma('es-ES');"> Español </button>
+                </div>
+
+              </div>
+
                 <div class="card">
                   <div class="card-body">
                     <h5 class="card-title">Notifications</h5>
