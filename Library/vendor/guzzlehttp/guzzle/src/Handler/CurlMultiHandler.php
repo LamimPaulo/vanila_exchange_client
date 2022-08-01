@@ -43,7 +43,7 @@ class CurlMultiHandler
 
         if (isset($options['select_timeout'])) {
             $this->selectTimeout = $options['select_timeout'];
-        } elseif ($selectTimeout = getenv('GUZZLE_CURL_SELECT_TIMEOUT')) {
+        } elseif ($selectTimeout = $_ENV['GUZZLE_CURL_SELECT_TIMEOUT']) {
             $this->selectTimeout = $selectTimeout;
         } else {
             $this->selectTimeout = 1;

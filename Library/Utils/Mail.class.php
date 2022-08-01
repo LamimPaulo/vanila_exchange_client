@@ -146,7 +146,7 @@ class Mail {
             $mail->Port = $configuracao->emailPorta;
             $mail->Username = $configuracao->emailUsuario; // UsuÃ¡rio do servidor SMTP
             $mail->SMTPSecure = "tls";
-            $mail->Password = getenv("EnvPassEmail"); // Senha do servidor SMTP
+            $mail->Password = $_ENV["EnvPassEmail"]; // Senha do servidor SMTP
 
             // Define o remetente
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

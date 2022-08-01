@@ -244,15 +244,15 @@ class Client implements ClientInterface
         // We can only trust the HTTP_PROXY environment variable in a CLI
         // process due to the fact that PHP has no reliable mechanism to
         // get environment variables that start with "HTTP_".
-        if (php_sapi_name() === 'cli' && getenv('HTTP_PROXY')) {
-            $defaults['proxy']['http'] = getenv('HTTP_PROXY');
+        if (php_sapi_name() === 'cli' && $_ENV['HTTP_PROXY']) {
+            $defaults['proxy']['http'] = $_ENV['HTTP_PROXY'];
         }
 
-        if ($proxy = getenv('HTTPS_PROXY')) {
+        if ($proxy = $_ENV['HTTPS_PROXY']) {
             $defaults['proxy']['https'] = $proxy;
         }
 
-        if ($noProxy = getenv('NO_PROXY')) {
+        if ($noProxy = $_ENV['NO_PROXY']) {
             $cleanedNoProxy = str_replace(' ', '', $noProxy);
             $defaults['proxy']['no'] = explode(',', $cleanedNoProxy);
         }

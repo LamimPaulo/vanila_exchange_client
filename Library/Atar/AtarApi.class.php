@@ -8,15 +8,15 @@ class AtarApi {
     protected $user;
     protected $password;
     protected $credenciais;
-    
+
     public function __construct() {
-        $this->user = getenv("EnvAtarUser");
-        $this->password = getenv("EnvAtarPassword");
+        $this->user = $_ENV["EnvAtarUser"];
+        $this->password = $_ENV["EnvAtarPassword"];
         
         if(AMBIENTE == "producao"){
-            $this->host = getenv("EnvAtarUrlProd");
+            $this->host = $_ENV["EnvAtarUrlProd"];
         } else {
-            $this->host = getenv("EnvAtarUrlDev");
+            $this->host = $_ENV["EnvAtarUrlDev"];
         }
         
         

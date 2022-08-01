@@ -1,21 +1,24 @@
 <?php
 ob_start();
-
 require_once __DIR__ . '/Library/vendor/autoload.php';
 require_once __DIR__ . '/Library/autoload_classmap.php';
+require_once 'vendor/autoload.php';
 
 
 use Utils\Session;
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 //Definição do ambiente de execução do sistema
-$ambiente = getenv('AMBIENTE');
-$empresa = getenv('EMPRESA');
-$titulo = getenv('TITULO');
-$grafico = getenv('GRAFICO');
-$erro = getenv('ERRO');
-$urlBase = getenv("EnvUrlProd");
-$bdBook = getenv("EnvBdUrlBookName");
-$bdGrafico = getenv("EnvBdUrlGraficoName");
+
+$ambiente = $_ENV['AMBIENTE'];
+$empresa = $_ENV['EMPRESA'];
+$titulo = $_ENV['TITULO'];
+$grafico = $_ENV['GRAFICO'];
+$erro = $_ENV['ERRO'];
+$urlBase = $_ENV["EnvUrlProd"];
+$bdBook = $_ENV["EnvBdUrlBookName"];
+$bdGrafico = $_ENV["EnvBdUrlGraficoName"];
 
 define("AMBIENTE", $ambiente);
 define("EMPRESA", $empresa);

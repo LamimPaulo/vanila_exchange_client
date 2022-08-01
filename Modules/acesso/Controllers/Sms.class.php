@@ -1,23 +1,20 @@
 <?php
-
 namespace Modules\acesso\Controllers;
-
 class Sms {
-    
     private $idioma = null;
     public function __construct($params) {
         $this->idioma = new \Utils\PropertiesUtils("login", IDIOMA);
-        
-       if (!\Utils\Geral::isLogado()) {
+
+    if (!\Utils\Geral::isLogado()) {
             \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
-        } 
-        
+        }
+
         if (\Utils\Geral::isAutenticado()) {
             \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
         }
-        
+
     }
-    
+
     public function auth($params) {
         
         try {
@@ -38,9 +35,7 @@ class Sms {
         
         \Utils\Layout::view("two_factor_auth", $params);
     }
-    
-    
-    
+
     public function reenviar($params) {
         try {
             
@@ -69,8 +64,7 @@ class Sms {
         }
         print json_encode($json);
     }
-    
-    
+
     public function validate($params) {
         try {
             

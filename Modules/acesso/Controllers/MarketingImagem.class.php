@@ -3,47 +3,39 @@
 namespace Modules\acesso\Controllers;
 
 class MarketingImagem {
-    
+
     private $idioma = null;
-    
+
     public function __construct($params) {
-        
         $this->idioma = new \Utils\PropertiesUtils("docs_aceitacao", IDIOMA);
         if (!\Utils\Geral::isLogado()) {
             \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
         }
-        
+
         if (!\Utils\Geral::isAutenticado()) {
             \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_TWOFACTORAUTH);
         }
-        
     }
-    
-    
-    
+
     public function index($params) {
-        
+
         $id = \Utils\Get::get($params, 0, null);
-        
         $params["code"] = $id;
-        
         \Utils\Layout::view("marketing_imagem", $params);
     }
-    
-    
+
     public function listarCliente($params) {
-        
         try {
             $id = \Utils\Post::getEncrypted($params, "code", null);
             $marketingImagemRn = new \Models\Modules\Cadastro\MarketingImagemRn();
-       
+
             $imagemMoeda = "";
             $ativa = false;
-           
+
             if(!empty($id)){
                 $marketingImagem = new \Models\Modules\Cadastro\MarketingImagem(Array("id" => $id));
                 $marketingImagemRn->conexao->carregar($marketingImagem);
-                
+
                 if(!empty($marketingImagem)){
                     $ativa = true;
                     $id = $marketingImagem->id;

@@ -19,7 +19,6 @@ $clienteVerificado = isset($_data["clienteVerificado"]) ? $_data["clienteVerific
 $brand = \Models\Modules\Cadastro\BrandRn::getBrand();
 $idioma2 = new \Utils\PropertiesUtils("menu", IDIOMA);
 
-
 $nome = $cliente->nome;
 $email = $cliente->email;
 $celular = $cliente->celular;
@@ -360,7 +359,7 @@ $_data["idiomaMenu"] = $idioma;
             <a class="nav-link active" id="settings-main-tab" data-toggle="pill" href="#settings-main" role="tab"
               aria-controls="settings-main" aria-selected="false"><i class="icon ion-md-bulb"></i> Meu Perfil</a>
 
-            <a class="nav-link" id="settings-documentos-tab" data-toggle="pill" href="#settings-documentos" role="tab"
+            <a class="nav-link" onclick="getDocStats()" id="settings-documentos-tab" data-toggle="pill" href="#settings-documentos" role="tab"
             aria-controls="settings-documentos" aria-selected="false"><i class="icon ion-md-person"></i> <?php echo $idioma->getText("documentos") ?></a>
 
             <a class="nav-link" id="settings-preferences-tab" data-toggle="pill" href="#settings-preferences" role="tab"
@@ -400,7 +399,6 @@ $_data["idiomaMenu"] = $idioma;
                     <button class="btn btn-sm btn-primary" onclick="javascript:trocarIdioma('en-US');"> English </button>
                     <button class="btn btn-sm btn-primary" onclick="javascript:trocarIdioma('es-ES');"> Español </button>
                 </div>
-
               </div>
 
                 <div class="card">
@@ -415,8 +413,7 @@ $_data["idiomaMenu"] = $idioma;
                           </span>
                               <span class="text-right pull-right" style="padding:5px !important;">
 
-                              <button id="btn_kycStart" class="btn btn-link" type="button" id="btn-salvar"
-                                      onclick="kycStart()">
+                              <button id="btn_kycStart" class="btn btn-link" type="button" id="btn-salvar">
                                   <?php
                                   if ($cliente->documentoVerificado == 0 || $cliente->documentoVerificado == null) {
                                       echo '<div class="badge-danger" style="padding:10px;border-radius:20px;"><i class="fa fa-shield fa-1x" aria-hidden="true"></i>&nbsp;Conta não verificada</div>';
@@ -441,12 +438,12 @@ $_data["idiomaMenu"] = $idioma;
                             </p>
                             <!-- <p> </p> -->
                               <?php if ($cliente->documentoVerificado == 1) { ?>
-                                <li class="timeline-item">
-                                  <div class="timeline-badge check-success" style="padding-top:10px;"><i
-                                              class="fa fa-check"></i></div>
+                                <!-- <li class="timeline-item"> -->
+                                  <!-- <div class="timeline-badge check-success" style="padding-top:10px;"><i
+                                              class="fa fa-check"></i></div> -->
                                   <div class="timeline-panel">
                                     <div class="timeline-heading">
-                                      <h4 class="timeline-title">Conta nível I</h4>
+                                      <h6 class="timeline-title">Conta nível I</h6>
                                     </div>
                                       <div class="timeline-body">
                                           <p>
@@ -467,7 +464,7 @@ $_data["idiomaMenu"] = $idioma;
                                 if ($cliente->documentoVerificado == 0) {
                                     $kyc_status_button = '';
                                     echo '<i class="fa fa-info-circle  fa-1x " aria-hidden="true"></i>&nbsp;Insira seus dados na aba Documentos</br><i class="fa fa-check-circle-o fa-1x " aria-hidden="true"></i>&nbsp;Documentos pessoais<br/><i class="fa fa-check-circle-o  fa-1x " aria-hidden="true"></i>&nbsp;Selfie<br/>';
-                                    echo '<br/><button id="btn_kycStartBtn" class="btn btn-primary m-b-xs"  type="button" id="btn-salvar" onclick="kycStart()">' . $idioma->getText($kyc_status_name) . '</button>  ';
+                                    // echo '<br/><button id="btn_kycStartBtn" class="btn btn-primary m-b-xs"  type="button" id="btn-salvar" onclick="kycStart()">' . $idioma->getText($kyc_status_name) . '</button>  ';
                                 } else if ($cliente->documentoVerificado == 3) {
                                     $kyc_status_name = 'verificarContaPendente';
                                     echo '<i class="fa fa-check-circle-o fa-1x text-danger" aria-hidden="true"></i>&nbsp;Documentos pessoais<br/><i class="fa fa-check-circle-o  fa-1x text-danger" aria-hidden="true"></i>&nbsp;Selfie<br/>';
@@ -555,23 +552,22 @@ $_data["idiomaMenu"] = $idioma;
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title"><?php echo $idioma->getText("dadosPessoais2") ?></h5>
-
                   <div class="settings-profile">
                     <form id="form-perfil"
                       action="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MEUSDADOS_SALVAR?>"
                       method="POST" enctype="multipart/form-data" autocomplete="off">
                       <div class="form-row mt-4">
 
-                      <div class="col-md-6">
-                        <div class="form-group <?php echo(empty($nome) ? "has-error" : "") ?>">
-                          <label for="nome"><?php echo $idioma->getText("nome") ?> *</label>
-                          <input class="form-control " <?php echo $configuracao->kyc == 0 ? "" : "disabled" ?>  <?php echo $cliente->documentoVerificado == 0 ? "" : "disabled" ?>
-                            id="nome"
-                            placeholder="<?php echo $idioma->getText("digiteNomeCompleto") ?>"
-                            name="nome" maxlength="200"
-                            value="<?php echo $nome ?>"/>
-                          </div>
-                      </div>
+                        <div class="col-md-6">
+                          <div class="form-group <?php echo(empty($nome) ? "has-error" : "") ?>">
+                            <label for="nome"><?php echo $idioma->getText("nome") ?> *</label>
+                            <input class="form-control " <?php echo $configuracao->kyc == 0 ? "" : "disabled" ?>  <?php echo $cliente->documentoVerificado == 0 ? "" : "disabled" ?>
+                              id="nome"
+                              placeholder="<?php echo $idioma->getText("digiteNomeCompleto") ?>"
+                              name="nome" maxlength="200"
+                              value="<?php echo $nome ?>"/>
+                            </div>
+                        </div>
 
                         <div class="col-md-6">
                           <div class="form-group <?php echo(empty($email) ? "has-error" : "") ?>">
@@ -620,22 +616,26 @@ $_data["idiomaMenu"] = $idioma;
                           </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md- 6">
                           <div class="form-group <?php echo(empty($celular) ? "has-error" : "") ?>">
                             <label for="ddi">DDI</label>
                             <select class="custom-select custom-sl"
                                     name="ddi"
-                                    id="ddi" <?php //echo $cliente->documentoVerificado == 0 ? "" : " disabled " ?>>
+                                    id="ddi" <?php echo $cliente->documentoVerificado == 0 ? "" : " disabled " ?>>
                                 <?php foreach ($paises as $pais) {
                                     if (!empty($pais->ddi)) { ?>
-                                        <option value="<?php echo $pais->ddi ?>" <?php echo(empty($cliente->ddi) && $pais->id == Utils\Constantes::BRASIL ? "selected='true'" : !empty($cliente->ddi) && $cliente->ddi == $pais->ddi ? "selected='true'" : "") ?> ><?php echo $pais->nome . " - " . $pais->ddi ?></option>
+                                        <option value="<?php echo $pais->ddi ?>" <?php echo(empty($cliente->ddi) && $pais->id == Utils\Constantes::BRASIL
+                                          ? "selected='true'" 
+                                          : (!empty($cliente->ddi) && $cliente->ddi == $pais->ddi
+                                          ? "selected='true'" 
+                                          : "")) ?> ><?php echo $pais->nome . " - " . $pais->ddi ?></option>
                                     <?php }
                                 } ?>
                             </select>
                           </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                           <div class="form-group <?php echo(empty($celular) ? "has-error" : "") ?>">
                             <label for="celular"><?php echo "DDD + " . $idioma->getText("celular") ?></label>
                             <input class="form-control full-width" id="celular"
@@ -644,7 +644,7 @@ $_data["idiomaMenu"] = $idioma;
                           </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-6">
                           <!-- <div class="form-group <?php echo(!($cpf > 0) ? "has-error" : "") ?>"> -->
                             <label for="documentoTipo"><?php echo $idioma->getText("tipoDocumentoTitulo") ?></label>
                             <select style="width: 100%" class="custom-select" name="documentoTipo"
@@ -653,7 +653,7 @@ $_data["idiomaMenu"] = $idioma;
                             </select>
                           <!-- </div> -->
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                           <!-- <div class="form-group <?php echo(!($cpf > 0) ? "has-error" : "") ?>"> -->
                             <label for="cpf"><?php echo $idioma->getText("documento") ?></label>
                             <input class="form-control" <?php echo $cliente->documentoVerificado == 0 ? "" : " disabled " ?>
@@ -667,6 +667,78 @@ $_data["idiomaMenu"] = $idioma;
                         </div>
                       </div>
                     </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Documentos</h5>
+                  <div class="settings-profile">
+
+                    <form id="form-documentos"
+                      action="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_KYC_ENVIAR_DOCS?>"
+                      method="POST" enctype="multipart/form-data" autocomplete="off"
+                    >
+                      <div class="form-row mt-4">
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <!-- <div class="custom-file "> -->
+                              <input type="file" class="custom-file-input" name="frente" id="frente">
+                              <label class="custom-file-label" for="doc_front">CNH/RG Frente</label>
+                            <!-- </div> -->
+                          </div>
+                        </div>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        <div class="col-md-5">
+                          <div class="form-group" id="st-frente">
+                            <!-- status -->
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <!-- <div class="custom-file"> -->
+                              <input type="file" class="custom-file-input" name="verso" id="verso">
+                              <label class="custom-file-label" for="doc_back">CNH/RG Verso</label>
+                            <!-- </div> -->
+                          </div>
+                        </div>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        <div class="col-md-5">
+                          <div class="form-group" id="st-verso">
+                            status
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <!-- <div class="custom-file"> -->
+                              <input type="file" class="custom-file-input" name="selfie" id="selfie">
+                              <label class="custom-file-label" for="doc_selfie">Selfie com Documento</label>
+                            <!-- </div> -->
+                          </div>
+                        </div>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                        <div class="col-md-5">
+                          <div class="form-group" id="st-selfie">
+                            status
+                          </div>
+                        </div>
+
+                        <div class="col-md-12">
+                          <input type="submit" value="Enviar" id="btn-salvar-docs">
+                        </div>
+                      </div>
+                    </form>
+
                   </div>
                 </div>
               </div>
@@ -2610,6 +2682,29 @@ $_data["idiomaMenu"] = $idioma;
     var inicial = 0;
     var pareamento = true;
 
+
+    function getDocStats() {
+        $.ajax({
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_KYC_DOCS_STATS ?>",
+            method: "post",
+            dataType: "json",
+            data: {},
+            success: function (json) {
+                try {
+                    if (json.status == 'success') {
+                        $("#st-frente").html(json.data.Frente.message);
+                        $("#st-verso").html(json.data.Verso.message);
+                        $("#st-selfie").html(json.data.Selfie.message);
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+            }
+        });
+    }
+
     function getAuthSecret() {
         $.ajax({
             url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_MEUSDADOS_GOOGLEAUTH_GETSECRET ?>",
@@ -2633,6 +2728,7 @@ $_data["idiomaMenu"] = $idioma;
     }
 
     $(document).ready(function () {
+        getDocStats();
 
         $('.i-checks').iCheck({
             checkboxClass: 'icheckbox_square-green',
@@ -2659,8 +2755,6 @@ $_data["idiomaMenu"] = $idioma;
 
             });
         });
-
-
 
         new Clipboard('#copyRef');
 
@@ -2803,6 +2897,26 @@ $_data["idiomaMenu"] = $idioma;
                     showNotyAlert(e, "e");
                 }
                 $("#btn-salvar").prop("disabled", false);
+            }
+        });
+
+        $("#form-documentos").ajaxForm({ 
+            dataType: "json",
+            beforeSubmit: function () {
+                $("btn-salvar-docs").prop("disabled", true);
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        showNotyAlert(json.mensagem, "s");
+                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_MEUSDADOS ?>";
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("btn-salvar-docs").prop("disabled", false);
             }
         });
 

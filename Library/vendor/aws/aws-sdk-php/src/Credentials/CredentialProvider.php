@@ -766,13 +766,13 @@ class CredentialProvider
     private static function getHomeDir()
     {
         // On Linux/Unix-like systems, use the HOME environment variable
-        if ($homeDir = getenv('HOME')) {
+        if ($homeDir = $_ENV['HOME']) {
             return $homeDir;
         }
 
         // Get the HOMEDRIVE and HOMEPATH values for Windows hosts
-        $homeDrive = getenv('HOMEDRIVE');
-        $homePath = getenv('HOMEPATH');
+        $homeDrive = $_ENV['HOMEDRIVE'];
+        $homePath = $_ENV['HOMEPATH'];
 
         return ($homeDrive && $homePath) ? $homeDrive . $homePath : null;
     }
@@ -786,7 +786,7 @@ class CredentialProvider
 
         // If loading .aws/credentials, also load .aws/config when AWS_SDK_LOAD_NONDEFAULT_CONFIG is set
         if ($filename === self::getHomeDir() . '/.aws/credentials'
-            && getenv('AWS_SDK_LOAD_NONDEFAULT_CONFIG')
+            && $_ENV('AWS_SDK_LOAD_NONDEFAULT_CONFIG')
         ) {
             $configFilename = self::getHomeDir() . '/.aws/config';
             $configProfileData = \Aws\parse_ini_file($configFilename, true, INI_SCANNER_RAW);

@@ -32,14 +32,14 @@ class BancoDados extends Adapter {
      */
     function __construct($bd = null) {
 
-        $this->timezone = getenv("EnvTimeZone");
-        $this->url = getenv("EnvBdUrl");
-        $this->user = getenv("EnvBdUser");
-        $this->pass = getenv("EnvBdPass");
-        $this->name = getenv("EnvBdName");
+        $this->timezone = $_ENV["EnvTimeZone"];
+        $this->url = $_ENV["EnvBdUrl"];
+        $this->user = $_ENV["EnvBdUser"];
+        $this->pass = $_ENV["EnvBdPass"];
+        $this->name = $_ENV["EnvBdName"];
 
-        $urlBdBook = getenv("EnvBdUrlBook");
-        $urlBdGrafico = getenv("EnvBdUrlGrafico");
+        $urlBdBook = $_ENV["EnvBdUrlBook"];
+        $urlBdGrafico = $_ENV["EnvBdUrlGrafico"];
 
         $pdoParams = array(
             \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true

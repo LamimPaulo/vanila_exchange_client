@@ -581,7 +581,9 @@ public static $rotas = Array(
         "meudados/cnpj/salvar"                              => Array("url" => "perfil/meusDados/salvarCnpj",                               "modulo" => "perfil",                       "rotina" => "meusdados" ),
         "meudados/cnpj/mostrar"                              => Array("url" => "perfil/meusDados/mostrarCnpj",                               "modulo" => "perfil",                       "rotina" => "meusdados" ),
         "meudados/kyc/start"                              => Array("url" => "perfil/meusDados/kycStart",                               "modulo" => "perfil",                       "rotina" => "meusdados" ),
+        "meudados/kyc/doc_send"                              => Array("url" => "perfil/meusDados/sendDocument",                               "modulo" => "perfil",                       "rotina" => "meusdados" ),
         "meudados/kyc/smsresend"                            => Array("url" => "perfil/meusDados/kycSmsResend",                               "modulo" => "perfil",                       "rotina" => "meusdados" ),
+        "meudados/kyc/docstats"                            => Array("url" => "perfil/meusDados/docStats",                               "modulo" => "perfil",                       "rotina" => "meusdados" ),
 
         // DASHBOARD
         "dashboard/referencias/vendedor"                    => Array("url" => "principal/dashboard/carregarValorMensalPorVendedor" ,        "modulo" => "principal",                       "rotina" => "dashboard" ),
@@ -873,6 +875,7 @@ public static $rotas = Array(
     const R_DASHBOARD_SALDOS_CLIENTES = "dashboard/saldos/clientes";
     const R_DASHBOARD_SALDOS_EMPRESA = "dashboard/saldos/empresa";
     const R_MEUSDADOS = "myprofile";
+    const R_ENVIAR_DOCS = "myprofile";
     const R_CARTEIRAS = "deposit";
     const R_INVESTIMENTO = "investimento";
     const R_INDICACOES = "indicacoes";
@@ -1156,7 +1159,9 @@ public static $rotas = Array(
     const R_MEUSDADOS_LIMITES = "meusdados/limites";
     const R_MEUSDADOS_TAXAS = "api/trade/fees";
     const R_KYC_START = "meudados/kyc/start";
+    const R_KYC_ENVIAR_DOCS = "meudados/kyc/doc_send";
     const R_KYC_SMS_RESEND = "meudados/kyc/smsresend";
+    const R_KYC_DOCS_STATS = "meudados/kyc/docstats";
     
     
     const R_DASHBOARD_REFERENCIAS_VENDEDOR = "dashboard/referencias/vendedor";

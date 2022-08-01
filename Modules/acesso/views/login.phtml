@@ -76,7 +76,7 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
             </div>
             <br>
             <div style="text-align: center;">
-                <div  id="google" name="google" atrpage="login" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo getenv('GoogleSite'); ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
+                <div  id="google" name="google" atrpage="login" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo $_ENV["GoogleSite"]; ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
             </div>
             <button id="acessar-painel" disabled="disabled" style="background-color: #2351ff; border-color: #2351ff; color:black;" type="submit" class="btn btn-primary block full-width m-b" ><?php echo $lang['modal3']; ?></button>
     </form>

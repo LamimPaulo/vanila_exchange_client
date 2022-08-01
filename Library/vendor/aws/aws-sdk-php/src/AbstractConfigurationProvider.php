@@ -86,13 +86,13 @@ abstract class AbstractConfigurationProvider
     protected static function getHomeDir()
     {
         // On Linux/Unix-like systems, use the HOME environment variable
-        if ($homeDir = getenv('HOME')) {
+        if ($homeDir = $_ENV['HOME']) {
             return $homeDir;
         }
 
         // Get the HOMEDRIVE and HOMEPATH values for Windows hosts
-        $homeDrive = getenv('HOMEDRIVE');
-        $homePath = getenv('HOMEPATH');
+        $homeDrive = $_ENV['HOMEDRIVE'];
+        $homePath = $_ENV['HOMEPATH'];
 
         return ($homeDrive && $homePath) ? $homeDrive . $homePath : null;
     }
@@ -105,7 +105,7 @@ abstract class AbstractConfigurationProvider
      */
     protected static function getDefaultConfigFilename()
     {
-        if ($filename = getenv(self::ENV_CONFIG_FILE)) {
+        if ($filename = $_ENV[self::ENV_CONFIG_FILE]) {
             return $filename;
         }
         return self::getHomeDir() . '/.aws/config';

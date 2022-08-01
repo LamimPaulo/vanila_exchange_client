@@ -10,11 +10,11 @@ require_once getcwd() . '/Library/Models/Modules/Cadastro/CidadeRn.class.php';*/
 
 require_once getcwd() . '/Library/Models/Modules/Cadastro/ConsultaCnpj.class.php';
 require_once getcwd() . '/Library/Models/Modules/Cadastro/ConsultaCnpjRn.class.php';
-
 require_once getcwd() . '/Library/Documento/IWebService.class.php';
 
-
+use Error;
 use Utils\Data;
+use GuzzleHttp\Client;
 
 class MeusDados
 {
@@ -2126,7 +2126,6 @@ class MeusDados
 
     public function kycStart()
     {
-
         try {
             $clienteGet = \Utils\Geral::getCliente();
             $clienteGet = new \Models\Modules\Cadastro\Cliente(Array("id" => $clienteGet->id));
@@ -2136,14 +2135,12 @@ class MeusDados
             if ($clienteGet->tipoAutenticacao != \Utils\Constantes::TIPO_AUTH_GOOGLE) {
                 throw new \Exception("Por favor, altere a segurança da sua conta para 2FA Authenticator.");
             }
-            
             if (!empty($clienteGet->kycUpdateData)) {
                 $dataAtual = new \Utils\Data(date("Y-m-d H:i:s"));
 
                 $diferenca = $dataAtual->diferenca($clienteGet->kycUpdateData);
 
                 if ($diferenca->y <= 0 && $diferenca->m <= 0 && $diferenca->d < 7) {
-                    
                     $diferenca->d = ($diferenca->d - 7)  * -1;
 
                     $stringData = " {$diferenca->d} dia(s), {$diferenca->h} hora(s) e {$diferenca->i} minuto(s)";
@@ -2184,28 +2181,28 @@ class MeusDados
             $queueName = 'kycstart_prod';
 
 
-            $params = [
-                'comando' => 'user.kycstage1',
-                'id_cliente' => $clienteGet->id,
-                'parametros' => [
-                    'nome' => $clienteGet->documento,
-                    'email' => $clienteGet->email,
-                    'telefone' => $clienteGet->celular,
-                    'cpf' => $clienteGet->documento
-                ]
-            ];
+            // $params = [
+            //     'comando' => 'user.kycstage1',
+            //     'id_cliente' => $clienteGet->id,
+            //     'parametros' => [
+            //         'nome' => $clienteGet->documento,
+            //         'email' => $clienteGet->email,
+            //         'telefone' => $clienteGet->celular,
+            //         'cpf' => $clienteGet->documento
+            //     ]
+            // ];
 
-            $result = \LambdaAWS\QueueKYC::sendQueue($queueName, false, $params);
+            // $result = \LambdaAWS\QueueKYC::sendQueue($queueName, false, $params);
 
 
-            if (!$result) {
+            // if (!$result) {
 
-                return print json_encode([
-                    'sucesso' => false,
-                    'msg' => 'Falha ao processar envio de KYC',
-                    'msgType' => 'e'
-                ]);
-            }
+            //     return print json_encode([
+            //         'sucesso' => false,
+            //         'msg' => 'Falha ao processar envio de KYC',
+            //         'msgType' => 'e'
+            //     ]);
+            // }
 
             $json['mensagem'] = 'Processo com sucesso.';
             $json['sucesso'] = true;
@@ -2215,7 +2212,7 @@ class MeusDados
                 'sucesso' => true,
                 'msg' => 'Enviamos um SMS/E-mail para seu telefone. Verifique.',
                 'msgType' => 's',
-                'queueReturnUid' => $result['queueReturnUid']
+                // 'queueReturnUid' => $result['queueReturnUid']
             ]);
 
 
@@ -2231,6 +2228,105 @@ class MeusDados
         }
 
 
+    }
+
+    public function sendDocument($params)
+    {
+        try {
+            $clienteGet = \Utils\Geral::getCliente();
+
+            $front = fopen($_FILES['frente']['tmp_name'], 'r');
+            $back = fopen($_FILES['verso']['tmp_name'], 'r');
+            $selfie = fopen($_FILES['selfie']['tmp_name'], 'r');
+
+            $client = new Client();
+            $response = $client->post($_ENV['NAVI_API_URL'].'kyc/multi_store', [
+                'headers' => [
+                    'accept' => 'Application/json',
+                    'token' => $_ENV['NAVI_API_TOKEN'],
+                    'cl' => $_ENV['NAVI_API_CL'],
+                    'service' => 'CEP',
+                ],
+                'query' => [
+
+                ],
+                'multipart' => [
+                    [
+                        'name' => 'frente',
+                        'contents' => $front,
+                    ],
+                    [
+                        'name' => 'verso',
+                        'contents' => $back,
+                    ],
+                    [
+                        'name' => 'selfie',
+                        'contents' => $selfie,
+                    ],
+                    [
+                        'name' => 'tag',
+                        'contents' => $clienteGet->email,
+                    ]
+                ],
+            ]);
+            $res = json_decode($response->getBody()->getContents());
+            error_log($res);
+
+            return print json_encode([
+                'sucesso' => true,
+                'msg' => 'Documentos enviados com succeso.',
+                'msgType' => 's',
+            ]);
+
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+        }
+    }
+    public function docStats($params)
+    {
+        try {
+            $cliente = \Utils\Geral::getCliente();
+
+            $client = new Client();
+            $response = $client->get($_ENV['NAVI_API_URL'].'kyc/validated/'.$cliente->email, [
+                'headers' => [
+                    'accept' => 'Application/json',
+                    'token' => $_ENV['NAVI_API_TOKEN'],
+                    'cl' => $_ENV['NAVI_API_CL'],
+                    'service' => 'CEP',
+                ],
+            ]);
+            $res = $response->getBody()->getContents();
+            $this->updateClientDoc($res, $cliente);
+            return print $res;
+
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+        }
+    }
+
+    private function updateClientDoc($response, $cliente)
+    {
+        try{
+            $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
+            $clienteRn->conexao->carregar($cliente);
+
+            $res = json_decode($response);
+                if(!$res->data->all_approved){
+                    $cliente->documentoVerificado = 0;
+                    $clienteRn->salvar($cliente, $cliente->senha, null, null, false);
+                }
+                if($res->data->all_approved){
+                    $cliente->documentoVerificado = 1;
+                    $clienteRn->salvar($cliente, $cliente->senha, null, null, false);
+                }
+
+                // return 'ok';
+        } catch(\Throwable $e){
+            error_log($e->getMessage());
+            error_log($e->getLine());
+            error_log($e->getFile());
+        }
     }
 
     public function kycSmsResend()

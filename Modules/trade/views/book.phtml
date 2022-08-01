@@ -126,18 +126,15 @@ $_data["idiomaMenu"] = $idioma;
         </div>
 
     </div>
-    
+
       <div class="col-md-6">
-        <div class="main-chart mb15">
-            <!-- TradingView Widget BEGIN -->
+        <!-- TradingView Widget BEGIN -->
+        <!-- <div class="main-chart mb15">
             <div class="page-tv-chart-container" id="tv_chart_container">
             </div>
 
             <div class="tradingview-widget-container">
             <div id="tradingview_e8053"></div>
-            <!-- <div id="tv_chart_container"></div>
-            <iframe style="border: none;" seamless="seamless" src="<?php echo DIR_TV ?>/index.html?lang=<?php //echo $idioma->getLang()?>&symbol=<?php //echo $paridade->symbol ?>" width="100%" height="55%"></iframe> -->
-
 
             <script src="https://s3.tradingview.com/tv.js"></script>
             <script type="text/javascript" src="<?php echo DIR_TV ?>/charting_library/charting_library.min.js"></script>
@@ -205,327 +202,299 @@ $_data["idiomaMenu"] = $idioma;
                 });
             </script>
             </div>
-            <!-- TradingView Widget END -->
-
-        </div>
+        </div> -->
+        <!-- TradingView Widget END -->
 
                 <!-- user trade -->
         <div class="market-trade">
-          <ul class="nav nav-pills" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="pill" href="#pills-compra" role="tab"
-                aria-selected="true"><?php echo $idioma->getText("direta36")?></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="pill" href="#pills-ordens" role="tab" aria-selected="false"><?php echo $idioma->getText("direta37")?></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="pill" href="#pills-extrato" role="tab" aria-selected="false"><?php echo $idioma->getText("direta38")?></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="pill" href="#pills-24hrs" role="tab" aria-selected="false"><?php echo $idioma->getText("direta39")?></a>
-            </li>
-          </ul>
+            <ul class="nav nav-pills" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#pills-compra" role="tab"
+                        aria-selected="true"><?php echo $idioma->getText("direta36")?></a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#pills-ordens" role="tab" aria-selected="false"><?php echo $idioma->getText("direta37")?></a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#pills-extrato" role="tab" aria-selected="false"><?php echo $idioma->getText("direta38")?></a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#pills-24hrs" role="tab" aria-selected="false"><?php echo $idioma->getText("direta39")?></a>
+                </li>
+            </ul>
 
-          <div class="tab-content">
-            <div class="tab-pane fade show active" id="pills-compra" role="tabpanel">
-              <div class="d-flex justify-content-between">
-                <div class="market-trade-buy">
-                    <div class="input-group">
-                        <input type="hidden" class="form-control" id="buyamountwithfee"> 
-                        <input type="text" class="form-control digital-currency" id="buyamount" placeholder="<?php echo $idioma->getText("volumeComprar") ?>">
-                        <div class="input-group-append">
-                            <span class="input-group-text" onclick="initbuysell('b', 'a');" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
-                        </div>
-                    </div>
-                  <div class="input-group">
-                    <input type="text" class="form-control real" id="buyprice" placeholder=<?php echo $idioma->getText("preco")?>>
-                    <div class="input-group-append">
-                      <span class="input-group-text" onclick="initbuysell('b', 'p');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                    </div>
-                  </div>
-
-                  <div class="input-group">
-                    <input type="text" class="form-control real" id="buytotal" placeholder=<?php echo $idioma->getText("totalComprar")?>>
-                    <div class="input-group-append">
-                      <span class="input-group-text" onclick="initbuysell('b', 't');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                    </div>
-                  </div>
-
-                  <div class="input-group">
-                    <input type="text" class="form-control real disabled" disabled="true" id="buytaxIn" placeholder=<?php echo $idioma->getText("taxa")?>>
-                    <div class="input-group-append">
-                      <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
-                    </div>
-                  </div>
-
-                  <div class="input-group">
-                    <input type="text" class="form-control real disabled" disabled="true" id="buyreceiveIn" placeholder=<?php echo $idioma->getText("receberaAprox")?>>
-                    <div class="input-group-append">
-                      <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
-                    </div>
-                  </div>
-                <!--                   
-                  <ul class="market-trade-list">
-                    <li><a href="#!">25%</a></li>
-                    <li><a href="#!">50%</a></li>
-                    <li><a href="#!">75%</a></li>
-                    <li><a href="#!">100%</a></li>
-                  </ul>
-                  <p>Available: <span>0 BTC = 0 USD</span></p>
-                  <p>Volume: <span>0 BTC = 0 USD</span></p>
-                  <p>Margin: <span>0 BTC = 0 USD</span></p>
-                  <p>Fee: <span>0 BTC = 0 USD</span></p> -->
-                    <!-- <button class="btn buy">Buy</button> -->
-                    <button type="button" class="btn buy" id="btn-order-buy" onclick="salvarOrdemCompra();">
-                        <strong><?php echo $idioma->getText("compraRegistrarOrdemBtn") ?></strong>
-                    </button>
-                </div>
-
-                <div class="market-trade-sell">
-                    <div class="input-group">
-                    <input type="text" class="form-control digital-currency" id="sellamount" placeholder="<?php echo $idioma->getText("volumeVender") ?>">
-                    <div class="input-group-append">
-                        <span class="input-group-text" onclick="initbuysell('s', 'a');" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
-                    </div>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" class="form-control real" id="sellprice" placeholder="<?php echo $idioma->getText("preco") ?>">
-                        <div class="input-group-append">
-                            <span class="input-group-text" onclick="initbuysell('s', 'p');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" class="form-control real" id="selltotal" placeholder="<?php echo $idioma->getText("totalVender") ?>">
-                        <div class="input-group-append">
-                            <span class="input-group-text" onclick="initbuysell('s', 't');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" disabled="true" class="form-control real" id="selltaxIn" placeholder="<?php echo $idioma->getText("taxa") ?>">
-                        <div class="input-group-append">
-                            <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" class="form-control real" disabled="true" id="sellreceiveIn" placeholder="<?php echo $idioma->getText("receberaAproxVender") ?>">
-                        <div class="input-group-append">
-                        <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                        </div>
-                    </div>
-                    <!-- <ul class="market-trade-list">
-                        <li><a href="#!">25%</a></li>
-                        <li><a href="#!">50%</a></li>
-                        <li><a href="#!">75%</a></li>
-                        <li><a href="#!">100%</a></li>
-                    </ul>
-                    <p>Available: <span>0 BTC = 0 USD</span></p>
-                    <p>Volume: <span>0 BTC = 0 USD</span></p>
-                    <p>Margin: <span>0 BTC = 0 USD</span></p>
-                    <p>Fee: <span>0 BTC = 0 USD</span></p> -->
-                    <!-- <button class="btn sell">Sell</button> -->
-                    <button type="button" class="btn sell" id="btn-order-sell" onclick="salvarOrdemVenda();">
-                        <strong><?php echo $idioma->getText("vendaRegistrarOrdemBtn") ?></strong>
-                    </button>
-                </div>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="pills-ordens" role="tabpanel">
-                <!-- <div class="d-flex justify-content-between">
-                    <div class="market-trade-buy">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="pills-compra" role="tabpanel">
+                    <div class="d-flex justify-content-between">
+                        <div class="market-trade-buy">
+                            <div class="input-group">
+                                <input type="hidden" class="form-control" id="buyamountwithfee"> 
+                                <input type="text" class="form-control digital-currency" id="buyamount" placeholder="<?php echo $idioma->getText("volumeComprar") ?>">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="initbuysell('b', 'a');" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
+                                </div>
+                            </div>
                         <div class="input-group">
-                            <input type="number" class="form-control" placeholder="Price">
+                            <input type="text" class="form-control real" id="buyprice" placeholder=<?php echo $idioma->getText("preco")?>>
                             <div class="input-group-append">
-                            <span class="input-group-text">BTC</span>
+                            <span class="input-group-text" onclick="initbuysell('b', 'p');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
                             </div>
                         </div>
-                    <div class="input-group">
-                        <input type="number" class="form-control" placeholder="Amount">
-                        <div class="input-group-append">
-                        <span class="input-group-text">ETH</span>
+
+                        <div class="input-group">
+                            <input type="text" class="form-control real" id="buytotal" placeholder=<?php echo $idioma->getText("totalComprar")?>>
+                            <div class="input-group-append">
+                            <span class="input-group-text" onclick="initbuysell('b', 't');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="text" class="form-control real disabled" disabled="true" id="buytaxIn" placeholder=<?php echo $idioma->getText("taxa")?>>
+                            <div class="input-group-append">
+                            <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="text" class="form-control real disabled" disabled="true" id="buyreceiveIn" placeholder=<?php echo $idioma->getText("receberaAprox")?>>
+                            <div class="input-group-append">
+                            <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
+                            </div>
+                        </div>
+                        <!--                   
+                        <ul class="market-trade-list">
+                            <li><a href="#!">25%</a></li>
+                            <li><a href="#!">50%</a></li>
+                            <li><a href="#!">75%</a></li>
+                            <li><a href="#!">100%</a></li>
+                        </ul>
+                        <p>Available: <span>0 BTC = 0 USD</span></p>
+                        <p>Volume: <span>0 BTC = 0 USD</span></p>
+                        <p>Margin: <span>0 BTC = 0 USD</span></p>
+                        <p>Fee: <span>0 BTC = 0 USD</span></p> -->
+                            <!-- <button class="btn buy">Buy</button> -->
+                            <button type="button" class="btn buy" id="btn-order-buy" onclick="salvarOrdemCompra();">
+                                <strong><?php echo $idioma->getText("compraRegistrarOrdemBtn") ?></strong>
+                            </button>
+                        </div>
+
+                        <div class="market-trade-sell">
+                            <div class="input-group">
+                            <input type="text" class="form-control digital-currency" id="sellamount" placeholder="<?php echo $idioma->getText("volumeVender") ?>">
+                            <div class="input-group-append">
+                                <span class="input-group-text" onclick="initbuysell('s', 'a');" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
+                            </div>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control real" id="sellprice" placeholder="<?php echo $idioma->getText("preco") ?>">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="initbuysell('s', 'p');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control real" id="selltotal" placeholder="<?php echo $idioma->getText("totalVender") ?>">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="initbuysell('s', 't');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" disabled="true" class="form-control real" id="selltaxIn" placeholder="<?php echo $idioma->getText("taxa") ?>">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control real" disabled="true" id="sellreceiveIn" placeholder="<?php echo $idioma->getText("receberaAproxVender") ?>">
+                                <div class="input-group-append">
+                                <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                </div>
+                            </div>
+                            <!-- <ul class="market-trade-list">
+                                <li><a href="#!">25%</a></li>
+                                <li><a href="#!">50%</a></li>
+                                <li><a href="#!">75%</a></li>
+                                <li><a href="#!">100%</a></li>
+                            </ul>
+                            <p>Available: <span>0 BTC = 0 USD</span></p>
+                            <p>Volume: <span>0 BTC = 0 USD</span></p>
+                            <p>Margin: <span>0 BTC = 0 USD</span></p>
+                            <p>Fee: <span>0 BTC = 0 USD</span></p> -->
+                            <!-- <button class="btn sell">Sell</button> -->
+                            <button type="button" class="btn sell" id="btn-order-sell" onclick="salvarOrdemVenda();">
+                                <strong><?php echo $idioma->getText("vendaRegistrarOrdemBtn") ?></strong>
+                            </button>
                         </div>
                     </div>
-                    <ul class="market-trade-list">
-                        <li><a href="#!">25%</a></li>
-                        <li><a href="#!">50%</a></li>
-                        <li><a href="#!">75%</a></li>
-                        <li><a href="#!">100%</a></li>
-                    </ul>
-                    <p>Available: <span>0 BTC = 0 USD</span></p>
-                    <p>Volume: <span>0 BTC = 0 USD</span></p>
-                    <p>Margin: <span>0 BTC = 0 USD</span></p>
-                    <p>Fee: <span>0 BTC = 0 USD</span></p>
-                    <button class="btn buy">Buy</button>
-                    </div>
-                    <div class="market-trade-sell">
-                    <div class="input-group">
-                        <input type="number" class="form-control" placeholder="Price">
-                        <div class="input-group-append">
-                        <span class="input-group-text">BTC</span>
+                </div>
+
+                <!-- <div class="tab-pane fade" id="pills-ordens" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel-heading" style="text-align: center;">
+                                <strong style="margin-left: -35px"><?php echo $idioma->getText("minhasOrdens") ?> - <?php echo $paridade->moedaBook->nome ?>  (<?php echo $paridade->symbol ?>)</strong>                                                            
+                                <div class="pull-left">
+                                    <input type="checkbox" class="custom-checkbox" id="todas" name="todas" value="1"><label>&nbsp;<?php echo $idioma->getText("todas") ?>&nbsp;</label>
+                                </div>
+                            </div>
+                            <div class="table" style="background-color: #fff;">
+                                <table class="table table-hover table-condensed " style="font-size: 12px; background-color: #fff; margin-bottom: 0px !important;">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"><?php echo $idioma->getText("moeda") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("movimento") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("dataTb") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("cotacaoTb") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("volumeTb") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("valorTotalTb") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("executado") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("pendente") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("statusTb") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("acaoTb") ?></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="orders-list" style="overflow-y: auto;">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-group">
-                        <input type="number" class="form-control" placeholder="Amount">
-                        <div class="input-group-append">
-                        <span class="input-group-text">ETH</span>
-                        </div>
-                    </div>
-                    <ul class="market-trade-list">
-                        <li><a href="#!">25%</a></li>
-                        <li><a href="#!">50%</a></li>
-                        <li><a href="#!">75%</a></li>
-                        <li><a href="#!">100%</a></li>
-                    </ul>
-                    <p>Available: <span>0 BTC = 0 USD</span></p>
-                    <p>Volume: <span>0 BTC = 0 USD</span></p>
-                    <p>Margin: <span>0 BTC = 0 USD</span></p>
-                    <p>Fee: <span>0 BTC = 0 USD</span></p>
-                    <button class="btn sell">Sell</button>
                     </div>
                 </div> -->
-                <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="panel-heading" style="text-align: center; background-color: #C2C2C2C7;">
-                                                    <strong style="margin-left: -35px"><?php echo $idioma->getText("minhasOrdens") ?> - <?php echo $paridade->moedaBook->nome ?>  (<?php echo $paridade->symbol ?>)</strong>                                                            
-                                                    <div class="pull-left">   
-                                                        <input type="checkbox" class="" id="todas" name="todas" value="1"><label>&nbsp;<?php echo $idioma->getText("todas") ?>&nbsp;</label>
-                                                    </div> 
-                                                </div>
-                                                <div class="table-responsive" style="height: 52.5% !important;  background-color: #fff;">
-                                                    <table class="table table-hover table-bordered table-condensed table-stripped " style="font-size: 12.5px; background-color: #fff; margin-bottom: 0px !important;">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center"><?php echo $idioma->getText("moeda") ?></th>
-                                                                <th class="text-center"><?php echo $idioma->getText("movimento") ?></th>
-                                                                <th class="text-center"><?php echo $idioma->getText("dataTb") ?></th>
-                                                                <th class="text-center"><?php echo $idioma->getText("cotacaoTb") ?></th>
-                                                                <th class="text-center"><?php echo $idioma->getText("volumeTb") ?></th>
-                                                                <th class="text-center"><?php echo $idioma->getText("valorTotalTb") ?></th>
-                                                                <th class="text-center"><?php echo $idioma->getText("executado") ?></th>
-                                                                <th class="text-center"><?php echo $idioma->getText("pendente") ?></th>
-                                                                <th class="text-center"><?php echo $idioma->getText("statusTb") ?></th>
-                                                                <th class="text-center"><?php echo $idioma->getText("acaoTb") ?></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="orders-list" style="overflow-y: auto;">
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-            </div>
 
+                <div class="tab-pane fade" id="pills-extrato" role="tabpanel">
+                    <div class="row" >
+                        <div class="col col-lg-12">
+                            <div class="row">
 
-            <div class="tab-pane fade" id="pills-stop-limit" role="tabpanel">
-              <div class="d-flex justify-content-between">
-                <div class="market-trade-buy">
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Price">
-                    <div class="input-group-append">
-                      <span class="input-group-text">BTC</span>
+                                <div class="col-sm-3">
+                                    <div data-toggle="buttons" class="btn-group" id="radioTipoBtc">
+                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="compraBtc"> 
+                                            <input hidden type="radio"  name="optionsBtc" value="compra" class="btn-filtro-extrato">
+                                                <?php echo $idioma->getText("direta11") ?>
+                                        </label>
+                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="vendaBtc"> 
+                                            <input hidden type="radio" name="optionsBtc" value="venda" class="btn-filtro-extrato">
+                                                <?php echo $idioma->getText("direta12") ?>
+                                        </label>
+                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato active " id="todosBtc"> 
+                                            <input hidden type="radio" id="" name="optionsBtc" value="todos" class="btn-filtro-extrato">
+                                                <?php echo $idioma->getText("direta13") ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div data-toggle="buttons" class="btn-group" id="radioDatas">
+                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="diaBtc"> 
+                                            <input hidden type="radio" name="optionsBtc" value="dia" ><?php echo $idioma->getText("direta7") ?>
+                                        </label>
+                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="semanaBtc"> 
+                                            <input hidden type="radio"  name="optionsBtc" value="semana" ><?php echo $idioma->getText("direta8") ?>
+                                        </label>
+                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" > 
+                                            <input hidden type="radio" name="optionsBtc " value="mes" class=""><?php echo $idioma->getText("direta9") ?>
+                                        </label>
+                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato active" id="todosDataBtc"> 
+                                            <input hidden type="radio"  name="optionsBtc" value="todos" ><?php echo $idioma->getText("direta10") ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3"></div>
+
+                                <div class="col-sm-3">
+                                    <div data-toggle="buttons" class="btn-group" id="radioLimite">
+                                        <label style="font-size: 10px;" class="btn btn-sm btn-white active btn-filtro-extrato" id="limit10"> 
+                                            <input type="radio"  name="optionsBtc" value="10" >
+                                                <?php echo $idioma->getText("direta34") ?>
+                                        </label>
+                                        <label style="font-size: 10px;" class="btn btn-sm btn-white btn-filtro-extrato" id="limit20"> 
+                                            <input type="radio" name="optionsBtc" value="30" >
+                                                <?php echo $idioma->getText("direta35") ?>
+                                        </label>
+                                        <label style="font-size: 10px;" class="btn btn-sm btn-white btn-filtro-extrato"  id="noLimit"> 
+                                            <input type="radio" id="" name="optionsBtc" value="todos" >
+                                                <?php echo $idioma->getText("direta13") ?>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="table-responsive m-t-md" style="height: 52.1% !important; background-color: #fff; ">
+                                <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 12.5px; margin-bottom: 0px !important;">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("moeda") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("data") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("cotacao") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("volumeTotal") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("valorTotal") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("volumeExecutado") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("valorExecutado") ?></strong></th>
+                                            <th class="text-center"><strong><?php echo $idioma->getText("status") ?></strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="myTrades" style="overflow-y: auto;">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Amount">
-                    <div class="input-group-append">
-                      <span class="input-group-text">ETH</span>
-                    </div>
-                  </div>
-                  <ul class="market-trade-list">
-                    <li><a href="#!">25%</a></li>
-                    <li><a href="#!">50%</a></li>
-                    <li><a href="#!">75%</a></li>
-                    <li><a href="#!">100%</a></li>
-                  </ul>
-                  <p>Available: <span>0 BTC = 0 USD</span></p>
-                  <p>Volume: <span>0 BTC = 0 USD</span></p>
-                  <p>Margin: <span>0 BTC = 0 USD</span></p>
-                  <p>Fee: <span>0 BTC = 0 USD</span></p>
-                  <button class="btn buy">Buy</button>
                 </div>
-                <div class="market-trade-sell">
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Price">
-                    <div class="input-group-append">
-                      <span class="input-group-text">BTC</span>
+
+                <div class="tab-pane fade" id="pills-24hrs" role="tabpanel">
+                    <div class="row" >
+                        <div class="col col-lg-12">
+                            <div class="">
+                                <table class="table table-hover" style="font-size: 12.5px; margin-bottom: 0px !important;">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"><?php echo $idioma->getText("hora") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("cotacaoN") ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("volumeN") ?> - <?php echo $paridade->moedaBook->simbolo ?></th>
+                                            <th class="text-center"><?php echo $idioma->getText("valorTotalN") ?></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="trade-list" style="overflow-y: auto;">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Amount">
-                    <div class="input-group-append">
-                      <span class="input-group-text">ETH</span>
-                    </div>
-                  </div>
-                  <ul class="market-trade-list">
-                    <li><a href="#!">25%</a></li>
-                    <li><a href="#!">50%</a></li>
-                    <li><a href="#!">75%</a></li>
-                    <li><a href="#!">100%</a></li>
-                  </ul>
-                  <p>Available: <span>0 BTC = 0 USD</span></p>
-                  <p>Volume: <span>0 BTC = 0 USD</span></p>
-                  <p>Margin: <span>0 BTC = 0 USD</span></p>
-                  <p>Fee: <span>0 BTC = 0 USD</span></p>
-                  <button class="btn sell">Sell</button>
                 </div>
-              </div>
             </div>
-            <div class="tab-pane fade" id="pills-stop-market" role="tabpanel">
-              <div class="d-flex justify-content-between">
-                <div class="market-trade-buy">
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Price">
-                    <div class="input-group-append">
-                      <span class="input-group-text">BTC</span>
+        </div>
+        <div class="mtb15"></div>
+        <div class="market-trade mtb15">
+            <div class="" style="margin-top: 15px; height:405px;">
+                <div class="col-lg-12">
+                    <div class="panel-heading" style="text-align: center;">
+                        <strong style="margin-left: 0px; "><?php echo $idioma->getText("minhasOrdens") ?> - <?php echo $paridade->moedaBook->nome ?>  (<?php echo $paridade->symbol ?>)</strong>                                                            
+                        <div class="pull-left">
+                            <input type="checkbox" style="margin-left: 15px; " class="custom-checkbox" id="todas" name="todas" value="1"><label>&nbsp;<?php echo $idioma->getText("todas") ?>&nbsp;</label>
+                        </div>
                     </div>
-                  </div>
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Amount">
-                    <div class="input-group-append">
-                      <span class="input-group-text">ETH</span>
+                    <div class="table" style="background-color: #fff;">
+                        <table class="table table-hover table-condensed " style="font-size: 12px; background-color: #fff; margin-bottom: 0px !important;">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"><?php echo $idioma->getText("moeda") ?></th>
+                                    <th class="text-center"><?php echo $idioma->getText("movimento") ?></th>
+                                    <th class="text-center"><?php echo $idioma->getText("dataTb") ?></th>
+                                    <th class="text-center"><?php echo $idioma->getText("cotacaoTb") ?></th>
+                                    <th class="text-center"><?php echo $idioma->getText("volumeTb") ?></th>
+                                    <th class="text-center"><?php echo $idioma->getText("valorTotalTb") ?></th>
+                                    <th class="text-center"><?php echo $idioma->getText("executado") ?></th>
+                                    <th class="text-center"><?php echo $idioma->getText("pendente") ?></th>
+                                    <th class="text-center"><?php echo $idioma->getText("statusTb") ?></th>
+                                    <th class="text-center"><?php echo $idioma->getText("acaoTb") ?></th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-list" style="overflow-y: auto;">
+                            </tbody>
+                        </table>
                     </div>
-                  </div>
-                  <ul class="market-trade-list">
-                    <li><a href="#!">25%</a></li>
-                    <li><a href="#!">50%</a></li>
-                    <li><a href="#!">75%</a></li>
-                    <li><a href="#!">100%</a></li>
-                  </ul>
-                  <p>Available: <span>0 BTC = 0 USD</span></p>
-                  <p>Volume: <span>0 BTC = 0 USD</span></p>
-                  <p>Margin: <span>0 BTC = 0 USD</span></p>
-                  <p>Fee: <span>0 BTC = 0 USD</span></p>
-                  <button class="btn buy">Buy</button>
                 </div>
-                <div class="market-trade-sell">
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Price">
-                    <div class="input-group-append">
-                      <span class="input-group-text">BTC</span>
-                    </div>
-                  </div>
-                  <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Amount">
-                    <div class="input-group-append">
-                      <span class="input-group-text">ETH</span>
-                    </div>
-                  </div>
-                  <ul class="market-trade-list">
-                    <li><a href="#!">25%</a></li>
-                    <li><a href="#!">50%</a></li>
-                    <li><a href="#!">75%</a></li>
-                    <li><a href="#!">100%</a></li>
-                  </ul>
-                  <p>Available: <span>0 BTC = 0 USD</span></p>
-                  <p>Volume: <span>0 BTC = 0 USD</span></p>
-                  <p>Margin: <span>0 BTC = 0 USD</span></p>
-                  <p>Fee: <span>0 BTC = 0 USD</span></p>
-                  <button class="btn sell">Sell</button>
-                </div>
-              </div>
             </div>
-          </div>
         </div>
 
         <!-- <div class="market-history market-order mt15">
@@ -615,56 +584,48 @@ $_data["idiomaMenu"] = $idioma;
         </div> -->
       </div>
 
-      <div class="col-md-3">
-        <div class="order-book mb15">
-          <h2 class="heading">Order Book</h2>
-          <table class="table">
-            <thead>
-                <tr>
-                    <th class="text-left"><?php echo $idioma->getText("direta31") ?>(<?php echo $paridade->moedaTrade->simbolo?>)</th>
-                    <th class="text-right"><?php echo $idioma->getText("direta33") ?>(<?php echo $paridade->moedaTrade->simbolo?>)</th>
-                    <th class="text-center"><?php echo $idioma->getText("direta32") ?>(<?php echo $paridade->moedaBook->simbolo?>)</th>
-                </tr>
-            </thead> 
-            <tbody id="ordersSells">
-            </tbody>
-            <tbody class="ob-heading">
-                <tr>
-                    <td>
-                        <span>Dif</span>
-                        <span id="differenceV"></span>
-                    </td>
-                     <td>
-                    </td>
-                    <td id="differenceClass" >
-                        <span>Change</span>
-                        <span id="differenceP" ></span>
-                    </td>
-                </tr>
-            </tbody>
-            <tbody id="ordersBuys">
-            </tbody>
-          </table>
+        <div class="col-md-3">
+            <div class="order-book mb15">
+                <h2 class="heading">Order Book</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-left"><?php echo $idioma->getText("direta31") ?>(<?php echo $paridade->moedaTrade->simbolo?>)</th>
+                            <th class="text-right"><?php echo $idioma->getText("direta33") ?>(<?php echo $paridade->moedaTrade->simbolo?>)</th>
+                            <th class="text-center"><?php echo $idioma->getText("direta32") ?>(<?php echo $paridade->moedaBook->simbolo?>)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersSells">
+                    </tbody>
+                    <tbody class="ob-heading">
+                        <tr>
+                            <td>
+                                <span>Dif</span>
+                                <span id="differenceV"></span>
+                            </td>
+                            <td>
+                            </td>
+                            <td id="differenceClass" >
+                                <span>Change</span>
+                                <span id="differenceP" ></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody id="ordersBuys">
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
 
 
 
 
 
-
-
-
-
-
-
-    <!-- //hist -->
-    <div class="col-md-3">
-
-    </div>
-    <div class="col-md-6">
-
-    </div>
+        <!-- //hist -->
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+        </div>
     </div>
   </div>
 
@@ -691,6 +652,7 @@ $_data["idiomaMenu"] = $idioma;
     };
     $(document).ready(function () {
         setCurrentCoin(1);
+        listarMinhasOrdens();
         alertaKyc();
         listarBook();
         listarParidadesBook();
@@ -698,19 +660,27 @@ $_data["idiomaMenu"] = $idioma;
         setInterval(listarParidadesBook, 10000);
         setInterval(listarSaldoMoedasBook, 5000);
         setInterval(listarBook, 3000);
+        listarTrade();
+
 
         $("#radioDatas input").on('change', function(){
             data = $('input[name="optionsBtc"]:checked', '#radioDatas').val();
-            extratoCliente();
+            tipo = $('input[name="optionsBtc"]:checked', '#radioTipoBtc').val();
+            limite = $('input[name="optionsBtc"]:checked', '#radioLimite').val();
+            extratoCliente(data, tipo, limite);
         });
 
         $("#radioTipoBtc input").on('change', function(){
+            data = $('input[name="optionsBtc"]:checked', '#radioDatas').val();
             tipo = $('input[name="optionsBtc"]:checked', '#radioTipoBtc').val();
-            extratoCliente();
+            limite = $('input[name="optionsBtc"]:checked', '#radioLimite').val();
+            extratoCliente(data, tipo, limite);
         });
         $("#radioLimite input").on('change', function(){
+            data = $('input[name="optionsBtc"]:checked', '#radioDatas').val();
+            tipo = $('input[name="optionsBtc"]:checked', '#radioTipoBtc').val();
             limite = $('input[name="optionsBtc"]:checked', '#radioLimite').val();
-            extratoCliente();
+            extratoCliente(data, tipo, limite);
         });
 
         $(".real").each(function () {
@@ -720,9 +690,9 @@ $_data["idiomaMenu"] = $idioma;
             currencymask($(this), 20, <?php echo $paridade->moedaBook->casasDecimais ?>, ",");
         });
 
-       $("#ticker-paridade").change(function () {
+        $("#ticker-paridade").change(function () {
             listarParidadesBook();
-        }); 
+        });
 
         $("#ticker-search").keyup(function () {
             filtrarParidadesBook();
@@ -731,7 +701,7 @@ $_data["idiomaMenu"] = $idioma;
         $("#balances-search").keyup(function () {
             filtrarMoedasBook();
         });
-        
+
         $("#btn-blocked-balance-show").click(function () {
             $(".table-blocked-balance").show();
             balanceMode = 1;
@@ -741,38 +711,35 @@ $_data["idiomaMenu"] = $idioma;
             $(".table-blocked-balance").hide();
             balanceMode = 2;
         });
-       
+
         $("#buyamount").keyup(function () {
             console.log('teste');
             calcularTotal("b", "a");
         });
-        
-        
+
         $("#buyprice").keyup(function () {
             calcularTotal("b", "p");
         });
-        
-        
+
         $("#buytotal").keyup(function () {
             calcularTotal("b", "t");
         });
-        
-        
+
         $("#sellamount").keyup(function () {
             calcularTotal("s", "a");
         });
-        
+
         $("#sellprice").keyup(function () {
             calcularTotal("s", "p");
         });
-        
+
         $("#selltotal").keyup(function () {
             calcularTotal("s", "t");
         });
-        
+
 
     });
-    
+
         $("#tab-market").click(function () {
             $("#tab-market").css( 'font-weight', 'bold' ); 
             $("#tab-myorders").css( 'font-weight', 'normal' );
@@ -781,7 +748,7 @@ $_data["idiomaMenu"] = $idioma;
             clearInterval(listMinhasOrdens);
             clearInterval(listTrade);
         });
-        
+
         $("#tab-myorders").click(function () {
             $("#tab-myorders").css( 'font-weight', 'bold' );  
             $("#tab-market").css( 'font-weight', 'normal' );
@@ -842,7 +809,7 @@ $_data["idiomaMenu"] = $idioma;
         }
         });
 
-    function extratoCliente() {
+    function extratoCliente(data, tipo, limite) {
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_EXTRATO_FILTRAR ?>',
             method: 'post',
@@ -983,12 +950,10 @@ $_data["idiomaMenu"] = $idioma;
                         if (json.sucesso) {
                             $("#btn-favorito-"+json.codigo).html(json.html);
 
-
                         } else {
-                            
+                            //
                         }
                     } catch (e) {
-                        
                     }
                     flagAddParidadeFavorita = true;
                 },
@@ -1129,13 +1094,12 @@ $_data["idiomaMenu"] = $idioma;
                 success: function (json) {
                     try {
                         if (json.sucesso) {
-                            $("#ordersBuys").html(json.htmlCompra); 
+                            $("#ordersBuys").html(json.htmlCompra);
                             $("#ordersSells").html(json.htmlVenda);
+                            $("#ordersSells").scrollTop(50000);
                             $("#differenceV").html(json.diferenca);
                             $("#differenceClass").addClass(json.diferencaClass);
-                            
                             var porc = parseFloat(json.diferencaPorcentagem);
-                            
                             if(porc >= 0){
                                 $("#differenceP").html(json.diferencaPorcentagem + "%");
                             } else {
@@ -1144,10 +1108,8 @@ $_data["idiomaMenu"] = $idioma;
                             $("#tblVenda").css('margin-top', json.adjusttbl+"%");
                         } else {
                             showNotyAlert(json.mensagem, "e");
-                            
                         }
                     } catch (e) {
-                        
                         showNotyAlert(e, "e");
                     }
                     flagBook = true;
@@ -1161,40 +1123,39 @@ $_data["idiomaMenu"] = $idioma;
 
     var flagMinharOrdens = true;
     function listarMinhasOrdens() {
-    if (flagMinharOrdens) {
-    $.ajax({
-        url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_LISTAR ?>',
-        method: 'post',
-        dataType:'json',
-        data:{ 
-            todas: $("#todas").is(":checked")  
-        },  
-        beforeSend: function () {
-            flagMinharOrdens = false;
-        },        
-        success: function (json) {
-            try {
-                if (json.sucesso) {
-                    $(".my-order-item").remove();
-                    $("#orders-list").html($(json.html));
-                } else {
-                    $(".my-order-item").remove();
-                    showNotyAlert(json.mensagem, "e");
-                    if (json.redirect) {
-                        location = json.url;
+        if (flagMinharOrdens) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_LISTAR ?>',
+                method: 'post',
+                dataType:'json',
+                data:{
+                    todas: $("#todas").is(":checked")
+                },
+                beforeSend: function () {
+                    flagMinharOrdens = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $(".my-order-item").remove();
+                            $("#orders-list").html($(json.html));
+                        } else {
+                            $(".my-order-item").remove();
+                            showNotyAlert(json.mensagem, "e");
+                            if (json.redirect) {
+                                location = json.url;
+                            }
+                        }
+                    } catch (e) {
+                        $(".my-order-item").remove();
+                        showNotyAlert(e, "e");
                     }
+                    flagMinharOrdens = true;
+                },
+                complete: function () {
+                    flagMinharOrdens = true;
                 }
-            } catch (e) {
-                $(".my-order-item").remove();
-                showNotyAlert(e, "e");
-            }
-            flagMinharOrdens = true;
-        },
-        complete: function () {
-            flagMinharOrdens = true;
-        }
-        
-        });
+            });
         }
     }
 
@@ -1326,7 +1287,6 @@ $_data["idiomaMenu"] = $idioma;
             success: function (json) {
                 try {
                     if (json.sucesso) {
-                        
                         listarMinhasOrdens();
                     } else {
                         showNotyAlert(json.mensagem, "e");
@@ -1340,12 +1300,10 @@ $_data["idiomaMenu"] = $idioma;
     }
 
     function initbuysell(m, f) {
-    
-    
         if (f === 'p') {
             consultarPreco(m);
             calcularTotal(m, f);
-        } else { 
+        } else {
             $.ajax({
                 url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INIT ?>',
                 method: 'post',
@@ -1357,7 +1315,7 @@ $_data["idiomaMenu"] = $idioma;
                     try {
                         if (json.sucesso) {
                             var fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
-                            
+
                             var fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
 
                             if (f === 'a') {
@@ -1387,15 +1345,12 @@ $_data["idiomaMenu"] = $idioma;
         var fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
         var tr = null;
         if (m === 's') {
-           tr = $("#ordersBuys tr").first();
-           
+            tr = $("#ordersBuys tr").first();
+
         } else {
-           tr = $("#ordersSells tr").last();
-           
+            tr = $("#ordersSells tr").last();
         }
-        
         var preco = parseFloat($(tr).children(".td-price").first().children("span").first().html().replace(",", "?").replace(".", "").replace("?", ".")).toFixed(casasDecimaisReal);
-        
         $(fieldPrice).val(preco);
     }
 
@@ -1444,19 +1399,18 @@ $_data["idiomaMenu"] = $idioma;
     }
 
     var flagListarTrade = true;
-    function listarTrade() { 
+    function listarTrade() {
         if(flagListarTrade){
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_NEGOCIACOES_FILTRARTRADE ?>',
             method: 'post',
             dataType:'json',
             data: {
-               otc: $("#otc").is(":checked") 
+                otc: $("#otc").is(":checked")
             },
             beforeSend: function () {
                 flagListarTrade = false;
-                
-            },        
+            },
             success: function (json) {
                 try {
                     if (json.sucesso) {
@@ -1480,34 +1434,34 @@ $_data["idiomaMenu"] = $idioma;
     }
 
     function configOrder(tipo, cotacao, volume) {
-               
+
         if (tipo === "<?php echo \Utils\Constantes::ORDEM_COMPRA ?>") {
-            
+
             var volumeC = parseFloat(volume);
             var cotacaoC = parseFloat(cotacao);
             var total = volumeC * cotacaoC;
-                    
+
             $("#tab-compra").trigger("click");
             $("#buyamount").val(volumeC.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
             $("#buyprice").val(cotacaoC.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
             $("#buytotal").val(total.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
-            
-            var taxa = <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?>;                
+
+            var taxa = <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?>;
             var fee = (volumeC * taxa) / 100;
             var receber = parseFloat(volumeC - fee);
-            
+
             $("#buytaxIn").val(fee.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
             $("#taxLabelBuy").html(" (" + taxa.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).replace(".", ",") + "%)" );
             $("#buyreceiveIn").val(receber.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
-            
+
         } else {
             var volumeV = parseFloat(volume);
-            var cotacaoV = parseFloat(cotacao);            
+            var cotacaoV = parseFloat(cotacao);
             var taxa = <?php echo number_format($taxaVenda, $casasDecimais, ".", "") ?>;
-            
-            var fee = (volumeV * taxa) / 100;            
+
+            var fee = (volumeV * taxa) / 100;
             var volumeToSell = volumeV;
-            
+
             $("#buyamountwithfee").val(fee.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
             $("#tab-venda").trigger("click");
             $("#sellamount").val(volumeToSell.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));

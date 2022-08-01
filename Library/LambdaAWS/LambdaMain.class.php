@@ -13,8 +13,8 @@ class LambdaMain {
                         
             $clientSQS = new \Aws\Sqs\SqsClient([
                 'credentials' => [
-                    'key' => getenv("EnvLambdaKey"),
-                    'secret' => getenv("EnvLambdaSecret"),
+                    'key' => $_ENV["EnvLambdaKey"],
+                    'secret' => $_ENV["EnvLambdaSecret"],
                 ],
                 'region' => "us-east-1",
                 'version' => '2012-11-05'

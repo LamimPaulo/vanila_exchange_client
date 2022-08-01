@@ -35,7 +35,7 @@ $attachment->setFilename("my_file.txt");
 $mail = new SendGrid\Mail($from, $subject, $to, $content);
 $mail->addAttachment($attachment);
 
-$apiKey = getenv('SENDGRID_API_KEY');
+$apiKey = $_ENV['SENDGRID_API_KEY'];
 $sg = new \SendGrid($apiKey);
 
 $response = $sg->client->mail()->send()->post($mail);
@@ -102,7 +102,7 @@ $mail->personalization[0]->addSubstitution("-name-", "Example User");
 $mail->personalization[0]->addSubstitution("-city-", "Denver");
 $mail->setTemplateId("13b8f94f-bcae-4ec6-b752-70d6cb59f932");
 
-$apiKey = getenv('SENDGRID_API_KEY');
+$apiKey = $_ENV['SENDGRID_API_KEY'];
 $sg = new \SendGrid($apiKey);
 
 try {
@@ -153,7 +153,7 @@ $request_body = json_decode('{
   "template_id": "13b8f94f-bcae-4ec6-b752-70d6cb59f932"
 }');
 
-$apiKey = getenv('SENDGRID_API_KEY');
+$apiKey = $_ENV['SENDGRID_API_KEY'];
 $sg = new \SendGrid($apiKey);
 
 try {

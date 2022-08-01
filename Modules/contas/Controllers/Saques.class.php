@@ -9,12 +9,11 @@ class Saques {
 
     public function __construct(&$params) {
         \Utils\Validacao::acesso($this->codigoModulo);
-        
+
         $this->idioma = new \Utils\PropertiesUtils("saque", IDIOMA);
     }
 
     public function index($params) {
-
         try {
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $cliente = \Utils\Geral::getCliente();
@@ -44,15 +43,15 @@ class Saques {
                         
             $contasBancarias = $contaBancariaRn->listar("id_cliente = {$cliente->id} AND ativo > 0", "id", null, null, true);            
 
-//            $contaBancariaEmpresaRn = new \Models\Modules\Cadastro\ContaBancariaEmpresaRn();
-//            $bancosEmpresa = $contaBancariaEmpresaRn->getIdsBancosEmpresa();
-//            
-//            $contasSemTaxaSaque = Array();
-//            foreach ($contasBancarias as $contaBancaria) {
-//                if (in_array($contaBancaria->idBanco, $bancosEmpresa)) {
-//                    $contasSemTaxaSaque[] = $contaBancaria->id;
-//                }
-//            }
+        //    $contaBancariaEmpresaRn = new \Models\Modules\Cadastro\ContaBancariaEmpresaRn();
+        //    $bancosEmpresa = $contaBancariaEmpresaRn->getIdsBancosEmpresa();
+           
+        //    $contasSemTaxaSaque = Array();
+        //    foreach ($contasBancarias as $contaBancaria) {
+        //        if (in_array($contaBancaria->idBanco, $bancosEmpresa)) {
+        //            $contasSemTaxaSaque[] = $contaBancaria->id;
+        //        }
+        //    }
             
             
             if($configuracao->atarAtivo == 1){                
@@ -91,29 +90,29 @@ class Saques {
         \Utils\Layout::view("index_saques", $params);
 
     }
-    
+
     private function operacao(\Models\Modules\Cadastro\Cliente &$cliente, \Models\Modules\Cadastro\Configuracao &$configuracao) {
         try {
-            
+
             $contaBancariaRn = new \Models\Modules\Cadastro\ContaBancariaRn();
             $contasBancarias = $contaBancariaRn->listar("id_cliente = {$cliente->id} AND ativo > 0", "id", null, null, true);    
-            
+
             $arrayContas = null;
-            
-            $jsonContas = "";
-            $jsonAtar = "";
-            $jsonCointrade = "";
-                    
+
+            $jsonContas = (object)null;;
+            $jsonAtar = (object)null;;
+            $jsonCointrade = (object)null;;
+
             $jsonContas->text = "Contas Bancárias";
-            
+
+            $jsonExchange = (object)null;
             $jsonExchange->text = "Exchange";
-            
-            
+
             //Atar
             if ($configuracao->atarAtivo == 1 ) {
                 $jsonAtar->text = "Atar";
-                
-                $object = null;
+
+                $object = (object)null;
                 $object->id = 2;
                 $object->text = "Atar";
                 $object->icone = IMAGES . "bancos/atar.png";
@@ -121,91 +120,85 @@ class Saques {
                 $jsonAtar->children[] = $object;
                 $arrayContas[] = $jsonAtar;
             }
-            
-            
+
             //Transf interna.
-            $object = null;
+            $object = (object)null;;
             $object->id = 1;
             $object->text = $this->idioma->getText("transfInterna");
             $object->icone = IMAGES . "transferencia.png";
 
             $jsonCointrade->children[] = $object;
             $arrayContas[] = $jsonCointrade;
-            
-            
+
             foreach ($contasBancarias as $contaBancaria) {
-                
+
                 //Texto
                 $tipoConta = strlen(\Utils\Validacao::limparString($contaBancaria->documentoCliente)) == 14 ? " / Empresa" : "";
                 $digito = empty($contaBancaria->agenciaDigito) ? "" : "-{$contaBancaria->agenciaDigito}";
                 $texto = "{$contaBancaria->banco->nome}    |    AG: {$contaBancaria->agencia}{$digito} / CC: {$contaBancaria->conta}-{$contaBancaria->contaDigito} {$tipoConta}";
-                
+
                 //Icone
                 if(!empty($contaBancaria->banco->logo)){
                     $icone = IMAGES . "bancos/" . $contaBancaria->banco->logo;
                 } else {
                     $icone = IMAGES . "currencies/BRL.png";
                 }
-                
-                    $object = null;
+
+                    $object = (object)null;;
                     $object->id = $contaBancaria->id;
                     $object->text = $texto;
                     $object->icone = $icone;
 
                     $jsonContas->children[] = $object;
             }
-            
+
             $arrayContas[] = $jsonContas;
 
             return json_encode($arrayContas);
-            
         } catch (\Exception $ex) {
-         
             return null;
         }
     }
-    
+
     private function listar(\Models\Modules\Cadastro\Cliente &$cliente, $clienteVerificado) {
         try {
-                       
+
             $categoriaMoedaRn = new \Models\Modules\Cadastro\CategoriaMoedaRn();
             $categorias = $categoriaMoedaRn->conexao->listar("ativo = 1");
             $mostrarAbaDepositoReais = $clienteVerificado;
             $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
             $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
-            
+
             $arrayMoedas = null;
-            
-            $jsonMoedas = null;
-            $jsonContas = null;
-            $jsonStablecoin = null;
-            
-            
-            
+            $jsonMoedas = (object)null;;
+            $jsonContas = (object)null;;
+            $jsonStablecoin = (object)null;;
+
             $jsonMoedas->text = "Criptomoedas";
-            
+
             if(empty($cliente->moedaFavorita)){
                 $cliente->moedaFavorita = 2;
             }
-            
+
             if ($cliente->documentoVerificado == 1) {
-                
+
                 $jsonStablecoin->text = "Stablecoins";
                 $jsonContas->text = "Reais";
 
                 $contaBancariaRn = new \Models\Modules\Cadastro\ContaBancariaRn();
                 $contasBancarias = $contaBancariaRn->listar("id_cliente = {$cliente->id} AND ativo > 0", "id", null, null, true);
 
-                $jsonAtar = "";
-                $jsonCointrade = "";
+                $jsonAtar = (object)null;;
+                $jsonCointrade = (object)null;;
 
                 //Atar
                 if ($configuracao->atarAtivo == 1 && $cliente->documentoVerificado == 1) {
 
+                    $jsonExchange = (object)null;;
                     $jsonExchange->text = "Exchange";
 
                     $jsonAtar->text = "Atar";
-                    $object = null;
+                    $object = (object)null;;
                     $object->id = 2;
                     $object->op = \Utils\Criptografia::encriptyPostId(1); //Real
                     $object->text = "Atar";
@@ -218,7 +211,7 @@ class Saques {
 
                 if ($cliente->documentoVerificado == 1) {
                     //Transf interna.
-                    $object = null;
+                    $object = (object)null;;
                     $object->id = 1;
                     $object->op = \Utils\Criptografia::encriptyPostId(1); //Real 
                     $object->text = $this->idioma->getText("transfInterna");
@@ -244,7 +237,7 @@ class Saques {
                         $icone = IMAGES . "currencies/BRL.png";
                     }
 
-                    $object = null;
+                    $object = (object)null;;
                     $object->id = $contaBancaria->id;
                     $object->op = \Utils\Criptografia::encriptyPostId(1); //Real
                     $object->text = $texto;
@@ -256,56 +249,52 @@ class Saques {
                 }
             }
 
-
-
             foreach ($categorias as $categoriaCarteira) {
-                
                 if ($categoriaCarteira->id == 1 && $configuracao->statusTransferenciaBrl > 0 && $mostrarAbaDepositoReais) {
-                    
-//                    $object = null;
-//                    $object->id = \Utils\Criptografia::encriptyPostId(1); //Real
-//                    $object->text = "Bancos";
-//                    $object->icone = IMAGES . "currencies/" . "BRL.png";
-//                    $object->tipo = "b";
-//
-//                    $jsonContas->children[] = $object;
-                    
+                //    $object = (object)null;
+                //    $object->id = \Utils\Criptografia::encriptyPostId(1); //Real
+                //    $object->text = "Bancos";
+                //    $object->icone = IMAGES . "currencies/" . "BRL.png";
+                //    $object->tipo = "b";
+
+                //    $jsonContas->children[] = $object;
+
                 } else if ($categoriaCarteira->id > 1) { 
                     $moedas = $moedaRn->conexao->listar("id_categoria_moeda = {$categoriaCarteira->id} AND ativo = 1 AND visualizar_saque = 1", "principal DESC, nome", null, null);
                     foreach ($moedas as $moeda) {
-                       
-                       $object = null;
-                       $object->id = \Utils\Criptografia::encriptyPostId($moeda->id);
-                       $object->text = $moeda->simbolo . " - " . $moeda->nome;    
-                       $object->tipo = "c";
-                       $object->icone = IMAGES . "currencies/" . $moeda->icone;
-                       $object->rede = (!empty($moeda->redesSaque) && !empty($moeda->idMoedaSaque)) ? true : false;
-                       $object->selected = $cliente->moedaFavorita == $moeda->id ? true : false;
-                        
-                       if($categoriaCarteira->id == 2){
-                           if($cliente->documentoVerificado == 1){
-                               $jsonStablecoin->children[] = $object;
-                           }
-                       } else {
-                           $jsonMoedas->children[] = $object;
-                       }
+
+                        $object = (object)null;;
+                        $object->id = \Utils\Criptografia::encriptyPostId($moeda->id);
+                        $object->text = $moeda->simbolo . " - " . $moeda->nome;    
+                        $object->tipo = "c";
+                        $object->icone = IMAGES . "currencies/" . $moeda->icone;
+                        $object->rede = (!empty($moeda->redesSaque) && !empty($moeda->idMoedaSaque)) ? true : false;
+                        $object->selected = $cliente->moedaFavorita == $moeda->id ? true : false;
+
+                        if($categoriaCarteira->id == 2){
+                            if($cliente->documentoVerificado == 1){
+                                $jsonStablecoin->children[] = $object;
+                            }
+                        } else {
+                            $jsonMoedas->children[] = $object;
+                        }
                     }
-                } 
+                }
             }
-            
+
             if ($cliente->documentoVerificado == 1) {
                 $arrayMoedas[] = $jsonContas;
                 $arrayMoedas[] = $jsonAtar;
                 $arrayMoedas[] = $jsonCointrade;
                 $arrayMoedas[] = $jsonStablecoin;
             }
-            
+
             $arrayMoedas[] = $jsonMoedas;
-            
+
             return json_encode($arrayMoedas);
-            
+
         } catch (\Exception $ex) {
-         
+
             return null;
         }
     }
@@ -390,11 +379,11 @@ class Saques {
             <td><?php echo $saque->dataSolicitacao->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP) ?></td>
             <td>
                 <?php if($saque->contaBancaria != null){  ?>
-                   <a tabindex="0" class="saque-motivo" role="button" data-controle='<?php echo $saque->id ?>' data-motivo='<?php echo $this->idioma->getText("codC") ?>: <?php echo $saque->contaBancaria->banco->codigo ?> <br> <?php echo $this->idioma->getText("bancoC") ?>: <?php echo $saque->contaBancaria->banco->nome ?>
-                      <br><?php echo $this->idioma->getText("agenciaC") ?>: <?php echo $saque->contaBancaria->agencia . ($saque->contaBancaria->agenciaDigito != null ? "-".$saque->contaBancaria->agenciaDigito : "")?> <br><?php echo $this->idioma->getText("contaC") ?>: <?php echo $saque->contaBancaria->conta . ($saque->contaBancaria->contaDigito != null ? "-".$saque->contaBancaria->contaDigito : "") ?>'
-                      data-toggle="popover" data-trigger="focus" style="margin-left: 5px; font-size: 9px">
-                      <i style="font-size: 15px;" class="fa fa-info-circle"></i>
-                </a> 
+                    <a tabindex="0" class="saque-motivo" role="button" data-controle='<?php echo $saque->id ?>' data-motivo='<?php echo $this->idioma->getText("codC") ?>: <?php echo $saque->contaBancaria->banco->codigo ?> <br> <?php echo $this->idioma->getText("bancoC") ?>: <?php echo $saque->contaBancaria->banco->nome ?>
+                        <br><?php echo $this->idioma->getText("agenciaC") ?>: <?php echo $saque->contaBancaria->agencia . ($saque->contaBancaria->agenciaDigito != null ? "-".$saque->contaBancaria->agenciaDigito : "")?> <br><?php echo $this->idioma->getText("contaC") ?>: <?php echo $saque->contaBancaria->conta . ($saque->contaBancaria->contaDigito != null ? "-".$saque->contaBancaria->contaDigito : "") ?>'
+                        data-toggle="popover" data-trigger="focus" style="margin-left: 5px; font-size: 9px">
+                        <i style="font-size: 15px;" class="fa fa-info-circle"></i>
+                    </a>
                 <?php }?> 
             </td>
             <td><?php echo $this->idioma->getText("rS") ?> <?php echo number_format($saque->valorSaque, 2, ",", ".") ?></td>
@@ -416,7 +405,7 @@ class Saques {
                 if ($saque->status == \Utils\Constantes::STATUS_SAQUE_CANCELADO && !empty($saque->motivoCancelamento)) {
                     ?>
                     <a tabindex="0" class="saque-motivo" role="button" data-controle='<?php echo $saque->id ?>' data-motivo='<?php echo $saque->motivoCancelamento ?>' data-toggle="popover" data-trigger="focus" style="margin-left: 5px; font-size: 9px ">
-                         <i style="font-size: 15px;"class="fa fa-info-circle"></i>
+                        <i style="font-size: 15px;"class="fa fa-info-circle"></i>
                     </a>
                     <?php } ?>
             </td>
@@ -507,7 +496,6 @@ class Saques {
         print json_encode($json);
     }
 
-    
     public function salvar($params) {
         try {
             $authRn = new \Models\Modules\Cadastro\AuthRn();
@@ -516,71 +504,70 @@ class Saques {
             $cliente = \Utils\Geral::getCliente();
             $clienteRn->conexao->carregar($cliente);
             $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
-            
+
             if(empty($cliente->id)){
                 throw new \Exception("Cliente inválido.");
             }
-            
+
             \Utils\ValidarSeguranca::validar($cliente);
-            
+
             $saque->idContaBancaria = \Utils\Post::get($params, "idContaBancaria", 0);
-            $saque->valorSaque = \Utils\Post::getNumeric($params, "valorReais", 0);            
+            $saque->valorSaque = \Utils\Post::getNumeric($params, "valorReais", 0);
             $processo = \Utils\Post::getEncrypted($params, "processo", 0);
             $token = \Utils\Post::get($params, "token", null);
             $pin = \Utils\Post::get($params, "pin", null);
-            
+
             if($cliente->documentoVerificado != 1){
                 throw new \Exception($this->idioma->getText("verifiqueSuaConta"));
             }
-            
+
             $moeda = new \Models\Modules\Cadastro\Moeda(Array("id" => 1));
             $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
             $moedaRn->conexao->carregar($moeda);
-            
+
             \Utils\ValidarLimiteOperacional::validar($cliente, $moeda, \Utils\Constantes::SAQUE, $saque->valorSaque, true);            
-                        
+
             if($processo == 1){
-                                
+
                 $contaCorrenteReaisRn = new \Models\Modules\Cadastro\ContaCorrenteReaisRn();
                 $saldo = $contaCorrenteReaisRn->calcularSaldoConta($cliente);
-                
+
                 if($saldo < $saque->valorSaque){
                     throw new \Exception($this->idioma->getText("saldoInsuficiente"));
-                }                
-                
+                }
+
                 $auth = new \Models\Modules\Cadastro\Auth();
-                $auth->idCliente = $cliente->id;                
+                $auth->idCliente = $cliente->id;
                 $authRn->salvar($auth);
-                
+
                 $contaBancaria = new \Models\Modules\Cadastro\ContaBancaria();
                 $contaBancaria->id = $saque->idContaBancaria;
-                
+
                 try {
                     $contaBancariaRn = new \Models\Modules\Cadastro\ContaBancariaRn();
                     $contaBancariaRn->carregar($contaBancaria, true, true);
                 } catch (\Exception $ex) {
                     throw new \Exception($this->idioma->getText("contaNaoEncontradaC"));
                 }
-                
+
                 $comissao = 0;
                 if ($cliente->considerarTaxaSaqueCliente) {
                     $comissao = $cliente->taxaComissaoSaque;
                 } else {
                     $comissao = $configuracao->taxaSaque;
                 }
-                
+
                 $valorSaque = ($saque->valorSaque - ($saque->valorSaque * ($comissao / 100))) - ($configuracao->tarifaTed);
-                
-                
+
                 $json["nomeTitular"] = $contaBancaria->nomeCliente;
                 $json["documentoCPF"] = $contaBancaria->documentoCliente;
                 $json["bancoInf"] = $contaBancaria->banco->codigo . " - " . $contaBancaria->banco->nome;
                 $json["agencia"] = $contaBancaria->agencia . " - " . $contaBancaria->agenciaDigito;
                 $json["conta"] = $contaBancaria->conta . " - " . $contaBancaria->contaDigito;
-                
+
                 $json["valorSolicitado"] = "R$ " . number_format($saque->valorSaque, 2, ",", ".");
                 $json["valorSaque"] = "R$ " . number_format($valorSaque, 2, ",", ".");
-                
+
                 if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL)  {
                 $json["mensagem"] = $this->idioma->getText("foiEnviadoEmail1") . " " . $cliente->email . " " . $this->idioma->getText("porFavorInsiraToken1");
                 } 
@@ -591,27 +578,27 @@ class Saques {
 
                 if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_GOOGLE){
                     $json["mensagem"] = $this->idioma->getText("useGoogle1");
-                }                
-                
+                }
+
             } else if($processo == 2){
-                                
+
                 if(empty($token)){
                     throw new \Exception($this->idioma->getText("tokenInvalido"));
                 }
-                
+
                 if(empty($pin)){
-                   throw new \Exception($this->idioma->getText("pinInvalido")); 
+                    throw new \Exception($this->idioma->getText("pinInvalido")); 
                 }
-                
+
                 if($cliente->pin != $pin){
                     throw new \Exception($this->idioma->getText("pinInvalido"));
                 }
-                
+
                 $authRn->validar($token, $cliente);
-                
+
                 $saqueRn = new \Models\Modules\Cadastro\SaqueRn();
                 $saqueRn->solicitarSaque($saque);
-                
+
                 $json["mensagem"] = $this->idioma->getText("saqueSucesso");
             }
 
@@ -623,12 +610,10 @@ class Saques {
         print json_encode($json);
     }
 
-    
     public function ultimosSaques($params) {
         try{
             $cliente = \Utils\Geral::getCliente();
             $categoria = \Utils\Post::getEncrypted($params, "categoria", null);
-            
             $contaCorrenteBtcRn = new \Models\Modules\Cadastro\ContaCorrenteBtcRn();
             $dados = $contaCorrenteBtcRn->ultimosSaquesBtcBrl($cliente, 'T', $categoria);
             
@@ -640,31 +625,31 @@ class Saques {
         }
         print json_encode($json);
     }
-    
-    private function htmlListaUltimosSaques($dados) {        
+
+    private function htmlListaUltimosSaques($dados) {
         ob_start();
 
         if (sizeof($dados) > 0) {
             foreach ($dados as $contaCorrenteBtc) {
-                $this->itemListaUltimosSaques($contaCorrenteBtc);                
+                $this->itemListaUltimosSaques($contaCorrenteBtc);
             }
         }
         $html = ob_get_contents();
         ob_end_clean();
         return $html;
     }
-    
+
     private function itemListaUltimosSaques($dados) {
         $data = new \Utils\Data(date($dados["data"]));
-        $hora = new \Utils\Data(date($dados["data"])); 
-        
+        $hora = new \Utils\Data(date($dados["data"]));
+
         if($dados["categoria"] > 1){
         $moeda = new \Models\Modules\Cadastro\Moeda();
         $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
         $moeda->id = $dados["idMoeda"];
         $moedaRn->carregar($moeda);
         }
-        
+
         ?>
         <tr style="text-decoration: <?php echo $dados["descricao"] == \Utils\Constantes::STATUS_SAQUE_CANCELADO ? "line-through;" : "none;" ?>">
             <td class="text-center"><?php echo $data->formatar(\Utils\Data::FORMATO_PT_BR) ?></td>
@@ -733,7 +718,7 @@ class Saques {
         </tr>
         <?php
     }
-    
+
     public function getTaxaTokens($params) {
         try {
             $taxaMoedaRn = new \Models\Modules\Cadastro\TaxaMoedaRn();
@@ -741,12 +726,12 @@ class Saques {
 
             $id = \Utils\Post::getEncrypted($params, "codigo", 0);
             $rede = \Utils\Post::get($params, "rede", null);
-            
+
             $moeda = \Models\Modules\Cadastro\MoedaRn::get($id);
             $taxaMoeda = $taxaMoedaRn->getByMoeda($moeda->id);
 
             if ($rede == \Utils\Constantes::REDE_ERC20) {
-                
+
                 //Taxa cobrada em outra moeda
                 $moedaTaxa = \Models\Modules\Cadastro\MoedaRn::get($taxaMoeda->idMoedaTaxa);
                 $json["simboloTaxa"] = $moedaTaxa->simbolo;
@@ -758,9 +743,9 @@ class Saques {
                     $taxaMoedaTransf = $taxaMoedaRn->getByMoeda($taxaMoeda->idMoedaTaxa);
                     $json["taxa"] = $taxaMoedaTransf->taxaTransferencia;
                 }
-                
+
                 $json["somar"] = false;
-                
+
             } else if ($rede == \Utils\Constantes::REDE_BEP20){
 
                 //Moeda Saque
@@ -784,11 +769,11 @@ class Saques {
                     $json["simboloTaxa"] = $moedaTaxa->simbolo;
                 }
                 $json["somar"] = false;
-                
+
                 if($moeda->id == $taxaMoeda->idMoedaTaxa){
                     $json["somar"] = true;
                 }
-                
+
             } else {
                 throw new \Exception("Rede não encontrada.");
             }
@@ -800,33 +785,33 @@ class Saques {
         }
         print json_encode($json);
     }
-    
+
     public function showDados($params) {
         try {
             $taxaMoedaRn = new \Models\Modules\Cadastro\TaxaMoedaRn();
             $cliente = \Utils\Geral::getCliente();
-            
+
             $taxa = "";
-            
+
             $id = \Utils\Post::getEncrypted($params, "codigo", 0);
             $tipo = \Utils\Post::get($params, "tipo", null);
-          
+
             if (!in_array(strtolower($tipo), Array("b", "c"))) {
                 throw new \Exception("Código inválido");
             }
-            
+
             $moeda = \Models\Modules\Cadastro\MoedaRn::get($id);
-            
+
             if($tipo == "c"){
-                
+
                 $taxaMoeda = $taxaMoedaRn->getByMoeda($moeda->id);
-                
+
                  //Verifica se a taxa é cobrada em outra moeda
                 if(empty($taxaMoeda->idMoedaTaxa)){
                     //Taxa cobrada na mesma moeda
                     $json["taxa"] = number_format($taxaMoeda->taxaTransferencia, 8, ".", "");
                     $json["simboloTaxa"] = null;
-                    
+
                     $msg = str_replace("{var}", $moeda->nome, $this->idioma->getText("taxasMoeda"));
                     $json["taxasMoeda"] = str_replace("{var1}", $moeda->nome, $msg);
                 } else {
@@ -920,7 +905,7 @@ class Saques {
         
         print json_encode($json);
     }
-    
+
     public function saldoClienteCripto($params) {
         try{
             $id = \Utils\Post::getEncrypted($params, "codigo", 0);
@@ -953,45 +938,45 @@ class Saques {
         print json_encode($json);
         
     }
-    
+
     public function saldoCliente($params) {
         try{
-            $cliente = \Utils\Geral::getCliente();            
+            $cliente = \Utils\Geral::getCliente();
             $id = \Utils\Post::getEncrypted($params, "id", 1);
-            
+
             if(empty($cliente->id)){
                 throw new \Exception("Cliente inválido.");
             }
-            
+
             $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
             $moeda = new \Models\Modules\Cadastro\Moeda();
             $cripto = false;
-            
+
             if($id > 1){ // Criptomoeda
-                
+
                 $contaCorrenteRn = new \Models\Modules\Cadastro\ContaCorrenteBtcRn();
                 $dados = $contaCorrenteRn->calcularSaldoConta($cliente, $id, true, false);
-                
+
                 $cripto = true;
                 $moeda->id = $id;
                 $moedaRn->carregar($moeda);
-               
+
                 $json["saldoTotal"] = number_format($dados["saldo"] + $dados["bloqueado"], 8, ".", "")  . " " . $moeda->simbolo;
                 $json["saldo"] = number_format($dados["saldo"], 8, ".", "") . " " . $moeda->simbolo;
                 $json["saldoBloqueado"] = number_format($dados["bloqueado"], 8, ".", "") . " " . $moeda->simbolo;;
                 $json["saldoDisp"] = number_format($dados["saldo"], 8, ".", "");
-            } else { // Reais  
-                
+            } else { // Reais
+
                 $contaCorrenteReaisRn = new \Models\Modules\Cadastro\ContaCorrenteReaisRn();
                 $saldoReais = $contaCorrenteReaisRn->calcularSaldoConta($cliente, true, false);
                 $cripto = false;
-    
+
                 $json["saldoTotal"] = "R$ " . number_format($saldoReais["saldo"] + $saldoReais["bloqueado"], 2, ",", ".") ;
                 $json["saldo"] = "R$ " . number_format($saldoReais["saldo"], 2, ",", ".") ;
                 $json["saldoBloqueado"] = "R$ " . number_format($saldoReais["bloqueado"], 2, ",", ".")  ;
                 $json["saldoDisp"] = number_format($saldoReais["saldo"], 2, ",", ".");
             }
-            
+
             $json["cripto"] = $cripto;
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
@@ -999,13 +984,12 @@ class Saques {
             $json["mensagem"] = \Utils\Excecao::mensagem($ex);
         }
         print json_encode($json);
-        
+
     }
 
-    
     public function findByEmail($params) {
-        try{   
-            
+        try{
+
             $cliente = \Utils\Geral::getCliente();
             $email = \Utils\Post::get($params, "email", null);
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
@@ -1031,7 +1015,5 @@ class Saques {
         print json_encode($json);
         
     }
-    
-    
 
 }

@@ -24,14 +24,14 @@ class Request
         $partner_token = isset($options['partner_token'])? $options['partner_token'] : "";
         $this->certified_path = isset($options['certified_path'])? $options['certified_path'] : null;
         $this->client = new Client([
-        'debug' => $this->config['debug'],
-        'base_uri' => $this->config['baseUri'],
-        'headers' => [
-          'Content-Type' => 'application/json',
-          'api-sdk' => 'php-' . $composerData['version'],
-          'partner-token' => $partner_token
-          ],
-      ]);
+            'debug' => $this->config['debug'],
+            'base_uri' => $this->config['baseUri'],
+            'headers' => [
+            'Content-Type' => 'application/json',
+            'api-sdk' => 'php-' . $composerData['version'],
+            'partner-token' => $partner_token
+        ],
+        ]);
     }
 
     public function send($method, $route, $requestOptions)
@@ -46,8 +46,8 @@ class Request
             return json_decode($response->getBody(), true);
         } catch (ClientException $e) {
             throw new AuthorizationException($e->getResponse()->getStatusCode(),
-                       $e->getResponse()->getReasonPhrase(),
-                       $e->getResponse()->getBody());
+                        $e->getResponse()->getReasonPhrase(),
+                        $e->getResponse()->getBody());
         } catch (ServerException $se) {
             throw new GerencianetException($se->getResponse()->getBody());
         }

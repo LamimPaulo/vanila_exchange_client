@@ -6,15 +6,14 @@ require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasParidadeFavo
 require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasParidadeFavoritaRn.class.php';
 
 class Book {
-    
+
     private  $codigoModulo = "trade";
     private $idioma = null;
     private $casasDecimaisMoedaTrade = 4;
-    
+
     function __construct($params) {
-        
         \Utils\Validacao::acesso($this->codigoModulo);
-        
+
         $this->idioma = new \Utils\PropertiesUtils("book", IDIOMA);
 
         $paridade = \Modules\principal\Controllers\Principal::getParity();
@@ -25,7 +24,7 @@ class Book {
             $this->casasDecimaisMoedaTrade = $paridade->casasDecimaisMoedaTrade;
         }
     }
-    
+
     public function index($params) {
         try {
 
@@ -48,37 +47,33 @@ class Book {
             $params["venda"] = number_format($taxas["venda"], 4, ".", "");
 
             \Utils\Layout::view("book", $params);
-            
+
         } catch (\Exception $ex) {
-            
         }
     }
 
     public function getParidadesByMoeda($params) {
-        
+
         try {
             $moeda = new \Models\Modules\Cadastro\Moeda();
             $moeda->id = \Utils\Post::get($params, "moeda", 0);
-            
-            
+
             $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
             $paridades = $paridadeRn->getListaParidadesByMoeda($moeda, false, true);
-            
+
             $cliente = \Utils\Geral::getLogado();
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $clienteRn->conexao->carregar($cliente);
             $clienteHasParidadeFavoritaRn = new \Models\Modules\Cadastro\ClienteHasParidadeFavoritaRn();
             $favoritas = $clienteHasParidadeFavoritaRn->getParidadesFavoritas($cliente);
-            
+
             ob_start();
             foreach ($paridades as $paridade) {
-                
+
                 $favorita = isset($favoritas[$paridade->id]);
-                
                 $precoAbertura = $paridade->primeiroPreco;
-                               
                 $precoVolume = $paridade->precoCompra;
-                
+
                 if (($paridade->idMoedaTrade > 1) && ($paridade->ativo == 1)) {
                     $par = $paridadeRn->getBySymbol("{$paridade->moedaTrade->simbolo}:BRL");
                     if ($paridade != null) {
@@ -87,13 +82,13 @@ class Book {
                         $precoVolume = 0;
                     }
                 }
-                
+
                 if ($precoAbertura > 0) {
                     $variacao = (($paridade->precoCompra > $precoAbertura) ? (($paridade->precoCompra - $precoAbertura) / $precoAbertura) :  ($precoAbertura - $paridade->precoCompra) / $precoAbertura) * 100;
                 } else {
                     $variacao = 0;
                 }
-                
+
                 $icon = "";
                 $color = "text-blue";
                 if ($paridade->precoCompra < $precoAbertura) {
@@ -106,13 +101,13 @@ class Book {
                 if($precoAbertura == 0){
                     $icon = "-";
                 }
-                
+
                 if (empty($paridade->casasDecimaisMoedaTrade)) {
                     $casasDecimaisMoedaTrade = $paridade->moedaTrade->casasDecimais;
                 } else {
                     $casasDecimaisMoedaTrade = $paridade->casasDecimaisMoedaTrade;
                 }
-                
+
                 ?>
 
                 <tr class="<?php echo ($favorita ? "favorite-parity" : "") ?> tr-h" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >                    
@@ -124,8 +119,8 @@ class Book {
                         <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
                     </td>
                     <td class="text-right change-parity<?php echo $color ?> column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 30% !important;" data-name="<?php echo $paridade->symbol ?>">
-                         <?php echo number_format($variacao, 1, ",", ".") ?>%
-                    </td>           
+                        <?php echo number_format($variacao, 1, ",", ".") ?>%
+                    </td>
                     <td><?php echo $icon ?></td>
                     <?php if($cliente->modoOperacao == "basic"){ ?>
                     <td class="text-right change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 35% !important" data-name="<?php echo $paridade->symbol ?>">
@@ -148,39 +143,36 @@ class Book {
             }
             $html = ob_get_contents();
             ob_end_clean();
-            
+
             $json["html"] = $html;
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
             $json["sucesso"] = false;
             $json["mensagem"] = \Utils\Excecao::mensagem($ex);
         }
-        
+
         print json_encode($json);
     }
-    
-    
+
     public function getTableBalances($params) {
-        
+
         try {
-            
+
             $balanceMode = \Utils\Post::get($params, "balanceMode", 1);
-            
             $cliente = \Utils\Geral::getCliente();
-            
+
             $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
             $moedas = $moedaRn->listar( " id > 1 AND (ativo = 1 OR status_saque = 1) ");
-            
+
             $lista = Array();
-            
             $contaCorrenteReaisRn = new \Models\Modules\Cadastro\ContaCorrenteReaisRn();
             $saldos = $contaCorrenteReaisRn->calcularSaldoConta($cliente, true);
-            
+
             if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
                 $moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
                 $lista[] = Array("moeda" => $moeda, "saldos" => $saldos);
             }
-            
+
             $contaCorrenteBtcRn = new \Models\Modules\Cadastro\ContaCorrenteBtcRn();
             foreach ($moedas as $moeda) {
 
@@ -227,19 +219,18 @@ class Book {
         
         print json_encode($json);
     }
-    
-    
+
     public function salvarOrdemCompra($params) {
         try {
-            
+
             $paridade = \Modules\principal\Controllers\Principal::getParity();
-            
+
             $amount = \Utils\Post::getNumeric($params, "amount", 0);
             $price = \Utils\Post::getNumeric($params, "price", 0);
-            
+
             $orderBookRn = new \Models\Modules\Cadastro\OrderBookRn();
             $orderBookRn->registrarOrdemCompra($amount, $price, $paridade, false);
-            
+
             $json["sucesso"] = true;
             $json["mensagem"] = $this->idioma->getText("ordemRegistradaSucessoC");
         } catch (\Exception $ex) {
@@ -248,19 +239,17 @@ class Book {
         }
         print json_encode($json);
     }
-    
-    
+
     public function salvarOrdemVenda($params) {
-        try {            
-            
+        try {
             $paridade = \Modules\principal\Controllers\Principal::getParity();
-            
+
             $amount = \Utils\Post::getNumeric($params, "amount", 0);
             $price = \Utils\Post::getNumeric($params, "price", 0);
-            
+
             $orderBookRn = new \Models\Modules\Cadastro\OrderBookRn();
             $orderBookRn->registrarOrdemVenda($amount, $price, $paridade, false);
-            
+
             $json["sucesso"] = true;
             $json["mensagem"] = $this->idioma->getText("ordemRegistradaSucessoV");
         } catch (\Exception $ex) {
@@ -269,28 +258,28 @@ class Book {
         }
         print json_encode($json);
     }
-    
+
     public function getBook($params) {
         try {
             $paridade = \Modules\principal\Controllers\Principal::getParity();
-            $cliente = \Utils\Geral::getCliente(); 
+            $cliente = \Utils\Geral::getCliente();
 
             $bd = new \Io\BancoDados(BDBOOK);
             $orderBookRn = new \Models\Modules\Cadastro\OrderBookRn($bd);
 
-            $listaCompra = $orderBookRn->getOrders($paridade, \Utils\Constantes::ORDEM_COMPRA, "N", "N", 9, 0, true);
-            $listaVenda = $orderBookRn->getOrders($paridade, \Utils\Constantes::ORDEM_VENDA, "N", "N", 9, 0, true);
+            $listaCompra = $orderBookRn->getOrders($paridade, \Utils\Constantes::ORDEM_COMPRA, "N", "N", 30, 0, true);
+            $listaVenda = $orderBookRn->getOrders($paridade, \Utils\Constantes::ORDEM_VENDA, "N", "N", 30, 0, true);
 
             $venda = current($listaVenda);
             $compra = current($listaCompra);
 
             $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
             if($compra->valorCotacao != $paridade->precoCompra && !empty($compra->valorCotacao)){
-                $paridadeRn->conexao->update(Array("preco_compra" => $compra->valorCotacao), Array("id" => $paridade->id));                
+                $paridadeRn->conexao->update(Array("preco_compra" => $compra->valorCotacao), Array("id" => $paridade->id));
             }
 
             if($venda->valorCotacao != $paridade->precoVenda && !empty($venda->valorCotacao)){
-                $paridadeRn->conexao->update(Array("preco_venda" => $venda->valorCotacao), Array("id" => $paridade->id));                
+                $paridadeRn->conexao->update(Array("preco_venda" => $venda->valorCotacao), Array("id" => $paridade->id));
             }
 
             $diferencaPorcentagem = 0;
@@ -362,7 +351,7 @@ class Book {
         $colorClass2 = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "green-bg-".number_format($ordem->porcentagem, 0, ".", "") : "red-bg-".number_format($ordem->porcentagem, 0, ".", "")); 
         ?>
 
-        <tr style="font-weight: <?php echo $ordem->idCliente == $idCliente ? "bold" : "normal" ?>"    
+        <tr style="font-weight: <?php echo $ordem->idCliente == $idCliente ? "bold" : "normal" ?>"
             class="order-item <?php echo $colorClass2 ?>" 
             onclick="configOrder('<?php echo ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? \Utils\Constantes::ORDEM_VENDA : \Utils\Constantes::ORDEM_COMPRA) ?>', '<?php echo number_format($ordem->valorCotacao, $this->casasDecimaisMoedaTrade, ".", "")?>', '<?php echo number_format($volumeAcumulado, $ordem->paridade->moedaBook->casasDecimais, ".", "")?>');" >
             <td class="<?php echo $colorClass ?>" ">

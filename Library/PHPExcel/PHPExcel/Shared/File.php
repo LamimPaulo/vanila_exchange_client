@@ -109,13 +109,13 @@ class PHPExcel_Shared_File
 		// http://php.net/manual/en/function.sys-get-temp-dir.php#94119
 
 		if ( !function_exists('sys_get_temp_dir')) {
-			if ($temp = getenv('TMP') ) {
+			if ($temp = $_ENV['TMP'] ) {
 				if ((!empty($temp)) && (file_exists($temp))) { return realpath($temp); }
 			}
-			if ($temp = getenv('TEMP') ) {
+			if ($temp = $_ENV['TEMP'] ) {
 				if ((!empty($temp)) && (file_exists($temp))) { return realpath($temp); }
 			}
-			if ($temp = getenv('TMPDIR') ) {
+			if ($temp = $_ENV['TMPDIR'] ) {
 				if ((!empty($temp)) && (file_exists($temp))) { return realpath($temp); }
 			}
 

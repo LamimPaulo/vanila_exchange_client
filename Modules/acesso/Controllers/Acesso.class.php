@@ -12,9 +12,9 @@ use Utils\Layout;
 use Utils\Geral;
 
 class Acesso {
-    
+
     public $idioma = null;
-    
+
     public function __construct() {
         $this->idioma = new \Utils\PropertiesUtils("login", IDIOMA);
         header('Access-Control-Allow-Origin: *');
@@ -116,7 +116,7 @@ class Acesso {
             
         }
     }
-    
+
     public function verificarSessao(\Models\Modules\Cadastro\Cliente $cliente) {
 
         $navegadorRn = new \Models\Modules\Cadastro\NavegadorRn();
@@ -169,7 +169,7 @@ class Acesso {
             Layout::view('login', array('loginInvalido' => true, 'mensagem' => \Utils\Excecao::mensagem($e), '_POST' => $params['_POST']));
         }
     }
-    
+
     /**
      * Método responsável por logar o usuário no sistema
      * @param array $params Array com os dados do controller passado automaticamente pelo route
@@ -188,12 +188,11 @@ class Acesso {
             } else {
                 throw new \Exception("Recaptcha inválido.");
             }
-
             $usuario = new Usuario(Array("email" => $email, "senha" => $senha));
-            
+
             $tokenApiRn = new \Models\Modules\Cadastro\TokenApiRn();
             $token = $tokenApiRn->login($usuario->email, $usuario->senha);
-            
+
             $json["token"] = $token->token;
             $json["sucesso"] = true;
         } catch (\Exception $e) {
@@ -202,7 +201,7 @@ class Acesso {
         } 
         print json_encode($json);
     }
-    
+
     /**
      * Método responsável pelo processo de recuperação de senha do cadastro de usuário
      * @param array $params Array com os dados do controller passado automaticamente pelo route
@@ -214,7 +213,7 @@ class Acesso {
         
         Layout::view("recuperar", $params);
     }
-    
+
     /**
      * Método responsável pelo processo de recuperação de senha do cadastro de usuário
      * @param array $params Array com os dados do controller passado automaticamente pelo route
@@ -225,7 +224,7 @@ class Acesso {
         }
         Layout::view("cadastro", $params);
     }
-    
+
     public function validarDadosRecuperacao($params) {
         try {
             
@@ -357,16 +356,12 @@ class Acesso {
         print json_encode($json);
     }
 
-
-    /**
-     * Método responsável por encerrar o login de usuário
-     */
     public function logout() {
         $logado = Geral::getLogado();
         Session::close();
         Geral::redirect(URLBASE_CLIENT);
     }
-    
+
     public function newPassword($params) {
         try {
             
@@ -394,27 +389,27 @@ class Acesso {
             if ($cliente->emailConfirmado < 1) {
                 //throw new \Exception("Você precisa confirmar o seu E-mail. Para isso acesse a página de login e cliquem em \"Confirmar e-mail\"");
             }
-            
+
             if ($cliente->bloquearRecuperacaoSenha > 0) {
                 throw new \Exception($this->idioma->getText("recuperacaoBloqueadaSenha"));
             }
-            
+
             if ($cliente == null) {
                 throw new \Exception($msg);
             }
-            
+
             if ($hash != $cliente->hashRecuperacaoSenha) {
                 throw new \Exception($this->idioma->getText("chaveInvalidaErr"));
             }
-            
+
             $dtAtual = new \Utils\Data(date("d/m/Y H:i:s"));
             if ($cliente->validadeHashRecuperacaoSenha->menor($dtAtual)) {
                 throw new \Exception($this->idioma->getText("dataExpiradaErr"));
             }
-            
+
             $time = time();
             $seedNovaSenha = sha1("@Nova{$time}SenhaNewCash");
-            
+
             $cliente->senha = substr($seedNovaSenha, 0, 10);
             $senha = sha1($cliente->senha.\Utils\Constantes::SEED_SENHA);
 
@@ -442,7 +437,7 @@ class Acesso {
         }
         print json_encode($json);
     }
-    
+
     public function confirmation($params) {
         try {
             
@@ -453,7 +448,7 @@ class Acesso {
         }
         Layout::view("confirmacao_email", $params);
     }
-    
+
     public function confirmarEmail($params) {
         try {
             $hash = \Utils\Post::get($params, "key", NULL);
@@ -517,7 +512,7 @@ class Acesso {
         }
         print json_encode($json);
     }
-    
+
     public function revogarAcesso($params) {
         try {       
             $idCliente = \Utils\Get::getEncrypted($params, "cnc");
@@ -581,8 +576,8 @@ class Acesso {
         } 
         
        Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGOUT);
-    } 
-    
+    }
+
     public function novoCadastro($params) {
         try { 
                         
@@ -651,25 +646,23 @@ class Acesso {
            Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
         } 
     }
- 
-    
+
     public function ativarContaApp($params) {
         try {
             $get = \Utils\Get::getEncrypted($params, "at", null);
 
-            if(empty($get)){                
+            if(empty($get)){
                 Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
             }
-            
-            
+
             $dados = base64_decode($get);
             $dados = explode("?", $dados);
 
             //exit(print_r($dados));
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-            
+
             $result = $clienteRn->conexao->listar(" api_key = '{$dados[0]}' AND data_cadastro = '{$dados[1]}' ");
-            
+
             if(sizeof($result) > 0){
                 $cliente = $result->current();
                 $clienteRn->conexao->update(Array("email_confirmado" => 1), Array("id" => $cliente->id ));
@@ -677,10 +670,9 @@ class Acesso {
             } else {
                 echo "Verifique seu link de ativação.";
             }
-            
+
         } catch (\Exception $ex) {
             Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
         }
     }
-    
 }

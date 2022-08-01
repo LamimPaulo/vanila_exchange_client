@@ -29,12 +29,12 @@ class ADCGetTest extends TestCase
 
     protected function setUp()
     {
-        $this->originalHome = getenv('HOME');
+        $this->originalHome = $_ENV['HOME'];
     }
 
     protected function tearDown()
     {
-        if ($this->originalHome != getenv('HOME')) {
+        if ($this->originalHome != $_ENV['HOME']) {
             putenv('HOME=' . $this->originalHome);
         }
         putenv(ServiceAccountCredentials::ENV_VAR);  // removes it from
@@ -108,12 +108,12 @@ class ADCGetMiddlewareTest extends TestCase
 
     protected function setUp()
     {
-        $this->originalHome = getenv('HOME');
+        $this->originalHome = $_ENV['HOME'];
     }
 
     protected function tearDown()
     {
-        if ($this->originalHome != getenv('HOME')) {
+        if ($this->originalHome != $_ENV['HOME']) {
             putenv('HOME=' . $this->originalHome);
         }
         putenv(ServiceAccountCredentials::ENV_VAR);  // removes it if assigned
@@ -204,11 +204,11 @@ class ADCGetCredentialsAppEngineTest extends BaseTest
     protected function setUp()
     {
         // set home to be somewhere else
-        $this->originalHome = getenv('HOME');
+        $this->originalHome = $_ENV['HOME'];
         putenv('HOME=' . __DIR__ . '/not_exist_fixtures');
 
         // remove service account path
-        $this->originalServiceAccount = getenv(ServiceAccountCredentials::ENV_VAR);
+        $this->originalServiceAccount = $_ENV[ServiceAccountCredentials::ENV_V]R);
         putenv(ServiceAccountCredentials::ENV_VAR);
     }
 
@@ -252,12 +252,12 @@ class ADCGetSubscriberTest extends BaseTest
     {
         $this->onlyGuzzle5();
 
-        $this->originalHome = getenv('HOME');
+        $this->originalHome = $_ENV['HOME'];
     }
 
     protected function tearDown()
     {
-        if ($this->originalHome != getenv('HOME')) {
+        if ($this->originalHome != $_ENV['HOME']) {
             putenv('HOME=' . $this->originalHome);
         }
         putenv(ServiceAccountCredentials::ENV_VAR);  // removes it if assigned

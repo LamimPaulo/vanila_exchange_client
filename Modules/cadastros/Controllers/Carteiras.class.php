@@ -84,10 +84,10 @@ class Carteiras {
             
             $arrayMoedas = null;
             
-            $jsonMoedas = null;
+            $jsonMoedas = (object)null;
             $jsonMoedas->text = "Criptomoedas";
             
-            $jsonStablecoin = null;
+            $jsonStablecoin = (object)null;
             $jsonStablecoin->text = "Stablecoins";
             
             if (empty($cliente->moedaFavorita)) {
@@ -96,7 +96,7 @@ class Carteiras {
 
             if ($cliente->documentoVerificado == 1) {
                 
-                $jsonContas = null;
+                $jsonContas = (object)null;
                 $jsonContas->text = "Reais";
 
                 $bancos = $contaBancariaEmpresaRn->listar(" ativo = 1 ", "ordem DESC", null, NULL, true);
@@ -105,7 +105,7 @@ class Carteiras {
 
                     if ($contaBancariaEmpresa->id == 15052774463549) { //Atar     
                         if ($configuracao->atarAtivo == 1) {
-                            $object = null;
+                            $object = (object)null;
                             $object->id = \Utils\Criptografia::encriptyPostId($contaBancariaEmpresa->id);
                             $object->text = $contaBancariaEmpresa->banco->nome;
                             $object->icone = IMAGES . "bancos/" . $contaBancariaEmpresa->banco->logo;
@@ -115,7 +115,7 @@ class Carteiras {
                         }
                     } else {
                         /* Boleto ou conta bancaria empresa */
-                        $object = null;
+                        $object = (object)null;
                         $object->id = \Utils\Criptografia::encriptyPostId($contaBancariaEmpresa->id);
                         $object->text = $contaBancariaEmpresa->banco->nome;
                         $object->tipo = "b";
@@ -136,7 +136,7 @@ class Carteiras {
                     $moedas = $moedaRn->conexao->listar("id_categoria_moeda = {$categoriaCarteira->id} AND ativo = 1 AND visualizar_deposito = 1", "principal DESC, nome", null, null);
                     foreach ($moedas as $moeda) {
                        
-                       $object = null;
+                       $object = (object)null;
                        $object->id = \Utils\Criptografia::encriptyPostId($moeda->id);
                        $object->text = $moeda->simbolo . " - " . $moeda->nome;    
                        $object->tipo = "c";

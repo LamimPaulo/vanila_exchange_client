@@ -3,7 +3,7 @@
 require 'vendor/autoload.php';
 
 
-$apiKey = getenv('SENDGRID_API_KEY');
+$apiKey = $_ENV['SENDGRID_API_KEY'];
 $sg = new \SendGrid($apiKey);
 
 ////////////////////////////////////////////////////

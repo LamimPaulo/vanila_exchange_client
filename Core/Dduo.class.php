@@ -1,6 +1,6 @@
 <?php
 
-//Apelidos usados apenas para facilitar a declaração das classes 
+//Apelidos usados apenas para facilitar a declaração das classes
 use Io\BancoDados;
 use Utils\Geral;
 use Utils\Layout;
@@ -174,7 +174,6 @@ class Dduo {
         }
     }
 
-
     public function route($_parameters) {
 
         /*$name = 'log1.txt';
@@ -327,5 +326,4 @@ class Dduo {
             Geral::redirect(URLBASE_CLIENT . 'login');
         }
     }
-
 }

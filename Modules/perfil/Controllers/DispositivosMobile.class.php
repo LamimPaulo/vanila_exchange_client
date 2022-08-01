@@ -6,25 +6,24 @@ require_once getcwd() . '/Library/Models/Modules/Cadastro/DispositivoMobile.clas
 require_once getcwd() . '/Library/Models/Modules/Cadastro/DispositivoMobileRn.class.php';
 
 class DispositivosMobile {
-    
+
     private  $codigoModulo = Array("perfil", "cadastros");
-    
+
     function __construct() {
         $this->idioma = new \Utils\PropertiesUtils("perfil", IDIOMA);
         \Utils\Validacao::acesso($this->codigoModulo);
     }
-    
-    
+
     public function parear() {
-        try {            
+        try {
             $cliente = \Utils\Geral::getCliente();
-            
+
             $authRn = new \Models\Modules\Cadastro\AuthRn();
             $auth = new \Models\Modules\Cadastro\Auth();
-            
+
             $auth->idCliente = $cliente->id;
             $codigo = $authRn->salvar($auth, null, false);
-            
+
             $hash = base64_encode($cliente->clientid . ":" . $cliente->apiKey . "]" . $codigo);
             //exit($hash);
             if (!file_exists("qrcodes/{$hash}.png")) {
@@ -37,34 +36,32 @@ class DispositivosMobile {
             $json["sucesso"] = false;
             $json["mensagem"] = \Utils\Excecao::mensagem($e);
         }
-        
+
         print json_encode($json);
     }
-    
+
     public function ativarPareamento() {
-        try {            
+        try {
             $cliente = \Utils\Geral::getCliente();
-            
+
             $dispositivoMobileRn = new \Models\Modules\Cadastro\DispositivoMobileRn();
             $lista = $dispositivoMobileRn->filtrar($cliente->id);
-            
+
             if(sizeof($lista) > 0){
                 $json["ativado"] = true;
             } else {
                 $json["ativado"] = false;
             }
-            
+
             $json["sucesso"] = true;
         } catch (\Exception $e) {
             $json["sucesso"] = false;
             $json["mensagem"] = \Utils\Excecao::mensagem($e);
         }
-        
+
         print json_encode($json);
     }
-    
-    
-    
+
     public function listar($params) {
         try {
             if (\Utils\Geral::isCliente()) {
@@ -73,24 +70,23 @@ class DispositivosMobile {
                 $cliente = new \Models\Modules\Cadastro\Cliente();
                 $cliente->id = \Utils\Post::getEncrypted($params, "cliente", null);
             }
-            
+
             $dispositivoMobileRn = new \Models\Modules\Cadastro\DispositivoMobileRn();
             $lista = $dispositivoMobileRn->filtrar($cliente->id);
-            
+
             $json["html"] = $this->listaHtml($lista);
             $json["sucesso"] = true;
         } catch (\Exception $e) {
             $json["sucesso"] = false;
             $json["mensagem"] = \Utils\Excecao::mensagem($e);
         }
-        
+
         print json_encode($json);
     }
-    
-    
+
     private function listaHtml($lista) {
         ob_start();
-        
+
         if (sizeof($lista) > 0) {
             foreach ($lista as $dispositivoMobile) {
                 //$dispositivoMobile = new \Models\Modules\Cadastro\DispositivoMobile();

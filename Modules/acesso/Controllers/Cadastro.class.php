@@ -68,9 +68,9 @@ class Cadastro {
                 //$result = \LambdaAWS\QueueKYC::validarEmail($nome, $email, $referencia, \Utils\Criptografia::encriptyPostId($senha));
             }
 
-//            if (!$result) {
-//                throw new \Exception("Por favor, tente novamente mais tarde.");
-//            }
+        //    if (!$result) {
+        //        throw new \Exception("Por favor, tente novamente mais tarde.");
+        //    }
             $this->criarNovoCliente($nome, $email, $senha, $referencia);
 
             $json["sucesso"] = true;
@@ -195,39 +195,39 @@ class Cadastro {
     }
     
 //    public static function criarNovoCliente($object) {
-//
+
 //        $cliente = new \Models\Modules\Cadastro\Cliente();
-//
+
 //        $cliente->email = strtolower(\Utils\SQLInjection::clean($object->parametros->email));
 //        $cliente->nome = \Utils\SQLInjection::clean($object->parametros->nome);
 //        $cliente->senha = \Utils\Criptografia::decriptyPostId($object->parametros->senha);
-//
+
 //        $cliente->senha = sha1($cliente->senha . \Utils\Constantes::SEED_SENHA);
-//
+
 //        $cliente->idReferencia = \Utils\Criptografia::decriptyPostId($object->parametros->referencia);
-//
+
 //        if (!is_numeric($cliente->idReferencia)) {
 //            $cliente->idReferencia = null;
 //        }
-//
+
 //        if (empty($cliente->email)) {
 //            throw new \Exception("O email deve ser informado");
 //        }
-//
+
 //        if (empty($cliente->nome)) {
 //            throw new \Exception("O nome deve ser informado");
 //        }
-//
+
 //        $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
 //        $result = $clienteRn->conexao->listar("email = '{$cliente->email}'");
-//
+
 //        if (sizeof($result) > 0) {
 //            throw new \Exception("O email já está cadastrado no sistema");
-//
+
 //        } else {
 //            $cliente->id = 0;
 //        }
-//
+
 //        $where = "tipo IN ('C', 'UC') ";
 //        $rotinaHasAcaoRn = new \Models\Modules\Acesso\RotinaHasAcaoRn();
 //        $rotinasHasAcoes = $rotinaHasAcaoRn->conexao->listar($where);
@@ -235,7 +235,7 @@ class Cadastro {
 //        foreach ($rotinasHasAcoes as $rha) {
 //            $permissoesRotinas[] = $rha->id;
 //        }
-//
+
 //        $moduloHasAcaoRn = new \Models\Modules\Acesso\ModuloHasAcaoRn();
 //        $modulosHasAcoes = $moduloHasAcaoRn->listar($where, null, null, null, true);
 //        $permissoesModulos = Array();
@@ -246,15 +246,15 @@ class Cadastro {
 //                }
 //            }
 //        }
-//
+
 //        $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']);
-//
+
 //        if(strpos($ip,',') !== false) {
 //            $ip = substr($ip,0,strpos($ip,','));
 //        }
-//
+
 //        $_SESSION["cadastrado"] = true;
-//
+
 //        $cliente->comissaoConvitePago = 0;
 //        $cliente->documentoVerificado = 0;
 //        $cliente->documentoTipo = \Utils\Constantes::DOCUMENTO_CPF;
@@ -270,9 +270,7 @@ class Cadastro {
 //        $cliente->origemCadastro = \Utils\Constantes::ORIGEM_SITE;
 //        $cliente->ipCadastro = $ip;
 //        $cliente->retornoAnaliseEmail = "E-mail consultado com sucesso. - E-mail válido.";
-//
+
 //        $clienteRn->salvar($cliente, $cliente->senha, $permissoesRotinas, $permissoesModulos);
 //    }
-    
-    
 }

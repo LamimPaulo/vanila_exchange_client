@@ -66,7 +66,7 @@ class Referencia {
             $saque = 0;
             $compraVenda = 0;
             foreach ($referencias as $referencia) {
-                $referenciaAux = null;
+                $referenciaAux = (object)null;
                 $gravar = false;
 
                 $arrayNomeCliente = explode(" ", $referencia->nome);
@@ -126,7 +126,7 @@ class Referencia {
             }
             
             if(empty(sizeof($lista))){
-                $referenciaAux = null;
+                $referenciaAux = (object)null;
                 $referenciaAux->nomeReferencia = "-";
                 $referenciaAux->dataCadastro = "-";
                 $referenciaAux->valorDeposito = "-";

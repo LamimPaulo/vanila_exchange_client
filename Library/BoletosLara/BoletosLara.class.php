@@ -12,15 +12,15 @@ class BoletosLara {
     protected $idEmpresa;
     
     public function __construct() {
-        $this->user = getenv("EnvLaraUser");
-        $this->password = getenv("EnvLaraPassword");
-        $this->token = getenv("EnvLaraToken");
-        $this->idEmpresa = getenv("EnvLaraIdEmpresa");
+        $this->user = $_ENV["EnvLaraUser"];
+        $this->password = $_ENV["EnvLaraPassword"];
+        $this->token = $_ENV["EnvLaraToken"];
+        $this->idEmpresa = $_ENV["EnvLaraIdEmpresa"];
         
         if(AMBIENTE == "producao"){
-            $this->host = getenv("EnvLaraUrlProd");
+            $this->host = $_ENV["EnvLaraUrlProd"];
         } else {
-            $this->host = getenv("EnvLaraUrlDev");
+            $this->host = $_ENV["EnvLaraUrlDev"];
         }
         
         $this->credenciais = "Basic " . base64_encode($this->user . ":" . $this->password);
@@ -28,7 +28,7 @@ class BoletosLara {
 
     public function gerarBoleto(\Models\Modules\Cadastro\Deposito &$deposito) {
 
-        $object = null;
+        $object = (object)null;
         
         //Dados do cliente
         //Caso tenha o idLara do cliente, não precisa preencher todos os campos novamente.

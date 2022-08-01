@@ -28,14 +28,14 @@ class Extrato {
 
         $dados = Array();
 
-        $object = null;
+        $object = (object)null;
         $object->text = "Todos";
         $object->id = \Utils\Criptografia::encriptyPostId("todos");
         $object->icone = IMAGES . "transferencia.png";
         $dados[] = $object;
 
         foreach ($moedas as $m) {
-            $object = null;
+            $object = (object)null;
             $object->text = $m->simbolo . " - " .$m->nome;
             $object->simbolo = $m->simbolo;
             $object->icone = IMAGES . "currencies/" .$m->icone;
