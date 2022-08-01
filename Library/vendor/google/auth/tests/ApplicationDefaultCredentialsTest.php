@@ -29,12 +29,12 @@ class ADCGetTest extends TestCase
 
     protected function setUp()
     {
-        $this->originalHome = $_ENV['HOME'];
+        $this->originalHome = $_ENV['HOME'] ?? getenv('HOME');
     }
 
     protected function tearDown()
     {
-        if ($this->originalHome != $_ENV['HOME']) {
+        if ($this->originalHome != $_ENV['HOME'] ?? getenv('HOME')) {
             putenv('HOME=' . $this->originalHome);
         }
         putenv(ServiceAccountCredentials::ENV_VAR);  // removes it from
@@ -108,12 +108,12 @@ class ADCGetMiddlewareTest extends TestCase
 
     protected function setUp()
     {
-        $this->originalHome = $_ENV['HOME'];
+        $this->originalHome = $_ENV['HOME'] ?? getenv('HOME');
     }
 
     protected function tearDown()
     {
-        if ($this->originalHome != $_ENV['HOME']) {
+        if ($this->originalHome != $_ENV['HOME'] ?? getenv('HOME')) {
             putenv('HOME=' . $this->originalHome);
         }
         putenv(ServiceAccountCredentials::ENV_VAR);  // removes it if assigned
@@ -204,7 +204,7 @@ class ADCGetCredentialsAppEngineTest extends BaseTest
     protected function setUp()
     {
         // set home to be somewhere else
-        $this->originalHome = $_ENV['HOME'];
+        $this->originalHome = $_ENV['HOME'] ?? getenv('HOME');
         putenv('HOME=' . __DIR__ . '/not_exist_fixtures');
 
         // remove service account path
@@ -252,12 +252,12 @@ class ADCGetSubscriberTest extends BaseTest
     {
         $this->onlyGuzzle5();
 
-        $this->originalHome = $_ENV['HOME'];
+        $this->originalHome = $_ENV['HOME'] ?? getenv('HOME');
     }
 
     protected function tearDown()
     {
-        if ($this->originalHome != $_ENV['HOME']) {
+        if ($this->originalHome != $_ENV['HOME'] ?? getenv('HOME')) {
             putenv('HOME=' . $this->originalHome);
         }
         putenv(ServiceAccountCredentials::ENV_VAR);  // removes it if assigned
