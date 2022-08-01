@@ -124,8 +124,8 @@ class Agent
                 case isset($_SERVER['SSH_AUTH_SOCK']):
                     $address = $_SERVER['SSH_AUTH_SOCK'];
                     break;
-                case isset($_ENV['SSH_AUTH_SOCK']):
-                    $address = $_ENV['SSH_AUTH_SOCK'];
+                case isset($_SERVER['SSH_AUTH_SOCK']):
+                    $address = $_SERVER['SSH_AUTH_SOCK'];
                     break;
                 default:
                     user_error('SSH_AUTH_SOCK not found');

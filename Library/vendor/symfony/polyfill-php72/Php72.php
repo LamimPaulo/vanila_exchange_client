@@ -125,10 +125,10 @@ final class Php72
         $stdin = 'php://stdin' === $meta['uri'] || 'php://fd/0' === $meta['uri'];
 
         return !$stdin
-            && (false !== $_ENV['ANSICON']
-            || 'ON' === $_ENV['ConEmuANSI']
-            || 'xterm' === $_ENV['TERM']
-            || 'Hyper' === $_ENV['TERM_PROGRAM']);
+            && (false !== $_SERVER['ANSICON']
+            || 'ON' === $_SERVER['ConEmuANSI']
+            || 'xterm' === $_SERVER['TERM']
+            || 'Hyper' === $_SERVER['TERM_PROGRAM']);
     }
 
     public static function stream_isatty($stream)

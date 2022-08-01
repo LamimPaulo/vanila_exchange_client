@@ -185,12 +185,12 @@ class SACFromWellKnownFileTest extends TestCase
 
     protected function setUp()
     {
-        $this->originalHome = $_ENV['HOME'];
+        $this->originalHome = $_SERVER['HOME'];
     }
 
     protected function tearDown()
     {
-        if ($this->originalHome != $_ENV['HOME']) {
+        if ($this->originalHome != $_SERVER['HOME']) {
             putenv('HOME=' . $this->originalHome);
         }
     }

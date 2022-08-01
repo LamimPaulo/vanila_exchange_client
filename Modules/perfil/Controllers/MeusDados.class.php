@@ -2240,11 +2240,11 @@ class MeusDados
             $selfie = fopen($_FILES['selfie']['tmp_name'], 'r');
 
             $client = new Client();
-            $response = $client->post($_ENV['NAVI_API_URL'].'kyc/multi_store', [
+            $response = $client->post($_SERVER['NAVI_API_URL'].'kyc/multi_store', [
                 'headers' => [
                     'accept' => 'Application/json',
-                    'token' => $_ENV['NAVI_API_TOKEN'],
-                    'cl' => $_ENV['NAVI_API_CL'],
+                    'token' => $_SERVER['NAVI_API_TOKEN'],
+                    'cl' => $_SERVER['NAVI_API_CL'],
                     'service' => 'CEP',
                 ],
                 'query' => [
@@ -2288,11 +2288,11 @@ class MeusDados
             $cliente = \Utils\Geral::getCliente();
 
             $client = new Client();
-            $response = $client->get($_ENV['NAVI_API_URL'].'kyc/validated/'.$cliente->email, [
+            $response = $client->get($_SERVER['NAVI_API_URL'].'kyc/validated/'.$cliente->email, [
                 'headers' => [
                     'accept' => 'Application/json',
-                    'token' => $_ENV['NAVI_API_TOKEN'],
-                    'cl' => $_ENV['NAVI_API_CL'],
+                    'token' => $_SERVER['NAVI_API_TOKEN'],
+                    'cl' => $_SERVER['NAVI_API_CL'],
                     'service' => 'CEP',
                 ],
             ]);

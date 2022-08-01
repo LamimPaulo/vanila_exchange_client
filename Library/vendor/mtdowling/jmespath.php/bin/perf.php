@@ -53,7 +53,7 @@ function runCase($given, $expression, $name)
         if ($tryTime < $best) {
             $best = $tryTime;
         }
-        if (!$_ENV['CACHE']) {
+        if (!$_SERVER['CACHE']) {
             $runtime = \JmesPath\Env::createRuntime();
             // Delete compiled scripts if not caching.
             if ($runtime instanceof \JmesPath\CompilerRuntime) {

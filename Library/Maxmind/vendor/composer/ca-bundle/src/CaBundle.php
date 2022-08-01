@@ -69,14 +69,14 @@ class CaBundle
 
         // If SSL_CERT_FILE env variable points to a valid certificate/bundle, use that.
         // This mimics how OpenSSL uses the SSL_CERT_FILE env variable.
-        $envCertFile = $_ENV['SSL_CERT_FILE'];
+        $envCertFile = $_SERVER['SSL_CERT_FILE'];
         if ($envCertFile && is_readable($envCertFile) && static::validateCaFile($envCertFile, $logger)) {
             return self::$caPath = $envCertFile;
         }
 
         // If SSL_CERT_DIR env variable points to a valid certificate/bundle, use that.
         // This mimics how OpenSSL uses the SSL_CERT_FILE env variable.
-        $envCertDir = $_ENV['SSL_CERT_DIR'];
+        $envCertDir = $_SERVER['SSL_CERT_DIR'];
         if ($envCertDir && is_dir($envCertDir) && is_readable($envCertDir)) {
             return self::$caPath = $envCertDir;
         }

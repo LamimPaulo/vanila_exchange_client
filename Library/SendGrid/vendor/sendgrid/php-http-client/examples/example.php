@@ -6,7 +6,7 @@
 include(dirname(__DIR__) . '/lib/Client.php');
 // This gets the parent directory, for your current directory use getcwd()
 $path_to_config = dirname(__DIR__);
-$apiKey = $_ENV['SENDGRID_API_KEY'];
+$apiKey = $_SERVER['SENDGRID_API_KEY'];
 $headers = ['Authorization: Bearer ' . $apiKey];
 $client = new SendGrid\Client('https://api.sendgrid.com', $headers, '/v3');
 

@@ -135,9 +135,9 @@ class ConsoleHelper
     {
         if ('\\' === DIRECTORY_SEPARATOR) {
             // Windows
-            return false !== $_ENV['ANSICON']
-                || 'ON' === $_ENV['ConEmuANSI']
-                || 'xterm' === $_ENV['TERM'];
+            return false !== $_SERVER['ANSICON']
+                || 'ON' === $_SERVER['ConEmuANSI']
+                || 'xterm' === $_SERVER['TERM'];
         }
 
         return function_exists('posix_isatty') && posix_isatty($resource);

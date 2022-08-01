@@ -65,7 +65,7 @@ All of our examples assume you are using [environment variables](https://github.
 
 If you choose to add your SendGrid API key directly (not recommended):
 
-`$apiKey = $_ENV['SENDGRID_API_KEY'];`
+`$apiKey = $_SERVER['SENDGRID_API_KEY'];`
 
 becomes
 

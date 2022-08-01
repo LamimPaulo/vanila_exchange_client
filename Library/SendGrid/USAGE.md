@@ -7,7 +7,7 @@ This documentation is based on our [OAI specification](https://github.com/sendgr
 require 'vendor/autoload.php';
 
 
-$apiKey = $_ENV['SENDGRID_API_KEY'];
+$apiKey = $_SERVER['SENDGRID_API_KEY'];
 $sg = new \SendGrid($apiKey);
 ```
 

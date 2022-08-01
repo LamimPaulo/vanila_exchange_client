@@ -766,13 +766,13 @@ class CredentialProvider
     private static function getHomeDir()
     {
         // On Linux/Unix-like systems, use the HOME environment variable
-        if ($homeDir = $_ENV['HOME']) {
+        if ($homeDir = $_SERVER['HOME']) {
             return $homeDir;
         }
 
         // Get the HOMEDRIVE and HOMEPATH values for Windows hosts
-        $homeDrive = $_ENV['HOMEDRIVE'];
-        $homePath = $_ENV['HOMEPATH'];
+        $homeDrive = $_SERVER['HOMEDRIVE'];
+        $homePath = $_SERVER['HOMEPATH'];
 
         return ($homeDrive && $homePath) ? $homeDrive . $homePath : null;
     }

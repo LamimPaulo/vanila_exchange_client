@@ -11,11 +11,11 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 //Definição do ambiente de execução do sistema
 
-$ambiente = $_ENV['AMBIENTE'] ?? getenv('AMBIENTE');
-$empresa = $_ENV['EMPRESA'] ?? getenv('EMPRESA');
-$titulo = $_ENV['TITULO'] ?? getenv('TITULOP');
-$grafico = $_ENV['GRAFICO'] ?? getenv('GRAFICO');
-$erro = $_ENV['ERRO'] ?? getenv('ERRO');
+$ambiente = $_SERVER['AMBIENTE'] ?? getenv('AMBIENTE');
+$empresa = $_SERVER['EMPRESA'] ?? getenv('EMPRESA');
+$titulo = $_SERVER['TITULO'] ?? getenv('TITULOP');
+$grafico = $_SERVER['GRAFICO'] ?? getenv('GRAFICO');
+$erro = $_SERVER['ERRO'] ?? getenv('ERRO');
 $urlBase = $_ENV["EnvUrlProd"] ?? getenv('EnvUrlProd');
 $bdBook = $_ENV["EnvBdUrlBookName"] ?? getenv('EnvBdUrlBookName');
 $bdGrafico = $_ENV["EnvBdUrlGraficoName"] ?? getenv('EnvBdUrlGraficoName');
