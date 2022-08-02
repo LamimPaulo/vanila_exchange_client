@@ -2312,14 +2312,9 @@ class MeusDados
             $clienteRn->conexao->carregar($cliente);
 
             $res = json_decode($response);
-                if(!$res->data->all_approved){
-                    $cliente->documentoVerificado = 0;
-                    $clienteRn->salvar($cliente, $cliente->senha, null, null, false);
-                }
-                if($res->data->all_approved){
-                    $cliente->documentoVerificado = 1;
-                    $clienteRn->salvar($cliente, $cliente->senha, null, null, false);
-                }
+                // if($res->data->all_approved){
+                    $clienteRn->alterarDocumentoVerificado($cliente, $res->data->all_approved);
+                // }
 
                 // return 'ok';
         } catch(\Throwable $e){

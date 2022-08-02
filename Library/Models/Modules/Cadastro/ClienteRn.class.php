@@ -12,15 +12,15 @@ use Utils\Mail;
  * @package Models_Modules
  * @subpackage Acesso
  */
-class ClienteRn { 
-     
+class ClienteRn {
+
     /**
      *
      * @var GenericModel 
      */
     public $conexao = null;
     public $idioma = null;
-    
+
     public function __construct(\Io\BancoDados $adapter = null) {
         $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
 
@@ -31,62 +31,60 @@ class ClienteRn {
         }
     }
 
-    public function salvar(Cliente &$cliente, $confirmacaoSenha = null, $permissoesRotinas = Array(), $permissoesModulos = Array(), $alterarPermissoes = true) {
-        
+    public function salvar(Cliente &$cliente, $confirmacaoSenha = null, $permissoesRotinas = Array(), $permissoesModulos = Array(), $alterarPermissoes = true, $keep_pass = false) {
+
         $configuracao = ConfiguracaoRn::get();
-        
+
         $emailBoasVindas = false;
         if (!empty($cliente->senha)) {
-            
+
             if (empty($confirmacaoSenha)) {
                 throw new \Exception($this->idioma->getText("necessarioConfirmarSenha"));
             }
-            
-            if ($cliente->senha != $confirmacaoSenha) {
+
+            if ($confirmacaoSenha != null && $cliente->senha != $confirmacaoSenha) {
                 throw new \Exception($this->idioma->getText("aSenhaConfirmacaoDevemIguais"));
             }
         }
-        
-        
+
         if (!\Utils\Validacao::email($cliente->email)) {
             throw new \Exception($this->idioma->getText("emailInvalido"));
         }
-        
+
         $result = $this->conexao->listar("email = '{$cliente->email}' AND id != {$cliente->id}", NULL, NULL, 1);
-          
+
         if (sizeof($result) > 0) {
             throw new \Exception($this->idioma->getText("oEmailJaCadastrado"));
         }
-        
-        
+
         $usuario = \Utils\Geral::getLogado();
         if ($cliente->id > 0) {
-            
+
             $aux = new Cliente(Array("id" => $cliente->id));
             $this->conexao->carregar($aux);
-            
+
             $cliente->idPromocao = $aux->idPromocao;
             $cliente->status = $aux->status;
             $cliente->idUsuario = $aux->idUsuario;
-            
+
             if ($configuracao->kyc == 1) {
                 $cliente->nome = $aux->nome;
             }
-            
+
             if ($aux->fotoDocumentoVerificada > 0 && $configuracao->kyc == 1) {
                 $cliente->documento = $aux->documento;
                 $cliente->celular = $aux->celular;
                 $cliente->dataNascimento = $aux->dataNascimento;
-                $cliente->email = $aux->email;                
+                $cliente->email = $aux->email;
                 $cliente->idPaisNaturalidade = $aux->idPaisNaturalidade;
                 $cliente->documentoTipo = $aux->documentoTipo;
                 $cliente->utilizaSaqueDepositoBrl = $aux->utilizaSaqueDepositoBrl;
             }
-            
+
             $cliente->origemCadastro = $aux->origemCadastro;
             $cliente->quantidadeTentativasSegundoFator = $aux->quantidadeTentativasSegundoFator;
             $cliente->dataUltimaTentativaSegundoFator = $aux->dataUltimaTentativaSegundoFator;
-            
+
             if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_GOOGLE) {
                 $cliente->googleAuthAtivado = $aux->googleAuthAtivado;
                 $cliente->googleAuthSecret = $aux->googleAuthSecret;
@@ -94,8 +92,7 @@ class ClienteRn {
                 $cliente->googleAuthAtivado = 0;
                 $cliente->googleAuthSecret = null;
             }
-            
-            
+
             $cliente->retornoAnaliseEmail = $aux->retornoAnaliseEmail;
             $cliente->hashValidacaoEmail = $aux->hashValidacaoEmail;
             $cliente->validadeHashValidacaoEmail = $aux->validadeHashValidacaoEmail;
@@ -105,9 +102,9 @@ class ClienteRn {
             $cliente->quantidadeTentativasLogin = $aux->quantidadeTentativasLogin;
             $cliente->bloquearLogin = $aux->bloquearLogin;
             $cliente->bloquearRecuperacaoSenha = $aux->bloquearRecuperacaoSenha;
-            
+
             if ($cliente->analiseCliente > 0) {
-                
+
                 if ($aux->idAnaliseClienteAdm > 0) {
                     $cliente->idAnaliseClienteAdm = $aux->idAnaliseClienteAdm;
                 } else {
@@ -131,68 +128,66 @@ class ClienteRn {
             if (empty($cliente->comissao)) {
                 $cliente->comissao = $aux->comissao;
             }
-            
+
             if (empty($cliente->pin)) {
                 $cliente->pin = $aux->pin;
             }
-            
-            if (empty($cliente->senha)) {
-                $cliente->senha = $aux->senha;
+
+            if ($cliente->senha == null) {
+                $cliente->senha = $cliente->senha;
+            } else if($keep_pass){
+                $cliente->senha = $cliente->senha;
             } else {
                 $cliente->senha = sha1($cliente->senha . \Utils\Constantes::SEED_SENHA);
             }
-            
+
             if (empty($cliente->fotoCliente)) {
                 $cliente->fotoCliente = $aux->fotoCliente;
             }
-            
+
             if (empty($cliente->fotoDocumento)) {
                 $cliente->fotoDocumento = $aux->fotoDocumento;
             }
-            
-            
+
             if (empty($cliente->fotoDocumentoVerso)) {
                 $cliente->fotoDocumentoVerso = $aux->fotoDocumentoVerso;
             }
-            
+
             if (empty($cliente->fotoResidencia)) {
                 $cliente->fotoResidencia = $aux->fotoResidencia;
             }
-            
+
             if (empty($cliente->fotoOutroDocumento)) {
                 $cliente->fotoOutroDocumento = $aux->fotoOutroDocumento;
             }
-            
+
             if (empty($cliente->codigoPais)) {
                 $cliente->codigoPais = $aux->codigoPais;
             }
-            
+
             $cliente->dataExpiracao = $aux->dataExpiracao;
             $cliente->dataCadastro = $aux->dataCadastro;
-            
-            
+
             $cliente->fotoClienteVerificada = $aux->fotoClienteVerificada;
             $cliente->fotoDocumentoVerificada = $aux->fotoDocumentoVerificada;
             $cliente->fotoResidenciaVerificada = $aux->fotoResidenciaVerificada;
             $cliente->fotoOutroDocumentoVerificada = $aux->fotoOutroDocumentoVerificada;
-            
+
             if (empty($cliente->foto)) {
                 $cliente->foto = $aux->foto;
             }
-            
+
             $cliente->idReferencia = $aux->idReferencia;
-            
-            
+
             // variáveis que se não forem atualizadas devem permanecer conforme configuradas
             if ($cliente->taxaComissaoSaque == null) {
                 $cliente->taxaComissaoSaque = $aux->taxaComissaoSaque;
             }
-            
+
             if ($cliente->taxaComissaoDeposito == null) {
                 $cliente->taxaComissaoDeposito = $aux->taxaComissaoDeposito;
             }
-            
-            
+
             if ($cliente->taxaComissaoTransfenciaCurrency == null) {
                 $cliente->taxaComissaoTransfenciaCurrency = $aux->taxaComissaoTransfenciaCurrency;
             }
@@ -473,10 +468,10 @@ class ClienteRn {
             //Salvar cliente
             $this->conexao->salvar($cliente);
            
-//            if (\Utils\Geral::isCliente() && \Utils\Geral::getCliente()->id == $cliente->id) {
-//                $usuario = (\Utils\Geral::isUsuario() ? \Utils\Geral::getLogado() : null);
-//                \Utils\Geral::setLogado($usuario, $cliente);
-//            }
+        //    if (\Utils\Geral::isCliente() && \Utils\Geral::getCliente()->id == $cliente->id) {
+        //        $usuario = (\Utils\Geral::isUsuario() ? \Utils\Geral::getLogado() : null);
+        //        \Utils\Geral::setLogado($usuario, $cliente);
+        //    }
             
             try {
                 if ($emailBoasVindas) {
@@ -543,9 +538,6 @@ class ClienteRn {
         }
         
     }
-    
-    
-
 
     function pagarAirDropPromocaoICONEWC(Cliente $cliente, $descricao, $pagarReferencia = false) {
         $dataAtual = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -673,8 +665,7 @@ class ClienteRn {
             }
         }
     }
-    
-    
+
     function pagarAirDropCadastroValidacao(Cliente $cliente, $descricao) {
         $dataAtual = new \Utils\Data(date("d/m/Y H:i:s"));
         
@@ -749,8 +740,7 @@ class ClienteRn {
             }
         }
     }
-    
-    
+
     public function filtrar($status = "T", $filtro = null, $statusDocumentos = "A", $idLicenca = 0, $ordenacao = "A", \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null, $tipoData = "A", $online = "T") {
         
         $where = Array();
@@ -911,8 +901,7 @@ class ClienteRn {
         }
         return $lista;
     }
-    
-    
+
     public function criarCarteiraPadrao(Cliente $cliente) {
         try {
             
@@ -934,11 +923,11 @@ class ClienteRn {
             
         }
     }
-    
+
     public function alterarStatusCliente(Cliente &$cliente) {
         $this->conexao->update(Array("status" => $cliente->status), Array("id" => $cliente->id));
     }
-    
+
     public function liberarLogin(Cliente &$cliente) {
                 
         $this->conexao->update(Array("bloquear_login" => $cliente->bloquearLogin, "bloquear_recuperacao_senha" => $cliente->bloquearRecuperacaoSenha,
@@ -947,7 +936,7 @@ class ClienteRn {
     
 
     }
-    
+
     public function getByEmail($email) {
         if (!empty($email)) {
             $result = $this->conexao->listar("email = '{$email}'", null, null, 1);
@@ -957,7 +946,7 @@ class ClienteRn {
         }
         return null;
     }
-    
+
     public function getByCpf($cpf) {
         if (!empty($cpf)) {
             $result = $this->conexao->listar("documento = '{$cpf}'", null, null, 1);
@@ -967,7 +956,7 @@ class ClienteRn {
         }
         return null;
     }
-    
+
     public function excluir(Cliente &$cliente) {
         try {
             
@@ -983,8 +972,7 @@ class ClienteRn {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
-    
+
     public function extratoUsuario(Usuario $usuario, $ref, $idCliente = null) {
         $whereCliente = ($idCliente > 0 ? " AND c.id = {$idCliente} " : "");
         $query = "SELECT "
@@ -1008,31 +996,30 @@ class ClienteRn {
                 . " m.periodo_ref = '{$ref}' "
                 . " {$whereCliente} "
                 . " ORDER BY m.pago DESC, c.nome ";
-                
+
         $result = $this->conexao->adapter->query($query)->execute();
         return $result;
     }
-    
-    
+
     public function updateDadosSeguranca(Cliente $cliente, $updatePin = false, $updateFraseSegurança = false, $update2fa = false) {
-        
+
         $aux = new Cliente(Array("id" => $cliente->id));
         try {
             $this->conexao->carregar($aux);
         } catch (\Exception $ex) {
             throw new \Exception("e");
         }
-        
+
         if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_SMS) {
             if (empty($aux->celular)) {
                 throw new \Exception($this->idioma->getText("ativarTokenPorSMS"));
             }
         }
-        
+
         if (!empty($aux->pin)) {
             $cliente->pin = $aux->pin;
         }
-        
+
         if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_GOOGLE) {
             if ($aux->googleAuthAtivado < 1) {
                 if (empty($cliente->googleAuthSecret)) {
@@ -1049,16 +1036,16 @@ class ClienteRn {
             $cliente->googleAuthSecret = null;
             $cliente->googleAuthAtivado = 0;
         }
-        
+
         if (!empty($cliente->pin)) {
             if (strlen($cliente->pin) != 4) {
                 throw new \Exception($this->idioma->getText("pinDeveTer4Digitos"));
             }
         }
-        
+
         $cliente->pin = $cliente->getEncriptedPin();
         $cliente->fraseSeguranca = $cliente->getEncriptedFraseSeguranca();
-        
+
         $this->conexao->update(
                 Array(
                     "google_auth_ativado" => $cliente->googleAuthAtivado, 
@@ -1068,44 +1055,44 @@ class ClienteRn {
                     "frase_seguranca" => $cliente->fraseSeguranca
                     ), 
                 Array("id" => $cliente->id));
-        
+
         if($updatePin){
             $this->conexao->update(
                 Array("data_update_pin" => date("Y-m-d H:i:s")), 
                 Array("id" => $cliente->id));
         }
-        
+
         if($updateFraseSegurança){
             $this->conexao->update(
                 Array("data_update_frase_seguranca" => date("Y-m-d H:i:s")), 
                 Array("id" => $cliente->id));
         }
-        
+
         if($update2fa){
             $this->conexao->update(
                 Array("data_update_twofa" => date("Y-m-d H:i:s"), "documento_verificado" => 0), 
                 Array("id" => $cliente->id));
         }
-        
+
     }
-    
+
     public function alterarSenha(Cliente $cliente, $confirmacao, $senhaAtual) {
-        
+
         try {
             $c = new Cliente(Array("id" => $cliente->id));
             $this->conexao->carregar($c);
         } catch (\Exception $e) {
             throw new \Exception($this->idioma->getText("clienteNaoLocalizado"));
         }
-            
+
         if ($c->senha !== sha1($senhaAtual . \Utils\Constantes::SEED_SENHA)) {
             throw new \Exception($this->idioma->getText("senhaAtualInvalida"));
         }
-        
+
         if (empty($cliente->senha)) {
             throw new \Exception($this->idioma->getText("necessarioInformarSenha"));
         }
-        
+
         if (empty($confirmacao)) {
             throw new \Exception($this->idioma->getText("necessarioConfirmarSenha"));
         }
@@ -1130,8 +1117,7 @@ class ClienteRn {
         }
         
     }
-    
-    
+
     public function getQuantidadeClientesPorStatus() {
         
         $query = " SELECT status, COUNT(*) AS qtd FROM clientes"
@@ -1161,7 +1147,7 @@ class ClienteRn {
         
         return Array("ativos" => $ativos, "aguardando" => $aguardando, "inativos" => $inativos);
     }
-    
+
     public function getQuantidadeClientesOnline() {
         
         $dataRef = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -1170,8 +1156,7 @@ class ClienteRn {
         $result = $this->conexao->adapter->query("SELECT * FROM clientes WHERE ultima_atividade >= '{$dataRef->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO)}';")->execute();
         return $result;
     }
-    
-    
+
     public function getNumeroClientesOnline() {
         
         $dataRef = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -1185,8 +1170,7 @@ class ClienteRn {
         }
         return $qtd;
     }
-    
-    
+
     public function alterarStatusFranquia(Cliente $cliente) {
         
         try {
@@ -1210,9 +1194,7 @@ class ClienteRn {
                 )
             );
     }
-    
-    
-    
+
     public function cancelarFranquia(Cliente $cliente) {
         try {
             $this->conexao->adapter->iniciar();
@@ -1247,8 +1229,29 @@ class ClienteRn {
             throw new \Exception($ex);
         }
     }
-    
-    
+
+    public function alterarDocumentoVerificado(Cliente &$cliente, $status) {
+        try {
+            try {
+                $this->conexao->carregar($cliente);
+            } catch (\Exception $ex) {
+                throw new \Exception("Cliente não localizado no sistema");
+            }
+            $cliente->documentoVerificado = $status;
+
+            $this->conexao->update(
+                Array(
+                    "documento_verificado" => $cliente->documentoVerificado
+                ),
+                Array(
+                    "id" => $cliente->id
+                )
+            );
+        } catch (\Exception $ex) {
+            throw new \Exception($ex);
+        }
+    }
+
     public function alterarStatusMercado(Cliente &$cliente) {
         try {
             try {
@@ -1270,8 +1273,7 @@ class ClienteRn {
             throw new \Exception($ex);
         }
     }
-    
-    
+
     public function iniciarAnalise(Cliente &$cliente) {
         try {
             $this->conexao->carregar($cliente);
@@ -1309,8 +1311,7 @@ class ClienteRn {
             );
         
     }
-    
-    
+
     public function finalizarAnalise(Cliente &$cliente) {
         try {
             $this->conexao->carregar($cliente);
@@ -1343,7 +1344,7 @@ class ClienteRn {
                 )
             );
     }
-    
+
     public function setUltimaAtividade() {
 
         $pagina = (string)$_SERVER["HTTP_REFERER"];
@@ -1370,7 +1371,7 @@ class ClienteRn {
         return $status;
         # end
     }
-    
+
     public function creditarComissaoReferencia(Cliente $cliente, $comissao, $descricao, $convite, $idReferencia, $token = null, $origem = 0) {
         
         $this->conexao->carregar($cliente);
@@ -1410,8 +1411,7 @@ class ClienteRn {
         $contaCorrenteReaisEmpresaRn->salvar($contaCorrenteReaisEmpresa, $token);
         
     }
-    
-    
+
     public function getQuantidadeReferenciasByCliente(Cliente $cliente = null, \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null) {
         $where = Array();
         
@@ -1437,7 +1437,7 @@ class ClienteRn {
         }
         return $qtd;
     }
-    
+
     public function getQuantidadeConvidadosByCliente(Cliente $cliente = null, \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null) {
         $where = Array();
         
@@ -1463,8 +1463,7 @@ class ClienteRn {
         }
         return $qtd;
     }
-    
-    
+
     public function getClientesComLicenca($filtro) {
         
         $where = Array();
@@ -1503,7 +1502,7 @@ class ClienteRn {
         
         return $lista;
     }
-    
+
     public function getQuantidadeClientesCadastradosIco() {
      
         $query = " SELECT COUNT(*) AS qtd FROM clientes WHERE origem_cadastro = 'newctoken';";
@@ -1515,8 +1514,8 @@ class ClienteRn {
         return $qtd;
         
     }
-    
-        public function getQuantidadeClientesCadastrados() {
+
+    public function getQuantidadeClientesCadastrados() {
         
         $query = " SELECT COUNT(*) AS qtd FROM clientes;";
         $result = $this->conexao->adapter->query($query)->execute();
@@ -1527,8 +1526,8 @@ class ClienteRn {
         return $qtd;
         
     }
-    
-        public function getQuantidadeClientesCadastradosPorMes() {
+
+    public function getQuantidadeClientesCadastradosPorMes() {
         
          $lista = array();
          $query = "";         
@@ -1551,7 +1550,7 @@ class ClienteRn {
  
         return $lista;
     }
-    
+
     public function getQuantidadeClientesCadastradosPorDia() {
         
          $lista = array();
@@ -1581,9 +1580,7 @@ class ClienteRn {
         return $lista;
         
     }
-    
-    
-    
+
     public function getQuantidadeClientesVerificadosSistema() {
         $query = "SELECT "
                 . " COUNT(*)  AS total FROM clientes c  "
@@ -1600,7 +1597,7 @@ class ClienteRn {
         }
         return $total;
     }
-    
+
     public function getCarteiraPrincipal(Cliente $cliente, $idMoeda) {
         
         $query = "SELECT c.* FROM carteiras_clientes c WHERE id_cliente = {$cliente->id} AND id_moeda = {$idMoeda} ORDER BY principal DESC, id ASC;";
@@ -1612,7 +1609,7 @@ class ClienteRn {
         }
         return null;
     }
-    
+
     public function getClientesReferencias($cliente) {
         
         $query = "SELECT * FROM clientes WHERE id_referencia = {$cliente->id} ORDER BY nome ASC;";
@@ -1643,9 +1640,7 @@ class ClienteRn {
         
         return $lista;
     }
-    
-    
-    
+
     public function getArvoreReferencias(Cliente $cliente) {
         $inicioIco = \Utils\Constantes::getDataInicioICO();
         $arvore = Array();
@@ -1677,9 +1672,7 @@ class ClienteRn {
             "cliente" => Array("nivel" => $nivel), 
             "referencias" => $arvore);
     }
-    
-    
-    
+
     public function getQuantidadeClientesReferenciados(Cliente $cliente) {
         $inicioIco = \Utils\Constantes::getDataInicioICO();
         $clientes = $this->conexao->listar(" id_referencia = {$cliente->id} AND status = 1 AND data_cadastro >= '{$inicioIco->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO)}' ", "nome");
@@ -1693,8 +1686,7 @@ class ClienteRn {
         }
         return $quantidade;
     }
-    
-    
+
     public function getRankingMoeda(Moeda $moeda, $skip, $limit) {
         
         $sLimit = ($limit > 0 ? " LIMIT {$limit} " : "");
@@ -1706,7 +1698,7 @@ class ClienteRn {
         . " FROM clientes c";
         
     }
-    
+
     public function clienteVerificado(Cliente $cliente){
         $clienteVerificado = false;
         $configuracao = ConfiguracaoRn::get();
@@ -1729,28 +1721,28 @@ class ClienteRn {
 
         return $clienteVerificado;
     }
-    
+
     public function alterarModo(Cliente &$cliente, $modo) {
         $this->conexao->update(Array("modo_operacao" => $modo), Array("id" => $cliente->id));
     }
-    
+
     public function confirmarEmail(Cliente &$cliente) {
         $this->conexao->update(Array("email_confirmado" => 1), Array("id" => $cliente->id));
     }
-    
+
     public function senhaTemporaria(Cliente &$cliente) {
         $cliente->senha = sha1($cliente->senha.\Utils\Constantes::SEED_SENHA);
         $this->conexao->update(Array("senha" => $cliente->senha), Array("id" => $cliente->id));
     }
-        
+
     public function setMoedaFavorita(Cliente &$cliente, $idMoeda) {
         $this->conexao->update(Array("moeda_favorita" => $idMoeda), Array("id" => $cliente->id));
     }
-    
+
     public function setParidadeAtual(Cliente &$cliente, $idParidade) {
         $this->conexao->update(Array("id_moeda_atual" => $idParidade), Array("id" => $cliente->id));
     }
-    
+
     public function gerarApiKeys(Cliente &$cliente) {
         
         $dataAtual = new \Utils\Data(date("Y-m-d H:i:s"));
