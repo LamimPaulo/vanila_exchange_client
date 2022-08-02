@@ -368,7 +368,6 @@ class Book {
 
     public function listarMinhasOrdens($params) {
         try {
-                        
             $cliente = \Utils\Geral::getCliente();
             $paridade = \Modules\principal\Controllers\Principal::getParity();
             $todas = \Utils\Post::getBoolean($params, "todas", false);
@@ -377,10 +376,9 @@ class Book {
             if (!$todas) {
                 $whereParidade = " AND id_paridade = {$paridade->id}";
             }
-            
+
             $orderBookRn = new \Models\Modules\Cadastro\OrderBookRn();
             $lista = $orderBookRn->listar("id_cliente = {$cliente->id} AND cancelada = 0 AND executada = 0 {$whereParidade} ", "data_cadastro desc", null, null);
-            
 
             $json["html"] = $this->htmlMinhasOrdens($lista);
             $json["sucesso"] = true;
@@ -392,7 +390,7 @@ class Book {
     }
 
     private function htmlMinhasOrdens($lista) {
-        
+
         ob_start();
         if (sizeof($lista) > 0) {
             foreach ($lista as $ordem) {
@@ -411,13 +409,13 @@ class Book {
     }
 
     private function htmlItemMinhasOrdens(\Models\Modules\Cadastro\OrderBook $ordem) {
-        
+
         if ($ordem->cancelada > 0) {
             $color = "color: #666666;";
         } else {
             $color = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "color: #1ab394;" : "color: #ff1e1e;");
         }
-        
+
         $tradeSymbol = ($ordem->paridade->moedaTrade->simbolo);
         ?>
             <tr class="my-order-item tr-h" style="<?php echo $color?>;">
@@ -433,25 +431,23 @@ class Book {
                 <td class="text-center">
                     <?php if (!($ordem->cancelada > 0) && !($ordem->executada > 0)) { ?>
                     <a class="" onclick="cancelar('<?php echo \Utils\Criptografia::encriptyPostId($ordem->id); ?>');">
-                       <i class="fa fa-times" style="color: #252525"></i>
+                        <i class="fa fa-times" style="color: #252525"></i>
                     </a
                     <?php } ?>
                 </td>
 
             </tr>
         <?php
-        
     }
 
     public function cancelar($params) {
         try {
-            
             $orderBook = new \Models\Modules\Cadastro\OrderBook();
             $orderBook->id = \Utils\Post::getEncrypted($params, "ordem", 0);
-            
+
             $orderBookRn = new \Models\Modules\Cadastro\OrderBookRn();
             $orderBookRn->cancelar($orderBook);
-            
+
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
             $json["sucesso"] = false;
