@@ -1,7 +1,7 @@
 <?php
 $contasBancarias = isset($_data["contas"]) ? $_data["contas"] : Array();
 $configuracao = isset($_data["configuracao"]) ? $_data["configuracao"] : new \Models\Modules\Cadastro\Configuracao();
-$valorMinReais = number_format($configuracao->valorMinSaqueReais, 2, ",", ".");
+$valorMinReais = number_format($configuracao->valorMinSaqueReais, 2, ".", ",");
 $idioma = new \Utils\PropertiesUtils("saque", IDIOMA);
 $_data["idiomaMenu"] = $idioma;
 $cliente = Utils\Geral::getCliente();

@@ -40,48 +40,47 @@ class Saques {
             } else {
                 $comissao = $configuracao->taxaSaque;
             }
-                        
+
             $contasBancarias = $contaBancariaRn->listar("id_cliente = {$cliente->id} AND ativo > 0", "id", null, null, true);            
 
         //    $contaBancariaEmpresaRn = new \Models\Modules\Cadastro\ContaBancariaEmpresaRn();
         //    $bancosEmpresa = $contaBancariaEmpresaRn->getIdsBancosEmpresa();
-           
+
         //    $contasSemTaxaSaque = Array();
         //    foreach ($contasBancarias as $contaBancaria) {
         //        if (in_array($contaBancaria->idBanco, $bancosEmpresa)) {
         //            $contasSemTaxaSaque[] = $contaBancaria->id;
         //        }
         //    }
-            
-            
-            if($configuracao->atarAtivo == 1){                
-                $atarContasRn = new \Models\Modules\Cadastro\AtarContasRn();                
+
+            if($configuracao->atarAtivo == 1){
+                $atarContasRn = new \Models\Modules\Cadastro\AtarContasRn();
                 $params["atar"] = $atarContasRn->saldoAtarDisponivel($configuracao);
             }
-            
+
             $atarCliente = null;
             $atarClientesRn = new \Models\Modules\Cadastro\AtarClientesRn();
             $result = $atarClientesRn->conexao->listar(" id_cliente = {$cliente->id} ");
-            
+
             if (sizeof($result) > 0) {
                 foreach ($result as $atar) {
                     $atarCliente = $atar;
                 }
             }
-            
+
             if($cliente->documentoVerificado == 1){
                 $params["operacao"] = $this->operacao($cliente, $configuracao);
                 $params["contas"] = $contasBancarias;
             }
-            
+
             $params["atar"] = $atarCliente;
             $params["moedaFavorita"] = \Utils\Criptografia::encriptyPostId($cliente->moedaFavorita);
-            
+
             $params["moedas"] = $this->listar($cliente, $clienteVerificado);
-            
+
             $params["configuracao"] = $configuracao;
             $params["comissao"] = $comissao;
-            
+
             $params["sucesso"] = true;
         } catch (\Exception $ex) {
             $params["sucesso"] = false;
