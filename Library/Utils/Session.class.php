@@ -61,12 +61,12 @@ class Session{
                 $state = session_start([
                     'read_and_close' => $readAndClose,
                     'cookie_lifetime' => 86400
-                ]);               
+                ]);
             }
             
             return $state;
         } catch (\Exception $e) {
-            return $e->getMessagem();
+            return $e->getMessage();
         }
     }
     

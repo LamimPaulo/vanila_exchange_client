@@ -27,26 +27,8 @@ class Ativos {
 
     public function index($params) {
         try {
-
-            // $cliente = \Utils\Geral::getLogado();
-            // $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-            // $clienteRn->conexao->carregar($cliente);
-            // $paridade = \Modules\principal\Controllers\Principal::getParity();
-            // $clienteHasTaxaRn = new \Models\Modules\Cadastro\ClienteHasTaxaRn();
-
-            // $params["casasDecimais"] = $this->casasDecimaisMoedaTrade;
-
-            // $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
-            // $paridades = $paridadeRn->getListaTodasParidades(false);
-
-            // $params["paridades"] = $paridades;
-
-            // $taxas = $clienteHasTaxaRn->getTaxaCliente($cliente, $paridade->idMoedaBook, false);
-
-            // $params["compra"] = number_format($taxas["compra"], 4, ".", "");
-            // $params["venda"] = number_format($taxas["venda"], 4, ".", "");
-
-            \Utils\Layout::view("Ativos", $params);
+            header('Location: '.'http://localhost:8000/ativos');
+            // \Utils\Layout::view("Ativos", $params);
 
         } catch (\Exception $ex) {
         }

@@ -26,13 +26,11 @@ class Acesso {
      * @param array $params Array com os dados do controller passado automaticamente pelo route
      */
     function index($params) {
-        
         if (Geral::isLogado()) {
             Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD, 0);
         } else {
-            
             $cliente = new \Models\Modules\Cadastro\Cliente();
-            
+
             $token = \Utils\Post::get($params, "token", null);
             if (empty($token)) {
                 $token = \Utils\Get::get($params, 0, null);
@@ -44,8 +42,7 @@ class Acesso {
                     $tokenApi = $tokenApiRN->validar($token);
 
                     $logado = $tokenApiRN->getUserByToken($token);
-                    
-                    
+
                     $auth = new \Models\Modules\Cadastro\Auth();
                     if ($logado instanceof \Models\Modules\Cadastro\Usuario) {
 
@@ -53,24 +50,22 @@ class Acesso {
 
                         Geral::setLogado($logado, null);
                     } else {
-                        
+
                         $clienteRn->conexao->update(Array("email_confirmado" => 1), Array("id" => $logado->id));
-                        
+
                         $auth->idCliente = $logado->id;
                         Geral::setLogado(null, $logado);
-                        
+
                         $cliente->id = $auth->idCliente;
                         $clienteRn->conexao->carregar($cliente);
-                        
+
                         $navegador = $this->verificarSessao($cliente);
-                        
-                         $idClienteEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($cliente->id));
-                         $idNavegadorEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($navegador->id));
-                            
+
+                        $idClienteEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($cliente->id));
+                        $idNavegadorEncripty = \Utils\Criptografia::encriptyPostId(base64_encode($navegador->id));
+
                         $linkRevogar = URLBASE_CLIENT . \Utils\Rotas::R_REVOGAR . "?nnc={$idNavegadorEncripty}&cnc={$idClienteEncripty}";
-
                         $dataAtual = new \Utils\Data(date("d/m/Y H:i"));
-
                         $listaEnvio = Array(
                             Array("nome" => $cliente->nome, "email" => $cliente->email)
                         );
@@ -91,7 +86,7 @@ class Acesso {
                         $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Log Acesso", $conteudo, $listaEnvio);
                         $mail->send();
                     }
-                    
+
                     Geral::setAutenticado(false);
                     $authRn = new \Models\Modules\Cadastro\AuthRn();
                     $authRn->salvar($auth);

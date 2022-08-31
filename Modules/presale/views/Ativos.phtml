@@ -43,100 +43,88 @@ $_data["idiomaMenu"] = $idioma;
 <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet"> 
 <!-- <script src="<?php echo JS; ?>underscore-min.js"></script> -->
 
-<section class="py-20"><div class="container">
-        <h3 class="mb-8 mb-lg-16 display-2 text-center">Acesse oportunidades de Ativos Alternativos com rentabilidade a partir de 18% ao ano</h3>
+    <section class="py-20">
+        <div class="red">
+            <div class="position-relative container">
 
-    </div>
-    </section>
+                <div class="center btn-group container">
+                    <input type="radio" class="btn-check" name="options" id="pre-reserva" autocomplete="off" checked />
+                    <label class="btn btn-primary" for="pre-reserva">Pré-reserva</label>
 
-    <section class="pb-4">
-    <div class="">
-        <div class="position-relative container">
+                    <input type="radio" class="btn-check" name="options" id="judiciais" autocomplete="off" />
+                    <label class="btn btn-primary" for="judiciais">Judiciais</label>
 
-            <div class="btn-group mb-lg-3 container">
-                <input type="radio" class="btn-check" name="options" id="pre-reserva" autocomplete="off" checked />
-                <label class="btn btn-primary" for="pre-reserva">Pré-reserva</label>
+                    <input type="radio" class="btn-check" name="options" id="arte" autocomplete="off" />
+                    <label class="btn btn-primary" for="arte">Arte</label>
 
-                <input type="radio" class="btn-check" name="options" id="judiciais" autocomplete="off" />
-                <label class="btn btn-primary" for="judiciais">Judiciais</label>
+                    <input type="radio" class="btn-check" name="options" id="empresarial" autocomplete="off" />
+                    <label class="btn btn-primary" for="empresarial">Empresarial</label>
 
-                <input type="radio" class="btn-check" name="options" id="arte" autocomplete="off" />
-                <label class="btn btn-primary" for="arte">Arte</label>
+                    <input type="radio" class="btn-check" name="options" id="musica" autocomplete="off" />
+                    <label class="btn btn-primary" for="musica">Musica</label>
 
-                <input type="radio" class="btn-check" name="options" id="empresarial" autocomplete="off" />
-                <label class="btn btn-primary" for="empresarial">Empresarial</label>
+                    <input type="radio" class="btn-check" name="options" id="biotecnologia" autocomplete="off" />
+                    <label class="btn btn-primary" for="biotecnologia">Biotecnologia</label>
 
-                <input type="radio" class="btn-check" name="options" id="musica" autocomplete="off" />
-                <label class="btn btn-primary" for="musica">Musica</label>
+                    <input type="radio" class="btn-check" name="options" id="cripto" autocomplete="off" />
+                    <label class="btn btn-primary" for="cripto">Cripto</label>
+                </div>
 
-                <input type="radio" class="btn-check" name="options" id="biotecnologia" autocomplete="off" />
-                <label class="btn btn-primary" for="biotecnologia">Biotecnologia</label>
+                <div class="position-relative max-w-6xl mx-auto pt-10">
+                    <!-- <div class="position-absolute start-0 end-0 mb-n24 row"> -->
+                    <div class="position-relative mb-n24 row" id="list">
 
-                <input type="radio" class="btn-check" name="options" id="cripto" autocomplete="off" />
-                <label class="btn btn-primary" for="cripto">Cripto</label>
-            </div>
-
-            <div class="position-relative max-w-6xl mx-auto pt-10">
-                <!-- <div class="position-absolute start-0 end-0 mb-n24 row"> -->
-                <div class="position-relative mb-n24 row" id="list">
-
-
-
-
-
-                    {{-- {{$assets}} --}}
-                    @foreach ($assets as $asset)
-                        {{-- {{$asset}} --}}
-                        <div class="col-4 col-md-4 mb-4 mb-lg-10 shadow">
-                            <div class="bg-white rounded p-0">
-                                <div class="container">
-                                    <div class="text-center small" >FALTAM {{$asset->days_to_end}} DIAS</div>
-                                    <img class="w-100" src="https://hurst.capital/_next/image?url=https%3A%2F%2Fapi-hcp.hurst.capital%2Fv2%2Ffile%2F5514565e-566d-434e-bf8d-7638708227fa.png&w=1920&q=85" alt="">
-                                    <div class="text-center py-0">{{$asset->category->name}}</div>
+                        @foreach ($assets as $asset)
+                            <div class="col-4 col-md-4 mb-4 mb-lg-10 shadow">
+                                <div class="bg-white rounded p-0">
+                                    <div class="container">
+                                        <div class="text-center small" >FALTAM {{$asset->days_to_end}} DIAS</div>
+                                        <img class="w-100" src="https://hurst.capital/_next/image?url=https%3A%2F%2Fapi-hcp.hurst.capital%2Fv2%2Ffile%2F5514565e-566d-434e-bf8d-7638708227fa.png&w=1920&q=85" alt="">
+                                        <div class="text-center py-0">{{$asset->category->name}}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="bg-white  rounded p-8">
-                                <blockquote class="blockquote"><p class="mb-6 h5 text-center ">{{ $asset->name }}</p></blockquote>
-                                <div class="container">
+                                <div class="bg-white  rounded p-8">
+                                    <blockquote class="blockquote"><p class="mb-6 h5 text-center ">{{ $asset->name }}</p></blockquote>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="text-center small font-weight-bold">
+                                                    PRAZO
+                                                </div>
+                                                <div class="text-center mark font-weight-ligth">
+                                                    {{$asset->months_duration}} MESES
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="text-center small">
+                                                    RENTABILIDADE
+                                                </div>
+                                                <div class="text-center mark">
+                                                    {{$asset->rentability}}% A.A
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="py-6 text-center">
+                                        <div class="progress">
+                                            <div class="progress-bar bg-secondary" role="progressbar" style="width: {{$asset->percent_captalized}}%" aria-valuenow="{{$asset->percent_captalized}}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        {{$asset->percent_captalized}}% captados
+                                    </div>
                                     <div class="row">
-                                        <div class="col">
-                                            <div class="text-center small font-weight-bold">
-                                                PRAZO
-                                            </div>
-                                            <div class="text-center mark font-weight-ligth">
-                                                {{$asset->months_duration}} MESES
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="text-center small">
-                                                RENTABILIDADE
-                                            </div>
-                                            <div class="text-center mark">
-                                                {{$asset->rentability}}% A.A
-                                            </div>
-                                        </div>
+                                        <a class="btn btn-primary" href="{{env('APP_URL')}}/token/{{$asset->id}}">
+                                            INVESTIR
+                                        </a>
                                     </div>
-                                </div>
-                                <div class="py-6 text-center">
-                                    <div class="progress">
-                                        <div class="progress-bar bg-secondary" role="progressbar" style="width: {{$asset->percent_captalized}}%" aria-valuenow="{{$asset->percent_captalized}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    {{$asset->percent_captalized}}% captados
-                                </div>
-                                <div class="row">
-                                    <a class="btn btn-primary" href="{{env('APP_URL')}}/token/{{$asset->id}}">
-                                        INVESTIR
-                                    </a>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
 
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </section>
 
 <script>
