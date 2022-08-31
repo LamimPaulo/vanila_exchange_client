@@ -290,18 +290,17 @@ class Principal {
     }
     
     public static function getParity($idParidade = null) {
-        
         try {
-            $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
-            
-            $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-            $idCliente = \Utils\Geral::getLogado();
-            $cliente = new \Models\Modules\Cadastro\Cliente(Array("id" => $idCliente->id));
-            $clienteRn->conexao->carregar($cliente);
-            
-            if (empty($idParidade)) {      
-                 $idParidade = $cliente->idMoedaAtual;               
-            }
+        $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
+        
+        $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
+        $idCliente = \Utils\Geral::getLogado();
+        $cliente = new \Models\Modules\Cadastro\Cliente(Array("id" => $idCliente->id));
+        $clienteRn->conexao->carregar($cliente);
+        
+        if (empty($idParidade)) {
+            $idParidade = $cliente->idMoedaAtual;
+        }
 
             if(!empty($idParidade)){
                 $paridade = $paridadeRn->get($idParidade);
@@ -317,7 +316,7 @@ class Principal {
 
             return $paridade;
         } catch (\Exception $ex) {
-            throw new \Exception("Verificação de cliente");
+            throw new \Exception("Verificação de clienteeee");
         }
     }
     

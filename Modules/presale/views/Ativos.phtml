@@ -1,0 +1,985 @@
+<?php
+
+$idioma = new \Utils\PropertiesUtils("book", IDIOMA);
+$casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"]  : 2);
+
+$taxaCompra = (isset($_data["compra"]) ? number_format($_data["compra"], $casasDecimais, ".", "")  : 0);
+$taxaVenda = (isset($_data["venda"]) ? number_format($_data["venda"], $casasDecimais, ".", "")  : 0 );
+
+$paridade = Modules\principal\Controllers\Principal::getParity();
+
+if (!empty($paridade->casasDecimaisMoedaTrade) && $paridade->casasDecimaisMoedaTrade > 0) {
+    $paridade->moedaTrade->casasDecimais = $paridade->casasDecimaisMoedaTrade;
+}
+
+$cliente = Utils\Geral::getCliente();
+
+$mostrarBotoes = ($paridade->ativo > 0 && $paridade->statusMercado > 0 && $cliente->statusMercado > 0 && $paridade->moedaBook->statusMercado > 0 && $paridade->moedaBook->ativo > 0);
+
+$mostrarAlerta = false;
+$mensagemAlerta = "";
+
+if ($paridade->ativo < 1 || $paridade->moedaBook->ativo < 1) {
+    $mostrarAlerta = true;
+    $mensagemAlerta = $idioma->getText("mercadoEncerrado");
+} else if ($paridade->statusMercado < 1 || $paridade->moedaBook->statusMercado < 1) {
+    $mostrarAlerta = true;
+    $mensagemAlerta = $idioma->getText("mercadoSupenso");
+} else if ($cliente->statusMercado < 1) {
+    $mensagemAlerta = $idioma->getText("compraVendaSuspensaConta");
+    $mostrarAlerta = true;
+}
+
+$_data["idiomaMenu"] = $idioma;
+?>
+
+
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+<!-- <link href="<?php echo TEMA; ?>paulo/css/bootstrap/bootstrap.min.css" rel="stylesheet">  -->
+<link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet"> 
+<!-- <script src="<?php echo JS; ?>underscore-min.js"></script> -->
+
+<section class="py-20"><div class="container">
+        <h3 class="mb-8 mb-lg-16 display-2 text-center">Acesse oportunidades de Ativos Alternativos com rentabilidade a partir de 18% ao ano</h3>
+
+    </div>
+    </section>
+
+    <section class="pb-4">
+    <div class="">
+        <div class="position-relative container">
+
+            <div class="btn-group mb-lg-3 container">
+                <input type="radio" class="btn-check" name="options" id="pre-reserva" autocomplete="off" checked />
+                <label class="btn btn-primary" for="pre-reserva">Pré-reserva</label>
+
+                <input type="radio" class="btn-check" name="options" id="judiciais" autocomplete="off" />
+                <label class="btn btn-primary" for="judiciais">Judiciais</label>
+
+                <input type="radio" class="btn-check" name="options" id="arte" autocomplete="off" />
+                <label class="btn btn-primary" for="arte">Arte</label>
+
+                <input type="radio" class="btn-check" name="options" id="empresarial" autocomplete="off" />
+                <label class="btn btn-primary" for="empresarial">Empresarial</label>
+
+                <input type="radio" class="btn-check" name="options" id="musica" autocomplete="off" />
+                <label class="btn btn-primary" for="musica">Musica</label>
+
+                <input type="radio" class="btn-check" name="options" id="biotecnologia" autocomplete="off" />
+                <label class="btn btn-primary" for="biotecnologia">Biotecnologia</label>
+
+                <input type="radio" class="btn-check" name="options" id="cripto" autocomplete="off" />
+                <label class="btn btn-primary" for="cripto">Cripto</label>
+            </div>
+
+            <div class="position-relative max-w-6xl mx-auto pt-10">
+                <!-- <div class="position-absolute start-0 end-0 mb-n24 row"> -->
+                <div class="position-relative mb-n24 row" id="list">
+
+
+
+
+
+                    {{-- {{$assets}} --}}
+                    @foreach ($assets as $asset)
+                        {{-- {{$asset}} --}}
+                        <div class="col-4 col-md-4 mb-4 mb-lg-10 shadow">
+                            <div class="bg-white rounded p-0">
+                                <div class="container">
+                                    <div class="text-center small" >FALTAM {{$asset->days_to_end}} DIAS</div>
+                                    <img class="w-100" src="https://hurst.capital/_next/image?url=https%3A%2F%2Fapi-hcp.hurst.capital%2Fv2%2Ffile%2F5514565e-566d-434e-bf8d-7638708227fa.png&w=1920&q=85" alt="">
+                                    <div class="text-center py-0">{{$asset->category->name}}</div>
+                                </div>
+                            </div>
+                            <div class="bg-white  rounded p-8">
+                                <blockquote class="blockquote"><p class="mb-6 h5 text-center ">{{ $asset->name }}</p></blockquote>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="text-center small font-weight-bold">
+                                                PRAZO
+                                            </div>
+                                            <div class="text-center mark font-weight-ligth">
+                                                {{$asset->months_duration}} MESES
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-center small">
+                                                RENTABILIDADE
+                                            </div>
+                                            <div class="text-center mark">
+                                                {{$asset->rentability}}% A.A
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="py-6 text-center">
+                                    <div class="progress">
+                                        <div class="progress-bar bg-secondary" role="progressbar" style="width: {{$asset->percent_captalized}}%" aria-valuenow="{{$asset->percent_captalized}}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    {{$asset->percent_captalized}}% captados
+                                </div>
+                                <div class="row">
+                                    <a class="btn btn-primary" href="{{env('APP_URL')}}/token/{{$asset->id}}">
+                                        INVESTIR
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+<script>
+    var amountCompra = 0;
+    var amountVenda = 0;
+    var precoCompra = 0;
+    var precoVenda = 0;
+    var balanceMode = 1;
+    var somenteFavoritas = false;
+    var casasDecimaisReal = <?php echo empty($paridade->casasDecimaisMoedaTrade) ? $paridade->moedaTrade->casasDecimais : $paridade->casasDecimaisMoedaTrade ?>;
+    var pageWidth, pageHeight;
+    var data = "todos";
+    var tipo = "todos";
+    var limite = 10;
+    var listMinhasOrdens = "";
+    var listTrade = "";
+    var basePage = {
+        width: 2048,
+        height: 768,
+        scale: 1,
+        scaleX: 1,
+        scaleY: 1
+    };
+    $(document).ready(function () {
+        setCurrentCoin(1);
+        listarMinhasOrdens();
+        alertaKyc();
+        listarBook();
+        listarParidadesBook();
+        listarSaldoMoedasBook();
+        setInterval(listarParidadesBook, 10000);
+        setInterval(listarSaldoMoedasBook, 5000);
+        setInterval(listarBook, 3000);
+        listarTrade();
+
+
+        $("#radioDatas input").on('change', function(){
+            data = $('input[name="optionsBtc"]:checked', '#radioDatas').val();
+            tipo = $('input[name="optionsBtc"]:checked', '#radioTipoBtc').val();
+            limite = $('input[name="optionsBtc"]:checked', '#radioLimite').val();
+            extratoCliente(data, tipo, limite);
+        });
+
+        $("#radioTipoBtc input").on('change', function(){
+            data = $('input[name="optionsBtc"]:checked', '#radioDatas').val();
+            tipo = $('input[name="optionsBtc"]:checked', '#radioTipoBtc').val();
+            limite = $('input[name="optionsBtc"]:checked', '#radioLimite').val();
+            extratoCliente(data, tipo, limite);
+        });
+        $("#radioLimite input").on('change', function(){
+            data = $('input[name="optionsBtc"]:checked', '#radioDatas').val();
+            tipo = $('input[name="optionsBtc"]:checked', '#radioTipoBtc').val();
+            limite = $('input[name="optionsBtc"]:checked', '#radioLimite').val();
+            extratoCliente(data, tipo, limite);
+        });
+
+        $(".real").each(function () {
+            currencymask($(this), 20, casasDecimaisReal, ",");
+        });
+        $(".digital-currency").each(function () {
+            currencymask($(this), 20, <?php echo $paridade->moedaBook->casasDecimais ?>, ",");
+        });
+
+        $("#ticker-paridade").change(function () {
+            listarParidadesBook();
+        });
+
+        $("#ticker-search").keyup(function () {
+            filtrarParidadesBook();
+        });
+
+        $("#balances-search").keyup(function () {
+            filtrarMoedasBook();
+        });
+
+        $("#btn-blocked-balance-show").click(function () {
+            $(".table-blocked-balance").show();
+            balanceMode = 1;
+        });
+
+        $("#btn-blocked-balance-hide").click(function () {
+            $(".table-blocked-balance").hide();
+            balanceMode = 2;
+        });
+
+        $("#buyamount").keyup(function () {
+            console.log('teste');
+            calcularTotal("b", "a");
+        });
+
+        $("#buyprice").keyup(function () {
+            calcularTotal("b", "p");
+        });
+
+        $("#buytotal").keyup(function () {
+            calcularTotal("b", "t");
+        });
+
+        $("#sellamount").keyup(function () {
+            calcularTotal("s", "a");
+        });
+
+        $("#sellprice").keyup(function () {
+            calcularTotal("s", "p");
+        });
+
+        $("#selltotal").keyup(function () {
+            calcularTotal("s", "t");
+        });
+
+
+    });
+
+        $("#tab-market").click(function () {
+            $("#tab-market").css( 'font-weight', 'bold' ); 
+            $("#tab-myorders").css( 'font-weight', 'normal' );
+            $("#tab-tradehistoric").css( 'font-weight', 'normal' );  
+            $("#tab-mytrades").css( 'font-weight', 'normal' ); 
+            clearInterval(listMinhasOrdens);
+            clearInterval(listTrade);
+        });
+
+        $("#tab-myorders").click(function () {
+            $("#tab-myorders").css( 'font-weight', 'bold' );  
+            $("#tab-market").css( 'font-weight', 'normal' );
+            $("#tab-tradehistoric").css( 'font-weight', 'normal' );  
+            $("#tab-mytrades").css( 'font-weight', 'normal' ); 
+            listarMinhasOrdens();
+            listMinhasOrdens = setInterval(listarMinhasOrdens, 5000);
+            clearInterval(listTrade);
+        });
+
+        $("#tab-tradehistoric").click(function () {
+            $("#tab-tradehistoric").css( 'font-weight', 'bold' );    
+            $("#tab-market").css( 'font-weight', 'normal' );
+            $("#tab-myorders").css( 'font-weight', 'normal' );  
+            $("#tab-mytrades").css( 'font-weight', 'normal' );
+            listarTrade();
+            listTrade = setInterval(listarTrade, 5000);
+            clearInterval(listMinhasOrdens);
+        });
+
+        $("#tab-mytrades").click(function () {
+            $("#tab-mytrades").css( 'font-weight', 'bold' );   
+            $("#tab-tradehistoric").css( 'font-weight', 'normal' );
+            $("#tab-market").css( 'font-weight', 'normal' );
+            $("#tab-myorders").css( 'font-weight', 'normal' ); 
+            extratoCliente();
+            clearInterval(listMinhasOrdens);
+            clearInterval(listTrade);
+        });
+
+        $(function(){
+            var $page = $('.page_content');
+
+            getPageSize();
+            scalePages($page, pageWidth, pageHeight);
+            $(window).resize(_.debounce(function () {
+            getPageSize();            
+            scalePages($page, pageWidth, pageHeight);
+        }, 150));
+
+
+        function getPageSize() {
+            pageHeight = $('#container').height();
+            pageWidth = $('#container').width();
+        }
+
+        function scalePages(page, maxWidth, maxHeight) {                              
+            scaleX = maxWidth / basePage.width;
+            scaleY = maxHeight / basePage.height;
+            basePage.scaleX = scaleX;
+            basePage.scaleY = scaleY;
+            basePage.scale = (scaleX > scaleY) ? scaleY : scaleX;
+
+          var newLeftPos = Math.abs(Math.floor(((basePage.width * basePage.scale) - maxWidth)/2));
+          var newTopPos = Math.abs(Math.floor(((basePage.height * basePage.scale) - maxHeight)/2));
+
+            page.attr('style', '-webkit-transform:scale(' + basePage.scale + ');left:' + newLeftPos + 'px;top:' + newTopPos + 'px;');
+        }
+        });
+
+    function extratoCliente(data, tipo, limite) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_EXTRATO_FILTRAR ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                data: data,
+                tipo: tipo,
+                limite: limite
+            },
+            beforeSend: function () {
+                $(".btn-filtro-extrato").addClass("disabled");
+                //$(".btn-filtro-extrato").trigger("change");
+            },
+            error: function () {
+                $(".btn-filtro-extrato").removeClass("disabled");
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#myTrades").html(json.html);
+                    } else {
+                    }
+                } catch (e) {
+                }
+                $(".btn-filtro-extrato").removeClass("disabled");
+            }
+        });
+    }
+
+    function mudarParidade(paridade) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CURRENCY ?>',
+            dataType: 'json',
+            method: 'post',
+            data: {
+                codigo: paridade
+            },
+            beforeSend: function () {
+
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+
+                        location = location.href;
+
+                    } else {
+                    }
+                } catch (e) {
+                }
+
+            },
+            complete: function () {
+
+            }
+        });
+    }
+
+    function setSomenteFavoritas() {
+        somenteFavoritas = !somenteFavoritas;
+
+        if (somenteFavoritas) {
+            $("#filtro-favoritas").removeClass("fa-star-o").addClass("fa-star");
+        } else {
+            $("#filtro-favoritas").removeClass("fa-star").addClass("fa-star-o");
+        }
+
+        filtrarParidadesBook();
+    }
+
+    function setCurrentCoin(id) {
+        currentSelected = id
+        listarParidadesBook();
+    }
+
+    function filtrarParidadesBook() {
+        var filtro = $("#ticker-search").val().toLowerCase();
+
+        $("#body-paridades tr").each(function () {
+            var mostrar = true;
+
+            if (filtro.length > 0) {
+                var name = $(this).children("td.column-paridade").first().attr("data-name").toLowerCase();
+                var content = $(this).children("td.column-paridade").first().html().toLowerCase();
+
+                var mostrar = (name.indexOf(filtro) !== -1 || content.indexOf(filtro) !== -1);
+
+            }
+
+            if (mostrar && somenteFavoritas) {
+                mostrar = $(this).hasClass("favorite-parity");
+            }
+
+            if (mostrar) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+
+        });
+    }
+
+    function filtrarMoedasBook() {
+
+        var filtro = $("#balances-search").val().toLowerCase();
+
+        $("#body-balances tr").each(function () {
+            if (filtro.length > 0) {
+                var name = $(this).children("td.column-balance").first().attr("data-name").toLowerCase();
+                var content = $(this).children("td.column-balance").first().html().toLowerCase();
+
+                if (name.indexOf(filtro) !== -1 || content.indexOf(filtro) !== -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            } else {
+                $(this).show();
+            }
+        });
+    }
+
+    var flagAddParidadeFavorita = true;
+    function addFavorito(codigo) {
+        if (flagAddParidadeFavorita) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_FAVORITO_ADD ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    paridade: codigo
+                },
+                beforeSend: function () {
+                    flagAddParidadeFavorita = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#btn-favorito-"+json.codigo).html(json.html);
+
+                        } else {
+                            //
+                        }
+                    } catch (e) {
+                    }
+                    flagAddParidadeFavorita = true;
+                },
+                complete: function () {
+                    flagAddParidadeFavorita = true;
+                }
+            });
+        }
+    }
+
+    var flagRemoverParidadeFavorita = true;
+    function removerFavorito(codigo) {
+        if (flagRemoverParidadeFavorita) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_FAVORITO_REMOVE ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    paridade: codigo
+                },
+                beforeSend: function () {
+                    flagRemoverParidadeFavorita = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#btn-favorito-"+json.codigo).html(json.html);
+
+
+                        } else {
+                            
+                        }
+                    } catch (e) {
+                       
+                    }
+                    flagRemoverParidadeFavorita = true;
+                },
+                complete: function () {
+                    flagRemoverParidadeFavorita = true;
+                }
+            });
+        }
+    }
+
+    var flagParidadesBook = true;
+    function listarParidadesBook() {
+        if (flagParidadesBook) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_PARIDADES_LISTAR ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    // moeda: $("#ticker-paridade").val()
+                    moeda: currentSelected == null ? 1 :currentSelected
+                },
+                beforeSend: function () {
+                    flagParidadesBook = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#body-paridades").html(json.html);
+
+                            $(".change-parity").each(function () {
+                                $(this).click(function () {
+                                    var paridade = $(this).parent("tr").attr("data-paridade");
+                                    mudarParidade(paridade);
+                                });
+                            });
+
+                            filtrarParidadesBook();
+                        } else {
+                            
+                        }
+                    } catch (e) {
+                       
+                    }
+                    flagParidadesBook = true;
+                },
+                complete: function () {
+                    flagParidadesBook = true;
+                }
+            });
+        }
+    }
+
+
+    var flagSaldoMoedas = true;
+    function listarSaldoMoedasBook() {
+        if (flagSaldoMoedas) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_MOEDAS_SALDO ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    balanceMode: balanceMode
+                },
+                beforeSend: function () {
+                    flagSaldoMoedas = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#body-balances").html(json.html);
+
+                            if(balanceMode === 2) {
+                                $(".table-blocked-balance").hide();
+                            } else {
+                                $(".table-blocked-balance").show();
+                            }
+
+                            filtrarMoedasBook();
+                        } else {
+                            
+                        }
+                    } catch (e) {
+                        
+                    }
+                    flagSaldoMoedas = true;
+                },
+                complete: function () {
+                    flagSaldoMoedas = true;
+                }
+            });
+        }
+    }
+
+    var flagBook = true;
+    function listarBook() {
+        if (flagBook) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_LISTAR ?>',
+                method: 'post',
+                dataType:'json',
+                beforeSend: function () {
+                    flagBook = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#ordersBuys").html(json.htmlCompra);
+                            $("#ordersSells").html(json.htmlVenda);
+                            $("#ordersSells").scrollTop(50000);
+                            $("#differenceV").html(json.diferenca);
+                            $("#differenceClass").addClass(json.diferencaClass);
+                            var porc = parseFloat(json.diferencaPorcentagem);
+                            if(porc >= 0){
+                                $("#differenceP").html(json.diferencaPorcentagem + "%");
+                            } else {
+                                $("#differenceP").html("");
+                            }
+                            $("#tblVenda").css('margin-top', json.adjusttbl+"%");
+                        } else {
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
+                        showNotyAlert(e, "e");
+                    }
+                    flagBook = true;
+                },
+                complete: function () {
+                    flagBook = true;
+                }
+            });
+        }
+    }
+
+    var flagMinharOrdens = true;
+    function listarMinhasOrdens() {
+        if (flagMinharOrdens) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_LISTAR ?>',
+                method: 'post',
+                dataType:'json',
+                data:{
+                    todas: $("#todas").is(":checked")
+                },
+                beforeSend: function () {
+                    flagMinharOrdens = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $(".my-order-item").remove();
+                            $("#orders-list").html($(json.html));
+                        } else {
+                            $(".my-order-item").remove();
+                            showNotyAlert(json.mensagem, "e");
+                            if (json.redirect) {
+                                location = json.url;
+                            }
+                        }
+                    } catch (e) {
+                        $(".my-order-item").remove();
+                        showNotyAlert(e, "e");
+                    }
+                    flagMinharOrdens = true;
+                },
+                complete: function () {
+                    flagMinharOrdens = true;
+                }
+            });
+        }
+    }
+
+    function calcularTotal(m, f) {
+        let fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
+        let fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
+        let fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
+        
+        let amo = ($(fieldAmount).val().length > 0 ? parseFloat($(fieldAmount).val().replace(",", ".")) : 0);;
+        let fee = (m === 'b' ? parseFloat(   ($("#buyamountwithfee").val().length > 0 ? $("#buyamountwithfee").val(): 0) ): 0);
+        let amount = amo + fee;
+        let price = ($(fieldPrice).val().length > 0 ? parseFloat($(fieldPrice).val().replace(",", ".")) : 0);;
+        let total = ($(fieldTotal).val().length > 0 ? parseFloat($(fieldTotal).val().replace(",", ".")) : 0);;
+        
+        let perTax = (m === 'b' ? <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?> : <?php echo number_format($taxaVenda, $casasDecimais, ".", "")?>);
+        
+        if (f === "a") { // o usuário inseriu dados no campo amount
+            if (price > 0) { 
+                total = (amount * price);
+                $(fieldTotal).val(total.toFixed(casasDecimaisReal).replace(".",","));
+            } else if (total > 0) {
+                price = (amount > 0 ? (total / amount) : 0);
+                $(fieldPrice).val(price.toFixed(casasDecimaisReal).replace(".",","));
+            }
+        } else if (f === "p") { // o usuário inseriu dados no campo price
+            if (amount > 0) { 
+                total = (amount * price);
+                $(fieldTotal).val(total.toFixed(casasDecimaisReal).replace(".",","));
+            } else if (total > 0) {
+                amount = (price > 0 ? (total / price) : 0);
+                $(fieldAmount).val(amo.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).replace(".",","));
+            }
+        } else if (f === "t") { // o usuário inseriu dados no campo total
+            if (price > 0) {
+                amount = (price > 0 ? (total / price) : 0 );
+                $(fieldAmount).val(amount.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).replace(".",","));
+            } else if (amount > 0) { 
+                price = (amount > 0 ? (total / amount) : 0);
+                $(fieldPrice).val(price.toFixed(casasDecimaisReal).replace(".",","));
+            } 
+        }
+        
+        if (m === 'b') {
+            let valorTaxa = parseFloat( (amount * (perTax / 100)) );
+            let receber = parseFloat( (amount - valorTaxa) );
+            
+            $("#buytaxIn").val(valorTaxa.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>));
+            $("#taxLabelBuy").html(" (" + perTax.toFixed(casasDecimaisReal).replace(".", ",") + "%)" );
+            $("#buyreceiveIn").val(receber.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>));
+        } else {
+            let valorTaxa = parseFloat( (total * (perTax / 100)) );
+            let receber = parseFloat( (total - valorTaxa) );
+            
+            $("#selltaxIn").val((valorTaxa.toFixed(casasDecimaisReal).replace(".",",")));
+            $("#taxLabelSell").html(" (" + perTax.toFixed(casasDecimaisReal).replace(".", ",") + "%)" );
+            $("#sellreceiveIn").val((receber.toFixed(casasDecimaisReal)).replace(".",",") );
+        }
+        
+    }
+
+    function salvarOrdemCompra() {
+        $("#btn-order-buy").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_COMPRAR ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                amount: $("#buyamount").val(),
+                price: $("#buyprice").val()
+            }, 
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarBook();
+                        listarMinhasOrdens();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-order-buy").prop("disabled", false);
+            }
+        });
+    }
+
+    function salvarOrdemVenda() {
+        $("#btn-order-sell").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDEM_VENDER ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                amount: $("#sellamount").val(),
+                price: $("#sellprice").val()
+            }, 
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarBook();
+                        listarMinhasOrdens();
+                        showNotyAlert(json.mensagem, "s");
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#btn-order-sell").prop("disabled", false);
+            }
+        });
+    }
+
+    function modalCancelar(order) {
+        $("#modalCancelarOrdem").modal();
+        $("#modalCancelarOrdemCodigo").val(order);
+    }
+
+    function cancelar(order) {
+        $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", true);
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_ORDENS_CANCELAR ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                ordem: order
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        listarMinhasOrdens();
+                    } else {
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    showNotyAlert(e, "e");
+                }
+                $("#modalCancelarOrdemClose, #modalCancelarOrdemConfirmar").prop("disabled", false);
+            }
+        });
+    }
+
+    function initbuysell(m, f) {
+        if (f === 'p') {
+            consultarPreco(m);
+            calcularTotal(m, f);
+        } else {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INIT ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            var fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
+
+                            var fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
+
+                            if (f === 'a') {
+                                if (m === 'b') {
+                                    $(fieldTotal).val(json.saldobrl.replace(".", ""));
+
+                                    atualizarTotalCompra();
+                                } else {
+                                    $(fieldAmount).val(json.saldobtc);
+                                }
+
+                            } else if (f === 't') {
+                                $(fieldTotal).val(json.saldobrl.replace(".", ""));
+                            }
+                            
+                            calcularTotal(m, f);
+                        }
+                    } catch (e) {
+                    }
+
+                }
+            });
+        }
+    }
+
+    function consultarPreco(m) {
+        var fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
+        var tr = null;
+        if (m === 's') {
+            tr = $("#ordersBuys tr").first();
+
+        } else {
+            tr = $("#ordersSells tr").last();
+        }
+        var preco = parseFloat($(tr).children(".td-price").first().children("span").first().html().replace(",", "?").replace(".", "").replace("?", ".")).toFixed(casasDecimaisReal);
+        $(fieldPrice).val(preco);
+    }
+
+    function init(m, f) {
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_INIT ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        var fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
+                        var fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
+                        var fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
+                        
+                        var saldobrl = parseFloat(json.saldobrl.replace(".", "").replace(",", "."));
+                        var saldobtc = parseFloat(json.saldobtc);
+                        
+                        
+                        if (f === 'a') {
+                            if (m === 'b') {
+                                $(fieldTotal).val(saldobrl.replace(".", ","));
+                            } else {
+                                $(fieldAmount).val(saldobtc.replace(".", ","));
+                            }
+                        } else if (f === 'p') {
+                            if (m === 'b') {
+                                $(fieldPrice).val(json.venda);
+                            } else {
+                                $(fieldPrice).val(json.compra);
+                            }
+                        } else if (f === 't') {
+                            $(fieldTotal).val(saldobrl.replace(".", ","));
+                        }
+                        
+                        calcularTotal(m, f);
+                    }
+                } catch (e) {
+                }
+                
+            }
+        });
+    }
+
+    var flagListarTrade = true;
+    function listarTrade() {
+        if(flagListarTrade){
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_BOOK_NEGOCIACOES_FILTRARTRADE ?>',
+            method: 'post',
+            dataType:'json',
+            data: {
+                otc: $("#otc").is(":checked")
+            },
+            beforeSend: function () {
+                flagListarTrade = false;
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $(".order-item-trade").remove();
+                        $("#trade-list").append(json.html);
+                    } else {
+                        $(".order-item-trade").remove();
+                        showNotyAlert(json.mensagem, "e");
+                    }
+                } catch (e) {
+                    $(".order-item-trade").remove();
+                    showNotyAlert(e, "e");
+                }
+                flagListarTrade = true;
+            },
+            complete: function () {
+                flagListarTrade = true;
+            }
+        });
+        }
+    }
+
+    function configOrder(tipo, cotacao, volume) {
+
+        if (tipo === "<?php echo \Utils\Constantes::ORDEM_COMPRA ?>") {
+
+            var volumeC = parseFloat(volume);
+            var cotacaoC = parseFloat(cotacao);
+            var total = volumeC * cotacaoC;
+
+            $("#tab-compra").trigger("click");
+            $("#buyamount").val(volumeC.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+            $("#buyprice").val(cotacaoC.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
+            $("#buytotal").val(total.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
+
+            var taxa = <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?>;
+            var fee = (volumeC * taxa) / 100;
+            var receber = parseFloat(volumeC - fee);
+
+            $("#buytaxIn").val(fee.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+            $("#taxLabelBuy").html(" (" + taxa.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).replace(".", ",") + "%)" );
+            $("#buyreceiveIn").val(receber.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+
+        } else {
+            var volumeV = parseFloat(volume);
+            var cotacaoV = parseFloat(cotacao);
+            var taxa = <?php echo number_format($taxaVenda, $casasDecimais, ".", "") ?>;
+
+            var fee = (volumeV * taxa) / 100;
+            var volumeToSell = volumeV;
+
+            $("#buyamountwithfee").val(fee.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+            $("#tab-venda").trigger("click");
+            $("#sellamount").val(volumeToSell.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).toString().replace('.', ','));
+            $("#sellprice").val(cotacaoV.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ',')).trigger("keyup");
+        }
+    }
+
+</script>
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
