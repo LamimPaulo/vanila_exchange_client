@@ -27,7 +27,8 @@ class Ativos {
 
     public function index($params) {
         try {
-            header('Location: '.'http://localhost:8000/ativos');
+            // header('Location: '.'http://localhost:8000/ativos');
+            header('Location: '.$_ENV['SITE_URL'].'/ativos');
             // \Utils\Layout::view("Ativos", $params);
 
         } catch (\Exception $ex) {
