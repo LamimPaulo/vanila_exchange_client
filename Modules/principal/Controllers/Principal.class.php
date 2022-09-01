@@ -9,49 +9,47 @@ class Principal {
     function index($_parameters) {        
         Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
     }
-    
+
     function mudarIdioma($params) {
         $idioma = \Utils\Post::get($params, "lang", "pt-BR");
         $expire = (time() + 7 * 24 * 60 * 60);
         $path = "/";
         setcookie("ncidiom", $idioma, $expire, $path);
-        
+
         $uri = $_SERVER["REQUEST_URI"];
         if (substr($uri, 0, 1)) {
             $uri = substr($uri, 1);
         }
-        
     }
-    
+
     static function getIdioma() {
         $idioma = isset($_COOKIE["ncidiom"]) ?  $_COOKIE["ncidiom"] : "pt-BR";
         return $idioma;
     }
-    
+
     public function online() {
         try {
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $clienteRn->setUltimaAtividade();
             $cliente = \Utils\Geral::getCliente();
             $clienteRn->conexao->carregar($cliente);
-            
+
             //exit(print_r(\Utils\Geral::getCliente()));
-            
+
             if (!\Utils\Geral::isLogado() || $cliente->status != 1) {
                //\Utils\Session::close();
                //\Utils\Geral::redirect(URLBASE_CLIENT);
                 $navegadorRn = new \Models\Modules\Cadastro\NavegadorRn();
-                
+
                 $navegadorSessao = $navegadorRn->conexao->listar(" id_cliente = {$cliente->id}", "id DESC", null, 1);
                 $navegadorSessao = $navegadorSessao->current();
-
                 $session_id_to_destroy = \Utils\Criptografia::decriptyPostId($navegadorSessao->idSession);
 
                 session_id($session_id_to_destroy);
                 session_start();
                 session_destroy();
                 session_commit();
-                
+
                 //\Utils\Geral::setAutenticado(false);
                 $json["mensagem"] = "Sessão encerrada.";
                 $json["url"] = URLBASE_CLIENT . \Utils\Rotas::R_LOGIN;
@@ -65,61 +63,55 @@ class Principal {
         }        
         print json_encode($json);
     }
-    
+
     public function init($params) {
         try {
             //throw new \Exception( "erro");
-            
             $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
             $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
             $configuracaoRn->conexao->carregar($configuracao);
-            
+
             $paridade = Principal::getParity();
             $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
             $paridadeRn->carregar($paridade, true, true, true);
-            
+
             if (!\Utils\Geral::isLogado()) {
                 $json["redirect"] = true;
                 $json["url"] = URLBASE_CLIENT . \Utils\Rotas::R_LOGIN;
                 throw new \Exception("Sessão expirada");
             }
-            
+
             $casasCurrency = \Utils\Post::get($params, "casasCurrency", 8);
             $casasDecimais = ($paridade->idMoedaTrade == 1 ? $configuracao->qtdCasasDecimais : 8);
-            
+
             //throw new \Exception();
             $cliente = \Utils\Geral::getCliente();
-            
-            
+
             try {
                 $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
                 $clienteRn->setUltimaAtividade();
             } catch (\Exception $ex) {
-
+                //
             }
-            
+
             //$dados = Array("saldo" => 0, "bloqueado" => 0);
-            
             if ($cliente !== null) {
-                
                 $contaCorrenteReaisRn = new \Models\Modules\Cadastro\ContaCorrenteReaisRn();
                 $contaCorrenteBtcRn = new \Models\Modules\Cadastro\ContaCorrenteBtcRn(null, false);
-                
                 if ($paridade->idMoedaTrade == 1) { 
                     $dados = $contaCorrenteReaisRn->calcularSaldoConta(new \Models\Modules\Cadastro\Cliente(Array("id" => $cliente->id)), true);
                 } else {
                     $dados = $contaCorrenteBtcRn->calcularSaldoConta(new \Models\Modules\Cadastro\Cliente(Array("id" => $cliente->id)), $paridade->idMoedaTrade, true);
                 }
-                
+
                 $json["saldobrl"] = number_format($dados["saldo"], $casasDecimais, ",", ".");
                 $json["saldobrlbloqueado"] = number_format($dados["bloqueado"], $casasDecimais, ",", ".");
-                
-                
+
                 $dados = $contaCorrenteBtcRn->calcularSaldoConta(new \Models\Modules\Cadastro\Cliente(Array("id" => $cliente->id)), $paridade->idMoedaBook, true);
-                
+
                 $sSaldo = number_format($dados["saldo"], 8, ".", "");
                 $sSaldoBloqueado = number_format($dados["bloqueado"], 8, ".", "");
-                
+
                 $json["saldobtc"] = substr($sSaldo, 0, (strlen($sSaldo) - (8-$casasCurrency)));
                 $json["saldobtcbloqueado"] = substr($sSaldoBloqueado, 0, (strlen($sSaldoBloqueado) - (8-$casasCurrency)));
                 
@@ -297,7 +289,7 @@ class Principal {
         $idCliente = \Utils\Geral::getLogado();
         $cliente = new \Models\Modules\Cadastro\Cliente(Array("id" => $idCliente->id));
         $clienteRn->conexao->carregar($cliente);
-        
+
         if (empty($idParidade)) {
             $idParidade = $cliente->idMoedaAtual;
         }

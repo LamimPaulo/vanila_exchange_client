@@ -128,8 +128,9 @@ $_data["idiomaMenu"] = $idioma;
     </div>
 
       <div class="col-md-6">
+        
         <!-- TradingView Widget BEGIN -->
-        <!-- <div class="main-chart mb15">
+        <div class="main-chart mb15">
             <div class="page-tv-chart-container" id="tv_chart_container">
             </div>
 
@@ -140,69 +141,81 @@ $_data["idiomaMenu"] = $idioma;
             <script type="text/javascript" src="<?php echo DIR_TV ?>/charting_library/charting_library.min.js"></script>
             <script type="text/javascript" src="<?php echo DIR_TV ?>/datafeeds/udf/dist/polyfills.js"></script>
             <script type="text/javascript" src="<?php echo DIR_TV ?>/datafeeds/udf/dist/bundle.js"></script>
+            <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
             <script>
                 TradingView.onready(function()
                 {
                     var widget = window.tvWidget = new TradingView.widget(
                     {
-                        "debug": false,
-                        "fullscreen":false,
-                        "timezone": "America/Sao_Paulo",
-                        "width": "100%",
-                        "height": 425,
-                        "symbol": "<?php echo $paridade->symbol?>",
-                        "interval": '15',
-                        "container_id": "tv_chart_container",
-                        "intervals": ["1", "5", "15", "30", "60", "360", "720", "D", "7D", "M", "3M"],
-                        "locale": "pt",
-                        // "symbol": "BTCBRL",
-                        "datafeed": new Datafeeds.UDFCompatibleDatafeed("api.coinage.trade/public/getcandles/config", 60000),
-                        "library_path": "<?php echo DIR_TV ?>/charting_library/",
-                        "theme": "Light",
-                        "style": "1",
+                        "debug": true,
+                        // "symbol": "NASDAQ:AAPL",
+                        "theme": "light",
+                        "style": "2",
                         "toolbar_bg": "#f1f3f6",
                         "enable_publishing": false,
-                        "withdateranges": true,
-                        "hide_side_toolbar": false,
-                        "allow_symbol_change": false,
-                        "show_popup_button": true,
-                        "popup_width": "1000",
-                        "popup_height": "650",
-                        "container_id": "tradingview_e8053",
-                        "disabled_features": [
-                            'use_localstorage_for_settings',
-                            "timeframes_toolbar",
-                            "volume_force_overlay",
-                            "left_toolbar",
-                            "show_logo_on_all_charts",
-                            "caption_buttons_text_if_possible",
-                            "header_settings",
-                            "header_chart_type",
-                            "header_indicators",
-                            "header_compare",
-                            "compare_symbol",
-                            "header_screenshot",
-                            "header_widget_dom_node",
-                            "header_saveload",
-                            "header_undo_redo",
-                            "header_interval_dialog_button",
-                            "show_interval_dialog_on_key_press",
-                            "header_symbol_search",
-                            "header_resolutions",
-                            "header_widget"
-                        ],
-
-                    "charts_storage_url": 'https://saveload.tradingview.com',
-                    "charts_storage_api_version": "1.1",
-                    "client_id": 'tradingview.com',
-                    "user_id": 'public_user_id',
-                    // "theme": "White",
+                        "hide_top_toolbar": true,
+                        "hide_legend": true,
+                        "range": "ALL",
+                        "save_image": false,
+                        // "fullscreen":false,
+                        "timezone": "America/Sao_Paulo",
+                        "symbol": "<?php echo $paridade->symbol?>",
+                        "interval": '5',
+                        "container_id": "tv_chart_container",
+                        "intervals": ["5", "15", "30", "60", "360", "720", "D", "7D", "M", "3M"],
+                        // "chartTypes": ["Candles"],
+                        "datafeed": new Datafeeds.UDFCompatibleDatafeed("https://api.coinage.trade/public/getcandles", 60000),
+                        "library_path": "<?php echo DIR_TV ?>charting_library/",
+                        "locale": "pt",
+                        // overrides:{
+                        //     'paneProperties.legendProperties.showLegend': true,
+                        //     // 'mainSeriesProperties.candleStyle.upColor': '#64ae74',
+                        //     // 'mainSeriesProperties.candleStyle.downColor': '#df5f61',
+                        //     // 'mainSeriesProperties.candleStyle.drawWick': true,
+                        //     // 'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
+                        //     // 'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
+                        //     // 'mainSeriesProperties.candleStyle.drawBorder': true,
+                        //     // 'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
+                        //     // 'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
+                        //     // 'scalesProperties.lineColor': '#252525',
+                        //     'scalesProperties.textColor': '#8a8a8a',
+                        //     'paneProperties.topMargin': 20,
+                        //     'paneProperties.bottomMargin': 5
+                        // },
+                        // disabled_features: [
+                        //     'use_localstorage_for_settings',
+                        //     "timeframes_toolbar",
+                        //     "volume_force_overlay",
+                        //     "left_toolbar",
+                        //     "show_logo_on_all_charts",
+                        //     "caption_buttons_text_if_possible",
+                        //     "header_settings",
+                        //     // "header_chart_type",
+                        //     "header_indicators",
+                        //     "header_compare",
+                        //     "compare_symbol",
+                        //     "header_screenshot",
+                        //     "header_widget_dom_node",
+                        //     "header_saveload",
+                        //     "header_undo_redo",
+                        //     "header_interval_dialog_button",
+                        //     "show_interval_dialog_on_key_press",
+                        //     "header_symbol_search",
+                        //     "header_resolutions",
+                        //     "header_widget"
+                        // ],
+                        // "charts_storage_url": 'https://saveload.tradingview.com',
+                        // "charts_storage_api_version": "1.1",
+                        // "client_id": 'tradingview.com',
+                        // "user_id": 'public_user_id',
+                        "height": "425",
+                        "width": "100%",
                     }
                     );
                 });
             </script>
             </div>
-        </div> -->
+        </div>
         <!-- TradingView Widget END -->
 
                 <!-- user trade -->
@@ -212,9 +225,9 @@ $_data["idiomaMenu"] = $idioma;
                     <a class="nav-link active" data-toggle="pill" href="#pills-compra" role="tab"
                         aria-selected="true"><?php echo $idioma->getText("direta36")?></a>
                 </li>
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link" data-toggle="pill" href="#pills-ordens" role="tab" aria-selected="false"><?php echo $idioma->getText("direta37")?></a>
-                </li> -->
+                </li>
                 <!-- <li class="nav-item">
                     <a class="nav-link" data-toggle="pill" href="#pills-extrato" role="tab" aria-selected="false"><?php echo $idioma->getText("direta38")?></a>
                 </li> -->
@@ -327,7 +340,7 @@ $_data["idiomaMenu"] = $idioma;
                     </div>
                 </div>
 
-                <!-- <div class="tab-pane fade" id="pills-ordens" role="tabpanel">
+                <div class="tab-pane fade" id="pills-ordens" role="tabpanel">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="panel-heading" style="text-align: center;">
@@ -358,7 +371,7 @@ $_data["idiomaMenu"] = $idioma;
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
                 <div class="tab-pane fade" id="pills-extrato" role="tabpanel">
                     <div class="row" >
@@ -463,7 +476,7 @@ $_data["idiomaMenu"] = $idioma;
                 </div>
             </div>
         </div>
-        <div class="mtb15"></div>
+        <!-- <div class="mtb15"></div>
         <div class="market-trade mtb15">
             <div class="" style="margin-top: 15px; overflow:scroll; height:405px;">
                 <div class="col-lg-12">
@@ -495,7 +508,7 @@ $_data["idiomaMenu"] = $idioma;
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- <div class="market-history market-order mt15">
             <ul class="nav nav-pills" role="tablist">
@@ -650,7 +663,146 @@ $_data["idiomaMenu"] = $idioma;
         scaleX: 1,
         scaleY: 1
     };
-    $(document).ready(function () {
+
+
+
+
+
+
+
+
+
+function calculateSMA(data, count){
+  var avg = function(data) {
+    var sum = 0;
+    for (var i = 0; i < data.length; i++) {
+       sum += data[i].close;
+    }
+    return sum / data.length;
+  };
+  var result = [];
+  for (var i=count - 1, len=data.length; i < len; i++){
+    var val = avg(data.slice(i - count + 1, i));
+    result.push({ time: data[i].time, value: val});
+  }
+  return result;
+}
+
+function generateBarsData(period) {
+	var res = [];
+	var controlPoints = generateControlPoints(res, period);
+    console.log(res);
+    console.log(period);
+
+
+	for (var i = 0; i < controlPoints.length - 1; i++) {
+		var left = controlPoints[i];
+		var right = controlPoints[i + 1];
+		fillBarsSegment(left, right, res);
+	}
+	return res;
+}
+
+function fillBarsSegment(left, right, points) {
+	var deltaY = right.price - left.price;
+	var deltaX = right.index - left.index;
+	var angle = deltaY / deltaX;
+	for (var i = left.index; i <= right.index; i++) {
+		var basePrice = left.price + (i - left.index) * angle;
+		var openNoise = (0.1 - Math.random() * 0.2) + 1;
+		var closeNoise = (0.1 - Math.random() * 0.2) + 1;
+		var open = basePrice * openNoise;
+		var close = basePrice * closeNoise;
+		var high = Math.max(basePrice * (1 + Math.random() * 0.2), open, close);
+		var low = Math.min(basePrice * (1 - Math.random() * 0.2), open, close);
+		points[i].open = open;
+		points[i].high = high;
+		points[i].low = low;
+		points[i].close = close;
+	}
+}
+
+function generateControlPoints(res, period, dataMultiplier) {
+    console.log(res);
+
+	var time = period !== undefined ? period.timeFrom : { day: 1, month: 1, year: 2018 };
+	var timeTo = period !== undefined ? period.timeTo : { day: 1, month: 1, year: 2019 };
+	var days = getDiffDays(time, timeTo);
+    
+	dataMultiplier = dataMultiplier || 100;
+	var controlPoints = [];
+    
+	controlPoints.push({ index: 0, price: getRandomPrice() * dataMultiplier });
+	for (var i = 0; i < days; i++) {
+		if (i > 0 && i < days - 1 && Math.random() < 0.05) {
+			controlPoints.push({ index: i, price: getRandomPrice() * dataMultiplier });
+		}
+		res.push({ time: time });
+        
+		time = nextBusinessDay(time);
+	}
+	controlPoints.push({ index: res.length - 1, price: getRandomPrice() * dataMultiplier });
+	
+    return controlPoints;
+}
+
+function getDiffDays(dateFrom, dateTo) {
+	var df = convertBusinessDayToUTCTimestamp(dateFrom);
+	var dt = convertBusinessDayToUTCTimestamp(dateTo);
+	var diffTime = Math.abs(dt.getTime() - df.getTime());
+	return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
+function convertBusinessDayToUTCTimestamp(date) {
+	return new Date(Date.UTC(date.year, date.month - 1, date.day, 0, 0, 0, 0));
+}
+
+function nextBusinessDay(time) {
+	var d = convertBusinessDayToUTCTimestamp({ year: time.year, month: time.month, day: time.day + 1 });
+	return { year: d.getUTCFullYear(), month: d.getUTCMonth() + 1, day: d.getUTCDate() };
+}
+
+function getRandomPrice() {
+	return 10 + Math.round(Math.random() * 10000) / 100;
+}
+
+function setLegendText(priceValue) {
+	let val = '∅';
+	if (priceValue !== undefined) {
+		val = (Math.round(priceValue * 100) / 100).toFixed(2);
+	}
+	legend.innerHTML = 'MA10 <span style="color:rgba(4, 111, 232, 1)">' + val + '</span>';
+}
+
+
+
+$(document).ready(function () {
+    // var container = document.createElement('div');
+    // document.getElementById('tradingview_e8053').appendChild(container);
+    // var chart = LightweightCharts.createChart(document.getElementById('tradingview_e8053'), {
+    //     height: 425,
+    //         crosshair: {
+    //             mode: LightweightCharts.CrosshairMode.Normal,
+    //         },
+    // });
+    // var candleSeries = chart.addCandlestickSeries();
+    // var data = generateBarsData();
+    // candleSeries.setData(data);
+
+    // var smaData = calculateSMA(data, 10);
+    // var smaLine = chart.addLineSeries({
+    //     color: 'rgba(4, 111, 232, 1)',
+    //     lineWidth: 2,
+    // });
+    // smaLine.setData(smaData);
+
+    // var legend = document.createElement('div');
+    // legend.className = 'sma-legend';
+    // container.appendChild(legend);
+    // legend.style.display = 'block';
+    // legend.style.left = 3 + 'px';
+    // legend.style.top = 3 + 'px';
+
         setCurrentCoin(1);
         listarMinhasOrdens();
         alertaKyc();
@@ -1163,15 +1315,15 @@ $_data["idiomaMenu"] = $idioma;
         let fieldAmount = (m === 'b' ? "#buyamount" : "#sellamount");
         let fieldPrice = (m === 'b' ? "#buyprice" : "#sellprice");
         let fieldTotal = (m === 'b' ? "#buytotal" : "#selltotal");
-        
+
         let amo = ($(fieldAmount).val().length > 0 ? parseFloat($(fieldAmount).val().replace(",", ".")) : 0);;
         let fee = (m === 'b' ? parseFloat(   ($("#buyamountwithfee").val().length > 0 ? $("#buyamountwithfee").val(): 0) ): 0);
         let amount = amo + fee;
         let price = ($(fieldPrice).val().length > 0 ? parseFloat($(fieldPrice).val().replace(",", ".")) : 0);;
         let total = ($(fieldTotal).val().length > 0 ? parseFloat($(fieldTotal).val().replace(",", ".")) : 0);;
-        
+
         let perTax = (m === 'b' ? <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?> : <?php echo number_format($taxaVenda, $casasDecimais, ".", "")?>);
-        
+
         if (f === "a") { // o usuário inseriu dados no campo amount
             if (price > 0) { 
                 total = (amount * price);
@@ -1192,28 +1344,27 @@ $_data["idiomaMenu"] = $idioma;
             if (price > 0) {
                 amount = (price > 0 ? (total / price) : 0 );
                 $(fieldAmount).val(amount.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>).replace(".",","));
-            } else if (amount > 0) { 
+            } else if (amount > 0) {
                 price = (amount > 0 ? (total / amount) : 0);
                 $(fieldPrice).val(price.toFixed(casasDecimaisReal).replace(".",","));
-            } 
+            }
         }
-        
+
         if (m === 'b') {
             let valorTaxa = parseFloat( (amount * (perTax / 100)) );
             let receber = parseFloat( (amount - valorTaxa) );
-            
+
             $("#buytaxIn").val(valorTaxa.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>));
             $("#taxLabelBuy").html(" (" + perTax.toFixed(casasDecimaisReal).replace(".", ",") + "%)" );
             $("#buyreceiveIn").val(receber.toFixed(<?php echo $paridade->moedaBook->casasDecimais ?>));
         } else {
             let valorTaxa = parseFloat( (total * (perTax / 100)) );
             let receber = parseFloat( (total - valorTaxa) );
-            
+
             $("#selltaxIn").val((valorTaxa.toFixed(casasDecimaisReal).replace(".",",")));
             $("#taxLabelSell").html(" (" + perTax.toFixed(casasDecimaisReal).replace(".", ",") + "%)" );
             $("#sellreceiveIn").val((receber.toFixed(casasDecimaisReal)).replace(".",",") );
         }
-        
     }
 
     function salvarOrdemCompra() {

@@ -155,7 +155,6 @@ class Book {
     }
 
     public function getTableBalances($params) {
-
         try {
 
             $balanceMode = \Utils\Post::get($params, "balanceMode", 1);
@@ -244,6 +243,9 @@ class Book {
         try {
             $paridade = \Modules\principal\Controllers\Principal::getParity();
 
+            if($paridade->isPresale){
+                throw new \Exception('Moeda em pré venda. O token estará disponivel para uso após seu lançamento.');
+            }
             $amount = \Utils\Post::getNumeric($params, "amount", 0);
             $price = \Utils\Post::getNumeric($params, "price", 0);
 
@@ -296,7 +298,7 @@ class Book {
 
             $diferenca = ($venda->valorCotacao - $compra->valorCotacao) < 0 ? "" : $venda->valorCotacao - $compra->valorCotacao;
 
-            $json["diferenca"] = $paridade->moedaTrade->simbolo . " " . number_format($diferenca, $this->casasDecimaisMoedaTrade, ".", "");
+            $json["diferenca"] = $paridade->moedaTrade->simbolo . " " . number_format((float) $diferenca, $this->casasDecimaisMoedaTrade, ".", "");
             $json["diferencaPorcentagem"] = $diferencaPorcentagemShow;
             $json["diferencaClass"] = $diferencaPorcentagemShow >= 0 ? 'green' : 'red';
             $json["adjusttbl"] = sizeof($listaVenda) < 16 ? (16 - sizeof($listaVenda)) * 4.77 : 0 ;
@@ -312,7 +314,7 @@ class Book {
     }
 
     private function htmlOrdens($lista, $tipo, $idCliente) {
-        $listaAux = null;
+        $listaAux = [];
         $volumeGeral = 0;
 
         foreach ($lista as $dados) {
@@ -326,7 +328,8 @@ class Book {
 
         $volumeAcumulado = 0;
         ob_start();
-        if (sizeof($listaAux) > 0) {
+        if (!empty($listaAux) && count($listaAux) > 0) {
+        // if (false) {
             foreach ($listaAux as $ordem) {
                 $volumeAcumulado += $ordem->volumeCurrency;
 
@@ -334,8 +337,17 @@ class Book {
 
                 $this->htmlItemOrdem($ordem, $volumeGeral, $idCliente, $ac);
             }
-        }
+        } else{
+            ?>
 
+            <tr class="order-item">
+                <td>
+                    <span>Sem ordem</span>
+                </td>
+            </tr>
+
+                <?php
+            }
         $html = ob_get_contents();
         ob_end_clean();
         return $html;
@@ -511,23 +523,21 @@ class Book {
         }
         print json_encode($json);
     }
-    
+
     public function getListaTrade($params) {
-        
+
         try {
             $bd = new \Io\BancoDados(BDBOOK);
-            
+
             $minhasOrdens = \Utils\Post::getBoolean($params, "minhasOrdens", false);
-            
+
             $paridade = \Modules\principal\Controllers\Principal::getParity();
-            
-            
-            
+
             $idCliente = 0;
             if ($minhasOrdens && \Utils\Geral::isCliente()) {
                 $cliente = \Utils\Geral::getCliente();
                 $idCliente = $cliente->id;
-                
+
                 $dataInicial = null;
                 $dataFinal = null;
             } else {
@@ -535,7 +545,7 @@ class Book {
                 $dataFinal = new \Utils\Data(date("d/m/Y"));
                 $dataInicial->subtrair(0, 0, 1);
             }
-            
+
             $ordemExecutadaRn = new \Models\Modules\Cadastro\OrdemExecutadaRn($bd);
             $lista = $ordemExecutadaRn->filtrar($paridade, $dataInicial, $dataFinal, "T", "T", $idCliente, 30, false);
 
@@ -547,12 +557,9 @@ class Book {
         }
         print json_encode($json);
     }
-    
-    
+
     private function htmlTradeList($lista) {
-        
         $volumeAcumulado = 0;
-        
         ob_start();
         if (sizeof($lista) > 0) {
             foreach ($lista as $ordem) {
@@ -570,9 +577,9 @@ class Book {
         ob_end_clean();
         return $html;
     }
-    
+
     private function htmlItemTradeList(\Models\Modules\Cadastro\OrdemExecutada $ordem) {
-        
+
         $tradeSymbol = "";
         $color = ($ordem->tipo == \Utils\Constantes::ORDEM_COMPRA ? "color: #1ab394;" : "color: #ff1e1e;"); 
         ?>

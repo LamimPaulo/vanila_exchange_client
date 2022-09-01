@@ -42,6 +42,11 @@ class Paridade {
      * @var Integer 
      */
     public $statusMercado;
+    /**
+     *
+     * @var Integer 
+     */
+    public $isPresale;
     
     /**
      *
@@ -165,6 +170,7 @@ class Paridade {
         $this->idMoedaTrade = ((isset($dados ["{$pre}id_moeda_trade"])) ? ($dados ["{$pre}id_moeda_trade"]) : (null));
         $this->ativo = ((isset($dados ["{$pre}ativo"])) ? ($dados ["{$pre}ativo"]) : (null));
         $this->statusMercado = ((isset($dados ["{$pre}status_mercado"])) ? ($dados ["{$pre}status_mercado"]) : (null));
+        $this->isPresale = ((isset($dados ["{$pre}is_presale"])) ? ($dados ["{$pre}is_presale"]) : (null));
         $this->symbol = ((isset($dados ["{$pre}symbol"])) ? ($dados ["{$pre}symbol"]) : (null));
         
         $this->ultAtualizacaoTicker  = ((isset($dados ["{$pre}ult_atualizacao_ticker"])) ? ($dados ["{$pre}ult_atualizacao_ticker"] instanceof \Utils\Data ? $dados ["{$pre}ult_atualizacao_ticker"] : 
@@ -192,6 +198,7 @@ class Paridade {
         . "{$alias}id_moeda_book AS {$pre}id_moeda_book, "
         . "{$alias}id_moeda_trade AS {$pre}id_moeda_trade, "
         . "{$alias}status_mercado AS {$pre}status_mercado, "
+        . "{$alias}is_presale AS {$pre}is_presale, "
         . "{$alias}symbol AS {$pre}symbol, "
         . "{$alias}ativo AS {$pre}ativo, "
         . "{$alias}volume AS {$pre}volume, "
