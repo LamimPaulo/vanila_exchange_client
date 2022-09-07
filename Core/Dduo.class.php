@@ -292,7 +292,7 @@ class Dduo {
 
                                 throw new \Exception("Por favor, contate o suporte técnico. - Carregar Módulo", 500);
                             } else {
-                                throw new \Exception("Autoload Modules - Arquivo de classe não encontrado. - {$nameClassDefault}", 500);
+                                throw new \Exception("Autoload Modulesssss - Arquivo de classe não encontrado. - {$nameClassDefault}", 500);
                             }
                         }
                     });

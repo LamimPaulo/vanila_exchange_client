@@ -45,19 +45,15 @@ class Ethereum {
                 break;
         }
     }
-    
-    
+
     public function getBalanceErc20($contrato = null, $endereco = null, $action = "tokentx") {
 
-        
-        
-//        $numero = random_int(0, 9);
-//        
-//        if($numero % 2 == 0){
-//            $key = $this->api_key_etherscan_2;
-//        } else {
-//            $key = $this->api_key_etherscan;
-//        }
+        //    $numero = random_int(0, 9);
+        //    if($numero % 2 == 0){
+        //        $key = $this->api_key_etherscan_2;
+        //    } else {
+        //        $key = $this->api_key_etherscan;
+        //    }
 
         $curl = curl_init();
 
@@ -96,7 +92,7 @@ class Ethereum {
             return $response;
         }
     }
-    
+
     public function getBalanceEthereum($endereco = null, $action = "txlist") {
 
 
@@ -134,8 +130,7 @@ class Ethereum {
             return $response;
         }
     }
-    
-    
+
     public function getInformationToken($contrato = null){
 
         $curl = curl_init();

@@ -5,6 +5,7 @@
         "clue/socket-raw": "^1.4",
         "aws/aws-sdk-php": "^3.209",
         "predis/predis": "^1.1",
-        "phpmailer/phpmailer": "^6.6"
+        "phpmailer/phpmailer": "^6.6",
+        "php-amqplib/php-amqplib": "^3.2"
     }
 }

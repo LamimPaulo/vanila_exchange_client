@@ -188,25 +188,25 @@ class BitWalletAPI{
                 CURLOPT_CUSTOMREQUEST => "GET",
             ));
 
-//            $response = curl_exec($curl);
-//            curl_close($curl);
-//            return $response;
+            //    $response = curl_exec($curl);
+            //    curl_close($curl);
+            //    return $response;
             
             
             $response = curl_exec($curl);
             $err = curl_error($curl);
 
-        curl_close($curl);
+            curl_close($curl);
 
-        if ($err) {
-            exit(print_r($err));
-            //return null;   
-        } else {
-            exit(print_r($response));
-            //return json_decode($response);
+            if ($err) {
+                exit(print_r($err));
+                //return null;   
+            } else {
+                exit(print_r($response));
+                //return json_decode($response);
+            }
+            
         }
-           
-    }
     
     public function transferCostCointradeMove($token, $from, $to, $amount, $priority='fast') {
             
@@ -227,9 +227,9 @@ class BitWalletAPI{
                 CURLOPT_CUSTOMREQUEST => "GET",
             ));
 
-//            $response = curl_exec($curl);
-//            curl_close($curl);
-//            return $response;
+        //    $response = curl_exec($curl);
+        //    curl_close($curl);
+           return $response;
             
             
             $response = curl_exec($curl);
@@ -393,7 +393,7 @@ class BitWalletAPI{
                         } else {
                             $cost = $this->ethMaxCost;
                         }
-//exit($cost);
+            //exit($cost);
 
 
                         if ($balances['BNB-BSC']['total'] < $cost) {

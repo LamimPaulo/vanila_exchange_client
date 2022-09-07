@@ -152,10 +152,10 @@ class Acesso {
     public function logar($params) {
         try {
             unset($_SESSION["login"]);
-            
+
             $email = \Utils\Post::get($params, "email", NULL);
             $senha = \Utils\Post::get($params, "senha", NULL);
-            
+
             $usuario = new Usuario(Array("email" => $email, "senha" => $senha));
             $usuarioRn = new UsuarioRn();
             $usuarioRn->logar($usuario);
@@ -205,7 +205,6 @@ class Acesso {
         if (\Utils\Geral::isLogado() || \Utils\Geral::isAutenticado()) {
              Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
         }
-        
         Layout::view("recuperar", $params);
     }
 
@@ -509,15 +508,15 @@ class Acesso {
     }
 
     public function revogarAcesso($params) {
-        try {       
+        try {
             $idCliente = \Utils\Get::getEncrypted($params, "cnc");
             //$idNavegador = \Utils\Get::getEncrypted($params, "nnc");
-            
+
             //exit($idCliente . " --- " . $idNavegador);
-            
+
             $idCliente = base64_decode($idCliente);
             //$idNavegador = base64_decode($idNavegador);
-                        
+
             $cliente = new \Models\Modules\Cadastro\Cliente();
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $navegador = new \Models\Modules\Cadastro\Navegador();

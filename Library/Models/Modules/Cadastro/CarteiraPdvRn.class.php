@@ -386,7 +386,7 @@ class CarteiraPdvRn {
                 $carteiraGeradaRn = new CarteiraGeradaRn();
                 $carteiraGerada = $carteiraGeradaRn->getWallet($moeda->id);
                 $endereco = $carteiraGerada->address;
-                //$endereco = \CoreBtc\Wallet::create($walletName);
+                // $endereco = \CoreBtc\Wallet::create($walletName);
             }
             
             $carteiraPdv->enderecoCarteira = $endereco;

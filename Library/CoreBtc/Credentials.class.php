@@ -3,11 +3,11 @@
 namespace CoreBtc;
 
 class Credentials {
-    const SERVER_HOST_HOMOLOG = "http://35.190.184.242:8333/";
-    const SERVER_HOST_PROD = "http://127.0.0.1:8333/";
+    const SERVER_HOST_HOMOLOG = "http://177.38.215.99:8333/";
+    const SERVER_HOST_PROD = "http://177.38.215.99:8333/";
     const SERVER_PORT = "8333";
-    const USER = "newcash";
-    const PASSWORD = "jknfkldjnfnd38239473829knflksdKJKLJLKJKJyyei9";
+    const USER = "navi";
+    const PASSWORD = "8250ED7965E9AE0A33AB230828FE30BE05DE1FF565F0E240FBF9299FFF6301A0";
     
     public static function getAuthorization() {
         return base64_encode(self::USER.":".self::PASSWORD);

@@ -179,39 +179,38 @@ class Usuarios {
     
     function cadastro($params) {
         try {
-            
+
             $usuario = new \Models\Modules\Cadastro\Usuario();
             $usuario->id = \Utils\Post::getEncrypted($params, "idUsuario", 0);
-           
+
             $json["permissoesRotinas"] = Array();
             $json["permissoesModulos"] = Array();
-            
-            
+
             if ($usuario->id > 0) {
                 $usuarioRn = new \Models\Modules\Cadastro\UsuarioRn();
                 $usuarioRn->conexao->carregar($usuario);
-                 
+
                 $permissaoUsuarioRn = new \Models\Modules\Acesso\PermissaoUsuarioRn();
                 $resultRotinas = $permissaoUsuarioRn->conexao->listar("id_usuario = {$usuario->id}");
                 foreach ($resultRotinas as $permissaoUsuario) {
                     $json["permissoesRotinas"][] = $permissaoUsuario->idRotinaHasAcao;
                 }
-                
+
                 $permissaoModuloUsuarioRn = new \Models\Modules\Acesso\PermissaoModuloUsuarioRn();
                 $resultModulos = $permissaoModuloUsuarioRn->conexao->listar("id_usuario = {$usuario->id}");
                 foreach ($resultModulos as $permissaoModuloUsuario) {
                     $json["permissoesModulos"][] = $permissaoModuloUsuario->idModuloHasAcao;
                 }
-                
+
                 $json["salvar"] = ($usuario->permiteAlteracao && \Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_LISTAUSUARIOS, \Utils\Constantes::EDITAR));
             } else {
                 $usuario->tipo = \Utils\Constantes::VENDEDOR;
                 $json["salvar"] = ($usuario->permiteAlteracao && \Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_LISTAUSUARIOS, \Utils\Constantes::CADASTRAR));
             }
-            
+
             $usuario->dataExpiracao = ($usuario->dataExpiracao != null ? $usuario->dataExpiracao->formatar(\Utils\Data::FORMATO_PT_BR) : "");
             unset($usuario->observacoes);
-            
+
             $json["usuario"] = $usuario;
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
@@ -220,7 +219,7 @@ class Usuarios {
         }
         print json_encode($json);
     }
-    
+
     function salvar($params) {
         try {
             
@@ -288,7 +287,7 @@ class Usuarios {
                 $cliente = \Utils\Geral::getCliente();
                 \Utils\Geral::setLogado($usuario, $cliente);
             }
-            
+    
             $json["usuario"] = $usuario;
             $json["sucesso"] = true;
             $json["mensagem"] = "Usuário salvo com sucesso!";
@@ -298,7 +297,7 @@ class Usuarios {
         }
         print json_encode($json);
     }
-    
+
     function alterarStatusAtivo($params) {
         try {
             if (!\Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_LISTAUSUARIOS, \Utils\Constantes::ALTERAR_STATUS)) {
@@ -306,18 +305,17 @@ class Usuarios {
             }
             $usuarioRn = new \Models\Modules\Cadastro\UsuarioRn();
             $usuario = new \Models\Modules\Cadastro\Usuario();
-            
-            
+
             $usuario->id = \Utils\Post::get($params, "idUsuario", 0);
-            
+
             $usuarioRn->alterarStatusAtivo($usuario);
-            
+
             ob_start();
             $this->htmlUsuario($usuario);
             $html = ob_get_contents();
             ob_end_clean();
             $json["html"] = $html;
-            
+
             $json["sucesso"] = true;
             $json["mensagem"] = "Status alterado com sucesso!";
         } catch (\Exception  $ex) {
@@ -326,7 +324,7 @@ class Usuarios {
         }
         print json_encode($json);
     }
-    
+
     function excluir($params) {
         try {
             if (!\Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_LISTAUSUARIOS, \Utils\Constantes::EXCLUIR)) {
@@ -347,6 +345,4 @@ class Usuarios {
         }
         print json_encode($json);
     }
-    
-    
 }

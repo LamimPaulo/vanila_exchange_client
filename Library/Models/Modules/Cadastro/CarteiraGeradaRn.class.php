@@ -6,14 +6,14 @@ use \Models\Modules\Model\GenericModel;
 
 
 class CarteiraGeradaRn {
-    
+
     /**
      *
      * @var GenericModel 
      */
     public $conexao = null;
     public $idioma = null;
-    
+
     public function __construct(\Io\BancoDados $adapter = null) {
         $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         if ($adapter == null) {
@@ -22,7 +22,7 @@ class CarteiraGeradaRn {
             $this->conexao = new GenericModel($adapter, new CarteiraGerada());
         }
     }
-    
+
     public function salvar(CarteiraGerada &$carteiraGerada) {
         
         $carteiraGerada->id = 0;
@@ -46,7 +46,7 @@ class CarteiraGeradaRn {
             $this->conexao->salvar($carteiraGerada);
         }
     }
-    
+
     public function contarRegistros($idMoeda) {
         
         $qtdClientes = 0;
@@ -87,7 +87,7 @@ class CarteiraGeradaRn {
         
         return Array("clientes" => $qtdClientes, "estabelecimentos" => $qtdEstabelecimentos, "pdvs" => $qtdPdvs, "carteirasLivres" => $carteirasLivres, "carteirasClientes" => $carteirasClientes);
     }
-    
+
 /**
      * 
      * @param type $idMoeda
@@ -95,15 +95,12 @@ class CarteiraGeradaRn {
      * @throws \Exception
      */
     public function getWallet($idMoeda) {
-        
         $cod1 = rand(1, 1000);
         $cod2 = rand(1, 1000);
         $codigo = sha1("{$cod1}-{$cod2}");
-        
+
         $this->conexao->adapter->query("UPDATE carteiras_geradas SET codigo = '{$codigo}' WHERE utilizada = 0 AND inutilizada = 0 AND id_moeda = {$idMoeda} AND codigo IS NULL LIMIT 1; ")->execute();
-        
         $result = $this->conexao->listar("codigo = '{$codigo}' ", "id");
-        
         if (sizeof($result) > 0) {
             $carteira = $result->current();
             $this->conexao->update(Array("utilizada" => 1), Array("id" => $carteira->id));
@@ -111,10 +108,7 @@ class CarteiraGeradaRn {
         } else {
             throw new \Exception($this->idioma->getText("naoPossivelGerarCarteira"));
         }
-        
-        
     }
-    
 }
 
 ?>

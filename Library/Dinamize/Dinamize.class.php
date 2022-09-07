@@ -42,15 +42,15 @@ class Dinamize {
             if ($err) {
                 echo "cURL Error #:" . $err;
             } else {
-                $object = json_decode($response);               
+                $object = json_decode($response);
                 if($object->code == "480001"){ //Sucesso Auth 
-                    
+
                     $body = $object->body;
-                    $dados = (array) $body;                    
+                    $dados = (array) $body;
                     $token = $dados["auth-token"];
-                    
-                   return $token;
-                    
+
+                return $token;
+
                 } else { //Erro  Auth
                     throw new \Exception("Fail Token.");
                 }
@@ -60,12 +60,12 @@ class Dinamize {
         }
         return $token;
     }
-    
+
     public function adcionarCliente(Models\Modules\Cadastro\Cliente $cliente, $token = null) {
 
         try {
             $cadastro = false;
-            
+
             if (empty($token)) {
                 $token = $this->Auth();
             }

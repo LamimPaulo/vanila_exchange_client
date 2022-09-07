@@ -4,14 +4,13 @@ namespace Modules\acesso\Controllers;
 
 
 class Cadastro {
-    
     public $idioma = null;
-    
+
     public function __construct() {
         $this->idioma = new \Utils\PropertiesUtils("login", IDIOMA);
         header('Access-Control-Allow-Origin: *');
     }
-    
+
     public function cadastroCliente($params) {
         try {
 
@@ -20,15 +19,15 @@ class Cadastro {
             if (strtoupper($method) != "POST") {
                 throw new \Exception("Cadastro inválido", 500);
             }
-            
+
             $nome = \Utils\Post::get($params, "nome", null);
             $email = strtolower(\Utils\Post::get($params, "email", null));
             $senha = base64_decode(\Utils\Post::get($params, "senha", null));
             $confirmarSenha = base64_decode(\Utils\Post::get($params, "confirmarSenha", null));
             $referencia = \Utils\Post::get($params, "referencia", NULL);
-            
+
             $googleCode = \Utils\Post::get($params, "code", null);
-            
+
             if (!empty($googleCode)) {
                 $validate = \GoogleAuth\Recaptcha::validarRecaptcha($googleCode);
                 if (!$validate) {
@@ -64,9 +63,10 @@ class Cadastro {
             if (sizeof($cliente) > 0) {
                 throw new \Exception("Cadastro de e-mail não autorizado.");
                 
-            } else{
-                //$result = \LambdaAWS\QueueKYC::validarEmail($nome, $email, $referencia, \Utils\Criptografia::encriptyPostId($senha));
             }
+            //  else{
+            //     $result = \LambdaAWS\QueueKYC::validarEmail($nome, $email, $referencia, \Utils\Criptografia::encriptyPostId($senha));
+            // }
 
         //    if (!$result) {
         //        throw new \Exception("Por favor, tente novamente mais tarde.");
@@ -160,32 +160,32 @@ class Cadastro {
 
         $clienteRn->salvar($cliente, $cliente->senha, $permissoesRotinas, $permissoesModulos);
     }
-    
+
     private function politicaSenha($senha, $confirmarSenha){
-        
+
         $forca = 0;
-        
+
         if($senha === $confirmarSenha){
-            
+
             //String
             if(preg_match( '/[a-zA-Z]/', $senha )){
                 $forca++;
             }
-            
+
             //Numero
             if(preg_match( '/\d/', $senha )){
                 $forca++;
             }
-            
+
             //Caractere especial
             if(preg_match('/[^a-zA-Z\d]/', $senha)){
                 $forca++;
             }
-            
+
             //Tamanho senha
             if (strlen($senha) >= 8) {
                 $forca++;
-                
+
                 if ($forca == 4) {
                     return $senha;
                 }
@@ -193,7 +193,6 @@ class Cadastro {
         }
         return null;
     }
-    
 //    public static function criarNovoCliente($object) {
 
 //        $cliente = new \Models\Modules\Cadastro\Cliente();

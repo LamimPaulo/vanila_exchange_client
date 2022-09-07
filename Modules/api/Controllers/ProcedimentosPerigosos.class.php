@@ -223,16 +223,33 @@ class ProcedimentosPerigosos {
     }
     
     
-    public function testeEmail($params) {    
+    public function testeRabbit($params) {    
+        try
+        {
+            // $conteudo = Mail::template(Array("nome" => "Willian", "email" => "willianchiquetto@gmail.com", "nome1" => "Willian1", "email1" => "willianchiquetto@gmail.com1", "nome2" => "Willian2", "email2" => "2willianchiquetto@gmail.com"), "Teste cabeçalho", "Teste titulo", "teste rodape");
+
+            $result = \LambdaAWS\QueueKYC::sendQueue('teste', false, $params);
+            exit($result);
+
+        }
         
-         try
+        catch(\Exception  $e)
+        {   
+            
+            var_dump($e->getMessage());
+            //return false;
+        }
+    
+    }
+    public function testeEmail($params) {    
+        try
         {
             $conteudo = Mail::template(Array("nome" => "Willian", "email" => "willianchiquetto@gmail.com", "nome1" => "Willian1", "email1" => "willianchiquetto@gmail.com1", "nome2" => "Willian2", "email2" => "2willianchiquetto@gmail.com"), "Teste cabeçalho", "Teste titulo", "teste rodape");
 
             //exit($conteudo);
 
             $listaEnvio = Array(
-                Array("nome" => "Willian", "email" => "willianchiquetto@gmail.com")
+                Array("nome" => "teste", "email" => "robertolamim@gmail.com")
             );
 
             $mail = new \Utils\Mail("Empresa Nome", "Teste", $conteudo, $listaEnvio);
@@ -300,14 +317,14 @@ class ProcedimentosPerigosos {
         
         
             
-//        $paramsSQS = [
-//            'Addresses' => $ipSet->, // REQUIRED
-//            'Description' => '',
-//            'Id' => '953c7dd1-1ef9-410d-9897-761ac5c9f4e1', // REQUIRED
-//            'LockToken' => '90325b71-3f0f-443b-871b-00d472146c21', // REQUIRED
-//            'Name' => 'bloqueados', // REQUIRED
-//            'Scope' => 'REGIONAL', // REQUIRED
-//        ];
+        //    $paramsSQS = [
+        //        'Addresses' => $ipSet->, // REQUIRED
+        //        'Description' => '',
+        //        'Id' => '953c7dd1-1ef9-410d-9897-761ac5c9f4e1', // REQUIRED
+        //        'LockToken' => '90325b71-3f0f-443b-871b-00d472146c21', // REQUIRED
+        //        'Name' => 'bloqueados', // REQUIRED
+        //        'Scope' => 'REGIONAL', // REQUIRED
+        //    ];
 
          
          $paramsSQS = [
@@ -347,13 +364,13 @@ class ProcedimentosPerigosos {
         //$dados = (URLBASE_CLIENT . \Utils\Rotas::R_REGISTER . "/" . \Utils\Criptografia::encriptyPostId($cliente->id));
         
         //exit($get);
-//        $dados = \Utils\Criptografia::decriptyPostId($get, false);
-//        exit($dados);
-//        if($teste){
-//            exit("true");
-//        } else {
-//            exit("false");
-//        }
+        //    $dados = \Utils\Criptografia::decriptyPostId($get, false);
+        //    exit($dados);
+        //    if($teste){
+        //        exit("true");
+        //    } else {
+        //        exit("false");
+        //    }
         
         //$dados = explode(":", $dados);
         

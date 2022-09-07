@@ -15,6 +15,7 @@ public static $rotas = Array(
 
         //"lbd"                                   => Array("url" => "api/procedimentosPerigosos/testeLbd" ,                       "modulo" => "api",                    "rotina" => "coins" ),
         "testeEmail"                              => Array("url" => "api/procedimentosPerigosos/testeEmail" ,                     "modulo" => "api",                    "rotina" => "coins" ),
+        "testeRabbit"                              => Array("url" => "api/procedimentosPerigosos/testeRabbit" ,                     "modulo" => "api",                    "rotina" => "coins" ),
 
         //"negociacaoCliente"                    => Array("url" => "api/procedimentosPerigosos/negociacao" ,                     "modulo" => "api",                    "rotina" => "coins" ),
         //"testesql"                              => Array("url" => "api/procedimentosPerigosos/testeSql" ,                     "modulo" => "api",                    "rotina" => "coins" ),

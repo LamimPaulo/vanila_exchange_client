@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '2c54b18988fbe32424ca3805c40e99f026f4d631',
+        'reference' => '21751b0464dd24a1df2c1d5f12ad28a72c962dbb',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '2c54b18988fbe32424ca3805c40e99f026f4d631',
+            'reference' => '21751b0464dd24a1df2c1d5f12ad28a72c962dbb',
             'dev_requirement' => false,
         ),
         'aws/aws-crt-php' => array(
@@ -125,6 +125,15 @@
             'install_path' => __DIR__ . '/../mtdowling/jmespath.php',
             'aliases' => array(),
             'reference' => '9b87907a81b87bc76d19a7fb2d61e61486ee9edb',
+            'dev_requirement' => false,
+        ),
+        'php-amqplib/php-amqplib' => array(
+            'pretty_version' => 'v3.2.0',
+            'version' => '3.2.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-amqplib/php-amqplib',
+            'aliases' => array(),
+            'reference' => '0bec5b392428e0ac3b3f34fbc4e02d706995833e',
             'dev_requirement' => false,
         ),
         'phpmailer/phpmailer' => array(
@@ -237,6 +246,12 @@
             'aliases' => array(),
             'reference' => '9a142215a36a3888e30d0a9eeea9766764e96976',
             'dev_requirement' => false,
+        ),
+        'videlalvaro/php-amqplib' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => 'v3.2.0',
+            ),
         ),
         'zendframework/zend-db' => array(
             'pretty_version' => '2.9.3',

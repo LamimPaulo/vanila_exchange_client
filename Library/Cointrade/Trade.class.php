@@ -108,9 +108,9 @@ class Trade {
     public static function host(){
         
         if(AMBIENTE == "producao"){
-            return "https://api.cointradecx.com/private/";
+            return "https://api.coinage.trade/private/";
         } else {
-            return "http://l.api.cointradecx/private/";
+            return "https://api.coinage.trade/private/";
         }
     }
 

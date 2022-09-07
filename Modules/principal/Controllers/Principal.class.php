@@ -160,7 +160,7 @@ class Principal {
         }
         print json_encode($json);
     }
-    
+
     public function testeEmail($params) {
         try {
             $cliente = \Utils\Geral::getCliente();
@@ -186,22 +186,20 @@ class Principal {
         }
         print json_encode($json);
     }
-    
+
     public function getListaCotacoes() {
         try {
-            
+
             $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
-            
+
             $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
             $paridades = $paridadeRn->getListaTodasParidades(true);
             $cotacoesParidades = Array();
-            
+
             foreach ($paridades as $parity) {
                 if ($parity->ativo > 0) { 
                     //$parity = new \Models\Modules\Cadastro\Paridade();
-                    
                     $casasDecimais = ($parity->idMoedaTrade == 1 ? $configuracao->qtdCasasDecimais : $parity->moedaTrade->casasDecimais);
-                    
                     $cotacoesParidades[] = Array(
                         "code" => $parity->id,
                         "buy" => number_format($parity->precoCompra, $casasDecimais, ",", "."),
@@ -217,7 +215,7 @@ class Principal {
                     );
                 }
             }
-            
+
             $json["cotacoes"] = $cotacoesParidades;
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
@@ -226,7 +224,7 @@ class Principal {
         }
         print json_encode($json);
     }
-    
+
     public static function sincCofre() {
         try {
             $cofreRn = new \Models\Modules\Cadastro\CofreRn();
@@ -246,8 +244,7 @@ class Principal {
             }
         }
     }
-    
-    
+
     public static function setCurrency($params) {
         try {
             setcookie('nccurrency', '', time() - 300); 
@@ -280,11 +277,11 @@ class Principal {
         $json = Array("sucesso" => true);
         print json_encode($json);
     }
-    
+
     public static function getParity($idParidade = null) {
         try {
         $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
-        
+
         $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
         $idCliente = \Utils\Geral::getLogado();
         $cliente = new \Models\Modules\Cadastro\Cliente(Array("id" => $idCliente->id));
@@ -311,19 +308,19 @@ class Principal {
             throw new \Exception("Verificação de clienteeee");
         }
     }
-    
+
     public static function getCurrency($idParidade = null) {
-        
+
         try {
             $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
-            
+
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $idCliente = \Utils\Geral::getLogado();
             $cliente = new \Models\Modules\Cadastro\Cliente(Array("id" => $idCliente->id));
             $clienteRn->conexao->carregar($cliente);
-            
-            if (empty($idParidade)) {      
-                 $idParidade = $cliente->idMoedaAtual;               
+
+            if (empty($idParidade)) {
+                $idParidade = $cliente->idMoedaAtual;
             }
 
             if(!empty($idParidade)){
@@ -336,17 +333,16 @@ class Principal {
                 $mensagem = "Paridade não encontrada - GetCurrency - {$cliente->email}";
                 \Utils\Notificacao::notificar($mensagem, true, false, $cliente);
 
-                throw new \Exception("Verificação de cliente"); 
+                throw new \Exception("Verificação de cliente");
             }
 
             return $paridade->moedaBook;
         } catch (\Exception $ex) {
 
-            throw new \Exception("Verificação de cliente"); 
-            
+            throw new \Exception("Verificação de cliente");
         }
     }
-    
+
     public function setCurrencyAndRedirect($params) {
         try {
             $sigla = \Utils\Get::get($params, 0, NULL);

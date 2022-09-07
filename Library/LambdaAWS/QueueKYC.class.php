@@ -1,6 +1,8 @@
 <?php
-
 namespace LambdaAWS;
+
+
+
 /**
  * Description of Dinamize
  *
@@ -41,17 +43,9 @@ class QueueKYC {
         return $result;
     }
     
-    public static function sendQueue($queue_name, $priority, $params)
+    public static function sendQueue($exName, $params)
     {
-
-        $urlQueue = 'https://sqs.us-east-1.amazonaws.com/293963835247/' . $queue_name . '.fifo'; //PROD
-
-        $queueReturnUid = md5(uniqid(""));
-        $params = array_merge($params, [
-            'queueReturnUid' => $queueReturnUid
-        ]);
-
-        $result = LambdaMain::enviar($urlQueue, json_encode($params));
+        $result = LambdaMain::enviar($exName, json_encode($params));
         if ($result) {
             //Processado com sucesso
             return [

@@ -97,10 +97,10 @@ class InvoicePdvRn {
             if ($sandbox /*|| AMBIENTE === "desenvolvimento"*/) {
                 $invoicePdv->enderecoCarteira  = substr(sha1(time()."SANDBOX-ADDRESS-NEWCASH".time()), 0, 32) . "SANDBOX";
             } else {
-                $carteiraGeradaRn = new CarteiraGeradaRn();
-                $carteiraGerada = $carteiraGeradaRn->getWallet($invoicePdv->idMoeda);
-                $invoicePdv->enderecoCarteira = $carteiraGerada->address;
-                //$invoicePdv->enderecoCarteira = \CoreBtc\Wallet::create("PDV INVOICE {$invoicePdv->id} ");
+                // $carteiraGeradaRn = new CarteiraGeradaRn();
+                // $carteiraGerada = $carteiraGeradaRn->getWallet($invoicePdv->idMoeda);
+                // $invoicePdv->enderecoCarteira = $carteiraGerada->address;
+                $invoicePdv->enderecoCarteira = \CoreBtc\Wallet::create("PDV INVOICE {$invoicePdv->id} ");
             }
             
             if (empty($invoicePdv->enderecoCarteira)) {

@@ -216,6 +216,7 @@ class Tokens {
                 $bitWalletApi = new \BitWalletAPI();
                 $novoEndereco = $bitWalletApi->get_new_address();
                 
+                exit(print_r($novoEndereco));
                 
                 if ($novoEndereco["success"]) {
                     $novaCarteira = new \Models\Modules\Cadastro\CarteiraGerada();

@@ -124,12 +124,14 @@ class GenericModel extends AbstractTableGateway {
                 $logAcesso->acao = "ALTERAR";
             }
             
+            
+            
             if (!($object instanceof \Models\Modules\Cadastro\LogAcesso)) { 
                 $logAcesso->jsonDados = json_encode($object);
                 $logAcesso->tabela = $this->table;
                 $logAcesso->idRegistro = $object->id;
                 $logAcessoRn = new \Models\Modules\Cadastro\LogAcessoRn();
-                //$logAcessoRn->registrarLog($logAcesso);
+                $logAcessoRn->registrarLog($logAcesso);
             }
             
             if ($close) {

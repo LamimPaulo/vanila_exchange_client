@@ -151,19 +151,17 @@ class UsuarioRn {
      * @throws \Exception
      */
     public function logar(Usuario &$usuario) {
-        
         // Valida se o email foi informado
         if (empty($usuario->email)) {
             throw new \Exception($this->idioma->getText("loginEmailErr"));
         }
-        
         // Valida se a senha foi informada
         if (empty($usuario->senha)) {
             throw new \Exception($this->idioma->getText("loginSenhaErr"));
         }
-        
+
         $usuario->senha = sha1($usuario->senha.\Utils\Constantes::SEED_SENHA);
-        
+
         $configuracaoRn = new ConfiguracaoRn();
         $configuracao = new Configuracao(Array("id" => 1));
         $configuracaoRn->conexao->carregar($configuracao);
@@ -174,27 +172,23 @@ class UsuarioRn {
 
         $clienteRn = new ClienteRn();
         $result = $clienteRn->conexao->listar("email = '" . $usuario->email . "' and senha = '" . $usuario->senha . "'" , null, null, 1);
-            
+
         $logado = null;
         $auth = new \Models\Modules\Cadastro\Auth();
         if (sizeof($result) > 0) {
-                
+
             $cliente = $result->current();
 
             $pagarIco = ($cliente->emailConfirmado < 1);
-
             $cliente->quantidadeTentativasLogin++;
-
             if ($cliente->quantidadeTentativasLogin >= 5) {
                 $cliente->bloquearLogin = 1;
-
 
                 $observacoesCliente = new ObservacaoCliente();
                 $observacoesCliente->idCliente = $cliente->id;
                 $observacoesCliente->observacoes = "Login bloqueado após {$cliente->quantidadeTentativasLogin} tentativas inválidas.";
                 $observacaoClienteRn = new ObservacaoClienteRn();
                 $observacaoClienteRn->salvar($observacoesCliente);
-
             } else {
                 $cliente->bloquearLogin = 0;
             }
@@ -203,7 +197,7 @@ class UsuarioRn {
                 Array(
                     "quantidade_tentativas_login" => $cliente->quantidadeTentativasLogin, 
                     "bloquear_login" => $cliente->bloquearLogin
-                ), 
+                ),
                 Array("id" => $cliente->id)
             );
 
@@ -213,10 +207,10 @@ class UsuarioRn {
 
             $clienteRn->conexao->update(
                 Array(
-                    "quantidade_tentativas_login" => 0, 
-                    "bloquear_login" => 0,                        
+                    "quantidade_tentativas_login" => 0,
+                    "bloquear_login" => 0,
                     "data_ultimo_login" => date("Y-m-d H:i:s")
-                ), 
+                ),
                 Array("id" => $cliente->id)
             );
 

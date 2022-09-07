@@ -416,15 +416,14 @@ class Carteiras {
     }
     
     public function criarCarteira($params) {
-        try {          
-            
+        try {
             $carteira = new \Models\Modules\Cadastro\Carteira();
             $carteira->id = \Utils\Post::getEncrypted($params, 'id', 0);
             $carteira->nome = \Utils\Post::get($params, "nome", null);
             $idMoeda = \Utils\Post::getEncrypted($params, "idMoeda", null);
 
             $carteira->idMoeda = $idMoeda;
-            
+
             $carteiraRn = new \Models\Modules\Cadastro\CarteiraRn();
             $carteiraRn->salvar($carteira);
             
