@@ -412,7 +412,7 @@ public static $rotas = Array(
         "btc/transferencias/filtrar"            => Array("url" => "contas/btc/filtrarTransferencias" ,      "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
         "btc/transferencias/imprimir"           => Array("url" => "contas/btc/imprimirtransferencias" ,     "modulo" => "btc",                    "rotina" => "transferenciabtc" ),
         "btc/autorizacao/token"                 => Array("url" => "contas/btc/token" ,                      "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
-        
+
 //        "btc/empresa/imprimir"                  => Array("url" => "contas/btcEmpresa/imprimir" ,            "modulo" => "btc",                    "rotina" => "ccempresabtc" ),
 //        "btc/log"                               => Array("url" => "contas/logBtc/index" ,                   "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
 //        "btc/log/filtrar"                       => Array("url" => "contas/logBtc/filtrar" ,                 "modulo" => "btc",                    "rotina" => "contacorrentebtc" ),
@@ -431,7 +431,7 @@ public static $rotas = Array(
 //        "painel/ico/carregarSaque"              => Array("url" => "contas/painelBtc/carregarSaquesIco" ,                              "modulo" => "excluir",                "rotina" => "painelbtc" ),
 //        "painel/ico/autorizarSaque"             => Array("url" => "contas/painelBtc/autorizarSaquesIco" ,                              "modulo" => "excluir",                "rotina" => "painelbtc" ),
 //        "painel/ico/negarSaque"                 => Array("url" => "contas/painelBtc/negarSaquesIco" ,                              "modulo" => "excluir",                "rotina" => "painelbtc" ),
-//        
+//
 //        "contas/empresa"                        => Array("url" => "contasempresa/contaCorrente/index" ,                                     "modulo" => "contasempresa",          "rotina" => "contas/empresa" ),
 //        "contas/empresa/filtrarccbrl"           => Array("url" => "contasempresa/contaCorrente/filtrarBrl" ,                                "modulo" => "contasempresa",          "rotina" => "contas/empresa" ),
 //        "contas/empresa/filtrarcccurrency"      => Array("url" => "contasempresa/contaCorrente/filtrarCurrency" ,                           "modulo" => "contasempresa",          "rotina" => "contas/empresa" ),
@@ -471,7 +471,7 @@ public static $rotas = Array(
         "reais/transferencias/filtrar"          => Array("url" => "contas/reais/filtrarTransferencias" ,    "modulo" => "reais",                    "rotina" => "transferenciareais" ),
         "reais/transferencias/imprimir"         => Array("url" => "contas/reais/imprimirtransferencias" ,   "modulo" => "reais",                    "rotina" => "transferenciareais" ),
         "reais/autorizacao/token"               => Array("url" => "contas/reais/token" ,                    "modulo" => "reais",                    "rotina" => "transferenciareais" ),
-//        
+// 
 //        "empresa/autorizacao/token"             => Array("url" => "contas/transferencias/tokenEmpresa" ,     "modulo" => "reais",                    "rotina" => "transferenciareais" ),
 //        "reais/log"                             => Array("url" => "contas/logReais/index" ,                 "modulo" => "reais",                    "rotina" => "contacorrentereais" ),
 //        "reais/log/filtrar"                     => Array("url" => "contas/logReais/filtrar" ,               "modulo" => "reais",                    "rotina" => "contacorrentereais" ),

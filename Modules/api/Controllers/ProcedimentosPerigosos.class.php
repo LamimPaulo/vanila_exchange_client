@@ -185,7 +185,7 @@ class ProcedimentosPerigosos {
         
     }
     
-    public function testeLbd($params) {    
+    public function testeLbd($params) {
         
          try
         {
@@ -221,27 +221,32 @@ class ProcedimentosPerigosos {
             return false;
         }
     }
-    
-    
-    public function testeRabbit($params) {    
+
+    public function testeRabbit($params) {
         try
         {
-            // $conteudo = Mail::template(Array("nome" => "Willian", "email" => "willianchiquetto@gmail.com", "nome1" => "Willian1", "email1" => "willianchiquetto@gmail.com1", "nome2" => "Willian2", "email2" => "2willianchiquetto@gmail.com"), "Teste cabeçalho", "Teste titulo", "teste rodape");
-
-            $result = \LambdaAWS\QueueKYC::sendQueue('teste', false, $params);
+            $params = [
+                'id_moeda' => 2,
+                'rede_moeda' => 1,
+                'qtd' => 1,
+                'system'=> 'coinage'
+            ];
+            $result = \LambdaAWS\QueueKYC::sendQueue('ex.wallet_new', $params);
+            // $params = [
+            //     ''
+            // ];
+            // $result = \LambdaAWS\QueueKYC::sendQueue('ex.transaction.out', $params);
             exit($result);
 
         }
-        
+
         catch(\Exception  $e)
-        {   
-            
+        {
             var_dump($e->getMessage());
             //return false;
         }
-    
     }
-    public function testeEmail($params) {    
+    public function testeEmail($params) {
         try
         {
             $conteudo = Mail::template(Array("nome" => "Willian", "email" => "willianchiquetto@gmail.com", "nome1" => "Willian1", "email1" => "willianchiquetto@gmail.com1", "nome2" => "Willian2", "email2" => "2willianchiquetto@gmail.com"), "Teste cabeçalho", "Teste titulo", "teste rodape");
@@ -264,9 +269,8 @@ class ProcedimentosPerigosos {
             //return false;
         }
     }
-    
-    
-    public function testeSql($params) {    
+
+    public function testeSql($params) {
         
         //exit("OK");
         //$contas = new \Models\Modules\Cadastro\AtarContas(Array("id" => 2461));
@@ -380,5 +384,5 @@ class ProcedimentosPerigosos {
         //pZG82b3VmbTNlcTVldS5idXJwY29sbGFiJysnb3JhdG9yLm5ldFxcaGJ6XCcgZXhlYyBtYXN0ZXIuZGJvLnhwX2RpcnRyZWUgQHEgn0MSEyQDMjamVta2Uga3VhcilkZWNsYXJlIEBxIHZhcmNoYXIoOTkpc2V0IEBxXFw9J1xcXFxwcGl3bXo3ZHdndW80dWZvbmFscjZkam1
         
     }
-    
+
 }

@@ -123,7 +123,7 @@ class ClienteHasCreditoRn {
                 $moedasNegativas[] = $mVerificacao->simbolo;
             }
         }
-
+        
         if (sizeof($moedasNegativas) > 0) {
             $msg = $contaCorrenteBtcRn->idioma->getText("clienteHasCreditoRn1");
             $msg = str_replace("{var1}", implode(",", $moedasNegativas), $msg);

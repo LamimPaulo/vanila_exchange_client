@@ -192,7 +192,7 @@ class ContaCorrenteBtc {
      * @var String 
      */
     public $ipSession;
-     
+
     /**
      *
      * @var Integer 
@@ -204,11 +204,13 @@ class ContaCorrenteBtc {
      * @var Sting
      */
     public $rede;
-    
-    
+
+    public $confirmacoesNecessarias;
+    public $confirmacoes;
+
     /**
      * Construtor da classe 
-     *  
+     * 
      * @param String $dados Array contendo os dados do objeto
      */
     public function __construct($dados = null) {
@@ -254,6 +256,8 @@ class ContaCorrenteBtc {
         $this->ipSession = ((isset($dados ['ip_session'])) ? ($dados ['ip_session']) : (null));
         $this->idMoedaTaxa = ((isset($dados ['id_moeda_taxa'])) ? ($dados ['id_moeda_taxa']) : (null));
         $this->rede = ((isset($dados ['rede'])) ? ($dados ['rede']) : (null));
+        $this->confirmacoesNecessarias = ((isset($dados ['confirmacoes_necessarias'])) ? ($dados ['confirmacoes_necessarias']) : (null));
+        $this->confirmacoes = ((isset($dados ['confirmacoes'])) ? ($dados ['confirmacoes']) : (null));
     }
     
     public function getTable() {

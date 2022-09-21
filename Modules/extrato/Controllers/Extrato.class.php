@@ -8,7 +8,6 @@ class Extrato {
     private $idioma = null;
 
     public function __construct() {
-                
         if(\Utils\Geral::isUsuario()){
            \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
         }
@@ -55,7 +54,6 @@ class Extrato {
 
     public function listarExtrato($params) {
         try {
-            
             $cliente = \Utils\Geral::getCliente(); 
             $dataInicial = \Utils\Post::getData($params, "dataInicial", null, "00:00:00");
             $dataFinal = \Utils\Post::getData($params, "dataFinal", null, "23:59:59");
@@ -81,10 +79,10 @@ class Extrato {
                     break;
 
                 case $idMoeda == 1:
-                    $real = true;  
+                    $real = true;
                     break;
 
-                case $idMoeda > 1:                    
+                case $idMoeda > 1:
                     $cripto = true;
                     break;
                 default:
@@ -126,14 +124,14 @@ class Extrato {
             }
 
             if($cripto){
-                
+
                 $moeda = "";
                 if(!$todos){
                     $moeda = " id_moeda = {$idMoeda} AND ";
                 }
-                
+
                 $listaCripto = $contaCorrenteBtcRn->lista(" {$moeda} id_cliente = {$cliente->id} AND data_cadastro <= '{$dataFinal->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO)}' ", "id DESC", null, null, false, true);
-                
+
                 if (sizeof($listaCripto) > 0) {
                     $i = 0;
                     $saldo = 0;
@@ -162,15 +160,11 @@ class Extrato {
                     }
                 }
             }
-            
-            
-            
+
             krsort($listaGeral);
-            
+
             //$anexo = [$this->htmlExtrato($listaGeral, $dataInicial, $dataFinal, $limite)];
-                
-            
-            
+
             $json["html"] = $this->htmlExtrato($listaGeral, $dataInicial, $dataFinal, $limite);
             $json["anexo"] = $this->anexoExtrato($listaGeral, $dataInicial, $dataFinal, $limite);
             $json["sucesso"] = true;
@@ -224,13 +218,19 @@ class Extrato {
             $color = "color: #ff1e1e;";
             $sinal = "-";
         }
+        if($extrato->confirmacoes >= $extrato->confirmacoesNecessarias){
+            $confirmColor = "color: #1ab394";
+            
+        } else {
+            $confirmColor = "color: #ffe585";
+        }
 
         if($extrato instanceof \Models\Modules\Cadastro\ContaCorrenteReais){
             $extrato->moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
         ?>
             <div class="ibox-content">
                 <div class="row m-l-xs">
-                    <div class="col-sm-2">
+                    <div class="col-sm-1">
                         <small class="stats-label">Moeda</small></br>
                         <img src="<?php echo IMAGES . "currencies/" . $extrato->moeda->icone ?>" width="20" height="20"/>
                     </div>
@@ -238,7 +238,7 @@ class Extrato {
                         <small class="stats-label">Descrição</small>
                         <h6><?php echo $extrato->descricao; ?></h6>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <small class="stats-label">Data</small>
                         <h6><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h6>
                     </div>
@@ -248,8 +248,12 @@ class Extrato {
                     </div> 
                     <div class="col-sm-2">
                         <small class="stats-label">Saldo</small>
-                        <h6><strong><?php echo "R$ " . number_format($extrato->saldo, 2, ",", "."); ?></strong></h6>
+                        <h6 style="<?php echo $confirmColor ?>"><strong><?php echo "R$ " . number_format($extrato->saldo, 2, ",", "."); ?></strong></h6>
                     </div> 
+                    <div class="col-sm-2">
+                        <small class="stats-label">Confirmações</small>
+                        <h6 style="<?php echo $confirmColor ?>"><strong>0/0</strong></h6>
+                    </div>
                 </div>
             </div>
 
@@ -266,7 +270,7 @@ class Extrato {
 
             <div class="ibox-content">
                 <div class="row m-l-xs">
-                    <div class="col-sm-2">
+                    <div class="col-sm-1">
                         <small class="stats-label">Moeda</small></br>
                         <img src="<?php echo IMAGES . "currencies/" . $extrato->moeda->icone ?>" width="20" height="20"/>
                     </div>
@@ -274,7 +278,7 @@ class Extrato {
                         <small class="stats-label">Descrição</small>
                         <h6><?php echo $descricao; ?></h6>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <small class="stats-label">Data</small>
                         <h6><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h6>
                     </div>
@@ -285,6 +289,10 @@ class Extrato {
                     <div class="col-sm-2">
                         <small class="stats-label">Saldo</small>
                         <h6><strong><?php echo $extrato->moeda->simbolo . " ". number_format($extrato->saldo, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h6>
+                    </div>
+                    <div class="col-sm-2">
+                        <small class="stats-label">Confirmações</small>
+                        <h6 style="<?php echo $confirmColor ?>"><strong><?php echo $extrato->confirmacoes?>/<?php echo $extrato->confirmacoesNecessarias?></strong></h6>
                     </div>
                 </div>
             </div>

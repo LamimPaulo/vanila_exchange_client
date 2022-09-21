@@ -414,7 +414,7 @@ class Btc {
             \Utils\ValidarSeguranca::validar($clienteFrom);
             
             \Utils\ValidarLimiteOperacional::validar($clienteFrom, $moeda, \Utils\Constantes::SAQUE, $valor, true);
-            
+
             $authRn = new \Models\Modules\Cadastro\AuthRn();
             $authRn->validar($token);
 
@@ -426,15 +426,12 @@ class Btc {
                     throw new \Exception($this->idioma->getText("pinInvalido1"));
                 }
             }
-            
+
             if ($moeda->coinType == \Utils\Constantes::REDE_ERC20 && trim($rede) == \Utils\Constantes::REDE_BEP20) {
                 if (!empty($rede)) {
                     $validar = false;
-
                     $redes = json_decode($moeda->redesSaque);
-                    
-                    $validarKey = key_exists($rede, $redes);
-                    
+                    $validarKey = key_exists($rede, (array)$redes);
                     if (!$validarKey) {
                         throw new \Exception("Rede inválida.");
                     }
@@ -708,34 +705,33 @@ class Btc {
                     
                 } else {
                     //Taxa cobrada em outra moeda
-                    
+
                     //Verifica se taxa para essa transferencia não está vazia, caso sim, busca a taxa da moeda de transferencia;
                     if(!empty($taxaMoeda->taxaMoedaTransferencia) && $taxaMoeda->taxaMoedaTransferencia > 0){
                         $taxa = $taxaMoeda->taxaMoedaTransferencia;
-                        
+
                     } else {
                         $taxaMoedaTransf = $taxaMoedaRn->getByMoeda($taxaMoeda->idMoedaTaxa);
                         $taxa = $taxaMoedaTransf->taxaTransferencia;
-                    }   
+                    }
 
                     //Verifica se o cliente tem taxa especial.
                     if($cliente->considerarTaxaTransferenciaCurrency == 1) {
                         $taxa = $cliente->taxaComissaoTransfenciaCurrency;
                     }
-                    
+
                     $moedaTaxa = new \Models\Modules\Cadastro\Moeda(Array("id" => $taxaMoeda->idMoedaTaxa));
                     $moedaRn->carregar($moedaTaxa);
-                    
-                    $saldoMoedaTaxa = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $moedaTaxa->id, false, true);
-                    
-                    if($saldoMoedaTaxa < $taxa){
-                        throw new \Exception("Você precisa ter em seu saldo " . number_format($taxa, $moedaTaxa->casasDecimais, ",", "") . " {$moedaTaxa->nome} para fazer o saque.");
-                    }
-                    
+
+                    // $saldoMoedaTaxa = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $moedaTaxa->id, false, true);
+
+                    // if($saldoMoedaTaxa < $taxa){
+                    //     throw new \Exception("Você precisa ter em seu saldo " . number_format($taxa, $moedaTaxa->casasDecimais, ",", "") . " {$moedaTaxa->nome} para fazer o saque.");
+                    // }
+
                     $saldoEmconta = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $moeda->id, false, true);
                     $valorTransferencia = number_format($valor, $moeda->casasDecimais, ".", "");
 
-                    
                     if ($saldoEmconta < $valorTransferencia) {
                         throw new \Exception($this->idioma->getText("saldoInsuficiente"));
                     }
@@ -743,17 +739,16 @@ class Btc {
             } else {
                 throw new \Exception($this->idioma->getText("saldoInsuficiente"));
             }
-            
-            
-            if ($valor < 0 || $taxa < 0) {               
+
+            if ($valor < 0 || $taxa < 0) {
                 \Utils\Notificacao::notificar("Saque: valor ou taxa negativos.", true, true, $cliente);
-                
+
                 $cliente->status = 2;
                 $clienteRn->alterarStatusCliente($cliente);
             }
-            
+
             \Models\Modules\Cadastro\ClienteHasCreditoRn::validar($cliente);
-                
+
             if (empty($cliente->pin)) {
                 throw new \Exception($this->idioma->getText("precisaCadPin1"));
             }
@@ -762,27 +757,26 @@ class Btc {
             $telefone = $cliente->celular;
             $auth->idCliente = $cliente->id;
             $tipo = $cliente->tipoAutenticacao;
-            
+
             if (empty($enderecoBitcoin)) {
                 throw new \Exception($this->idioma->getText("enderecoInvalido"));
             }
-             
+
             $authRn = new \Models\Modules\Cadastro\AuthRn();
             $authRn->salvar($auth);
-           
-            
+
             if ($tipo == \Utils\Constantes::TIPO_AUTH_EMAIL)  {
                 $json["mensagem"] = $this->idioma->getText("foiEnviadoEmail1") . " " . $email . " " . $this->idioma->getText("porFavorInsiraToken1");
-            } 
-            
+            }
+
             if ($tipo == \Utils\Constantes::TIPO_AUTH_SMS){
                 $json["mensagem"] = $this->idioma->getText("foiEnviadoSMS1") . " " . $telefone . " " . $this->idioma->getText("porFavorInsiraToken1");;
             }
-            
+
             if ($tipo == \Utils\Constantes::TIPO_AUTH_GOOGLE){
                 $json["mensagem"] = $this->idioma->getText("useGoogle1");
             }
-            
+
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
             $json["sucesso"] = false;

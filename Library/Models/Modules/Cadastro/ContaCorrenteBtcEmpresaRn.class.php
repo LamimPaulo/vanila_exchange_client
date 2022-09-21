@@ -256,11 +256,11 @@ class ContaCorrenteBtcEmpresaRn {
             if (!$valor > 0) {
                 throw new \Exception("O valor precisa ser maior que zero");
             }
-            
+
             if (!$idMoeda > 0) {
                 throw new \Exception("Moeda inválida");
             }
-            
+
             $moeda = new Moeda(Array("id" => $idMoeda));
             try {
                 $moedaRn = new MoedaRn();
@@ -275,7 +275,7 @@ class ContaCorrenteBtcEmpresaRn {
             if ($moeda->statusMercado < 1) {
                 throw new \Exception("O comércio da moeda está temporariamente suspenso", 123);
             }
-            
+
             $carteiraRn = new CarteiraRn($this->conexao->adapter);
             $carteira = $carteiraRn->getByEndereco($enderecoBitcoin, 0);
 

@@ -22,25 +22,16 @@ class ContaCorrenteBtcRn {
 
     public function __construct(\Io\BancoDados $adapter = null, $enviarNotificacao = true) {
         $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
-        
         if ($adapter == null) {
-            
             $this->conexao = new GenericModel(\Dduo::conexao(), new ContaCorrenteBtc());
-            
         } else {
             $this->conexao = new GenericModel($adapter, new ContaCorrenteBtc());
         }
-        
         $this->enviarNotificacao = $enviarNotificacao;
     }
 
-
     public function gerarContaCorrente(ContaCorrenteBtc &$contaCorrenteBtc, $token = null) {
         $novo = ($contaCorrenteBtc->id <= 0);
-            
-            
-            
-            
             if ($contaCorrenteBtc->id > 0) {
                 $aux = new ContaCorrenteBtc(Array("id" => $contaCorrenteBtc->id));
                 $this->conexao->carregar($aux);
@@ -235,13 +226,10 @@ class ContaCorrenteBtcRn {
                
             }
     }
-            
     public function salvar(ContaCorrenteBtc &$contaCorrenteBtc, $token = null) {
         try {
             $this->conexao->adapter->iniciar();
-         
             $this->gerarContaCorrente($contaCorrenteBtc, $token);
-            
             $this->conexao->adapter->finalizar();
         } catch (\Exception $e) {
             $this->conexao->adapter->cancelar();
@@ -249,13 +237,10 @@ class ContaCorrenteBtcRn {
         }
     }
 
-
     public function resumo($filtro = null, $idMoeda = 2, $saldoMinBtc = 0) {
-        
         if (!$saldoMinBtc > 0) {
             $saldoMinBtc = 0;
         }
-        
         $where = Array();
 
         if (!empty($filtro)) {
@@ -270,22 +255,16 @@ class ContaCorrenteBtcRn {
                 . " GROUP BY c.id, c.nome "
                 . " ORDER BY c.nome ";
 
-        
-
         $lista = Array();
         $result = $this->conexao->adapter->query($query)->execute();
-        
         $contaCorrenteReaisRn = new ContaCorrenteReaisRn($this->conexao->adapter, false);
-        
         foreach ($result as $dados) {
             $cliente = new Cliente($dados);
-            
             if ($idMoeda > 1) {
                 $saldo = $this->calcularSaldoConta($cliente, $idMoeda, true);
             } else {
                 $saldo = $contaCorrenteReaisRn->calcularSaldoConta($cliente, true);
             }
-            
             if (($saldo["saldo"]+$saldo["bloqueado"]) >= $saldoMinBtc) { 
                 $lista[] = Array(
                     "cliente" => $cliente,
@@ -298,17 +277,15 @@ class ContaCorrenteBtcRn {
         return $lista;
     }
 
-
     public function resumoClientes($filtro = null, $saldoMinBrl = 0, $saldoMinBtc = 0) {
-        
         if (!$saldoMinBrl > 0) {
             $saldoMinBrl = 0;
         }
-        
+
         if (!$saldoMinBtc > 0) {
             $saldoMinBtc = 0;
         }
-        
+
         $where = Array();
 
         if (!empty($filtro)) {
@@ -517,17 +494,13 @@ class ContaCorrenteBtcRn {
         return Array("lista" => $lista, "entradas" => $entradas, "saidas" => $saidas);
     }
 
-    
-    
     public function calcularSaldoConta(Cliente $cliente, $idMoeda = 2, $saldoBloqueado = false, $desconsiderarCredito = false) {
-        
-        
+
         $sWhere = ($idMoeda > 0 ? " m.id = {$idMoeda} " : " m.ativo = 1 ");
-        
         $query = "SELECT 
                     m.*,
                     COALESCE(
-                    COALESCE((SELECT SUM(valor) FROM conta_corrente_btc WHERE id_moeda = m.id AND tipo = 'E' AND id_cliente = {$cliente->id}), 0) -
+                    COALESCE((SELECT SUM(valor) FROM conta_corrente_btc WHERE id_moeda = m.id AND confirmacoes >= confirmacoes_necessarias AND tipo = 'E' AND id_cliente = {$cliente->id}), 0) -
                     COALESCE((SELECT SUM(valor) FROM conta_corrente_btc WHERE id_moeda = m.id AND tipo = 'S' AND id_cliente = {$cliente->id}), 0)
                     , 0)
                     AS saldo_disponivel,
@@ -572,16 +545,11 @@ class ContaCorrenteBtcRn {
             } else {
                 return $dadosMoeda["saldo"];
             }
-            
         } else {
-            
             return $listaMoedas;
         }
-        
     }
-    
-    
-    
+
     public function calcularSaldoRecompensaICO(Cliente $cliente, $idMoeda = 2) {
         
         if (!$cliente->id > 0) {
@@ -609,8 +577,8 @@ class ContaCorrenteBtcRn {
         $saldo = ($entrada - $saida);
         return number_format($saldo, $moeda->casasDecimais, ".", "");
     }
-    
-     public function calcularSaldoReferencia($idCliente, $idMoeda, $idReferencia, $dataInicial, $dataFinal, $origem) {
+
+    public function calcularSaldoReferencia($idCliente, $idMoeda, $idReferencia, $dataInicial, $dataFinal, $origem) {
         
         if (!isset($dataInicial->data) || $dataInicial->data == null) {
             throw new \Exception($this->idioma->getText("dataInicialInformada"));
@@ -643,9 +611,7 @@ class ContaCorrenteBtcRn {
 
         return $result;
     }
-    
-    
-    
+
     public function calcularSaldoCompraBonusICO(Cliente $cliente, $idMoeda = 33) {
         
         if (!$cliente->id > 0) {
@@ -739,7 +705,6 @@ class ContaCorrenteBtcRn {
         }
     }
 
-
     public function  transferir(Cliente $clienteFrom, $enderecoBitcoin, $valor, $descricao, $idMoeda = 2, $token = null, $rede = null) {
         try {
             $this->conexao->adapter->iniciar();
@@ -754,15 +719,15 @@ class ContaCorrenteBtcRn {
             if ($clienteFrom->statusSaqueCurrency < 1) {
                 throw new \Exception($this->idioma->getText("saqueCriptoSuspenso"));
             }
-            
+
             if (!$valor > 0) {
                 throw new \Exception($this->idioma->getText("valorPrecisaMaioroZero"));
             }
-            
+
             if (!$idMoeda > 0) {
                 throw new \Exception($this->idioma->getText("moedaInvalida"));
             }
-            
+
             $moeda = new Moeda(Array("id" => $idMoeda));
             try {
                 $moedaRn = new MoedaRn();
@@ -774,11 +739,11 @@ class ContaCorrenteBtcRn {
             if ($moeda->ativo < 1) {
                 throw new \Exception($this->idioma->getText("comercioMoedaSuspenso"), 130);
             }
-            
-            /*if ($moeda->statusMercado < 1) {
+
+            if ($moeda->statusMercado < 1) {
                 throw new \Exception($this->idioma->getText("comercioMoedaTempSuspenso"), 123);
-            }*/
-            
+            }
+
             $carteiraRn = new CarteiraRn($this->conexao->adapter);
             $carteira = $carteiraRn->getByEndereco($enderecoBitcoin, $moeda->id);
 
@@ -792,7 +757,7 @@ class ContaCorrenteBtcRn {
             $configuracaoRn = new ConfiguracaoRn($this->conexao->adapter);
             $configuracao = new Configuracao(Array("id" => 1));
             $configuracaoRn->conexao->carregar($configuracao);
-              
+
             //Fazer movimentação de taxa
             $taxa = 0;
             $moedaTaxa = null;
@@ -814,57 +779,57 @@ class ContaCorrenteBtcRn {
 
             //$taxaMoeda = $taxaMoedaRn->getByMoeda($idMoeda);
             $valorTransferencia = 0;
-            
+
             if ($taxaMoeda != null) {
-                
+
                 //Verifica se a taxa é cobrada em outra moeda
                 if(empty($taxaMoeda->idMoedaTaxa)){
                     //Taxa cobrada na mesma moeda
-                    
+
                     //Verifica se o cliente tem taxa especial.
                     if($clienteFrom->considerarTaxaTransferenciaCurrency == 1) {
                         $taxa = $clienteFrom->taxaComissaoTransfenciaCurrency;
                     } else {
                         $taxa = $taxaMoeda->taxaTransferencia;
                     }
-                    
+
                     $saldoEmconta = $this->calcularSaldoConta($clienteFrom, $idMoeda, false, true);
                     $valorTransferencia = number_format($valor + $taxa, $moeda->casasDecimais, ".", "");
 
                     if ($saldoEmconta < $valorTransferencia) {
                         throw new \Exception($this->idioma->getText("voceNaoTemSaldoSuficiente"));
                     }
-                    
+
                     if ($taxa > $saldoEmconta) {
                         throw new \Exception($this->idioma->getText("valorMinimoTransf") . number_format($taxa, $moeda->casasDecimais, ",", ""));
                     }
-                    
+
                 } else {
                     //Taxa cobrada em outra moeda
-                    
+
                     //Verifica se taxa para essa transferencia não está vazia, caso sim, busca a taxa da moeda de transferencia;
                     if(!empty($taxaMoeda->taxaMoedaTransferencia) && $taxaMoeda->taxaMoedaTransferencia > 0){
                         $taxa = $taxaMoeda->taxaMoedaTransferencia;
-                        
+
                     } else {
                         $taxaMoedaTransf = $taxaMoedaRn->getByMoeda($taxaMoeda->idMoedaTaxa);
                         $taxa = $taxaMoedaTransf->taxaTransferencia;
-                    }   
-                    
+                    }
+
                     //Verifica se o cliente tem taxa especial.
                     if($clienteFrom->considerarTaxaTransferenciaCurrency == 1) {
                         $taxa = $clienteFrom->taxaComissaoTransfenciaCurrency;
                     }
-                    
+
                     $moedaTaxa = new Moeda(Array("id" => $taxaMoeda->idMoedaTaxa));
                     $moedaRn->carregar($moedaTaxa);
-                    
-                    $saldoMoedaTaxa = $this->calcularSaldoConta($clienteFrom, $moedaTaxa->id, false, true);
-                    
-                    if($saldoMoedaTaxa < $taxa){
-                        throw new \Exception("Você precisa ter em seu saldo " . number_format($taxa, $moedaTaxa->casasDecimais, ",", "") . " {$moedaTaxa->nome} para fazer o saque.");
-                    }
-                    
+
+                    // $saldoMoedaTaxa = $this->calcularSaldoConta($clienteFrom, $moedaTaxa->id, false, true);
+
+                    // if($saldoMoedaTaxa < $taxa){
+                    //     throw new \Exception("Você precisa ter em seu saldo " . number_format($taxa, $moedaTaxa->casasDecimais, ",", "") . " {$moedaTaxa->nome} para fazer o saque.");
+                    // }
+
                     $saldoEmconta = $this->calcularSaldoConta($clienteFrom, $idMoeda, false, true);
                     $valorTransferencia = number_format($valor, $moeda->casasDecimais, ".", "");
 
@@ -875,15 +840,15 @@ class ContaCorrenteBtcRn {
             } else {
                 throw new \Exception($this->idioma->getText("voceNaoTemSaldoSuficiente"));
             }
-            
+
             ClienteHasCreditoRn::validar($clienteFrom);
-            
-            $moedaDestino = null;
-            if(!empty($rede) && $rede != $moeda->coinType && !empty($moeda->idMoedaSaque)){
-                $moedaDestino = $this->converterRedes($clienteFrom, $moeda, $valorTransferencia);
-                $idMoeda = $moedaDestino->id;
-            }
-            
+
+            // $moedaDestino = null;
+            // if(!empty($rede) && $rede != $moeda->coinType && !empty($moeda->idMoedaSaque)){
+            //     $moedaDestino = $this->converterRedes($clienteFrom, $moeda, $valorTransferencia);
+            //     $idMoeda = $moedaDestino->id;
+            // }
+
             $contaCorrenteFrom = new ContaCorrenteBtc();
             $contaCorrenteFrom->id = 0;
             $contaCorrenteFrom->idCliente = $clienteFrom->id;
@@ -913,9 +878,8 @@ class ContaCorrenteBtcRn {
                 // se o cliente foi identificado a transferência é interna
                 $this->creditarContaDesnataria($contaCorrenteFrom, $clienteTo, $token);
             }
-            
             if ($taxa > 0) {
-                 if(!empty($taxaMoeda->idMoedaTaxa)){
+                if(!empty($taxaMoeda->idMoedaTaxa)){
                     $contaCorrenteTaxa = new ContaCorrenteBtc();
                     $contaCorrenteTaxa->id = 0;
                     $contaCorrenteTaxa->idCliente = $clienteFrom->id;
@@ -929,10 +893,10 @@ class ContaCorrenteBtcRn {
                     $contaCorrenteTaxa->idMoeda = $moedaTaxa->id;
                     $contaCorrenteTaxa->direcao = \Utils\Constantes::TRANF_INTERNA;
                     $contaCorrenteTaxa->executada = 1;
-                    
+                    $contaCorrenteTaxa->autorizada = 1;
+
                     $this->salvar($contaCorrenteTaxa, $token);
-                 }
-                 
+                }
                 $contaCorrenteBtcEmpresa = new ContaCorrenteBtcEmpresa();
                 $contaCorrenteBtcEmpresa->id = 0;
                 $contaCorrenteBtcEmpresa->data = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -943,21 +907,19 @@ class ContaCorrenteBtcRn {
                 $contaCorrenteBtcEmpresa->idMoeda = empty($moedaTaxa) ? $idMoeda : $moedaTaxa->id;
                 $contaCorrenteEmpresaRn = new ContaCorrenteBtcEmpresaRn($this->conexao->adapter);
                 $contaCorrenteEmpresaRn->salvar($contaCorrenteBtcEmpresa, $token);
-                
+
                 //Debito Taxa da Rede
                 if($contaCorrenteFrom->direcao == \Utils\Constantes::TRANF_EXTERNA){
-                    
                     if(!empty($taxaMoeda->idMoedaTaxa) && empty($rede)){
                         if(empty($taxaMoedaTransf)){
-                            
                             $taxaRedeMoeda = $taxaMoedaRn->getByMoeda($taxaMoeda->idMoedaTaxa);
                         } else {
-                           $taxaRedeMoeda = $taxaMoedaTransf;
+                            $taxaRedeMoeda = $taxaMoedaTransf;
                         }
                     } else {
                         $taxaRedeMoeda = $taxaMoeda;
                     }
-                    
+
                     $contaCorrenteTxRede = new ContaCorrenteBtcEmpresa();
                     $contaCorrenteTxRede->id = 0;
                     $contaCorrenteTxRede->data = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -965,13 +927,12 @@ class ContaCorrenteBtcRn {
                     $contaCorrenteTxRede->tipo = \Utils\Constantes::SAIDA;
                     $contaCorrenteTxRede->valor = $taxaRedeMoeda->taxaRede;
                     $contaCorrenteTxRede->transferencia = 1;
-                    $contaCorrenteTxRede->idMoeda = empty($moedaTaxa) ? $idMoeda : $moedaTaxa->id;                   
-                    
+                    $contaCorrenteTxRede->idMoeda = empty($moedaTaxa) ? $idMoeda : $moedaTaxa->id;
+
                     $contaCorrenteEmpresaRn->salvar($contaCorrenteTxRede, $token);
                 }
             }
-            
-           
+
             $this->carregar($contaCorrenteFrom, false, true, true);
 
             $this->conexao->adapter->finalizar();
@@ -981,7 +942,7 @@ class ContaCorrenteBtcRn {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
+
     private function converterRedes(Cliente $cliente, Moeda $moeda, $valor) {
         
         $contaCorrenteEmpresaRn = new ContaCorrenteBtcEmpresaRn();
@@ -1065,7 +1026,7 @@ class ContaCorrenteBtcRn {
             
             return $moedaDestino;
     }
-    
+
     private function creditarContaDesnataria(ContaCorrenteBtc $contaCorrente, \Models\Modules\Cadastro\Cliente $clienteTo, $token = null) {
         
         $moeda = MoedaRn::get($contaCorrente->idMoeda);
@@ -1086,7 +1047,7 @@ class ContaCorrenteBtcRn {
         
         $this->salvar($contaCorrenteTo, $token);
     }
-    
+
     public function find($hash, $wallet, $amount) {
         $result = $this->conexao->select(Array(
             "hash" => $hash,
@@ -1099,7 +1060,7 @@ class ContaCorrenteBtcRn {
         }
         return null;
     }
-    
+
     public function getByHash($hash) {
         $result = $this->conexao->select(Array(
             "hash" => $hash
@@ -1110,7 +1071,6 @@ class ContaCorrenteBtcRn {
         }
         return null;
     }
-
 
     public function confirmarTransferencia(ContaCorrenteBtc $contaCorrenteBtc) {
 
@@ -1206,7 +1166,6 @@ class ContaCorrenteBtcRn {
 
     }
 
-
     public function calcularVolumeTotalPorEndereco($endereco, $idMoeda = null) {
         $moeda = MoedaRn::get($idMoeda);
         
@@ -1227,8 +1186,7 @@ class ContaCorrenteBtcRn {
 
         return number_format($volume, $moeda->casasDecimais, ".", "");
     }
-    
-    
+
     public function autorizarTransacao(ContaCorrenteBtc &$contaCorrenteBtc) {
         try {
             $this->conexao->adapter->iniciar();
@@ -1302,7 +1260,7 @@ class ContaCorrenteBtcRn {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
+
     public function reenviarTransacao(ContaCorrenteBtc &$contaCorrenteBtc) {
     
         try {
@@ -1317,7 +1275,7 @@ class ContaCorrenteBtcRn {
         
         $this->conexao->update(Array("enviado" => 0), Array("id" => $contaCorrenteBtc->id));
     }
-    
+
     public function negarTransacao(ContaCorrenteBtc &$contaCorrenteBtc) {
         try {
             $this->conexao->adapter->iniciar();
@@ -1398,9 +1356,7 @@ class ContaCorrenteBtcRn {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
-    
-    
+
     public function transferirParaEmpresa($valor, $descricao, $idMoeda = 2, $token = null) {
         try {
             $this->conexao->adapter->iniciar();
@@ -1484,13 +1440,9 @@ class ContaCorrenteBtcRn {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
-    
-    
+
     public function cobranca(Cliente $cliente, $descricaoCliente, $descricaoEmpresa, $valor, Moeda $moeda) {
-        
         try {
-            
             try{
                 $clienteRn = new ClienteRn();
                 $clienteRn->conexao->carregar($cliente);
@@ -1557,7 +1509,7 @@ class ContaCorrenteBtcRn {
         }
         
     }
-    
+
     public function calcularSaldoCurrencies() {
         
         $query = "select "
@@ -1591,7 +1543,7 @@ class ContaCorrenteBtcRn {
         
         return $dados;
     }
-    
+
     public function getQuantidadeClientesComSaldo($idMoeda) {
         $query = "SELECT
                     COUNT(*) AS qtd
@@ -1609,22 +1561,22 @@ class ContaCorrenteBtcRn {
         }
         return $qtd;
     }
-    
+
     public function saldoConsolidadoInvestimento($idCliente, $idMoeda, $dataInicial, $dataFinal){
         $dataSql = "";
         $moedaSql = "";
         if($idMoeda != "T"){
-           $moedaSql = " id_moeda = {$idMoeda} AND ";                
+            $moedaSql = " id_moeda = {$idMoeda} AND ";
         } else {
-           $moedaSql = "";
+            $moedaSql = "";
         }
-        
+
         if($dataInicial == null){
             $dataSql = "";
         } else {
             $dataSql = "AND data_cadastro BETWEEN '{$dataInicial->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO)}' AND '{$dataFinal->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO)}'";
         }
-        
+
         $query = "SELECT c.id_moeda, c.descricao, c.data_cadastro, sum(valor) AS totalDia FROM conta_corrente_btc c WHERE
         id_cliente = {$idCliente} AND {$moedaSql} origem = 3 AND tipo = 'E' {$dataSql}
         GROUP BY c.id_moeda, c.descricao, c.data_cadastro
@@ -1634,9 +1586,8 @@ class ContaCorrenteBtcRn {
         
         return $result;
     }
-    
+
     public function ultimosDepositosBtcBrl(Cliente $cliente, $qtdRegitros = "T", $categoria = null) {
-        
         if ($cliente->id == null) {
             throw new \Exception($this->idioma->getText("clienteInvalidoNaoEncontrado"));
         }
@@ -1645,7 +1596,7 @@ class ContaCorrenteBtcRn {
         if ($qtdRegitros != "T") {
             $limit = " limit {$qtdRegitros} ";
         }
-        
+
         if($categoria != null){
             $categoriaQuery = " HAVING categoria = {$categoria} ";
         }
@@ -1653,30 +1604,30 @@ class ContaCorrenteBtcRn {
         $query = "SELECT data_cadastro as data, valor as volume, (select nome from moedas where id = id_moeda) as moeda,
                 hash as comprovante, descricao, (select id_categoria_moeda from moedas where id = id_moeda) as categoria, id_moeda as idMoeda, origem as origem, direcao as direcao, '0' as tipo_deposito, '1' as link FROM conta_corrente_btc
                 WHERE id_cliente = {$cliente->id} AND tipo = 'E' AND origem = 0
-                {$categoriaQuery}     
+                {$categoriaQuery}
                 UNION
                 SELECT data_cadastro as data, valor as volume, (select nome from moedas where id = id_moeda) as moeda,
                 origem as comprovante, descricao, (select id_categoria_moeda from moedas where id = id_moeda) as categoria, id_moeda as idMoeda, origem as origem, direcao as direcao, '0' as tipo_deposito, '1' as link FROM conta_corrente_btc
                 WHERE id_cliente = {$cliente->id} AND tipo = 'E' AND direcao = 'I' AND origem = 13
-                {$categoriaQuery}     
+                {$categoriaQuery}
                 UNION
                 SELECT data_cadastro as data, valor as volume, 'Real' as moedas, tipo as comprovante, origem as status, '1' as categoria, '0' as idMoeda, 'E' as origem, '0' as direcao, '0' as tipo_deposito, '1' as link FROM conta_corrente_reais
                 WHERE id_cliente = {$cliente->id}  AND origem = 9 AND tipo = 'E' {$categoriaQuery}
                 UNION
                 SELECT data_solicitacao as data, valor_creditado as volume, 'Real' as moedas, comprovante as comprovante, status as status, '1' as categoria, '0' as idMoeda, 'E' as origem, '0' as direcao, tipo_deposito as tipo_deposito, link_gateway as link FROM depositos
                 WHERE id_cliente = {$cliente->id}
-                {$categoriaQuery} 
+                {$categoriaQuery}
                 UNION
                 SELECT data_confirmacao as data, valor_creditado as volume, 'Atar' as moeda, id_transacao as comprovante, tipo as status, '1' as categoria, '0' as idMoeda, 'E' as origem, '0' as direcao, '0' as tipo_deposito, '1' as link FROM atar_contas
                 WHERE id_cliente = {$cliente->id} AND tipo = 'E'
-                {$categoriaQuery} 
+                {$categoriaQuery}
                 ORDER BY data DESC {$limit};";
-                
+
         $result = $this->conexao->adapter->query($query)->execute();
-        
-        return $result;     
+
+        return $result;
     }
-    
+
     public function ultimosSaquesBtcBrl(Cliente $cliente, $qtdRegitros = "T", $categoria = null) {
         
         if ($cliente->id == null) {
@@ -1710,7 +1661,5 @@ class ContaCorrenteBtcRn {
 
         return $result;     
     }
-    
 }
-
 ?>

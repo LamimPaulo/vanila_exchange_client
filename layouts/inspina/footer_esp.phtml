@@ -14,17 +14,17 @@ $paridade = Modules\principal\Controllers\Principal::getParity();
 
 
 
+<!-- <script src="<?php echo TEMA; ?>bootstrap/js/bootstrap.min.js"></script> -->
 <script src="<?php echo TEMA; ?>plugins/jQuery/jquery-2.2.3.min.js?<?php echo time() ?>"></script>
 <script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js?<?php echo time() ?>"></script>
 <script src="<?php echo TEMA; ?>js/jquery.1.11.min.js"></script>
 <script src="<?php echo TEMA; ?>js/jquery-ui.min.js"></script>
 <script src="<?php echo TEMA; ?>js/jquery.ui.touch-punch.min.js"></script>
-<script src="<?php echo TEMA; ?>bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo TEMA; ?>dist/js/lobipanel.js"></script>
 <script src="<?php echo TEMA; ?>lib/highlight/highlight.pack.js"></script>
 <script src="<?php echo JS; ?>TweenMax.min.js"></script>
 <script src="<?php echo TEMA; ?>js/datatables.js"></script>
-<script src="<?php echo TEMA; ?>js/plugins/sweetalert/sweetalert.min.js"></script>
+<!-- <script src="<?php echo TEMA; ?>js/plugins/sweetalert/sweetalert.min.js"></script> -->
 <script src="<?php echo TEMA; ?>js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/codemirror/codemirror.js"></script>
@@ -56,8 +56,17 @@ $paridade = Modules\principal\Controllers\Principal::getParity();
 <script src="<?php echo TEMA; ?>js/jAlert/jAlert-functions.js?<?php echo time(); ?>"></script>
 <script src="<?php echo TEMA; ?>js/jAlert/jAlert.js?<?php echo time(); ?>"></script>
 <script src="<?php echo JS; ?>pusher.min.js"></script>
-<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
 
+<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+<link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet"> 
+
+<head>
+    <style>
+        #toast-container > .toast {
+            background-image: none !important;
+        }
+    </style>
+</head>
 
 <?php //\Utils\Layout::append("notificacoes/cadastro_notificacao", $_data)?>
 
@@ -171,12 +180,24 @@ $(document).ready(function () {
 
     
     function launcherNotification(mensagem, usuario ,codigo, tipo) {
+        
         toastr.options = {
             closeButton: true,
+            debug: true,
+            newestOnTop: true,
             progressBar: true,
-            showMethod: 'slideDown',
+            positionClass: 'toast-top-left',
+            preventDuplicates: true,
+            showDuration: 300,
+            hideDuration: 1000,
+            timeOut: 5000,
+            extendedTimeOut: 1000,
+            showEasing: 'swing',
+            hideEasing: 'linear',
+            showMethod: 'fadeIn',
+            hideMethod: 'fadeOut',
             timeOut: 7500,
-            positionClass: "toast-bottom-center",
+            positionClass: "toastr-bottom-center",
             onShown: function (){
                 $.ajax({
                     url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_NOTIFICACOES_SHOWN ?>",
@@ -194,7 +215,7 @@ $(document).ready(function () {
         if (tipo === "s") {
             toastr.success(usuario, mensagem);
         } else if (tipo === "e") {
-            toastr.error(usuario, mensagem);
+            toastr.success(usuario, mensagem);
         } else if (tipo === "w") {
             toastr.warning(usuario, mensagem);
         } 
@@ -204,11 +225,21 @@ $(document).ready(function () {
     function showNotyAlert(mensagem, tipo) {
         toastr.options = {
             closeButton: true,
+            debug: true,
+            newestOnTop: true,
             progressBar: true,
-            showMethod: 'slideDown',
-            timeOut: 7500,
+            positionClass: 'toast-top-left',
             preventDuplicates: true,
-            positionClass: "toast-top-left"
+            showDuration: 300,
+            hideDuration: 1000,
+            timeOut: 5000,
+            extendedTimeOut: 1000,
+            showEasing: 'swing',
+            hideEasing: 'linear',
+            showMethod: 'fadeIn',
+            hideMethod: 'fadeOut',
+            timeOut: 7500,
+            positionClass: "toast-top-left",
         };
         
         if (tipo === "s") {

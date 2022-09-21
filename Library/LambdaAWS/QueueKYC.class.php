@@ -35,7 +35,7 @@ class QueueKYC {
     }
 
     public static function sendLog( $queue_name, $priority,$params) {
-        
+         
         $urlQueue = 'https://sqs.us-east-1.amazonaws.com/293963835247/'.$queue_name.'_prod.fifo'; //PROD
 
         $result = LambdaMain::enviar($urlQueue, json_encode($params));
@@ -60,8 +60,6 @@ class QueueKYC {
                 'msg' => 'Falha ao enviar sua solicitação'
             ];
         }
-
-
     }
 
 }

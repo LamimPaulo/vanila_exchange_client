@@ -894,20 +894,21 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
 </div>
 
 
+
 <script type="text/template" id="qrcodeTpl">
-        <div class="imgblock m-t-md">
+    <div class="imgblock m-t-md">
         <div class="qr" id="qrcodeNew"></div>
-        </div>
+    </div>
 </script>
 <script type="text/template" id="qrcodeTplAtar">
-        <div class="imgblock m-t-md">
+    <div class="imgblock m-t-md">
         <div class="qr" id="qrcodeNewAtar"></div>
-        </div>
+    </div>
 </script>
-    <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
-    <script src="<?php echo JS; ?>easy.qrcode.min.js"></script>
-    <script>
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<script src="<?php echo JS; ?>easy.qrcode.min.js"></script>
 
+<script>
     var comissao = <?php echo number_format($comissao, 2, ".", "")?>;
     var comissaoBoleto = <?php echo number_format($comissaoBoleto, 2, ".", "")?>;
     var tarifaBoleto = <?php echo number_format($tarifaBoleto, 2, ".", "")?>;

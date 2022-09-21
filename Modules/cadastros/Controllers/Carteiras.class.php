@@ -3,10 +3,10 @@
 namespace Modules\cadastros\Controllers;
 
 class Carteiras {
-    
+
     private  $codigoModulo = "carteiras";
     private $idioma = null;
-    
+
     function __construct(&$params) {
         \Utils\Validacao::acesso($this->codigoModulo);
         $this->idioma = new \Utils\PropertiesUtils("index_carteiras", IDIOMA);
@@ -21,7 +21,7 @@ class Carteiras {
 
         }
     }
-    
+
     public function index($params) {
  
             $cliente = \Utils\Geral::getCliente();
@@ -71,7 +71,7 @@ class Carteiras {
         
         \Utils\Layout::view("index_carteiras", $params);
     }
-    
+
     private function listar(\Models\Modules\Cadastro\Cliente &$cliente, $clienteVerificado) {
         try {
                        
@@ -167,7 +167,7 @@ class Carteiras {
             return null;
         }
     }
-    
+
     public function showDados($params) {
         try {
             $clienteSessao = \Utils\Geral::getCliente();
@@ -236,7 +236,6 @@ class Carteiras {
             } else {
                 $moeda = \Models\Modules\Cadastro\MoedaRn::get($id);
                 
-                //exit(print_r($moeda));
                 $carteiraClienteRn = new \Models\Modules\Cadastro\CarteiraRn();
                 $carteira = $carteiraClienteRn->getPrincipalCarteira($cliente, $moeda);
                    
@@ -316,7 +315,7 @@ class Carteiras {
         
         print json_encode($json);    
     }
-    
+
     public function listaDepositos($params) {
         try{
             $cliente = \Utils\Geral::getCliente();
@@ -333,8 +332,8 @@ class Carteiras {
         }
         print json_encode($json);
     }
-    
-    private function htmlListaUltimosDepositos($dados) {        
+
+    private function htmlListaUltimosDepositos($dados) {
         ob_start();
 
         if (sizeof($dados) > 0) {
@@ -346,8 +345,7 @@ class Carteiras {
         ob_end_clean();
         return $html;
     }
-    
-    
+
     private function itemListaUltimosDepositos($dados) {
         $data = new \Utils\Data(date($dados["data"]));
         $hora = new \Utils\Data(date($dados["data"])); 
@@ -414,19 +412,17 @@ class Carteiras {
         </tr>
         <?php
     }
-    
+
     public function criarCarteira($params) {
         try {
             $carteira = new \Models\Modules\Cadastro\Carteira();
             $carteira->id = \Utils\Post::getEncrypted($params, 'id', 0);
             $carteira->nome = \Utils\Post::get($params, "nome", null);
             $idMoeda = \Utils\Post::getEncrypted($params, "idMoeda", null);
-
             $carteira->idMoeda = $idMoeda;
 
             $carteiraRn = new \Models\Modules\Cadastro\CarteiraRn();
             $carteiraRn->salvar($carteira);
-            
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
             $json["sucesso"] = false;
@@ -434,8 +430,7 @@ class Carteiras {
         }
         print json_encode($json);
     }
-    
-    
+
     public function marcarComoPrincipal($params) {
         try {
             //Testes

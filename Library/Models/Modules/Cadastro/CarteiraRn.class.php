@@ -32,8 +32,6 @@ class CarteiraRn {
        
         try {
             $this->conexao->adapter->iniciar();
-            
-            
             if ($carteira->id > 0) {
                 $aux = new Carteira(Array("id" => $carteira->id));
                 $this->conexao->carregar($aux);
@@ -90,8 +88,7 @@ class CarteiraRn {
                 $carteira->seed = $carteiraGerada->seed;
                 $carteira->callbackDeposito = 0;
                 
-                // if (AMBIENTE == "producao") {
-
+                
                     $moedaCarteira = $moeda;
                     if (($moedaCarteira->token > 0 && $moedaCarteira->idMoedaPrincipal > 0)) {
                         $moedaCarteira = $moedaRn->get($moedaCarteira->idMoedaPrincipal);
@@ -104,13 +101,13 @@ class CarteiraRn {
                         $params = [
                             'id_moeda' => $moedaCarteira->id,
                             'rede_moeda' => $moedaCarteira->coinType,
-                            'qtd' => 1
+                            'qtd' => 1,
+                            'system' => 'coinage'
                         ];
                         $result = \LambdaAWS\QueueKYC::sendQueue($exchangeName , $params);
+
                     }
                 // }
-                
-                
                 if (empty($carteira->endereco)) {
                     throw new \Exception($this->idioma->getText("naoFoiPossivelCriarCarteiraMomento"));
                 }
@@ -122,7 +119,6 @@ class CarteiraRn {
             
             unset($carteira->moeda);
             $this->conexao->salvar($carteira);
-            // exit(print_r('teste'));
             
             $this->conexao->adapter->finalizar();
             

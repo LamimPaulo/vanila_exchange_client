@@ -106,6 +106,15 @@ class CarteiraGeradaRn {
             $this->conexao->update(Array("utilizada" => 1), Array("id" => $carteira->id));
             return $carteira;
         } else {
+            $exchangeName = 'ex.wallet_new';
+            $params = [
+                'id_moeda' => $idMoeda,
+                // 'rede_moeda' => $moedaCarteira->coinType,
+                'qtd' => 1,
+                'system' => 'coinage'
+            ];
+            \LambdaAWS\QueueKYC::sendQueue($exchangeName , $params);
+
             throw new \Exception($this->idioma->getText("naoPossivelGerarCarteira"));
         }
     }
