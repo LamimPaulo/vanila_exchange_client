@@ -392,6 +392,19 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                                     </div>
                                                 <?php } ?>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
                                                 <div id="depositoBoleto">
                                                     </br>
                                                     <div class="row p-md">
@@ -400,6 +413,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                                         </div>
                                                     </div>
                                                     </br>
+
                                                     <div id="telaBoleto">
                                                         <div class="row p-md">
                                                             <div class="col col-lg-5 col-xs-12 border-right">
@@ -410,7 +424,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                                             </div>
                                                             <div class="col-lg-7 col-xs-12 m-t-md">
                                                                 <small><?php echo $idioma->getText("comissaoDeposito") ?> (<span id="comissaoCobradaBoleto">R$ <?php echo number_format($tarifaBoleto, 2, ",", "") ?> + <?php echo number_format($comissao, 2, ",", "") ?></span>%)</small></br>
-                                                                <small><?php echo $idioma->getText("seraCreditado") ?> <strong id="valorCreditadoBoleto"> </strong></small>
+                                                                <small><?php echo $idioma->getText("seraCreditado") ?> <strong id="valorCreditadoBoleto"> </strong></small>a
                                                             </div>
                                                         </div>
                                                         <div class="row p-md">
@@ -419,11 +433,12 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="row p-md" id="tokenBoleto">
                                                         <div class="col-lg-12">
                                                             <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
                                                             <dl class="dl-horizontal m-t-sm">
-                                                                <dt class="border-bottom">Valor do Boleto:</dt> <dd id="valorTotalBoleto">-</dd>
+                                                                <dt class="border-bottom">Valor Total:</dt> <dd id="valorTotalBoleto">-</dd>
                                                                 <dt class="border-bottom">Valor à Creditar:</dt> <dd id="valorCreditarBoleto">-</dd>
                                                             </dl>
                                                             <div class="row">
@@ -448,18 +463,23 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                                                     <button class="btn btn-white full-width m-t-xs"  onclick="cancelarBoleto();"><?php echo $idioma->getText("cancelar") ?></button>
                                                                 </div>
                                                                 <div class="col-lg-6 col-xs-12">
-                                                                    <button class="btn btn-success full-width m-t-xs"  onclick="salvarDepositoBoleto();"><?php echo $idioma->getText("confirmar") ?></button>
+                                                                    <button class="btn btn-success full-width m-t-xs"  onclick="salvarDepositoBoleto();"> <?php echo $idioma->getText("confirmar") ?></button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="text-center" id="carregaBoleto"></div>
                                                     <div class="row p-md" id="boletoGerado"  >
                                                         <div class="col-lg-12">
                                                             <dl class="dl-horizontal m-t-sm">
+                                                                <dt class="border-bottom">QrCode</dt> <dd id="modalBoletoGeradoImgBarcode">-</dd>
+                                                                <span id="modalBoletoGeradoImgBarcodeChave"></span>
+                                                                </br>
+                                                                </br>
                                                                 <dt class="border-bottom">Status</dt> <dd id="modalStatusBoleto">-</dd>
-                                                                <dt class="border-bottom">Mensagem:</dt> <dd id="modalMensagemLabel">-</dd>
-                                                                <dt class="border-bottom"><?php echo $idioma->getText("dataVencimento") ?>:</dt> <dd id="modalBoletoGeradoVencimento">-</dd>
+                                                                <dt class="border-bottom">Mensagem</dt> <dd id="modalMensagemLabel">-</dd>
+                                                                <dt class="border-bottom">Vencimento</dt> <dd id="modalBoletoGeradoVencimento">-</dd>
                                                                 <dt class="border-bottom"><?php echo "Comissão" ?>:</dt> <dd id="modalBoletoComissao">-</dd>
                                                                 <dt class="border-bottom"><?php echo "Valor Tarifa" ?>:</dt> <dd id="modalBoletoTaxa">-</dd>
                                                                 <dt class="border-bottom"><?php echo "Valor Boleto" ?>:</dt> <dd id="modalBoletoGeradoValor">-</dd>
@@ -468,6 +488,17 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                                         </div>
                                                     </div>
                                                 </div>
+
+
+
+
+
+
+
+
+
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -930,6 +961,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
 
     $(document).ready(function () {
 
+        $("#tokenBoleto").hide();
         $("#selectCoins").select2({
             data: <?php echo $jsonMoedas ?>,
             templateSelection: formatState,
@@ -990,7 +1022,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
 
         // $("#radioDatasBtc input").on('change', function(){
         //     dataCoin = $('input[name="optionsBtc"]:checked', '#radioDatasBtc').val();
-        //     filtrarBtc();  
+        //     filtrarBtc();
         // });
 
         $('#btnSalvar').attr('disabled',true);
@@ -1024,9 +1056,9 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
             $(this).val(currency($(this).val(), 2, 8, event.keyCode));
                 event.preventDefault();
                 calcularValorBoleto();
-            });
+        });
 
-            $("#form-deposito").ajaxForm({
+        $("#form-deposito").ajaxForm({
             dataType: 'json',
             beforeSubmit: function () {
                 $("#btnSalvar").prop("disabled", true);
@@ -1092,8 +1124,8 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                 $("#comprovante").prop("disabled", false).trigger("change");
             }
             calcularValorCreditado();
-        });
-        carregarMoeda();
+            });
+            carregarMoeda();
         });
 
     function carregarMoeda(){
@@ -1555,13 +1587,12 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
 
         $("#valorCreditadoBoleto").html("R$ " + mascaraValor(resultado.toFixed(2)));
     }
-    
-    
+
     function modalGerarBoleto(deposito) {
        $("#modalGerarBoletoDeposito").val(deposito);
        $("#modalGerarBoleto").modal();
     }
-    
+
     function cancelarBoleto() {
         $("#boletoGerado").hide();
         $("#telaBoleto").hide();
@@ -1570,7 +1601,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         $("#btnGerarBoleto").prop("disabled", false); 
         $("#valorBoleto").val("0,00"); 
     }
-    
+
     function tokenBoleto() {
         $("#btnGerarBoleto").prop("disabled", true); 
         $("#boletoGerado").hide();
@@ -1584,7 +1615,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         url: "<?php echo URLBASE_CLIENT  . Utils\Rotas::R_DEPOSITO_BOLETO_TOKEN  ?>",
         method: "post",
         dataType: "json",
-        data: {            
+        data: {
             valor: $("#valorBoleto").val()
         },
         success: function (json) {
@@ -1593,25 +1624,24 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                     $("#carregaBoleto").hide();
                     $("#tokenBoleto").show();
                     $("#valorCreditarBoleto").html(json.creditarBoleto);
-                    $("#valorTotalBoleto").html(json.totalBoleto);                  
-                    showNotyAlert(json.mensagem, "s");                  
+                    $("#valorTotalBoleto").html(json.totalBoleto);
+                    // showNotyAlert(json.mensagem, "s");
+                    salvarDepositoBoleto();
                 } else {
                     showNotyAlert(json.mensagem, "e");
                     $("#carregaBoleto").hide();
                     $("#tokenBoleto").hide();
                     $("#telaBoleto").show();
-                    $("#btnGerarBoleto").prop("disabled", false);                     
+                    $("#btnGerarBoleto").prop("disabled", false);
                 }
             } catch (e) {
                 showNotyAlert(e, "e");
-                $("#btnGerarBoleto").prop("disabled", false);                 
+                $("#btnGerarBoleto").prop("disabled", false);
             }
-            
             }
         });
     }
-    
- 
+
     function salvarDepositoBoleto() {
         $("#btnGerarBoleto").prop("disabled", true); 
         $("#boletoGerado").hide();
@@ -1627,22 +1657,21 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         success: function (json) {
             try {
                 if (json.sucesso) {
-                    gerarBoleto(json.deposito);                   
+                    gerarBoleto(json.deposito);
                 } else {
                     showNotyAlert(json.mensagem, "e");
-                    $("#btnGerarBoleto").prop("disabled", false);                     
+                    $("#btnGerarBoleto").prop("disabled", false);
                 }
             } catch (e) {
                 showNotyAlert(e, "e");
-                $("#btnGerarBoleto").prop("disabled", false);                 
+                $("#btnGerarBoleto").prop("disabled", false);
             }
-            
             }
         });
         
     }
 
-    function gerarBoleto(deposito) {  
+    function gerarBoleto(deposito) {
         $("#telaBoleto").hide();
         $("#tokenBoleto").hide();
         $("#carregaBoleto").show();
@@ -1663,13 +1692,15 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                         $("#boletoGerado").show();
                         $("#modalMensagemLabel").html(json.mensagemLabel);
                         $("#modalStatusBoleto").html(json.status);
-                        $("#modalBoletoGeradoVencimento").html(json.vencimento);
+                        // $("#modalBoletoGeradoVencimento").html(json.vencimento);
+                        $("#modalBoletoGeradoVencimento").html(json.timer);
                         $("#modalBoletoGeradoValor").html(json.valor);
                         $("#modalBoletoValorCreditar").html(json.valorCreditar);
                         $("#modalBoletoComissao").html(json.comissao);
                         $("#modalBoletoTaxa").html(json.taxa);
                         $("#modalBoletoGeradoLink").attr("href",  json.link);
-                        $("#modalBoletoGeradoImgBarcode").html(json.img);                      
+                        $("#modalBoletoGeradoImgBarcode").html(json.qr_img);
+                        $("#modalBoletoGeradoImgBarcodeChave").html(json.qr);
                         showNotyAlert(json.mensagem, "s");
                         boletoAux();
                     } else {
@@ -1703,7 +1734,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
        filtrarReais();       
     }
     
-    function filtrarReais() {         
+    function filtrarReais() {
         var boletoAux = boleto;
         var status = "";
         var search = "";
@@ -1813,7 +1844,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
 
     function depositoBoleto(json) {
         limparCampos();
-        $("#valorCreditadoBoleto").html("R$ 0,00");        
+        $("#valorCreditadoBoleto").html("R$ 0,00");
         $("#depositoMoedas").hide();
         $("#ultimosDepositos").hide(); 
         $("#depositoBrl").hide();
@@ -1825,12 +1856,12 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         $("#boletoGerado").hide();
         $("#imagemBanco").attr("src", json.logo);
     }
-    
+
     function depositoAtar(json) {
 
         limparCampos();
         $("#depositoMoedas").hide();
-        $("#ultimosDepositos").hide(); 
+        $("#ultimosDepositos").hide();
         $("#depositoBrl").hide();
         $("#depositoBoleto").hide();
         $("#boletoGerado").hide();
@@ -1842,16 +1873,15 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         $("#tabelaAtar").show();
         $("#cadastroAtar").show();
         $("#btncopyAtar").html(json.idAtarEmpresa);
-        
+
         taxaAtar = parseFloat(json.taxaAtar);
         tarifaAtar = parseFloat(json.tarifaAtar);
-        
+
         $("#comissaoAtar").html(json.taxaAtar.replace(".",","));
         $("#tarifaAtar").html("R$ " + json.tarifaAtar.replace(".",","));
-        
+
         $("#imagemBanco").attr("src", json.logo);
-        
-        
+
         if(<?php echo $hasAtar ? 1 : 0 ?>){
             qrCodeTemplate = [{
             config: {
@@ -1868,31 +1898,30 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
             qrCodeFormat("atar");
         }
     }
-    
+
     function limparAtar() {
         limparCampos();
         $("#depositoMoedas").hide();
-        $("#ultimosDepositos").hide(); 
+        $("#ultimosDepositos").hide();
         $("#depositoBrl").hide();
         $("#depositoBoleto").hide();
         $("#boletoGerado").hide();
         $("#tabelaReais").hide();
         $("#token2faAtar").hide();
-        $("#depositoReais").show();   
+        $("#depositoReais").show();
         $("#atar").show();
         $("#tabelaAtar").show();
         $("#cadastroAtar").show();
-        
     }
-    
+
     <?php if($configuracao->atarAtivo == 1){ ?>
-    function filtrarAtar() {            
+    function filtrarAtar() {
             $.ajax({
                 url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_DEP_LISTAR ?>',
                 method: 'post',
                 dataType: 'json',
                 data: {
-                    data: dataAtar, 
+                    data: dataAtar,
                     filtro: $("#filtroTextoAtar").val()
                 },
                 success: function (json) {
@@ -1910,15 +1939,15 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                 }
             });
         }
-        
-    function depositarAtar() {   
+
+    function depositarAtar() {
             $("#btnCadastrarConta").prop("disabled", true);
             $.ajax({
                 url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_DEP_SALVAR ?>',
                 method: 'post',
                 dataType: 'json',
                 data: {
-                    idAtar: $("#labelIdAtar").html(),                    
+                    idAtar: $("#labelIdAtar").html(),
                     pin: $("#pinAtar").val()
                 },
                 beforeSend: function(){
@@ -1931,21 +1960,20 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                             $("#token2faAtar").hide();
                             limparCampos();
                             showNotyAlert(json.mensagem, "s");
-                            location.reload();                           
+                            location.reload();
                         } else {
                             showNotyAlert(json.mensagem, "e");
                         }
                     } catch (e) {
-                       showNotyAlert(json.mensagem, "e");
+                        showNotyAlert(json.mensagem, "e");
                     }
                     $('#btnCadastrarConta').html('Cadastrar');
                     $("#btnCadastrarConta").prop("disabled", false);
                 }
             });
-            
         }
-        
-        function tokenAtar() {    
+
+        function tokenAtar() {
             $('#btnTokenAtar').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
             $("#btnTokenAtar").prop("disabled", true);
             $.ajax({
@@ -1954,7 +1982,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                 dataType: 'json',
                 data: {
                     idAtar: $("#idAtar").val()
-                    
+
                 },
                 beforeSend: function(){
                     $('#btnTokenAtar').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
@@ -1980,7 +2008,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                 
             });
         }
-        
+
     function calcularValorAtar() {
         var valor = ($("#valorAtar").val().length > 0 ? parseFloat(toFloat($("#valorAtar").val())) : 0);
         var tarAtar = parseFloat(tarifaAtar);
@@ -1995,7 +2023,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         $("#valorCreditadoAtar").html("R$ " + mascaraValor(resultado.toFixed(2)));
     }
     <?php } ?>
-    
+
     function loadCheckBox(){   
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
         elems.forEach(function(html) {
@@ -2005,7 +2033,6 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         });
     }
 
-    
     </script>
     <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
     </body>

@@ -3,100 +3,138 @@
 namespace Modules\contas\Controllers;
 
 class LaraBoleto {
-    
+
     private $idioma;
-    
+
     public function __construct($params) {
         $this->idioma = new \Utils\PropertiesUtils("deposito", IDIOMA);
     }
-    
+
     public function gerarBoleto($params) {
-        
-        $deposito = null;        
+        $deposito = null;
         try {
-            
-            $authRn = new \Models\Modules\Cadastro\AuthRn();
-            $configuracoes = \Models\Modules\Cadastro\ConfiguracaoRn::get();
+            // $authRn = new \Models\Modules\Cadastro\AuthRn();
+            // $configuracoes = \Models\Modules\Cadastro\ConfiguracaoRn::get();
             $deposito = new \Models\Modules\Cadastro\Deposito();
             $depositoRn = new \Models\Modules\Cadastro\DepositoRn();
-            $laraBoleto = new \BoletosLara\BoletosLara();
+            // $laraBoleto = new \BoletosLara\BoletosLara();
             $cliente = \Utils\Geral::getCliente();
-            
-            $token = \Utils\Post::get($params, "token", null);
-            $pin = \Utils\Post::get($params, "pin", null);
+
+            // $token = \Utils\Post::get($params, "token", null);
+            // $pin = \Utils\Post::get($params, "pin", null);
             $deposito->id = \Utils\Post::getEncrypted($params, "deposito", 0);
-            
+            // exit(print_r($deposito->id));
             try {
                 $depositoRn->carregar($deposito, true, false, false, true);
             } catch (\Exception $ex) {
                 throw new \Exception($this->idioma->getText("depositoInvalidoOuNaoEncontrado"));
-            }         
-            
+            }
+
             $nomeCliente = \Utils\Validacao::limparString($deposito->cliente->nome, false);
-            
-            if (empty($token)) {
-                throw new \Exception($this->idioma->getText("tokenInvalido"));
-            }
 
-            if (empty($pin)) {
-                throw new \Exception($this->idioma->getText("pinInvalido"));
-            }
+            // if (empty($token)) {
+            //     throw new \Exception($this->idioma->getText("tokenInvalido"));
+            // }
 
-            if ($deposito->cliente->pin != $pin) {
-                throw new \Exception($this->idioma->getText("pinInvalido"));
-            }
+            // if (empty($pin)) {
+            //     throw new \Exception($this->idioma->getText("pinInvalido"));
+            // }
 
-            $authRn->validar($token, $cliente);
+            // if ($deposito->cliente->pin != $pin) {
+            //     throw new \Exception($this->idioma->getText("pinInvalido"));
+            // }
+
+            // $authRn->validar($token, $cliente);
 
             if (strlen($nomeCliente) < 8) {
                 throw new \Exception("Nome do cliente inválido. Atualize seu nome completo no menu Meu Perfil, aba Meus Dados.");
             }
-            
+
             if(!\Utils\Validacao::verificarNomeCompleto($nomeCliente)){
                 throw new \Exception("Nome inválido. Atualize seu nome no menu Meu Perfil, aba Meus Dados.");
             }
-            
-            if (empty($deposito->idGateway) || $deposito->dataVencimentoGateway == null || $deposito->dataVencimentoGateway->menor(new \Utils\Data(date("d/m/Y H:i:s")))) {
 
-                $dataAtual = new \Utils\Data(date("Y-m-d H:i:s"));
-                $dataAtual->somar(0, 0, 2);
 
-                $deposito->dataVencimentoGateway = $dataAtual;
+            $object = (object)null;
+            $object->document = $deposito->cliente->documento;
+            $object->name = $nomeCliente;
+            $object->value = $deposito->valorDepositado;
 
-                $protocolo = $laraBoleto->gerarBoleto($deposito);
+            $curl = curl_init();
 
-                if (empty($protocolo)) {
-                    throw new \Exception("Por favor, tente gerar seu boleto mais tarde.");
-                } else {
-                    
-                    $depositoRn->conexao->update(
-                        Array(
-                            "data_vencimento_gateway" => $deposito->dataVencimentoGateway->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO), 
-                            "status_gateway" => \Utils\Constantes::STATUS_DEPOSITO_PENDENTE,
-                            "id_gateway" => $protocolo
-                        ), 
-                        Array(
-                            "id" => $deposito->id
-                        )
-                    );
-                    
-                }
-            }
-            
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "http://localhost:8000/api/test",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => json_encode($object),
+                CURLOPT_HTTPHEADER => array(
+                    // "Authorization: Bearer {$this->token}",
+                    "Cache-Control: no-cache",
+                    "Connection: keep-alive",
+                    "Content-Type: x`application/json"
+                ),
+            ));
+
+        $response = curl_exec($curl);
+        $response = json_decode($response);
+        $err = curl_error($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        curl_close($curl);
+
+
+
+            // if (empty($deposito->idGateway) || $deposito->dataVencimentoGateway == null || $deposito->dataVencimentoGateway->menor(new \Utils\Data(date("d/m/Y H:i:s")))) {
+
+            //     $dataAtual = new \Utils\Data(date("Y-m-d H:i:s"));
+            //     $dataAtual->somar(0, 0, 2);
+
+            //     $deposito->dataVencimentoGateway = $dataAtual;
+
+                // $protocolo = $laraBoleto->gerarBoleto($deposito);
+
+            //     if (empty($protocolo)) {
+            //         throw new \Exception("Por favor, tente gerar seu boleto mais tarde.");
+            //     } else {
+
+            //         $depositoRn->conexao->update(
+            //             Array(
+            //                 "data_vencimento_gateway" => $deposito->dataVencimentoGateway->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO), 
+            //                 "status_gateway" => \Utils\Constantes::STATUS_DEPOSITO_PENDENTE,
+            //                 "id_gateway" => $protocolo
+            //             ), 
+            //             Array(
+            //                 "id" => $deposito->id
+            //             )
+            //         );
+
+            //     }
+            // }
+
             $valorCreditar = $deposito->valorDepositado - ($deposito->valorDepositado * ($configuracoes->taxaDepositoBoleto / 100)) - $configuracoes->tarifaDepositoBoleto;
 
-            $json["status"] = "Processo iniciado - GERANDO BOLETO";
-            $json["mensagemLabel"] = "Seu boleto está sendo gerado. Você será notificado quando seu boleto estiver disponível para pagamento.";
-            $json["vencimento"] = $deposito->dataVencimentoGateway->formatar(\Utils\Data::FORMATO_PT_BR);
-            $json["valor"] = "R$ " . number_format($deposito->valorDepositado, 2, ",", ".");
-            $json["link"] = $deposito->linkGateway;
+            $json["status"] = "Aguardando pagamento";
+            $json["mensagemLabel"] = "QRCode Gerado! pague-o dentro do tempo determinado.";
+            // $json["vencimento"] = $deposito->dataVencimentoGateway->formatar(\Utils\Data::FORMATO_PT_BR);
+            // $json["valor"] = "R$ " . number_format($deposito->valorDepositado, 2, ",", ".");
+            // $json["link"] = $deposito->linkGateway;
             $json["valorCreditar"] = "R$ " . number_format($valorCreditar, 2, ",", ".");
             $json["comissao"] = number_format($configuracoes->taxaDepositoBoleto, 2, ",", ".") . "%";
             $json["taxa"] = "R$ " . number_format($configuracoes->tarifaDepositoBoleto, 2, ",", ".");
 
-            $json["mensagem"] = "Aguarde. Seu boleto está sendo gerado. Você será notificado quando seu boleto estiver disponível para pagamento.";
+
+            $json["valor"] = "R$ ".$response->data->transaction->valor->original;
+            $json['timer'] = $response->data->transaction->calendario->expiracao;
+            $json['qr'] = $response->data->payment->qrcode;
+            $json['qr_img'] = "<img src='".$response->data->payment->imagemQrcode."' />";
+            $json["mensagem"] = "Aguarde. QRCode Gerado! pague-o dentro do tempo determinado.";
             $json["sucesso"] = true;
-            
+
         }  catch (\Exception $ex) {
             $this->deletaDeposito($deposito);
             $json["sucesso"] = false;

@@ -12,7 +12,7 @@ class GerenciaNet {
     
     public function gerarBoleto($params) {
         
-        $deposito = null;        
+        $deposito = null;
         try {
             
             $token = \Utils\Post::get($params, "token", null);
@@ -28,7 +28,7 @@ class GerenciaNet {
                 $depositoRn->carregar($deposito, true, false, false, true);
             } catch (\Exception $ex) {
                 throw new \Exception($this->idioma->getText("depositoInvalidoOuNaoEncontrado"));
-            }         
+            }
             
             $nomeCliente = \Utils\Validacao::limparString($deposito->cliente->nome, false);
             
@@ -193,13 +193,13 @@ class GerenciaNet {
             $cliente = \Utils\Geral::getCliente();
             $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
             $valor = \Utils\Post::getNumeric($params, "valor", 0);
-           
+
             $nomeCliente = \Utils\Validacao::limparString($cliente->nome, false);
 
             if (strlen($nomeCliente) < 8) {
                 throw new \Exception("Nome do cliente inválido. Atualize seu nome completo no menu Meu Perfil, aba Meus Dados.");
             }
-            
+
             if(!\Utils\Validacao::verificarNomeCompleto($nomeCliente)){
                 throw new \Exception("Nome inválido. Atualize seu nome no menu Meu Perfil, aba Meus Dados.");
             }
@@ -207,7 +207,7 @@ class GerenciaNet {
             if($valor > $configuracao->valorMaxBoleto){
                 throw new \Exception("Valor não permitido.");
             }
-            
+
             $auth = new \Models\Modules\Cadastro\Auth();
             $auth->idCliente = $cliente->id;
             $authRn->salvar($auth);

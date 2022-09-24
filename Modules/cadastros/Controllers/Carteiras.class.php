@@ -74,7 +74,6 @@ class Carteiras {
 
     private function listar(\Models\Modules\Cadastro\Cliente &$cliente, $clienteVerificado) {
         try {
-                       
             $categoriaMoedaRn = new \Models\Modules\Cadastro\CategoriaMoedaRn();
             $categorias = $categoriaMoedaRn->conexao->listar("ativo = 1");
             $mostrarAbaDepositoReais = $clienteVerificado;
@@ -108,8 +107,8 @@ class Carteiras {
                             $object = (object)null;
                             $object->id = \Utils\Criptografia::encriptyPostId($contaBancariaEmpresa->id);
                             $object->text = $contaBancariaEmpresa->banco->nome;
-                            $object->icone = IMAGES . "bancos/" . $contaBancariaEmpresa->banco->logo;
                             $object->tipo = "b";
+                            $object->icone = IMAGES . "bancos/" . $contaBancariaEmpresa->banco->logo;
 
                             $jsonContas->children[] = $object;
                         }

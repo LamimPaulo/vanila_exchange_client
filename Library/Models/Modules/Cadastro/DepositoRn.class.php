@@ -28,28 +28,27 @@ class DepositoRn {
         }
     }
     
-    
+
     public function salvar(Deposito &$deposito) {
-        
+
         $cliente = \Utils\Geral::getCliente();
-        
+
         if ($cliente == null) {
             throw new \Exception($this->idioma->getText("vocePrecisaLogadoLancamento"));
         }
-        
+
         if ($cliente->statusDepositoBrl < 1) {
             throw new \Exception($this->idioma->getText("solicitacaoDepositoSuspensa"));
         }
-        
         if ($deposito->id > 0) {
-            
+
             $aux = new Deposito(Array("id" => $deposito->id));
             $this->conexao->carregar($aux);
-            
+
             if ($aux->status != \Utils\Constantes::STATUS_DEPOSITO_PENDENTE) {
                 throw new \Exception($this->idioma->getText("naoPossivelAlterarDeposito"));
             }
-            
+
             $deposito->idCliente = $aux->idCliente;
             $deposito->idUsuario = $aux->idUsuario;
             $deposito->status = $aux->status;
@@ -61,11 +60,11 @@ class DepositoRn {
             if (empty($deposito->comprovante)) {
                 $deposito->comprovante = $aux->comprovante;
             }
-            
+
             if (empty($deposito->notaFiscal)) {
                 $deposito->notaFiscal = $aux->notaFiscal;
             }
-            
+
         } else {
             $deposito->idCliente = $cliente->id;
             $deposito->idUsuario = null;
@@ -75,12 +74,12 @@ class DepositoRn {
             $deposito->dataCancelamento = null;
             $deposito->motivoCancelamento = null;
             $deposito->notaFiscal = null;
-            
+
             if (!$deposito->aceitaNota > 0) {
                 $deposito->aceitaNota = 0;
             }
         }
-        
+
         if ($deposito->tipoDeposito != \Utils\Constantes::GERENCIA_NET) {
             if (empty($deposito->comprovante)) {
                 throw new \Exception($this->idioma->getText("vocePrecisaInformarCompDeposito"));
@@ -90,11 +89,11 @@ class DepositoRn {
                 throw new \Exception($this->idioma->getText("necessarioInformarConta"));
             }
         }
-        
+
         if (!$deposito->idCliente > 0) {
             throw new \Exception($this->idioma->getText("necessarioIdentifarDepositante"));
         }
-        
+
         $arrayTipos = Array(
             \Utils\Constantes::DOC,
             \Utils\Constantes::TED,
@@ -102,66 +101,64 @@ class DepositoRn {
             \Utils\Constantes::TRANSF_ENTRE_CONTAS,
             \Utils\Constantes::GERENCIA_NET
         );
-        
+
         if (!in_array($deposito->tipoDeposito, $arrayTipos)) {
             throw new \Exception($this->idioma->getText("necessarioDepositarTipoDeposito"));
         }
-        
+
         $arrayStatus = Array(
             \Utils\Constantes::STATUS_DEPOSITO_CANCELADO,
             \Utils\Constantes::STATUS_DEPOSITO_CONFIRMADO,
             \Utils\Constantes::STATUS_DEPOSITO_PENDENTE
         );
-        
+
         if (!in_array($deposito->status, $arrayStatus)) {
             throw new \Exception($this->idioma->getText("statusInvalido"));
         }
-        
+
         if (!$deposito->valorDepositado > 0) {
             throw new \Exception($this->idioma->getText("valorPrecisaMaiorZero"));
         }
-        
+
         if (!$deposito->valorCreditado > 0) {
             throw new \Exception($this->idioma->getText("creditadoNaContaMaiorZero"));
         }
-        
+
         if (!$deposito->valorComissao > 0) {
             $deposito->valorComissao = 0;
         }
-        
+
         if (!$deposito->taxaComissao > 0) {
             $deposito->taxaComissao = 0;
         }
-        
+
         unset($deposito->cliente);
         unset($deposito->usuario);
         unset($deposito->contaBancariaEmpresa);
-        
-        
+
         $this->conexao->salvar($deposito);
     }
-    
+
     public function solicitarDeposito(Deposito $deposito) {
-        
         $cliente = \Utils\Geral::getCliente();
-        
+
         if ($cliente == null) {
             throw new \Exception($this->idioma->getText("vocePrecisaLogadoLancamento"));
         }
-        
+
         if ($cliente->statusDepositoBrl < 1) {
             throw new \Exception($this->idioma->getText("solicitacaoDepositoSuspensa"));
         }
-        
+
         $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
         $clienteRn->conexao->carregar($cliente);
 
         $deposito->taxaComissao = 0;
-        
+
         $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
         $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
         $configuracaoRn->conexao->carregar($configuracao);
-        
+
         $deposito->valorTarifa = 0;
         if ($deposito->tipoDeposito == \Utils\Constantes::DINHEIRO) { 
             if ($deposito->valorDepositado < 2000) {
@@ -185,17 +182,17 @@ class DepositoRn {
                 $deposito->taxaComissao = $configuracao->taxaDeposito;
             }
         }
-        
+
         if (!$deposito->valorDepositado > 0) {
             throw new \Exception($this->idioma->getText("valorDepositadoDeveInformado"));
         }
-        
+
         if($deposito->tipoDeposito == \Utils\Constantes::GERENCIA_NET){
             $deposito->valorComissao = number_format((($deposito->valorDepositado) * ($deposito->taxaComissao / 100)), 2, ".", "");
         } else {
             $deposito->valorComissao = number_format((($deposito->valorDepositado - $deposito->valorTarifa) * ($deposito->taxaComissao / 100)), 2, ".", "");
-        }        
-        
+        }
+
         $deposito->valorCreditado = number_format($deposito->valorDepositado - $deposito->valorTarifa - $deposito->valorComissao, 2, ".", "");
         if (!$deposito->valorCreditado > 0) {
             throw new \Exception($this->idioma->getText("O Valor depositado não pode ser inferior ao valor das taxas e tarifas cobradas"));
@@ -203,39 +200,38 @@ class DepositoRn {
         /*if ($deposito->tipoDeposito == \Utils\Constantes::DINHEIRO) {
             $deposito->aceitaNota = 1;
         }*/
-        
+
         if ($deposito->valorCreditado < 0) {
             throw new \Exception("O valor creditado é inferior ao valor das taxas e encargos.");
         }
-        
+
         $this->salvar($deposito);
     }
-    
+
     public function carregar(Deposito &$deposito, $carregar = true, $carregarContaBancariaEmpresa = true, $carregarUsuario = true, $carregarCliente = true) {
         if ($carregar) {
             $this->conexao->carregar($deposito);
         }
-        
+
         if ($carregarContaBancariaEmpresa && $deposito->idContaBancariaEmpresa > 0) {
             $deposito->contaBancariaEmpresa = new ContaBancariaEmpresa(Array("id" => $deposito->idContaBancariaEmpresa));
             $contaBancariaEmpresaRn = new ContaBancariaEmpresaRn();
             $contaBancariaEmpresaRn->carregar($deposito->contaBancariaEmpresa, true, true);
         }
-        
+
         if ($carregarUsuario && $deposito->idUsuario > 0) {
             $deposito->usuario = new Usuario(Array("id" => $deposito->idUsuario));
             $usuarioRn = new UsuarioRn();
             $usuarioRn->conexao->carregar($deposito->usuario);
         }
-        
+
         if ($carregarCliente && $deposito->idCliente > 0) {
             $deposito->cliente = new Cliente(Array("id" => $deposito->idCliente));
             $clienteRn = new ClienteRn();
             $clienteRn->conexao->carregar($deposito->cliente);
         }
     }
-    
-    
+
     public function listar($where = null, $order = null, $offset = null, $limit = null, $carregarContaBancariaEmpresa = true, $carregarUsuario = true, 
             $carregarCliente = true) {
         $result = $this->conexao->listar($where, $order, $offset, $limit);
@@ -246,7 +242,7 @@ class DepositoRn {
         }
         return $lista;
     }
-    
+
     public function filtrar($idCliente = null, \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null, $idContaBancariaEmpresa = null, 
             $tipoDeposito = "Q", $status = "T", $filtro = null, $qtdRegitros = "T", $boleto = false) {
         
@@ -319,7 +315,7 @@ class DepositoRn {
         //exit(print_r(sizeof($lista)));
         return $lista;
     }
-    
+
     public function aprovar(Deposito $dep) {
         try {
             
@@ -513,7 +509,7 @@ class DepositoRn {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
+
     public function getQuantidadeDepositosValidados(Cliente $cliente) {
         $idCliente = ($cliente != null ? " AND id_cliente = {$cliente->id}" : "");
         $status = \Utils\Constantes::STATUS_DEPOSITO_CONFIRMADO;
@@ -527,8 +523,7 @@ class DepositoRn {
         
         return $qtd;
     }
-    
-    
+
     public function cancelar(Deposito $deposito) {
         $motivoCancelamento = $deposito->motivoCancelamento;
         try {
@@ -567,8 +562,7 @@ class DepositoRn {
                 Array("id" => $deposito->id));
        
     }
-    
-    
+
     public function getQuantidadePorStatus() {
         $query = "SELECT status, COUNT(*) AS qtd, SUM(valor_depositado) AS valor FROM depositos GROUP BY status";
         
@@ -614,8 +608,7 @@ class DepositoRn {
         
         return $lista;
     }
-    
-    
+
     public function calcularQuantiadeHorasMediasValidacaoDeposito(\Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null) {
         
         $where = Array();

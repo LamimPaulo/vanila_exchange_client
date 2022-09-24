@@ -246,6 +246,7 @@ class ProcedimentosPerigosos {
             //return false;
         }
     }
+
     public function testeEmail($params) {
         try
         {
@@ -268,6 +269,97 @@ class ProcedimentosPerigosos {
             var_dump($e->getMessage());
             //return false;
         }
+    }
+
+    public function testeGerarBoleto($params) {
+        $deposito = null;
+        try {
+            // $authRn = new \Models\Modules\Cadastro\AuthRn();
+            // $configuracoes = \Models\Modules\Cadastro\ConfiguracaoRn::get();
+            $deposito = new \Models\Modules\Cadastro\Deposito();
+            $depositoRn = new \Models\Modules\Cadastro\DepositoRn();
+            // $laraBoleto = new \BoletosLara\BoletosLara();
+            $cliente = \Utils\Geral::getCliente();
+            
+            // exit(print_r('teste'));
+            
+            // $token = \Utils\Post::get($params, "token", null);
+            // $pin = \Utils\Post::get($params, "pin", null);
+            // $deposito->id = \Utils\Post::getEncrypted($params, "deposito", 0);
+            $deposito->id = '15053103741955';
+
+            try {
+                $depositoRn->carregar($deposito, true, false, false, true);
+            } catch (\Exception $ex) {
+                // throw new \Exception($this->idioma->getText("depositoInvalidoOuNaoEncontrado"));
+                throw new \Exception('depositoInvalidoOuNaoEncontrado');
+            }
+
+            $nomeCliente = \Utils\Validacao::limparString($deposito->cliente->nome, false);
+
+            // if (empty($token)) {
+            //     throw new \Exception($this->idioma->getText("tokenInvalido"));
+            // }
+
+            // if (empty($pin)) {
+            //     throw new \Exception($this->idioma->getText("pinInvalido"));
+            // }
+
+            // if ($deposito->cliente->pin != $pin) {
+            //     throw new \Exception($this->idioma->getText("pinInvalido"));
+            // }
+
+            // $authRn->validar($token, $cliente);
+
+            if (strlen($nomeCliente) < 8) {
+                throw new \Exception("Nome do cliente inválido. Atualize seu nome completo no menu Meu Perfil, aba Meus Dados.");
+            }
+
+            if(!\Utils\Validacao::verificarNomeCompleto($nomeCliente)){
+                throw new \Exception("Nome inválido. Atualize seu nome no menu Meu Perfil, aba Meus Dados.");
+            }
+
+
+            $object = (object)null;
+            $object->document = $deposito->cliente->documento;
+            $object->name = $nomeCliente;
+            $object->value = $deposito->valorDepositado;
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "http://localhost:8000/api/test",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => json_encode($object),
+                CURLOPT_HTTPHEADER => array(
+                    // "Authorization: Bearer {$this->token}",
+                    "Cache-Control: no-cache",
+                    "Connection: keep-alive",
+                    "Content-Type: x`application/json"
+                ),
+            ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        print_r($response);
+        print_r($err);
+        print_r($httpcode);
+
+        }  catch (\Exception $ex) {
+            // $this->deletaDeposito($deposito);
+            $json["sucesso"] = false;
+            $json["mensagem"] = \Utils\Excecao::mensagem($ex);
+        }
+        print json_encode($json);
     }
 
     public function testeSql($params) {

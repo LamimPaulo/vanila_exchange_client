@@ -174,7 +174,7 @@ informacoesEnvioArqLi3=No nome do arquivo não pode ter ponto. Ex.: deposito.ban
 informacoesEnvioArqLi4=Envie arquivos de fácil leitura e identificação.
 informacoesEnvioArqLi5=O comprovante não pode conter espaços ou símbolos. ( / % $ @ * > < )
 informacoesEnvioArqLi6=Exemplo: (comprovante_1050.jpg)
-comissaoDeposito=Comissão de depósito:
+comissaoDeposito=Taxa de depósito:
 seraCreditado=Será creditado em sua conta:
 prazoMedioAprovacao=Prazo médio para aprovação do depósito:
 horas=hora(s)
@@ -222,7 +222,7 @@ realizadoConta=Realizados na conta
 cadastrarDeposito=Cadastrar Depósito
 limpar=Limpar
 filtro=Filtro
-gerarBoleto=Boleto
+gerarBoleto=Gerar
 boletoBancario=Boleto Bancário
 
 #inputs
@@ -407,7 +407,7 @@ permissaoAlteraDepC=Você não tem permissão para alterar dados do depósito
 identicacaoInvalidaC=Identificação do depósito inválida
 ##--
 
-depositeBoleto=Deposite utilizando o sitema de pagamento por boleto.
+depositeBoleto=Deposite utilizando o sitema de pagamento por PIX.
 dataVencimento=Data Vencimento
 valor=Valor
 codigoBarras=Código de Barras

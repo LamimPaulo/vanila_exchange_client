@@ -7,14 +7,13 @@ require_once getcwd() . '/Library/Utils/Canvas.class.php';
 require_once getcwd() . '/Library/Utils/Texto.class.php';
 
 class Depositos {
-    
     private $idioma = null;
-    
+
     public function __construct(&$params) {
         $this->idioma = new \Utils\PropertiesUtils("index_carteiras", IDIOMA);
-        
+
     }
-    
+
     public function index($params) {
         
         try {
@@ -69,7 +68,7 @@ class Depositos {
         }
         \Utils\Layout::view("index_depositos", $params);
     }
-    
+
     public function listar($params) {
         try {
             $idCliente = \Utils\Geral::getCliente()->id;       
@@ -120,7 +119,7 @@ class Depositos {
         }
         print json_encode($json);
     }
-    
+
     public function htmlLista($lista) {
         $popover = Array();
         ob_start();
@@ -141,7 +140,7 @@ class Depositos {
         ob_end_clean();
         return Array("html" => $html, "popover" => $popover);
     }
-    
+
     public function itemHtmlLista(\Models\Modules\Cadastro\Deposito $deposito) {
        
         ?>
@@ -222,7 +221,7 @@ class Depositos {
             </tr>
         <?php
     }
-    
+
     public function solicitar($params) {
         
         if (!\Utils\Geral::isCliente()) {
@@ -275,7 +274,7 @@ class Depositos {
         }
         \Utils\Layout::view("solicitar_deposito", $params);
     }
-    
+
     public function getDadosContaBancaria($params) {
         try {
             $contaBancariaEmpresa = new \Models\Modules\Cadastro\ContaBancariaEmpresa();
@@ -298,83 +297,79 @@ class Depositos {
         }
         print json_encode($json);
     }
-    
-    
+
     public function salvar($params) {
         try {
             $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
-            
             $deposito = new \Models\Modules\Cadastro\Deposito();
-            
             $valor = \Utils\Post::getNumeric($params, "valor", 0);
-            
             $cliente = \Utils\Geral::getCliente();
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $clienteRn->conexao->carregar($cliente);
-            
+
             if($cliente->documentoVerificado != 1){
                 throw new \Exception($this->idioma->getText("verifiqueSuaConta"));
             }
-            
+
             $moeda = new \Models\Modules\Cadastro\Moeda(Array("id" => 1));
             $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
             $moedaRn->conexao->carregar($moeda);
-            
+
             \Utils\ValidarLimiteOperacional::validar($cliente, $moeda, \Utils\Constantes::ENTRADA, $valor, true);
-            
+
             $deposito->comprovante = \Utils\File::get($params, "comprovante", "", Array(), $cliente, "depositos", false);
             $deposito->id = \Utils\Post::get($params, "id", 0);
-            
+
             $deposito->tipoDeposito = \Utils\Post::get($params, "tipoDeposito", null);
             $deposito->idContaBancariaEmpresa = \Utils\Post::getEncrypted($params, "idContaBancariaEmpresa", 0);
             $deposito->valorDepositado = $valor;
-                        
+
             if ($deposito->tipoDeposito == \Utils\Constantes::GERENCIA_NET) {
-                $deposito->idContaBancariaEmpresa = 15052774463552;
+                $deposito->idContaBancariaEmpresa = 15052774463553;
                 $deposito->comprovante = null;
-                
+
                 if($valor > $configuracao->valorMaxBoleto){
                     throw new \Exception("Valor máximo permitido de R$ " . number_format($configuracao->valorMaxBoleto, 2, ",", ".") . ".");
                 }
-                
-                if(empty($cliente->documento)){                    
+
+                if(empty($cliente->documento)){
                     throw new \Exception("Documento CPF inválido. Atualize o CPF no menu Meu Perfil, aba Meus Dados.");
                 } else {
                     if(!\Utils\Validacao::cpf($cliente->documento)){
                         throw new \Exception("Documento CPF inválido. Atualize o CPF no menu Meu Perfil, aba Meus Dados.");
                     }
                 }
-                
+
                 $nomeCliente = \Utils\Validacao::limparString($cliente->nome, false);
 
                 if(strlen($nomeCliente) < 8){
                     throw new \Exception("Nome do cliente inválido. Atualize seu nome completo no menu Meu Perfil, aba Meus Dados.");
                 }
-                
+
                 if(!\Utils\Validacao::verificarNomeCompleto($nomeCliente)){
                     throw new \Exception("Nome do cliente inválido. Atualize seu nome completo no menu Meu Perfil, aba Meus Dados.");
                 }
-                  
+
             } else {
                 if (empty($deposito->comprovante)) {
                     throw new \Exception($this->idioma->getText("arqInvalidoC"));
                 }
-            }                      
-            
-            if($deposito->valorDepositado < $configuracao->valorMinimoDepositoReais){               
+            }
+
+            if($deposito->valorDepositado < $configuracao->valorMinimoDepositoReais){
                 $valorMinimo = "R$ " . number_format($configuracao->valorMinimoDepositoReais, 2, ",", ".");
                 throw new \Exception(str_replace("{var1}", $valorMinimo, $this->idioma->getText("valorMinimoDeposito")));
-            }                       
-            
+            }
+
             $depositoRn = new \Models\Modules\Cadastro\DepositoRn();
             $depositoRn->solicitarDeposito($deposito);
-            
+
             if ($deposito->tipoDeposito == \Utils\Constantes::GERENCIA_NET) {
                 $json["boleto"] = true;
             } else {
                 $json["boleto"] = false;
             }
-            
+
             $json["deposito"] = \Utils\Criptografia::encriptyPostId($deposito->id);
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
@@ -383,23 +378,20 @@ class Depositos {
         }
         print json_encode($json);
     }
-    
-    
-    
+
     public function aprovar($params) {
-        
         if (!\Utils\Geral::isUsuario() || \Utils\Geral::getLogado()->tipo != \Utils\Constantes::ADMINISTRADOR) {
             \Utils\Geral::redirect(URLBASE_CLIENT . "contas/depositos");
         }
-        
+
         try {
-            
+
             if (!\Models\Modules\Acesso\ModuloRn::validar(\Utils\Rotas::M_DEPOSITOS, \Utils\Constantes::EDITAR)) {
                 throw new \Exception($this->idioma->getText("permissaoAlteraDepC"));
             }
-            
+
             $id = \Utils\SQLInjection::clean(str_replace("ID_SOLICITACAO-", "", base64_decode(\Utils\Get::get($params, 0, 0))));
-            
+
             $deposito = new \Models\Modules\Cadastro\Deposito(Array("id" => $id));
             if ($deposito->id > 0) {
                 $depositoRn = new \Models\Modules\Cadastro\DepositoRn();
@@ -441,10 +433,8 @@ class Depositos {
         }
         \Utils\Layout::view("aprovar_deposito", $params);
     }
-    
-    
+
     public function aprovarDeposito($params) {
-        
         try {
             if (!\Models\Modules\Acesso\ModuloRn::validar(\Utils\Rotas::M_DEPOSITOS, \Utils\Constantes::EDITAR)) {
                 throw new \Exception($this->idioma->getText("permissaoAlteraDepC"));
@@ -454,8 +444,7 @@ class Depositos {
             $deposito->idContaBancariaEmpresa = \Utils\Post::get($params, "idContaBancariaEmpresa", 0);
             $deposito->valorDepositado = \Utils\Post::getNumeric($params, "valor", 0);
             $deposito->tipoDeposito = \Utils\Post::get($params, "tipoDeposito", NULL);
-            
-            
+
             $depositoRn = new \Models\Modules\Cadastro\DepositoRn();
             $depositoRn->aprovar($deposito);
             
@@ -466,33 +455,28 @@ class Depositos {
         }
         print json_encode($json);
     }
-    
+
     public function cancelar($params) {
-        
         try {
             $deposito = new \Models\Modules\Cadastro\Deposito();
             $deposito->id = \Utils\Post::get($params, "id", 0);
             $deposito->motivoCancelamento =  \Utils\Post::get($params, "motivoCancelamento", 0);
             $depositoRn = new \Models\Modules\Cadastro\DepositoRn();
             $depositoRn->cancelar($deposito);
-            
+
             $json["sucesso"] = true;
         } catch (\Exception $ex) {
             $json["sucesso"] = false;
             $json["mensagem"] = \Utils\Excecao::mensagem($ex);
         }
         print json_encode($json);
-        
     }
-    
-    
-    
+
     public function imprimir($params) {
         try {
-            
             $d = \Utils\Get::get($params, 0, "");
             $a = explode("|", \Utils\SQLInjection::clean(base64_decode($d)));
-            
+
             $dataInicial = (isset($a[0]) && strlen(trim($a[0])) == 10) ? new \Utils\Data(trim($a[0]) . " 00:00:00") : null;
             $dataFinal = (isset($a[1]) && strlen(trim($a[1])) == 10) ? new \Utils\Data(trim($a[1]) . " 23:59:59") : null;
             $idContaBancariaEmpresa =  isset($a[2]) ? $a[2] : 0;
@@ -500,12 +484,12 @@ class Depositos {
             $tipoDeposito =  isset($a[4]) ? $a[4] : "Q";
             $filtro =  isset($a[5]) ? $a[5] : null;
             $idCliente = isset($a[6]) ? $a[6] : 0;
-            
+
             $depositoRn = new \Models\Modules\Cadastro\DepositoRn();
             $depositos = $depositoRn->filtrar($idCliente, $dataInicial, $dataFinal, $idContaBancariaEmpresa, $tipoDeposito, $status, $filtro);
-            
+
             $params["depositos"] = $depositos;
-            
+
             $pdf = new \Utils\PDF();
             ob_start();
             \Utils\Layout::view("impressos/extrato_depositos", $params);
@@ -528,6 +512,4 @@ class Depositos {
             <?php
         }
     }
-    
-    
 }
