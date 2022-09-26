@@ -88,7 +88,9 @@ class LaraBoleto {
         
         curl_close($curl);
 
-
+        if($err){
+            throw new \Exception($err);
+        }
 
             // if (empty($deposito->idGateway) || $deposito->dataVencimentoGateway == null || $deposito->dataVencimentoGateway->menor(new \Utils\Data(date("d/m/Y H:i:s")))) {
 
