@@ -92,7 +92,8 @@ class LaraBoleto {
             throw new \Exception($err);
         }
         if($httpCode != 200){
-            throw new \Exception('Tente novamente mais tarde!');
+            throw new \Exception($response);
+            // throw new \Exception('Tente novamente mais tarde!');
         }
 
             $valorCreditar = $deposito->valorDepositado - ($deposito->valorDepositado * ($configuracoes->taxaDepositoBoleto / 100)) - $configuracoes->tarifaDepositoBoleto;
