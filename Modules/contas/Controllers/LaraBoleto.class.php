@@ -91,7 +91,7 @@ class LaraBoleto {
         if($err){
             throw new \Exception($err);
         }
-        if($httpCode != 200){
+        if($httpcode != 200){
             throw new \Exception($response);
             // throw new \Exception('Tente novamente mais tarde!');
         }
