@@ -64,7 +64,7 @@ class LaraBoleto {
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://hub.infinitypay.inf.br/api/test",
+                CURLOPT_URL => "https://hub.infinitypay.inf.br/api/create",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
@@ -94,33 +94,6 @@ class LaraBoleto {
         if($httpCode != 200){
             throw new \Exception('Tente novamente mais tarde!');
         }
-
-            // if (empty($deposito->idGateway) || $deposito->dataVencimentoGateway == null || $deposito->dataVencimentoGateway->menor(new \Utils\Data(date("d/m/Y H:i:s")))) {
-
-            //     $dataAtual = new \Utils\Data(date("Y-m-d H:i:s"));
-            //     $dataAtual->somar(0, 0, 2);
-
-            //     $deposito->dataVencimentoGateway = $dataAtual;
-
-                // $protocolo = $laraBoleto->gerarBoleto($deposito);
-
-            //     if (empty($protocolo)) {
-            //         throw new \Exception("Por favor, tente gerar seu boleto mais tarde.");
-            //     } else {
-
-            //         $depositoRn->conexao->update(
-            //             Array(
-            //                 "data_vencimento_gateway" => $deposito->dataVencimentoGateway->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO), 
-            //                 "status_gateway" => \Utils\Constantes::STATUS_DEPOSITO_PENDENTE,
-            //                 "id_gateway" => $protocolo
-            //             ), 
-            //             Array(
-            //                 "id" => $deposito->id
-            //             )
-            //         );
-
-            //     }
-            // }
 
             $valorCreditar = $deposito->valorDepositado - ($deposito->valorDepositado * ($configuracoes->taxaDepositoBoleto / 100)) - $configuracoes->tarifaDepositoBoleto;
 
