@@ -92,7 +92,7 @@ class LaraBoleto {
             throw new \Exception($err);
         }
         if($httpcode != 200){
-            throw new \Exception($response);
+            throw new \Exception(json_encode($response));
             // throw new \Exception('Tente novamente mais tarde!');
         }
 
