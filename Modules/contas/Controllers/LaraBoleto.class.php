@@ -64,7 +64,7 @@ class LaraBoleto {
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://hub.infinity.inf.br/api/test",
+                CURLOPT_URL => "https://hub.infinitypay.inf.br/api/test",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
