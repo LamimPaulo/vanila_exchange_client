@@ -91,6 +91,9 @@ class LaraBoleto {
         if($err){
             throw new \Exception($err);
         }
+        if($httpCode != 200){
+            throw new \Exception('Tente novamente mais tarde!');
+        }
 
             // if (empty($deposito->idGateway) || $deposito->dataVencimentoGateway == null || $deposito->dataVencimentoGateway->menor(new \Utils\Data(date("d/m/Y H:i:s")))) {
 
