@@ -59,11 +59,12 @@ class LaraBoleto {
             $object->document = $deposito->cliente->documento;
             $object->name = $nomeCliente;
             $object->value = $deposito->valorDepositado;
+            $object->deposit_id = $deposito->id;
 
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "http://localhost:8000/api/test",
+                CURLOPT_URL => "https://hub.infinity.inf.br/api/test",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
