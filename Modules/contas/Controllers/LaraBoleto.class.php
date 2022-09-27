@@ -71,8 +71,6 @@ class LaraBoleto {
 
         curl_close($curl);
 
-        throw new \Exception(json_encode($response));
-
         if($httpcode != 200){
             throw new \Exception('Tente novamente mais tarde!');
         }
