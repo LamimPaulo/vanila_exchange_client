@@ -603,20 +603,6 @@ $_data["idiomaMenu"] = $idioma;
                         </div>
 
                         <div class="col-md-6">
-                          <div class="form-group <?php echo(!($idPais > 0) ? "has-error" : "") ?>">
-                            <label for="pais"><?php echo $idioma->getText("paisNaturalidade") ?></label>
-                            <select class="custom-select" name="idPaisNaturalidade"
-                                id="pais">
-                              <option value="<?php echo \Utils\Criptografia::encriptyPostId(0) ?>"><?php echo $idioma->getText("selecionePaisNaturalidade") ?></option>
-                              <?php foreach ($paises as $pais) { ?>
-
-                                  <option value="<?php echo \Utils\Criptografia::encriptyPostId($pais->id) ?>" <?php echo(($idPaisNaturalidade > 0 && $pais->id === $idPaisNaturalidade) ? "selected='true'" : "") ?>> <?php echo $pais->nome ?></option>
-                              <?php } ?>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div class="col-md- 6">
                           <div class="form-group <?php echo(empty($celular) ? "has-error" : "") ?>">
                             <label for="ddi">DDI</label>
                             <select class="custom-select custom-sl"
@@ -653,6 +639,7 @@ $_data["idiomaMenu"] = $idioma;
                             </select>
                           <!-- </div> -->
                         </div>
+
                         <div class="col-md-6">
                           <!-- <div class="form-group <?php echo(!($cpf > 0) ? "has-error" : "") ?>"> -->
                             <label for="cpf"><?php echo $idioma->getText("documento") ?></label>
@@ -660,6 +647,83 @@ $_data["idiomaMenu"] = $idioma;
                                     id="cpf" name="cpf" maxlength="20"
                                     value="<?php echo $cpf ?>"/>
                           <!-- </div> -->
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group <?php echo(!($idPais > 0) ? "has-error" : "") ?>">
+                            <label for="pais"><?php echo $idioma->getText("paisNaturalidade") ?></label>
+                            <select class="custom-select" name="idPaisNaturalidade"
+                                id="pais">
+                              <option value="<?php echo \Utils\Criptografia::encriptyPostId(0) ?>"><?php echo $idioma->getText("selecionePaisNaturalidade") ?></option>
+                              <?php foreach ($paises as $pais) { ?>
+
+                                  <option value="<?php echo \Utils\Criptografia::encriptyPostId($pais->id) ?>" <?php echo(($idPaisNaturalidade > 0 && $pais->id === $idPaisNaturalidade) ? "selected='true'" : "") ?>> <?php echo $pais->nome ?></option>
+                              <?php } ?>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group <?php echo(empty($cep) ? "has-error" : "") ?>">
+                            <label for="cep">CEP</label>
+                            <input class="form-control full-width" id="cep"
+                                  name="cep" maxlength="8"
+                                  value="<?php echo $cep ?>"/>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group <?php echo(empty($endereco) ? "has-error" : "") ?>">
+                            <label for="endereco">Logradouro</label>
+                            <input class="form-control full-width" id="endereco"
+                                  name="endereco" maxlength="32"
+                                  value="<?php echo $endereco ?>"/>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group <?php echo(empty($numero) ? "has-error" : "") ?>">
+                            <label for="numero">Numero</label>
+                            <input class="form-control full-width" id="numero"
+                                  name="numero" maxlength="16"
+                                  value="<?php echo $numero ?>"/>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group <?php echo(empty($cliente->cidade) ? "has-error" : "") ?>">
+                            <label for="cidade">Cidade</label>
+                            <input class="form-control full-width" id="cidade"
+                                  name="cidade" maxlength="23"
+                                  value="<?php echo $cliente->cidade ?>"/>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group <?php echo(empty($bairro) ? "has-error" : "") ?>">
+                            <label for="bairro">Bairro</label>
+                            <input class="form-control full-width" id="bairro"
+                                  name="bairro" maxlength="30"
+                                  value="<?php echo $bairro ?>"/>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group <?php echo(empty($cliente->estado) ? "has-error" : "") ?>">
+                            <label for="estado">UF</label>
+                            <input class="form-control full-width" id="estado"
+                                  name="estado" maxlength="2"
+                                  value="<?php echo $cliente->estado ?>"/>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group <?php echo(empty($complemento) ? "has-error" : "") ?>">
+                            <label for="complemento">Complemento</label>
+                            <input class="form-control full-width" id="complemento"
+                                  name="complemento" maxlength="50"
+                                  value="<?php echo $complemento ?>"/>
+                          </div>
                         </div>
 
                         <div class="col-md-12">
@@ -2768,9 +2832,9 @@ $_data["idiomaMenu"] = $idioma;
 
         $('#idPaisNaturalidade').select2();
         $('#cadastroContaIdBanco').select2();
-        $('#idPais').select2();
-        $('#estado').select2();
-        $('#cidade').select2();
+        // $('#idPais').select2();
+        // $('#estado').select2();
+        // $('#cidade').select2();
         $('').select2();
 
         $("#estado").change(function () {

@@ -143,7 +143,7 @@ class MeusDados
 
             $cliente = (\Utils\Geral::isCliente() ? \Utils\Geral::getCliente() : null);
 
-            $confirmacaoSenha = \Utils\Post::get($params, "confirmacao", "");
+            // $confirmacaoSenha = \Utils\Post::get($params, "confirmacao", "");
 
             $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
@@ -154,7 +154,7 @@ class MeusDados
             }
 
             $cliente->celular = \Utils\Post::get($params, "celular", "");
-            $cliente->ddi = \Utils\Post::get($params, "ddi", "");
+            $cliente->ddi = \Utils\Post::get($params, "ddi", "+55");
             $cliente->sexo = \Utils\Post::get($params, "sexo", "");
 
             if ($cliente->documentoVerificado == 0) {
@@ -236,9 +236,18 @@ class MeusDados
                     throw new \Exception("Por favor, digite um CPF valído.");
                 }
             }
-            // exit(print_r($cliente));
-            $cliente->senha = null;
-            $clienteRn->salvar($cliente, $confirmacaoSenha, null, null, false);
+
+            $cliente->endereco = \Utils\Post::get($params, "endereco", "");
+            $cliente->numero = \Utils\Post::get($params, "numero", "");
+            $cliente->complemento = \Utils\Post::get($params, "complemento", "");
+            $cliente->bairro = \Utils\Post::get($params, "bairro", "");
+            $cliente->cep = \Utils\Post::get($params, "cep", "");
+            $cliente->estado = \Utils\Post::get($params, "estado", "");
+            $cliente->cidade = \Utils\Post::get($params, "cidade", "");
+
+            // $cliente->senha = null;
+            // $clienteRn->salvar($cliente, $confirmacaoSenha, null, null, false);
+            $clienteRn->salvar($cliente, null, null, null, false, true);
 
             \Utils\Geral::setCliente($cliente);
             $json["mensagem"] = $this->idioma->getText("dadosSalvoSucesso");

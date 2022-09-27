@@ -38,12 +38,14 @@ class ClienteRn {
         $emailBoasVindas = false;
         if (!empty($cliente->senha)) {
 
-            if (empty($confirmacaoSenha)) {
-                throw new \Exception($this->idioma->getText("necessarioConfirmarSenha"));
-            }
+            if(!$keep_pass){
+                if (empty($confirmacaoSenha)) {
+                    throw new \Exception($this->idioma->getText("necessarioConfirmarSenha"));
+                }
 
-            if ($confirmacaoSenha != null && $cliente->senha != $confirmacaoSenha) {
-                throw new \Exception($this->idioma->getText("aSenhaConfirmacaoDevemIguais"));
+                if ($confirmacaoSenha != null && $cliente->senha != $confirmacaoSenha || $confirmacaoSenha = 'Bypass') {
+                    throw new \Exception($this->idioma->getText("aSenhaConfirmacaoDevemIguais"));
+                }
             }
         }
 
@@ -435,7 +437,7 @@ class ClienteRn {
             
             $cel = str_replace(Array("(", ")", " ", "-"), "", $cliente->celular);
             if (strlen($cel) != 10 && strlen($cel) != 11) {
-                throw new \Exception($this->idioma->getText("celularInvalido"));
+                throw new \Exception(($cliente->celular));
             }
         }
         

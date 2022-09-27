@@ -118,19 +118,20 @@ $moeda = $paridade->moedaBook;
                         </a> -->
 
                         <li class="nav-item dropdown header-img-icon">
-                            <a style="color:#00dfff;" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
+                            <!-- <a style="color:#00dfff;" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"> -->
                                 <!-- <img src="assets/img/avatar.svg" alt="avatar"> -->
                                 <?php 
-                                $arrayNomeCliente = explode(" ",$cliente->nome);
-                                $clienteNome = $arrayNomeCliente[0]. ' ' .$arrayNomeCliente[1];
-                                $clienteNome = mb_convert_case($clienteNome, MB_CASE_LOWER, "UTF-8");
-                                echo ucwords($clienteNome);
+                                //$arrayNomeCliente = explode(" ",$cliente->nome);
+                                //$clienteNome = $arrayNomeCliente[0]. ' ' .$arrayNomeCliente[1];
+                                //$clienteNome = mb_convert_case($clienteNome, MB_CASE_LOWER, "UTF-8");
+                                //echo ucwords($clienteNome);
                                 ?>
-                            </a>
+                            <!-- </a> -->
 
+                            <!-- 
                             <div class="dropdown-menu">
-                                <!-- <div class="dropdown-header d-flex flex-column align-items-center">
+                                    <div class="dropdown-header d-flex flex-column align-items-center">
                                     <div class="figure mb-3">
                                     <img src="assets/img/avatar.svg" alt="">
                                     </div>
@@ -140,7 +141,7 @@ $moeda = $paridade->moedaBook;
                                     </div>
                                 </div> -->
 
-                                <div class="dropdown-body">
+                                <!-- <div class="dropdown-body">
                                     <ul class="profile-nav">
                                         <li class="nav-item">
                                             <a class="nav-link" style="color:#00dfff;" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MEUSDADOS ?>">
@@ -156,7 +157,21 @@ $moeda = $paridade->moedaBook;
                                         </li>
                                     </ul>
                                 </div>
+                                
                             </div>
+                        -->
+                            <li class="nav-item">
+                                <a class="nav-link" style="color:#00dfff;" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MEUSDADOS ?>">
+                                    <i class="icon ion-md-person"></i>
+                                    <span><?php echo $idioma->getText("meuPerfilD") ?></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link red" href="#" id="logout">
+                                    <i class="icon ion-md-power"></i>
+                                    <?php echo $idioma->getText("sair") ?>
+                                </a>
+                            </li>
                         </li>
                     </li>
                 </ul>

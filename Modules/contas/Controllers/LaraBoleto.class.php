@@ -2,6 +2,8 @@
 
 namespace Modules\contas\Controllers;
 
+use Throwable;
+
 class LaraBoleto {
 
     private $idioma;
@@ -13,51 +15,24 @@ class LaraBoleto {
     public function gerarBoleto($params) {
         $deposito = null;
         try {
-            // $authRn = new \Models\Modules\Cadastro\AuthRn();
-            // $configuracoes = \Models\Modules\Cadastro\ConfiguracaoRn::get();
             $deposito = new \Models\Modules\Cadastro\Deposito();
             $depositoRn = new \Models\Modules\Cadastro\DepositoRn();
-            // $laraBoleto = new \BoletosLara\BoletosLara();
             $cliente = \Utils\Geral::getCliente();
 
-            // $token = \Utils\Post::get($params, "token", null);
-            // $pin = \Utils\Post::get($params, "pin", null);
             $deposito->id = \Utils\Post::getEncrypted($params, "deposito", 0);
-            // exit(print_r($deposito->id));
             try {
                 $depositoRn->carregar($deposito, true, false, false, true);
             } catch (\Exception $ex) {
                 throw new \Exception($this->idioma->getText("depositoInvalidoOuNaoEncontrado"));
             }
 
-            $client = $deposito->cliente;
+            if(!$deposito->cliente->endereco || !$deposito->cliente->numero || !$deposito->cliente->bairro || !$deposito->cliente->cep || !$deposito->cliente->cidade){
+                throw new \Exception('É necessario ter um endereço completo cadastrado.');
+            }
 
-            // if (empty($token)) {
-            //     throw new \Exception($this->idioma->getText("tokenInvalido"));
-            // }
-
-            // if (empty($pin)) {
-            //     throw new \Exception($this->idioma->getText("pinInvalido"));
-            // }
-
-            // if ($deposito->cliente->pin != $pin) {
-            //     throw new \Exception($this->idioma->getText("pinInvalido"));
-            // }
-
-            // $authRn->validar($token, $cliente);
-
-            // if (strlen($client) < 8) {
-            //     throw new \Exception("Nome do cliente inválido. Atualize seu nome completo no menu Meu Perfil, aba Meus Dados.");
-            // }
-
-            // if(!\Utils\Validacao::verificarNomeCompleto($nomeCliente)){
-            //     throw new \Exception("Nome inválido. Atualize seu nome no menu Meu Perfil, aba Meus Dados.");
-            // }
-
-            // if(!$cliente->endereco || !$cliente->numero || !$cliente->bairro || !$cliente->cep){
-            //     throw new \Exception('É necessario ter um endereço completo cadastrado.');
-            // }
-
+            if(!$deposito->cliente->celular){
+                throw new \Exception('É necessario ter um numero de telefone cadastrado.');
+            }
 
             $object = (object)null;
             $object->customer = $deposito->cliente;
@@ -67,8 +42,10 @@ class LaraBoleto {
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://hub.infinitypay.inf.br/api/create",
+                // CURLOPT_URL => "https://hub.infinitypay.inf.br/api/create",
+                CURLOPT_URL => "http://127.0.0.1:8000/api/create",
                 CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_FAILONERROR => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
                 CURLOPT_TIMEOUT => 30,
@@ -77,7 +54,6 @@ class LaraBoleto {
                 CURLOPT_CUSTOMREQUEST => "POST",
                 CURLOPT_POSTFIELDS => json_encode($object),
                 CURLOPT_HTTPHEADER => array(
-                    // "Authorization: Bearer {$this->token}",
                     "Cache-Control: no-cache",
                     "Connection: keep-alive",
                     "Content-Type: x`application/json"
@@ -86,18 +62,20 @@ class LaraBoleto {
 
         $response = curl_exec($curl);
         $response = json_decode($response);
+
         $err = curl_error($curl);
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        
+
         curl_close($curl);
 
         if($err){
             throw new \Exception($err);
         }
+
         if($httpcode != 200){
-            // throw new \Exception(json_encode($response));
             throw new \Exception('Tente novamente mais tarde!');
         }
+            $configuracoes = \Models\Modules\Cadastro\ConfiguracaoRn::get();
 
             $valorCreditar = $deposito->valorDepositado - ($deposito->valorDepositado * ($configuracoes->taxaDepositoBoleto / 100)) - $configuracoes->tarifaDepositoBoleto;
 
@@ -110,12 +88,12 @@ class LaraBoleto {
             $json["comissao"] = number_format($configuracoes->taxaDepositoBoleto, 2, ",", ".") . "%";
             $json["taxa"] = "R$ " . number_format($configuracoes->tarifaDepositoBoleto, 2, ",", ".");
 
-
-            $json["valor"] = "R$ ".$response->data->transaction->valor->original;
-            $json['timer'] = $response->data->transaction->calendario->expiracao;
+            $json["valor"] = "R$ ".$deposito->valorDepositado;
+            // $json['timer'] = $response->data->transaction->calendario->expiracao;
+            $json['timer'] = 3600;
             $json['qr'] = $response->data->payment->qrcode;
             $json['qr_img'] = "<img src='".$response->data->payment->imagemQrcode."' />";
-            $json["mensagem"] = "Aguarde. QRCode Gerado! pague-o dentro do tempo determinado.";
+            $json["mensagem"] = "QRCode Gerado! pague-o dentro do tempo determinado.";
             $json["sucesso"] = true;
 
         }  catch (\Exception $ex) {
