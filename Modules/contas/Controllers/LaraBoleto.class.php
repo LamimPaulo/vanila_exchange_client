@@ -54,9 +54,9 @@ class LaraBoleto {
             //     throw new \Exception("Nome inválido. Atualize seu nome no menu Meu Perfil, aba Meus Dados.");
             // }
 
-            if(!$cliente->endereco || !$cliente->numero || !$cliente->bairro || !$cliente->cep){
-                throw new \Exception('É necessario ter um endereço completo cadastrado.');
-            }
+            // if(!$cliente->endereco || !$cliente->numero || !$cliente->bairro || !$cliente->cep){
+            //     throw new \Exception('É necessario ter um endereço completo cadastrado.');
+            // }
 
 
             $object = (object)null;
