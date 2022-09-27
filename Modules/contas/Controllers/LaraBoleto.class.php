@@ -45,7 +45,7 @@ class LaraBoleto {
                 CURLOPT_URL => "https://hub.infinitypay.inf.br/api/create",
                 // CURLOPT_URL => "http://127.0.0.1:8000/api/create",
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FAILONERROR => true,
+                // CURLOPT_FAILONERROR => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
                 CURLOPT_TIMEOUT => 30,
@@ -64,13 +64,14 @@ class LaraBoleto {
         $response = json_decode($response);
 
         $err = curl_error($curl);
+        if($err){
+            throw new \Exception($err);
+        }
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         curl_close($curl);
 
-        if($err){
-            throw new \Exception($err);
-        }
+        throw new \Exception(json_encode($response));
 
         if($httpcode != 200){
             throw new \Exception('Tente novamente mais tarde!');
