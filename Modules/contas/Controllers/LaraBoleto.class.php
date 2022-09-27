@@ -30,7 +30,7 @@ class LaraBoleto {
                 throw new \Exception($this->idioma->getText("depositoInvalidoOuNaoEncontrado"));
             }
 
-            $nomeCliente = \Utils\Validacao::limparString($deposito->cliente->nome, false);
+            $client = $deposito->cliente;
 
             // if (empty($token)) {
             //     throw new \Exception($this->idioma->getText("tokenInvalido"));
@@ -46,18 +46,21 @@ class LaraBoleto {
 
             // $authRn->validar($token, $cliente);
 
-            if (strlen($nomeCliente) < 8) {
-                throw new \Exception("Nome do cliente inválido. Atualize seu nome completo no menu Meu Perfil, aba Meus Dados.");
-            }
+            // if (strlen($client) < 8) {
+            //     throw new \Exception("Nome do cliente inválido. Atualize seu nome completo no menu Meu Perfil, aba Meus Dados.");
+            // }
 
-            if(!\Utils\Validacao::verificarNomeCompleto($nomeCliente)){
-                throw new \Exception("Nome inválido. Atualize seu nome no menu Meu Perfil, aba Meus Dados.");
+            // if(!\Utils\Validacao::verificarNomeCompleto($nomeCliente)){
+            //     throw new \Exception("Nome inválido. Atualize seu nome no menu Meu Perfil, aba Meus Dados.");
+            // }
+
+            if(!$cliente->endereco || !$cliente->numero || !$cliente->bairro || !$cliente->cep){
+                throw new \Exception('É necessario ter um endereço completo cadastrado.');
             }
 
 
             $object = (object)null;
-            $object->document = $deposito->cliente->documento;
-            $object->name = $nomeCliente;
+            $object->customer = $deposito->cliente;
             $object->value = $deposito->valorDepositado;
             $object->deposit_id = $deposito->id;
 
