@@ -18,7 +18,7 @@ class Saques {
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $cliente = \Utils\Geral::getCliente();
             $clienteRn->conexao->carregar($cliente);
-            
+
             if (\Utils\Geral::isCliente() && $cliente->utilizaSaqueDepositoBrl < 1) {
                 \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
             }
@@ -132,15 +132,14 @@ class Saques {
             foreach ($contasBancarias as $contaBancaria) {
 
                 //Texto
-                $tipoConta = strlen(\Utils\Validacao::limparString($contaBancaria->documentoCliente)) == 14 ? " / Empresa" : "";
-                $digito = empty($contaBancaria->agenciaDigito) ? "" : "-{$contaBancaria->agenciaDigito}";
-                $texto = "{$contaBancaria->banco->nome}    |    AG: {$contaBancaria->agencia}{$digito} / CC: {$contaBancaria->conta}-{$contaBancaria->contaDigito} {$tipoConta}";
+
+                $texto = "Chave PIX: {$contaBancaria->documento}";
 
                 //Icone
                 if(!empty($contaBancaria->banco->logo)){
                     $icone = IMAGES . "bancos/" . $contaBancaria->banco->logo;
                 } else {
-                    $icone = IMAGES . "currencies/BRL.png";
+                    $icone = IMAGES . "currencies/pix.png";
                 }
 
                     $object = (object)null;;
@@ -227,7 +226,8 @@ class Saques {
                     //Texto
                     $tipoConta = strlen(\Utils\Validacao::limparString($contaBancaria->documentoCliente)) == 14 ? " / Empresa" : "";
                     $digito = empty($contaBancaria->agenciaDigito) ? "" : "-{$contaBancaria->agenciaDigito}";
-                    $texto = "{$contaBancaria->banco->nome}    |    AG: {$contaBancaria->agencia}{$digito} / CC: {$contaBancaria->conta}-{$contaBancaria->contaDigito} {$tipoConta}";
+                    // $texto = "{$contaBancaria->banco->nome}    |    AG: {$contaBancaria->agencia}{$digito} / CC: {$contaBancaria->conta}-{$contaBancaria->contaDigito} {$tipoConta}";
+                    $texto = "Chave pix: {$contaBancaria->documentoCliente}";
 
                     //Icone
                     if (!empty($contaBancaria->banco->logo)) {

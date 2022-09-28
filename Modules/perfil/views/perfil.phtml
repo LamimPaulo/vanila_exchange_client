@@ -368,7 +368,7 @@ $_data["idiomaMenu"] = $idioma;
             <a class="nav-link" id="settings-security-tab" data-toggle="pill" href="#settings-security" role="tab"
             aria-controls="settings-security" aria-selected="false"><i class="icon ion-md-lock"></i> <?php echo $idioma->getText("abaSeguranca") ?></a>
 
-            <a class="nav-link" id="settings-bank-tab" data-toggle="pill" href="#settings-banks" role="tab"
+            <a class="nav-link" onclick="listarContasBancarias()" id="settings-bank-tab" data-toggle="pill" href="#settings-banks" role="tab"
             aria-controls="settings-banks" aria-selected="false"><i class="icon ion-md-briefcase"></i> <?php echo $idioma->getText("perfil50") ?></a>
 
             <a class="nav-link" onclick="listaEmpresa();" id="settings-company-tab" data-toggle="pill" href="#settings-company" role="tab"
@@ -2131,7 +2131,7 @@ $_data["idiomaMenu"] = $idioma;
                                   </div>
                               </div>
                           </div>
-                          <div class="row">
+                          <!-- <div class="row">
                               <div class="col-lg-6">
                                   <div class="form-group">
                                       <label><?php echo $idioma->getText("instituicaoBancariaC") ?></label>
@@ -2188,7 +2188,7 @@ $_data["idiomaMenu"] = $idioma;
                                               id="cadastroContaContaDigito" maxlength="1"/>
                                   </div>
                               </div>
-                          </div>
+                          </div> -->
                           <div class="row">
                               <div class="col-lg-4">
                                   <button type="button" class="btn btn-primary text-center full-width"
@@ -2198,6 +2198,8 @@ $_data["idiomaMenu"] = $idioma;
                           </div>
                           </br>
                           </br>
+                          Chaves Cadastradas
+                          <div id="listaContasBancarias"></div>
                       </div>
                       <div class="col-lg-5">
                           <div id="vertical-timeline"

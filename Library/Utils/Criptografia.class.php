@@ -92,15 +92,16 @@ class Criptografia {
     
     
     public static function decriptyPostId($value, $validSqlException = true) {
+        ini_set('memory_limit', '1024M');
         $seed = "1!2@3#";
         $sobra = (strlen($value) % 2);
-        $half = ((strlen($value) - $sobra) / 2) + $sobra;   
-        $base64Half1 = substr($value, 0, strlen($value) - $half);     
+        $half = ((strlen($value) - $sobra) / 2) + $sobra;
+        $base64Half1 = substr($value, 0, strlen($value) - $half);
         $base64Half2 = substr($value, strlen($value) - $half, $half);
         $base64 = $base64Half2.$base64Half1;
         $last = substr($base64, strlen($base64)-1);
         $base64 = substr($base64, 0, strlen($base64)-2);
-        
+
         while($last > 0) {
             $base64.="=";
             $last--;

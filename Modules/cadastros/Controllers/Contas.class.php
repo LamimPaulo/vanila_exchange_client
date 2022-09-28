@@ -127,10 +127,10 @@ class Contas {
                         <?php echo $conta->banco->nome ?>
                     </div>
                     <div class="col-lg-2 text-center">
-                        <?php echo $conta->getTipoConta() ?>
+                        <!-- <?php echo $conta->getTipoConta() ?> -->
                     </div>
                     <div class="col-lg-1 text-center">
-                        <?php echo $conta->agencia ?>
+                        <!-- <?php echo $conta->agencia ?> -->
                     </div>
                     <div class="col-lg-1 text-center">
                         <?php echo $conta->conta ?>
@@ -176,12 +176,12 @@ class Contas {
         try {
             
             $contaBancaria = new \Models\Modules\Cadastro\ContaBancaria();
-            $contaBancaria->idBanco = \Utils\Post::get($params, "idBanco", null);
-            $contaBancaria->conta = \Utils\Post::get($params, "conta", null);
-            $contaBancaria->agencia = \Utils\Post::get($params, "agencia", null);
-            $contaBancaria->tipoConta = \Utils\Post::get($params, "tipoConta", null);
-            $contaBancaria->agenciaDigito = \Utils\Post::get($params, "agenciaDigito", 0);
-            $contaBancaria->contaDigito = \Utils\Post::get($params, "contaDigito", 0);
+            // $contaBancaria->idBanco = \Utils\Post::get($params, "idBanco", null);
+            // $contaBancaria->conta = \Utils\Post::get($params, "conta", null);
+            // $contaBancaria->agencia = \Utils\Post::get($params, "agencia", null);
+            // $contaBancaria->tipoConta = \Utils\Post::get($params, "tipoConta", null);
+            // $contaBancaria->agenciaDigito = \Utils\Post::get($params, "agenciaDigito", 0);
+            // $contaBancaria->contaDigito = \Utils\Post::get($params, "contaDigito", 0);
             $contaBancaria->documentoCliente = \Utils\Post::getEncrypted($params, "documento", null);
             
             $contaBancariaRn = new \Models\Modules\Cadastro\ContaBancariaRn();
@@ -286,7 +286,7 @@ class Contas {
         ?>
         <tr >
             <td class="text-center">
-                <?php echo $conta->nomeCliente ?>
+                <!-- <?php echo $conta->nomeCliente ?> -->
             </td>
             <td class="text-center">
                 <?php echo $conta->documentoCliente ?>
@@ -306,9 +306,9 @@ class Contas {
             <td class="text-center">
                 <?php echo $conta->getTipoConta() ?>
             </td>
-            <td class="text-center">
+            <!-- <td class="text-center">
                 <?php echo ($conta->ativo > 0 ?  $this->idioma->getText("simC") : $this->idioma->getText("naoC")) ?>
-            </td>
+            </td> -->
             <td class="text-center">
                 <input type="checkbox" class="js-switch" onchange="alterarStatusContaBancaria('<?php echo \Utils\Criptografia::encriptyPostId($conta->id) ?>');" <?php echo $conta->ativo > 0 ?  "checked" : "" ?>/>
             </td>

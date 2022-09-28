@@ -9,7 +9,7 @@ class Extrato {
 
     public function __construct() {
         if(\Utils\Geral::isUsuario()){
-           \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
+            \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
         }
         \Utils\Validacao::acesso($this->codigoModulo);
         $this->idioma = new \Utils\PropertiesUtils("extrato", IDIOMA);
@@ -225,12 +225,14 @@ class Extrato {
             $confirmColor = "color: #ffe585";
         }
 
-        if($extrato->confirmations >= $extrato->confirmationsRequired){
+        if($extrato->confirmations ?? 0 > $extrato->confirmationsRequired ?? ''){
             $confirmColor2 = "color: #1ab394";
 
         } else {
             $confirmColor2 = "color: #ffe585";
         }
+        $brlConfirmations = $extrato->confirmations ?? 0;
+        $brlConfirmationsRequired = $extrato->confirmationsRequired ?? 0;
 
         if($extrato instanceof \Models\Modules\Cadastro\ContaCorrenteReais){
             $extrato->moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
@@ -263,7 +265,7 @@ class Extrato {
                     </div> 
                     <div class="col-sm-1">
                         <small class="stats-label">Confirmações</small>
-                        <h6 style="<?php echo $confirmColor2 ?>"><strong><?php echo $extrato->confirmations.'/'.$extrato->confirmationsRequired ?></strong></h6>
+                        <h6 style="<?php echo $confirmColor2 ?>"> <strong><?php echo $brlConfirmations.'/'.$brlConfirmationsRequired ?></strong></h6>
                     </div>
                 </div>
             </div>
@@ -332,7 +334,7 @@ class Extrato {
             </div>
         <?php } 
     }
-    
+
     private function anexoExtrato($lista, $limite) {
         $result = array();
         if (sizeof($lista) > 0) {

@@ -65,38 +65,38 @@ class ContaBancariaRn {
             
         }
         
-        if (empty($contaBancaria->agencia) || strlen($contaBancaria->agencia) < 4 || ($contaBancaria->agencia + 0 ) <= 0) {
-            throw new \Exception($this->idioma->getText("necessarioInformarAgencia"));
-        }
+        // if (empty($contaBancaria->agencia) || strlen($contaBancaria->agencia) < 4 || ($contaBancaria->agencia + 0 ) <= 0) {
+        //     throw new \Exception($this->idioma->getText("necessarioInformarAgencia"));
+        // }
                 
-        if (empty($contaBancaria->conta) || strlen($contaBancaria->conta) < 4) {
-            throw new \Exception($this->idioma->getText("necessarioInformarConta"));
-        }        
+        // if (empty($contaBancaria->conta) || strlen($contaBancaria->conta) < 4) {
+        //     throw new \Exception($this->idioma->getText("necessarioInformarConta"));
+        // }        
         
-        if ($contaBancaria->contaDigito == null) {
-            throw new \Exception($this->idioma->getText("necessarioInformarContaDigito"));
-        }
+        // if ($contaBancaria->contaDigito == null) {
+        //     throw new \Exception($this->idioma->getText("necessarioInformarContaDigito"));
+        // }
         
-        if ($contaBancaria->nomeCliente == null) {
-            throw new \Exception($this->idioma->getText("contaClienteNome"));
-        }
+        // if ($contaBancaria->nomeCliente == null) {
+        //     throw new \Exception($this->idioma->getText("contaClienteNome"));
+        // }
         
         if ($contaBancaria->documentoCliente == null) {
             throw new \Exception($this->idioma->getText("contaClienteDocumento"));
         }
         
-        if (!$contaBancaria->idBanco > 0) {
-            throw new \Exception($this->idioma->getText("necessarioInformarBanco"));
-        }
+        // if (!$contaBancaria->idBanco > 0) {
+        //     throw new \Exception($this->idioma->getText("necessarioInformarBanco"));
+        // }
         
-        $tiposConta = Array(
-            \Utils\Constantes::CONTA_CORRENTE,
-            \Utils\Constantes::CONTA_POUPANCA
-        );
+        // $tiposConta = Array(
+        //     \Utils\Constantes::CONTA_CORRENTE,
+        //     \Utils\Constantes::CONTA_POUPANCA
+        // );
         
-        if (!in_array($contaBancaria->tipoConta, $tiposConta)) {
-            throw new \Exception($this->idioma->getText("tipoContaInvalido"));
-        }
+        // if (!in_array($contaBancaria->tipoConta, $tiposConta)) {
+        //     throw new \Exception($this->idioma->getText("tipoContaInvalido"));
+        // }
         
         /*$contasBancarias = $this->listar(
                       " id_banco = '{$contaBancaria->idBanco}' AND "
