@@ -37,6 +37,11 @@ class ContaCorrenteReais {
      * @var Double 
      */
     public $valor;
+
+    public $txid;
+    public $txidIndex;
+    public $confirmations;
+    public $confirmationsRequired;
     
     /**
      *
@@ -170,6 +175,10 @@ class ContaCorrenteReais {
         $this->idCliente = ((isset($dados ['id_cliente'])) ? ($dados ['id_cliente']) : (null));
         $this->tipo = ((isset($dados ['tipo'])) ? ($dados ['tipo']) : (null));
         $this->valor = ((isset($dados ['valor'])) ? ($dados ['valor']) : (null));
+        $this->txid = ((isset($dados ['txid'])) ? ($dados ['txid']) : (null));
+        $this->txidIndex = ((isset($dados ['txid_index'])) ? ($dados ['txid_index']) : (null));
+        $this->confirmations = ((isset($dados ['confirmations'])) ? ($dados ['confirmations']) : (null));
+        $this->confirmationsRequired = ((isset($dados ['confirmations_required'])) ? ($dados ['confirmations_required']) : (null));
         $this->transferencia = ((isset($dados ['transferencia'])) ? ($dados ['transferencia']) : (null));
         $this->idClienteDestino = ((isset($dados ['id_cliente_destino'])) ? ($dados ['id_cliente_destino']) : (null));
         $this->valorTaxa = ((isset($dados ['valor_taxa'])) ? ($dados ['valor_taxa']) : (null));

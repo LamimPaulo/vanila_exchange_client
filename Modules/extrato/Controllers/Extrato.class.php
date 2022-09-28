@@ -220,9 +220,16 @@ class Extrato {
         }
         if($extrato->confirmacoes >= $extrato->confirmacoesNecessarias){
             $confirmColor = "color: #1ab394";
-            
+
         } else {
             $confirmColor = "color: #ffe585";
+        }
+
+        if($extrato->confirmations >= $extrato->confirmationsRequired){
+            $confirmColor2 = "color: #1ab394";
+
+        } else {
+            $confirmColor2 = "color: #ffe585";
         }
 
         if($extrato instanceof \Models\Modules\Cadastro\ContaCorrenteReais){
@@ -234,9 +241,13 @@ class Extrato {
                         <small class="stats-label">Moeda</small></br>
                         <img src="<?php echo IMAGES . "currencies/" . $extrato->moeda->icone ?>" width="20" height="20"/>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <small class="stats-label">Descrição</small>
                         <h6><?php echo $extrato->descricao; ?></h6>
+                    </div>
+                    <div class="col-sm-2">
+                        <small class="stats-label">TXID</small>
+                        <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->txid, $_ENV['BSCSCAN_URL']);  ?>"> Explorer</a></h6>
                     </div>
                     <div class="col-sm-2">
                         <small class="stats-label">Data</small>
@@ -248,16 +259,16 @@ class Extrato {
                     </div> 
                     <div class="col-sm-2">
                         <small class="stats-label">Saldo</small>
-                        <h6 style="<?php echo $confirmColor ?>"><strong><?php echo "R$ " . number_format($extrato->saldo, 2, ",", "."); ?></strong></h6>
+                        <h6 style="<?php echo $color ?>"><strong><?php echo "R$ " . number_format($extrato->saldo, 2, ",", "."); ?></strong></h6>
                     </div> 
-                    <div class="col-sm-2">
+                    <div class="col-sm-1">
                         <small class="stats-label">Confirmações</small>
-                        <h6 style="<?php echo $confirmColor ?>"><strong>0/0</strong></h6>
+                        <h6 style="<?php echo $confirmColor2 ?>"><strong><?php echo $extrato->confirmations.'/'.$extrato->confirmationsRequired ?></strong></h6>
                     </div>
                 </div>
             </div>
 
-        <?php } else if ($extrato instanceof \Models\Modules\Cadastro\ContaCorrenteBtc) { 
+        <?php } else if ($extrato instanceof \Models\Modules\Cadastro\ContaCorrenteBtc) {
 
                 if(!empty($extrato->descricao)){
                     $descricao = $extrato->descricao;
@@ -266,7 +277,7 @@ class Extrato {
                         $descricao = "Saque de {$extrato->moeda->nome}";
                     }
                 }
-            ?> 
+            ?>
 
             <div class="ibox-content">
                 <div class="row m-l-xs">
@@ -274,10 +285,33 @@ class Extrato {
                         <small class="stats-label">Moeda</small></br>
                         <img src="<?php echo IMAGES . "currencies/" . $extrato->moeda->icone ?>" width="20" height="20"/>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <small class="stats-label">Descrição</small>
                         <h6><?php echo $descricao; ?></h6>
                     </div>
+
+                    <?php if($extrato->moeda->id == '2') {?>
+                        <div class="col-sm-2">
+                            <small class="stats-label">TXID</small>
+                            <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['BITCOIN_EXPLORER_URL']);  ?>"> Explorer</a></h6>
+                        </div>
+                    <?php } else if($extrato->rede == 'BEP20' ){?>
+                        <div class="col-sm-2">
+                            <small class="stats-label">TXID</small>
+                            <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['BSCSCAN_URL']);  ?>"> Explorer</a></h6>
+                        </div>
+                    <?php } else if($extrato->rede == 'ERC20' ){?>
+                        <div class="col-sm-2">
+                            <small class="stats-label">TXID</small>
+                            <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['ETHERSCAN_URL']);  ?>"> Explorer</a></h6>
+                        </div>
+                        <?php } else { ?>
+                            <div class="col-sm-2">
+                                <small class="stats-label">TXID</small>
+                                <h6> <?php echo $extrato->hash  ?></h6>
+                            </div>
+                        <?php } ?>
+
                     <div class="col-sm-2">
                         <small class="stats-label">Data</small>
                         <h6><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h6>
@@ -285,12 +319,12 @@ class Extrato {
                     <div class="col-sm-2">
                         <small class="stats-label">Quantidade</small>
                         <h6 style="<?php echo $color ?>"><strong><?php echo $sinal . " {$extrato->moeda->simbolo} " . number_format($extrato->valor, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h6>
-                    </div>  
+                    </div>
                     <div class="col-sm-2">
                         <small class="stats-label">Saldo</small>
                         <h6><strong><?php echo $extrato->moeda->simbolo . " ". number_format($extrato->saldo, $extrato->moeda->casasDecimais, ",", "."); ?></strong></h6>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-1">
                         <small class="stats-label">Confirmações</small>
                         <h6 style="<?php echo $confirmColor ?>"><strong><?php echo $extrato->confirmacoes?>/<?php echo $extrato->confirmacoesNecessarias?></strong></h6>
                     </div>
