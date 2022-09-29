@@ -824,11 +824,11 @@ class ContaCorrenteBtcRn {
                     $moedaTaxa = new Moeda(Array("id" => $taxaMoeda->idMoedaTaxa));
                     $moedaRn->carregar($moedaTaxa);
 
-                    // $saldoMoedaTaxa = $this->calcularSaldoConta($clienteFrom, $moedaTaxa->id, false, true);
+                    $saldoMoedaTaxa = $this->calcularSaldoConta($clienteFrom, $moedaTaxa->id, false, true);
 
-                    // if($saldoMoedaTaxa < $taxa){
-                    //     throw new \Exception("Você precisa ter em seu saldo " . number_format($taxa, $moedaTaxa->casasDecimais, ",", "") . " {$moedaTaxa->nome} para fazer o saque.");
-                    // }
+                    if($saldoMoedaTaxa < $taxa){
+                        throw new \Exception("Você precisa ter em seu saldo " . number_format($taxa, $moedaTaxa->casasDecimais, ",", "") . " {$moedaTaxa->nome} para fazer o saque.");
+                    }
 
                     $saldoEmconta = $this->calcularSaldoConta($clienteFrom, $idMoeda, false, true);
                     $valorTransferencia = number_format($valor, $moeda->casasDecimais, ".", "");
