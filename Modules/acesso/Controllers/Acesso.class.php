@@ -81,7 +81,7 @@ class Acesso {
                             //"notificar" => $cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL ? false : true,
                         );
 
-                        $conteudo = Mail::template($conteudo, "Log Acesso", "Log Acesso");
+                        $conteudo = Mail::template($conteudo, "Log Acesso", "Log Acesso", $cliente->nome);
 
                         $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Log Acesso", $conteudo, $listaEnvio);
                         $mail->send();
@@ -417,7 +417,7 @@ class Acesso {
                 "Senha" => $cliente->senha
             );
 
-            $conteudo = Mail::template($conteudo, "Nova Senha", "Nova Senha");
+            $conteudo = Mail::template($conteudo, "Nova Senha", "Nova Senha",$cliente->nome);
 
             $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Nova Senha", $conteudo, $listaEnvio);
             $mail->send();
@@ -487,7 +487,7 @@ class Acesso {
                     "Mensagem" => "Conta ativada com sucesso."
                 );
 
-                $conteudo = Mail::template($conteudo, "Ativação Conta", "Ativação Conta");
+                $conteudo = Mail::template($conteudo, "Ativação Conta", "Ativação Conta", $cliente->nome);
 
                 $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Ativação Conta", $conteudo, $listaEnvio);
                 $mail->send();
@@ -560,7 +560,7 @@ class Acesso {
                 "Status" => "Conta bloqueada"
             );
 
-            $conteudo = Mail::template($conteudo, "Revogar Conta", "Revogar Conta");
+            $conteudo = Mail::template($conteudo, "Revogar Conta", "Revogar Conta", $cliente->nome);
 
             $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Revogar Conta", $conteudo, $listaEnvio);
             $mail->send();

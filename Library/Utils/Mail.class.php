@@ -227,7 +227,238 @@ class Mail {
      * @param String $rodape Rodapé do email
      * 
      */
-    public static function template($conteudo, $cabecalhoConteudo, $titulo = '', $rodape = '') {
+    public static function template($conteudo, $cabecalhoConteudo, $titulo = '', $nome = '') {
+        ob_start();
+        ?>
+        <!--doctype html -->
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- NAME: 1 COLUMN -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquidex</title>
+</head>
+
+<body>
+<div class="">
+    <div style="margin:0">
+        <div style="background-color:#eeeeee;color:#555555;font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;font-size:14px;height:100%!important;line-height:1.4em;margin:0;padding:0;width:100%!important">
+            <center>
+                <table style="background-color:#eeeeee;border-collapse:collapse;border-spacing:0;color:#555555;font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;font-size:14px;height:100%!important;line-height:1.4em;margin:0;padding:0;width:100%!important"
+                        width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
+                    <tbody>
+                    <tr>
+                        <td style="background-color:#eeeeee;color:#555555;font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;font-size:14px;height:100%!important;line-height:1.4em;margin:0;padding:1em;text-align:auto;width:100%!important"
+                            valign="top" align="center">
+                            <table style="border-collapse:collapse;border-spacing:0" width="600" cellspacing="0"
+                                    cellpadding="0" border="0">
+                                <tbody>
+                                <tr>
+                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;text-align:left">
+                                        <table style="border-collapse:collapse;border-spacing:0" width="100%"
+                                               cellspacing="0" cellpadding="0" border="0">
+                                            <tbody>
+                                            <tr>
+                                                <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;text-align:left"
+                                                    width="120" height="60">
+
+                                                    <!-- <img src="https://navi.inf.br/storage/api/clients/3/liquidex.png" -->
+                                                    <img src="https://navi.inf.br/storage/api/clients/52/b84f2934-a4c2-42b4-b717-3516f3f52cb4.png"
+                                                         width="120"/>
+
+                                                </td>
+                                                <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;padding-left:.8em;text-align:right">
+                                                    <?php echo $titulo ?>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;text-align:left">
+                                        <div style="background-color:#ffffff;border:1px solid #e5e5e5">
+                                            <table style="border-collapse:collapse;border-spacing:0"
+                                                    width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                <tbody>
+                                                <tr>
+                                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;max-width:264px;min-width:264px;padding:24px 24px 24px 12px;text-align:left;vertical-align:top;color:#999">
+
+                                                        Olá,
+                                                        <strong style="color:#000000">
+                                                        <?php echo $nome ?? 'Cliente'?>
+                                                        </strong><br>
+
+
+                                                    </td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;text-align:left">
+                                        <div style="background-color:#ffffff;border:1px solid #e5e5e5">
+                                            <table style="border-collapse:collapse;border-spacing:0"
+                                                   width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                <tbody>
+
+                                                <tr>
+                                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;padding:24px;text-align:left"
+                                                        valign="top" align="left">
+
+                                                        <?php
+                                                            if(is_array($conteudo)){
+                                                                foreach ($conteudo as $key => $value) { ?>
+                                                                    <p style="text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: bold; color: #B8B8B8; margin-bottom: 2px;">
+                                                                        <?php echo $key . ": "; ?>
+                                                                        <span style="font-size: 12px; color: #111; font-weight: bold; margin-bottom: 10px;">
+                                                                            <?php echo $value . "<br>"; ?>
+                                                                        </span>
+                                                                    </p>
+                                                                    <?php
+                                                                }
+                                                            } else { ?>
+                                                                <span style="font-size: 12px; color: #111; font-weight: bold; margin-bottom: 10px;">
+                                                                    <?php echo($conteudo); ?>
+                                                                </span>
+                                                            <?php }
+                                                        ?>
+
+                                                        <!-- <p style="text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: bold; color: #B8B8B8; margin-bottom: 2px;">
+                                                            #IP:
+                                                            <span style="font-size: 12px; color: #111; font-weight: bold; margin-bottom: 10px;">
+                                                                {{$info['ip']}}
+                                                            </span>
+                                                        </p> -->
+
+                                                        <!-- <p style="text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: bold; color: #B8B8B8; margin-bottom: 2px;">
+                                                            {{ trans('mail.notify_login.access') }}:
+                                                            <span style="font-size: 12px; color: #111; font-weight: bold; margin-bottom: 10px;">
+                                                                {{$info['created']}}
+                                                            </span>
+                                                        </p> -->
+
+                                                        <!-- <p style="text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: bold; color: #B8B8B8; margin-bottom: 2px;">
+                                                            {{ trans('mail.notify_login.source') }}:
+                                                            <span style="font-size: 12px; color: #111; font-weight: bold;">
+                                                                {{$info['agent']}}
+                                                            </span>
+                                                        </p> -->
+
+                                                    </td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;font-size:.4em;height:.4em;line-height:1em;text-align:left">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+
+                                <!-- <tr>
+                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;text-align:left">
+                                        <div style="background-color:#ffffff;border:1px solid #e5e5e5">
+                                            <table style="border-collapse:collapse;border-spacing:0"
+                                                   width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                <tbody>
+                                                <tr>
+                                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;padding:12px;text-align:center"
+                                                        valign="top" align="center">
+                                                        <center>
+                                                            <h4 style="margin-bottom: 10px; color: #000000">
+                                                                {{ trans('mail.notify_login.info_2') }}
+                                                            </h4>
+
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr> -->
+
+                                <tr>
+                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;text-align:center"
+                                        valign="top" align="center">
+                                        <table style="border-collapse:collapse;border-spacing:0" width="100%"
+                                               cellspacing="0" cellpadding="0" border="0">
+                                            <tbody>
+                                            <tr>
+                                                <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;padding:24px;text-align:center"
+                                                    valign="top" align="center">
+                                                    <center>
+                                                        <p>
+                                                        Está é uma mensagem automática, por favor não responda. Se você não fez esta solicitação ou não é nosso cliente, entre em contato imediatamente com a Coinage.
+                                                        </p>
+
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;text-align:center"
+                                        valign="top" align="center">
+                                        <table style="border-collapse:collapse;border-spacing:0" width="100%"
+                                               cellspacing="0" cellpadding="0" border="0">
+                                            <tbody>
+                                            <tr>
+                                                <td style="font-family:'Helvetica Neue','Helvetica','Roboto','Calibri','Arial',sans-serif;padding:24px;text-align:center"
+                                                    valign="top" align="center">
+                                                    <center>
+
+                                                        <br>
+
+                                                        <strong>
+
+                                                        </strong>
+                                                        <br>
+                                                        <div style="color: #A5A5A5; font-size: 10px; margin-bottom: 5px;">
+                                                            Copyright <?php echo date('Y') ?> Coinage. Direitos
+                                                            Reservados.
+                                                        </div>
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </center>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
+        <?php
+        $html = ob_get_contents();
+        ob_end_clean();
+        return $html;
+    }
+
+    public static function template2($conteudo, $cabecalhoConteudo, $titulo = '', $rodape = '') {
         ob_start();
         ?>
         <!--doctype html -->
@@ -247,7 +478,7 @@ class Mail {
                             <tr>
                                 <td height="75">
                                     <a style="font-family: Helvetica, arial, sans-serif; font-size: 18px; font-weight: bold; 
-                                       text-decoration: none; color: #484848" href="#"><?php echo($titulo); ?></a>
+                                        text-decoration: none; color: #484848" href="#"><?php echo($titulo); ?></a>
                                 </td>
                             </tr>
                         </tbody>

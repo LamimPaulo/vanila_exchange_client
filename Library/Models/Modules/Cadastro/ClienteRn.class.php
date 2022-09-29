@@ -512,7 +512,7 @@ class ClienteRn {
                             "Link" =>  URLBASE_CLIENT . \Utils\Rotas::R_ATIVACAO . "?at=" . $token2
                         );
 
-                        $conteudo = Mail::template($conteudo, "Bem-Vindo", "Cadastro");
+                        $conteudo = Mail::template($conteudo, "Bem-Vindo", "Cadastro", $cliente->nome);
 
                         $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Cadastro", $conteudo, $listaEnvio);
                         $mail->send();
@@ -1767,7 +1767,7 @@ class ClienteRn {
                 Array("nome" => $cliente->nome, "email" => $cliente->email)
             );
 
-            $conteudo = Mail::template($conteudo, "API Credenciais", "API Credenciais");
+            $conteudo = Mail::template($conteudo, "API Credenciais", "API Credenciais", $cliente->nome);
 
             $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "API Credenciais", $conteudo, $listaEnvio);
             $mail->send();

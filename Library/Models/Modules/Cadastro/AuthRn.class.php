@@ -165,7 +165,7 @@ class AuthRn {
             "Token" => $codigo
         );
 
-        $conteudo = Mail::template($conteudo, "Token 2FA", "Token");
+        $conteudo = Mail::template($conteudo, "Token 2FA", "Token", $cliente->nome);
 
         $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Token 2FA", $conteudo, $listaEnvio);
         $mail->send();

@@ -329,7 +329,7 @@ class UsuarioRn {
                 "Hash" => $hash
             );
 
-            $conteudo = Mail::template($conteudo, "Recuperar Senha", "Hash");
+            $conteudo = Mail::template($conteudo, "Recuperar Senha", "Hash",$cliente->nome);
 
             $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Recuperar Senha", $conteudo, $listaEnvio);
             $mail->send();

@@ -250,7 +250,14 @@ class ProcedimentosPerigosos {
     public function testeEmail($params) {
         try
         {
-            $conteudo = Mail::template(Array("nome" => "Willian", "email" => "willianchiquetto@gmail.com", "nome1" => "Willian1", "email1" => "willianchiquetto@gmail.com1", "nome2" => "Willian2", "email2" => "2willianchiquetto@gmail.com"), "Teste cabeçalho", "Teste titulo", "teste rodape");
+            $conteudo = Mail::template([
+                "nome" => "Willian",
+                "email" => "willianchiquetto@gmail.com",
+                "nome1" => "Willian1",
+                "email1" => "willianchiquetto@gmail.com1",
+                "nome2" => "Willian2",
+                "email2" => "2willianchiquetto@gmail.com"
+            ], "Teste cabeçalho", "Teste titulo", "teste rodape");
 
             //exit($conteudo);
 
