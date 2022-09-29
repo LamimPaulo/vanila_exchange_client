@@ -723,7 +723,7 @@ class Btc {
                     $moedaTaxa = new \Models\Modules\Cadastro\Moeda(Array("id" => $taxaMoeda->idMoedaTaxa));
                     $moedaRn->carregar($moedaTaxa);
 
-                    // $saldoMoedaTaxa = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $moedaTaxa->id, false, true);
+                    $saldoMoedaTaxa = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $moedaTaxa->id, false, true);
 
                     if($saldoMoedaTaxa < $taxa){
                         throw new \Exception("Você precisa ter em seu saldo " . number_format($taxa, $moedaTaxa->casasDecimais, ",", "") . " {$moedaTaxa->nome} para fazer o saque.");
