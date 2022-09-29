@@ -644,9 +644,9 @@ class Btc {
                 }
             }
             
-            if(!\Utils\Validacao::validaCarteira($enderecoBitcoin, $moeda)){
-                throw new \Exception("Insira uma carteira válida da moeda " . $moeda->nome . "."); 
-            }
+            // if(!\Utils\Validacao::validaCarteira($enderecoBitcoin, $moeda)){
+            //     throw new \Exception("Insira uma carteira válida da moeda " . $moeda->nome . "."); 
+            // }
             
             if ($valor <= 0) {
                 throw new \Exception("Valor inválido.");

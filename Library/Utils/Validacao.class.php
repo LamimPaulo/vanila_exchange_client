@@ -32,25 +32,25 @@ class Validacao {
                 $validade = true;
                 
                 switch ($moeda->id) {
-                    case 2: //Bitcoin           
+                    case 2: //Bitcoin
                         $first = Array("1", "3", "B"); 
-                        if(in_array(strtoupper(substr($carteira, 0, 1)), $first)){                          
+                        if(in_array(strtoupper(substr($carteira, 0, 1)), $first)){
                             $validade = true;
                         } else {
                             $validade = false;
                         }
                         break;
-                        
+
                     case 4: //Litecoin           
                         $first = Array("L", "M", "3"); 
-                        if(in_array(strtoupper(substr($carteira, 0, 1)), $first)){                          
+                        if(in_array(strtoupper(substr($carteira, 0, 1)), $first)){
                             $validade = true;
                         } else {
                             $validade = false;
                         }
                         break;
-                        
-                    case 23: //BBK           
+
+                    case 23: //BBK
                         $first = Array("B");
                         if (in_array(strtoupper(substr($carteira, 0, 1)), $first)) {
                             $validade = true;
@@ -91,11 +91,11 @@ class Validacao {
                         break;
 
                     case 3: //ETH - Tokens
-                    case 13:    
+                    case 13:
                     case 14:
                     case 15:
                     case 16:
-                    case 17: 
+                    case 17:
                     case 21:
                     case 30:
                     case 32:
