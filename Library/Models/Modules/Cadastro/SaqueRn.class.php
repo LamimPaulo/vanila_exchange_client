@@ -198,7 +198,7 @@ class SaqueRn {
             ClienteHasCreditoRn::validar($cliente);
             
             $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
-            $moedaRn->carregar(1);
+            $moedaRn->get(1);
 
             $contaCorrenteReais = new ContaCorrenteReais();
             $contaCorrenteReais->id = 0;
