@@ -203,7 +203,7 @@ class SaqueRn {
             $contaCorrenteReais = new ContaCorrenteReais();
             $contaCorrenteReais->id = 0;
             $contaCorrenteReais->data = new \Utils\Data(date("d/m/Y H:i:s"));
-            $contaCorrenteReais->descricao = "Saque "+$moedaRn->nome;
+            $contaCorrenteReais->descricao = "Saque ".$moedaRn->nome;
             $contaCorrenteReais->idCliente = $cliente->id;
             $contaCorrenteReais->tipo = \Utils\Constantes::SAIDA;
             $contaCorrenteReais->transferencia = 0;
