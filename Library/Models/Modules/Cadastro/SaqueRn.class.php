@@ -206,9 +206,9 @@ class SaqueRn {
             $contaCorrenteReais->transferencia = 0;
             $contaCorrenteReais->valor = $saque->valorSaque;
             $contaCorrenteReais->origem = 4;
-            $contaCorrenteReais->idReferenciado = $saque->id;
             $contaCorrenteReaisRn->salvar($contaCorrenteReais);
-            
+            $saque->idGateway = $contaCorrenteReaisRn->id;
+
             $saldo = $contaCorrenteReaisRn->calcularSaldoConta(new Cliente(Array("id" => $cliente->id)));
             if ($saldo < 0) {
                 $contaCorrenteReaisRn->excluir($contaCorrenteReais);
