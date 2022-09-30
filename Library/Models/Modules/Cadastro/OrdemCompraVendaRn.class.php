@@ -143,13 +143,16 @@ class OrdemCompraVendaRn {
             $saque->valorComissao = ($saque->valorSaque * ($saque->taxaComissao / 100));
             
             $saque->valorSacado = $saque->valorSaque - $saque->valorComissao - $saque->tarifaTed;
-
+            
+            $moeda = new Moeda(Array("id" => 1));
+            $moedaRn = new MoedaRn();
+            $moedaRn->conexao->carregar($moeda);
             
             $contaCorrenteReaisRn = new ContaCorrenteReaisRn($this->conexao->adapter);
             $contaCorrenteReais = new ContaCorrenteReais();
             $contaCorrenteReais->id = 0;
             $contaCorrenteReais->data = new \Utils\Data(date("d/m/Y H:i:s"));
-            $contaCorrenteReais->descricao = "Saque";
+            $contaCorrenteReais->descricao = "Venda de "+$moedaRn->nome;
             $contaCorrenteReais->idCliente = $cliente->id;
             $contaCorrenteReais->tipo = \Utils\Constantes::SAIDA;
             $contaCorrenteReais->transferencia = 0;

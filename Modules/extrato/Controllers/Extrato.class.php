@@ -247,10 +247,17 @@ class Extrato {
                         <small class="stats-label">Descrição</small>
                         <h6><?php echo $extrato->descricao; ?></h6>
                     </div>
-                    <div class="col-sm-2">
-                        <small class="stats-label">TXID</small>
-                        <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->txid, $_ENV['BSCSCAN_URL']);  ?>"> Explorer</a></h6>
-                    </div>
+                    <?php if($extrato->txid){?>
+                        <div class="col-sm-2">
+                            <small class="stats-label">TXID</small>
+                            <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->txid, $_ENV['BSCSCAN_URL']);  ?>"> Explorer</a></h6>
+                        </div>
+                    <?php } else{ ?>
+                        <div class="col-sm-2">
+                            <small class="stats-label">TXID</small>
+                            <h6><a disabled>Processando</a></h6>
+                        </div>
+                    <?php } ?>
                     <div class="col-sm-2">
                         <small class="stats-label">Data</small>
                         <h6><?php echo $extrato->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP_LONGO); ?></h6>
