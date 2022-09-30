@@ -308,7 +308,7 @@ class Saques {
             $nresultado = \Utils\Post::get($params, "nresultado", "T");            
             
             switch ($data) {
-                case "dia":                        
+                case "dia":
                     $dataInicial = new \Utils\Data(date("d/m/Y 00:00:00"));
                     $dataFinal = new \Utils\Data(date("d/m/Y 23:59:59"));
                     break;
@@ -323,11 +323,11 @@ class Saques {
                     $dataInicial->subtrair(0, 1);
                     break;
                 case "todos":
-                    $dataInicial =  new \Utils\Data(date("01/04/2018") . " 00:00:00");//Data que iniciou o sistema
+                    $dataInicial =  new \Utils\Data(date("01/06/2022") . " 00:00:00");//Data que iniciou o sistema
                     $dataFinal = new \Utils\Data(date("d/m/Y") . " 23:59:59");
                     break;
             }
-            
+
             if(empty($cliente->id)){
                 throw new \Exception("Cliente inválido.");
             }
