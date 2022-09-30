@@ -194,9 +194,9 @@ class SaqueRn {
             if ($saldo < $saque->valorSaque) {
                 throw new \Exception($this->idioma->getText("voceNaoTemSaldoSuficiente"));
             }
-            
+
             ClienteHasCreditoRn::validar($cliente);
-            
+
             $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
             $moedaRn->get(1);
 
@@ -219,10 +219,9 @@ class SaqueRn {
                 $contaCorrenteReaisRn->excluir($contaCorrenteReais);
                 throw new \Exception($this->idioma->getText("voceNaoTemSaldoSuficiente"));
             }
-            
+
             $this->salvar($saque);
-            
-            
+
             $this->conexao->adapter->finalizar();
         } catch (\Exception $e) {
             try{
