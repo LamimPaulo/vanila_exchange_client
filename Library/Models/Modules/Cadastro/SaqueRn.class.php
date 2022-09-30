@@ -200,6 +200,7 @@ class SaqueRn {
             $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
             $moedaRn->get(1);
 
+            $idd_help = uniqid();
             $contaCorrenteReais = new ContaCorrenteReais();
             $contaCorrenteReais->id = 0;
             $contaCorrenteReais->data = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -209,8 +210,10 @@ class SaqueRn {
             $contaCorrenteReais->transferencia = 0;
             $contaCorrenteReais->valor = $saque->valorSaque;
             $contaCorrenteReais->origem = 4;
+            $contaCorrenteReais->idReferenciado = $idd_help;
+            $saque->idGateway = $idd_help;
             $contaCorrenteReaisRn->salvar($contaCorrenteReais);
-            
+
             $saldo = $contaCorrenteReaisRn->calcularSaldoConta(new Cliente(Array("id" => $cliente->id)));
             if ($saldo < 0) {
                 $contaCorrenteReaisRn->excluir($contaCorrenteReais);
