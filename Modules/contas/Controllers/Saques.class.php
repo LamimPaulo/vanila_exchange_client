@@ -376,7 +376,7 @@ class Saques {
 
         <tr style='text-align: center; background-color: #fff'>
             <td><?php echo $saque->dataSolicitacao->formatar(\Utils\Data::FORMATO_PT_BR_TIMESTAMP) ?></td>
-            <td>
+            <!-- <td>
                 <?php if($saque->contaBancaria != null){  ?>
                     <a tabindex="0" class="saque-motivo" role="button" data-controle='<?php echo $saque->id ?>' data-motivo='<?php echo $this->idioma->getText("codC") ?>: <?php echo $saque->contaBancaria->banco->codigo ?> <br> <?php echo $this->idioma->getText("bancoC") ?>: <?php echo $saque->contaBancaria->banco->nome ?>
                         <br><?php echo $this->idioma->getText("agenciaC") ?>: <?php echo $saque->contaBancaria->agencia . ($saque->contaBancaria->agenciaDigito != null ? "-".$saque->contaBancaria->agenciaDigito : "")?> <br><?php echo $this->idioma->getText("contaC") ?>: <?php echo $saque->contaBancaria->conta . ($saque->contaBancaria->contaDigito != null ? "-".$saque->contaBancaria->contaDigito : "") ?>'
@@ -384,7 +384,7 @@ class Saques {
                         <i style="font-size: 15px;" class="fa fa-info-circle"></i>
                     </a>
                 <?php }?> 
-            </td>
+            </td> -->
             <td><?php echo $this->idioma->getText("rS") ?> <?php echo number_format($saque->valorSaque, 2, ",", ".") ?></td>
             <td><?php echo number_format($saque->taxaComissao, 2, ",", ".") ?>%</td>
             <td><?php echo $this->idioma->getText("rS") ?> <?php echo number_format($saque->tarifaTed, 2, ",", ".") ?></td>

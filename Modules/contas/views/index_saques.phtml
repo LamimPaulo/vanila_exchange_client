@@ -474,7 +474,6 @@ if(!empty($cliente->moedaFavorita)){
 
                                                             ///aquiii
                         <div id="tabelaReais">
-
                                 <div class="">
                                     <div class="col-sm-3 ">
                                         <div class=" p-xs">
@@ -493,22 +492,20 @@ if(!empty($cliente->moedaFavorita)){
                                             <label class="btn btn-sm btn-white active" id="semanaReal"> <input type="radio"  name="options" value="semana"><?php echo $idioma->getText("semana") ?></label>
                                             <label class="btn btn-sm btn-white" id="mesReal"> <input type="radio"  name="options" value="mes"><?php echo $idioma->getText("mes") ?></label>
                                             <label class="btn btn-sm btn-white" id="todosReal"> <input type="radio"  name="options" value="todos"><?php echo $idioma->getText("todos") ?></label> -->
-                                            <button type="button" class="btn-white" onclick="filterBtn('dia');" id="diaBtc"><?php echo $idioma->getText("dia") ?></button>
-                                            <button type="button" class="btn-white" onclick="filterBtn('semana');" id="semanaBtc"><?php echo $idioma->getText("semana") ?></button>
-                                            <button type="button" class="btn-white" onclick="filterBtn('mes');" id="mesBtc"><?php echo $idioma->getText("mes") ?></button>
-                                            <button type="button" class="btn-white" onclick="filterBtn('todos');" id="todosBtc"><?php echo $idioma->getText("todos") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtnReal('dia');" id="diaReal"><?php echo $idioma->getText("dia") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtnReal('semana');" id="semanaReal"><?php echo $idioma->getText("semana") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtnReal('mes');" id="mesReal"><?php echo $idioma->getText("mes") ?></button>
+                                            <button type="button" class="btn-white" onclick="filterBtnReal('todos');" id="todosReal"><?php echo $idioma->getText("todos") ?></button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4 ">
+                                    <!-- <div class="col-sm-4 ">
                                         <div class="input-group p-xs">
                                             <input type="text" id="filtroTextoReal" placeholder="<?php echo $idioma->getText("pesquisar") ?>" class="input-sm form-control"><span class="input-group-btn">
                                                         <button type="button" class="btn btn-sm btn-primary" onclick="filtrarReaisAux();">&nbsp;<i class="fa fa-search"></i></button>
                                                         <button type="button" class="btn btn-sm btn-default" onclick="limpaSearchReal();">&nbsp;<i class="fa fa-eraser"></i></button></span>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
-
-                                table
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="table-responsive m-t-sm">
@@ -518,9 +515,9 @@ if(!empty($cliente->moedaFavorita)){
                                                     <th class="text-center">
                                                         <?php echo $idioma->getText("data") ?>
                                                     </th>
-                                                    <th class="text-center">
-                                                        <?php echo $idioma->getText("conta") ?>
-                                                    </th>
+                                                    <!-- <th class="text-center">
+                                                        <?php  //echo $idioma->getText("conta") ?>
+                                                    </th> -->
                                                     <th class="text-center">
                                                         <?php echo $idioma->getText("valor") ?>
                                                     </th>
@@ -533,17 +530,15 @@ if(!empty($cliente->moedaFavorita)){
                                                     <th class="text-center">
                                                         <?php echo $idioma->getText("creditado") ?>
                                                     </th>
-                                                    <th class="text-center">
-                                                        <?php echo $idioma->getText("comp") ?>
-                                                    </th>
+                                                    <!-- <th class="text-center">
+                                                        <?php //echo $idioma->getText("comp") ?>
+                                                    </th> -->
                                                     <th class="text-center">
                                                         <?php echo $idioma->getText("status") ?>
                                                     </th>
                                                 </tr>
                                                 </thead>
-                                                inside
                                                 <tbody id="listaReais">
-                                                    inside2
 
                                                 </tbody>
                                                 <tfoot>
@@ -969,10 +964,16 @@ if(!empty($cliente->moedaFavorita)){
     }
 
     function filterBtn(data) {
-            console.log(data);
-            dataCoin = data;
-            filtrarBtc();
-        }
+        console.log(data);
+        dataCoin = data;
+        filtrarBtc();
+    }
+
+    function filterBtnReal(data) {
+        console.log(data);
+        dataCoin = data;
+        filtrarReais();
+    }
 
     function updateSaldo(ativa){
         if(ativa){
@@ -983,8 +984,6 @@ if(!empty($cliente->moedaFavorita)){
         }
 
     }
-
-
 
     function tabelas(tabela){
         $("#tabelaReais").hide();
@@ -1019,7 +1018,6 @@ if(!empty($cliente->moedaFavorita)){
                 break;
         }
     }
-
 
     function confirmarTransferencia(){
         $("#infMoeda").hide();
@@ -1107,7 +1105,6 @@ if(!empty($cliente->moedaFavorita)){
         });
     }
 
-
     function cancelarTransferencia(){
         $("#infMoeda").show();
         $("#token2fa").hide();
@@ -1141,7 +1138,6 @@ if(!empty($cliente->moedaFavorita)){
             }
         });
     }
-
 
     function getSaldoDisponivel(){
         $.ajax({
@@ -1224,30 +1220,57 @@ if(!empty($cliente->moedaFavorita)){
         filtrarBtc();
     }
 
-    function filtrarBtc() {
-    $("#listaCripto").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
-    $.ajax({
-        url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_TRANSFERENCIAS_FILTRAR  ?>',
-        method: 'post',
-        dataType: 'json',
-        data: {
-            data: dataCoin,
-            filtro: $("#filtroTextoBtc").val(),
-            moeda: moeda
-        },
-        success: function (json) {
-            try {
-                if (json.sucesso) {
-                    $("#listaCripto").html(json.html);
-                    $('#tbllistabtc').trigger('footable_initialize');
-                } else {
-                    $("#listaCripto").html("<tr><td colspan='6'>"+json.mensagem+"</td></tr>");
-                }
-            } catch (e) {
-                $("#listaCripto").html("<tr><td colspan='6'>"+e+"</td></tr>");
-            }
+    // function filtrarReais() {
+    //     $("#listaReais").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+    //     $.ajax({
+    //         url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_TRANSFERENCIAS_FILTRAR  ?>',
+    //         method: 'post',
+    //         dataType: 'json',
+    //         data: {
+    //             data: dataCoin,
+    //             filtro: $("#filtroTextoReal").val(),
+    //             moeda: moeda
+    //         },
+    //         success: function (json) {
+    //             try {
+    //                 if (json.sucesso) {
+    //                     $("#listaReais").html(json.html);
+    //                     $('#tbllistareais').trigger('footable_initialize');
+    //                 } else {
+    //                     $("#listaReais").html("<tr><td colspan='6'>"+json.mensagem+"</td></tr>");
+    //                 }
+    //             } catch (e) {
+    //                 $("#listaReais").html("<tr><td colspan='6'>"+e+"</td></tr>");
+    //             }
 
-        }
+    //         }
+    //     });
+    // }
+
+    function filtrarBtc() {
+        $("#listaCripto").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_TRANSFERENCIAS_FILTRAR  ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                data: dataCoin,
+                filtro: $("#filtroTextoBtc").val(),
+                moeda: moeda
+            },
+            success: function (json) {
+                try {
+                    if (json.sucesso) {
+                        $("#listaCripto").html(json.html);
+                        $('#tbllistabtc').trigger('footable_initialize');
+                    } else {
+                        $("#listaCripto").html("<tr><td colspan='6'>"+json.mensagem+"</td></tr>");
+                    }
+                } catch (e) {
+                    $("#listaCripto").html("<tr><td colspan='6'>"+e+"</td></tr>");
+                }
+
+            }
         });
     }
 
@@ -1285,11 +1308,10 @@ if(!empty($cliente->moedaFavorita)){
     }
 
     function calcularValorTotal() {
-    
         if(simboloTaxa !== null){
             var valor = ($("#valor").val().length > 0 ? parseFloat(toFloat($("#valor").val())) : 0.00);
             $("#debitadoBtc").html(valor.toFixed(8) + " " + simbolo);
-            
+
         } else {
             var valor = ($("#valor").val().length > 0 ? parseFloat(toFloat($("#valor").val())) : 0.00);
             var taxa = parseFloat(taxaMoeda);
@@ -1451,7 +1473,6 @@ if(!empty($cliente->moedaFavorita)){
         dataCoin = "semana";
         filtrarBtc();
     }
-
 
     function limpaSearchReal(){
         $("#semanaReal").addClass("active");
