@@ -197,18 +197,20 @@ class SaqueRn {
             
             ClienteHasCreditoRn::validar($cliente);
             
+            $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
+            $moedaRn->carregar(1);
+
             $contaCorrenteReais = new ContaCorrenteReais();
             $contaCorrenteReais->id = 0;
             $contaCorrenteReais->data = new \Utils\Data(date("d/m/Y H:i:s"));
-            $contaCorrenteReais->descricao = "Saque";
+            $contaCorrenteReais->descricao = "Saque "+$moedaRn->nome;
             $contaCorrenteReais->idCliente = $cliente->id;
             $contaCorrenteReais->tipo = \Utils\Constantes::SAIDA;
             $contaCorrenteReais->transferencia = 0;
             $contaCorrenteReais->valor = $saque->valorSaque;
             $contaCorrenteReais->origem = 4;
             $contaCorrenteReaisRn->salvar($contaCorrenteReais);
-            $saque->idGateway = $contaCorrenteReaisRn->id;
-
+            
             $saldo = $contaCorrenteReaisRn->calcularSaldoConta(new Cliente(Array("id" => $cliente->id)));
             if ($saldo < 0) {
                 $contaCorrenteReaisRn->excluir($contaCorrenteReais);
