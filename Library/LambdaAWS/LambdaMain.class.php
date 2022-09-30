@@ -17,7 +17,7 @@ class LambdaMain {
         try {
 
             $connection =  AMQPStreamConnection::create_connection([
-                ['host' => '177.38.215.101', 'port' => 5672, 'user' => 'admin', 'password' => 'N@videv1', 'vhost' => '/'],
+                ['host' => $_ENV['AMPQ_HOST'], 'port' => $_ENV['AMQP_PORT'], 'user' => $_ENV['AMQP_USER'], 'password' => $_ENV['AMQP_PASSWORD'], 'vhost' => '/'],
             ]);
 
             $channel = $connection->channel();
