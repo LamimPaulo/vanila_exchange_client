@@ -500,9 +500,9 @@ if(!empty($cliente->moedaFavorita)){
                                     </div>
                                     <div class="col-sm-4 ">
                                         <div class="input-group p-xs">
-                                            <!-- <input type="text" id="filtroTextoReal" placeholder="<?php echo $idioma->getText("pesquisar") ?>" class="input-sm form-control"><span class="input-group-btn">
+                                            <input type="text" id="filtroTextoReal" placeholder="<?php echo $idioma->getText("pesquisar") ?>" class="input-sm form-control"><span class="input-group-btn">
                                                         <button type="button" class="btn btn-sm btn-primary" onclick="filtrarReaisAux();">&nbsp;<i class="fa fa-search"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-default" onclick="limpaSearchReal();">&nbsp;<i class="fa fa-eraser"></i></button></span> -->
+                                                        <button type="button" class="btn btn-sm btn-default" onclick="limpaSearchReal();">&nbsp;<i class="fa fa-eraser"></i></button></span>
                                         </div>
                                     </div>
                                 </div>
@@ -1219,33 +1219,6 @@ if(!empty($cliente->moedaFavorita)){
         dataCoin = "todos";
         filtrarBtc();
     }
-
-    // function filtrarReais() {
-    //     $("#listaReais").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
-    //     $.ajax({
-    //         url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_SAQUES_FILTRAR  ?>',
-    //         method: 'post',
-    //         dataType: 'json',
-    //         data: {
-    //             data: dataCoin,
-    //             filtro: $("#filtroTextoReal").val(),
-    //             moeda: moeda
-    //         },
-    //         success: function (json) {
-    //             try {
-    //                 if (json.sucesso) {
-    //                     $("#listaReais").html(json.html);
-    //                     $('#tbllistareais').trigger('footable_initialize');
-    //                 } else {
-    //                     $("#listaReais").html("<tr><td colspan='6'>"+json.mensagem+"</td></tr>");
-    //                 }
-    //             } catch (e) {
-    //                 $("#listaReais").html("<tr><td colspan='6'>"+e+"</td></tr>");
-    //             }
-
-    //         }
-    //     });
-    // }
 
     function filtrarBtc() {
         $("#listaCripto").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
