@@ -50,28 +50,34 @@ class Cadastro {
             if (empty($nome)) {
                 throw new \Exception("O nome deve ser informado.");
             }
-            
+
             $senha = $this->politicaSenha($senha, $confirmarSenha);
-            
+
             if(empty($senha)){
-               throw new \Exception("Senha não aceita"); 
+                throw new \Exception("Senha não aceita");
             }
-            
+
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $cliente = $clienteRn->conexao->listar("email = '{$email}'");
 
             if (sizeof($cliente) > 0) {
                 throw new \Exception("Cadastro de e-mail não autorizado.");
-                
             }
-            //  else{
-            //     $result = \LambdaAWS\QueueKYC::validarEmail($nome, $email, $referencia, \Utils\Criptografia::encriptyPostId($senha));
-            // }
+            else{
+                // $result = \LambdaAWS\QueueKYC::validarEmail($nome, $email, $referencia, \Utils\Criptografia::encriptyPostId($senha));
+                $bodyMail = [
+                    'nome' => $nome,
+                    'email' => $email,
+                    'referencia' => $referencia,
+                    'senha' => sha1($senha.\Utils\Constantes::SEED_SENHA)
+                ];
 
-        //    if (!$result) {
-        //        throw new \Exception("Por favor, tente novamente mais tarde.");
-        //    }
-            $this->criarNovoCliente($nome, $email, $senha, $referencia);
+                $result = \LambdaAWS\QueueKYC::sendQueue('ex.new_user', $bodyMail);
+            }
+            if (!$result['processado']) {
+                throw new \Exception("Por favor, tente novamente mais tarde.");
+            }
+            // $this->criarNovoCliente($nome, $email, $senha, $referencia);
 
             $json["sucesso"] = true;
             $json["mensagem"] = $this->idioma->getText("cadastroSucesso");
@@ -193,6 +199,7 @@ class Cadastro {
         }
         return null;
     }
+
 //    public static function criarNovoCliente($object) {
 
 //        $cliente = new \Models\Modules\Cadastro\Cliente();

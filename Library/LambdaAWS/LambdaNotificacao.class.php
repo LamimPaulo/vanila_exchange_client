@@ -15,13 +15,12 @@ class LambdaNotificacao {
 
             $empresa = \Models\Modules\Cadastro\EmpresaRn::getEmpresa();
             $idioma = substr(\Modules\principal\Controllers\Principal::getIdioma(), 0, 2);
-            
+
             $separacao = explode(' ', $cliente->nome);
             $nome = !empty($separacao[0]) ? $separacao[0] : $cliente->nome;
 
             $urlQueue = 'https://sqs.us-east-1.amazonaws.com/293963835247/notificacoes_prod.fifo'; //PROD
 
-                        
             $clientSQS = new \Aws\Sqs\SqsClient([
                 'credentials' => [
                     'key' => getenv("EnvLambdaKey"),
@@ -33,7 +32,7 @@ class LambdaNotificacao {
 
             //Preparacao do JSON a ser enviado ao Lambda
             $object = ["user_id" => "{$cliente->id}"];
-                                
+
             if ($email) {
                 $emailArray = ["email" => [
                         "para" => $cliente->email,
@@ -49,7 +48,7 @@ class LambdaNotificacao {
                         ]
                     ]
                 ];
-                            
+
                 $object += $emailArray;
 
                 //Verificar redes sociais

@@ -14,14 +14,9 @@ use Utils\Mail;
  * @subpackage Acesso
  */
 class UsuarioRn {
-    
-    /**
-     *
-     * @var GenericModel 
-     */
     public $conexao = null;
     private $idioma = null;
-    
+
     public function __construct(\Io\BancoDados $adapter = null) {
         $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         if ($adapter == null) {
@@ -29,32 +24,32 @@ class UsuarioRn {
         } else {
             $this->conexao = new GenericModel($adapter, new Usuario());
         }
-        
+
     }
-    
+
     public function salvar(Usuario &$usuario, $confirmacaoSenha, $permissoesRotinas = Array(), $permissoesModulos = Array()) {
-        
+
         if (!empty($usuario->senha) && empty($confirmacaoSenha)) {
             throw new \Exception($this->idioma->getText("confirmaSenhaErr"));
         }
         if (empty($usuario->senha) && !empty($confirmacaoSenha)) {
             throw new \Exception($this->idioma->getText("informadaSenhaErr"));
         }
-        
+
         if ($usuario->senha != $confirmacaoSenha) {
             throw new \Exception($this->idioma->getText("confirmacaoSenhaIguaisErr"));
         }
-        
+
         if ($usuario->id > 0) {
             $aux = new Usuario(Array("id" => $usuario->id));
             $this->conexao->carregar($aux);
-            
+
             $usuario->ativo = $aux->ativo;
             $usuario->observacoes = $aux->observacoes;
             $usuario->googleAuthAtivado = $aux->googleAuthAtivado;
             $usuario->googleAuthSecret = $aux->googleAuthSecret;
             $usuario->codAppAdvisor = $aux->codAppAdvisor;
-            
+
             if (!empty($usuario->senha)) {
                 $usuario->senha = sha1($usuario->senha.\Utils\Constantes::SEED_SENHA);
             } else {
@@ -62,16 +57,15 @@ class UsuarioRn {
             }
             $usuario->dataCadastro = $aux->dataCadastro;
             $usuario->permiteAlteracao = $aux->permiteAlteracao;
-            
-            
+
             if (empty($usuario->foto)) {
                 $usuario->foto = $aux->foto;
             }
-            
+
             if ($aux->permiteAlteracao < 1) {
                 throw new \Exception($this->idioma->getText("usuarioAlteracoesErr"));
             }
-            
+
         } else {
             if (empty($usuario->senha)) {
                 throw new \Exception($this->idioma->getText("informarSenhaErr"));
@@ -79,72 +73,69 @@ class UsuarioRn {
             $usuario->senha = sha1($usuario->senha.\Utils\Constantes::SEED_SENHA);
             $usuario->ativo = 1;
             $usuario->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
-            
+
             $usuario->permiteAlteracao = 1;
-            
-            
+
             $usuario->googleAuthAtivado = 0;
             $usuario->googleAuthSecret = null;
         }
-        
+
         if ($usuario->tipo != \Utils\Constantes::ADMINISTRADOR && $usuario->tipo != \Utils\Constantes::VENDEDOR) {
             throw new \Exception($this->idioma->getText("usuarioInvalidoErr"));
         }
-        
+
         if (empty($usuario->nome)) {
             throw new \Exception($this->idioma->getText("nomeUserInformadoErr"));
         }
-        
+
         if (empty($usuario->email)) {
             throw new \Exception($this->idioma->getText("emailPrecisaIndformadoErr"));
-        } 
-        
+        }
+
         $result = $this->conexao->listar("email = '{$usuario->email}' AND id != {$usuario->id}");
         if (sizeof($result) > 0) {
             throw new \Exception($this->idioma->getText("emailJaCadastradoErr"));
         }
-        
+
         $cel = str_replace(Array("(", ")", " ", "-"), "", $usuario->celular);
         if (strlen($cel) != 10 && strlen($cel) != 11) {
             throw new \Exception($this->idioma->getText("celularInvalido"));
         }
-        
+
         if ($usuario->twoFactorAuth > 0 && empty($usuario->celular)) {
             throw new \Exception($this->idioma->getText("login2FAErr"));
         }
-        
+
         $tiposAuth = Array(
             \Utils\Constantes::TIPO_AUTH_EMAIL,
             \Utils\Constantes::TIPO_AUTH_SMS
         );
-        
+
         if (!in_array($usuario->tipoAutenticacao, $tiposAuth)) {
             $usuario->tipoAutenticacao = \Utils\Constantes::TIPO_AUTH_EMAIL;
         }
-        
+
         $usuario->twoFactorAuth = 1;
-        
+
         try {
             $usuario->observacoes = \Utils\Criptografia::encriptyPostId($usuario->observacoes);
             $this->conexao->salvar($usuario);
-            
+
             $permissaoUsuarioRn = new \Models\Modules\Acesso\PermissaoUsuarioRn();
             $permissaoUsuarioRn->salvar($usuario, $permissoesRotinas);
-            
+
             $permissaoModuloUsuarioRn = new \Models\Modules\Acesso\PermissaoModuloUsuarioRn();
             $permissaoModuloUsuarioRn->salvar($usuario, $permissoesModulos);
-            
+
             if (\Utils\Geral::getLogado()->id == $usuario->id) {
                 \Utils\Geral::setUsuario($usuario);
             }
-            
+
         } catch (\Exception $ex) {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
-    
-    
+
     /**
      * Função resposável por efetuar o login no sistema
      * @param \Models\Modules\Cadastro\Usuario $usuario
@@ -247,7 +238,7 @@ class UsuarioRn {
         $authRn->salvar($auth);
         
     }
-    
+
     public function getByEmail($email) {
         if (!empty($email)) {
             $result = $this->conexao->listar("email = '{$email}'", null, null, 1);
@@ -257,8 +248,8 @@ class UsuarioRn {
         }
         return null;
     }
-    
-        public function getByCpf($cpf) {
+
+    public function getByCpf($cpf) {
         if (!empty($cpf)) {
             $result = $this->conexao->listar("cpf = '{$cpf}'", null, null, 1);
             if (sizeof($result) > 0) {
@@ -267,7 +258,7 @@ class UsuarioRn {
         }
         return null;
     }
-    
+
     public function recuperar(Usuario $usuario) {
         
         $clienteRn = new ClienteRn();
@@ -338,8 +329,7 @@ class UsuarioRn {
             throw new \Exception($this->idioma->getText("nenhumUserCPFinformado"), 99);
         }
     }
-    
-    
+
     public function excluir(Usuario &$usuario) {
         try {
             $this->conexao->adapter->iniciar();
@@ -363,17 +353,14 @@ class UsuarioRn {
             throw new \Exception(\Utils\Excecao::mensagem($e));
         }
     }
-    
+
     public function alterarStatusAtivo(Usuario &$usuario) {
         $this->conexao->carregar($usuario);
         $usuario->ativo = $usuario->ativo ? 0 : 1;
         $this->conexao->update(Array("ativo" => $usuario->ativo), Array("id" => $usuario->id));
     }
-    
-    
-    
+
     public function alterarSenha(Usuario $usuario, $confirmacao, $senhaAtual) {
-        
         try {
             $u = new Usuario(Array("id" => $usuario->id));
             $this->conexao->carregar($u);
@@ -414,5 +401,4 @@ class UsuarioRn {
         
     }
 }
-
 ?>

@@ -42,7 +42,7 @@ class QueueKYC {
 
         return $result;
     }
-    
+
     public static function sendQueue($exName, $params)
     {
         $result = LambdaMain::enviar($exName, json_encode($params));
@@ -51,7 +51,6 @@ class QueueKYC {
             return [
                 'processado' => true,
                 'msg' => 'Solicitação processada com sucesso.',
-                'queueReturnUid' => $params['queueReturnUid']
             ];
         } else {
             //Falha no processo
