@@ -193,21 +193,20 @@ class ClienteRn {
             if ($cliente->taxaComissaoTransfenciaCurrency == null) {
                 $cliente->taxaComissaoTransfenciaCurrency = $aux->taxaComissaoTransfenciaCurrency;
             }
-            
+
             $cliente->recebimentoAlertaMovimentacaoConta = $aux->recebimentoAlertaMovimentacaoConta;
             $cliente->emailConfirmado = $aux->emailConfirmado;
-            
+
             $cliente->considerarTaxaDepositoCliente = ($cliente->considerarTaxaDepositoCliente != null ? $cliente->considerarTaxaDepositoCliente : $aux->considerarTaxaDepositoCliente);
             $cliente->considerarTaxaSaqueCliente = ($cliente->considerarTaxaSaqueCliente != null ? $cliente->considerarTaxaSaqueCliente : $aux->considerarTaxaSaqueCliente);
             $cliente->considerarTaxaTransferenciaCurrency = ($cliente->considerarTaxaTransferenciaCurrency != null ? $cliente->considerarTaxaTransferenciaCurrency : $aux->considerarTaxaTransferenciaCurrency);
-            
+
             $cliente->statusFranquia = $aux->statusFranquia;
             $cliente->statusMercado = $aux->statusMercado;
-            
+
             $cliente->statusSaqueCurrency  = $aux->statusSaqueCurrency;
             $cliente->qtdEnviosEmailsRecuperacao = $aux->qtdEnviosEmailsRecuperacao;
-            
-            
+
             $cliente->emAnalise = $aux->emAnalise;
             $cliente->dataInicioAnalise = $aux->dataInicioAnalise;
             $cliente->dataFimAnalise = $aux->dataFimAnalise;
@@ -215,7 +214,7 @@ class ClienteRn {
             $cliente->idUsuarioTerminoAnalise = $aux->idUsuarioTerminoAnalise;
             $cliente->idClienteConvite = $aux->idClienteConvite;
             $cliente->comissaoConvitePago = $aux->comissaoConvitePago;
-            
+
             $cliente->ultimaAtividade = $aux->ultimaAtividade;
             $cliente->dataUltimoLogin = $aux->dataUltimoLogin;
             $cliente->ipUltimoAcesso = $aux->ipUltimoAcesso;
@@ -223,34 +222,34 @@ class ClienteRn {
             $cliente->ipCadastro = $aux->ipCadastro;
             $cliente->dataUltimaTentativaSegundoFator = null;
             $cliente->dataUltimaTentativaLogin = null;
-            
-            
+
+
             if (!is_numeric($cliente->clienteP2p)) {
                 $cliente->clienteP2p = $aux->clienteP2p;
             }
-            
+
             $cliente->apiKey = $aux->apiKey;
             $cliente->clientid = $aux->clientid;
-            
+
         } else {
-            
+
             //$cliente->apiKey = \Utils\Criptografia::token($cliente->nome);
             //$cliente->clientid = \Utils\Criptografia::userid($cliente->apiKey);
-            
-            
+
+
             $cliente->clienteP2p = 0;
             if (empty($cliente->origemCadastro)) {
                 $cliente->origemCadastro = \Utils\Constantes::ORIGEM_SITE;
             }
-            
+
             if ($cliente->tipoTaxaCarteiraRemota == null) {
                 $cliente->tipoTaxaCarteiraRemota = "p";
             }
-            
+
             if ($cliente->tipoTaxaInvoicePdv == null) {
                 $cliente->tipoTaxaInvoicePdv = "p";
             }
-            
+
             $cliente->idPromocao = null;
             $cliente->hashValidacaoEmail = null;
             $cliente->validadeHashValidacaoEmail = null;
@@ -260,55 +259,55 @@ class ClienteRn {
             $cliente->quantidadeTentativasLogin = 0;
             $cliente->bloquearLogin = 0;
             $cliente->bloquearRecuperacaoSenha = 0;
-            
+
             $cliente->analiseCliente = 0;
             $cliente->idAnaliseClienteAdm = null;
-            
+
             $cliente->emailConfirmado = 0;
             $cliente->recebimentoAlertaMovimentacaoConta = "S";
-            
+
             $cliente->ultimaAtividade = null;
             $cliente->dataUltimoLogin = null;
-            
+
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR']?$_SERVER['HTTP_X_FORWARDED_FOR']:$_SERVER['REMOTE_ADDR'];
                 if(strpos($ip,',') !== false) {
                 $ip = substr($ip,0,strpos($ip,','));
             }
-            
+
             $cliente->ipUltimoAcesso = $ip;
             $cliente->webkit = null;
-            
+
             if ($cliente->status == null) {
                 $cliente->status = 0;
             }
             if ($cliente->cardReload == null) {
                 $cliente->cardReload = 0;
             }
-            
+
             if (!is_numeric($cliente->comissao) || !$cliente->comissao > 0) {
                 $cliente->comissao = 0;
             }
-            
+
             if (empty($cliente->codigoPais)) {
                 $cliente->codigoPais = "076";
             }
-            
+
             //$senhaTemp = substr(sha1($cliente->email . \Utils\Constantes::SEED_SENHA), 0, 10);
             //$cliente->senha = sha1($senhaTemp.\Utils\Constantes::SEED_SENHA);
             $cliente->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
-            
+
             $cliente->fotoClienteVerificada = 0;
             $cliente->fotoDocumentoVerificada = 0;
             $cliente->fotoResidenciaVerificada = 0;
             $cliente->fotoOutroDocumentoVerificada = 0;
-            
+
             $cliente->taxaComissaoDeposito = 0;
             $cliente->taxaComissaoSaque = 0;
             $cliente->taxaComissaoTransfenciaCurrency = 0;
             $cliente->considerarTaxaDepositoCliente = 0;
             $cliente->considerarTaxaSaqueCliente = 0;
             $cliente->considerarTaxaTransferenciaCurrency = 0;
-            
+
             $cliente->statusFranquia = 0;
             
             $cliente->statusMercado = 1;

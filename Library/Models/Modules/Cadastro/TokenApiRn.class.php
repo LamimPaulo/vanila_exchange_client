@@ -29,47 +29,46 @@ class TokenApiRn {
             $this->conexao = new GenericModel($adapter, new TokenApi()); 
         }
     }
-    
+
     public function salvar(TokenApi  &$tokenApi) {
-        
         try {
             $this->conexao->adapter->iniciar();
             if (!$tokenApi->idUsuario > 0 && !$tokenApi->idCliente > 0) {
                 throw new \Exception($this->idioma->getText("identificacaoInvalida"));
             }
-            
+
             $where = new \Zend\Db\Sql\Where();
             if ($tokenApi->idUsuario > 0) {
                 $where->equalTo("id_usuario", $tokenApi->idUsuario);
             } else {
                 $where->isNull("id_usuario");
             }
-            
+
             if ($tokenApi->idCliente > 0) {
                 $where->equalTo("id_cliente", $tokenApi->idCliente);
             } else {
                 $where->isNull("id_cliente");
             }
-            
+
             $this->conexao->delete($where);
-            
+
             $tokenApi->token = sha1(base64_encode(rand(0, 10000) . "/" . date("d/m/Y H:i:s") . self::SEED . rand(0, 50000)));
-            
+
             $tokenApi->validade = new \Utils\Data(date("d/m/Y H:i:s"));
-            
+
             if ($tokenApi->idUsuario == 1483023334) {
                 $tokenApi->validade->somar(0, 0, 0, 0, 5, 0);
             } else {
                 $tokenApi->validade->somar(0, 0, 0, 0, 5, 0);
             }
-            
+
             $this->conexao->insert(Array(
                 "validade" => $tokenApi->validade->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO),
                 "id_cliente" => $tokenApi->idCliente,
                 "token" => $tokenApi->token,
                 "id_usuario" => $tokenApi->idUsuario
             ));
-            
+
             $this->conexao->adapter->finalizar();
         } catch(\Exception $e) {
             $this->conexao->adapter->cancelar();
@@ -87,11 +86,10 @@ class TokenApiRn {
         if (empty($senha)) {
             throw new \Exception($this->idioma->getText("loginSenhaErr"));
         }
-        
+
         $clienteRn = new ClienteRn();
 
         $senha = sha1($senha . \Utils\Constantes::SEED_SENHA);
-
 
         $configuracao = ConfiguracaoRn::get();
 

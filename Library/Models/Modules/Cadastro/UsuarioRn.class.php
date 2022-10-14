@@ -260,9 +260,9 @@ class UsuarioRn {
     }
 
     public function recuperar(Usuario $usuario) {
-        
+
         $clienteRn = new ClienteRn();
-        
+
         $where = new \Zend\Db\Sql\Where();
 
         $where->equalTo("email", $usuario->email);
@@ -277,7 +277,7 @@ class UsuarioRn {
 
 
             if (!$cliente->emailConfirmado > 0) {
-                //throw new \Exception("O seu e-mail precisa ser confirmado para efetuar a troca de senha.");
+                throw new \Exception("O seu e-mail precisa ser confirmado para efetuar a troca de senha.");
             }
 
             $time = time();

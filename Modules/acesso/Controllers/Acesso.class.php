@@ -573,58 +573,56 @@ class Acesso {
     }
 
     public function novoCadastro($params) {
-        try { 
-                        
+        try {
             unset($_SESSION["login"]);
-            
             $method = strtoupper($_SERVER['REQUEST_METHOD']);
-            
+
             if (!in_array($method, Array(\Utils\Constantes::POST, \Utils\Constantes::GET))) {
                 throw new \Exception("Método inválido.", 400);
             }
-            
+
             switch ($method) {
                 case \Utils\Constantes::POST:
                     $email = \Utils\Post::get($params, "email", null);
                     $token = \Utils\Post::getEncrypted($params, "cid", null);
-                   
+
                     break;
                 case \Utils\Constantes::GET:
                     $token = \Utils\Get::getEncrypted($params, "at", null);
-                    
+
                     $dados = base64_decode($token);
                     $dados = explode("]", $dados);
-                    
+
                     $token = \Utils\Criptografia::decriptyPostId($dados[0]);
                     $email = \Utils\SQLInjection::clean($dados[1]);
-                    
+
                     break;
 
                 default:
                     throw new \Exception($this->idioma->getText("emailInvalido"));
                     break;
             }
-                        
+
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $cliente = $clienteRn->getByEmail($email);
-            
+
             $redirecionando = false;
-            
+
             if($cliente->emailConfirmado == 1 || $cliente->status != 0 || $token == null || empty($token) || $email == null || empty($email)){
                 $redirecionando = true;
                 Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
-            }    
-            
+            }
+
             if (!$redirecionando) {
                 $tokenApiRn = new \Models\Modules\Cadastro\TokenApiRn();
                 $tokenCliente = $tokenApiRn->getClienteByToken($token, false);
-            }  
-            
+            }
+
             if(empty($token) || $tokenCliente->idCliente != $cliente->id || $token != $tokenCliente->token){
-                $redirecionando = true;                
+                $redirecionando = true;
                 Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_LOGIN);
             }
-            
+
             if (!$redirecionando) {
 
                 $cliente->status = \Utils\Constantes::CLIENTE_ATIVO;
