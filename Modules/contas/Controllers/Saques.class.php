@@ -139,7 +139,7 @@ class Saques {
                 if(!empty($contaBancaria->banco->logo)){
                     $icone = IMAGES . "bancos/" . $contaBancaria->banco->logo;
                 } else {
-                    $icone = IMAGES . "currencies/pix.png";
+                    $icone = IMAGES . "currencies/CBRL2.png";
                 }
 
                     $object = (object)null;;
