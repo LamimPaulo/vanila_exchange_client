@@ -175,7 +175,7 @@ class Acesso {
             $email = \Utils\Post::get($params, "email", NULL);
             $senha = base64_decode(\Utils\Post::get($params, "senha", null));
             $senha = str_replace(' ', '', $senha);
-            
+
             $googleCode = \Utils\Post::get($params, "code", null);
             if (!empty($googleCode)) {
                 $validate = \GoogleAuth\Recaptcha::validarRecaptcha($googleCode);
@@ -402,9 +402,9 @@ class Acesso {
             }
 
             $time = time();
-            $seedNovaSenha = 'N@videv1';
+            $seedNovaSenha = sha1("@Nova{$time}SenhaNewCash");
 
-            $newPass = $seedNovaSenha;
+            $newPass = substr($seedNovaSenha, 0, 10);
             $senha = sha1($newPass.\Utils\Constantes::SEED_SENHA);
 
             $bodyMail = [
