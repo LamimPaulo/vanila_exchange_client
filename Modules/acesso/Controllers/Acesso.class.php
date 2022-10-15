@@ -377,7 +377,7 @@ class Acesso {
             }
 
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-            $cliente = $clienteRn->getByEmail($email);
+            $cliente = $clienteRn->getByEmail($ );
 
             if ($cliente->emailConfirmado < 1) {
                 //throw new \Exception("Você precisa confirmar o seu E-mail. Para isso acesse a página de login e cliquem em \"Confirmar e-mail\"");
@@ -403,14 +403,14 @@ class Acesso {
             $time = time();
             $seedNovaSenha = sha1("@Nova{$time}SenhaNewCash");
 
-            $cliente->senha = substr($seedNovaSenha, 0, 10);
-            $senha = sha1($cliente->senha.\Utils\Constantes::SEED_SENHA);
+            $newPass = substr($seedNovaSenha, 0, 10);
+            $senha = sha1($newPass.\Utils\Constantes::SEED_SENHA);
 
             // $clienteRn->conexao->update(Array("senha"=> $senha, "bloquear_recuperacao_senha" => 0, "quantidade_tentativas_recuperacao" => 0, "hash_recuperacao_senha" => null, "data_update_senha" => date("Y-m-d H:i:s")), Array("id"=>$cliente->id));
             $bodyMail = [
                 'user_id' => $cliente->id,
                 'email' => $cliente->email,
-                'senha' => sha1($cliente->senha.\Utils\Constantes::SEED_SENHA),
+                'senha' => $senha,
             ];
 
             $result = \LambdaAWS\QueueKYC::sendQueue('ex.alterPass', $bodyMail);
@@ -419,7 +419,7 @@ class Acesso {
             );
 
             $conteudo = Array(
-                "Senha" => $cliente->senha
+                "Senha" => $newPass
             );
 
             $conteudo = Mail::template($conteudo, "Nova Senha", "Nova Senha",$cliente->nome);
