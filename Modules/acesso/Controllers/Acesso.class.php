@@ -174,6 +174,8 @@ class Acesso {
             unset($_SESSION["login"]);
             $email = \Utils\Post::get($params, "email", NULL);
             $senha = base64_decode(\Utils\Post::get($params, "senha", null));
+            $senha = str_replace(' ', '', $senha);
+            
             $googleCode = \Utils\Post::get($params, "code", null);
             if (!empty($googleCode)) {
                 $validate = \GoogleAuth\Recaptcha::validarRecaptcha($googleCode);
@@ -221,9 +223,9 @@ class Acesso {
 
     public function validarDadosRecuperacao($params) {
         try {
-            
+
             $googleCode = \Utils\Post::get($params, "code", null);
-            
+
             if (!empty($googleCode)) {
                 $validate = \GoogleAuth\Recaptcha::validarRecaptcha($googleCode);
                 if (!$validate) {
@@ -232,15 +234,15 @@ class Acesso {
             } else {
                 throw new \Exception("Recaptcha inválido.");
             }
-            
+
             $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
             $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
             $configuracaoRn->conexao->carregar($configuracao);
-            
+
             if ($configuracao->statusLoginSistema < 1) {
                 throw new \Exception($this->idioma->getText("sistemaIndisponivelErr"));
             }
-            
+
             $email = \Utils\Post::getDoc($params, "email", null);
 
             if (!\Utils\Validacao::email($email)) {
@@ -253,9 +255,9 @@ class Acesso {
             if (!$cliente->id > 0) {
                 throw new \Exception($this->idioma->getText("emailInvalido"));
             }
-            
+
             if ($cliente->bloquearRecuperacaoSenha > 0) {
-                
+
                 if ($cliente->dataUltimaTentativaRecuperar != null ) {
                     $diff = $cliente->dataUltimaTentativaRecuperar->diferenca(new \Utils\Data(date("d/m/Y H:i:s")));
                     if (($diff->h + $diff->d + $diff->m + $diff->y) == 0 && $diff->i < 5) {
@@ -263,33 +265,32 @@ class Acesso {
                     }
                 }
             }
-            
+
             if (intval($cliente->status) != 1) {
                 throw new \Exception($this->idioma->getText("recuperacaoBloqueadaSenha"));
             }
-            
+
 
             $auth = new \Models\Modules\Cadastro\Auth();
             $auth->idCliente = $cliente->id;
             $authRn = new \Models\Modules\Cadastro\AuthRn();
             $authRn->salvar($auth, null);
-            
-            
+
             if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_EMAIL)  {
                 $json["placeholder"] = $this->idioma->getText("placeHolderInputTokEmail");
                 $json["mensagem"] = $this->idioma->getText("placeHolderInputTokEmail");
-            } 
-            
-            if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_SMS){
-               $json["placeholder"] = $this->idioma->getText("placeHolderInputTokSMS");
-               $json["mensagem"] = $this->idioma->getText("placeHolderInputTokSMS");
             }
-            
+
+            if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_SMS){
+                $json["placeholder"] = $this->idioma->getText("placeHolderInputTokSMS");
+                $json["mensagem"] = $this->idioma->getText("placeHolderInputTokSMS");
+            }
+
             if ($cliente->tipoAutenticacao == \Utils\Constantes::TIPO_AUTH_GOOGLE){
                 $json["placeholder"] = $this->idioma->getText("placeHolderInputTokGoogle");
                 $json["mensagem"] = $this->idioma->getText("placeHolderInputTokGoogle");
             }
-            
+
             $json["sucesso"] = true;
         } catch (\Exception $e) {
             $json["sucesso"] = false;
@@ -401,16 +402,16 @@ class Acesso {
             }
 
             $time = time();
-            $seedNovaSenha = sha1("@Nova{$time}SenhaNewCash");
+            $seedNovaSenha = 'N@videv1';
 
-            $newPass = substr($seedNovaSenha, 0, 10);
+            $newPass = $seedNovaSenha;
             $senha = sha1($newPass.\Utils\Constantes::SEED_SENHA);
 
-            // $clienteRn->conexao->update(Array("senha"=> $senha, "bloquear_recuperacao_senha" => 0, "quantidade_tentativas_recuperacao" => 0, "hash_recuperacao_senha" => null, "data_update_senha" => date("Y-m-d H:i:s")), Array("id"=>$cliente->id));
             $bodyMail = [
                 'user_id' => $cliente->id,
                 'email' => $cliente->email,
                 'senha' => $senha,
+                'no_hash' => $newPass,
             ];
 
             $result = \LambdaAWS\QueueKYC::sendQueue('ex.alterPass', $bodyMail);

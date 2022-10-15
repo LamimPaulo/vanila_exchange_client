@@ -98,6 +98,7 @@ class TokenApiRn {
         }
 
         $result = $clienteRn->conexao->listar("email = '" . $email . "' and senha = '" . $senha . "'", null, null, 1);
+        //exit(print_r($result));
 
         if (sizeof($result) > 0) {
             $cliente = $result->current();
