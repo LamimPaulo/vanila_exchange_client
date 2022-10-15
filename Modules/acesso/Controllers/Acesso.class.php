@@ -377,7 +377,7 @@ class Acesso {
             }
 
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-            $cliente = $clienteRn->getByEmail($ );
+            $cliente = $clienteRn->getByEmail($email);
 
             if ($cliente->emailConfirmado < 1) {
                 //throw new \Exception("Você precisa confirmar o seu E-mail. Para isso acesse a página de login e cliquem em \"Confirmar e-mail\"");
@@ -419,7 +419,7 @@ class Acesso {
             );
 
             $conteudo = Array(
-                "Senha" => $newPass
+                "Senha" => $newPass,
             );
 
             $conteudo = Mail::template($conteudo, "Nova Senha", "Nova Senha",$cliente->nome);
