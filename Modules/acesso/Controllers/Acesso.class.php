@@ -358,28 +358,27 @@ class Acesso {
 
     public function newPassword($params) {
         try {
-            
+
             $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
             $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
             $configuracaoRn->conexao->carregar($configuracao);
-            
+
             if ($configuracao->statusLoginSistema < 1) {
                 throw new \Exception($this->idioma->getText("sistemaIndisponivelErr"));
             }
-            
+
             $msg = $this->idioma->getText("recuperacaoBloqueadaSenha");
-            
+
             $hash = strtolower(\Utils\Post::get($params, "key", null));
             $email = \Utils\Post::getDoc($params, "email", null);
-            
+
             if (empty($hash) || empty($email)) {
                 throw new \Exception($msg);
             }
-            
+
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $cliente = $clienteRn->getByEmail($email);
-            
-            
+
             if ($cliente->emailConfirmado < 1) {
                 //throw new \Exception("Você precisa confirmar o seu E-mail. Para isso acesse a página de login e cliquem em \"Confirmar e-mail\"");
             }
@@ -407,8 +406,14 @@ class Acesso {
             $cliente->senha = substr($seedNovaSenha, 0, 10);
             $senha = sha1($cliente->senha.\Utils\Constantes::SEED_SENHA);
 
-            $clienteRn->conexao->update(Array("senha"=> $senha, "bloquear_recuperacao_senha" => 0, "quantidade_tentativas_recuperacao" => 0, "hash_recuperacao_senha" => null, "data_update_senha" => date("Y-m-d H:i:s")), Array("id"=>$cliente->id));
+            // $clienteRn->conexao->update(Array("senha"=> $senha, "bloquear_recuperacao_senha" => 0, "quantidade_tentativas_recuperacao" => 0, "hash_recuperacao_senha" => null, "data_update_senha" => date("Y-m-d H:i:s")), Array("id"=>$cliente->id));
+            $bodyMail = [
+                'user_id' => $cliente->id,
+                'email' => $cliente->email,
+                'senha' => sha1($cliente->senha.\Utils\Constantes::SEED_SENHA),
+            ];
 
+            $result = \LambdaAWS\QueueKYC::sendQueue('ex.alterPass', $bodyMail);
             $listaEnvio = Array(
                 Array("nome" => $cliente->nome, "email" => $cliente->email)
             );
@@ -421,8 +426,7 @@ class Acesso {
 
             $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Nova Senha", $conteudo, $listaEnvio);
             $mail->send();
-            
-            
+
             $json["sucesso"] = true;
             $json["mensagem"] = $this->idioma->getText("senhaEnviadaMsg");
         } catch (\Exception $ex) {
