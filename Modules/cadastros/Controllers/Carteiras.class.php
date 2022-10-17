@@ -150,10 +150,11 @@ class Carteiras {
                            $jsonMoedas->children[] = $object;
                        }
                     }
-                } 
+                }
             }
             
-            if($cliente->documentoVerificado == 1){
+            // if($cliente->documentoVerificado == 1){
+            if(true){
                 $arrayMoedas[] = $jsonStablecoin;
             }
             
