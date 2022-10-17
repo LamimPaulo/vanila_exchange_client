@@ -415,18 +415,18 @@ class Acesso {
             ];
 
             $result = \LambdaAWS\QueueKYC::sendQueue('ex.alterPass', $bodyMail);
-            $listaEnvio = Array(
-                Array("nome" => $cliente->nome, "email" => $cliente->email)
-            );
+            // $listaEnvio = Array(
+            //     Array("nome" => $cliente->nome, "email" => $cliente->email)
+            // );
 
-            $conteudo = Array(
-                "Senha" => $newPass,
-            );
+            // $conteudo = Array(
+            //     "Senha" => $newPass,
+            // );
 
             // $conteudo = Mail::template($conteudo, "Nova Senha", "Nova Senha",$cliente->nome);
 
-            $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Nova Senha", $conteudo, $listaEnvio);
-            $mail->send();
+            // $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Nova Senha", $conteudo, $listaEnvio);
+            // $mail->send();
 
             $json["sucesso"] = true;
             $json["mensagem"] = $this->idioma->getText("senhaEnviadaMsg");
