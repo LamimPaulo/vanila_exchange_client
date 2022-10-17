@@ -423,7 +423,7 @@ class Acesso {
                 "Senha" => $newPass,
             );
 
-            $conteudo = Mail::template($conteudo, "Nova Senha", "Nova Senha",$cliente->nome);
+            // $conteudo = Mail::template($conteudo, "Nova Senha", "Nova Senha",$cliente->nome);
 
             $mail = new \Utils\Mail(BrandRn::getBrand()->nome, "Nova Senha", $conteudo, $listaEnvio);
             $mail->send();
