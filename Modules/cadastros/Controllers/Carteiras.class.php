@@ -93,8 +93,8 @@ class Carteiras {
                 $cliente->moedaFavorita = 2;
             }
 
-            if ($cliente->documentoVerificado == 1) {
-                
+            // if ($cliente->documentoVerificado == 1) {
+            if (true) {
                 $jsonContas = (object)null;
                 $jsonContas->text = "Reais";
 
