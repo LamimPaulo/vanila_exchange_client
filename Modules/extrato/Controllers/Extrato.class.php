@@ -264,11 +264,11 @@ class Extrato {
                     </div>
                     <div class="col-sm-2">
                         <small class="stats-label">Valor</small>
-                        <h6 style="<?php echo $color ?>"><strong><?php echo $sinal . " R$ " . number_format($extrato->valor, 2, ",", "."); ?></strong></h6>
+                        <h6 style="<?php echo $color ?>"><strong><?php echo $sinal . " CBRL " . number_format($extrato->valor, 2, ",", "."); ?></strong></h6>
                     </div> 
                     <div class="col-sm-2">
                         <small class="stats-label">Saldo</small>
-                        <h6 style="<?php echo $color ?>"><strong><?php echo "R$ " . number_format($extrato->saldo, 2, ",", "."); ?></strong></h6>
+                        <h6 style="<?php echo $color ?>"><strong><?php echo "CBRL " . number_format($extrato->saldo, 2, ",", "."); ?></strong></h6>
                     </div> 
                     <div class="col-sm-1">
                         <small class="stats-label">Confirmações</small>
