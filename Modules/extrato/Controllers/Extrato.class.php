@@ -272,7 +272,8 @@ class Extrato {
                     </div> 
                     <div class="col-sm-1">
                         <small class="stats-label">Confirmações</small>
-                        <h6 style="<?php echo $confirmColor2 ?>"> <strong><?php echo $brlConfirmations.'/'.$brlConfirmationsRequired ?></strong></h6>
+                        <!-- <h6 style="<?php echo $confirmColor2 ?>"> <strong><?php echo $brlConfirmations.'/'.$brlConfirmationsRequired ?></strong></h6> -->
+                        <h6 style="color: #1ab394"> <strong>1/1</strong></h6>
                     </div>
                 </div>
             </div>
