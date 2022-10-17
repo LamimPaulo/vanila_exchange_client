@@ -149,9 +149,9 @@ class MeusDados
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $clienteRn->conexao->carregar($cliente);
 
-            if ($cliente->tipoAutenticacao != \Utils\Constantes::TIPO_AUTH_GOOGLE) {
-                throw new \Exception("Por favor, altere a segurança da sua conta para 2FA Authenticator.");
-            }
+            // if ($cliente->tipoAutenticacao != \Utils\Constantes::TIPO_AUTH_GOOGLE) {
+            //     throw new \Exception("Por favor, altere a segurança da sua conta para 2FA Authenticator.");
+            // }
 
             $cliente->celular = \Utils\Post::get($params, "celular", "");
             $cliente->ddi = \Utils\Post::get($params, "ddi", "+55");
@@ -2141,9 +2141,10 @@ class MeusDados
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $clienteRn->conexao->carregar($clienteGet);
 
-            if ($clienteGet->tipoAutenticacao != \Utils\Constantes::TIPO_AUTH_GOOGLE) {
-                throw new \Exception("Por favor, altere a segurança da sua conta para 2FA Authenticator.");
-            }
+            // if ($clienteGet->tipoAutenticacao != \Utils\Constantes::TIPO_AUTH_GOOGLE) {
+            //     throw new \Exception("Por favor, altere a segurança da sua conta para 2FA Authenticator.");
+            // }
+
             if (!empty($clienteGet->kycUpdateData)) {
                 $dataAtual = new \Utils\Data(date("Y-m-d H:i:s"));
 
