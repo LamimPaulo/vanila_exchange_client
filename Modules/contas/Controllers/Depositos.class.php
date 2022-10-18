@@ -307,9 +307,9 @@ class Depositos {
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $clienteRn->conexao->carregar($cliente);
 
-            if($cliente->documentoVerificado != 1){
-                throw new \Exception($this->idioma->getText("verifiqueSuaConta"));
-            }
+            // if($cliente->documentoVerificado != 1){
+            //     throw new \Exception($this->idioma->getText("verifiqueSuaConta"));
+            // }
 
             $moeda = new \Models\Modules\Cadastro\Moeda(Array("id" => 1));
             $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
