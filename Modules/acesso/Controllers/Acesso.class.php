@@ -301,34 +301,32 @@ class Acesso {
 
     public function authRecover($params) {
         try {
-            
             $configuracaoRn = new \Models\Modules\Cadastro\ConfiguracaoRn();
             $configuracao = new \Models\Modules\Cadastro\Configuracao(Array("id" => 1));
             $configuracaoRn->conexao->carregar($configuracao);
-            
+
             if ($configuracao->statusLoginSistema < 1) {
                 throw new \Exception($this->idioma->getText("sistemaIndisponivelErr"));
             }
-            
+
             $email = \Utils\Post::getDoc($params, "email", null);
             $token = \Utils\Post::get($params, "token", NULL);
-            
+
             if (!\Utils\Validacao::email($email)) {
                 throw new \Exception($this->idioma->getText("emailInvalido"), 99);
             }
 
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
             $cliente  = $clienteRn->getByEmail($email);
-            
+
             $authRn = new \Models\Modules\Cadastro\AuthRn();
             $authRn->validar($token, $cliente);
-            
-            
+
             if ($cliente->emailConfirmado < 1) {
                 //throw new \Exception("Você precisa confirmar o seu E-mail. Para isso acesse a página de login e cliquem em \"Confirmar e-mail\"");
             }
             if ($cliente->bloquearRecuperacaoSenha > 0) {
-                
+
                 if ($cliente->dataUltimaTentativaRecuperar != null ) {
                     $diff = $cliente->dataUltimaTentativaRecuperar->diferenca(new \Utils\Data(date("d/m/Y H:i:s")));
                     if (($diff->h + $diff->d + $diff->m + $diff->y) == 0 && $diff->i < 5) {
@@ -336,10 +334,9 @@ class Acesso {
                     }
                 }
             }
-            
+
             $usuarioRn = new UsuarioRn();
             $usuarioRn->recuperar(new Usuario(Array("email" => $email)));
-            
 
             $json["mensagem"] = $this->idioma->getText("chaveEnviadaJson");  
             $json["sucesso"] = true;  
@@ -347,7 +344,7 @@ class Acesso {
             $json["sucesso"] = false; 
             $json["mensagem"] = $this->idioma->getText("falhaEnviaRecupeErr") . \Utils\Excecao::mensagem($e); 
         }
-        
+
         print json_encode($json);
     }
 

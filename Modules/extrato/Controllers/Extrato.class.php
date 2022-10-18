@@ -236,7 +236,7 @@ class Extrato {
 
         if($extrato instanceof \Models\Modules\Cadastro\ContaCorrenteReais){
             $extrato->moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
-        ?>
+            ?>
             <div class="ibox-content">
                 <div class="row m-l-xs">
                     <div class="col-sm-1">
@@ -255,7 +255,7 @@ class Extrato {
                     <?php } else{ ?>
                         <div class="col-sm-2">
                             <small class="stats-label">TXID</small>
-                            <h6><a disabled>Processando</a></h6>
+                            <h6><a disabled>Interna</a></h6>
                         </div>
                     <?php } ?>
                     <div class="col-sm-2">
@@ -300,27 +300,35 @@ class Extrato {
                         <h6><?php echo $descricao; ?></h6>
                     </div>
 
-                    <?php if($extrato->moeda->id == '2') {?>
+                    <?php if($extrato->direcao == 'I') {?>
                         <div class="col-sm-2">
                             <small class="stats-label">TXID</small>
-                            <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['BITCOIN_EXPLORER_URL']);  ?>"> Explorer</a></h6>
+                            <h6><a disabled>Interna</a></h6>
                         </div>
-                    <?php } else if($extrato->rede == 'BEP20' ){?>
-                        <div class="col-sm-2">
-                            <small class="stats-label">TXID</small>
-                            <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['BSCSCAN_URL']);  ?>"> Explorer</a></h6>
-                        </div>
-                    <?php } else if($extrato->rede == 'ERC20' ){?>
-                        <div class="col-sm-2">
-                            <small class="stats-label">TXID</small>
-                            <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['ETHERSCAN_URL']);  ?>"> Explorer</a></h6>
-                        </div>
-                        <?php } else { ?>
+
+                    <?php } else{ ?>
+                        <?php if($extrato->moeda->id == '2') {?>
                             <div class="col-sm-2">
                                 <small class="stats-label">TXID</small>
-                                <h6> <?php echo $extrato->hash  ?></h6>
+                                <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['BITCOIN_EXPLORER_URL']);  ?>"> Explorer</a></h6>
                             </div>
-                        <?php } ?>
+                        <?php } else if($extrato->rede == 'BEP20' ){?>
+                            <div class="col-sm-2">
+                                <small class="stats-label">TXID</small>
+                                <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['BSCSCAN_URL']);  ?>"> Explorer</a></h6>
+                            </div>
+                        <?php } else if($extrato->rede == 'ERC20' ){?>
+                            <div class="col-sm-2">
+                                <small class="stats-label">TXID</small>
+                                <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['ETHERSCAN_URL']);  ?>"> Explorer</a></h6>
+                            </div>
+                            <?php } else { ?>
+                                <div class="col-sm-2">
+                                    <small class="stats-label">TXID</small>
+                                    <h6> <?php echo $extrato->hash  ?></h6>
+                                </div>
+                            <?php } ?>
+                    <?php } ?>
 
                     <div class="col-sm-2">
                         <small class="stats-label">Data</small>
