@@ -39,7 +39,8 @@ if(!empty($cliente->moedaFavorita)){
 }
 
 $mostrarBotaoDeposito = (Models\Modules\Acesso\ModuloRn::validar(Utils\Rotas::M_DEPOSITOS, \Utils\Constantes::CADASTRAR)  ? (Utils\Geral::isCliente() && ($cliente->statusDepositoBrl > 0)) : false);
-$mostrarAbaDepositoReais = isset($_data["verificado"]) ? $_data["verificado"] : false;
+// $mostrarAbaDepositoReais = isset($_data["verificado"]) ? $_data["verificado"] : false;
+$mostrarAbaDepositoReais = true;
 
 $casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"]  : 2);
 
@@ -488,17 +489,6 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
-
-
-
-
-
-
-
-
                                             </div>
                                         </div>
                                     </div>

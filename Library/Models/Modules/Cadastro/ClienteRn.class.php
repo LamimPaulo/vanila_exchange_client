@@ -1745,7 +1745,6 @@ class ClienteRn {
     }
 
     public function gerarApiKeys(Cliente &$cliente) {
-        
         $dataAtual = new \Utils\Data(date("Y-m-d H:i:s"));
         $dataAtual->subtrair(0, 0, 1, 0, 0, 0);
         
@@ -1775,6 +1774,7 @@ class ClienteRn {
             throw new \Exception("Aguardar o período de 24 horas para renovar as credenciais.");
         }
     }
+
     public function setLastUpdateResendSMS(Cliente &$cliente) {
         $this->conexao->update(Array("kyc_sms_resend_data" => date('Y-m-d H:i:s')), Array("id" => $cliente->id));
     }

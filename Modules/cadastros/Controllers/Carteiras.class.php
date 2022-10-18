@@ -128,42 +128,37 @@ class Carteiras {
             }
 
             foreach ($categorias as $categoriaCarteira) {
-                
+
                 if ($categoriaCarteira->id == 1 && $configuracao->statusDepositoBrl > 0 && $mostrarAbaDepositoReais) {
-                    
-                } else if ($categoriaCarteira->id > 1) { 
+
+                } else if ($categoriaCarteira->id > 1) {
                     $moedas = $moedaRn->conexao->listar("id_categoria_moeda = {$categoriaCarteira->id} AND ativo = 1 AND visualizar_deposito = 1", "principal DESC, nome", null, null);
                     foreach ($moedas as $moeda) {
-                       
-                       $object = (object)null;
-                       $object->id = \Utils\Criptografia::encriptyPostId($moeda->id);
-                       $object->text = $moeda->simbolo . " - " . $moeda->nome;    
-                       $object->tipo = "c";
-                       $object->icone = IMAGES . "currencies/" . $moeda->icone;
-                       $object->selected = $cliente->moedaFavorita == $moeda->id ? true : false;
-                        
-                       if($categoriaCarteira->id == 2){
-                           if($cliente->documentoVerificado == 1){
-                               $jsonStablecoin->children[] = $object;
-                           }
-                       } else {
-                           $jsonMoedas->children[] = $object;
-                       }
+
+                        $object = (object)null;
+                        $object->id = \Utils\Criptografia::encriptyPostId($moeda->id);
+                        $object->text = $moeda->simbolo . " - " . $moeda->nome;    
+                        $object->tipo = "c";
+                        $object->icone = IMAGES . "currencies/" . $moeda->icone;
+                        $object->selected = $cliente->moedaFavorita == $moeda->id ? true : false;
+
+                        if($categoriaCarteira->id == 2){
+                            if($cliente->documentoVerificado == 1){
+                                $jsonStablecoin->children[] = $object;
+                            }
+                        } else {
+                            $jsonMoedas->children[] = $object;
+                        }
                     }
                 }
             }
-            
-            // if($cliente->documentoVerificado == 1){
+
             if(true){
                 $arrayMoedas[] = $jsonStablecoin;
             }
-            
             $arrayMoedas[] = $jsonMoedas;
-            
             return json_encode($arrayMoedas);
-            
         } catch (\Exception $ex) {
-         
             return null;
         }
     }

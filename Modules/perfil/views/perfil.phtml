@@ -2800,6 +2800,7 @@ $_data["idiomaMenu"] = $idioma;
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green'
         });
+
         $('#market_check').on('ifChanged', function(event){
             $.ajax({
                 url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_MERKETUPDATE ?>",
@@ -3078,7 +3079,6 @@ $_data["idiomaMenu"] = $idioma;
         $(".tab-etapas-perfil").click(function () {
             activeTab = $(this).attr("href");
         });
-
 
         $("#idPaisNaturalidade").trigger("change");
 

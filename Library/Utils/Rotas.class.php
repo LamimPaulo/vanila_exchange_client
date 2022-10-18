@@ -101,13 +101,12 @@ public static $rotas = Array(
         "notificacaoMoeda/Cliente"      => Array("url" => "acesso/notificacaoMoeda/index" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
         "notificacaomoeda/listarCliente" => Array("url" => "acesso/notificacaoMoeda/listarCliente" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
         "notificacaomoeda/marcarComoLido" => Array("url" => "acesso/notificacaoMoeda/marcarComoLido" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
-        
+
         //Marketing
         "marketingImagem/onlyView"       => Array("url" => "acesso/marketingImagem/index" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
         "marketingImagem/listar"         => Array("url" => "acesso/marketingImagem/listarCliente" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
         "marketingImagem/marcarComoLido" => Array("url" => "acesso/marketingImagem/marcarComoLido" ,                  "modulo" => "acesso",                       "rotina" => "acesso"),
-        
-        
+
         //"confirmacao"                   => Array("url" => "acesso/acesso/confirmation" ,                    "modulo" => "acesso",                       "rotina" => "acesso"),
         //"qrcodeinvoice"                 => Array("url" => "acesso/cartoes/gerarQRCodeInvoice" ,             "modulo" => "acesso",                       "rotina" => "cartoes"),
         //"wsconvites"                    => Array("url" => "ws/convites/index" ,                             "modulo" => "ws",                           "rotina" => "convites"),
@@ -122,10 +121,9 @@ public static $rotas = Array(
         "transferencias"                => Array("url" => "contas/btc/transferencia" ,                      "modulo" => "transferencias",                "rotina" => "cadastro" ),
         "clientes/promocao/pagar"       => Array("url" => "cadastros/clientes/enviarCreditosCampanha" ,                      "modulo" => "transferencias",               "rotina" => "transferencias" ),
         "cotacoes/get"                  => Array("url" => "principal/principal/getListaCotacoes" ,          "modulo" => "principal",               "rotina" => "principal" ),
-        
+
         //"testeEmail"                  => Array("url" => "principal/principal/testeEmail" ,          "modulo" => "principal",               "rotina" => "principal" ),
 
-        
         // Contas Bancárias
         "contasbancarias/listar"        => Array("url" => "cadastros/contas/getContasCliente" ,             "modulo" => "saques",               "rotina" => "contasbancarias" ),
         "contasbancarias/status/alterar"=> Array("url" => "cadastros/contas/alterarStatus" ,                "modulo" => "saques",               "rotina" => "contasbancarias" ),

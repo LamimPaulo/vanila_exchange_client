@@ -10,22 +10,22 @@ class Atar {
     public function __construct(&$params) {
         \Utils\Validacao::acesso($this->codigoModulo);
         $cliente = \Utils\Geral::getCliente();
-        
+
         if (\Utils\Geral::isCliente() && $cliente->utilizaSaqueDepositoBrl < 1) {
             \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
         }
-        
+
         $this->idioma = new \Utils\PropertiesUtils("saque", IDIOMA);
     }
-    
+
     public function listar($params) {
         try {
             $cliente = \Utils\Geral::getCliente();
             $data = \Utils\Post::get($params, "data", "semana");
-            $nresultado = \Utils\Post::get($params, "filtro", null);            
-            
+            $nresultado = \Utils\Post::get($params, "filtro", null);
+
             switch ($data) {
-                case "dia":                        
+                case "dia":
                     $dataInicial = new \Utils\Data(date("d/m/Y 00:00:00"));
                     $dataFinal = new \Utils\Data(date("d/m/Y 23:59:59"));
                     break;
