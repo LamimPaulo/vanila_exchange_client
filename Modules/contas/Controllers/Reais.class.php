@@ -472,9 +472,9 @@ class Reais {
                 throw new \Exception("Transferência para o mesmo cliente não é permitido.");
             }
             
-            if ($clienteFrom->documentoVerificado != 1 || $clienteFrom->status != 1) {
-                throw new \Exception("Por favor, faça a verificação da sua conta no menu Meu Perfil.");
-            }
+            // if ($clienteFrom->documentoVerificado != 1 || $clienteFrom->status != 1) {
+            //     throw new \Exception("Por favor, faça a verificação da sua conta no menu Meu Perfil.");
+            // }
             
             if ($clienteTo->documentoVerificado != 1 || $clienteTo->status != 1) {
                 throw new \Exception("Transferência não permitida. Cliente destino não habilitado.");
@@ -662,9 +662,9 @@ class Reais {
                 $tipo = $cliente->tipoAutenticacao;
             }
             
-            if($cliente->documentoVerificado != 1 ){
-                throw new \Exception("Por favor, faça a verificação da sua conta no menu Meu Perfil.");
-            }
+            // if($cliente->documentoVerificado != 1 ){
+            //     throw new \Exception("Por favor, faça a verificação da sua conta no menu Meu Perfil.");
+            // }
                         
             $clienteTo = new \Models\Modules\Cadastro\Cliente();
             $clienteTo->id = \Utils\Post::getEncrypted($params, "idClienteTo", 0);
