@@ -2312,7 +2312,7 @@ $_data["idiomaMenu"] = $idioma;
                                           <strong><?php echo $idioma->getText("perfil63") ?></strong></button>
                                   </div>
                               </div>
-                              <div class="row m-t-md" id="solicitarApiToken" hidden="true">
+                              <div class="row m-t-md" id="solicitarApiToken" >
                                   <div class="col-lg-6">
                                       <div class="form-group">
                                           <label><?php echo $idioma->getText("perfil62") ?></label>
@@ -2323,7 +2323,7 @@ $_data["idiomaMenu"] = $idioma;
                                   <div class="col-lg-6">
                                       <div class="form-group">
                                           <label>&nbsp;&nbsp;</label>
-                                          <button class="btn btn-success full-width" type="button"
+                                          <button class="btn btn-success full-width" type="button" 
                                                   onclick="gerarApiKey();" id="btnGerarTokenApi">
                                               <strong><?php echo $idioma->getText("perfil64") ?></strong>
                                           </button>
@@ -2795,7 +2795,7 @@ $_data["idiomaMenu"] = $idioma;
 
     $(document).ready(function () {
         getDocStats();
-
+        $("#solicitarApiToken").hide();
         $('.i-checks').iCheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green'
