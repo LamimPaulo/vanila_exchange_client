@@ -1202,6 +1202,9 @@ $(document).ready(function () {
                 success: function (json) {
                     try {
                         if (json.sucesso) {
+                            // if(!json.html) {
+                            //     $(".saldos").hide();
+                            // }
                             $("#body-balances").html(json.html);
 
                             if(balanceMode === 2) {

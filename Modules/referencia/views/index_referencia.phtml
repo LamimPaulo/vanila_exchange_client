@@ -61,32 +61,32 @@ $_data["idiomaMenu"] = $idioma;
                             <h5 class="card-title">Link Para Compartilhamento</h5>
                             <div class="container">
                                 <div class="row">
-                                    <div class="col-sm-5">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-md-2">
-                                                <button class="btn btn-lg btn-outline dim btn-primary telegram  m-t-md " onclick="telegram();" ><i class="fa fa-telegram"></i></button>
-                                            </div>
-                                            <div class="col-xs-2 col-md-2">
-                                                <button class="btn btn-lg btn-outline dim btn-success whatsapp m-t-md " onclick="whatsapp();" ><i class="fa fa-whatsapp"></i></button>
-
-                                            </div>
-                                            <div class="col-xs-2 col-md-2">
-                                                <button class="btn btn-lg btn-outline dim btn-success m-t-md " onclick="facebook();" ><i class="fa fa-facebook-f"></i></button> 
-
-                                            </div>
-                                            <div class="col-xs-2 col-md-2">
-                                                <button class="btn btn-lg btn-outline dim btn-warning m-t-md " onclick="email();" ><i class="fa fa-envelope-o"></i></button> 
-
-                                            </div>
-                                            <div class="col-xs-2 col-md-2">
-                                                <button id="copyRef" class="btn btn-lg btn-outline dim btn-info m-t-md " data-clipboard-target="#linkReferencia"><i class="fa fa-copy"></i></button> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-7">
+                                    <div class="col-md-12">
                                         <div class="row">
                                             <div class="alert alert-success m-t-md m-r-md">
                                                 <span id="linkReferencia" style="word-wrap: break-word;"><?php echo $linkCliente ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row d-flex justify-content-center">
+                                            <div class="col">
+                                                <button class="btn btn-lg btn-outline dim btn-primary telegram  m-t-md " onclick="telegram();" ><i class="fa fa-telegram"></i></button>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-lg btn-outline dim btn-success whatsapp m-t-md " onclick="whatsapp();" ><i class="fa fa-whatsapp"></i></button>
+
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-lg btn-outline dim btn-success m-t-md " onclick="facebook();" ><i class="fa fa-facebook-f"></i></button> 
+
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-lg btn-outline dim btn-warning m-t-md " onclick="email();" ><i class="fa fa-envelope-o"></i></button> 
+
+                                            </div>
+                                            <div class="col">
+                                                <button id="copyRef" class="btn btn-lg btn-outline dim btn-info m-t-md " data-clipboard-target="#linkReferencia"><i class="fa fa-copy"></i></button> 
                                             </div>
                                         </div>
                                     </div>
@@ -102,8 +102,7 @@ $_data["idiomaMenu"] = $idioma;
                 <div class="container-fluid">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Período</h5>
-                            <div class="container">
+                            <h5 class="card-title">Filtrar por Período</h5>
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group" id="datas">
@@ -125,7 +124,7 @@ $_data["idiomaMenu"] = $idioma;
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label><?php echo "Registro" ?></label>
                                             <select class="form-control custom-select" id="registros">
@@ -136,14 +135,13 @@ $_data["idiomaMenu"] = $idioma;
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-12">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
-                                            <button type="button" class="btn btn-outline btn-default full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
+                                            <button type="button" class="btn btn-light full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,25 +157,25 @@ $_data["idiomaMenu"] = $idioma;
                                     <small class="stats-label">Moeda</small></br>
                                     <div id="moedaImg">-</div>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2">
                                     <small class="stats-label">Qtd. Total Indicados</small>
-                                    <h4 id="qtdReferencias">-</h4>
+                                    <h6 id="qtdReferencias">-</h4>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2">
                                     <small class="stats-label">Total Depósitos</small>
-                                    <h4 id="totalDepositos">-</h4>
+                                    <h6 id="totalDepositos">-</h4>
                                 </div>                                  
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2">
                                     <small class="stats-label">Total Compra/Venda</small>
-                                    <h4 id="totalCompraVenda">-</h4>
+                                    <h6 id="totalCompraVenda">-</h4>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2">
                                     <small class="stats-label">Total Saques</small>
-                                    <h4 id="totalSaques">-</h4>
+                                    <h6 id="totalSaques">-</h4>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2">
                                     <small class="stats-label">Total no Período</small>
-                                    <h4><strong id="total">-</strong></h4>
+                                    <h6><strong id="total">-</strong></h4>
                                 </div>
                                 <div class="col-sm-1">
                                     <div class="ibox-tools">

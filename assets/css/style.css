@@ -3954,6 +3954,11 @@ button.dim:active:before {
   }
 }
 @media only screen and (max-width: 768px) {
+  .paridade {
+    height: 150px;
+    overflow: scroll;
+  }
+
   footer.landing-footer {
     text-align: center;
   }
@@ -4029,6 +4034,10 @@ button.dim:active:before {
 @media only screen and (max-width: 576px) {
   .markets-capital-item {
     height: 91.4%;
+  }
+  .paridade {
+    height: 150px;
+    overflow: scroll;
   }
 }
 

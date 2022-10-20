@@ -10,7 +10,7 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
 
 $cliente = \Utils\Geral::getCliente();
 
-if(!empty($cliente->moedaFavorita)){
+if (!empty($cliente->moedaFavorita)) {
     $moedaFavorita = $cliente->moedaFavorita;
 } else {
     $moedaFavorita = 2;
@@ -22,7 +22,7 @@ $_data["idiomaMenu"] = $idioma;
 <?php Utils\Layout::append("inspina/metas", $_data) ?>
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
 <?php Utils\Layout::append("inspina/menu", $_data) ?>
-<link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet"> 
+<link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
 <link href="<?php echo TEMA; ?>css/plugins/switchery/switchery.css" rel="stylesheet">
 <link href="<?php echo TEMA; ?>css/plugins/iCheck/custom.css" rel="stylesheet">
 
@@ -31,48 +31,46 @@ $_data["idiomaMenu"] = $idioma;
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Extrato</h5>
-                <div class="">
-                    <div class="">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group" id="datas">
-                                    <label class="control-label">Período</label>
-                                    <div class="input-daterange input-group full-width" id="datepicker">
-                                        <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                        <span class="input-group-addon">Até</span>
-                                        <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                    </div>
-                                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group" id="datas">
+                            <label class="control-label">Período</label>
+                            <div class="input-daterange input-group full-width" id="datepicker">
+                                <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                <span class="input-group-addon">Até</span>
+                                <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
                             </div>
-                            <div class="col-sm-4">
-                                <div class="card-title">
-                                    <label class="control-label">Moedas</label>
-                                    <select class="form-control custom-select select2" id="idMoeda"></select>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label><?php echo "Registro" ?></label>
-                                    <select class="form-control custom-select" id="registros">
-                                        <option value="30">30</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                        <option value="T"><?php echo "Todos" ?></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <label>&nbsp;</label>
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-primary pull-right full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <label>&nbsp;</label>
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-primary pull-right full-width" onclick="download()"><?php echo "Baixar" ?>&nbsp;&nbsp;<i class="fa fa-download"></i></button>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="control-label">Moedas</label>
+                            <select class="form-control custom-select select2" id="idMoeda"></select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="control-label"><?php echo "Registro" ?></label>
+                            <select class="form-control custom-select" id="registros">
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="T"><?php echo "Todos" ?></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>&nbsp;</label>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-light full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label>&nbsp;</label>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary pull-right full-width" onclick="download()"><?php echo "Baixar" ?>&nbsp;&nbsp;<i class="fa fa-download"></i></button>
                         </div>
                     </div>
                 </div>
@@ -82,8 +80,8 @@ $_data["idiomaMenu"] = $idioma;
         <div class="settings mt15">
             <div class="card">
                 <div class="card-body">
-                        <div id="boxes" class="card-body">
-                        </div>
+                    <div id="boxes" class="card-body">
+                    </div>
                     </table>
                 </div>
             </div>
@@ -103,11 +101,14 @@ $_data["idiomaMenu"] = $idioma;
 <script src="<?php echo TEMA; ?>js/plugins/daterangepicker/daterangepicker.js"></script>
 
 <script>
-    var moeda = '<?php echo \Utils\Criptografia::encriptyPostId($moedaFavorita)?>';  
-      
-    $(document).ready(function () {
-        $("#dataInicial, #dataFinal").datepicker({forceParse: false,format: 'dd/mm/yyyy'}).mask("99/99/9999");
-        
+    var moeda = '<?php echo \Utils\Criptografia::encriptyPostId($moedaFavorita) ?>';
+
+    $(document).ready(function() {
+        $("#dataInicial, #dataFinal").datepicker({
+            forceParse: false,
+            format: 'dd/mm/yyyy'
+        }).mask("99/99/9999");
+
         $(".select2").select2({
             data: <?php echo $jsonMoedas ?>,
             templateResult: formatState,
@@ -115,136 +116,136 @@ $_data["idiomaMenu"] = $idioma;
             heigth: 'resolve',
             width: 'resolve',
         });
-       
-        $(".select2").on('select2:select', function (e) {
+
+        $(".select2").on('select2:select', function(e) {
             var data = e.params.data;
             moeda = data.id;
         });
-        
+
         filtrar();
-       
+
     });
-    
-    function formatState (state) {
+
+    function formatState(state) {
         if (!state.id) {
-          return state.text;
+            return state.text;
         }
         var $state = $(
-          '<span><img src="' + state.icone + '" height="18" width="18" />&nbsp;&nbsp;' + state.text + '</span>'
+            '<span><img src="' + state.icone + '" height="18" width="18" />&nbsp;&nbsp;' + state.text + '</span>'
         );
-        
-        if(state.selected){
+
+        if (state.selected) {
             moeda = state.id;
         }
-        
+
         return $state;
     }
-    
+
     itemsNotFormatted = [];
-    
-    function filtrar() {    
+
+    function filtrar() {
         $("#boxes").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_EXTRATO_LISTAR ?>',
             method: 'post',
             dataType: 'json',
             data: {
-                dataInicial : $("#dataInicial").val(),
-                dataFinal : $("#dataFinal").val(),
-                registros : $("#registros").val(),
+                dataInicial: $("#dataInicial").val(),
+                dataFinal: $("#dataFinal").val(),
+                registros: $("#registros").val(),
                 moeda: moeda
             },
-            success: function (json) {                 
+            success: function(json) {
                 try {
-                    if (json.sucesso) { 
-                          $("#boxes").html(json.html);
-                          itemsNotFormatted = json.anexo;
+                    if (json.sucesso) {
+                        $("#boxes").html(json.html);
+                        itemsNotFormatted = json.anexo;
                     } else {
-                        $("#boxes").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");   
+                        $("#boxes").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
                         showNotyAlert(json.mensagem, "e");
                     }
                 } catch (e) {
-                   $("#boxes").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
-                   showNotyAlert(json.mensagem, "e");
+                    $("#boxes").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+                    showNotyAlert(json.mensagem, "e");
                 }
             }
         });
     }
-    
-    
-    
+
+
+
     function convertToCSV(objArray) {
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    var str = '';
-    for (var i = 0; i < array.length; i++) {
-        var line = '';
-        for (var index in array[i]) {
-            if (line != '') line += ''
-            line += array[i][index];
+        var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+        var str = '';
+        for (var i = 0; i < array.length; i++) {
+            var line = '';
+            for (var index in array[i]) {
+                if (line != '') line += ''
+                line += array[i][index];
+            }
+            str += line + '\r\n';
         }
-        str += line + '\r\n';
+        return str;
     }
-    return str;
-}
 
-function exportCSVFile(headers, items, fileTitle) {
-    if (headers) {
-        items.unshift(headers);
-    }
-    var jsonObject = JSON.stringify(items);
-    var csv = this.convertToCSV(jsonObject);
-    var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
-    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    if (navigator.msSaveBlob) {
-        navigator.msSaveBlob(blob, exportedFilenmae);
-    } else {
-        var link = document.createElement("a");
-        if (link.download !== undefined) {
-            var url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", exportedFilenmae);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+    function exportCSVFile(headers, items, fileTitle) {
+        if (headers) {
+            items.unshift(headers);
+        }
+        var jsonObject = JSON.stringify(items);
+        var csv = this.convertToCSV(jsonObject);
+        var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
+        var blob = new Blob([csv], {
+            type: 'text/csv;charset=utf-8;'
+        });
+        if (navigator.msSaveBlob) {
+            navigator.msSaveBlob(blob, exportedFilenmae);
+        } else {
+            var link = document.createElement("a");
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", exportedFilenmae);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
     }
-}
 
-function download(){
-    
-  var headers = {
-      empresa: '<?php echo $empresa->nomeEmpresarial ?>\n' + ';;;;;;\n' + ';;;;;;\n',
-      saldoFinalDia: 'Saldos no final do dia ' + $("#dataFinal").val() + '\n' + ';;;;;;\n',
-      data: 'Data;',
-      tipo: "Tipo;",
-      moeda: "Moeda;",
-      valor: "Valor;",
-      total: "Total"
-  };
+    function download() {
 
+        var headers = {
+            empresa: '<?php echo $empresa->nomeEmpresarial ?>\n' + ';;;;;;\n' + ';;;;;;\n',
+            saldoFinalDia: 'Saldos no final do dia ' + $("#dataFinal").val() + '\n' + ';;;;;;\n',
+            data: 'Data;',
+            tipo: "Tipo;",
+            moeda: "Moeda;",
+            valor: "Valor;",
+            total: "Total"
+        };
 
 
-  var itemsFormatted = [];
-  
+
+        var itemsFormatted = [];
 
 
-  itemsNotFormatted.forEach((item) => {
-      itemsFormatted.push({
-          data: item.data+';',
-          tipo: item.tipo+';',
-          moeda: item.moeda+';',
-          valor: item.valor+';',
-          total: item.total
-      });
-  });
 
-  var fileTitle = 'ExchangeCX-Extract';
-  exportCSVFile(headers, itemsFormatted, fileTitle);
-}
+        itemsNotFormatted.forEach((item) => {
+            itemsFormatted.push({
+                data: item.data + ';',
+                tipo: item.tipo + ';',
+                moeda: item.moeda + ';',
+                valor: item.valor + ';',
+                total: item.total
+            });
+        });
 
+        var fileTitle = 'ExchangeCX-Extract';
+        exportCSVFile(headers, itemsFormatted, fileTitle);
+    }
 </script>
 
 
 <?php Utils\Layout::append("mensage_text", $_data) ?>
-
