@@ -3584,6 +3584,11 @@ body.rtls .vertical-timeline-icon i {
   color: #ffffff;
 }
 
+.paridade {
+  height: 300px;
+  overflow: scroll;
+}
+
 .progress-bar {
   background-color: #1ab394;
 }
@@ -3947,10 +3952,16 @@ button.dim:active:before {
   .market-history tbody {
     height: 274px;
   }
+  .main-chart {
+    display: none;
+  }
 }
 @media only screen and (max-width: 792px) {
   .market-pairs tbody {
     height: 699px;
+  }
+  .main-chart {
+    display: none;
   }
 }
 @media only screen and (max-width: 768px) {
@@ -3958,7 +3969,10 @@ button.dim:active:before {
     height: 150px;
     overflow: scroll;
   }
-
+  .main-chart {
+    display: none;
+  }
+  
   footer.landing-footer {
     text-align: center;
   }
@@ -4038,6 +4052,9 @@ button.dim:active:before {
   .paridade {
     height: 150px;
     overflow: scroll;
+  }
+  .main-chart {
+    display: none;
   }
 }
 
