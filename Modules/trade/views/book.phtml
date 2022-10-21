@@ -64,7 +64,7 @@ $_data["idiomaMenu"] = $idioma;
                     $selected = ($paridade->idMoedaTrade == $moedaTrade->id);
                     ?>
                 <li class="nav-item">
-                    <option class="nav-link" data-toggle="pill" role="tab" aria-selected="false" onclick="setCurrentCoin(<?php echo $moedaTrade->id?>);"><?php echo $moedaTrade->nome ?></option>
+                    <a class="nav-link" data-toggle="pill" role="tab" aria-selected="false" onclick="setCurrentCoin(<?php echo $moedaTrade->id?>);"><?php echo $moedaTrade->nome ?></a>
                     <input type="hidden" id="hiddencontainer" name="hiddencontainer"/>
                 </li>
                     <?php
@@ -97,18 +97,18 @@ $_data["idiomaMenu"] = $idioma;
           </ul>
           <div class="tab-content">
             <div class="tab-pane fade show active" id="recent-trades" role="tabpanel">
-              <table class="table">
+              <table class="table" style="table-layout: fixed">
                 <thead class="thead-h thead-h1">
                     <tr class="tr-h">
-                        <th class="text-left" style="padding-left: 28px !important; width: 44%">
+                        <th class="text-left" style="padding-left: 28px !important;">
                             <?php echo $idioma->getText("direta22") ?>
                         </th>
-                        <th class="text-right" style="width: 150px;">
+                        <!-- <th class="text-right" style="min-width: 150px">
                             <?php echo $idioma->getText("direta29") ?>
                         </th>
-                        <th class="text-right" style="width: 130px;">
+                        <th class="text-left" style="min-width: 70px">
                             <?php echo $idioma->getText("direta23") ?>
-                        </th>
+                        </th> -->
                     </tr>
                 </thead>
                 <tbody id="body-balances" class="tbody-h tbody-saldo" >
@@ -147,32 +147,34 @@ $_data["idiomaMenu"] = $idioma;
                 {
                     var widget = window.tvWidget = new TradingView.widget(
                     {
-                        "debug": true,
+                        "debug": false,
                         "fullscreen":false,
                         "timezone": "America/Sao_Paulo",
                         "symbol": "<?php echo $paridade->symbol?>",
                         "interval": '15',
                         "container_id": "tv_chart_container",
-                        "intervals": ["1", "5", "15", "30", "60", "360", "720", "D", "7D", "M", "3M"],
-                        "chartTypes":["Lines"],
+                        "intervals": ["5", "15", "30", "60", "360", "720", "D", "7D", "M", "3M"],
+                        "chartTypes":["Candles"],
                         "datafeed": new Datafeeds.UDFCompatibleDatafeed("https://coinage.trade/api/getcandles"),
                         "library_path": "<?php echo DIR_TV ?>charting_library/",
                         "locale": "pt",
-                        // "overrides":{
-                        //     'paneProperties.legendProperties.showLegend': false,
-                        //     'mainSeriesProperties.candleStyle.upColor': '#64ae74',
-                        //     'mainSeriesProperties.candleStyle.downColor': '#df5f61',
-                        //     'mainSeriesProperties.candleStyle.drawWick': true,
-                        //     'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
-                        //     'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
-                        //     'mainSeriesProperties.candleStyle.drawBorder': true,
-                        //     'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
-                        //     'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
-                        //     'scalesProperties.lineColor': '#252525',
-                        //     'scalesProperties.textColor': '#8a8a8a',
-                        //     'paneProperties.topMargin': 20,
-                        // },
-                        // "disabled_features": [
+                        // disabled_features: ["use_localstorage_for_settings"],
+                        // enabled_features: ["study_templates"],
+                        "overrides":{
+                            'paneProperties.legendProperties.showLegend': false,
+                            'mainSeriesProperties.candleStyle.upColor': '#64ae74',
+                            'mainSeriesProperties.candleStyle.downColor': '#df5f61',
+                            'mainSeriesProperties.candleStyle.drawWick': true,
+                            'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
+                            'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
+                            'mainSeriesProperties.candleStyle.drawBorder': true,
+                            'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
+                            'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
+                            'scalesProperties.lineColor': '#252525',
+                            'scalesProperties.textColor': '#8a8a8a',
+                            'paneProperties.topMargin': 20,
+                        },
+                        "disabled_features": [
                         //     'use_localstorage_for_settings',
                         //     "timeframes_toolbar",
                         //     "volume_force_overlay",
@@ -183,17 +185,17 @@ $_data["idiomaMenu"] = $idioma;
                         //     "header_chart_type",
                         //     "header_indicators",
                         //     "header_compare",
-                        //     "compare_symbol",
-                        //     "header_screenshot",
-                        //     "header_widget_dom_node",
-                        //     "header_saveload",
-                        //     "header_undo_redo",
-                        //     "header_interval_dialog_button",
-                        //     "show_interval_dialog_on_key_press",
-                        //     "header_symbol_search",
-                        //     "header_resolutions",
-                        //     "header_widget"
-                        // ],
+                            "compare_symbol",
+                            "header_screenshot",
+                            "header_widget_dom_node",
+                            "header_saveload",
+                            "header_undo_redo",
+                            "header_interval_dialog_button",
+                            "show_interval_dialog_on_key_press",
+                            "header_symbol_search",
+                            // "header_resolutions",
+                            // "header_widget"
+                        ],
                         "charts_storage_url": 'https://saveload.tradingview.com',
                         "charts_storage_api_version": "1.1",
                         "client_id": 'tradingview.com',

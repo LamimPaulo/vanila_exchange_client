@@ -111,7 +111,7 @@ class Book {
 
                 ?>
 
-                <tr class="<?php echo ($favorita ? "favorite-parity" : "") ?> tr-h" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >                    
+                <tr class="<?php echo ($favorita ? "favorite-parity" : "") ?> tr-h" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
                     <td class="text-left change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 18px; width: 25% !important" data-name="<?php echo $paridade->symbol ?>">
                         <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 12px; height: 12px;" />&nbsp;
                         <?php echo $paridade->moedaBook->simbolo; ?>
@@ -182,27 +182,36 @@ class Book {
                     $lista[] = Array("moeda" => $moeda, "saldos" => $saldos);
                 }
             }
+            $idioma = new \Utils\PropertiesUtils("book", IDIOMA);
 
             ob_start();
             foreach ($lista as $dados) {
                 $moeda = $dados["moeda"];
                 $saldos = $dados["saldos"];
-                
+
                 ?>
                 <tr class="tr-h">
-                    <td style="padding-left: 18px; padding-top: 3px !important; padding-bottom: 3px !important;" class="column-balance" data-name="<?php echo $moeda->simbolo?>" width="55%">
-                        
+                    <td style="padding-left: 18px; padding-top: 3px !important; padding-bottom: 3px !important;" class="column-balance" data-name="<?php echo $moeda->simbolo?>" width="20%">
+
                         <img src="<?php echo IMAGES ?>currencies/<?php echo $moeda->icone?>" style="width: 12px; height: 12px;" />&nbsp;&nbsp;<?php echo $moeda->simbolo; ?>
                     </td>
-                    <td class="text-right column-balance" style="padding-top: 3px !important; padding-bottom: 3px !important; width: 150px !important;">
+
+                    <td class="text-right" style="padding-right: 3px !important; padding-left: 3px !important; padding-top: 3px !important; padding-bottom: 3px !important; padding-right: 18px; min-width: 150px;">
                         <p style="padding: 0px; margin: 0px; <?php echo ($balanceMode > 1 ? "display: none;" : "") ?>" class="">
                             <span class="text-muted"><?php echo number_format($saldos["bloqueado"], $moeda->casasDecimais, ",", ".") ?> </span>
                         </p>
-                    </td>
-                    <td class="text-right column-balance" style="padding-top: 3px !important; padding-bottom: 3px !important; width: 150px !important; padding-right: 18px;">
                         <p style="padding: 0px; margin: 0px;" >
                             <span class="text-success"><?php echo number_format($saldos["saldo"], $moeda->casasDecimais, ",", ".") ?> </span>
                         </p>
+                    </td>
+
+
+                    <td class="text-left" style="padding-right: 3px !important; padding-left: 3px !important; padding-top: 3px !important; padding-bottom: 3px !important; min-width: 70px;">
+                        <small class="text-muted"><?php echo $idioma->getText("direta29") ?></small><br>
+                        <small class="text-muted"><?php echo $idioma->getText("direta23") ?></small>
+                        <!-- <p style="padding: 0px; margin: 0px; <?php echo ($balanceMode > 1 ? "display: none;" : "") ?>" class="">
+                            <span class="text-muted"><?php echo number_format($saldos["bloqueado"], $moeda->casasDecimais, ",", ".") ?> </span>
+                        </p> -->
                     </td>
                 </tr>
                 <?php

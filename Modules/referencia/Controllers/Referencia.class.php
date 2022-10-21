@@ -39,7 +39,7 @@ class Referencia {
 
             $contaCorrenteBtcRn = new \Models\Modules\Cadastro\ContaCorrenteBtcRn();
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-            
+
             if ($limite == "T") {
                 $limite = null;
             }
@@ -56,10 +56,10 @@ class Referencia {
             if (!empty($idReferencia)) {
                 $referencia = " id_referenciado = {$idMoeda} AND ";
             }
-            
+
             $moeda = \Models\Modules\Cadastro\MoedaRn::get($idMoeda);
             $referencias = $clienteRn->getClientesReferencias($cliente);
-            
+
             $lista = Array();
             $listaNomeData = Array();
             $deposito = 0;

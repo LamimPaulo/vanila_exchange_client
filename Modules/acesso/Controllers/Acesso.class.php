@@ -216,7 +216,7 @@ class Acesso {
      */
     public function register($params) {
         if (\Utils\Geral::isLogado() || \Utils\Geral::isAutenticado()) {
-             Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
+                Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
         }
         Layout::view("cadastro", $params);
     }

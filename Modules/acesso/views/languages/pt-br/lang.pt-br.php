@@ -41,6 +41,7 @@
   $lang['home7']      = 'Nosso Time'; 
   $lang['home8']      = 'Nosso time é formado por pessoas qualificadas que lhe oferecerão o melhor suporte e atendimento para aquilo que você precisar, seja ele por e-mail, chat ou telefone.'; 
   $lang['home9']      = 'Não tem uma conta?'; 
+  $lang['home98']      = 'Já tem uma conta?'; 
   $lang['home99']      = 'Cadastre-se aqui'; 
   $lang['home10']      = 'Entrar'; 
   $lang['home11']      = 'Nome Completo';
