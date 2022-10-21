@@ -4058,4 +4058,8 @@ button.dim:active:before {
   }
 }
 
+#btn-order-buy, #btn-order-sell {
+  font-size: 10px;
+}
+
 /*# sourceMappingURL=style.css.map */
