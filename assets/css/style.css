@@ -161,6 +161,8 @@ tbody tr:hover {
   padding-left: 7.5px;
 }
 
+.fa-search {margin: 7px;}
+
 .form-control::-webkit-input-placeholder {
   /* Chrome/Opera/Safari */
   color: rgba(24, 33, 77, 0.3490196078);

@@ -353,28 +353,43 @@ $_data["idiomaMenu"] = $idioma;
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12 col-lg-3">
-          <div class="nav flex-column nav-pills settings-nav" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
-            <a class="nav-link active" id="settings-main-tab" data-toggle="pill" href="#settings-main" role="tab" aria-controls="settings-main" aria-selected="false"><i class="icon ion-md-bulb"></i> Meu Perfil</a>
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Menu
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
 
-            <a class="nav-link" onclick="getDocStats()" id="settings-documentos-tab" data-toggle="pill" href="#settings-documentos" role="tab" aria-controls="settings-documentos" aria-selected="false"><i class="icon ion-md-person"></i> <?php echo $idioma->getText("documentos") ?></a>
+                  <div class="nav flex-column nav-pills settings-nav" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
-            <a class="nav-link" id="settings-preferences-tab" data-toggle="pill" href="#settings-preferences" role="tab" aria-controls="settings-preferences" aria-selected="false"><i class="icon ion-md-settings"></i> <?php echo $idioma->getText("perfil75") ?></a>
+                    <a class="nav-link active" id="settings-main-tab" data-toggle="pill" href="#settings-main" role="tab" aria-controls="settings-main" aria-selected="false"><i class="icon ion-md-bulb"></i> Meu Perfil</a>
 
-            <a class="nav-link" id="settings-security-tab" data-toggle="pill" href="#settings-security" role="tab" aria-controls="settings-security" aria-selected="false"><i class="icon ion-md-lock"></i> <?php echo $idioma->getText("abaSeguranca") ?></a>
+                    <a class="nav-link" onclick="getDocStats()" id="settings-documentos-tab" data-toggle="pill" href="#settings-documentos" role="tab" aria-controls="settings-documentos" aria-selected="false"><i class="icon ion-md-person"></i> <?php echo $idioma->getText("documentos") ?></a>
 
-            <a class="nav-link" onclick="listarContasBancarias()" id="settings-bank-tab" data-toggle="pill" href="#settings-banks" role="tab" aria-controls="settings-banks" aria-selected="false"><i class="icon ion-md-briefcase"></i> <?php echo $idioma->getText("perfil50") ?></a>
+                    <a class="nav-link" id="settings-preferences-tab" data-toggle="pill" href="#settings-preferences" role="tab" aria-controls="settings-preferences" aria-selected="false"><i class="icon ion-md-settings"></i> <?php echo $idioma->getText("perfil75") ?></a>
 
-            <a class="nav-link" onclick="listaEmpresa();" id="settings-company-tab" data-toggle="pill" href="#settings-company" role="tab" aria-controls="settings-company" aria-selected="false"><i class="icon ion-md-business"></i> <?php echo "Empresa" ?></a>
+                    <a class="nav-link" id="settings-security-tab" data-toggle="pill" href="#settings-security" role="tab" aria-controls="settings-security" aria-selected="false"><i class="icon ion-md-lock"></i> <?php echo $idioma->getText("abaSeguranca") ?></a>
 
-            <a class="nav-link" id="settings-api-tab" data-toggle="pill" href="#settings-api" role="tab" aria-controls="settings-api" aria-selected="false"><i class="icon iconify" data-icon="ion:terminal"></i> <?php echo $idioma->getText("perfil20") ?></a>
+                    <a class="nav-link" onclick="listarContasBancarias()" id="settings-bank-tab" data-toggle="pill" href="#settings-banks" role="tab" aria-controls="settings-banks" aria-selected="false"><i class="icon ion-md-briefcase"></i> <?php echo $idioma->getText("perfil50") ?></a>
 
-            <a class="nav-link" onclick="listaNavegadores();" id="settings-hist-tab" data-toggle="pill" href="#settings-hist" role="tab" aria-controls="settings-hist" aria-selected="false"><i class="icon ion-md-exit"></i> <?php echo $idioma->getText("perfil21") ?></a>
+                    <a class="nav-link" onclick="listaEmpresa();" id="settings-company-tab" data-toggle="pill" href="#settings-company" role="tab" aria-controls="settings-company" aria-selected="false"><i class="icon ion-md-business"></i> <?php echo "Empresa" ?></a>
 
-            <?php if ($documentosEntregue && $configuracao->aparelhos == 1) { ?>
-              <a class="nav-link" onclick="listarDispositivosMobile(); parear();" id="settings-devices-tab" data-toggle="pill" href="#settings-devices" role="tab" aria-controls="settings-devices" aria-selected="false"><i class="icon ion-md-phone-portrait"></i> <?php echo $idioma->getText("perfil1") ?></a>
-            <?php } ?>
-            <a class="nav-link" onclick="meusLimites(); getTaxas();" id="settings-limits-tab" data-toggle="pill" href="#settings-limits" role="tab" aria-controls="settings-limits" aria-selected="false"><i class="icon ion-md-cash"></i> <?php echo $idioma->getText("perfil24") ?></a>
+                    <a class="nav-link" id="settings-api-tab" data-toggle="pill" href="#settings-api" role="tab" aria-controls="settings-api" aria-selected="false"><i class="icon iconify" data-icon="ion:terminal"></i> <?php echo $idioma->getText("perfil20") ?></a>
+
+                    <a class="nav-link" onclick="listaNavegadores();" id="settings-hist-tab" data-toggle="pill" href="#settings-hist" role="tab" aria-controls="settings-hist" aria-selected="false"><i class="icon ion-md-exit"></i> <?php echo $idioma->getText("perfil21") ?></a>
+
+                    <?php if ($documentosEntregue && $configuracao->aparelhos == 1) { ?>
+                      <a class="nav-link" onclick="listarDispositivosMobile(); parear();" id="settings-devices-tab" data-toggle="pill" href="#settings-devices" role="tab" aria-controls="settings-devices" aria-selected="false"><i class="icon ion-md-phone-portrait"></i> <?php echo $idioma->getText("perfil1") ?></a>
+                    <?php } ?>
+                    <a class="nav-link" onclick="meusLimites(); getTaxas();" id="settings-limits-tab" data-toggle="pill" href="#settings-limits" role="tab" aria-controls="settings-limits" aria-selected="false"><i class="icon ion-md-cash"></i> <?php echo $idioma->getText("perfil24") ?></a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-md-12 col-lg-9">
@@ -3601,4 +3616,5 @@ $_data["idiomaMenu"] = $idioma;
     });
   }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <?php Utils\Layout::append("mensage_text", $_data) ?>
