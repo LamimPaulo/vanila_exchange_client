@@ -72,8 +72,8 @@ class Book {
 
                 $favorita = isset($favoritas[$paridade->id]);
                 $precoAbertura = $paridade->primeiroPreco;
-                $precoVolume = $paridade->precoCompra;
-
+                $precoVolume = $paridade->precoCompra ;
+                $valor = $paridade->precoCompra != 0 ? $paridade->precoCompra : $paridade->precoVenda;
                 if (($paridade->idMoedaTrade > 1) && ($paridade->ativo == 1)) {
                     $par = $paridadeRn->getBySymbol("{$paridade->moedaTrade->simbolo}:BRL");
                     if ($paridade != null) {
