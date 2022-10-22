@@ -85,17 +85,17 @@ class Book {
 
                 if ($precoAbertura > 0) {
                     // $variacao = $precoAbertura;
-                    $variacao = (($paridade->precoCompra > $precoAbertura) ? (($paridade->precoCompra - $precoAbertura) / $precoAbertura) :  ($precoAbertura - $paridade->precoCompra) / $precoAbertura) * 100;
+                    $variacao = (($valor > $precoAbertura) ? (($valor - $precoAbertura) / $precoAbertura) :  ($precoAbertura - $valor) / $precoAbertura) * 100;
                 } else {
                     $variacao = 0;
                 }
 
                 $icon = "";
                 $color = "text-blue";
-                if ($paridade->precoCompra > $precoAbertura) {
+                if ($valor > $precoAbertura) {
                     $icon = "<i class='fa fa-level-up' style='color: #1ab394;'></i>";
                     $color = "text-navy";
-                } else if ($paridade->precoCompra < $precoAbertura) {
+                } else if ($valor < $precoAbertura) {
                     $icon = "<i class='fa fa-level-down' style='color: #ed5565;'></i>";
                     $color = "text-danger";
                 }
