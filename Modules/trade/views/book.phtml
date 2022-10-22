@@ -74,12 +74,12 @@ $_data["idiomaMenu"] = $idioma;
 
             <div class="paridade">
                 <table class="table" id="tickers-table">
-                    <thead class="thead-h thead-h1">
-                        <tr class="tr-h">
-                            <th class="text-center" style="width: 25% !important;"><?php echo $idioma->getText("direta22") ?></th>
-                            <th class="text-right" style="width: 35% !important;"><?php echo $idioma->getText("direta4") ?></th>
-                            <th class="text-right" style="width: 30% !important;"><?php echo $idioma->getText("direta40") ?></th>
-                            <th class="text-center" style="width: 10% !important;"></th>
+                    <thead>
+                        <tr>
+                            <th scope="col"><?php echo $idioma->getText("direta22") ?></th>
+                            <th scope="col"><?php echo $idioma->getText("direta4") ?></th>
+                            <th scope="col"><?php echo $idioma->getText("direta40") ?></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody id="body-paridades" class="tbody-h tbody-h1" style="cursor: pointer;">
