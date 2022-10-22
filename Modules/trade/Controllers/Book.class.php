@@ -117,7 +117,7 @@ class Book {
                         <?php echo $paridade->moedaBook->simbolo; ?>
                     </td>
                     <td class="text-right change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 35%;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
+                        <?php echo number_format($valor, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
                     </td>
                     <td class="text-right change-parity<?php echo $color ?> column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 30% !important;" data-name="<?php echo $paridade->symbol ?>">
                         <?php echo number_format($variacao, 1, ",", ".") ?>%
