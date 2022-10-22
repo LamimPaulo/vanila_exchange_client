@@ -552,9 +552,9 @@ class OrderBookRn {
         $having = "";
         if ($agrupar) {
             if ($tipo == \Utils\Constantes::ORDEM_COMPRA) { 
-                $columns = "SUM(ob.volume_currency - ob.volume_executado + ob.valor_taxa - ob.valor_taxa_executada) AS volume , SUM(ob.volume_executado) AS volume_executado, AVG(ob.valor_cotacao) AS valor_cotacao, ob.tipo, ob.id_paridade, ob.id_cliente ";
+                $columns = "SUM(ob.volume_currency - ob.volume_executado + ob.valor_taxa - ob.valor_taxa_executada) AS volume , SUM(ob.volume_executado) AS volume_executado, AVG(ob.valor_cotacao) AS valor_cotacao, ob.tipo, ob.id_paridade, ob.id_cliente, ob.id";
             } else {
-                $columns = "SUM(ob.volume_currency - ob.volume_executado) AS volume , SUM(ob.volume_executado) AS volume_executado, AVG(ob.valor_cotacao) AS valor_cotacao, ob.tipo, ob.id_paridade, ob.id_cliente";
+                $columns = "SUM(ob.volume_currency - ob.volume_executado) AS volume , SUM(ob.volume_executado) AS volume_executado, AVG(ob.valor_cotacao) AS valor_cotacao, ob.tipo, ob.id_paridade, ob.id_cliente, ob.id";
             }
             $groupby = " GROUP BY ob.valor_cotacao, ob.tipo, ob.id_paridade ";
             $having = " HAVING  volume > 0 ";
@@ -583,6 +583,7 @@ class OrderBookRn {
             $orderBook = new OrderBook($dados);
             if ($agrupar) { 
                 $orderBook->volumeCurrency = $dados["volume"];
+                $orderBook->id = $dados["id"];
             } else {
                 if ( $dados["tipo"] == \Utils\Constantes::ORDEM_COMPRA) { 
                     $orderBook->volumeCurrency = $dados["volume_currency"] - $dados["volume_executado"] + $dados["valor_taxa"] - $dados["valor_taxa_executada"];

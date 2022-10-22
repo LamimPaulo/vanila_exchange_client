@@ -295,9 +295,8 @@ class Book {
             }
 
             $diferencaPorcentagem = 0;
-
             if(!empty($compra->valorCotacao) && !empty($venda->valorCotacao)){
-               $diferencaPorcentagem = number_format(100 * (1 - ($compra->valorCotacao) / (($venda->valorCotacao) * 1 )), 2, ",", "."); 
+               $diferencaPorcentagem = number_format(100 * (1 - ($compra->valorCotacao) / (($venda->valorCotacao) * 1 )), 2, ",", ".");
 
                 if($diferencaPorcentagem >= 0){
                     $diferencaPorcentagemShow = $diferencaPorcentagem;
@@ -341,6 +340,7 @@ class Book {
         if (!empty($listaAux) && count($listaAux) > 0) {
         // if (false) {
             foreach ($listaAux as $ordem) {
+
                 $volumeAcumulado += $ordem->volumeCurrency;
 
                 $ac = ($tipo == \Utils\Constantes::ORDEM_COMPRA ? $volumeAcumulado : ($volumeGeral - $volumeAcumulado + $ordem->volumeCurrency));
