@@ -4065,3 +4065,6 @@ button.dim:active:before {
 }
 
 /*# sourceMappingURL=style.css.map */
+.datepicker.dropdown-menu {
+  max-width: 330px !important;
+}

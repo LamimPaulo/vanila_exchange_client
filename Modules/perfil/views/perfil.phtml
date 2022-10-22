@@ -353,8 +353,7 @@ $_data["idiomaMenu"] = $idioma;
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12 col-lg-3">
-
-          <div class="accordion" id="accordionExample">
+          <div class="accordion mb-3" id="accordionExample">
             <div class="accordion-item">
               <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -417,7 +416,7 @@ $_data["idiomaMenu"] = $idioma;
                       </span>
                       <span class="text-right pull-right" style="padding:5px !important;">
 
-                        <button id="btn_kycStart" class="btn btn-link" type="button" id="btn-salvar">
+                        <div id="btn_kycStart"id="btn-salvar">
                           <?php
                           if ($cliente->documentoVerificado == 0 || $cliente->documentoVerificado == null) {
                             echo '<div class="badge-danger" style="padding:10px;border-radius:20px;"><i class="fa fa-shield fa-1x" aria-hidden="true"></i>&nbsp;Conta não verificada</div>';
@@ -429,7 +428,7 @@ $_data["idiomaMenu"] = $idioma;
                             echo '<div class="badge-danger" style="padding:10px;border-radius:20px;"><i class="fa fa-shield fa-1x" aria-hidden="true"></i>&nbsp;Conta não verificada</div>';
                           }
                           ?>
-                        </button>
+                        </div>
                       </span>
                     </div>
 
@@ -683,7 +682,7 @@ $_data["idiomaMenu"] = $idioma;
                         <div class="col-md-6">
                           <div class="form-group <?php echo (empty($cliente->estado) ? "has-error" : "") ?>">
                             <label for="estado">UF</label>
-                            <input class="form-control full-width" id="estado" name="estado" maxlength="2" value="<?php echo $cliente->estado ?>" />
+                            <input style="text-transform:uppercase" class="form-control full-width" id="estado" name="estado" maxlength="2" value="<?php echo $cliente->estado ?>" />
                           </div>
                         </div>
 
@@ -2814,6 +2813,10 @@ $_data["idiomaMenu"] = $idioma;
     $("#dataNascimento").datepicker({
       format: "dd/mm/yyyy"
     }).mask("99/99/9999");
+
+    $("#celular").mask("(99) 9 9999-9999"); 
+    $("#cpf").mask("999.999.999-99"); 
+    $("#cep").mask("99999-999");
 
     $("#senha").keyup(function() {
       forcaSenha();
