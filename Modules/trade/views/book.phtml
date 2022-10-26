@@ -64,7 +64,7 @@ $_data["idiomaMenu"] = $idioma;
                     $selected = ($paridade->idMoedaTrade == $moedaTrade->id);
                     ?>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" role="tab" aria-selected="false" onclick="setCurrentCoin(<?php echo $moedaTrade->id?>);"><?php echo $moedaTrade->nome ?></a>
+                    <a class="btn nav-link" data-toggle="pill" role="tab" aria-selected="false" onclick="setCurrentCoin(<?php echo $moedaTrade->id?>);"><?php echo $moedaTrade->simbolo ?></a>
                     <input type="hidden" id="hiddencontainer" name="hiddencontainer"/>
                 </li>
                     <?php
