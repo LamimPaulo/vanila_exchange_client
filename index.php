@@ -42,6 +42,12 @@ if (AMBIENTE == "producao" && isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
     $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CF_CONNECTING_IP'];
 }
 
+if(AMBIENTE != "producao"){
+    define('DATAFEED_URL', 'https://sandbox.coinage.trade/api/getcandles');
+}else{
+    define('DATAFEED_URL', 'https://coinage.trade/api/getcandles');
+}
+
 //Incluo os caminhos de todas as bibliotecas e arquivos de include do sistema
 set_include_path('./Library/' . PATH_SEPARATOR . './Core/' . PATH_SEPARATOR . './Modules/');
 //Defino o locale do sistema

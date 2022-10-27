@@ -72,8 +72,8 @@ class Book {
 
                 $favorita = isset($favoritas[$paridade->id]);
                 $precoAbertura = $paridade->primeiroPreco;
-                $precoVolume = $paridade->precoCompra;
-
+                $precoVolume = $paridade->precoCompra ;
+                $valor = $paridade->precoCompra != 0 ? $paridade->precoCompra : $paridade->precoVenda;
                 if (($paridade->idMoedaTrade > 1) && ($paridade->ativo == 1)) {
                     $par = $paridadeRn->getBySymbol("{$paridade->moedaTrade->simbolo}:BRL");
                     if ($paridade != null) {
@@ -85,17 +85,17 @@ class Book {
 
                 if ($precoAbertura > 0) {
                     // $variacao = $precoAbertura;
-                    $variacao = (($paridade->precoCompra > $precoAbertura) ? (($paridade->precoCompra - $precoAbertura) / $precoAbertura) :  ($precoAbertura - $paridade->precoCompra) / $precoAbertura) * 100;
+                    $variacao = (($valor > $precoAbertura) ? (($valor - $precoAbertura) / $precoAbertura) :  ($precoAbertura - $valor) / $precoAbertura) * 100;
                 } else {
                     $variacao = 0;
                 }
 
                 $icon = "";
                 $color = "text-blue";
-                if ($paridade->precoCompra > $precoAbertura) {
+                if ($valor > $precoAbertura) {
                     $icon = "<i class='fa fa-level-up' style='color: #1ab394;'></i>";
                     $color = "text-navy";
-                } else if ($paridade->precoCompra < $precoAbertura) {
+                } else if ($valor < $precoAbertura) {
                     $icon = "<i class='fa fa-level-down' style='color: #ed5565;'></i>";
                     $color = "text-danger";
                 }
@@ -117,7 +117,7 @@ class Book {
                         <?php echo $paridade->moedaBook->simbolo; ?>
                     </td>
                     <td class="text-right change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 35%;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->precoCompra, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
+                        <?php echo number_format($valor, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
                     </td>
                     <td class="text-right change-parity<?php echo $color ?> column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 30% !important;" data-name="<?php echo $paridade->symbol ?>">
                         <?php echo number_format($variacao, 1, ",", ".") ?>%
