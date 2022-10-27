@@ -888,7 +888,7 @@ class Saques {
                 $json["limiteDisponivel"] = "Limite Disponível: " . number_format($dados["limiteDisponivelMensal"], $moeda->casasDecimais, ",", ".") . " de " . number_format($dados["limiteMensal"], $moeda->casasDecimais, ",", ".") . " {$moeda->simbolo}";
             
                 if ($dados["limiteDisponivelMensal"] <= 0 ) {
-                    $json["limiteInformacao"] = "Para solicitar o aumento do limite de saque, por favor, envie um e-mail para support@Exchangecx.com";
+                    $json["limiteInformacao"] = "Para solicitar o aumento do limite de saque, por favor, envie um e-mail para support@Coinage.com";
                 } else {
                     $json["limiteInformacao"] = "";
                 }

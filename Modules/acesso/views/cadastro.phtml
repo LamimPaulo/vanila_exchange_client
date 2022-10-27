@@ -1,19 +1,20 @@
 <?php
-$available_langs = array('pt-br','en','es','fr');
-if(in_array($_POST['lang'], $available_langs)) {
+$available_langs = array('pt-br', 'en', 'es', 'fr');
+if (in_array($_POST['lang'], $available_langs)) {
     $_SESSION['lang'] = $_POST['lang'];
 }
 $idioma = (isset($_SESSION['lang']) ? $_SESSION['lang'] : "pt-br");
 $homeBase = URLBASE_CLIENT . 'Modules/acesso/views/';
-include('Modules/acesso/views/languages/'.$idioma.'/lang.'.$idioma.'.php');
+include('Modules/acesso/views/languages/' . $idioma . '/lang.' . $idioma . '.php');
 $brand = Models\Modules\Cadastro\BrandRn::getBrand();
 $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
 $idReferencia = \Utils\Get::get($_data, 0, "");
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
-    <?php if(AMBIENTE == "producao") { ?>
+    <?php if (AMBIENTE == "producao") { ?>
 
     <?php } ?>
     <title><?php echo TITULO ?></title>
@@ -40,89 +41,111 @@ $idReferencia = \Utils\Get::get($_data, 0, "");
     <link rel="stylesheet" href="<?php echo TEMA; ?>/css/style.css">
     <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
 
-    
+
     <script src="https://www.google.com/recaptcha/api.js"></script>
-    
+
 </head>
 <script type="text/javascript">
     var AMBIENTE = '<?php echo AMBIENTE ?>';
 </script>
+
 <body>
-  <div class="vh-100 d-flex justify-content-center">
-    <div class="form-access my-auto middle-box text-center loginscreen animated fadeInDown">
-    <div class="m-t-lg m-b-lg">
+    <div class="vh-100 d-flex justify-content-center">
+        <div class="form-access my-auto middle-box text-center loginscreen animated fadeInDown">
+            <div class="m-t-lg m-b-lg">
 
-        <div class="m-t-lg m-b-lg">
-            <a href="<?php echo $empresa->homePage ?>">
-                <img alt="image"  width="250px" src="<?php echo IMAGES; ?>logo-ca.png" class="logo">
-            </a>
-        </div>
-        <br>
-        <form method="post" id="form-cadastro" class="form-cadastro mt-lg-4">
-            <span>Registro</span>
-            <div class="form-group">
-                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="text" name="nome" id="nome" class="form-control" placeholder="<?php echo $lang['home11']; ?>">
+                <div class="m-t-lg m-b-lg">
+                    <a href="<?php echo $empresa->homePage ?>">
+                        <img alt="image" width="250px" src="<?php echo IMAGES; ?>logo-ca.png" class="logo">
+                    </a>
+                </div>
+                <br>
+                <form method="post" id="form-cadastro" class="form-cadastro mt-lg-4">
+                    <span>Registro</span>
+                    <div class="form-group">
+                        <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;" type="text" name="nome" id="nome" class="form-control" placeholder="<?php echo $lang['home11']; ?>">
+                    </div>
+                    <div class="form-group">
+                        <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;" type="email" name="email" id="email" class="form-control" placeholder="E-mail">
+                    </div>
+                    <div class="form-group">
+                        <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;" type="hidden" name="referencia" id="referencia" class="form-control" value="<?php echo $idReferencia ?>">
+                    </div>
+                    <div class="form-group">
+                        <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;" type="password" name="senha" id="senha" class="form-control" placeholder="<?php echo $lang['home36']; ?>">
+                    </div>
+                    <div class="form-group">
+                        <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;" type="password" name="senhaConfirmar" id="senhaConfirmar" class="form-control" placeholder="<?php echo $lang['home37']; ?>">
+                    </div>
+                    <div class="form-group">
+                        <div id="google" name="google" atrpage="" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo $_ENV["GoogleSite"]; ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;"></div>
+                        <!-- <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="password" name="senhaConfirmar" id="senhaConfirmar" class="form-control" placeholder="<?php echo $lang['home37']; ?>"> -->
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" name="termos" id="termos">
+                        <label class="custom-control-label" for="termos">Eu concordo com os <a href="#!" target="_terms"><?php echo $lang['home13']; ?></a></label>
+                    </div>
+                    <button id="conta-gratis" disabled="disabled" style="background-color: #2351ff; border-color: #2351ff; color:black;" type="submit" class="btn btn-primary block full-width m-b"><?php echo $lang['home14']; ?></button>
+                </form>
+                <!-- <h2>Don't have an account? <a href="signup-light.html">Sign up here</a></h2> -->
+                <div class="col-xs-6 text-center">
+                    <h2>
+                        <?php echo $lang['home98']; ?>
+                        <a class="" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGIN ?>" style="color: #2351ff;">
+                            <?php echo $lang['home10']; ?>
+                        </a>
+                    </h2>
+                </div>
             </div>
-            <div class="form-group">
-                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="email" name="email" id="email" class="form-control" placeholder="E-mail">
-            </div>
-            <div class="form-group">
-                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="hidden" name="referencia" id="referencia" class="form-control" value="<?php echo $idReferencia ?>">
-            </div>
-            <div class="form-group">
-                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="password" name="senha" id="senha" class="form-control" placeholder="<?php echo $lang['home36']; ?>">
-            </div>
-            <div class="form-group">
-                <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="password" name="senhaConfirmar" id="senhaConfirmar" class="form-control" placeholder="<?php echo $lang['home37']; ?>">
-            </div>
-            <div class="form-group">
-                <div id="google" name="google" atrpage="" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo $_ENV["GoogleSite"]; ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;" ></div>
-                <!-- <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="password" name="senhaConfirmar" id="senhaConfirmar" class="form-control" placeholder="<?php echo $lang['home37']; ?>"> -->
-            </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="termos" id="termos">
-                <label class="custom-control-label" for="termos">Eu concordo com os <a href="#!" target="_terms" ><?php echo $lang['home13']; ?></a></label>
-            </div>
-            <button id="conta-gratis" disabled="disabled" style="background-color: #2351ff; border-color: #2351ff; color:black;" type="submit" class="btn btn-primary block full-width m-b" ><?php echo $lang['home14']; ?></button>
-    </form>
-    <!-- <h2>Don't have an account? <a href="signup-light.html">Sign up here</a></h2> -->
-        <div class="col-xs-6 text-center">
-            <h2>
-                <?php echo $lang['home98']; ?>
-                <a
-                class=""
-                href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_LOGIN ?>"
-                style="color: #2351ff;">
-                    <?php echo $lang['home10']; ?>
-                </a>
-            </h2>
-        </div>
-    </div>
-    <!-- <div class="footer navbar-fixed-bottom center">
-        <small ><?php echo $empresa->nomeEmpresarial ?> <?php echo $empresa->anoInicio ?> - <?php echo date('Y');?></small> 
+            <!-- <div class="footer navbar-fixed-bottom center">
+        <small ><?php echo $empresa->nomeEmpresarial ?> <?php echo $empresa->anoInicio ?> - <?php echo date('Y'); ?></small> 
     </div> -->
-</div>
-<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
-    <script src="assets/js/jquery-3.4.1.min.js"></script>
-    <script src="assets/js/popper.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/amcharts-core.min.js"></script>
-    <script src="assets/js/amcharts.min.js"></script>
-    <script src="assets/js/custom.js"></script>
+        </div>
+        <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
+        <script src="<?php echo TEMA; ?>js/jquery-3.4.1.min.js"></script>
+        <script src="<?php echo TEMA; ?>js/popper.min.js"></script>
+        <script src="<?php echo TEMA; ?>js/bootstrap.min.js"></script>
+        <script src="<?php echo TEMA; ?>js/amcharts-core.min.js"></script>
+        <script src="<?php echo TEMA; ?>js/amcharts.min.js"></script>
+        <script src="<?php echo TEMA; ?>js/custom.js"></script>
 
-<!-- <script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script> -->
-<!-- <script src="<?php echo TEMA; ?>js/bootstrap.min.js"></script> -->
-<script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
-
-
-<?php Utils\Layout::append("inspina/notificacao", null); ?>
+        <!-- <script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script> -->
+        <!-- <script src="<?php echo TEMA; ?>js/bootstrap.min.js"></script> -->
+        <script src="<?php echo TEMA; ?>js/plugins/toastr/toastr.min.js"></script>
 
 
-<script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
+        <?php Utils\Layout::append("inspina/notificacao", null); ?>
+
+
+        <script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
+        <script>
+            $(document).ready(function () {
+            function validarBotao() {
+
+                var operacao = $("#google").attr("atrpage");
+                var opcao = false;
+
+                switch (operacao) {
+                    case "register":
+                        document.getElementById("conta-gratis").disabled = opcao;
+                        break;
+                    case "login":
+                        document.getElementById("acessar-painel").disabled = opcao;
+                        break;
+                    case "recovery":
+                        document.getElementById("btn-send").disabled = opcao;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        </script>
 
 </body>
 
-<?php if(AMBIENTE == "producao") { ?>
+<?php if (AMBIENTE == "producao") { ?>
 
 <?php } ?>
+
 </html>

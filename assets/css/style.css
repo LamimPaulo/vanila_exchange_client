@@ -2165,6 +2165,14 @@ tbody.ob-heading {
   border-radius: 2px;
 }
 
+.input-group-text {
+  font-size: 12px;
+  width: 55px;
+}
+input::placeholder {
+  font-size: 14px;
+}
+
 .market-news {
   border: 1px solid #e0e3eb;
   border-radius: 2px;
