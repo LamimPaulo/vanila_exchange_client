@@ -78,14 +78,14 @@ $idReferencia = \Utils\Get::get($_data, 0, "");
                         <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;" type="password" name="senhaConfirmar" id="senhaConfirmar" class="form-control" placeholder="<?php echo $lang['home37']; ?>">
                     </div>
                     <div class="form-group">
-                        <div id="google" name="google" atrpage="" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo $_ENV["GoogleSite"]; ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;"></div>
+                        <div id="google" name="google" atrpage="register" class="g-recaptcha" data-callback="validarBotao" data-sitekey="<?php echo $_ENV["GoogleSite"]; ?>" data-theme="light" style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0; display: inline-block !important; margin-left: 25px !important;"></div>
                         <!-- <input style="border-radius: 3px; background-color: transparent !important; color: #000 !important;"  type="password" name="senhaConfirmar" id="senhaConfirmar" class="form-control" placeholder="<?php echo $lang['home37']; ?>"> -->
                     </div>
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" name="termos" id="termos">
                         <label class="custom-control-label" for="termos">Eu concordo com os <a href="#!" target="_terms"><?php echo $lang['home13']; ?></a></label>
                     </div>
-                    <button id="conta-gratis" disabled="disabled" style="background-color: #2351ff; border-color: #2351ff; color:black;" type="submit" class="btn btn-primary block full-width m-b"><?php echo $lang['home14']; ?></button>
+                    <button id="conta-gratis" style="background-color: #2351ff; border-color: #2351ff; color:black;" type="submit" class="btn btn-primary block full-width m-b"><?php echo $lang['home14']; ?></button>
                 </form>
                 <!-- <h2>Don't have an account? <a href="signup-light.html">Sign up here</a></h2> -->
                 <div class="col-xs-6 text-center">
@@ -119,27 +119,28 @@ $idReferencia = \Utils\Get::get($_data, 0, "");
 
         <script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
         <script>
-            $(document).ready(function () {
-            function validarBotao() {
+            // $(document).ready(function () {
+            //     function validarBotao() {
 
-                var operacao = $("#google").attr("atrpage");
-                var opcao = false;
+            //         var operacao = $("#google").attr("atrpage");
+            //         var opcao = false;
+            //         console.log(opcao);
 
-                switch (operacao) {
-                    case "register":
-                        document.getElementById("conta-gratis").disabled = opcao;
-                        break;
-                    case "login":
-                        document.getElementById("acessar-painel").disabled = opcao;
-                        break;
-                    case "recovery":
-                        document.getElementById("btn-send").disabled = opcao;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+            //         switch (operacao) {
+            //             case "register":
+            //                 document.getElementById("conta-gratis").disabled = opcao;
+            //                 break;
+            //             case "login":
+            //                 document.getElementById("acessar-painel").disabled = opcao;
+            //                 break;
+            //             case "recovery":
+            //                 document.getElementById("btn-send").disabled = opcao;
+            //                 break;
+            //             default:
+            //                 break;
+            //         }
+            //     }
+            // });
         </script>
 
 </body>
