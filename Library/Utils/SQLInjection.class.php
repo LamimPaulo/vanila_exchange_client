@@ -136,17 +136,17 @@ class SQLInjection {
                     $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
 
                     
-                    $clienteRn->conexao->update(
-                        Array(
-                            "status" => 2,
-                            "analise_cliente" => 1,
-                            "id_analise_cliente_adm" => 1483022582, //Renato User
-                            "anotacoes" => " {$logado->observacoes} \n Cliente bloqueado automaticamente por ser detectada SQL Injection "
-                        ), 
-                        Array(
-                            "id" => $logado->id
-                        )
-                    );
+                    // $clienteRn->conexao->update(
+                    //     Array(
+                    //         "status" => 2,
+                    //         "analise_cliente" => 1,
+                    //         "id_analise_cliente_adm" => 1483022582, //Renato User
+                    //         "anotacoes" => " {$logado->observacoes} \n Cliente bloqueado automaticamente por ser detectada SQL Injection "
+                    //     ), 
+                    //     Array(
+                    //         "id" => $logado->id
+                    //     )
+                    // ); //TODO uncoment to be safer
                          
                     $observacaoCliente = new \Models\Modules\Cadastro\ObservacaoCliente();
                     $observacaoCliente->idCliente = $logado->id;
