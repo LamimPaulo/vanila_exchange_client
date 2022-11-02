@@ -131,11 +131,11 @@ class Book {
                     <td class="text-center column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 15% !important"  id="btn-favorito-<?php echo $paridade->id ?>" data-name="<?php echo $paridade->symbol ?>">
                         <?php if ($favorita) {?>
                         <button class="btn btn-link text-success" type="button" onclick="removerFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
-                            <i class="fa  fa-star" style="font-size: 9px; color: green"></i>
+                            <i class="fa  fa-star" style="font-size: 9px; color: gold"></i>
                         </button>
                         <?php } else { ?>
                         <button class="btn btn-link text-warning" type="button" onclick="addFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
-                            <i class="fa  fa-star-o" style="font-size: 9px; color: gray"></i>
+                            <i class="fa  fa-star-o" style="font-size: 12px; color: grey"></i>
                         </button>
                         <?php }  ?>
                     </td>
