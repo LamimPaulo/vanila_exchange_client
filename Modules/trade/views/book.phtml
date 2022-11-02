@@ -64,7 +64,7 @@ $_data["idiomaMenu"] = $idioma;
                     $selected = ($paridade->idMoedaTrade == $moedaTrade->id);
                     ?>
                 <li class="nav-item">
-                    <a class="btn nav-link" data-toggle="pill" role="tab" aria-selected="false" onclick="setCurrentCoin(<?php echo $moedaTrade->id?>);"><?php echo $moedaTrade->simbolo ?></a>
+                    <a class="btn nav-link <?php echo ($paridade->idMoedaTrade == $moedaTrade->id) ? 'active' : ''  ?>" data-toggle="pill" role="tab" aria-selected="false" onclick="setCurrentCoin(<?php echo $moedaTrade->id?>);"><?php echo $moedaTrade->simbolo ?></a>
                     <input type="hidden" id="hiddencontainer" name="hiddencontainer"/>
                 </li>
                     <?php
@@ -796,7 +796,11 @@ $(document).ready(function () {
     // legend.style.left = 3 + 'px';
     // legend.style.top = 3 + 'px';
 
-        setCurrentCoin(1);
+        if(sessionStorage.getItem("current_coin") === null) {
+            setCurrentCoin(1)
+        } else {
+            setCurrentCoin(sessionStorage.getItem("current_coin"))
+        }
         listarMinhasOrdens();
         alertaKyc();
         listarBook();
@@ -1026,8 +1030,15 @@ $(document).ready(function () {
     }
 
     function setCurrentCoin(id) {
-        currentSelected = id
-        listarParidadesBook();
+        if(sessionStorage.getItem("current_coin") === null) {
+            sessionStorage.setItem("current_coin", id)
+            currentSelected = id
+            listarParidadesBook();
+        } else {
+            sessionStorage.setItem("current_coin", id)
+            currentSelected = sessionStorage.getItem("current_coin");
+            listarParidadesBook();
+        }
     }
 
     function filtrarParidadesBook() {
@@ -1160,6 +1171,7 @@ $(document).ready(function () {
                 success: function (json) {
                     try {
                         if (json.sucesso) {
+                            console.log("PARIDADES: ", json.html)
                             $("#body-paridades").html(json.html);
 
                             $(".change-parity").each(function () {
