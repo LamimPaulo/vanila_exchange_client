@@ -16,7 +16,8 @@
 titulo=Exchange - Documentos Obrigatorios
 docsLegais=Documentos Legales
 paraSaberUtilizar=Para continuar a utilizar el sistema es necesario leer y aceptar los documentos a continuación:
-liEConcordo=He leído y estoy de acuerdo           
+liEConcordo=He leído y estoy de acuerdo
+prosseguir=Proceder        
 mensagemImportante=Mensaje Importante:
 
 #Controller

@@ -13,6 +13,7 @@ titulo=Exchange - Required Documents
 docsLegais=Legal Documents
 paraSaberUtilizar=To continue to use the system you must read and accept the documents below:
 liEConcordo=I read and I agree
+prosseguir=Proceed
 mensagemImportante=Important Message:                                
 
 #Controller

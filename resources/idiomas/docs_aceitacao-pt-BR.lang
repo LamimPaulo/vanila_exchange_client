@@ -12,7 +12,8 @@
 titulo=Exchange - Documentos Obrigatórios
 docsLegais=Documentos Legais
 paraSaberUtilizar=Para continuar a utilizar o sistema é necessário ler e aceitar os documentos abaixo:
-liEConcordo=Li e Concordo             
+liEConcordo=Li e aceito todos os termos
+prosseguir=Prosseguir            
 mensagemImportante=Mensagem Importante:                            
 
 #Controller

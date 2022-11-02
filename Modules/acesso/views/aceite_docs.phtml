@@ -42,44 +42,31 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
                             <a href="javascript:trocarIdioma('es-ES');" id="Btlanges">ES </a>
                         </li>
                     </div>
-                    <div class="mt-lg-4">
+                    <div class="mt-lg-2">
                         <div class="col-lg-12">
                         <h2><?php echo $idioma->getText("docsLegais") ?></h2>
                         <br><br>
-                        <p>
                         <h3><?php echo $idioma->getText("paraSaberUtilizar") ?></h3>
-                        <p>
-                        </p>
-                        <p></p>
-                        <br><br>
+                        <p class="text-danger">*Aceite os termos para prosseguir</p>
                         <?php foreach ($lista as $documentoSistema) { ?>
-                        <div class="row" id="container-<?php echo $documentoSistema->codigo ?>">
-                            <div class="col col-lg-6">
-                                <!-- <div class="form-group"> -->
-                                    <div class="row text-left" >
-                                        <div class="custom-checkbox">
-                                            <input class="" type="checkbox" name="<?php echo $documentoSistema->codigo ?>" id="<?php echo $documentoSistema->codigo ?>" >
-                                        </div>&nbsp;&nbsp;
-                                        <label class="" for="<?php echo $documentoSistema->codigo ?>" style="font-size: 15px">
-                                            <a href="<?php echo $documentoSistema->link?>" target="<?php echo $documentoSistema->id ?>"><?php echo $documentoSistema->descricao?></a>
-                                        </label>
-                                <!-- </div> -->
+                        <div class="row" id="<?php echo $documentoSistema->codigo ?>">
+                            <div class="col col-lg-12">
+                                <div class="form-group" >
+                                    <a href="<?php echo $documentoSistema->link?>" target="<?php echo $documentoSistema->id ?>"><?php echo $documentoSistema->descricao?></a>
                                 </div>
                             </div>
                         </div>
                         <?php } ?>
-                        <br><br>
-                        <div class="row" id="container-alert" style="display: none;">
-                            <div class="col col-lg-12">
-                                <div class="alert alert-danger">
-                                </div>
-                            </div>
+                        <div class="custom-checkbox my-5">
+                            <input style="width: 20px;height: 20px;" type="checkbox" name="termos" id="termos" >
+                            <label for="termos" style="font-size: 20px">
+                            <?php echo $idioma->getText("liEConcordo") ?><span class="text-danger">*</span>
+                            </label>
                         </div>
-                        <br><br>
                         <div class="row">
                             <div class="col-xs-12 col-lg-12 text-center">
                                 <button class="btn btn-primary full-width" type="button" onclick="aceitar();" id="btn-aceitar">
-                                    <?php echo $idioma->getText("liEConcordo") ?>
+                                    <?php echo $idioma->getText("prosseguir") ?>
                                 </button>
                             </div>
                         </div>
@@ -97,10 +84,11 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
 <script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
 <script>
     $(document).ready(function () {
-        // $('.i-checks').iCheck({
-        //     checkboxClass: 'icheckbox_square-green',
-        //     radioClass: 'iradio_square-green'
-        // });
+        $("#btn-aceitar").hide();
+        $('#termos').change(function() {
+            $("#btn-aceitar").toggle();
+        });
+
     });
 
     function aceitar() {
