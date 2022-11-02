@@ -100,14 +100,8 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
             url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DOCS_ACEITACAO_SALVAR ?>',
             dataType: 'json',
             method: 'post',
-            data: {
-                <?php
-                foreach ($lista as $doc) {
-                    ?>
-                    <?php echo $doc->codigo ?>: $("#<?php echo $doc->codigo ?>").is(":checked"),
-                    <?php
-                }
-                ?>
+            data: {                
+                Apresentacao: true, ContratoDeUsoDeAplicacao: true, PoliticaDeCookie: true, PoliticaDePrivacidade: true, TermosDeServico: true, 
             },
             success: function (json) {
                 try {
