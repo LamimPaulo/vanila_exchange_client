@@ -131,11 +131,11 @@ class Book {
                     <td class="text-center column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 15% !important"  id="btn-favorito-<?php echo $paridade->id ?>" data-name="<?php echo $paridade->symbol ?>">
                         <?php if ($favorita) {?>
                         <button class="btn btn-link text-success" type="button" onclick="removerFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
-                            <i class="fa  fa-star" style="font-size: 9px; color: green"></i>
+                            <i class="fa  fa-star" style="font-size: 9px; color: gold"></i>
                         </button>
                         <?php } else { ?>
                         <button class="btn btn-link text-warning" type="button" onclick="addFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
-                            <i class="fa  fa-star-o" style="font-size: 9px; color: gray"></i>
+                            <i class="fa  fa-star-o" style="font-size: 12px; color: grey"></i>
                         </button>
                         <?php }  ?>
                     </td>
@@ -190,29 +190,31 @@ class Book {
                 $saldos = $dados["saldos"];
 
                 ?>
-                <tr class="tr-h">
-                    <td style="padding-left: 18px; padding-top: 3px !important; padding-bottom: 3px !important;" class="column-balance" data-name="<?php echo $moeda->simbolo?>" width="20%">
+                <tr>
+                    <th class="column-balance" data-name="<?php echo $moeda->simbolo?>">
+                       <img src="<?php echo IMAGES ?>currencies/<?php echo $moeda->icone?>" style="width: 12px; height: 12px;" />&nbsp;&nbsp;<?php echo $moeda->simbolo; ?>
+                    </th>
 
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $moeda->icone?>" style="width: 12px; height: 12px;" />&nbsp;&nbsp;<?php echo $moeda->simbolo; ?>
-                    </td>
-
-                    <td class="text-right" style="padding-right: 3px !important; padding-left: 3px !important; padding-top: 3px !important; padding-bottom: 3px !important; padding-right: 18px; min-width: 150px;">
+                    <td class="column-balance">
                         <p style="padding: 0px; margin: 0px; <?php echo ($balanceMode > 1 ? "display: none;" : "") ?>" class="">
                             <span class="text-muted"><?php echo number_format($saldos["bloqueado"], $moeda->casasDecimais, ",", ".") ?> </span>
                         </p>
+                    </td>
+
+                    <td class="text-right">
                         <p style="padding: 0px; margin: 0px;" >
                             <span class="text-success"><?php echo number_format($saldos["saldo"], $moeda->casasDecimais, ",", ".") ?> </span>
                         </p>
                     </td>
 
 
-                    <td class="text-left" style="padding-right: 3px !important; padding-left: 3px !important; padding-top: 3px !important; padding-bottom: 3px !important; min-width: 70px;">
+                    <!-- <td class="text-left" style="padding-right: 3px !important; padding-left: 3px !important; padding-top: 3px !important; padding-bottom: 3px !important; min-width: 70px;">
                         <small class="text-muted"><?php echo $idioma->getText("direta29") ?></small><br>
                         <small class="text-muted"><?php echo $idioma->getText("direta23") ?></small>
                         <!-- <p style="padding: 0px; margin: 0px; <?php echo ($balanceMode > 1 ? "display: none;" : "") ?>" class="">
                             <span class="text-muted"><?php echo number_format($saldos["bloqueado"], $moeda->casasDecimais, ",", ".") ?> </span>
-                        </p> -->
-                    </td>
+                        </p>
+                    </td> -->
                 </tr>
                 <?php
             }

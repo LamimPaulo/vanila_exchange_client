@@ -79,7 +79,7 @@ $_data["idiomaMenu"] = $idioma;
                             <th scope="col"><?php echo $idioma->getText("direta22") ?></th>
                             <th scope="col"><?php echo $idioma->getText("direta4") ?></th>
                             <th scope="col"><?php echo $idioma->getText("direta40") ?></th>
-                            <th scope="col"></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="body-paridades" class="tbody-h tbody-h1" style="cursor: pointer;">
@@ -89,27 +89,27 @@ $_data["idiomaMenu"] = $idioma;
 
         </div>
         
-        <div class="saldos">
+        <div style="border: 1px solid #e0e3eb; border-radius: 2px;">
           <ul class="nav " role="tablist">
             <li class="nav-item">
               <a class="nav-link active" data-toggle="pill" href="#recent-trades" role="tab" aria-selected="true"><?php echo $idioma->getText("direta24") ?></a>
             </li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane fade show active" id="recent-trades" role="tabpanel">
-              <table class="table" style="table-layout: fixed">
-                <thead class="thead-h thead-h1">
+            <div class="table-responsive tab-pane fade show active" id="recent-trades" role="tabpanel">
+              <table class="table table-hover" style="table-layout: fixed">
+                <thead>
                     <tr class="tr-h">
-                        <th class="text-left" style="padding-left: 28px !important;">
+                        <th scope="col">
                             <?php echo $idioma->getText("direta22") ?>
                         </th>
-                        <!-- <th class="text-right" style="min-width: 150px">
+                        <th scope="col">
                             <?php echo $idioma->getText("direta29") ?>
                         </th>
-                        <th class="text-left" style="min-width: 70px">
+                        <th class="text-right" scope="col">
                             <?php echo $idioma->getText("direta23") ?>
-                        </th> -->
-                    </tr>
+                        </th>
+                    </tr>                    
                 </thead>
                 <tbody id="body-balances" class="tbody-h tbody-saldo" >
                 </tbody>
@@ -1102,10 +1102,10 @@ $(document).ready(function () {
                     flagAddParidadeFavorita = false;
                 },
                 success: function (json) {
+                    console.log('josn: ', json)
                     try {
                         if (json.sucesso) {
                             $("#btn-favorito-"+json.codigo).html(json.html);
-
                         } else {
                             //
                         }
@@ -1171,7 +1171,6 @@ $(document).ready(function () {
                 success: function (json) {
                     try {
                         if (json.sucesso) {
-                            console.log("PARIDADES: ", json.html)
                             $("#body-paridades").html(json.html);
 
                             $(".change-parity").each(function () {

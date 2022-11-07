@@ -682,8 +682,8 @@ public static $rotas = Array(
 //        "book/ico/comprar"                                  => Array("url" => "trade/CompraIco/comprar" ,                                    "modulo" => "trade",                    "rotina" => "book/ico" ),
 //        //"book/ordens/listar"                                => Array("url" => "trade/book/getParidadesByMoeda" ,                             "modulo" => "trade",                    "rotina" => "book" ),
 //        "book/moedas/saldo"                                => Array("url" => "trade/book/getTableBalances" ,                                 "modulo" => "trade",                    "rotina" => "book" ),
-//        "book/favorito/add"                                => Array("url" => "trade/book/adicionarFavorito" ,                                 "modulo" => "trade",                    "rotina" => "book" ),
-//        "book/favorito/remove"                                => Array("url" => "trade/book/removerFavorito" ,                                 "modulo" => "trade",                    "rotina" => "book" ),
+       "book/favorito/add"                                => Array("url" => "trade/book/adicionarFavorito" ,                                 "modulo" => "trade",                    "rotina" => "book" ),
+       "book/favorito/remove"                                => Array("url" => "trade/book/removerFavorito" ,                                 "modulo" => "trade",                    "rotina" => "book" ),
 
 //        // Estorno
 //        "estornos"                                           => Array("url" => "contas/estorno/index" ,                                       "modulo" => "estorno",                "rotina" => "estorno" ),
