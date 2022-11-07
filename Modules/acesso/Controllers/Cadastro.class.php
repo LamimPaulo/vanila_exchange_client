@@ -68,7 +68,7 @@ class Cadastro {
                 $bodyMail = [
                     'nome' => $nome,
                     'email' => $email,
-                    'referencia' => $referencia,
+                    'referencia' => \Utils\Criptografia::decriptyPostId($referencia),
                     'senha' => sha1($senha.\Utils\Constantes::SEED_SENHA)
                 ];
 

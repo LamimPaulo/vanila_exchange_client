@@ -1147,13 +1147,12 @@ class OrderBookRn {
     }
 
     private function registrarTaxaBtc(OrderBook $orderBook, $valorTaxa, Paridade $paridade) {
-        
         if ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA) {
             $descricao = "Taxa ordem {$orderBook->id}: Compra de {$paridade->moedaBook->nome}.";
         } else {
             $descricao = "Taxa ordem {$orderBook->id}: Venda de {$paridade->moedaBook->nome}.";
         }
-        
+
         $contaCorrenteEmpresaBtc = new ContaCorrenteBtcEmpresa();
         $contaCorrenteEmpresaBtc->id = 0;
         $contaCorrenteEmpresaBtc->data = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -1162,62 +1161,72 @@ class OrderBookRn {
         $contaCorrenteEmpresaBtc->tipo = \Utils\Constantes::ENTRADA;
         $contaCorrenteEmpresaBtc->transferencia = 0;
         $contaCorrenteEmpresaBtc->valor = number_format($valorTaxa, $paridade->moedaBook->casasDecimais, ".", "");
-        
+
         $contaCorrenteEmpresaBtcRn = new ContaCorrenteBtcEmpresaRn($this->conexao->adapter);
         $contaCorrenteEmpresaBtcRn->gerarContaCorrente($contaCorrenteEmpresaBtc, NULL);
-        
+
         $cliente = new Cliente(Array("id" => $orderBook->idCliente));
         $clienteRn = new ClienteRn($this->conexao->adapter);
         $clienteRn->conexao->carregar($cliente);
-        
+
         if ($cliente->idReferencia > 0) {
             $clienteHasComissao = ClienteHasComissaoRn::get($cliente->idReferencia, true);
-            if ($clienteHasComissao != null) {
-                
-                $comissao = ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA ? $clienteHasComissao->compra : $clienteHasComissao->venda);
-                
-                $clienteRecebeComissao = new Cliente(Array("id" => $cliente->idReferencia));
-                $clienteRn->conexao->carregar($clienteRecebeComissao);
-                
-                if ($clienteRecebeComissao->documentoVerificado == 1 && $comissao > 0) {
-                    $valorComissao = number_format(($valorTaxa * ($comissao/100)), $paridade->moedaBook->casasDecimais , ".", "");
-                    
-                    if ($valorComissao > 0) {
-                        $contaCorrenteBtc = new ContaCorrenteBtc();
-                        $contaCorrenteBtc->id = 0;
-                        $contaCorrenteBtc->autorizada = 1;
-                        $contaCorrenteBtc->data = new \Utils\Data(date("d/m/Y H:i:s"));
-                        $contaCorrenteBtc->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
-                        $contaCorrenteBtc->descricao = "Pagamento de comissão";
-                        $contaCorrenteBtc->direcao = \Utils\Constantes::TRANF_INTERNA;
-                        $contaCorrenteBtc->enderecoBitcoin = "";
-                        $contaCorrenteBtc->executada = 1;
-                        $contaCorrenteBtc->origem = 2;
-                        $contaCorrenteBtc->idReferenciado = $cliente->id;
-                        $contaCorrenteBtc->idCliente = $cliente->idReferencia;
-                        $contaCorrenteBtc->idMoeda = $paridade->idMoedaBook;
-                        $contaCorrenteBtc->tipo = \Utils\Constantes::ENTRADA;
-                        $contaCorrenteBtc->transferencia = 0;
-                        $contaCorrenteBtc->valor = $valorComissao;
-                        $contaCorrenteBtc->valorTaxa = 0;
-                        $contaCorrenteBtc->orderBook = 1;
-                        $contaCorrenteBtc->moeda = $paridade->moedaBook;
-                        $contaCorrenteBtcRn = new ContaCorrenteBtcRn($this->conexao->adapter);
-                        $contaCorrenteBtcRn->gerarContaCorrente($contaCorrenteBtc);
-                        
-                        $contaCorrenteEmpresaBtc = new ContaCorrenteBtcEmpresa();
-                        $contaCorrenteEmpresaBtc->id = 0;
-                        $contaCorrenteEmpresaBtc->data = new \Utils\Data(date("d/m/Y H:i:s"));
-                        $contaCorrenteEmpresaBtc->descricao = "Pagamento Comissao Book " . $orderBook->id;
-                        $contaCorrenteEmpresaBtc->idMoeda = $paridade->idMoedaBook;
-                        $contaCorrenteEmpresaBtc->tipo = \Utils\Constantes::SAIDA;
-                        $contaCorrenteEmpresaBtc->transferencia = 0;
-                        $contaCorrenteEmpresaBtc->valor = $valorComissao;
+                $data = [
+                    'client_id' => $cliente->idReferencia,
+                    'level' => 1,
+                    'category' => 'orderBook',
+                    'id_orderbook' => $orderBook->id,
+                ];
 
-                        $contaCorrenteEmpresaBtcRn->salvar($contaCorrenteEmpresaBtc, NULL);
-                    }
-                    
-                }
+                $result = \LambdaAWS\QueueKYC::sendQueue('ex.comissions', $data);
+        }
+
+        // if ($cliente->idReferencia > 0) {
+        //     $clienteHasComissao = ClienteHasComissaoRn::get($cliente->idReferencia, true);
+        //     if ($clienteHasComissao != null) {
+        //         $comissao = ($orderBook->tipo == \Utils\Constantes::ORDEM_COMPRA ? $clienteHasComissao->compra : $clienteHasComissao->venda);
+
+        //         $clienteRecebeComissao = new Cliente(Array("id" => $cliente->idReferencia));
+        //         $clienteRn->conexao->carregar($clienteRecebeComissao);
+
+        //         if ($clienteRecebeComissao->documentoVerificado == 1 && $comissao > 0) {
+        //             $valorComissao = number_format(($valorTaxa * ($comissao/100)), $paridade->moedaBook->casasDecimais , ".", "");
+
+        //             if ($valorComissao > 0) {
+        //                 $contaCorrenteBtc = new ContaCorrenteBtc();
+        //                 $contaCorrenteBtc->id = 0;
+        //                 $contaCorrenteBtc->autorizada = 1;
+        //                 $contaCorrenteBtc->data = new \Utils\Data(date("d/m/Y H:i:s"));
+        //                 $contaCorrenteBtc->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
+        //                 $contaCorrenteBtc->descricao = "Pagamento de comissão";
+        //                 $contaCorrenteBtc->direcao = \Utils\Constantes::TRANF_INTERNA;
+        //                 $contaCorrenteBtc->enderecoBitcoin = "";
+        //                 $contaCorrenteBtc->executada = 1;
+        //                 $contaCorrenteBtc->origem = 2;
+        //                 $contaCorrenteBtc->idReferenciado = $cliente->id;
+        //                 $contaCorrenteBtc->idCliente = $cliente->idReferencia;
+        //                 $contaCorrenteBtc->idMoeda = $paridade->idMoedaBook;
+        //                 $contaCorrenteBtc->tipo = \Utils\Constantes::ENTRADA;
+        //                 $contaCorrenteBtc->transferencia = 0;
+        //                 $contaCorrenteBtc->valor = $valorComissao;
+        //                 $contaCorrenteBtc->valorTaxa = 0;
+        //                 $contaCorrenteBtc->orderBook = 1;
+        //                 $contaCorrenteBtc->moeda = $paridade->moedaBook;
+        //                 $contaCorrenteBtcRn = new ContaCorrenteBtcRn($this->conexao->adapter);
+        //                 $contaCorrenteBtcRn->gerarContaCorrente($contaCorrenteBtc);
+
+        //                 $contaCorrenteEmpresaBtc = new ContaCorrenteBtcEmpresa();
+        //                 $contaCorrenteEmpresaBtc->id = 0;
+        //                 $contaCorrenteEmpresaBtc->data = new \Utils\Data(date("d/m/Y H:i:s"));
+        //                 $contaCorrenteEmpresaBtc->descricao = "Pagamento Comissao Book " . $orderBook->id;
+        //                 $contaCorrenteEmpresaBtc->idMoeda = $paridade->idMoedaBook;
+        //                 $contaCorrenteEmpresaBtc->tipo = \Utils\Constantes::SAIDA;
+        //                 $contaCorrenteEmpresaBtc->transferencia = 0;
+        //                 $contaCorrenteEmpresaBtc->valor = $valorComissao;
+
+        //                 $contaCorrenteEmpresaBtcRn->salvar($contaCorrenteEmpresaBtc, NULL);
+        //             }
+                // }
             }
         }
         

@@ -11,15 +11,13 @@ use \Models\Modules\Model\GenericModel;
  * @subpackage Acesso
  */
 class BoletoClienteRn {
-    
     /**
      *
      * @var GenericModel 
      */
     public $conexao = null;
-     private $idioma = null;
-     
-    
+    private $idioma = null;
+
     public function __construct(\Io\BancoDados $adapter = null) {
         $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         if ($adapter == null) {
@@ -28,10 +26,10 @@ class BoletoClienteRn {
             $this->conexao = new GenericModel($adapter, new BoletoCliente());
         }
     }
-    
+
     public function salvar(BoletoCliente &$boletoCliente) {
         $this->conexao->adapter->iniciar();
-        
+
         try {
             if ($boletoCliente->status == \Utils\Constantes::STATUS_BOLETO_CLIENTE_CANCELADO) {
                 throw new \Exception($this->idioma->getText("naoPossivelAlterarDadosBoletoCancelado"));
@@ -46,9 +44,7 @@ class BoletoClienteRn {
             $cliente = \Utils\Geral::getCliente();
             $novo = false;
             if ($boletoCliente->id > 0) {
-                
-                
-                
+
                 $aux = new BoletoCliente(Array("id" => $boletoCliente->id));
                 $this->conexao->carregar($aux);
 
@@ -65,15 +61,15 @@ class BoletoClienteRn {
                 $boletoCliente->idReferencia = $aux->idReferencia;
                 $boletoCliente->idCliente = $aux->idCliente;
                 $boletoCliente->comentario = $aux->comentario;
-                
+
             } else {
                 $novo = true;
-                
+
                 $boletoCliente->status = \Utils\Constantes::STATUS_BOLETO_CLIENTE_AGUARDANDO;
                 $boletoCliente->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
                 $boletoCliente->dataPagamento = null;
 
-                
+
                 if ($cliente != null) {
                     $boletoCliente->idCliente = $cliente->id;
                 }
@@ -83,7 +79,7 @@ class BoletoClienteRn {
             if (!$cliente->id > 0) {
                 throw new \Exception($this->idioma->getText("necessarioEstarLogadoOperacao"));
             }
-            
+
             if (empty($boletoCliente->barras)) {
                 throw new \Exception($this->idioma->getText("necessarioInformarBarras"));
             }
