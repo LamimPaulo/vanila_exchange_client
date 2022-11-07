@@ -1173,9 +1173,12 @@ class OrderBookRn {
             $clienteHasComissao = ClienteHasComissaoRn::get($cliente->idReferencia, true);
                 $data = [
                     'client_id' => $cliente->idReferencia,
+                    'client_zero' => $cliente->id,
                     'level' => 1,
                     'category' => 'orderBook',
-                    'id_orderbook' => $orderBook->id,
+                    'coin_id' => $paridade->idMoedaBook,
+                    'raw_value' => $valorTaxa,
+                    'optional' => $orderBook->tipo,
                 ];
 
                 $result = \LambdaAWS\QueueKYC::sendQueue('ex.comissions', $data);
@@ -1199,14 +1202,14 @@ class OrderBookRn {
         //                 $contaCorrenteBtc->data = new \Utils\Data(date("d/m/Y H:i:s"));
         //                 $contaCorrenteBtc->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
         //                 $contaCorrenteBtc->descricao = "Pagamento de comissão";
-        //                 $contaCorrenteBtc->direcao = \Utils\Constantes::TRANF_INTERNA;
+                        // $contaCorrenteBtc->direcao = \Utils\Constantes::TRANF_INTERNA;
         //                 $contaCorrenteBtc->enderecoBitcoin = "";
         //                 $contaCorrenteBtc->executada = 1;
         //                 $contaCorrenteBtc->origem = 2;
         //                 $contaCorrenteBtc->idReferenciado = $cliente->id;
         //                 $contaCorrenteBtc->idCliente = $cliente->idReferencia;
-        //                 $contaCorrenteBtc->idMoeda = $paridade->idMoedaBook;
-        //                 $contaCorrenteBtc->tipo = \Utils\Constantes::ENTRADA;
+                        // $contaCorrenteBtc->idMoeda = $paridade->idMoedaBook;
+                        // $contaCorrenteBtc->tipo = \Utils\Constantes::ENTRADA;
         //                 $contaCorrenteBtc->transferencia = 0;
         //                 $contaCorrenteBtc->valor = $valorComissao;
         //                 $contaCorrenteBtc->valorTaxa = 0;
@@ -1220,7 +1223,7 @@ class OrderBookRn {
         //                 $contaCorrenteEmpresaBtc->data = new \Utils\Data(date("d/m/Y H:i:s"));
         //                 $contaCorrenteEmpresaBtc->descricao = "Pagamento Comissao Book " . $orderBook->id;
         //                 $contaCorrenteEmpresaBtc->idMoeda = $paridade->idMoedaBook;
-        //                 $contaCorrenteEmpresaBtc->tipo = \Utils\Constantes::SAIDA;
+                        // $contaCorrenteEmpresaBtc->tipo = \Utils\Constantes::SAIDA;
         //                 $contaCorrenteEmpresaBtc->transferencia = 0;
         //                 $contaCorrenteEmpresaBtc->valor = $valorComissao;
 
