@@ -1177,6 +1177,7 @@ class OrderBookRn {
                     'level' => 1,
                     'category' => 'orderBook',
                     'coin_id' => $paridade->idMoedaBook,
+                    'transaction_id' => $orderBook->id,
                     'raw_value' => $valorTaxa,
                     'optional' => $orderBook->tipo,
                 ];
