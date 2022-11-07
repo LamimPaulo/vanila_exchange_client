@@ -1177,11 +1177,12 @@ class OrderBookRn {
                     'level' => 1,
                     'category' => 'orderBook',
                     'coin_id' => $paridade->idMoedaBook,
+                    'value_decimals' => $paridade->moedaBook->casasDecimais,
                     'transaction_id' => $orderBook->id,
                     'raw_value' => $valorTaxa,
                     'optional' => $orderBook->tipo,
                 ];
-
+ 
                 $result = \LambdaAWS\QueueKYC::sendQueue('ex.comissions', $data);
         }
 
@@ -1200,10 +1201,10 @@ class OrderBookRn {
         //                 $contaCorrenteBtc = new ContaCorrenteBtc();
         //                 $contaCorrenteBtc->id = 0;
         //                 $contaCorrenteBtc->autorizada = 1;
-        //                 $contaCorrenteBtc->data = new \Utils\Data(date("d/m/Y H:i:s"));
+                        // $contaCorrenteBtc->data = new \Utils\Data(date("d/m/Y H:i:s"));
         //                 $contaCorrenteBtc->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
         //                 $contaCorrenteBtc->descricao = "Pagamento de comissão";
-                        // $contaCorrenteBtc->direcao = \Utils\Constantes::TRANF_INTERNA;
+                    // $contaCorrenteBtc->direcao = \Utils\Constantes::TRANF_INTERNA;
         //                 $contaCorrenteBtc->enderecoBitcoin = "";
         //                 $contaCorrenteBtc->executada = 1;
         //                 $contaCorrenteBtc->origem = 2;
