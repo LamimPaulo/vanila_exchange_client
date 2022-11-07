@@ -1226,13 +1226,12 @@ class OrderBookRn {
 
         //                 $contaCorrenteEmpresaBtcRn->salvar($contaCorrenteEmpresaBtc, NULL);
         //             }
-                // }
-            }
-        }
-        
+        //         }
+        //     }
+        // }
+
         $orderBook->valorTaxaExecutada = number_format(($orderBook->valorTaxaExecutada), $paridade->moedaBook->casasDecimais, ".", "");
         $this->conexao->update(Array("valor_taxa_executada" => number_format($orderBook->valorTaxaExecutada, $paridade->moedaBook->casasDecimais, ".", "")), Array("id" => $orderBook->id));
-        
     }
 
     public function getPrecos($idParidade) {
