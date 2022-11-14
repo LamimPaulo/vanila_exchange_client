@@ -1,32 +1,136 @@
 <?php
-
 namespace Modules\referencia\Controllers;
 
+use GuzzleHttp\Client;
+
 class Referencia {
-    
     private $codigoModulo = "referencia";
     private $idioma = null;
-    
+
     public function __construct() {
-                
         if(\Utils\Geral::isUsuario()){
-           \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
+            \Utils\Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
         }
         \Utils\Validacao::acesso($this->codigoModulo);
         $this->idioma = new \Utils\PropertiesUtils("extrato", IDIOMA);
     }
-    
+
+    public function buyPlan($params) {
+        $client = new Client();
+        $cliente = \Utils\Geral::getCliente();
+
+        $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
+        $moedas = $moedaRn->listar(" id = 1 OR ativo = 1 AND (visualizar_deposito = 1 OR visualizar_saque = 1)", "nome ASC");
+
+        if(true){
+            $url = 'http://localhost:8001/api/priv/plans';
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_SSH_COMPRESSION, true);
+            curl_setopt_array($ch, [
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_URL => $url
+            ]);
+            $result = curl_exec($ch);
+            $plans = json_decode($result);
+
+            curl_close($ch);
+        }
+        if(true){
+            $url = 'http://localhost:8001/api/priv/current';
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_SSH_COMPRESSION, true);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_URL => $url
+            ]);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Accept: Application/json',
+                'Content-type: Application/json',
+                'usr: '.$cliente->id,
+            ]);
+            $result2 = curl_exec($ch);
+            $current_plan = json_decode($result2);
+
+            curl_close($ch);
+        }
+
+        // exit(print_r($current_plan));
+
+
+        $params["moedas"] = $moedas;
+        $params["plans"] = $plans->data;
+        $params["current_plan"] = $current_plan->data;
+
+        \Utils\Layout::view("index_referencia2", $params);
+    }
+
     public function index($params) {
-        
+        $client = new Client();
+        $cliente = \Utils\Geral::getCliente();
         $moedaRn = new \Models\Modules\Cadastro\MoedaRn(); 
         $moedas = $moedaRn->listar(" id = 1 OR ativo = 1 AND (visualizar_deposito = 1 OR visualizar_saque = 1)", "nome ASC");
-        
-        $params["moedas"] = $moedas;
 
-        \Utils\Layout::view("index_referencia", $params);
+        if(true){
+            $url = 'http://localhost:8001/api/priv/plans';
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_SSH_COMPRESSION, true);
+            curl_setopt_array($ch, [
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_URL => $url
+            ]);
+            $result = curl_exec($ch);
+            $plans = json_decode($result);
+
+            curl_close($ch);
+        }
+        if(true){
+            $url = 'http://localhost:8001/api/priv/current';
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_SSH_COMPRESSION, true);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_URL => $url
+            ]);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Accept: Application/json',
+                'Content-type: Application/json',
+                'usr: '.$cliente->id,
+            ]);
+            $result2 = curl_exec($ch);
+            $current_plan = json_decode($result2);
+
+            curl_close($ch);
+        }
+
+        // exit(print_r($current_plan));
+
+
+        $params["moedas"] = $moedas;
+        $params["plans"] = $plans->data;
+        $params["current_plan"] = $current_plan->data;
+
+        \Utils\Layout::view("index_referencia2", $params);
     }
-    
-    
+
+    // public function index($params) {
+    //     $moedaRn = new \Models\Modules\Cadastro\MoedaRn(); 
+    //     $moedas = $moedaRn->listar(" id = 1 OR ativo = 1 AND (visualizar_deposito = 1 OR visualizar_saque = 1)", "nome ASC");
+
+    //     $params["moedas"] = $moedas;
+
+    //     \Utils\Layout::view("index_referencia", $params);
+    // }
+
     public function listarReferencia($params) {
         try {
 
@@ -47,7 +151,7 @@ class Referencia {
             if ($dataInicial->maior($dataFinal)) {
                 throw new \Exception("Data inicial não pode ser maior que a data final.");
             }
-            
+
             if (empty($idMoeda)) {
                 throw new \Exception("Moeda precisa ser selecionada.");
             }
@@ -75,15 +179,15 @@ class Referencia {
                 $nome = ucwords($clienteNome);
 
                 if($cliente->id == 15093064572782){
-                   $referenciaAux->nomeReferencia = $referencia->email; 
+                    $referenciaAux->nomeReferencia = $referencia->email; 
                 } else {
-                   $referenciaAux->nomeReferencia = $nome; 
+                    $referenciaAux->nomeReferencia = $nome; 
                 }
-                
+
                 $referenciaAux->dataCadastro = $referencia->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR);
 
                 $listaNomeData[] = $referenciaAux;
-                
+
                 $referenciaAux->valorDeposito = number_format(0, $moeda->casasDecimais, ".", "");
                 $referenciaAux->valorSaque = number_format(0, $moeda->casasDecimais, ".", "");
                 $referenciaAux->valorCompraVenda = number_format(0, $moeda->casasDecimais, ".", "");
@@ -116,15 +220,13 @@ class Referencia {
                 $saque += $referenciaAux->valorSaque;
                 $compraVenda += $referenciaAux->valorCompraVenda;
 
-
-
                 $referenciaAux->total = number_format(($referenciaAux->valorCompraVenda + $referenciaAux->valorSaque + $referenciaAux->valorDeposito), $moeda->casasDecimais, ".", "");
 
                 if ($gravar) {
                     $lista[] = $referenciaAux;
                 }
             }
-            
+
             if(empty(sizeof($lista))){
                 $referenciaAux = (object)null;
                 $referenciaAux->nomeReferencia = "-";
@@ -133,7 +235,7 @@ class Referencia {
                 $referenciaAux->valorSaque = "-";
                 $referenciaAux->valorCompraVenda = "-";
                 $referenciaAux->total = "-";
-                $lista[] = $referenciaAux; 
+                $lista[] = $referenciaAux;
             }
 
             $json["moedaImg"] = IMAGES . "currencies/" . $moeda->icone;
@@ -143,7 +245,7 @@ class Referencia {
             $json["totalCompraVenda"] = number_format($compraVenda, $moeda->casasDecimais, ".", "");
             $json["totalSaques"] = number_format($saque, $moeda->casasDecimais, ".", "");
             $json["total"] = number_format(($deposito + $saque + $compraVenda), $moeda->casasDecimais, ".", "");
-            
+
             $json["indicados"] = $listaNomeData;
             $json["dados"] = $lista;
             $json["sucesso"] = true;

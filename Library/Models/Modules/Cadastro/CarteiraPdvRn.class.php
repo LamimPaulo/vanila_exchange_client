@@ -14,7 +14,7 @@ class CarteiraPdvRn {
     
     /**
      *
-     * @var GenericModel 
+     * @var GenericModel
      */
     public $conexao = null;
     

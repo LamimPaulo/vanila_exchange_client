@@ -146,7 +146,30 @@ $_data["idiomaMenu"] = $idioma;
                     </div>
                 </div>
             </div>
+                                                    PLANO ATUAL DO USUARIO {estrutura: Valor a cada nivel -> nome do plano}<br>
+                                                    <?php foreach ($current_plan as $cp) { ?>
+                                                        <?php echo json_encode($cp)?>
+                                                    <?php } ?>
 
+                                                    <br><br>
+
+                                                    Planos Disponiveis {estrutura: Plano -> valores a cada nivel}
+                                                    <?php foreach ($plans as $m) { ?>
+                                                        <?php echo $m->title; ?> - <?php echo $m->price_local; ?> <br>
+                                                            <?php foreach ($m->limits as $l) { ?>
+                                                                Nivel - <?php echo $l->level ?> 
+                                                                - Deposito <?php echo $l->deposit.'%' ?>
+                                                                - Saque <?php echo $l->withdrawal.'%' ?>
+                                                                - Ordem Compra <?php echo $l->order_buy.'%' ?>
+                                                                - Ordem Venda <?php echo $l->order_sell.'%' ?>
+                                                                - Venda de plano <?php echo $l->plan_purchase.'%' ?>
+                                                            <br>
+                                                            <?php } ?>
+                                                            <button class="btn btn-sm" onclick="alert('<?php echo $m->id ?>')">contratar</button>
+                                                            <br>
+                                                            <br>
+                                                    <br>
+                                                    <?php } ?>
             <div class="settings mtb15">
                 <div class="container-fluid">
                     <div class="card">
