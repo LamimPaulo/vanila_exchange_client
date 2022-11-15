@@ -11,11 +11,6 @@ use \Models\Modules\Model\GenericModel;
  * @subpackage Acesso
  */
 class ContaCorrenteReaisRn {
-    
-    /**
-     *
-     * @var GenericModel 
-     */
     public $conexao = null;
     /**
      *
@@ -23,7 +18,7 @@ class ContaCorrenteReaisRn {
      */
     public $idioma=null;
     public $enviarNotificacao = true;
-    
+
     public function __construct(\Io\BancoDados $adapter = null, $enviarNotificacao = true) {
         $this->idioma = new \Utils\PropertiesUtils("exception", IDIOMA);
         
@@ -34,8 +29,7 @@ class ContaCorrenteReaisRn {
         }
         $this->enviarNotificacao = $enviarNotificacao;
     }
-    
-    
+
     public function gerarContaCorrente(ContaCorrenteReais &$contaCorrenteReais, $token = null) {
         $novo = ($contaCorrenteReais->id <= 0);
     
@@ -139,7 +133,7 @@ class ContaCorrenteReaisRn {
             }
         
     }
-    
+
     public function salvar(ContaCorrenteReais &$contaCorrenteReais, $token = null) {
         
         try {
@@ -154,7 +148,7 @@ class ContaCorrenteReaisRn {
         }
         
     }
-    
+
     public function resumo($filtro = null) {
         $where = Array();
         
@@ -192,7 +186,7 @@ class ContaCorrenteReaisRn {
         
         return $lista;
     }
-    
+
     public function filtrar($idCliente, \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null, $tipo = 'T', $filtro = null, $transferencia = "T", $qtdRegitros = "T", $orderBook = false, $carregarCliente = true, $carregarClienteDestino = true) {
         
         if ($idCliente <= 0) {
@@ -290,71 +284,66 @@ class ContaCorrenteReaisRn {
         
         return Array("lista" => $lista, "entradas" => $entradas, "saidas" => $saidas);
     }
-    
-    
+
     public function calcularSaldoConta(Cliente $cliente, $saldoBloqueado = false, $desconsiderarCredito = false) {
-        
         if (!$cliente->id > 0) {
             throw new \Exception("É necessário informar a identificação do cliente");
         }
-        
+
         $query = " SELECT SUM(valor) AS valor, tipo FROM conta_corrente_reais WHERE id_cliente = {$cliente->id} GROUP BY tipo;";
         $entrada = 0;
         $saida = 0;
         $result = $this->conexao->adapter->query($query)->execute();
         foreach ($result as $dados) {
-            
+
             if ($dados["tipo"] == \Utils\Constantes::ENTRADA) {
                 $entrada = $dados["valor"];
             } else {
                 $saida = $dados["valor"];
             }
         }
-        
+
         if (!$desconsiderarCredito) {
             $clienteHasCredito = ClienteHasCreditoRn::get($cliente->id, 1, true);
-            
+
             if ($clienteHasCredito != null && $clienteHasCredito->ativo > 0) {
                 $entrada += number_format($clienteHasCredito->volumeCredito, 4, ".", "");
             }
         }
-        
+
         $saldo = $entrada - $saida;
         $paridade = new Paridade(Array("id" => 1));
         $paridadeRn = new ParidadeRn();
         $paridadeRn->carregar($paridade, true, true, true);
         $orderBookRn = new OrderBookRn();
         $saldoOrdens = $orderBookRn->getValorTotalOrdensReais($cliente, $paridade);
-            
+
         if ($saldoBloqueado) {
             return Array("saldo" => number_format($saldo - $saldoOrdens, 2, ".", ""), "bloqueado" => number_format($saldoOrdens, 2, ".", ""));
         } else {
-            
             return number_format($saldo - $saldoOrdens, 2, ".", "");
         }
-        
+
     }
-    
-    
-    
+
     public function carregar(ContaCorrenteReais &$contaCorrenteReais, $carregar = true, $carregarCliente = true, $carregarClienteDestino = true) {
         if ($carregar) {
             $this->conexao->carregar($contaCorrenteReais);
         }
-        
+
         if ($carregarCliente && $contaCorrenteReais->idCliente > 0) {
             $contaCorrenteReais->cliente = new Cliente(Array("id" => $contaCorrenteReais->idCliente));
             $clienteRn = new ClienteRn();
             $clienteRn->conexao->carregar($contaCorrenteReais->cliente);
         }
-        
+
         if ($carregarClienteDestino && $contaCorrenteReais->idClienteDestino > 0) {
             $contaCorrenteReais->clienteDestino = new Cliente(Array("id" => $contaCorrenteReais->idClienteDestino));
             $clienteRn = new ClienteRn();
             $clienteRn->conexao->carregar($contaCorrenteReais->clienteDestino);
         }
     }
-    
+
     public function lista($where = null, $order = null, $offset = null, $limit = null, $carregarCliente = true, $carregarClienteDestino = true) {
         $result = $this->conexao->listar($where, $order, $offset, $limit);
         $lista = Array();
@@ -364,25 +353,24 @@ class ContaCorrenteReaisRn {
         }
         return $lista;
     }
-    
+
     public function excluir(ContaCorrenteReais &$contaCorrenteReais) {
         try {
-            
+
             $logContaCorrenteReaisRn = new LogContaCorrenteReaisRn($this->conexao->adapter);
-            
+
             $logContaCorrenteReaisRn->conexao->delete("id_conta_corrente_reais = {$contaCorrenteReais->id}");
             $this->conexao->excluir($contaCorrenteReais);
-            
+
         } catch (\Exception $ex) {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
-    
+
     public function transferir(Cliente $clienteFrom, Cliente $clienteTo, $valor, $descricao) {
         try {
             $this->conexao->adapter->iniciar();
-            
+
             $clienteRn = new ClienteRn($this->conexao->adapter);
             try{
                 $clienteRn->conexao->carregar($clienteFrom);
@@ -394,25 +382,24 @@ class ContaCorrenteReaisRn {
             } catch (\Exception $ex) {
                 throw new \Exception($this->idioma->getText("contaCorrenteReais2"));
             }
-            
+
             if (!$valor > 0) {
                 throw new \Exception($this->idioma->getText("valorPrecisaMaioroZero"));
             }
-            
-            
+
             $configuracaoRn = new ConfiguracaoRn($this->conexao->adapter);
             $configuracao = new Configuracao(Array("id" => 1));
             $configuracaoRn->conexao->carregar($configuracao);
-            
+
             $valorTransferencia = number_format(($valor), 8, ".", "");
-            
+
             $saldoEmConta = $this->calcularSaldoConta($clienteFrom, false, true);
             if ($saldoEmConta < $valorTransferencia) {
                 throw new \Exception($this->idioma->getText("voceNaoTemSaldoSuficiente"));
             }
-            
+
             ClienteHasCreditoRn::validar($clienteFrom);
-            
+
             $contaCorrenteFrom = new ContaCorrenteReais();
             $contaCorrenteFrom->id = 0;
             $contaCorrenteFrom->idCliente = $clienteFrom->id;
@@ -423,9 +410,9 @@ class ContaCorrenteReaisRn {
             $contaCorrenteFrom->transferencia = 1;
             $contaCorrenteFrom->idClienteDestino = $clienteTo->id;
             $contaCorrenteFrom->valorTaxa = $configuracao->taxaTransferenciaInternaReais;
-            
+
             $this->salvar($contaCorrenteFrom);
-            
+
             $saldo = $this->calcularSaldoConta($clienteFrom);
             if ($saldo < 0) {
                 $this->conexao->excluir($contaCorrenteFrom);
@@ -463,10 +450,8 @@ class ContaCorrenteReaisRn {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
-    
     public function debitarDoSaldo(Cliente $cliente, $valor, $descricao, $throwExcetion = true, $creditarEmpresa = true) {
-        
+
         $contaCorrenteReais = new ContaCorrenteReais();
         $contaCorrenteReais->id = 0;
         $contaCorrenteReais->data = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -475,19 +460,19 @@ class ContaCorrenteReaisRn {
         $contaCorrenteReais->tipo = \Utils\Constantes::SAIDA;
         $contaCorrenteReais->transferencia = 0;
         $contaCorrenteReais->valor = $valor;
-        
+
         $contaCorrenteReais->comissaoConvidado = 0;
         $contaCorrenteReais->comissaoLicenciado = 0;
         $contaCorrenteReais->clienteDestino = null;
         $contaCorrenteReais->idReferenciado = null;
         $contaCorrenteReais->orderBook = 0;
         $contaCorrenteReais->dataCadastro = new \Utils\Data(date("d/m/Y H:I:ss"));
-        
+
         $contaCorrenteReaisRn = new ContaCorrenteReaisRn();
         $contaCorrenteReaisRn->salvar($contaCorrenteReais);
-        
+
         $saldo = $this->calcularSaldoConta($cliente);
-        
+
         if ($saldo < 0) {
             $this->conexao->excluir($contaCorrenteReais);
             if ($throwExcetion) {
@@ -496,7 +481,7 @@ class ContaCorrenteReaisRn {
                 return null;
             }
         }
-        
+
         if ($creditarEmpresa) {
             $contaCorrenteEmpresa = new ContaCorrenteReaisEmpresa();
             $contaCorrenteEmpresa->bloqueado = 1;
@@ -509,25 +494,22 @@ class ContaCorrenteReaisRn {
             $contaCorrenteReaisEmpresaRn = new ContaCorrenteReaisEmpresaRn();
             $contaCorrenteReaisEmpresaRn->salvar($contaCorrenteEmpresa);
         }
-        
         return $contaCorrenteReais;
     }
-    
-    
-    
+
     public function transferirParaEmpresa($valor, $descricao) {
         try {
             $this->conexao->adapter->iniciar();
-            
+
             $cliente = \Utils\Geral::getCliente();
             if ($cliente == null) {
                 throw new \Exception($this->idioma->getText("vocePrecisaLogadoOperacao"));
             }
-            
+
             if (!$valor > 0) {
                 throw new \Exception($this->idioma->getText("valorPrecisaMaioroZero"));
             }
-            
+
             $contaCorrenteFrom = new ContaCorrenteReais();
             $contaCorrenteFrom->id = 0;
             $contaCorrenteFrom->idCliente = $cliente->id;
@@ -538,17 +520,15 @@ class ContaCorrenteReaisRn {
             $contaCorrenteFrom->transferencia = 1;
             $contaCorrenteFrom->idClienteDestino = null;
             $contaCorrenteFrom->valorTaxa = 0;
-            
+
             $saldo = $this->calcularSaldoConta($cliente, false, true);
             if ($saldo < $contaCorrenteFrom->valor) {
                 throw new \Exception($this->idioma->getText("voceNaoTemSaldoSuficiente"));
             }
             ClienteHasCreditoRn::validar($cliente);
-            
+
             $this->salvar($contaCorrenteFrom);
-            
-            
-            
+
             $contaCorrenteReaisEmpresa = new ContaCorrenteReaisEmpresa();
             $contaCorrenteReaisEmpresa->id = 0;
             $contaCorrenteReaisEmpresa->data = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -558,34 +538,31 @@ class ContaCorrenteReaisRn {
             $contaCorrenteReaisEmpresa->transferencia = 1;
             $contaCorrenteEmpresaRn = new ContaCorrenteReaisEmpresaRn($this->conexao->adapter);
             $contaCorrenteEmpresaRn->salvar($contaCorrenteReaisEmpresa);
-            
-            
+
             $this->conexao->adapter->finalizar();
         } catch (\Exception $ex) {
             $this->conexao->adapter->cancelar();
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
     }
-    
+
     public function cobranca(Cliente $cliente, $descricaoCliente, $descricaoEmpresa, $valor) {
-        
         try {
-            
             try{
                 $clienteRn = new ClienteRn($this->conexao->adapter);
                 $clienteRn->conexao->carregar($cliente);
             } catch (\Exception $ex) {
                 throw new \Exception($this->idioma->getText("clienteInvalidoNaoEncontrado"));
             }
-            
+
             if (!$valor > 0) {
                 throw new \Exception($this->idioma->getText("valorInvalido"));
             }
-            
+
             if (empty($descricaoEmpresa)) {
                 throw new \Exception($this->idioma->getText("necessarioInformarDescricaoEmpresa"));
             }
-            
+
             if (empty($descricaoCliente)) {
                 throw new \Exception($this->idioma->getText("informarDescricaoCliente"));
             }
@@ -600,10 +577,9 @@ class ContaCorrenteReaisRn {
             $contaCorrenteReais->valor = number_format($valor, 2, ".", "");
             $contaCorrenteReais->valorTaxa = 0;
             $contaCorrenteReais->id = 0;
-            
-            
+
             $this->salvar($contaCorrenteReais, null);
-            
+
             $contaCorrenteReaisEmpresa = new ContaCorrenteReaisEmpresa();
             $contaCorrenteReaisEmpresa->bloqueado = 1;
             $contaCorrenteReaisEmpresa->data = new \Utils\Data(date("d/m/Y H:i:s"));
@@ -612,18 +588,15 @@ class ContaCorrenteReaisRn {
             $contaCorrenteReaisEmpresa->tipo = \Utils\Constantes::ENTRADA;
             $contaCorrenteReaisEmpresa->transferencia = 1;
             $contaCorrenteReaisEmpresa->valor = number_format($valor, 2, ".", "");
-            
+
             $contaCorrenteReaisEmpresaRn = new ContaCorrenteReaisEmpresaRn($this->conexao->adapter);
             $contaCorrenteReaisEmpresaRn->salvar($contaCorrenteReaisEmpresa, NULL);
-            
+
         } catch (\Exception $ex) {
             throw new \Exception(\Utils\Excecao::mensagem($ex));
         }
-        
     }
-    
-    
-    
+
     public function calcularComissaoTotal(Cliente $cliente, \Utils\Data $dataInicial = null, \Utils\Data $dataFinal = null, $idMoeda = 1) {
         if (!$cliente->id > 0) {
             throw new \Exception($this->idioma->getText("informarDescricaoCliente"));

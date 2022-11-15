@@ -23,7 +23,7 @@ class Referencia {
         $moedas = $moedaRn->listar(" id = 1 OR ativo = 1 AND (visualizar_deposito = 1 OR visualizar_saque = 1)", "nome ASC");
 
         if(true){
-            $url = 'http://localhost:8001/api/priv/plans';
+            $url = 'https://sandbox.coinage.trade/api/priv/plans';
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -38,7 +38,7 @@ class Referencia {
             curl_close($ch);
         }
         if(true){
-            $url = 'http://localhost:8001/api/priv/current';
+            $url = 'https://sandbox.coinage.trade/api/priv/current';
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -76,7 +76,7 @@ class Referencia {
         $moedas = $moedaRn->listar(" id = 1 OR ativo = 1 AND (visualizar_deposito = 1 OR visualizar_saque = 1)", "nome ASC");
 
         if(true){
-            $url = 'http://localhost:8001/api/priv/plans';
+            $url = 'https://sandbox.coinage.trade/api/priv/plans';
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -91,7 +91,7 @@ class Referencia {
             curl_close($ch);
         }
         if(true){
-            $url = 'http://localhost:8001/api/priv/current';
+            $url = 'https://sandbox.coinage.trade/api/priv/current';
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
