@@ -55,12 +55,10 @@ $_data["idiomaMenu"] = $idioma;
 
     .card-plan {
         display: block;
-        padding: 5vh;
+        padding: 2vh;
         border-radius: 0.7rem;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        margin-top: 5%;
-        margin-bottom: 5%;
-        max-width: 700px;
+        /* max-width: 700px; */
         margin-left: auto;
         margin-right: auto;
     }
@@ -99,7 +97,7 @@ $_data["idiomaMenu"] = $idioma;
     }
 
     #purple {
-        color: rgb(131, 36, 160);
+        color: #fff;
     }
 
     #darkpurple {
@@ -124,7 +122,7 @@ $_data["idiomaMenu"] = $idioma;
     }
 
     i {
-        color: rgb(131, 36, 160);
+        color: #fff;
     }
 
     .main {
@@ -192,6 +190,67 @@ $_data["idiomaMenu"] = $idioma;
     .upload {
         color: white;
     }
+
+    ul {
+
+        list-style: none;
+        display: flex;
+    }
+
+
+
+    .social-icon {
+
+        height: 70px;
+        width: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 27px;
+        margin-right: 11px;
+        cursor: pointer;
+
+    }
+
+    .social-twitter {
+
+        background-color: #55acee;
+    }
+
+
+    .social-facebook {
+
+        background-color: #3b5999;
+    }
+
+
+    .social-linkedin {
+
+        background-color: #0077B5;
+    }
+
+
+    .social-whatsapp {
+
+        background-color: #075e54;
+    }
+
+    .social-instagram {
+
+        background-color: #dd4b39;
+    }
+
+    .social-icon i {
+
+        transition: 0.4s all;
+    }
+
+    .social-icon:hover i {
+
+        transform: scale(1.4);
+
+    }
 </style>
 
 <div id="container">
@@ -200,6 +259,7 @@ $_data["idiomaMenu"] = $idioma;
     <!-- <div class="col-md-12 col-lg-8"> -->
     <div class="page_content">
         <div class="settings mtb15">
+
             <div class="container-fluid">
                 <div class="card">
                     <div class="card-body">
@@ -213,28 +273,18 @@ $_data["idiomaMenu"] = $idioma;
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="row d-flex justify-content-center">
-                                        <div class="col">
-                                            <button class="btn btn-lg btn-outline dim btn-primary telegram  m-t-md " onclick="telegram();"><i class="fa fa-telegram"></i></button>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-lg btn-outline dim btn-success whatsapp m-t-md " onclick="whatsapp();"><i class="fa fa-whatsapp"></i></button>
 
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-lg btn-outline dim btn-success m-t-md " onclick="facebook();"><i class="fa fa-facebook-f"></i></button>
-
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-lg btn-outline dim btn-warning m-t-md " onclick="email();"><i class="fa fa-envelope-o"></i></button>
-
-                                        </div>
-                                        <div class="col">
-                                            <button id="copyRef" class="btn btn-lg btn-outline dim btn-info m-t-md " data-clipboard-target="#linkReferencia"><i class="fa fa-copy"></i></button>
-                                        </div>
-                                    </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <ul>
+                                        <li><span class="social-icon social-facebook" onclick="facebook();"><i class="fa fa-facebook"></i></span></li>
+                                        <li><span class="social-icon social-whatsapp" onclick="whatsapp();"><i class="fa fa-whatsapp"></i></span></li>
+                                        <li><span class="social-icon social-linkedin" onclick="telegram();"><i class="fa fa-telegram"></i></span></li>
+                                        <li><span class="social-icon social-instagram" onclick="email();"><i class="fa fa-envelope-o"></i></span></li>
+                                        <li><span id="copyRef" class="social-icon social-twitter" data-clipboard-target="#linkReferencia"><i class="fa fa-copy"></i></span></li>
+                                    </ul>
                                 </div>
+
+
                             </div>
                         </div>
 
@@ -249,7 +299,7 @@ $_data["idiomaMenu"] = $idioma;
             <div class="card-plan">
                 <div class="d-flex justify-content-between">
                     <div class="logo">
-                        <img src="assets/img/checked.png"/>
+                        <img src="assets/img/checked.png" />
                     </div>
                     <div class="header alignright">
                         <p><span id="purple">|Plano atual:</span></p>
@@ -336,8 +386,8 @@ $_data["idiomaMenu"] = $idioma;
                                                 <?php foreach ($m->limits as $l) { ?>
                                                     <tr>
                                                         <td>
-                                                                <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><strong><?php echo $l->level ?></strong></span> </div>
-                                                            </td>
+                                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><strong><?php echo $l->level ?></strong></span> </div>
+                                                        </td>
                                                         <td>
                                                             <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->deposit . '%' ?></span> </div>
                                                         </td>
@@ -369,60 +419,60 @@ $_data["idiomaMenu"] = $idioma;
             <?php } ?>
         </div>
     </div>
-<hr>
+    <hr>
 
 
 
-<div class="settings mtb15">
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Filtrar por Período</h5>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group" id="datas">
-                                    <label class="control-label">Período</label>
-                                    <div class="input-daterange input-group full-width" id="datepicker">
-                                        <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                        <span class="input-group-addon">Até</span>
-                                        <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                    </div>
+    <div class="settings mtb15">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Filtrar por Período</h5>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group" id="datas">
+                                <label class="control-label">Período</label>
+                                <div class="input-daterange input-group full-width" id="datepicker">
+                                    <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                    <span class="input-group-addon">Até</span>
+                                    <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Moedas</label>
-                                    <select class="form-control custom-select" id="idMoeda">
-                                        <?php foreach ($moedas as $m) { ?>
-                                            <option value="<?php echo \Utils\Criptografia::encriptyPostId($m->id) ?>" <?php echo $m->id == $moedaFavorita ? "selected" : ""; ?>><?php echo $m->simbolo . " - " . $m->nome ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Moedas</label>
+                                <select class="form-control custom-select" id="idMoeda">
+                                    <?php foreach ($moedas as $m) { ?>
+                                        <option value="<?php echo \Utils\Criptografia::encriptyPostId($m->id) ?>" <?php echo $m->id == $moedaFavorita ? "selected" : ""; ?>><?php echo $m->simbolo . " - " . $m->nome ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label><?php echo "Registro" ?></label>
-                                    <select class="form-control custom-select" id="registros">
-                                        <option value="30">30</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                        <option value="T"><?php echo "Todos" ?></option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label><?php echo "Registro" ?></label>
+                                <select class="form-control custom-select" id="registros">
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="T"><?php echo "Todos" ?></option>
+                                </select>
                             </div>
-                            <div class="col-sm-12">
-                                <label>&nbsp;</label>
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-light full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
-                                </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>&nbsp;</label>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-light full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        
+
     <div class="settings mtb15">
         <div class="container-fluid">
             <div class="card">
@@ -575,18 +625,18 @@ $_data["idiomaMenu"] = $idioma;
             data: {
                 plan_id: id
             },
-                success: function(res) {
-                    try {
-                        if (res.status === "Error") {
-                            toastr.error(res.message);
-                        } else {
-                            toastr.success(res.message);
-                        }
-                    } catch (e) {
-                        toastr.error(e);
-                        $("#lista").html("<div class='col-lg-12 text-center'>" + e + "</div>");
+            success: function(res) {
+                try {
+                    if (res.status === "Error") {
+                        toastr.error(res.message);
+                    } else {
+                        toastr.success(res.message);
                     }
+                } catch (e) {
+                    toastr.error(e);
+                    $("#lista").html("<div class='col-lg-12 text-center'>" + e + "</div>");
                 }
+            }
         })
     }
 
