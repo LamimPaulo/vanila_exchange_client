@@ -19,30 +19,13 @@ class Referencia {
         $client = new Client();
         $cliente = \Utils\Geral::getCliente();
 
-        $moedaRn = new \Models\Modules\Cadastro\MoedaRn();
-        $moedas = $moedaRn->listar(" id = 1 OR ativo = 1 AND (visualizar_deposito = 1 OR visualizar_saque = 1)", "nome ASC");
-
         if(true){
-            $url = 'https://sandbox.coinage.trade/api/priv/plans';
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_SSH_COMPRESSION, true);
-            curl_setopt_array($ch, [
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_URL => $url
-            ]);
-            $result = curl_exec($ch);
-            $plans = json_decode($result);
-
-            curl_close($ch);
-        }
-        if(true){
-            $url = 'https://sandbox.coinage.trade/api/priv/current';
+            $url = 'https://sandbox.coinage.trade/api/priv/buyplan';
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_SSH_COMPRESSION, true);
             curl_setopt_array($ch, [
                 CURLOPT_RETURNTRANSFER => true,
@@ -53,20 +36,14 @@ class Referencia {
                 'Content-type: Application/json',
                 'usr: '.$cliente->id,
             ]);
+            curl_setopt( $ch, CURLOPT_POSTFIELDS, $params );
             $result2 = curl_exec($ch);
-            $current_plan = json_decode($result2);
+            print json_decode($result2);
 
             curl_close($ch);
         }
 
-        // exit(print_r($current_plan));
-
-
-        $params["moedas"] = $moedas;
-        $params["plans"] = $plans->data;
-        $params["current_plan"] = $current_plan->data;
-
-        \Utils\Layout::view("index_referencia2", $params);
+        // \Utils\Layout::view("index_referencia2", $params);
     }
 
     public function index($params) {

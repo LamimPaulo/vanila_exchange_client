@@ -625,8 +625,8 @@ public static $rotas = Array(
         
         "referal"                                        => Array("url" => "referencia/referencia/index" ,                                        "modulo" => "referencia",                            "rotina" => "extrato" ),
         "referencia/listar"                                 => Array("url" => "referencia/referencia/listarReferencia" ,                             "modulo" => "referencia",                            "rotina" => "extrato" ),
+        "referencia/buy_plan"                                 => Array("url" => "referencia/referencia/buyPlan" ,                             "modulo" => "referencia",                            "rotina" => "extrato" ),
 
-        
         // CONtas
         "contas/empresa/btc"                                => Array("url" => "contas/btcEmpresa/index" ,                                   "modulo" => "contasempresa",                     "rotina" => "contas/empresa/btc" ),
         "contas/empresa/reais"                              => Array("url" => "contas/reaisEmpresa/index" ,                                 "modulo" => "contasempresa",                     "rotina" => "contas/empresa/reais" ),
@@ -970,6 +970,7 @@ public static $rotas = Array(
     const R_EXTRATO_LISTAR = "extrato/listar";
     
     const R_REFERENCIA_LISTAR = "referencia/listar";
+    const R_REFERENCIA_COMPRAR_PLANO = "referencia/buy_plan";
     
     const R_CONFIGURACOES_CONTAS_LISTAR = "configuracoes/contas/listar";
     const R_CONFIGURACOES_CONTAS_CADASTRO = "configuracoes/contas/cadastro";
