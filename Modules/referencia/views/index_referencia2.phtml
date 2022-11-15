@@ -5,11 +5,11 @@ $moedas = (isset($_data["moedas"]) ? $_data["moedas"]  : null);
 
 $dataInicial = new Utils\Data(date("d/m/Y"));
 $dataFinal = new Utils\Data(date("d/m/Y"));
-$dataInicial->subtrair(0,1);
+$dataInicial->subtrair(0, 1);
 
 $cliente = \Utils\Geral::getCliente();
 
-if(!empty($cliente->moedaFavorita)){
+if (!empty($cliente->moedaFavorita)) {
     $moedaFavorita = $cliente->moedaFavorita;
 } else {
     $moedaFavorita = 2;
@@ -25,186 +25,74 @@ $_data["idiomaMenu"] = $idioma;
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
 <?php Utils\Layout::append("inspina/menu", $_data) ?>
 <style>
-    button.btn-success.dim.whatsapp{
+    button.btn-plan-success.dim.whatsapp {
         box-shadow: inset 0 0 0 #25d366, 0 5px 0 0 #25d366, 0 10px 5px #999999;
     }
-    .btn-success.btn-outline.whatsapp {
+
+    .btn-plan-success.btn-plan-outline.whatsapp {
         color: #25d366;
         border-color: #25d366;
     }
-    .btn-success.whatsapp:hover {
+
+    .btn-plan-success.whatsapp:hover {
         background-color: #128c7e;
     }
 
-    button.btn-primary.dim.telegram{
+    button.btn-plan-primary.dim.telegram {
         box-shadow: inset 0 0 0 #0088cc, 0 5px 0 0 #0088cc, 0 10px 5px #999999;
     }
-    .btn-primary.btn-outline.telegram {
+
+    .btn-plan-primary.btn-plan-outline.telegram {
         color: #0088cc;
         border-color: #0088cc;
     }
-    .btn-primary.telegram:hover {
+
+    .btn-plan-primary.telegram:hover {
         background-color: #97dcff;
     }
 
+    /* Card */
 </style>
 
 <div id="container">
     <!-- <div class="col-md-12 col-lg-2">
     </div> -->
     <!-- <div class="col-md-12 col-lg-8"> -->
-        <div class="page_content">
-            <div class="settings mtb15">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Link Para Compartilhamento</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="alert alert-success m-t-md m-r-md">
-                                                <span id="linkReferencia" style="word-wrap: break-word;"><?php echo $linkCliente ?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row d-flex justify-content-center">
-                                            <div class="col">
-                                                <button class="btn btn-lg btn-outline dim btn-primary telegram  m-t-md " onclick="telegram();" ><i class="fa fa-telegram"></i></button>
-                                            </div>
-                                            <div class="col">
-                                                <button class="btn btn-lg btn-outline dim btn-success whatsapp m-t-md " onclick="whatsapp();" ><i class="fa fa-whatsapp"></i></button>
-
-                                            </div>
-                                            <div class="col">
-                                                <button class="btn btn-lg btn-outline dim btn-success m-t-md " onclick="facebook();" ><i class="fa fa-facebook-f"></i></button> 
-
-                                            </div>
-                                            <div class="col">
-                                                <button class="btn btn-lg btn-outline dim btn-warning m-t-md " onclick="email();" ><i class="fa fa-envelope-o"></i></button> 
-
-                                            </div>
-                                            <div class="col">
-                                                <button id="copyRef" class="btn btn-lg btn-outline dim btn-info m-t-md " data-clipboard-target="#linkReferencia"><i class="fa fa-copy"></i></button> 
-                                            </div>
+    <div class="page_content">
+        <div class="settings mtb15">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Link Para Compartilhamento</h5>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="alert alert-success m-t-md m-r-md">
+                                            <span id="linkReferencia" style="word-wrap: break-word;"><?php echo $linkCliente ?></span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="settings mtb15">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Filtrar por Período</h5>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="form-group" id="datas">
-                                            <label class="control-label">Período</label>
-                                            <div class="input-daterange input-group full-width" id="datepicker">
-                                                <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                                <span class="input-group-addon">Até</span>
-                                                <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                            </div>
+                                <div class="col-md-12">
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col">
+                                            <button class="btn btn-lg btn-outline dim btn-primary telegram  m-t-md " onclick="telegram();"><i class="fa fa-telegram"></i></button>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label>Moedas</label>
-                                            <select class="form-control custom-select" id="idMoeda">
-                                                <?php foreach ($moedas as $m) { ?>
-                                                    <option value="<?php echo \Utils\Criptografia::encriptyPostId($m->id) ?>" <?php echo $m->id == $moedaFavorita ? "selected" : ""; ?>><?php echo $m->simbolo . " - " . $m->nome ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label><?php echo "Registro" ?></label>
-                                            <select class="form-control custom-select" id="registros">
-                                                <option value="30">30</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                                <option value="T"><?php echo "Todos" ?></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <label>&nbsp;</label>
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-light full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                                                    PLANO ATUAL DO USUARIO {estrutura: Valor a cada nivel -> nome do plano}<br>
-                                                    <?php foreach ($current_plan as $cp) { ?>
-                                                        <?php echo json_encode($cp)?>
-                                                    <?php } ?>
+                                        <div class="col">
+                                            <button class="btn btn-lg btn-outline dim btn-success whatsapp m-t-md " onclick="whatsapp();"><i class="fa fa-whatsapp"></i></button>
 
-                                                    <br><br>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-lg btn-outline dim btn-success m-t-md " onclick="facebook();"><i class="fa fa-facebook-f"></i></button>
 
-                                                    Planos Disponiveis {estrutura: Plano -> valores a cada nivel}
-                                                    <?php foreach ($plans as $m) { ?>
-                                                        <?php echo $m->title; ?> - <?php echo $m->price_local; ?> <br>
-                                                            <?php foreach ($m->limits as $l) { ?>
-                                                                Nivel - <?php echo $l->level ?> 
-                                                                - Deposito <?php echo $l->deposit.'%' ?>
-                                                                - Saque <?php echo $l->withdrawal.'%' ?>
-                                                                - Ordem Compra <?php echo $l->order_buy.'%' ?>
-                                                                - Ordem Venda <?php echo $l->order_sell.'%' ?>
-                                                                - Venda de plano <?php echo $l->plan_purchase.'%' ?>
-                                                            <br>
-                                                            <?php } ?>
-                                                            <button class="btn btn-sm" onclick="alert('<?php echo $m->id ?>')">contratar</button>
-                                                            <br>
-                                                            <br>
-                                                    <br>
-                                                    <?php } ?>
-            <div class="settings mtb15">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Informações Gerais</h5>
-                            <div class="row m-l-xs">
-                                <div class="col-sm-1">
-                                    <small class="stats-label">Moeda</small></br>
-                                    <div id="moedaImg">-</div>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <small class="stats-label">Qtd. Total Indicados</small>
-                                    <h6 id="qtdReferencias">-</h4>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <small class="stats-label">Total Depósitos</small>
-                                    <h6 id="totalDepositos">-</h4>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <small class="stats-label">Total Compra/Venda</small>
-                                    <h6 id="totalCompraVenda">-</h4>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <small class="stats-label">Total Saques</small>
-                                    <h6 id="totalSaques">-</h4>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <small class="stats-label">Total no Período</small>
-                                    <h6><strong id="total">-</strong></h4>
-                                </div>
-                                <div class="col-sm-1">
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-down"></i>
-                                        </a>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-lg btn-outline dim btn-warning m-t-md " onclick="email();"><i class="fa fa-envelope-o"></i></button>
+
+                                        </div>
+                                        <div class="col">
+                                            <button id="copyRef" class="btn btn-lg btn-outline dim btn-info m-t-md " data-clipboard-target="#linkReferencia"><i class="fa fa-copy"></i></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -213,18 +101,175 @@ $_data["idiomaMenu"] = $idioma;
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="settings mtb15">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-body">
+        <div class="settings mtb15">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filtrar por Período</h5>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group" id="datas">
+                                    <label class="control-label">Período</label>
+                                    <div class="input-daterange input-group full-width" id="datepicker">
+                                        <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                        <span class="input-group-addon">Até</span>
+                                        <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Moedas</label>
+                                    <select class="form-control custom-select" id="idMoeda">
+                                        <?php foreach ($moedas as $m) { ?>
+                                            <option value="<?php echo \Utils\Criptografia::encriptyPostId($m->id) ?>" <?php echo $m->id == $moedaFavorita ? "selected" : ""; ?>><?php echo $m->simbolo . " - " . $m->nome ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label><?php echo "Registro" ?></label>
+                                    <select class="form-control custom-select" id="registros">
+                                        <option value="30">30</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="T"><?php echo "Todos" ?></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <label>&nbsp;</label>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-light full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        PLANO ATUAL DO USUARIO {estrutura: Valor a cada nivel -> nome do plano}<br>
+        <?php foreach ($current_plan as $cp) { ?>
+            <?php echo json_encode($cp) ?>
+        <?php } ?>
+
+
+        <div class="container mt-5">
+            <div class="row d-flex justify-content-center">
+                <?php foreach ($plans as $m) { ?>
+                    <div class="col">
+                        <div class="card p-2 text-center">
+                            <div class="row">
+                                <div class="col no-gutters">
+                                    <div class="py-3">
+                                        <h4 class="text-uppercase"><?php echo $m->title; ?></h4>
+                                        <div class="allergy"><span><?php echo $m->price_local; ?></span></div>
+                                        <div class="stats">
+                                            <table class="table table-borderless">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Nível</th>
+                                                        <th scope="col">Depósito</th>
+                                                        <th scope="col">Saque</th>
+                                                        <th scope="col">Ordem Compra</th>
+                                                        <th scope="col">Ordem Venda</th>
+                                                        <th scope="col">Ordem de plano</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    <?php foreach ($m->limits as $l) { ?>
+                                                        <tr>
+                                                            <td class="text-center"><strong><?php echo $l->level ?></strong></td>
+                                                            <td>
+                                                                <div class="d-flex flex-column"> <span class="text-left head"></span> <span class="text-left bottom"><?php echo $l->deposit . '%' ?></span> </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex flex-column"> <span class="text-left head"></span> <span class="text-left bottom"><?php echo $l->withdrawal . '%' ?></span> </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex flex-column"> <span class="text-left head"></span> <span class="text-left bottom"><?php echo $l->order_buy . '%' ?></span> </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex flex-column"> <span class="text-left head"></span> <span class="text-left bottom"><?php echo $l->order_sell . '%' ?></span> </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex flex-column"> <span class="text-left head"></span> <span class="text-left bottom"><?php echo $l->plan_purchase . '%' ?></span> </div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button onclick="alert('<?php echo $m->id ?>')" type="button" class="btn btn-primary btn-block">Contratar</button>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+
+        <div class="settings mtb15">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Informações Gerais</h5>
+                        <div class="row m-l-xs">
+                            <div class="col-sm-1">
+                                <small class="stats-label">Moeda</small></br>
+                                <div id="moedaImg">-</div>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <small class="stats-label">Qtd. Total Indicados</small>
+                                <h6 id="qtdReferencias">-</h4>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <small class="stats-label">Total Depósitos</small>
+                                <h6 id="totalDepositos">-</h4>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <small class="stats-label">Total Compra/Venda</small>
+                                <h6 id="totalCompraVenda">-</h4>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <small class="stats-label">Total Saques</small>
+                                <h6 id="totalSaques">-</h4>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <small class="stats-label">Total no Período</small>
+                                <h6><strong id="total">-</strong></h4>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-down"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="settings mtb15">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
                         <h5 class="card-title">Saldos</h5>
-                            <div class="row m-t-xs">            
-                                <div class="col-lg-12">                 
-                                    <div class="ibox float-e-margins ">                    
-                                        <div class="list-items" id="detalhesReferencias">
-                                            
-                                        </div>
+                        <div class="row m-t-xs">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins ">
+                                    <div class="list-items" id="detalhesReferencias">
+
                                     </div>
                                 </div>
                             </div>
@@ -233,10 +278,11 @@ $_data["idiomaMenu"] = $idioma;
                 </div>
             </div>
         </div>
+    </div>
     <!-- </div> -->
     <!-- <div class="col-md-12 col-lg-2">
     </div> -->
-    
+
 </div>
 
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
@@ -287,13 +333,15 @@ $_data["idiomaMenu"] = $idioma;
     </div>  
 </script>
 <script>
-      
-    $(document).ready(function () {
+    $(document).ready(function() {
         new Clipboard('#copyRef');
-        $("#dataInicial, #dataFinal").datepicker({forceParse: false,format: 'dd/mm/yyyy'}).mask("99/99/9999");
+        $("#dataInicial, #dataFinal").datepicker({
+            forceParse: false,
+            format: 'dd/mm/yyyy'
+        }).mask("99/99/9999");
         filtrar();
-        
-        $('#copyRef').click(function () {
+
+        $('#copyRef').click(function() {
             swal({
                 title: "Compartilhe seu link!",
                 text: "Seu link foi copiado!",
@@ -307,14 +355,14 @@ $_data["idiomaMenu"] = $idioma;
             });
         });
     });
-    
-    
+
+
     function render(props) {
         return function(tok, i) {
-          return (i % 2) ? props[tok] : tok;
+            return (i % 2) ? props[tok] : tok;
         };
-      }
-    
+    }
+
     function filtrar() {
         $("#detalhesReferencias").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
         $.ajax({
@@ -322,85 +370,83 @@ $_data["idiomaMenu"] = $idioma;
             method: 'post',
             dataType: 'json',
             data: {
-                dataInicial : $("#dataInicial").val(),
-                dataFinal : $("#dataFinal").val(),
-                registros : $("#registros").val(),
+                dataInicial: $("#dataInicial").val(),
+                dataFinal: $("#dataFinal").val(),
+                registros: $("#registros").val(),
                 moeda: $("#idMoeda").val()
             },
-            success: function (json) {                 
+            success: function(json) {
                 try {
-                    if (json.sucesso) { 
-                         $("#detalhesReferencias").html("");
-                         $(".list-indicados").html("");
-                       
-                         $("#moedaImg").html(' <img src="' + json.moedaImg +'" style="width: 25px; height: 25px;">');
-                         $("#qtdReferencias").html(json.qtdReferencias);
-                         $("#totalDepositos").html(json.totalDepositos);
-                         $("#totalCompraVenda").html(json.totalCompraVenda);
-                         $("#totalSaques").html(json.totalSaques);
-                         $("#total").html(json.total);
-                         
+                    if (json.sucesso) {
+                        $("#detalhesReferencias").html("");
+                        $(".list-indicados").html("");
+
+                        $("#moedaImg").html(' <img src="' + json.moedaImg + '" style="width: 25px; height: 25px;">');
+                        $("#qtdReferencias").html(json.qtdReferencias);
+                        $("#totalDepositos").html(json.totalDepositos);
+                        $("#totalCompraVenda").html(json.totalCompraVenda);
+                        $("#totalSaques").html(json.totalSaques);
+                        $("#total").html(json.total);
+
                         for (var i = 0; i < json.dados.length; i++) {
-                           var items = [{
-                                  nome: json.dados[i].nomeReferencia,
-                                  data: json.dados[i].dataCadastro,
-                                  deposito:  json.dados[i].valorDeposito,
-                                  compraVenda: json.dados[i].valorCompraVenda,
-                                  saque: json.dados[i].valorSaque,
-                                  totalTodos: json.dados[i].total                                  
-                                }];
-                           
-                           var itemTpl = $('script[data-template="listitem"]').text().split(/\$\{(.+?)\}/g);
-                           
-                           $('.list-items').append(items.map(function(item) {
-                                return itemTpl.map(render(item    )).join('');
+                            var items = [{
+                                nome: json.dados[i].nomeReferencia,
+                                data: json.dados[i].dataCadastro,
+                                deposito: json.dados[i].valorDeposito,
+                                compraVenda: json.dados[i].valorCompraVenda,
+                                saque: json.dados[i].valorSaque,
+                                totalTodos: json.dados[i].total
+                            }];
+
+                            var itemTpl = $('script[data-template="listitem"]').text().split(/\$\{(.+?)\}/g);
+
+                            $('.list-items').append(items.map(function(item) {
+                                return itemTpl.map(render(item)).join('');
                             }));
                         }
-                        
+
                         for (var i = 0; i < json.indicados.length; i++) {
-                           var items = [{
-                                  nomeIndicado: json.indicados[i].nomeReferencia,
-                                  dataIndicado: json.indicados[i].dataCadastro
-                                }];
-                           
-                           var itemTpl = $('script[data-template="listindicados"]').text().split(/\$\{(.+?)\}/g);
-                           
-                           $('.list-indicados').append(items.map(function(item) {
-                                return itemTpl.map(render(item    )).join('');
+                            var items = [{
+                                nomeIndicado: json.indicados[i].nomeReferencia,
+                                dataIndicado: json.indicados[i].dataCadastro
+                            }];
+
+                            var itemTpl = $('script[data-template="listindicados"]').text().split(/\$\{(.+?)\}/g);
+
+                            $('.list-indicados').append(items.map(function(item) {
+                                return itemTpl.map(render(item)).join('');
                             }));
                         }
-                     
+
                     } else {
-                        $("#detalhesReferencias").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");   
+                        $("#detalhesReferencias").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
                         showNotyAlert(json.mensagem, "e");
                     }
                 } catch (e) {
-                   $("#detalhesReferencias").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
-                   showNotyAlert(json.mensagem, "e");
+                    $("#detalhesReferencias").html("<div class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+                    showNotyAlert(json.mensagem, "e");
                 }
             }
         });
     }
-    
+
 
     function whatsapp() {
-        window.open('https://wa.me/?text=<?= "Acesse e cadastre" . ' ' . $linkCliente; ?>', '_blank'); 
+        window.open('https://wa.me/?text=<?= "Acesse e cadastre" . ' ' . $linkCliente; ?>', '_blank');
     }
-    
+
     function facebook() {
-        window.open('https://www.facebook.com/sharer.php?u=<?= $linkCliente; ?>', '_blank'); 
+        window.open('https://www.facebook.com/sharer.php?u=<?= $linkCliente; ?>', '_blank');
     }
-    
+
     function telegram() {
         window.open('https://telegram.me/share/url?url=<?= $linkCliente; ?>&text=Coinage - Compartilhe seu link referência.', '_blank');
     }
-    
+
     function email() {
         window.open('mailto:<?= $cliente->email ?>?&subject=Coinage&body=Compartilhe%20seu%20link%20de%20referência. - <?= $linkCliente ?>', '_blank');
     }
-    
 </script>
 
 
 <?php Utils\Layout::append("mensage_text", $_data) ?>
-
