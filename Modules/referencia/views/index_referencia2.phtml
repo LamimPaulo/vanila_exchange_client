@@ -208,7 +208,7 @@ $_data["idiomaMenu"] = $idioma;
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button onclick="alert('<?php echo $m->id ?>')" type="button" class="btn btn-primary btn-block">Contratar</button>
+                                <button onclick="listar('<?php echo $m->id ?>')" type="button" class="btn btn-primary btn-block">Contratar</button>
                             </div>
                         </div>
                     </div>
@@ -357,6 +357,33 @@ $_data["idiomaMenu"] = $idioma;
     });
 
 
+
+    function listar(id) {
+        console.log('id: ', id)
+        // $("#lista").html("<div class='col-lg-12 text-center'><img src='<?php echo IMAGES ?>loading.gif' /></div>");
+        $.ajax({
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REFERENCIA_COMPRAR_PLANO ?>',
+            method: 'post',
+            dataType: 'json',
+            data: {plan_id: id,
+            success: function (json) {
+                try {
+                        console.log('JSOOOOOOON: ', json);
+                    if (json.sucesso) {
+                        $("#lista").html(json.html);
+                        console.log('JSOOOOOOON: ', json);
+                    } else {
+                        $("#lista").html("<div class='col-lg-12 text-center'>"+json.mensagem+"</div>");
+                    }
+                } catch (e) {
+                    $("#lista").html("<div class='col-lg-12 text-center'>"+e+"</div>");
+                }
+            }
+        }
+        });
+    }
+
+
     function render(props) {
         return function(tok, i) {
             return (i % 2) ? props[tok] : tok;
@@ -447,6 +474,5 @@ $_data["idiomaMenu"] = $idioma;
         window.open('mailto:<?= $cliente->email ?>?&subject=Coinage&body=Compartilhe%20seu%20link%20de%20referência. - <?= $linkCliente ?>', '_blank');
     }
 </script>
-
 
 <?php Utils\Layout::append("mensage_text", $_data) ?>
