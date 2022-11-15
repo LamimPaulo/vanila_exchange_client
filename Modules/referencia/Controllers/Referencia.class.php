@@ -18,7 +18,9 @@ class Referencia {
     public function buyPlan($params) {
         $client = new Client();
         $cliente = \Utils\Geral::getCliente();
-
+        
+        $plan_id = \Utils\Post::get($params, "plan_id", null);
+        
         if(true){
             $url = 'https://sandbox.coinage.trade/api/priv/buyplan';
             $ch = curl_init();
@@ -31,18 +33,19 @@ class Referencia {
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_URL => $url
             ]);
+            curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode(['plan_id' => $plan_id]));
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'Accept: Application/json',
                 'Content-type: Application/json',
                 'usr: '.$cliente->id,
             ]);
-            curl_setopt( $ch, CURLOPT_POSTFIELDS, $params );
             $result2 = curl_exec($ch);
-            print json_decode($result2);
-
+            // print(json_decode($result2));
             curl_close($ch);
         }
-
+        
+        print $result2;
+        // return $result2;
         // \Utils\Layout::view("index_referencia2", $params);
     }
 
