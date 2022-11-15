@@ -330,15 +330,19 @@ $_data["idiomaMenu"] = $idioma;
                             volume: volume,
                             ico: ico
                         },
-                        success: function (json) {
+                        success: function (res) {
                             try {
-                                if (json.sucesso) {
-
-
-                                    showNotyAlert(json.mensagem, 's');
-                                } else {
-                                    showNotyAlert(json.mensagem, 'e');
+                                if (res.status === 'Error') {
+                                    toastr.danger(res);
                                 }
+                                if (res.status === 'Success') {
+                                    toastr.success(res);
+                                }
+                                // if (res.sucesso) {
+                                //     showNotyAlert(json.mensagem, 's');
+                                // } else {
+                                //     showNotyAlert(json.mensagem, 'e');
+                                // }
                             } catch (e) {
                                 showNotyAlert(e, 'e');
                             }
