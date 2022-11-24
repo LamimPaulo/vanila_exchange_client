@@ -495,7 +495,6 @@ class ContaCorrenteBtcRn {
     }
 
     public function calcularSaldoConta(Cliente $cliente, $idMoeda = 2, $saldoBloqueado = false, $desconsiderarCredito = false) {
-
         $sWhere = ($idMoeda > 0 ? " m.id = {$idMoeda} " : " m.ativo = 1 ");
         $query = "SELECT 
                     m.*,
@@ -551,19 +550,17 @@ class ContaCorrenteBtcRn {
     }
 
     public function calcularSaldoRecompensaICO(Cliente $cliente, $idMoeda = 2) {
-        
         if (!$cliente->id > 0) {
             throw new \Exception($this->idioma->getText("informarIdentificacaoCliente"));
         }
-        
         if (!$idMoeda > 0) {
             throw new \Exception($this->idioma->getText("moedaInvalida"));
         }
 
         $query = " SELECT SUM(valor) AS valor, tipo FROM conta_corrente_btc WHERE id_cliente = {$cliente->id} AND id_moeda = {$idMoeda} AND origem = 8 GROUP BY tipo;";
-        
+
         $moeda = MoedaRn::get($idMoeda);
-        
+
         $entrada = 0;
         $saida = 0;
         $result = $this->conexao->adapter->query($query)->execute();

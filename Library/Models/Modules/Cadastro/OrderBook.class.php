@@ -55,6 +55,10 @@ class OrderBook {
      * @var Integer 
      */
     public $executada;
+
+    public $internalFreeze;
+
+    public $internalLink;
     
     /**
      *
@@ -200,6 +204,8 @@ class OrderBook {
         $this->valorCotacao = ((isset($dados ['valor_cotacao'])) ? ($dados ['valor_cotacao']) : (null));
         $this->volumeCurrency = ((isset($dados ['volume_currency'])) ? ($dados ['volume_currency']) : (null));
         $this->executada = ((isset($dados ['executada'])) ? ($dados ['executada']) : (null));
+        $this->internalFreeze = ((isset($dados ['internal_freeze'])) ? ($dados ['internal_freeze']) : (null));
+        $this->internalLink = ((isset($dados ['internal_link'])) ? ($dados ['internal_link']) : (null));
         $this->cancelada = ((isset($dados ['cancelada'])) ? ($dados ['cancelada']) : (null));
         $this->volumeExecutado = ((isset($dados ['volume_executado'])) ? ($dados ['volume_executado']) : (null));
         $this->percentualTaxa = ((isset($dados ['percentual_taxa'])) ? ($dados ['percentual_taxa']) : (null));

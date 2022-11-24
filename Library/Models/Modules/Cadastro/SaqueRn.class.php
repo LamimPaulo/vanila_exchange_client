@@ -342,56 +342,52 @@ class SaqueRn {
     
     public function aprovar(Saque $saq) {
         try {
-            
             $usuarioLogado = \Utils\Geral::getLogado();
             if (!\Utils\Geral::isUsuario()) {
                 throw new \Exception($this->idioma->getText("vocePrecisaLogadoOperacao"));
             }
-            
+
             if ($usuarioLogado->tipo != \Utils\Constantes::ADMINISTRADOR) {
                 throw new \Exception($this->idioma->getText("voceNaoTemPermissaoEfetuarOperacao"));
             }
-            
+
             $this->conexao->adapter->iniciar();
-            
+
             if (!$saq->id > 0) {
                 throw new \Exception($this->idioma->getText("identificacaoSaqueInvalida"));
             }
-            
+
             $saque = new Saque(Array("id" => $saq->id));
             $this->carregar($saque, true, false, false, true);
-            
+
             if ($saque->status == \Utils\Constantes::STATUS_SAQUE_CONFIRMADO) {
                 throw new \Exception($this->idioma->getText("saqueJaConfirmado"));
             }
             if ($saque->status == \Utils\Constantes::STATUS_SAQUE_CANCELADO) {
                 throw new \Exception($this->idioma->getText("saqueJaCancelado"));
             }
-            
+
             $saque->comprovante = $saq->comprovante;
-            
+
             if (empty($saque->comprovante)) {
                 throw new \Exception($this->idioma->getText("necessarioEnviarCompDeposito"));
             }
-            
-            
+
             $saque->dataDeposito = new \Utils\Data(date("d/m/Y H:i:s"));
             $saque->idUsuario = $usuarioLogado->id;
             $saque->status = \Utils\Constantes::STATUS_SAQUE_CONFIRMADO;
-            
-            
-            
+
             $this->conexao->update(
                     Array(
                         "status" => $saque->status,
                         "data_deposito" => $saque->dataDeposito->formatar(\Utils\Data::FORMATO_ISO_TIMESTAMP_LONGO),
                         "comprovante" => $saque->comprovante,
                         "id_usuario" => $saque->idUsuario
-                    ), 
+                    ),
                     Array(
                         "id" => $saque->id
                     ));
-            
+
             $contaCorrenteReaisEmpresaRn = new ContaCorrenteReaisEmpresaRn($this->conexao->adapter);
             $contaCorrenteReaisEmpresa = new ContaCorrenteReaisEmpresa();
             $contaCorrenteReaisEmpresa->id = 0;
@@ -401,34 +397,48 @@ class SaqueRn {
             $contaCorrenteReaisEmpresa->transferencia = 0;
             $contaCorrenteReaisEmpresa->valor = number_format(($saque->valorComissao + $saque->tarifaTed), 2, ".", "");
             $contaCorrenteReaisEmpresaRn->salvar($contaCorrenteReaisEmpresa);
-            
-            
+
             // Começa a validação do Crédito de referência ou convite
             $cliente = new Cliente(Array("id" => $saque->idCliente));
             $clienteRn = new ClienteRn();
             $clienteRn->conexao->carregar($cliente);
-            
+
             $convite = false;
             $pagarComissao = false;
             $comissao = 0;
             $descricao = "";
             $idCliente = 0;
-            
+
             /*
             $configuracao = new Configuracao(Array("id" => 1));
             $configuracaoRn = new ConfiguracaoRn();
             $configuracaoRn->conexao->carregar($configuracao);
             */
-            
+                    //TODO ir pro admin isso, nao é aprovado aqui
             if ($cliente->idReferencia > 0) {
-                $clienteHasComissao = ClienteHasComissaoRn::get($cliente->idReferencia);
-                if ($clienteHasComissao != null) {
-                    if ($clienteHasComissao->saque > 0) { 
-                        $descricao = "Pagamento comissão saque Referência {$cliente->nome} ";
-                        $comissao = number_format(($saque->valorComissao * ($clienteHasComissao->saque / 100)), 2, ".", "");
-                        $clienteRn->creditarComissaoReferencia(new Cliente(Array("id" => $cliente->idReferencia)), $comissao, $descricao, false, $cliente->id, null, 4);
-                    }
-                }
+                $data = [
+                    'client_id' => $cliente->idReferencia,
+                    'client_zero' => $cliente->id,
+                    'level' => 1,
+                    'category' => 'withdrawal',
+                    // 'coin_id' => $paridade->idMoedaBook,
+                    'coin_id' => 1,
+                    // 'value_decimals' => $contacorre->moedaBook->casasDecimais,
+                    // 'transaction_id' => $orderBook->id,
+                    'raw_value' => $saque->valorComissao,
+                    'optional' => $saque->id,
+                ];
+
+                $result = \LambdaAWS\QueueKYC::sendQueue('ex.comissions', $data);
+
+                // $clienteHasComissao = ClienteHasComissaoRn::get($cliente->idReferencia);
+                // if ($clienteHasComissao != null) {
+                //     if ($clienteHasComissao->saque > 0) { 
+                //         $descricao = "Pagamento comissão saque Referência {$cliente->nome} ";
+                //         $comissao = number_format(($saque->valorComissao * ($clienteHasComissao->saque / 100)), 2, ".", "");
+                //         $clienteRn->creditarComissaoReferencia(new Cliente(Array("id" => $cliente->idReferencia)), $comissao, $descricao, false, $cliente->id, null, 4);
+                //     }
+                // }
             }
             
             /*

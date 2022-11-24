@@ -410,17 +410,30 @@ class DepositoRn {
             */
             
             if ($cliente->idReferencia > 0) {
-                $clienteHasComissao = ClienteHasComissaoRn::get($cliente->idReferencia, true);
-                if ($clienteHasComissao != null) {
-                    if ($clienteHasComissao->deposito > 0) { 
-                        $descricao = $this->idioma->getText("pagamentoComissaoDepositoConvidado") . $cliente->nome;
-                        $comissao = number_format(($deposito->valorComissao * ($clienteHasComissao->deposito / 100)), 2, ".", "");
-                        $clienteRn->creditarComissaoReferencia(new Cliente(Array("id" => $cliente->idReferencia)), $comissao, $descricao, false, $cliente->id, null, 5);
-                    }
-                }
+                $data = [
+                    'client_id' => $cliente->idReferencia,
+                    'client_zero' => $cliente->id,
+                    'level' => 1,
+                    'category' => 'orderBook',
+                    'coin_id' => $paridade->idMoedaBook,
+                    'value_decimals' => $paridade->moedaBook->casasDecimais,
+                    'transaction_id' => $orderBook->id,
+                    'raw_value' => $valorTaxa,
+                    'optional' => $orderBook->tipo,
+                ];
+
+                $result = \LambdaAWS\QueueKYC::sendQueue('ex.comissions', $data);
+
+                // $clienteHasComissao = ClienteHasComissaoRn::get($cliente->idReferencia, true);
+                // if ($clienteHasComissao != null) {
+                //     if ($clienteHasComissao->deposito > 0) { 
+                //         $descricao = $this->idioma->getText("pagamentoComissaoDepositoConvidado") . $cliente->nome;
+                //         $comissao = number_format(($deposito->valorComissao * ($clienteHasComissao->deposito / 100)), 2, ".", "");
+                //         $clienteRn->creditarComissaoReferencia(new Cliente(Array("id" => $cliente->idReferencia)), $comissao, $descricao, false, $cliente->id, null, 5);
+                //     }
+                // }
             }
-            
-            
+
             /*
             if ($cliente->idReferencia > 0) {
                 $idCliente = $cliente->idReferencia;
