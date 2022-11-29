@@ -130,16 +130,14 @@ $_data["idiomaMenu"] = $idioma;
       <div class="col-md-6">
         
         <!-- TradingView Widget BEGIN -->
-        <div class="main-chart mb15">
+        <!-- <div class="">
             <div class="page-tv-chart-container" id="tv_chart_container">
-            </div>
+        </div> -->
 <!-- TradingView Widget BEGIN -->
 
     <?php if($paridade->id == 1){ ?>
-
         <div class="tradingview-widget-container">
             <div id="tradingview_e2b09"></div>
-            <!-- <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/BTCBRL/?exchange=BINANCE" rel="noopener" target="_blank"><span class="blue-text">BTCBRL Chart</span></a> by TradingView</div> -->
             <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
             <script type="text/javascript">
             new TradingView.widget(
@@ -206,7 +204,10 @@ $_data["idiomaMenu"] = $idioma;
 
 
     <?php } else {?>ew Widget END -->
-                    <div class="tradingview-widget-container">
+                <div class="">
+            <div class="page-tv-chart-container" id="tv_chart_container">
+        </div>
+                    <div class="tradingview-widget-container" >
                     <div id="tradingview_e8053"></div>
                     <script src="https://s3.tradingview.com/tv.js"></script>
                     <script type="text/javascript" src="<?php echo DIR_TV ?>/charting_library/charting_library.min.js"></script>
@@ -284,8 +285,6 @@ $_data["idiomaMenu"] = $idioma;
                     </script>
                     </div>
                 </div>
-                <!-- TradingV
-        <!-- TradingViiew Widget END -->
 
     <?php } ?>
 
