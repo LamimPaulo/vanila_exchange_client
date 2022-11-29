@@ -22,7 +22,12 @@ class Referencia {
         $plan_id = \Utils\Post::get($params, "plan_id", null);
         
         if(true){
-            $url = 'https://sandbox.coinage.trade/api/priv/buyplan';
+
+            if(AMBIENTE != "producao"){
+                $url = 'https://sandbox.coinage.trade/api/priv/buyplan';
+            }else{
+                $url = 'https://coinage.trade/api/priv/buyplan';
+            }
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -56,7 +61,11 @@ class Referencia {
         $moedas = $moedaRn->listar(" id = 1 OR ativo = 1 AND (visualizar_deposito = 1 OR visualizar_saque = 1)", "nome ASC");
 
         if(true){
-            $url = 'https://sandbox.coinage.trade/api/priv/plans';
+            if(AMBIENTE != "producao"){
+                $url = 'https://sandbox.coinage.trade/api/priv/buyplan';
+            }else{
+                $url = 'https://coinage.trade/api/priv/buyplan';
+            }
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -71,7 +80,11 @@ class Referencia {
             curl_close($ch);
         }
         if(true){
-            $url = 'https://sandbox.coinage.trade/api/priv/current';
+            if(AMBIENTE != "producao"){
+                $url = 'https://sandbox.coinage.trade/api/priv/buyplan';
+            }else{
+                $url = 'https://coinage.trade/api/priv/buyplan';
+            }
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
