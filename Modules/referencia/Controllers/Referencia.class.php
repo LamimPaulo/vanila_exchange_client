@@ -62,9 +62,9 @@ class Referencia {
 
         if(true){
             if(AMBIENTE != "producao"){
-                $url = 'https://sandbox.coinage.trade/api/priv/buyplan';
+                $url = 'https://sandbox.coinage.trade/api/priv/plans';
             }else{
-                $url = 'https://coinage.trade/api/priv/buyplan';
+                $url = 'https://coinage.trade/api/priv/plans';
             }
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -81,9 +81,9 @@ class Referencia {
         }
         if(true){
             if(AMBIENTE != "producao"){
-                $url = 'https://sandbox.coinage.trade/api/priv/buyplan';
+                $url = 'https://sandbox.coinage.trade/api/priv/current';
             }else{
-                $url = 'https://coinage.trade/api/priv/buyplan';
+                $url = 'https://coinage.trade/api/priv/current';
             }
             $ch = curl_init();
 
