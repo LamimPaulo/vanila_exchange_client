@@ -135,75 +135,6 @@ $_data["idiomaMenu"] = $idioma;
         </div> -->
 <!-- TradingView Widget BEGIN -->
 
-    <?php if($paridade->id == 1){ ?>
-        <div class="tradingview-widget-container">
-            <div id="tradingview_e2b09"></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-            <script type="text/javascript">
-            new TradingView.widget(
-            {
-                "autosize": false,
-                "symbol": "MERCADO:BTCBRL",
-                "interval": "D",
-                "timezone": "Etc/UTC",
-                "theme": "light",
-                "style": "1",
-                "locale": "en",
-                "toolbar_bg": "#f1f3f6",
-                "enable_publishing": false,
-                "allow_symbol_change": false,
-                "container_id": "tradingview_e2b09",
-                "height": "425",
-                "width": "100%",
-                "theme": "White",
-                "style": 1,
-                "move_logo_to_main_pane": true,
-                "overrides":{
-                    'paneProperties.legendProperties.showLegend': false,
-                    'mainSeriesProperties.candleStyle.upColor': '#64ae74',
-                    'mainSeriesProperties.candleStyle.downColor': '#df5f61',
-                    'mainSeriesProperties.candleStyle.drawWick': true,
-                    'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
-                    'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
-                    'mainSeriesProperties.candleStyle.drawBorder': true,
-                    'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
-                    'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
-                    'scalesProperties.lineColor': '#252525',
-                    'scalesProperties.textColor': '#8a8a8a',
-                    'paneProperties.topMargin': 20,
-                },
-                "disabled_features": [
-                    'use_localstorage_for_settings',
-                    'legend_context_menu',
-                    'symbol_info',
-                    // "timeframes_toolbar",
-                    // "volume_force_overlay",
-                    // "left_toolbar",
-                    // "show_logo_on_all_charts",
-                    // "caption_buttons_text_if_possible",
-                    // "header_settings",
-                    // "header_chart_type",
-                    // "header_indicators",
-                    // "header_compare",
-                    // "compare_symbol",
-                    // "header_screenshot",
-                    // "header_widget_dom_node",
-                    // "header_saveload",
-                    // "header_undo_redo",
-                    // "header_interval_dialog_button",
-                    // "show_interval_dialog_on_key_press",
-                    // "symbol_info",
-                    // "header_symbol_search",
-                    // "header_resolutions",
-                    // "header_widget"
-                ],
-            }
-        );
-        </script>
-        </div>
-
-
-    <?php } else {?>ew Widget END -->
                 <div class="">
             <div class="page-tv-chart-container" id="tv_chart_container">
         </div>
@@ -219,58 +150,58 @@ $_data["idiomaMenu"] = $idioma;
                         {
                             var widget = window.tvWidget = new TradingView.widget(
                             {
-                                "debug": false,
+                                "debug": true,
                                 "fullscreen":false,
                                 "timezone": "America/Sao_Paulo",
                                 "symbol": "<?php echo $paridade->symbol?>",
-                                // "symbol": "BINANCE:BTCBRL",
                                 "interval": '15',
                                 "container_id": "tv_chart_container",
                                 "intervals": ["5", "15", "30", "60", "360", "720", "D", "7D", "M", "3M"],
                                 "chartTypes":["Candles"],
-                                "datafeed": new Datafeeds.UDFCompatibleDatafeed("<?php echo DATAFEED_URL ?>", 60000),
+                                "datafeed": new Datafeeds.UDFCompatibleDatafeed("http://127.0.0.1:8000/api/getcandles", 60000),
+                                // "datafeed": new Datafeeds.UDFCompatibleDatafeed("<?php echo DATAFEED_URL ?>", 60000),
                                 // "datafeed": new Datafeeds.UDFCompatibleDatafeed("https://demo_feed.tradingview.com", 60000),
                                 "library_path": "<?php echo DIR_TV ?>charting_library/",
                                 "locale": "pt",
                                 // disabled_features: ["use_localstorage_for_settings"],
                                 // enabled_features: ["study_templates"],
-                                "overrides":{
-                                    'paneProperties.legendProperties.showLegend': false,
-                                    'mainSeriesProperties.candleStyle.upColor': '#64ae74',
-                                    'mainSeriesProperties.candleStyle.downColor': '#df5f61',
-                                    'mainSeriesProperties.candleStyle.drawWick': true,
-                                    'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
-                                    'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
-                                    'mainSeriesProperties.candleStyle.drawBorder': true,
-                                    'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
-                                    'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
-                                    'scalesProperties.lineColor': '#252525',
-                                    'scalesProperties.textColor': '#8a8a8a',
-                                    'paneProperties.topMargin': 20,
-                                },
-                                "disabled_features": [
-                                    'use_localstorage_for_settings',
-                                    "timeframes_toolbar",
-                                    "volume_force_overlay",
-                                    "left_toolbar",
-                                    "show_logo_on_all_charts",
-                                    // "caption_buttons_text_if_possible",
-                                    "header_settings",
-                                    // "header_chart_type",
-                                    "header_indicators",
-                                    "header_compare",
-                                    "compare_symbol",
-                                    // "header_screenshot",
-                                    "header_widget_dom_node",
-                                    "header_saveload",
-                                    "header_undo_redo",
-                                    // "header_interval_dialog_button",
-                                    "show_interval_dialog_on_key_press",
-                                    // "symbol_info",
-                                    // "header_symbol_search",
-                                    // "header_resolutions",
-                                    // "header_widget"
-                                ],
+                                // "overrides":{
+                                //     'paneProperties.legendProperties.showLegend': false,
+                                //     'mainSeriesProperties.candleStyle.upColor': '#64ae74',
+                                //     'mainSeriesProperties.candleStyle.downColor': '#df5f61',
+                                //     'mainSeriesProperties.candleStyle.drawWick': true,
+                                //     'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
+                                //     'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
+                                //     'mainSeriesProperties.candleStyle.drawBorder': true,
+                                //     'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
+                                //     'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
+                                //     'scalesProperties.lineColor': '#252525',
+                                //     'scalesProperties.textColor': '#8a8a8a',
+                                //     'paneProperties.topMargin': 20,
+                                // },
+                                // "disabled_features": [
+                                //     'use_localstorage_for_settings',
+                                //     "timeframes_toolbar",
+                                //     "volume_force_overlay",
+                                //     "left_toolbar",
+                                //     "show_logo_on_all_charts",
+                                //     // "caption_buttons_text_if_possible",
+                                //     "header_settings",
+                                //     // "header_chart_type",
+                                //     "header_indicators",
+                                //     "header_compare",
+                                //     "compare_symbol",
+                                //     // "header_screenshot",
+                                //     "header_widget_dom_node",
+                                //     "header_saveload",
+                                //     "header_undo_redo",
+                                //     // "header_interval_dialog_button",
+                                //     "show_interval_dialog_on_key_press",
+                                //     // "symbol_info",
+                                //     // "header_symbol_search",
+                                //     // "header_resolutions",
+                                //     // "header_widget"
+                                // ],
                                 "charts_storage_url": 'https://saveload.tradingview.com',
                                 "charts_storage_api_version": "1.1",
                                 "client_id": 'tradingview.com',
@@ -285,8 +216,6 @@ $_data["idiomaMenu"] = $idioma;
                     </script>
                     </div>
                 </div>
-
-    <?php } ?>
 
 
 
