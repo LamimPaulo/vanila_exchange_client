@@ -127,8 +127,7 @@ $_data["idiomaMenu"] = $idioma;
 
     </div>
 
-      <div class="col-md-6">
-        
+    <div class="col-md-6">
         <!-- TradingView Widget BEGIN -->
         <!-- <div class="">
             <div class="page-tv-chart-container" id="tv_chart_container">
@@ -150,35 +149,33 @@ $_data["idiomaMenu"] = $idioma;
                         {
                             var widget = window.tvWidget = new TradingView.widget(
                             {
-                                "debug": true,
+                                "debug": false,
                                 "fullscreen":false,
                                 "timezone": "America/Sao_Paulo",
                                 "symbol": "<?php echo $paridade->symbol?>",
                                 "interval": '15',
                                 "container_id": "tv_chart_container",
-                                "intervals": ["5", "15", "30", "60", "360", "720", "D", "7D", "M", "3M"],
+                                "intervals": ["1", "3", "5", "15", "30", "60", "360", "720", "D", "7D", "M", "3M"],
                                 "chartTypes":["Candles"],
-                                // "datafeed": new Datafeeds.UDFCompatibleDatafeed("http://127.0.0.1:8000/api/getcandles", 60000),
                                 "datafeed": new Datafeeds.UDFCompatibleDatafeed("<?php echo DATAFEED_URL ?>", 60000),
-                                // "datafeed": new Datafeeds.UDFCompatibleDatafeed("https://demo_feed.tradingview.com", 60000),
                                 "library_path": "<?php echo DIR_TV ?>charting_library/",
                                 "locale": "pt",
-                                // disabled_features: ["use_localstorage_for_settings"],
-                                // enabled_features: ["study_templates"],
-                                // "overrides":{
-                                //     'paneProperties.legendProperties.showLegend': false,
-                                //     'mainSeriesProperties.candleStyle.upColor': '#64ae74',
-                                //     'mainSeriesProperties.candleStyle.downColor': '#df5f61',
-                                //     'mainSeriesProperties.candleStyle.drawWick': true,
-                                //     'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
-                                //     'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
-                                //     'mainSeriesProperties.candleStyle.drawBorder': true,
-                                //     'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
-                                //     'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
-                                //     'scalesProperties.lineColor': '#252525',
-                                //     'scalesProperties.textColor': '#8a8a8a',
-                                //     'paneProperties.topMargin': 20,
-                                // },
+                                disabled_features: ["use_localstorage_for_settings"],
+                                enabled_features: ["study_templates"],
+                                "overrides":{
+                                    'paneProperties.legendProperties.showLegend': false,
+                                    'mainSeriesProperties.candleStyle.upColor': '#64ae74',
+                                    'mainSeriesProperties.candleStyle.downColor': '#df5f61',
+                                    'mainSeriesProperties.candleStyle.drawWick': true,
+                                    'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
+                                    'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
+                                    'mainSeriesProperties.candleStyle.drawBorder': true,
+                                    'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
+                                    'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
+                                    'scalesProperties.lineColor': '#252525',
+                                    'scalesProperties.textColor': '#8a8a8a',
+                                    'paneProperties.topMargin': 20,
+                                },
                                 // "disabled_features": [
                                 //     'use_localstorage_for_settings',
                                 //     "timeframes_toolbar",
