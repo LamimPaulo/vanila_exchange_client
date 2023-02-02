@@ -294,78 +294,18 @@ $_data["idiomaMenu"] = $idioma;
         </div>
 
         <div id="lista"></div>
-        <!-- <div class="container">
-            <div class="card-plan">
-                <div class="d-flex justify-content-between">
-                    <div class="logo">
-                        <img src="assets/img/checked.png" />
-                    </div>
-                    <div class="header alignright">
-                        <p class="text-black"><span id="purple">|Plano atual:</span></p>
-                        <h5 class="text-uppercase"><strong><?php echo ($current_plan[0]->plan->title) ?></strong></h5>
-                    </div>
-                </div>
-                <div class="main">
-                    <div class="row">
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Nível</th>
-                                    <th scope="col">Depósito</th>
-                                    <th scope="col">Saque</th>
-                                    <th scope="col">Ordem Compra</th>
-                                    <th scope="col">Ordem Venda</th>
-                                    <th scope="col">Ordem de plano</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <?php foreach ($current_plan as $cp) { ?>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><strong><?php echo json_encode($cp->level) ?></strong></span> </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo json_encode($cp->deposit) . '%' ?></span> </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo json_encode($cp->withdrawal) . '%' ?></span> </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo json_encode($cp->order_buy) . '%' ?></span> </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo json_encode($cp->order_sell) . '%' ?></span> </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo json_encode($cp->plan_purchase) . '%' ?></span> </div>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-
-                <div class="card-plan card-inner">
-                    <h5><span id="big"><?php echo json_encode($current_plan[0]->plan->price_local) ?></span></h5>
-                </div>
-            </div>
-
-        </div> -->
     </div>
     <!-- <hr> -->
 
-    <div class="page_content">
-        <div class="settings mtb15">
+    <div class="page_content col-md-6 col-xs-12">
+        <div class="settings">
             <div class="container-fluid">
                 <div class=" justify-content-center">
                     <?php foreach ($plans as $m) { ?>
                         <div class="">
                             <div class="card p-2">
-                                <h5 class="card-title">Link Para Compartilhamento</h5>
-                                <div class="card-body row">
+                                <h5 class="card-title p-2">Planos</h5>
+                                <div class="card-body" style="min-height: 473px;">
                                     <div class="col no-gutters">
                                         <div class="py-3">
                                             <h4 class="text-uppercase"><?php echo $m->title; ?></h4>
