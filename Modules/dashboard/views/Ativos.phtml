@@ -201,7 +201,7 @@ height: 10%;
 
   <script>
     var donutData = null;
-    $.getJSON(<?php echo $_ENV['SITE_URL'] ?>+"/api/priv/jsonPortfolio?user=<?php echo $cliente->id?>", function (parsed_data) {
+    $.getJSON("'<?php echo $_ENV['SITE_URL'] ?>'"+"/api/priv/jsonPortfolio?user=<?php echo $cliente->id?>", function (parsed_data) {
       donutData = parsed_data;
       var html = '';
       if(donutData['position'].length > 0) {
