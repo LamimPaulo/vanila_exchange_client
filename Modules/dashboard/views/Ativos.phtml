@@ -1,0 +1,484 @@
+<?php
+
+$cliente = Utils\Geral::getCliente();
+$mostrarBotoes = ($paridade->ativo > 0 && $paridade->statusMercado > 0 && $cliente->statusMercado > 0 && $paridade->moedaBook->statusMercado > 0 && $paridade->moedaBook->ativo > 0);
+$mostrarAlerta = false;
+$mensagemAlerta = "";
+
+$idioma = new \Utils\PropertiesUtils("compra_venda_direta", IDIOMA);
+
+if ($paridade->ativo < 1 || $paridade->moedaBook->ativo < 1) {
+    $mostrarAlerta = true;
+    $mensagemAlerta = $idioma->getText("mercadoEncerrado");
+} else if ($paridade->statusMercado < 1 || $paridade->moedaBook->statusMercado < 1) {
+    $mostrarAlerta = true;
+    $mensagemAlerta = $idioma->getText("mercadoSupenso");
+} else if ($cliente->statusMercado < 1) {
+    $mensagemAlerta = $idioma->getText("compraVendaSuspensaConta");
+    $mostrarAlerta = true;
+}
+
+$_data["idiomaMenu"] = $idioma;
+?>
+<style>
+  .oj-chart {
+
+height: 10%;
+}
+    .border-edit {
+        border: 1px solid #1c84c6 !important;
+    }
+    .carregando {
+        background: url("<?php echo IMAGES ?>loading.gif") center no-repeat;
+        width: 200px;
+        height: 200px;
+        position: absolute;
+        top: 30%;
+        left: 45%;
+        color: blue;
+    }
+
+    .box {
+        border-radius: 10px !important;
+    }
+
+    .box-conversion-custom {
+        padding-right: 3px !important;
+        padding-left: 3px !important;
+    }
+
+    .row {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+
+
+    * {
+        font-family: "Segoe UI", Roboto, sans-serif;
+    }
+
+    .choose-position .select2-container {
+        width: 100% !important;
+    }
+
+    .choose-position .select2-container--default .select2-selection--single {
+        width: 100% !important;
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+        height: 50px;
+        line-height: 50px;
+        font-weight: 500;
+        font-size: 16px;
+        background-color: #fafafa;
+        border: 1px solid #eeeeee;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        transition: 0.1s;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #eeeeee !important;
+    }
+
+    .choose-position .select2-search {
+        display: none;
+    }
+
+    .choose-position .choose-input {
+        width: 100% !important;
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+        height: 50px;
+        line-height: 50px;
+        font-weight: 500;
+        font-size: 16px;
+        background-color: #fafafa;
+        border: 1px solid #eeeeee;
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+
+    .choose-position .select2-results__option {
+        display: flex;
+        align-items: center;
+    }
+
+    .choose-position .select2-results__option .img-flag {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .choose-position .select2-container--default.select2-container--focus .select2-selection--single {
+        border: 1px solid #c9c9c9 !important;
+        outline: 0;
+    }
+
+    .choose-position span.select2-selection.select2-selection--single {
+        outline: none;
+    }
+
+    .choose-position .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 35px;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 10px;
+        width: 35px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 5px 20px rgba(35, 49, 45, 0.14);
+    }
+    .select2-container--default .select2-selection--single {
+
+    }
+
+    td th{
+    text-align: center;
+    vertical-align: middle;
+}
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<link href="<?php echo TEMA; ?>css.old/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
+<div class="wrapper wrapper-content mostrar">
+    <div class="settings mtb15">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- <div class="col-md-12 col-lg-4">
+                </div> -->
+                <div class="col-md-12 col-lg-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Meu Portifólio</h5>
+                          <div>
+                            <div class="row chose-position">
+                              <div class="col-md-4">
+                                <div class="" style="height: 450;" id="chart"> </div>
+
+                              </div>
+                              <div class="col-md-8">
+                                <div class="" id="">
+                                  Suas Posições
+                                </div>
+                                <div>
+                                  <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <!-- <th scope="col">#</th> -->
+                                        <th scope="col">Nome</th>
+                                        <th scope="col">Quantidade</th>
+                                        <th scope="col">Cotação</th>
+                                        <th scope="col">24h</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="posicoes" class="te">
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+  <script>
+    var donutData = null;
+    $.getJSON("http://127.0.0.1:8000/api/priv/jsonPortfolio?user=<?php echo $cliente->id?>", function (parsed_data) {
+      donutData = parsed_data;
+      var html = '';
+      if(donutData['position'].length > 0) {
+        for(var j=0;j < donutData['position'].length; j++) {
+          html +='<tr>'
+            // +'<th scope="row">'+'</th>'
+            +'<td>'+donutData['position'][j].name+'</th>'
+            +'<td>'+donutData['position'][j].amount+'</td>'
+            +'<td>'+donutData['position'][j].quote+'</td>'
+            +'<td class="'+donutData['position'][j]._24h_c+'">' + donutData['position'][j]._24h+'% </td>'
+            +'</tr>';
+        }
+      } else {
+        html = '<p>Nenhuma posição encontrada</p>';
+      }
+
+      document.getElementById('posicoes').innerHTML = html;
+
+      chart.updateOptions({
+        series: donutData['series'],
+        labels: donutData['labels']
+      });
+    });
+
+    const formatter = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+
+    var options = {
+      chart: {
+        width: 450,
+        height: 450,
+        type: 'donut'
+      },
+      legend: {
+      floating: true,
+      width: '20%',
+        show: true,
+        showForSingleSeries: false,
+        showForNullSeries: true,
+        showForZeroSeries: true,
+        position: 'bottom',
+        horizontalAlign: 'center',
+        floating: false,
+        fontSize: '14px',
+        fontFamily: 'Helvetica, Arial',
+        fontWeight: 400,
+        inverseOrder: false,
+        customLegendItems: [],
+        offsetX: 0,
+        offsetY: 0,
+        labels: {
+            colors: undefined,
+            useSeriesColors: false,
+        },
+        markers: {
+            width: 12,
+            height: 12,
+            strokeWidth: 0,
+            strokeColor: '#fff',
+            fillColors: undefined,
+            radius: 12,
+            customHTML: undefined,
+            onClick: undefined,
+            offsetX: 0,
+            offsetY: 0
+        },
+        itemMargin: {
+            horizontal: 5,
+            vertical: 0
+        },
+        onItemClick: {
+            toggleDataSeries: true
+        },
+        onItemHover: {
+            highlightDataSeries: true
+        },
+      },
+      plotOptions: {
+        pie: {
+          size: 100,
+          dataLabels: {
+              offset: 0,
+              minAngleToShowLabel: 10
+          },
+          donut: {
+            size: '65%',
+            background: 'transparent',
+            labels: {
+              show: true,
+              name: {
+                show: true,
+                fontSize: '22px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 600,
+                color: undefined,
+                offsetY: -10,
+                formatter: function (val) {
+                  return val
+                }
+              },
+              value: {
+                show: true,
+                fontSize: '16px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 400,
+                color: undefined,
+                offsetY: 0,
+                formatter: function (val) {
+                  return formatter.format(val);
+                }
+              },
+              total: {
+                show: true,
+                showAlways: true,
+                label: 'Total',
+                fontSize: '22px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 600,
+                color: '#373d3f',
+                formatter: function (w) {
+                  return formatter.format(w.globals.seriesTotals.reduce((a, b) => {
+                    return a + b
+                  }, 0));
+                }
+              }
+            }
+          },
+        }
+      },
+      series: [1],
+      tooltip: {
+        y: {
+          formatter: function(value) {
+            return formatter.format(value);
+          }
+        }
+      },
+      labels: ['carregando...'],
+      dataLabels: {
+      enabled: false,
+      enabledOnSeries: false,
+        formatter: function (val) {
+          return parseFloat(val).toFixed(2) + "%"
+        },
+      }
+    }
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+  </script>
+<?php Utils\Layout::append("mensage_text", $_data) ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <script>
+        $(document).ready(function () {
+            var dashboard = new Dashboard();
+            dashboard.init();
+        });
+        anychart.onDocumentReady(function () {
+          var donutData, forecastData, instrumentsTable, stockData;
+
+          var updateDonutData = function(data, stocks_amount, bonds_amount){
+            var updateLabel = function (index) {
+              donutData['chart'].label(index).text(
+                  '<span style="font-size: 24px;">' + donutData['proportion'][index][0] * 10 + '%</span><br/>' +
+                  '<span style="font-size: 14px; font-weight: normal">' + donutData['proportion'][index][1].toUpperCase() + '</span>');
+            };
+            var updated_data = getDataInProportion(data, [[stocks_amount, "stocks"], [bonds_amount, "bonds"]]);
+            donutData['data'] = updated_data['data'];
+            donutData['proportion'] = updated_data['proportion'];
+            donutData['dataset'].data(updated_data['data']);
+            updateLabel(0);
+            updateLabel(1);
+          };
+
+          var proportionsChange = function () {
+            var stocks = parseInt($('#proportionsSlider .slider-track .max-slider-handle').attr('aria-valuemax'))/10 +
+                proportionsResult.getValue()/10;
+            var bonds = donutData['initial_data']['stocks'].length - stocks;
+            if (proportionsResult.getValue() == 0) {
+              stocks = donutData['initial_data']['stocks'].length/2;
+              bonds = donutData['initial_data']['stocks'].length/2;
+            }
+            updateDonutData(donutData['initial_data'], stocks, bonds);
+            forecastData['length'] = timeLine.getValue();
+            forecastData['data'] = donutData['data'];
+            updateForecastData(forecastData);
+            updateTableData(instrumentsTable, donutData['data']);
+            // stockData['mainData'] = calculateDataForStock(donutData['data'], stockData['historical']);
+            changeStockChart(stockData);
+          };
+          var proportionsResult = $('#proportionsSlider').slider().on('change', proportionsChange).data('slider');
+
+          var timeLineChange = function () {
+            forecastData['length'] = timeLine.getValue();
+            $('.time-value').text('(' + timeLine.getValue() + ' years)');
+            if (timeLine.getValue() == 1) $('.time-value').text('(' + timeLine.getValue() + ' year)');
+            updateForecastData(forecastData);
+          };
+          var timeLine = $('#timeLineSlider').slider().on('change', timeLineChange).data('slider');
+
+          donutData = drawDonutChart('donut-chart-container');
+          forecastData = drawForecastChart('forecast-chart-container');
+          forecastData['length'] = timeLine.getValue();
+          instrumentsTable = drawTable('table-container');
+
+          // $.getJSON("https://raw.githubusercontent.com/anychart-solutions/investment-portfolio-dashboard/master/src/data/financialQuotes.json", function (parsed_data) {
+          //   stockData = drawStockChart('stock-container');
+          //   stockData['indexesData'] = parsed_data;
+          // });
+
+          // $.getJSON("https://raw.githubusercontent.com/anychart-solutions/investment-portfolio-dashboard/master/src/data/StocksViaBonds.json", function (parsed_data) {
+          $.getJSON("http://127.0.0.1:8000/api/priv/jsonPortfolio?user=<?php echo $cliente->id?>", function (parsed_data) {
+            donutData['initial_data'] = parsed_data;
+            updateDonutListeners(donutData, instrumentsTable);
+            updateDonutData(parsed_data, 5, 5);
+            forecastData['data'] = donutData['data'];
+            // updateForecastData(forecastData);
+            // updateTableData(instrumentsTable, donutData['data']);
+            // $.getJSON("https://raw.githubusercontent.com/anychart-solutions/investment-portfolio-dashboard/master/src/data/historical.json", function (parsed_data) {
+          // $.getJSON("http://127.0.0.1:8000/api/priv/jsonHist?user=<?php echo $cliente->id?>", function (parsed_data) {
+          //     stockData['historical'] = parsed_data;
+          //     stockData['mainData'] = calculateDataForStock(donutData['data'], parsed_data);
+          //     changeStockChart(stockData);
+          //     stockData['stock'].selectRange("MTD");
+          //   });
+          });
+
+          $('.tabsMenu li a').on('click', function(){
+            $('.tab-dependent').hide();
+            $('.visible-' + $(this).attr('id')).show();
+          });
+
+          $('.stock_quotes input[type=checkbox]').on('click', function(){
+            if ($(this).attr('id') == 'log'){
+              var plot = stockData['stock'].plot();
+              if ($(this).prop('checked')) {
+                plot.yScale('log');
+              }
+              else {
+                plot.yScale('linear');
+              }
+              var seriesCount = plot.getSeriesCount();
+              for (var i = 0; i < seriesCount; i++) {
+                plot.getSeriesAt(i).yScale(plot.yScale());
+              }
+              plot.yAxis(0).scale(plot.yScale());
+              plot.yAxis(1).scale(plot.yScale());
+            } else {
+              var series = stockData[$(this).attr('id')];
+              series.enabled($(this).prop('checked'));
+            }
+          });
+        });
+    </script> -->
+
+
+<?//php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>

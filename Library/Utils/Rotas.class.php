@@ -631,7 +631,7 @@ public static $rotas = Array(
         "contas/empresa/btc"                                => Array("url" => "contas/btcEmpresa/index" ,                                   "modulo" => "contasempresa",                     "rotina" => "contas/empresa/btc" ),
         "contas/empresa/reais"                              => Array("url" => "contas/reaisEmpresa/index" ,                                 "modulo" => "contasempresa",                     "rotina" => "contas/empresa/reais" ),
 
-        "presale"                                          => Array("url" => "presale/ativos/index" ,                                       "modulo" => "presale",                            "rotina" => "mercado" ),
+        "dashboard"                                          => Array("url" => "dashboard/ativos/index" ,                                       "modulo" => "dashboard",                            "rotina" => "mercado" ),
 
 
         /// TRADE 

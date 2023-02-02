@@ -227,7 +227,8 @@ class Dduo {
 
             //Verifica se o módulo foi passado pela URL
             if ($module == null || $module == 'index') {
-                $module = 'trade';
+                // $module = 'trade';
+                $module = 'dashboard';
             }
             if ($method == null) {
                 $method = 'index';
@@ -264,7 +265,8 @@ class Dduo {
 
                 //Verifica se foi passado o controler por URL e se o valor é diferente de index
                 if ($controller == null || $controller == 'index') {
-                    $controller = 'book';
+                    // $controller = 'book';
+                    $controller = 'dashboard';
                 }
 
                 //Estas duas variáveis está na ordem de prioridade ao selecionar os Modules sempre sendo como padrão
@@ -322,7 +324,7 @@ class Dduo {
             if(AMBIENTE == "desenvolvimento" || Geral::getCliente()->id == 15093064543895){
                 exit(var_dump($e));
             }
-            //Geral::redirect(URLBASE_CLIENT . 'error/error/index/' . $e->getCode());
+            // Geral::redirect(URLBASE_CLIENT . 'error/error/index/' . $e->getCode());
             Geral::redirect(URLBASE_CLIENT . 'login');
         }
     }

@@ -27,7 +27,8 @@ class Acesso {
      */
     function index($params) {
         if (Geral::isLogado()) {
-            Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD, 0);
+            // Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD, 0);
+            Geral::redirect(URLBASE_CLIENT . 'dashboard', 0);
         } else {
             $cliente = new \Models\Modules\Cadastro\Cliente();
 

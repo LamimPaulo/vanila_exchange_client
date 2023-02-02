@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\presale\Controllers;
+namespace Modules\dashboard\Controllers;
 
 // require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasParidadeFavorita.class.php';
 // require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasParidadeFavoritaRn.class.php';
 
 class Ativos {
 
-    private $codigoModulo = "presale";
+    private $codigoModulo = "dashboard";
     private $idioma = null;
     private $casasDecimaisMoedaTrade = 4;
 
@@ -28,8 +28,8 @@ class Ativos {
     public function index($params) {
         try {
             // header('Location: '.'http://localhost:8000/ativos');
-            header('Location: '.$_ENV['SITE_URL'].'/ativos');
-            // \Utils\Layout::view("Ativos", $params);
+            // header('Location: '.$_ENV['SITE_URL'].'/ativos');
+            \Utils\Layout::view("Ativos", $params);
 
         } catch (\Exception $ex) {
         }
