@@ -23,8 +23,8 @@ $_data["idiomaMenu"] = $idioma;
 <style>
   .oj-chart {
 
-height: 10%;
-}
+  height: 10%;
+  }
     .border-edit {
         border: 1px solid #1c84c6 !important;
     }
@@ -144,19 +144,22 @@ height: 10%;
     td th{
     text-align: center;
     vertical-align: middle;
-}
+  }
 </style>
+
 <?php Utils\Layout::append("inspina/metas", $_data) ?>
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
 <?php Utils\Layout::append("inspina/menu", $_data) ?>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="<?php echo TEMA; ?>css.old/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
+
+
 <div class="wrapper wrapper-content mostrar">
     <div class="settings mtb15">
         <div class="container-fluid">
             <div class="row">
-                <!-- <div class="col-md-12 col-lg-4">
-                </div> -->
+                <div class="col-md-12 col-lg-4">
+                </div>
                 <div class="col-md-12 col-lg-12">
                     <div class="card">
                       <div class="card-body">
@@ -191,6 +194,23 @@ height: 10%;
                           </div>
                       </div>
                     </div>
+                </div>
+                <div class="col-md-12 col-lg-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        Tokens Renda Fixa Digital
+                      </h5>
+
+                      <div class="row">
+                        <div id="token-cards">
+
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
                 </div>
             </div>
         </div>
@@ -350,9 +370,82 @@ height: 10%;
         },
       }
     }
-
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
+
+    $.getJSON("<?php echo $_ENV['SITE_URL'] ?>"+"/api/priv/listOurTokens", function (data) {
+      var html = '';
+      for(var i=0;i < data.length; i++) {
+        console.log('for1')
+
+        console.log(data[i])
+        html += '<div class="col-2 col-md-2 mb-2 mb-lg-10  py-2">'
+                  +'<div class="bg-white rounded p-1">'
+                      +'<div class="container">'
+                          +'<div class="text-center small" >'+data[i].category.name+'</div>'
+                          +'<img class="rounded mx-auto d-block img-fluid" style="height:125px;" src="'+data[i].thumbnail_image+'" alt="">'
+                          // +'<div class="text-center py-0">#</div>'
+                      +'</div>'
+                  +'</div>'
+                  +'<div class="bg-white rounded p-2">'
+                      +'<blockquote class="blockquote"><p class="mb-6 h5 text-center ">'+data[i].name+'</p></blockquote>'
+                      +'<div class="container">'
+                          +'<div class="row">'
+                            +'<div class="col">'
+                              +'<div class="text-center small">'
+                                      +'RENTABILIDADE MEDIA'
+                                  +'</div>'
+                                  +'<div class="text-center mark">'
+                                      +data[i].rentability+'% A.A.'
+                                  +'</div>'
+                              +'</div>'
+                          +'</div>'
+                      +'</div>'
+                      +'<div id="tkn-'+data[i].id+'">'
+                      +'</div>'
+                      +'<div class="pt-4 row">'
+                          +'<a class="btn btn-primary" href="'+data[i].pdf_url+'">'
+                              +'Saiba mais'
+                          +'</a>'
+                      +'</div>'
+                  +'</div>'
+              +'</div>'
+            }
+
+      document.getElementById('token-cards').innerHTML = html;
+      console.log(html)
+      for(var i=0;i < data.length; i++) {
+        var options = {
+          series: [
+            {
+              name: "Ultimos Pagamentos",
+              data: data[i].chart.values,
+            },
+        ],
+          chart: {
+          height: 200,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        xaxis: {
+          categories: data[i].chart.labels,
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector('#tkn-'+data[i].id), options);
+        chart.render();
+      }
+      
+      
+    });
   </script>
 <?php Utils\Layout::append("mensage_text", $_data) ?>
 
