@@ -222,7 +222,10 @@ $idioma = new \Utils\PropertiesUtils("segundo_fator", IDIOMA);
                 success: function (json) {
                     try {
                         if (json.sucesso) {
-                            location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DASHBOARD ?>";
+                            // location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DASHBOARD ?>";
+                            location = "<?php echo URLBASE_CLIENT . 'dashboard' ?>";
+                            // Geral::redirect(URLBASE_CLIENT . 'dashboard', 0);
+
                             $(".hid").hide();
                         } else {
                             $("#codigo").val("");
