@@ -376,10 +376,7 @@ $_data["idiomaMenu"] = $idioma;
     $.getJSON("<?php echo $_ENV['SITE_URL'] ?>"+"/api/priv/listOurTokens", function (data) {
       var html = '';
       for(var i=0;i < data.length; i++) {
-        console.log('for1')
-
-        console.log(data[i])
-        html += '<div class="col-2 col-md-2 mb-2 mb-lg-10  py-2">'
+        html += '<div class="col-3 col-md-3 mb-3 mb-lg-10  py-2">'
                   +'<div class="bg-white rounded p-1">'
                       +'<div class="container">'
                           +'<div class="text-center small" >'+data[i].category.name+'</div>'
@@ -396,16 +393,20 @@ $_data["idiomaMenu"] = $idioma;
                                       +'RENTABILIDADE MEDIA'
                                   +'</div>'
                                   +'<div class="text-center mark">'
-                                      +data[i].rentability+'% A.A.'
+                                      +data[i].rentability
                                   +'</div>'
                               +'</div>'
                           +'</div>'
                       +'</div>'
                       +'<div id="tkn-'+data[i].id+'">'
                       +'</div>'
-                      +'<div class="pt-4 row">'
-                          +'<a class="btn btn-primary" href="'+data[i].pdf_url+'">'
-                              +'Saiba mais'
+                      +'<div class="pt-4 row justify-content-center">'
+                          +'<a class="btn text-center m-1 btn-small btn-primary col-sm-5" href="'+data[i].pdf_url+'">'
+                              +'Lamina Tecnica'
+                          +'</a>'
+                          // +'<div class="col-sm-6"> </div>'
+                          +'<a class="btn text-center m-1 btn-small btn-primary col-sm-5" href="/book">'
+                              +'Negociar'
                           +'</a>'
                       +'</div>'
                   +'</div>'
