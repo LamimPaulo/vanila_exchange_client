@@ -294,16 +294,15 @@ $_data["idiomaMenu"] = $idioma;
         </div>
 
         <div id="lista"></div>
-
-        <div class="container">
+        <!-- <div class="container">
             <div class="card-plan">
                 <div class="d-flex justify-content-between">
                     <div class="logo">
                         <img src="assets/img/checked.png" />
                     </div>
                     <div class="header alignright">
-                        <p><span id="purple">|Plano atual:</span></p>
-                        <h5 class="text-uppercase"><strong><?php echo json_encode($current_plan[0]->plan->title) ?></strong></h5>
+                        <p class="text-black"><span id="purple">|Plano atual:</span></p>
+                        <h5 class="text-uppercase"><strong><?php echo ($current_plan[0]->plan->title) ?></strong></h5>
                     </div>
                 </div>
                 <div class="main">
@@ -354,72 +353,84 @@ $_data["idiomaMenu"] = $idioma;
                 </div>
             </div>
 
-        </div>
+        </div> -->
     </div>
-    <hr>
+    <!-- <hr> -->
 
+    <div class="page_content">
+        <div class="settings mtb15">
+            <div class="container-fluid">
+                <div class=" justify-content-center">
+                    <?php foreach ($plans as $m) { ?>
+                        <div class="">
+                            <div class="card p-2">
+                                <h5 class="card-title">Link Para Compartilhamento</h5>
+                                <div class="card-body row">
+                                    <div class="col no-gutters">
+                                        <div class="py-3">
+                                            <h4 class="text-uppercase"><?php echo $m->title; ?></h4>
+                                            <div class="allergy"><span> Seja um Gesto de Renda fixa digital! </span></div>
+                                            <div class="stats py-4">
+                                                <table class="table table-borderless">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center head" scope="col">Nível</th>
+                                                            <th class="text-center head" scope="col">Saque</th>
+                                                            <th class="text-center head" scope="col">Ordem Compra</th>
+                                                            <th class="text-center head" scope="col">Ordem Venda</th>
+                                                            <th class="text-center head" scope="col">Ordem de plano</th>
+                                                            <th class="text-center head" scope="col">Gestao Renda Fixa</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
 
-    <div class="container mt-5">
-        <div class="row d-flex justify-content-center">
-            <?php foreach ($plans as $m) { ?>
-                <div class="col">
-                    <div class="card p-2 text-center">
-                        <div class="row">
-                            <div class="col no-gutters">
-                                <div class="py-3">
-                                    <h4 class="text-uppercase"><?php echo $m->title; ?></h4>
-                                    <div class="allergy"><span><?php echo $m->price_local; ?></span></div>
-                                    <div class="stats">
-                                        <table class="table table-borderless">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Nível</th>
-                                                    <th scope="col">Depósito</th>
-                                                    <th scope="col">Saque</th>
-                                                    <th scope="col">Ordem Compra</th>
-                                                    <th scope="col">Ordem Venda</th>
-                                                    <th scope="col">Ordem de plano</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                <?php foreach ($m->limits as $l) { ?>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><strong><?php echo $l->level ?></strong></span> </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->deposit . '%' ?></span> </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->withdrawal . '%' ?></span> </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->order_buy . '%' ?></span> </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->order_sell . '%' ?></span> </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->plan_purchase . '%' ?></span> </div>
-                                                        </td>
-                                                    </tr>
-                                                <?php } ?>
-                                            </tbody>
-                                        </table>
+                                                        <?php foreach ($m->limits as $l) { ?>
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><strong><?php echo $l->level ?></strong></span> </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->withdrawal . '%' ?></span> </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->order_buy . '%' ?></span> </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->order_sell . '%' ?></span> </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->plan_purchase . '%' ?></span> </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->manager . '%' ?></span> </div>
+                                                                </td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+                                <div class="card">
+                                    <?php
+                                    if($current_plan[0]->plan->title == $m->title){?>
+                                        <button onclick="listar('<?php echo $m->id ?>')" disabled type="button" class="btn btn-primary btn-block"> Já Contratado!</button>
+                                    <?php } else { ?>
+                                        <button onclick="listar('<?php echo $m->id ?>')" type="button" class="btn btn-primary btn-block"> <?php echo $m->price_local; ?> - Contratar</button>
+                                    <?php } ?>
+                                    <!-- <button onclick="listar('<?php echo $m->id ?>')" type="button" class="btn btn-primary btn-block"> <?php echo $m->price_local; ?> - Contratar</button> -->
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <button onclick="listar('<?php echo $m->id ?>')" type="button" class="btn btn-primary btn-block">Contratar</button>
-                        </div>
-                    </div>
+                    <?php } ?>
                 </div>
-            <?php } ?>
+            </div>
         </div>
     </div>
-    <hr>
+
+    
+    <!-- <hr> -->
 
 
 
