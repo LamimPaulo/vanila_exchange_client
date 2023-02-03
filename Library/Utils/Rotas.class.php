@@ -194,7 +194,7 @@ public static $rotas = Array(
         "contacorrentereais"            => Array("url" => "contas/reais/lancamentos" ,                      "modulo" => "reais",                        "rotina" => "contacorrentereais" ),
         "contasreais"                   => Array("url" => "contas/reais/index" ,                            "modulo" => "reais",                        "rotina" => "contasreais" ),
         "transferenciareais"            => Array("url" => "contas/reais/transferencia" ,                    "modulo" => "reais",                        "rotina" => "transferenciareais" ),
-        "depositos"                     => Array("url" => "contas/depositos/index" ,                        "modulo" => "depositos",                    "rotina" => "depositos"),
+        // "depositos"                     => Array("url" => "contas/depositos/index" ,                        "modulo" => "depositos",                    "rotina" => "depositos"),
         "withdraw"                        => Array("url" => "contas/saques/index" ,                           "modulo" => "saques",                       "rotina" => "saques" ),
         "contareaisempresa"             => Array("url" => "contas/reaisEmpresa/index" ,                     "modulo" => "reais",                        "rotina" => "contareaisempresa" ),
  
@@ -631,7 +631,7 @@ public static $rotas = Array(
         "contas/empresa/btc"                                => Array("url" => "contas/btcEmpresa/index" ,                                   "modulo" => "contasempresa",                     "rotina" => "contas/empresa/btc" ),
         "contas/empresa/reais"                              => Array("url" => "contas/reaisEmpresa/index" ,                                 "modulo" => "contasempresa",                     "rotina" => "contas/empresa/reais" ),
 
-        "dashboard"                                          => Array("url" => "dashboard/ativos/index" ,                                       "modulo" => "dashboard",                            "rotina" => "mercado" ),
+        "portfolio"                                          => Array("url" => "portfolio/portfolio/index" ,                                       "modulo" => "dashboard",                            "rotina" => "mercado" ),
 
 
         /// TRADE 

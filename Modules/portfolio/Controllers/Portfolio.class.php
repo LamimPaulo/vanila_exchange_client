@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\dashboard\Controllers;
+namespace Modules\portfolio\Controllers;
 
 // require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasParidadeFavorita.class.php';
 // require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasParidadeFavoritaRn.class.php';
 
-class Ativos {
+class Portfolio {
 
-    private $codigoModulo = "dashboard";
+    private $codigoModulo = "portfolio";
     private $idioma = null;
     private $casasDecimaisMoedaTrade = 4;
 

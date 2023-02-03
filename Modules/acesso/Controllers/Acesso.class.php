@@ -28,7 +28,7 @@ class Acesso {
     function index($params) {
         if (Geral::isLogado()) {
             // Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD, 0);
-            Geral::redirect(URLBASE_CLIENT . 'dashboard', 0);
+            Geral::redirect(URLBASE_CLIENT . 'portfolio', 0);
         } else {
             $cliente = new \Models\Modules\Cadastro\Cliente();
 
@@ -207,7 +207,7 @@ class Acesso {
     public function recuperar($params) {
         if (\Utils\Geral::isLogado() || \Utils\Geral::isAutenticado()) {
             //  Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
-            Geral::redirect(URLBASE_CLIENT . 'dashboard', 0);
+            Geral::redirect(URLBASE_CLIENT . 'portfolio', 0);
         }
         Layout::view("recuperar", $params);
     }
@@ -219,7 +219,7 @@ class Acesso {
     public function register($params) {
         if (\Utils\Geral::isLogado() || \Utils\Geral::isAutenticado()) {
                 // Geral::redirect(URLBASE_CLIENT . \Utils\Rotas::R_DASHBOARD);
-            Geral::redirect(URLBASE_CLIENT . 'dashboard', 0);
+            Geral::redirect(URLBASE_CLIENT . 'portfolio', 0);
 
         }
         Layout::view("cadastro", $params);
