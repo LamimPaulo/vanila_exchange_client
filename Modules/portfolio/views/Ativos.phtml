@@ -8,571 +8,1003 @@ $mensagemAlerta = "";
 $idioma = new \Utils\PropertiesUtils("compra_venda_direta", IDIOMA);
 
 if ($paridade->ativo < 1 || $paridade->moedaBook->ativo < 1) {
-    $mostrarAlerta = true;
-    $mensagemAlerta = $idioma->getText("mercadoEncerrado");
+  $mostrarAlerta = true;
+  $mensagemAlerta = $idioma->getText("mercadoEncerrado");
 } else if ($paridade->statusMercado < 1 || $paridade->moedaBook->statusMercado < 1) {
-    $mostrarAlerta = true;
-    $mensagemAlerta = $idioma->getText("mercadoSupenso");
+  $mostrarAlerta = true;
+  $mensagemAlerta = $idioma->getText("mercadoSupenso");
 } else if ($cliente->statusMercado < 1) {
-    $mensagemAlerta = $idioma->getText("compraVendaSuspensaConta");
-    $mostrarAlerta = true;
+  $mensagemAlerta = $idioma->getText("compraVendaSuspensaConta");
+  $mostrarAlerta = true;
 }
 
 $_data["idiomaMenu"] = $idioma;
 ?>
-<style>
-  .oj-chart {
 
-  height: 10%;
-  }
-    .border-edit {
-        border: 1px solid #1c84c6 !important;
-    }
-    .carregando {
-        background: url("<?php echo IMAGES ?>loading.gif") center no-repeat;
-        width: 200px;
-        height: 200px;
-        position: absolute;
-        top: 30%;
-        left: 45%;
-        color: blue;
-    }
-
-    .box {
-        border-radius: 10px !important;
-    }
-
-    .box-conversion-custom {
-        padding-right: 3px !important;
-        padding-left: 3px !important;
-    }
-
-    .row {
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-    }
-
-
-    * {
-        font-family: "Segoe UI", Roboto, sans-serif;
-    }
-
-    .choose-position .select2-container {
-        width: 100% !important;
-    }
-
-    .choose-position .select2-container--default .select2-selection--single {
-        width: 100% !important;
-        display: flex;
-        align-items: center;
-        padding: 0 30px;
-        height: 50px;
-        line-height: 50px;
-        font-weight: 500;
-        font-size: 16px;
-        background-color: #fafafa;
-        border: 1px solid #eeeeee;
-        border-top-right-radius: 25px;
-        border-bottom-right-radius: 25px;
-        transition: 0.1s;
-    }
-
-    .select2-dropdown {
-        border: 1px solid #eeeeee !important;
-    }
-
-    .choose-position .select2-search {
-        display: none;
-    }
-
-    .choose-position .choose-input {
-        width: 100% !important;
-        display: flex;
-        align-items: center;
-        padding: 0 30px;
-        height: 50px;
-        line-height: 50px;
-        font-weight: 500;
-        font-size: 16px;
-        background-color: #fafafa;
-        border: 1px solid #eeeeee;
-        border-top-left-radius: 25px;
-        border-bottom-left-radius: 25px;
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-    }
-
-    .choose-position .select2-results__option {
-        display: flex;
-        align-items: center;
-    }
-
-    .choose-position .select2-results__option .img-flag {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 10px;
-    }
-
-    .choose-position .select2-container--default.select2-container--focus .select2-selection--single {
-        border: 1px solid #c9c9c9 !important;
-        outline: 0;
-    }
-
-    .choose-position span.select2-selection.select2-selection--single {
-        outline: none;
-    }
-
-    .choose-position .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 35px;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 10px;
-        width: 35px;
-        background-color: #fff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 5px 20px rgba(35, 49, 45, 0.14);
-    }
-    .select2-container--default .select2-selection--single {
-
-    }
-
-    td th{
-    text-align: center;
-    vertical-align: middle;
-  }
-</style>
 
 <?php Utils\Layout::append("inspina/metas", $_data) ?>
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
 <?php Utils\Layout::append("inspina/menu", $_data) ?>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 <link href="<?php echo TEMA; ?>css.old/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/dashboard.css">
 
+<div class="container no-fluid mt-3">
+  <div class="row">
+    <div class="col">
+      <div class="row justify-content-between">
+        <div class="dashboard col-12 mb-5">
+          <div class="row">
+            <div class="col-12 d-flex">
+              <div class="nav nav-pills dashboard-nav" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="dashboard-tab" data-toggle="pill" href="#dashboard" role="tab"
+                  aria-controls="dashboard" aria-selected="true"><i class="icon ion-ios-home mr-1"></i>Dashboard</a>
+                <a class="nav-link" id="dashboard-portfolio-tab" data-toggle="pill" href="#dashboard-portfolio"
+                  role="tab" aria-controls="dashboard-portfolio" aria-selected="false"><i
+                    class="icon ion-ios-pie mr-1"></i>Portfólio</a>
+                <a class="nav-link" id="dashboard-wallet-tab" data-toggle="pill" href="#dashboard-wallet" role="tab"
+                  aria-controls="dashboard-wallet" aria-selected="false"><i class="icon ion-ios-wallet mr-1"></i>Minha
+                  Carteira</a>
+                <button class="btn btn-sm btn-light ml-2" id="visibility-button"><i class="icon ion-ios-eye"
+                    id="eye"></i></button>
+              </div>
+            </div>
+          </div>
 
-<div class="wrapper wrapper-content mostrar">
-    <div class="settings mtb15">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12 col-lg-4">
+          <div class="shadow mt-3">
+            <div class="p-3">
+              <div class="row">
+                <div class="col-lg-8">
+                  <h5 class="" id="market-card-title">Sua posição padrão está a mercado</h5>
+                  <h5 class="text-hidden" id="curve-card-title">Sua posição padrão está na taxa de compra</h5>
+                  <p class="" id="market-radio-text">Posição a mercado é uma estimativa de quanto os ativos valeriam
+                    caso fossem resgatados
+                    antes
+                    do
+                    vencimento. Válido para Títulos Públicos, Debêntures, CRIs e CRAs. Os outros ativos são
+                    precificados na taxa de compra. Caso queira alterar o seu padrão de visualização para
+                    <b>Posição
+                      na taxa de compra ("na curva")</b> acesse: <a class="text-dark font-weight-bold btn btn-light"
+                      href="#" id="market-radio-toggler">Mudar posição padrão <i
+                        class="icon ion-ios-arrow-forward text-warning"></i></a>
+                  </p>
+                  <p class="text-hidden" id="curve-radio-text">Posição
+                    na taxa de compra ("na curva") é um método de atualização dos ganhos em investimentos de renda
+                    fixa. Com ela, é possível identificar a rentabilidade, a longo e curto prazo, de uma aplicação.
+                    Caso queira alterar o seu padrão de visualização para
+                    <b>Posição a mercado (D-1)</b> acesse: <a class="text-dark font-weight-bold btn btn-light" href="#"
+                      id="curve-radio-toggler">Mudar posição padrão <i
+                        class="icon ion-ios-arrow-forward text-warning"></i></a>
+                  </p>
                 </div>
-                <div class="col-md-12 col-lg-12">
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title">Meu Portifólio</h5>
-                          <div>
-                            <div class="row chose-position">
-                              <div class="col-md-4">
-                                <div class="" style="height: 450;" id="chart"> </div>
+                <div class="col-lg-4">
+                  <h5 class="theme-color">Recomendados para você</h5>
+                  <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner bg-primary rounded">
+                      <div class="carousel-item active">
+                        <div class="row align-items-center">
+                          <div class="col-3">
+                            <img src="assets/img/icon/convert.svg" class="d-block w-100 carousel_icon" alt="...">
+                          </div>
+                          <div class="col-9">
+                            <div class="text-white fs-10 mr-4 mt-3 ml-1">
+                              <p class="h6">Slide 1</p>
+                              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <div class="row align-items-center">
+                          <div class="col-3">
+                            <img src="assets/img/icon/earn.svg" class="d-block w-100 carousel_icon" alt="...">
+                          </div>
+                          <div class="col-9">
+                            <div class="text-white fs-10 mr-4 mt-3 ml-1">
+                              <p class="h6">Slide 2</p>
+                              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <div class="row align-items-center">
+                          <div class="col-3">
+                            <img src="assets/img/icon/futures.svg" class="d-block w-100 carousel_icon" alt="...">
+                          </div>
+                          <div class="col-9">
+                            <div class="text-white fs-10 mr-4 mt-3 ml-1">
+                              <p class="h6">Slide 3</p>
+                              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <div class="row align-items-center">
+                          <div class="col-3">
+                            <img src="assets/img/icon/spot.svg" class="d-block w-100 carousel_icon" alt="...">
+                          </div>
+                          <div class="col-9">
+                            <div class="text-white fs-10 mr-4 mt-3 ml-1">
+                              <p class="h6">Slide 4</p>
+                              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-                              </div>
-                              <div class="col-md-8">
-                                <div class="" id="">
-                                  Suas Posições
+                    <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex mt-3">
+            <div class="d-flex">
+              <a href="#" type="button" id="market-radio-trigger"><i class="icon ion-ios-radio-button-on icon-badge"
+                  id="market-radio"></i></a>
+              <span class="h5 radio-title ml-1">Posição a mercado (D-1)</span>
+            </div>
+            <div class="d-flex ml-2">
+              <a href="#" type="button" id="curve-radio-trigger"><i class="icon ion-ios-radio-button-off icon-badge"
+                  id="curve-radio"></i></a>
+              <span class="h5 radio-title ml-1">Posição na taxa de compra ("na curva")</span>
+            </div>
+          </div>
+          <div class="row justify-content-around align-items-center">
+            <div class="col-12 col-lg-2 d-flex justify-content-center">
+              <div class="" id="dashboard-chart"></div>
+              <div class="text-center innerPieText" id="">
+                <span class="d-block fs-16 font-weight-bold" id="total-percent"></span>
+                <span class="">Total Investido</span>
+              </div>
+            </div>
+            <div class="col-12 col-sm-9 col-lg-10">
+              <div class="row mt-3">
+                <div class="col-xl-12 mb-3">
+                  <div class="row">
+                    <div class="col-md-5 text-center mb-3-md">
+                      <span class="d-block">
+                        <?php echo $cliente->nome ?>, este é o seu patrimônio
+                      </span>
+                      <span class="fs-20 d-block font-weight-bold"><span class="balance-hidden">****</span><span
+                          class="balance-visible" id="total-balance"></span></span>
+                      <span id="current-date"></span>
+                    </div>
+                    <div class="col-md-7 d-flex vl-60 justify-content-between">
+                      <div class="row text-center">
+                        <div class="col-12 col-lg-4 mt-2">
+                          <span class="d-block">Saldo disponível</span>
+                          <span class="fw-bold fs-16"><span class="balance-hidden">****</span><span
+                              class="balance-visible" id="available-balance"></span></span>
+                        </div>
+                        <div class="col-12 col-lg-4 mt-2">
+                          <span class="d-block">Total investido</span>
+                          <span class="fw-bold fs-16"><span class="balance-hidden">****</span><span
+                              class="balance-visible" id="invested-balance"></span></span>
+                        </div>
+                        <div class="col-12 col-lg-4 mt-2">
+                          <span class="d-block">Saldo projetado</span>
+                          <span class="fw-bold fs-16"><span class="balance-hidden">****</span><span
+                              class="balance-visible" id="projected-balance"></span></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="div-line"></div>
+                  <div class="row">
+                    <div class="border-top mt-3">
+                      <a href="/extract">
+                        <p class="text-dark h6 mt-3 text-center">Consulte o extrato completo da sua conta <i
+                            class="icon ion-ios-arrow-forward text-warning"></i></p>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+              <div class="dashboard shadow">
+                <div class="row justify-content-around align-items-center px-3">
+                  <div class="col-12 mt-3">
+                    <p class="h5">
+                      Performance da sua carteira e recomendado para você
+                    </p>
+                    <p>
+                      Acompanhe a performance da sua carteira e também as nossas recomendações. Para visualizar mais
+                      detalhes, acessa a aba <b>Minha Carteira</b>.
+                    </p>
+                  </div>
+                  <div class="col-12 ">
+                    <p class="mt-3">
+                      Performance da sua carteira
+                    </p>
+                    <div class="row">
+                      <div class="col-md-9">
+                        <span class="balance-hidden">****ATIVE A VISIBILIDADE DO SALDO PARA VER O GRÁFICO DE
+                          PERFORMANCE****</span><span class="balance-visible">
+                          <div id="performance-chart"></div>
+                        </span>
+                      </div>
+                      <div class="col-md-3">
+                        <div id="rentabilidade-values">
+                          <div class="mt-2">
+                            <span class="font-weight-bold d-block">
+                              Rendimento
+                            </span>
+                            <span class="text-success">
+                              <span class="balance-hidden">****</span><span class="balance-visible">R$ 2.336,52</span>
+                            </span>
+                          </div>
+                          <div class="mt-2">
+                            <span class="font-weight-bold d-block">
+                              Rentabilidade
+                            </span>
+                            <span class="text-success">
+                              <span class="balance-hidden">****</span><span class="balance-visible">19.17%</span>
+                            </span>
+                          </div>
+                          <div class="mt-2">
+                            <span class="font-weight-bold d-block">
+                              Rentabilidade CDI
+                            </span>
+                            <span class="text-success">
+                              <span class="balance-hidden">****</span><span class="balance-visible">145.50%</span>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="mt-5">
+                          <p class="h6">
+                            Visualizar Evolução Completa <i class="icon ion-ios-arrow-forward text-warning"></i>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="dashboard-portfolio" role="tabpanel"
+              aria-labelledby="dashboard-portfolio-tab">
+              <div class="dashboard-portfolio shadow">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="accordion" id="portfolio-accordion">
+                      <div class="card">
+                        <div class="card-header collapsed cursor" data-toggle="collapse" data-target="#collapseOne"
+                          aria-expanded="true" aria-controls="collapseOne" id="headingOne">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="w-75">
+                              <div class="pie animate no-round" id="pie-crypto-chart">0%</div>
+                              <span class="font-weight-bold font-card fs-r">Criptomoedas</span>
+                            </div>
+                            <div class="vl font-weight-bold w-50">
+                              <span class="d-block ml-4 fs-r">Saldo</span>
+                              <span class="balance-hidden ml-4 fs-r">****</span>
+                              <span class="balance-visible">
+                                <span class="ml-4 fs-r" id="crypto-balance"></span>
+                              </span>
+                            </div>
+                            <span class="vl d-flex align-items-center justify-content-center w-10"><i
+                                class="icon ion-ios-arrow-down ml-3"></i></span>
+                          </div>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                          data-parent="#portfolio-accordion">
+                          <div class="card">
+                            <div class="card-header">
+                              <div class="row justify-content-between text-center">
+                                <div class="col-1">
+                                  #
                                 </div>
-                                <div>
-                                  <table class="table">
-                                    <thead>
-                                      <tr>
-                                        <!-- <th scope="col">#</th> -->
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">Quantidade</th>
-                                        <!-- <th scope="col">Cotação</th> -->
-                                        <th scope="col">24h</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody id="posicoes" class="te">
-                                    </tbody>
-                                  </table>
+                                <div class="col-2">
+                                  Ativo
+                                </div>
+                                <div class="col-3">
+                                  Quantidade
+                                </div>
+                                <div class="col-3">
+                                  Valor em CBRL
+                                </div>
+                                <div class="col-2">
+                                  24h
                                 </div>
                               </div>
                             </div>
                           </div>
-                      </div>
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12">
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">
-                        Tokens Renda Fixa Digital
-                      </h5>
-
-                      <div class="row">
-                        <div id="token-cards">
-
+                          <div class="accordion" id="crypto-accordion"></div>
                         </div>
                       </div>
-
-
+                      <div class="card">
+                        <div class="card-header collapsed cursor" data-toggle="collapse" data-target="#collapseTwo"
+                          aria-expanded="true" aria-controls="collapseTwo" id="headingTwo">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="w-75">
+                              <div class="pie animate no-round" id="pie-rendaFixa-chart">0%</div>
+                              <span class="font-weight-bold font-card fs-r">Renda Fixa Digital</span>
+                            </div>
+                            <div class="vl font-weight-bold w-50">
+                              <span class="d-block ml-4 fs-r">Saldo</span>
+                              <span class="balance-hidden ml-4 fs-r">****</span>
+                              <span class="balance-visible">
+                                <span class="ml-4 fs-r" id="rendaFixa-balance"></span>
+                              </span>
+                            </div>
+                            <span class="vl d-flex align-items-center justify-content-center w-10"><i
+                                class="icon ion-ios-arrow-down ml-3"></i></span>
+                          </div>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                          data-parent="#portfolio-accordion">
+                          <div class="card">
+                            <div class="card-header">
+                              <div class="row justify-content-between text-center">
+                                <div class="col-1">
+                                  #
+                                </div>
+                                <div class="col-2">
+                                  Ativo
+                                </div>
+                                <div class="col-3">
+                                  Quantidade
+                                </div>
+                                <div class="col-3">
+                                  Valor em CBRL
+                                </div>
+                                <div class="col-3">
+                                  24h
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="accordion" id="rendaFixa-accordion"></div>
+                        </div>
+                      </div>
+                      <div class="card">
+                        <div class="card-header collapsed cursor" data-toggle="collapse" data-target="#collapseThree"
+                          aria-expanded="true" aria-controls="collapseThree" id="headingThree">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="w-75">
+                              <div class="pie animate no-round" id="pie-utility-chart">0%</div>
+                              <span class="font-weight-bold font-card fs-r">Utility Tokens</span>
+                            </div>
+                            <div class="vl font-weight-bold w-50">
+                              <span class="d-block ml-4 fs-r">Saldo</span>
+                              <span class="balance-hidden ml-4 fs-r">****</span>
+                              <span class="balance-visible">
+                                <span class="ml-4 fs-r" id="utility-balance"></span>
+                              </span>
+                            </div>
+                            <span class="vl d-flex align-items-center justify-content-center w-10"><i
+                                class="icon ion-ios-arrow-down ml-3"></i></span>
+                          </div>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                          data-parent="#portfolio-accordion">
+                          <div class="card">
+                            <div class="card-header">
+                              <div class="row justify-content-between text-center">
+                                <div class="col-1">
+                                  #
+                                </div>
+                                <div class="col-2">
+                                  Ativo
+                                </div>
+                                <div class="col-3">
+                                  Quantidade
+                                </div>
+                                <div class="col-3">
+                                  Valor em CBRL
+                                </div>
+                                <div class="col-3">
+                                  24h
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="accordion" id="utility-accordion"></div>
+                        </div>
+                      </div>
+                      <div class="card">
+                        <div class="card-header collapsed cursor" data-toggle="collapse" data-target="#collapseFour"
+                          aria-expanded="true" aria-controls="collapseFour" id="headingFour">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="w-75">
+                              <div class="pie animate no-round" id="pie-startups-chart">0%</div>
+                              <span class="font-weight-bold font-card fs-r">Startups</span>
+                            </div>
+                            <div class="vl font-weight-bold w-50">
+                              <span class="d-block ml-4 fs-r">Saldo</span>
+                              <span class="balance-hidden ml-4 fs-r">****</span>
+                              <span class="balance-visible">
+                                <span class="ml-4 fs-r" id="startups-balance"></span>
+                              </span>
+                            </div>
+                            <span class="vl d-flex align-items-center justify-content-center w-10"><i
+                                class="icon ion-ios-arrow-down ml-3"></i></span>
+                          </div>
+                        </div>
+                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                          data-parent="#portfolio-accordion">
+                          <div class="card">
+                            <div class="card-header">
+                              <div class="row justify-content-between text-center">
+                                <div class="col-1">
+                                  #
+                                </div>
+                                <div class="col-2">
+                                  Ativo
+                                </div>
+                                <div class="col-3">
+                                  Quantidade
+                                </div>
+                                <div class="col-3">
+                                  Valor em CBRL
+                                </div>
+                                <div class="col-3">
+                                  24h
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="accordion" id="startups-accordion"></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="shadow mt-3">
+                <div class="row">
+                  <div class="col-12 py-3">
+                    <div class="ml-3">
+                      <span class="rounded-badge bg-primary"><i
+                          class="icon ion-ios-checkmark-circle-outline icon-badge"></i></span>
+                      <span class="h5">Proventos</span>
+                      <span class="d-block ml-33">Acompanhe as distribuições dos proventos gerados pelos seus
+                        investimentos</span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="accordion" id="proventos-accordion">
+                      <div class="card">
+                        <div class="card-header collapsed cursor" data-toggle="collapse"
+                          data-target="#collapseProventos" aria-expanded="true" aria-controls="collapseProventos"
+                          id="headingProventos">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="w-50">
+                              <span class="font-weight-bold font-card fs-r ml-63">Proventos</span>
+                            </div>
+                            <div class="vl font-weight-bold w-50">
+                              <span class="d-block ml-4 fs-r">Ganhos Acumulados</span>
+                              <span class="balance-hidden ml-4 fs-r">****</span>
+                              <span class="balance-visible">
+                                <span class="ml-4 fs-r text-success" id="proventos-balance"></span>
+                              </span>
+                            </div>
+                            <span class="vl d-flex align-items-center justify-content-center w-10"><i
+                                class="icon ion-ios-arrow-down ml-3"></i></span>
+                          </div>
+                        </div>
+
+                        <div id="collapseProventos" class="collapse" aria-labelledby="headingProventos"
+                          data-parent="#proventos-accordion">
+                          <div class="card-body">
+                            <table class="table mt-2" id="portfolio">
+                              <thead class="text-center">
+                                <tr>
+                                  <th>#</th>
+                                  <th>Token</th>
+                                  <th>Ganho</th>
+                                  <th>Valor em CBRL</th>
+                                  <th>Data</th>
+                                </tr>
+                              </thead>
+                              <tbody class="text-center" id="proventos-items">
+
+                              </tbody>
+                            </table>
+                            <!-- <div class="d-flex mt-3 justify-content-center">
+                            <nav aria-label="Page navigation example">
+                              <ul class="pagination" id="proventos_pagination"></ul>
+                            </nav>
+                            </div> -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <div class="tab-pane fade" id="dashboard-wallet" role="tabpanel" aria-labelledby="dashboard-wallet-tab">
+              <div class="dashboard-wallet mt-3">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <div class="row justify-content-between text-center">
+                          <div class="col-1">
+                            #
+                          </div>
+                          <div class="col-2">
+                            Ativo
+                          </div>
+                          <div class="col-3">
+                            Quantidade
+                          </div>
+                          <div class="col-3">
+                            Valor em CBRL
+                          </div>
+                          <div class="col-2">
+                            24h
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="accordion" id="wallet-accordion"></div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mt-3 py-3 shadow">
+            <div class="">
+              <span class="rounded-badge bg-primary"><i class="icon ion-ios-stats mt-1"></i></span>
+              <span class="h5">Rentabilidade comparada</span>
+              <span class="d-block ml-33">Confira a performance da sua carteira quando comparada a outros
+                indicadores</span>
+            </div>
+
+            <table class="table table-hover mt-3" id="rentabilidade-table">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">No mês</th>
+                  <th scope="col">Semestre</th>
+                  <th scope="col">No ano</th>
+                  <th scope="col">12 meses</th>
+                  <th scope="col">Desde o início</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Sua carteira</th>
+                  <td>1.99%</td>
+                  <td>2.37%</td>
+                  <td>18.12%</td>
+                  <td>19.17%</td>
+                  <td>40.98%</td>
+                </tr>
+                <tr>
+                  <th scope="row">CDI%</th>
+                  <td>0.74%</td>
+                  <td>2.98%</td>
+                  <td>9.67%</td>
+                  <td>13.18%</td>
+                  <td>21.04%</td>
+                </tr>
+                <tr>
+                  <th scope="row">IPC-A</th>
+                  <td>0.24%</td>
+                  <td>0.59%</td>
+                  <td>3.48%</td>
+                  <td>5.06%</td>
+                  <td>7.16%</td>
+                </tr>
+                <tr>
+                  <th scope="row">IBOVESPA</th>
+                  <td>0.23%</td>
+                  <td>-1.76%</td>
+                  <td>5.72%</td>
+                  <td>3.64%</td>
+                  <td>3.84%</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="">Rentabilidade real <i class="icon ion-ios-information-circle-outline" d
+                      data-toggle="tooltip" data-html="true" title="Rentabilidade já considerando a inflação"></i>
+                  </th>
+                  <td>1.74%</td>
+                  <td>1.77%</td>
+                  <td>14.15%</td>
+                  <td>13.43%</td>
+                  <td>31.56%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+</div>
 
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
 <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
 
-  <script>
-    var donutData = null;
-    $.getJSON("<?php echo $_ENV['SITE_URL'] ?>"+"/api/priv/jsonPortfolio?user=<?php echo $cliente->id?>", function (parsed_data) {
-      donutData = parsed_data;
-      var html = '';
-      if(donutData['position'].length > 0) {
-        for(var j=0;j < donutData['position'].length; j++) {
-          html +='<tr>'
-            // +'<th scope="row">'+'</th>'
-            +'<td>'+donutData['position'][j].name+'</th>'
-            +'<td>'+donutData['position'][j].amount+'</td>'
-            // +'<td>'+donutData['position'][j].quote+'</td>'
-            +'<td class="'+donutData['position'][j]._24h_c+'">' + donutData['position'][j]._24h+'% </td>'
-            +'</tr>';
-        }
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script>
+<script src="assets/js/dashboard.js"></script>
+<script>
+  var walletData = null;
+
+  $.getJSON("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/jsonPortfolio?user=<?php echo $cliente->id ?>", function (parsed_data) {
+
+
+    // Configurações do gráfico redondo
+    const handleRadialChart = (id, percent, color, width, fontSize) => {
+      const radChart = document.getElementById(id);
+      radChart.style = "--p: " + percent + "; --c:" + color + "; --w:" + width + "px" + "; font-size:" + fontSize + "px";
+      if (id === "dashboard-chart" || id === "portfolio-chart") {
+        radChart.innerHTML = `<span class="d-block mt-2 text-center">${percent}%</span><p class="fs-12 text-center">Total Investido</p>`
       } else {
-        html = '<p>Nenhuma posição encontrada</p>';
-      }
-
-      document.getElementById('posicoes').innerHTML = html;
-
-      chart.updateOptions({
-        series: donutData['series'],
-        labels: donutData['labels']
-      });
-    });
-
-    const formatter = new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    });
-
-    var options = {
-      chart: {
-        width: 450,
-        height: 450,
-        type: 'donut'
-      },
-      legend: {
-      floating: true,
-      width: '20%',
-        show: true,
-        showForSingleSeries: false,
-        showForNullSeries: true,
-        showForZeroSeries: true,
-        position: 'bottom',
-        horizontalAlign: 'center',
-        floating: false,
-        fontSize: '14px',
-        fontFamily: 'Helvetica, Arial',
-        fontWeight: 400,
-        inverseOrder: false,
-        customLegendItems: [],
-        offsetX: 0,
-        offsetY: 0,
-        labels: {
-            colors: undefined,
-            useSeriesColors: false,
-        },
-        markers: {
-            width: 12,
-            height: 12,
-            strokeWidth: 0,
-            strokeColor: '#fff',
-            fillColors: undefined,
-            radius: 12,
-            customHTML: undefined,
-            onClick: undefined,
-            offsetX: 0,
-            offsetY: 0
-        },
-        itemMargin: {
-            horizontal: 5,
-            vertical: 0
-        },
-        onItemClick: {
-            toggleDataSeries: true
-        },
-        onItemHover: {
-            highlightDataSeries: true
-        },
-      },
-      plotOptions: {
-        pie: {
-          size: 100,
-          dataLabels: {
-              offset: 0,
-              minAngleToShowLabel: 10
-          },
-          donut: {
-            size: '65%',
-            background: 'transparent',
-            labels: {
-              show: true,
-              name: {
-                show: true,
-                fontSize: '22px',
-                fontFamily: 'Helvetica, Arial, sans-serif',
-                fontWeight: 600,
-                color: undefined,
-                offsetY: -10,
-                formatter: function (val) {
-                  return val
-                }
-              },
-              value: {
-                show: true,
-                fontSize: '16px',
-                fontFamily: 'Helvetica, Arial, sans-serif',
-                fontWeight: 400,
-                color: undefined,
-                offsetY: 0,
-                formatter: function (val) {
-                  return formatter.format(val);
-                }
-              },
-              total: {
-                show: true,
-                showAlways: true,
-                label: 'Total',
-                fontSize: '22px',
-                fontFamily: 'Helvetica, Arial, sans-serif',
-                fontWeight: 600,
-                color: '#373d3f',
-                formatter: function (w) {
-                  return formatter.format(w.globals.seriesTotals.reduce((a, b) => {
-                    return a + b
-                  }, 0));
-                }
-              }
-            }
-          },
-        }
-      },
-      series: [1],
-      tooltip: {
-        y: {
-          formatter: function(value) {
-            return formatter.format(value);
-          }
-        }
-      },
-      labels: ['carregando...'],
-      dataLabels: {
-      enabled: false,
-      enabledOnSeries: false,
-        formatter: function (val) {
-          return parseFloat(val).toFixed(2) + "%"
-        },
+        radChart.innerText = percent + "%";
       }
     }
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
 
-    $.getJSON("<?php echo $_ENV['SITE_URL'] ?>"+"/api/priv/listOurTokens", function (data) {
-      var html = '';
-      for(var i=0;i < data.length; i++) {
-        html += '<div class="col-3 col-md-3 mb-3 mb-lg-10  py-2">'
-                  +'<div class="bg-white rounded p-1">'
-                      +'<div class="container">'
-                          +'<div class="text-center small" >'+data[i].category.name+'</div>'
-                          +'<img class="rounded mx-auto d-block img-fluid" style="height:125px;" src="'+data[i].thumbnail_image+'" alt="">'
-                          // +'<div class="text-center py-0">#</div>'
-                      +'</div>'
-                  +'</div>'
-                  +'<div class="bg-white rounded p-2">'
-                      +'<blockquote class="blockquote"><p class="mb-6 h5 text-center ">'+data[i].name+'</p></blockquote>'
-                      +'<div class="container">'
-                          +'<div class="row">'
-                            +'<div class="col">'
-                              +'<div class="text-center small">'
-                                      +'RENTABILIDADE MEDIA'
-                                  +'</div>'
-                                  +'<div class="text-center mark">'
-                                      +data[i].rentability
-                                  +'</div>'
-                              +'</div>'
-                          +'</div>'
-                      +'</div>'
-                      +'<div id="tkn-'+data[i].id+'">'
-                      +'</div>'
-                      +'<div class="pt-4 row justify-content-center">'
-                          +'<a class="btn text-center m-1 btn-small btn-primary col-sm-5" href="'+data[i].pdf_url+'">'
-                              +'Lamina Tecnica'
-                          +'</a>'
-                          // +'<div class="col-sm-6"> </div>'
-                          +'<a class="btn text-center m-1 btn-small btn-primary col-sm-5" href="/book">'
-                              +'Negociar'
-                          +'</a>'
-                      +'</div>'
-                  +'</div>'
-              +'</div>'
-            }
+    walletData = parsed_data;
+    var walletHtml = '';
+    var portfolio_cryptoHtml = '';
+    var portfolio_rendaFixaHtml = '';
+    var portfolio_utilityHtml = '';
+    var portfolio_startupsHtml = '';
+    var portfolio_cryptoBalance = 0;
+    var portfolio_rendaFixaBalance = 0;
+    var portfolio_utilityBalance = 0;
+    var portfolio_startupsBalance = 0;
 
-      document.getElementById('token-cards').innerHTML = html;
-      console.log(html)
-      for(var i=0;i < data.length; i++) {
-        var options = {
-          series: [
-            {
-              name: "Ultimos Pagamentos",
-              data: data[i].chart.values,
-            },
-        ],
-          chart: {
-          height: 200,
-          type: 'line',
-          zoom: {
-            enabled: false
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-        xaxis: {
-          categories: data[i].chart.labels,
-        }
-        };
+    const headerHtml = (j) => {
+      return `<div class="card">
+                          <div class="card-header collapsed cursor" data-toggle="collapse" data-target="#collapse${walletData['labels'][j + 1]}"
+                            aria-expanded="false" aria-controls="collapse${walletData['labels'][j + 1]}" id="heading${walletData['labels'][j + 1]}">
+                            <div class="row justify-content-between text-center">
+                              <div class="col-1">
+                                <img class="symbol" src="assets/img/icon/${walletData['labels'][j + 1]}.png" alt="symbol">
+                              </div>
+                              <div class="col-2">
+                                <span class="theme-color">${walletData['labels'][j + 1]}</span>
+                              </div>
+                              <div class="col-3">
+                                <span class="balance-hidden">****</span><span class="balance-visible">${walletData['position'][j].amount}</span>
+                              </div>
+                              <div class="col-3">
+                                <span class="balance-hidden">****</span><span class="balance-visible">${walletData['series'][j + 1].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                              </div>
+                              <div class="col-2">
+                                <span class="text-success">${walletData['position'][j]._24h}%</span>
+                              </div>
+                            </div>
+                          </div>`
+    }
 
-        var chart = new ApexCharts(document.querySelector('#tkn-'+data[i].id), options);
-        chart.render();
+    const bodyHtml = (t, j) => {
+      return `<div id="collapse${walletData['labels'][j + 1]}" class="collapse" aria-labelledby="heading${walletData['labels'][j + 1]}"
+                            data-parent="#${t}-accordion">
+                            <div class="card-body">
+                            <div class="row justify-content-center mb-4">
+                                  <div class="col-12 col-lg-6 mt-4 mx-0">
+                                    <div class="my-3 border-bottom d-flex justify-content-between font-weight-bold">
+                                      <span class="ml-2 mb-2"><i class="icon ion-ios-trending-up mr-1"></i>Minha
+                                        Posição</span>
+                                      <span class="ml-2 mb-2">Ver mais detalhes</span>
+                                    </div>
+                                    <table class="table table-responsive mt-2">
+                                      <thead class="text-center">
+                                        <tr>
+                                          <th>Rendimento</th>
+                                          <th>Projetado</th>
+                                          <th>Negociado do dia</th>
+                                          <th>Em garantia</th>
+                                          <th>Liquidação de termo</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody class="text-center">
+                                        <tr>
+                                          <td><span class="balance-hidden">****</span><span class="balance-visible">R$
+                                              160,00</span></td>
+                                          <td><span class="balance-hidden">****</span><span
+                                              class="balance-visible">0</span>
+                                          </td>
+                                          <td><span class="balance-hidden">****</span><span
+                                              class="balance-visible">0</span>
+                                          </td>
+                                          <td><span class="balance-hidden">****</span><span
+                                              class="balance-visible">0</span>
+                                          </td>
+                                          <td><span class="balance-hidden">****</span><span
+                                              class="balance-visible">0</span>
+                                          </td>
+                                          
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <div class="row justify-content-center my-5">
+                                      <div class="col-6 col-md-3 mb-2">
+                                        <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/exchange">
+                                          <i class="text-primary fs-30"><img src="assets/img/icon/ico-wallet-in.svg" alt="deposit"></i>
+                                        </a>
+                                        <p class="fw-bold text-center">Investir</p>
+                                      </div>
+                                      <div class="col-6 col-md-3 mb-2">
+                                        <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/exchange">
+                                          <i class="text-primary fs-30"><img src="assets/img/icon/ico-wallet-out.svg" alt="deposit"></i>
+                                        </a>
+                                        <p class="fw-bold text-center">Resgatar</p>
+                                      </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-12 col-lg-6 mt-4 mx-0">
+                                    <div class="my-3 border-bottom d-flex font-weight-bold">
+                                      <span class="ml-2 mb-2"><i class="icon ion-ios-trending-up mr-1"></i>Evolução do
+                                        Ativo</span>
+                                    </div>
+                                    <div class="divergentChartDiv" id="${walletData['labels'][j + 1]}-divergentChart" style="height:300px"></div>
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>`
+    }
+    if (walletData['position'].length > 0) {
+      for (var j = 0; j < walletData['position'].length; j++) {
+        walletHtml += headerHtml(j) + `
+                          <div id="collapse${walletData['labels'][j + 1]}" class="collapse" aria-labelledby="heading${walletData['labels'][j + 1]}"
+                            data-parent="#wallet-accordion">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="d-flex col-12 col-lg-6 align-items-stretch">
+                                  <div class="d-flex justify-content-around align-items-center my-1 w-100">
+                                    <div class="row">
+                                      <div class="col-6 col-md-3 mb-2">
+                                        <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/deposit">
+                                          <i class="text-primary fs-30"><img src="assets/img/icon/ico-depositar.svg" alt="deposit"></i>
+                                        </a>
+                                        <p class="fw-bold text-center">Depositar</p>
+                                      </div>
+                                      <div class="col-6 col-md-3 mb-2">
+                                        <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/withdraw">
+                                          <i class="text-primary fs-30"><img src="assets/img/icon/ico-sacar.svg" alt="deposit"></i>
+                                        </a>
+                                        <p class="fw-bold text-center">Transferir</p>
+                                      </div>
+                                      <div class="col-6 col-md-3 mb-2">
+                                        <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/exchange">
+                                          <i class="text-primary fs-30"><img src="assets/img/icon/ico-comprar.svg" alt="deposit"></i>
+                                        </a>
+                                        <p class="fw-bold text-center">Comprar</p>
+                                      </div>
+                                      <div class="col-6 col-md-3 mb-2">
+                                        <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/book">
+                                          <i class="text-primary fs-30"><img src="assets/img/icon/ico-ordens.svg" alt="deposit"></i>
+                                        </a>
+                                        <p class="fw-bold text-center">Ordens</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12 col-lg-6 shadow">
+                                  <div class="pt-4 pl-2 pr-2 mr-2">
+                                    <p class="font-weight-lighter fs-12">ORIENTAÇÕES</p>
+                                    <div class="row">
+                                      <div class="col-1">
+                                      <span class="rounded-icon bg-primary">
+                                        <i class="icon ion-ios-information icon-badge"></i>
+                                      </span>
+                                      </div>
+                                      <div class="col-11">
+                                      O valor mínimo para depósitos em <b>Bitcoin</b> é de <b>0,00001000 BTC</b>.
+                                      </div>
+                                    </div>
+
+                                    <p class="font-weight-lighter fs-12 mt-3">INFORMAÇÕES ADICIONAIS</p>
+                                    <div class="row">
+                                      <div class="col-1">
+                                      <span class="rounded-icon bg-primary">
+                                        <i class="icon ion-ios-information icon-badge"></i>
+                                      </span>
+                                      </div>
+                                      <div class="col-11">
+                                      Depósitos em <b>Bitcoin</b> levam <b>3 confirmações</b> para serem aprovados.</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>`;
       }
-      
-      
-    });
-  </script>
+      for (var j = 0; j < walletData['position'].length - 1; j++) {
+        portfolio_cryptoBalance += walletData['series'][j + 1];
+        portfolio_cryptoHtml += headerHtml(j) + bodyHtml("crypto", j);
+      }
+      for (var j = 4; j < walletData['position'].length; j++) {
+        portfolio_rendaFixaBalance += walletData['series'][j + 1];
+        portfolio_rendaFixaHtml += headerHtml(j) + bodyHtml("rendaFixa", j);
+      }
+      for (var j = 5; j < walletData['position'].length; j++) {
+        portfolio_utilityBalance += walletData['series'][j + 1];
+        portfolio_utilityHtml += headerHtml(j) + bodyHtml("utility", j);
+      }
+      for (var j = 5; j < walletData['position'].length; j++) {
+        portfolio_startupsBalance += walletData['series'][j + 1];
+        portfolio_startupsHtml += headerHtml(j) + bodyHtml("startups", j);
+      }
+    } else {
+      walletHtml = '<p>Nenhuma posição encontrada</p>';
+      portfolio_cryptoHtml = '<p>Nenhuma posição encontrada</p>';
+      portfolio_rendaFixaHtml = '<p>Nenhuma posição encontrada</p>';
+      portfolio_utilityHtml = '<p>Nenhuma posição encontrada</p>';
+      portfolio_startupsHtml = '<p>Nenhuma posição encontrada</p>';
+    }
+
+    const totalBalance = () => {
+      total = 0;
+      walletData['series'].forEach(element => {
+        total = element + total;
+      });
+      return total;
+    }
+
+    const investedBalance = () => {
+      total = 0;
+      walletData['series'].forEach((e, i) => {
+        if (i > 0) {
+          total = e + total;
+        }
+      });
+      return total;
+    }
+
+    const currentDate = () => {
+      let now = new Date();
+      return "Atualizado em " + now.toLocaleString("pt-BR");
+    }
+
+    const pieChartPercent = (amount) => {
+      const percent100 = totalBalance();
+      return (amount * 100 / percent100);
+    }
+
+    const dadosPie = [{
+      "products": "Criptomoedas",
+      "share": pieChartPercent(portfolio_cryptoBalance).toFixed(2),
+      "color": am4core.color("orange")
+    }, {
+      "products": "Renda Fixa Digital",
+      "share": pieChartPercent(portfolio_rendaFixaBalance).toFixed(2),
+      "color": am4core.color("yellow")
+    }, {
+      "products": "Utility Tokens",
+      "share": pieChartPercent(portfolio_utilityBalance).toFixed(2),
+      "color": am4core.color("blue")
+    }, {
+      "products": "Startups",
+      "share": pieChartPercent(portfolio_startupsBalance).toFixed(2),
+      "color": am4core.color("green")
+    }, {
+      "products": "Não Investido",
+      "share": pieChartPercent(walletData["series"][0]).toFixed(2),
+      "color": am4core.color("#ccc")
+    }];
+
+    const handlePieChart = (id, data) => {
+      am4core.ready(function () {
+
+        // License begin
+        am4core.addLicense("ch-custom-attribution");
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart = am4core.create(id, am4charts.PieChart);
+
+        // Add data
+        chart.data = data;
+
+        // Set inner radius
+        chart.innerRadius = am4core.percent(70);
+
+        // Add and configure Series
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.ticks.template.disabled = true;
+        pieSeries.labels.template.disabled = true;
+        pieSeries.dataFields.value = "share";
+        pieSeries.dataFields.category = "products";
+        pieSeries.slices.template.propertyFields.fill = "color";
+        pieSeries.slices.template.stroke = am4core.color("#fff");
+        pieSeries.slices.template.strokeWidth = 2;
+        pieSeries.slices.template.strokeOpacity = 1;
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+      }); // end am4core.ready()
+    }
+
+    handlePieChart("dashboard-chart", dadosPie);
+    handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);
+    handleRadialChart("pie-rendaFixa-chart", pieChartPercent(portfolio_rendaFixaBalance).toFixed(1), "yellow", 50, 14);
+    handleRadialChart("pie-utility-chart", pieChartPercent(portfolio_utilityBalance).toFixed(1), "blue", 50, 14);
+    handleRadialChart("pie-startups-chart", pieChartPercent(portfolio_startupsBalance).toFixed(1), "green", 50, 14);
+    document.getElementById('total-percent').innerHTML = pieChartPercent(investedBalance()).toFixed(2) + "%";
+    document.getElementById('wallet-accordion').innerHTML = walletHtml;
+    document.getElementById('crypto-accordion').innerHTML = portfolio_cryptoHtml;
+    document.getElementById('rendaFixa-accordion').innerHTML = portfolio_rendaFixaHtml;
+    document.getElementById('utility-accordion').innerHTML = portfolio_utilityHtml;
+    document.getElementById('startups-accordion').innerHTML = portfolio_startupsHtml;
+    document.getElementById('crypto-balance').innerHTML = portfolio_cryptoBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('rendaFixa-balance').innerHTML = portfolio_rendaFixaBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('utility-balance').innerHTML = portfolio_utilityBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('startups-balance').innerHTML = portfolio_startupsBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('current-date').innerHTML = currentDate();
+    document.getElementById('total-balance').innerHTML = totalBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('available-balance').innerHTML = walletData['series'][0].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('invested-balance').innerHTML = investedBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('projected-balance').innerHTML = totalBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+  });
+
+  // $.getJSON("<?php echo $_ENV['SITE_URL'] ?>"+"/api/priv/listOurTokens", function (data) {
+</script>
+<script src="assets/js/divergentLinesChart.js"></script>
+<script src="assets/js/valueAxisChart.js"></script>
+<?php Utils\Layout::append("mensage_text", $_data) ?>
 <?php Utils\Layout::append("mensage_text", $_data) ?>
 
+<div class="row mt-3">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- <script>
-        $(document).ready(function () {
-            var dashboard = new Dashboard();
-            dashboard.init();
-        });
-        anychart.onDocumentReady(function () {
-          var donutData, forecastData, instrumentsTable, stockData;
-
-          var updateDonutData = function(data, stocks_amount, bonds_amount){
-            var updateLabel = function (index) {
-              donutData['chart'].label(index).text(
-                  '<span style="font-size: 24px;">' + donutData['proportion'][index][0] * 10 + '%</span><br/>' +
-                  '<span style="font-size: 14px; font-weight: normal">' + donutData['proportion'][index][1].toUpperCase() + '</span>');
-            };
-            var updated_data = getDataInProportion(data, [[stocks_amount, "stocks"], [bonds_amount, "bonds"]]);
-            donutData['data'] = updated_data['data'];
-            donutData['proportion'] = updated_data['proportion'];
-            donutData['dataset'].data(updated_data['data']);
-            updateLabel(0);
-            updateLabel(1);
-          };
-
-          var proportionsChange = function () {
-            var stocks = parseInt($('#proportionsSlider .slider-track .max-slider-handle').attr('aria-valuemax'))/10 +
-                proportionsResult.getValue()/10;
-            var bonds = donutData['initial_data']['stocks'].length - stocks;
-            if (proportionsResult.getValue() == 0) {
-              stocks = donutData['initial_data']['stocks'].length/2;
-              bonds = donutData['initial_data']['stocks'].length/2;
-            }
-            updateDonutData(donutData['initial_data'], stocks, bonds);
-            forecastData['length'] = timeLine.getValue();
-            forecastData['data'] = donutData['data'];
-            updateForecastData(forecastData);
-            updateTableData(instrumentsTable, donutData['data']);
-            // stockData['mainData'] = calculateDataForStock(donutData['data'], stockData['historical']);
-            changeStockChart(stockData);
-          };
-          var proportionsResult = $('#proportionsSlider').slider().on('change', proportionsChange).data('slider');
-
-          var timeLineChange = function () {
-            forecastData['length'] = timeLine.getValue();
-            $('.time-value').text('(' + timeLine.getValue() + ' years)');
-            if (timeLine.getValue() == 1) $('.time-value').text('(' + timeLine.getValue() + ' year)');
-            updateForecastData(forecastData);
-          };
-          var timeLine = $('#timeLineSlider').slider().on('change', timeLineChange).data('slider');
-
-          donutData = drawDonutChart('donut-chart-container');
-          forecastData = drawForecastChart('forecast-chart-container');
-          forecastData['length'] = timeLine.getValue();
-          instrumentsTable = drawTable('table-container');
-
-          // $.getJSON("https://raw.githubusercontent.com/anychart-solutions/investment-portfolio-dashboard/master/src/data/financialQuotes.json", function (parsed_data) {
-          //   stockData = drawStockChart('stock-container');
-          //   stockData['indexesData'] = parsed_data;
-          // });
-
-          // $.getJSON("https://raw.githubusercontent.com/anychart-solutions/investment-portfolio-dashboard/master/src/data/StocksViaBonds.json", function (parsed_data) {
-          $.getJSON("http://127.0.0.1:8000/api/priv/jsonPortfolio?user=<?php echo $cliente->id?>", function (parsed_data) {
-            donutData['initial_data'] = parsed_data;
-            updateDonutListeners(donutData, instrumentsTable);
-            updateDonutData(parsed_data, 5, 5);
-            forecastData['data'] = donutData['data'];
-            // updateForecastData(forecastData);
-            // updateTableData(instrumentsTable, donutData['data']);
-            // $.getJSON("https://raw.githubusercontent.com/anychart-solutions/investment-portfolio-dashboard/master/src/data/historical.json", function (parsed_data) {
-          // $.getJSON("http://127.0.0.1:8000/api/priv/jsonHist?user=<?php echo $cliente->id?>", function (parsed_data) {
-          //     stockData['historical'] = parsed_data;
-          //     stockData['mainData'] = calculateDataForStock(donutData['data'], parsed_data);
-          //     changeStockChart(stockData);
-          //     stockData['stock'].selectRange("MTD");
-          //   });
-          });
-
-          $('.tabsMenu li a').on('click', function(){
-            $('.tab-dependent').hide();
-            $('.visible-' + $(this).attr('id')).show();
-          });
-
-          $('.stock_quotes input[type=checkbox]').on('click', function(){
-            if ($(this).attr('id') == 'log'){
-              var plot = stockData['stock'].plot();
-              if ($(this).prop('checked')) {
-                plot.yScale('log');
-              }
-              else {
-                plot.yScale('linear');
-              }
-              var seriesCount = plot.getSeriesCount();
-              for (var i = 0; i < seriesCount; i++) {
-                plot.getSeriesAt(i).yScale(plot.yScale());
-              }
-              plot.yAxis(0).scale(plot.yScale());
-              plot.yAxis(1).scale(plot.yScale());
-            } else {
-              var series = stockData[$(this).attr('id')];
-              series.enabled($(this).prop('checked'));
-            }
-          });
-        });
-    </script> -->
-
-
-<?//php Utils\Layout::append("inspina/footer_esp", $_data) ?>
-
-
-<?php Utils\Layout::append("mensage_text", $_data) ?>
+<!-- TEXTO CARD DE ORIENTAÇÕES -->
+<!-- <div class="col-1">
+<span class="rounded-icon bg-primary">
+<i class="icon ion-ios-information icon-badge"></i>
+</span>
+</div>
+<div class="col-11">
+O envio de valores <b>abaixo do mínimo serão descartados</b>.
+</div>
+</div>
+<div class="row mt-3">
+<div class="col-1">
+<span class="rounded-icon bg-primary">
+<i class="icon ion-ios-information icon-badge"></i>
+</span>
+</div>
+<div class="col-11">
+Deposite somente saldo <b>Bitcoin (BTC)</b> através da rede <b>BITCOIN</b> para este endereço.
+</div>
+</div>
+<div class="row mt-3">
+<div class="col-1">
+<span class="rounded-icon bg-primary">
+<i class="icon ion-ios-information icon-badge"></i>
+</span>
+</div>
+<div class="col-11">
+Depósitos a partir de outra rede pode resultar em <b>perda permanente de seu saldo</b>.
+</div>
+</div> -->

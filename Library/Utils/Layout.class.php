@@ -99,7 +99,7 @@ class Layout {
                     $dropdown = (empty(trim($modulo["url"])) ? "class='dropdown-toggle' data-toggle='dropdown'" : "");
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" style="color:#00dfff;" aria-expanded="false" role="button" href="<?php echo $url ?>" <?php echo $dropdown ?>>
+                        <a class="nav-link menu-color" aria-expanded="false" role="button" href="<?php echo $url ?>" <?php echo $dropdown ?>>
                             <?php echo $idioma->getText("sidebarMenu{$modulo["id"]}"); ?>
                             <?php if (empty(trim($modulo["url"]))) { ?>
                             <span class="caret"></span>

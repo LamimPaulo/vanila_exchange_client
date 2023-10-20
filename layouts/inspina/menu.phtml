@@ -86,9 +86,9 @@ $moeda = $paridade->moedaBook;
 <link rel="stylesheet" href="assets/css/style.css">
 
 <body>
-    <header id="dark-bb">
-        <nav class="navbar navbar-expand-lg" id="dark">
-            <a class="navbar-brand" href="<?php echo $_SERVER['EnvUrlProd'] ?>/portfolio"><img src="<?php echo IMAGES . "logo-ca.png" ?>" style="max-height: 40px;"></a>
+    <header id="light-bb container">
+        <nav class="navbar navbar-expand-lg" id="light">
+            <a class="navbar-brand" href="<?php echo $_SERVER['EnvUrlProd'] ?>/home"><img src="<?php echo IMAGES . "logo-ca.png" ?>" style="max-height: 40px;"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerMenu"
                 aria-controls="headerMenu" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="icon ion-md-menu"></i>
@@ -161,7 +161,7 @@ $moeda = $paridade->moedaBook;
                             </div>
                         -->
                             <li class="nav-item">
-                                <a class="nav-link" style="color:#00dfff;" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MEUSDADOS ?>">
+                                <a class="nav-link menu-color" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MEUSDADOS ?>">
                                     <i class="icon ion-md-person"></i>
                                     <span><?php echo $idioma->getText("meuPerfilD") ?></span>
                                 </a>
@@ -263,6 +263,7 @@ $('tbody, .market-news ul').mCustomScrollbar({
     }
 
 </script>
+
 
 
 

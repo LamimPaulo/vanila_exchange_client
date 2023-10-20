@@ -1,0 +1,295 @@
+#logo {
+    height: 30px;
+}
+
+.bg-header {
+    background-image: linear-gradient(to right, #e0edfb, white);
+}
+
+#sidebar-menu {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.btn-square {
+    width: 75px;
+    height: 75px;
+    border-radius: 12px;
+    border: 2px solid #cccccc40 ;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 14px -6px;
+}
+
+.fs-10 {
+    font-size: 10px;
+}
+
+.fs-12 {
+    font-size: 12px;
+}
+
+.fs-16 {
+    font-size: 16px;
+}
+
+.fs-20 {
+    font-size: 20px;
+}
+
+.fs-30 {
+    font-size: 30px;
+}
+
+.mr-15 {
+    margin-left: -114px;
+}
+
+.carousel_icon {
+    margin-left: 70%;
+    max-height: 50px;
+    max-width: 50px;
+}
+
+.service_icon {
+    font-size: 20px;
+}
+
+.line {
+    height: 500px;
+}
+
+.list-group-item {
+    border: none;
+    background-color: transparent;
+}
+
+.button {
+    margin: auto;
+}
+
+.hidden {
+    border-right: solid 1px #dee2e6;
+}
+
+#balance-card {
+    margin-top: 27px;
+}
+
+#balance-crypto {
+    border-bottom: 1px dotted;
+}
+
+.symbol {
+    max-width: 20px;
+    margin-right: 3px;
+}
+
+.balance-hidden {
+    display: none;
+}
+
+.vl {
+    border-left: 1px solid;
+    height: 40px;
+}
+
+.vl-60 {
+    border-left: 1px solid #ccc;
+    height: 60px;
+}
+
+.w-10 {
+    width: 10%;
+}
+
+#pieChartdiv {
+    width: 100%;
+    max-width: 100%;
+    height: 250px;
+    max-height: 100%;
+}
+
+.shadow {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 14px -6px;
+    border-radius: 5px;
+    border: none;
+}
+
+.font-card {
+    font-size: 20px;
+}
+
+#performance-chart {
+    min-height: 300px;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.cursor:hover {
+    background-color: #eee;
+}
+
+#performance-chart {
+    margin-top: -20px;
+}
+
+.rounded-badge {
+    height: 30px;
+    width: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 1rem;
+}
+
+.icon-badge{
+    font-size: 20px;
+    margin-top: 4px;
+}
+
+.rounded-icon {
+    height: 25px;
+    width: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 1rem;
+}
+
+.ml-33{
+    margin-left: 33px;
+}
+
+.ml-63{
+    margin-left: 63px;
+}
+
+/* Controle do gráfico radial nos collapses */
+
+@property --p {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+}
+
+.pie {
+    --p: 80;
+    --b: 5px;
+    --c: orange;
+    --w: 50px;
+
+    width: var(--w);
+    aspect-ratio: 1;
+    position: relative;
+    display: inline-grid;
+    margin: 5px;
+    place-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+.pie:before,
+.pie:after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+}
+
+.pie:before {
+    inset: 0;
+    background:
+        radial-gradient(farthest-side, var(--c) 98%, #0000) top/var(--b) var(--b) no-repeat,
+        conic-gradient(var(--c) calc(var(--p)*1%), #ccc 0);
+    -webkit-mask: radial-gradient(farthest-side, #0000 calc(99% - var(--b)), #000 calc(100% - var(--b)));
+    mask: radial-gradient(farthest-side, #0000 calc(99% - var(--b)), #000 calc(100% - var(--b)));
+}
+
+.pie:after {
+    inset: calc(50% - var(--b)/2);
+    background: var(--c);
+    transform: rotate(calc(var(--p)*3.6deg)) translateY(calc(50% - var(--w)/2));
+}
+
+.animate {
+    animation: p 1s .5s both;
+}
+
+.no-round:before {
+    background-size: 0 0, auto;
+}
+
+.no-round:after {
+    content: none;
+}
+
+#total-invested-chart {
+    position: relative;
+}
+
+.innerPieText {
+    position: absolute;
+    transform: translateY(50px);
+}
+
+.text-hidden{
+    display: none;
+}
+
+@keyframes p {
+    from {
+        --p: 0
+    }
+}
+
+@media only screen and (max-width: 992px) {
+
+    #div-line{
+        min-height: 100px;
+    }
+}
+
+@media only screen and (min-width: 769px) {
+
+    .md-hidden {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    .hidden {
+        display: none;
+    }
+
+    .radio-title,
+    .fs-r {
+        font-size: 2.8vw;
+    }
+
+    #market-radio, #curve-radio{
+        font-size: 3.2vw;
+    }
+
+    .mb-3-md{
+        margin-bottom: 1rem;
+    }
+
+    #rentabilidade-values{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+}
+
+@media only screen and (max-width: 510px) {
+
+    #v-pills-tab {
+        font-size: 2.4vw;
+    }
+}

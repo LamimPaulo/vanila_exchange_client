@@ -29,6 +29,16 @@ img {
   height: auto;
 }
 
+.navbar {
+  max-width: 1145px;
+  margin: 0 auto;
+}
+
+.menu-color{
+  color: #2351ff;
+  font-weight: bold;
+}
+
 .mtb100 {
   margin: 100px 0;
 }
