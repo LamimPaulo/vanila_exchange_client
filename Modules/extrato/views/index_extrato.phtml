@@ -1,7 +1,7 @@
 <?php
 
 $idioma = new \Utils\PropertiesUtils("book", IDIOMA);
-$jsonMoedas = (isset($_data["moedas"]) ? $_data["moedas"]  : null);
+$jsonMoedas = (isset($_data["moedas"]) ? $_data["moedas"] : null);
 
 $dataInicial = new Utils\Data(date("d/m/Y"));
 $dataFinal = new Utils\Data(date("d/m/Y"));
@@ -27,62 +27,79 @@ $_data["idiomaMenu"] = $idioma;
 <link href="<?php echo TEMA; ?>css/plugins/iCheck/custom.css" rel="stylesheet">
 
 <body>
-    <div class="settings mtb15">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Extrato</h5>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group" id="datas">
-                            <label class="control-label">Período</label>
-                            <div class="input-daterange input-group full-width" id="datepicker">
-                                <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                <span class="input-group-addon">Até</span>
-                                <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-11 mx-auto">
+                <div class="settings">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Extrato</h5>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group" id="datas">
+                                        <label class="control-label">Período</label>
+                                        <div class="input-daterange input-group full-width" id="datepicker">
+                                            <input type="text" id="dataInicial" class=" form-control" name="dataInicial"
+                                                value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                            <span class="input-group-addon">Até</span>
+                                            <input type="text" id="dataFinal" class=" form-control" name="dataFinal"
+                                                value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="control-label">Moedas</label>
+                                        <select class="form-control custom-select select2" id="idMoeda"></select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            <?php echo "Registro" ?>
+                                        </label>
+                                        <select class="form-control custom-select" id="registros">
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                            <option value="T">
+                                                <?php echo "Todos" ?>
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>&nbsp;</label>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-light full-width" onclick="filtrar()">
+                                            <?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label>&nbsp;</label>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary pull-right full-width"
+                                            onclick="download()">
+                                            <?php echo "Baixar" ?>&nbsp;&nbsp;<i class="fa fa-download"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="control-label">Moedas</label>
-                            <select class="form-control custom-select select2" id="idMoeda"></select>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="control-label"><?php echo "Registro" ?></label>
-                            <select class="form-control custom-select" id="registros">
-                                <option value="30">30</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="T"><?php echo "Todos" ?></option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <label>&nbsp;</label>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-light full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label>&nbsp;</label>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary pull-right full-width" onclick="download()"><?php echo "Baixar" ?>&nbsp;&nbsp;<i class="fa fa-download"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="settings mt15">
-            <div class="card">
-                <div class="card-body">
-                    <div id="boxes" class="card-body">
+                <div class="settings mt15">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="boxes" class="card-body">
+                            </div>
+                            </table>
+                        </div>
                     </div>
-                    </table>
                 </div>
             </div>
         </div>
@@ -103,7 +120,7 @@ $_data["idiomaMenu"] = $idioma;
 <script>
     var moeda = '<?php echo \Utils\Criptografia::encriptyPostId($moedaFavorita) ?>';
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("#dataInicial, #dataFinal").datepicker({
             forceParse: false,
             format: 'dd/mm/yyyy'
@@ -117,7 +134,7 @@ $_data["idiomaMenu"] = $idioma;
             width: 'resolve',
         });
 
-        $(".select2").on('select2:select', function(e) {
+        $(".select2").on('select2:select', function (e) {
             var data = e.params.data;
             moeda = data.id;
         });
@@ -155,7 +172,7 @@ $_data["idiomaMenu"] = $idioma;
                 registros: $("#registros").val(),
                 moeda: moeda
             },
-            success: function(json) {
+            success: function (json) {
                 try {
                     if (json.sucesso) {
                         $("#boxes").html(json.html);

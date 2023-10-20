@@ -1,5 +1,5 @@
 <?php
-$contasBancarias = isset($_data["contas"]) ? $_data["contas"] : Array();
+$contasBancarias = isset($_data["contas"]) ? $_data["contas"] : array();
 $configuracao = isset($_data["configuracao"]) ? $_data["configuracao"] : new \Models\Modules\Cadastro\Configuracao();
 $valorMinReais = number_format($configuracao->valorMinSaqueReais, 2, ".", ",");
 $idioma = new \Utils\PropertiesUtils("saque", IDIOMA);
@@ -11,8 +11,8 @@ $atar = isset($_data["atar"]) ? $_data["atar"] : null;
 $processo1 = \Utils\Criptografia::encriptyPostId(Utils\Constantes::PROCESSO_SAQUE_1);
 $processo2 = \Utils\Criptografia::encriptyPostId(Utils\Constantes::PROCESSO_SAQUE_2);
 
-$jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
-$jsonOperacao = isset($_data["operacao"]) ? $_data["operacao"] : Array();
+$jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
+$jsonOperacao = isset($_data["operacao"]) ? $_data["operacao"] : array();
 
 $tarifaTed = $configuracao->tarifaTed;
 
@@ -23,14 +23,14 @@ $moedaSelecionado = \Utils\Criptografia::encriptyPostId(2); //Bitcoin
 
 $moedaRn = new Models\Modules\Cadastro\MoedaRn();
 
-if(!empty($cliente->moedaFavorita)){
-    if($cliente->moedaFavorita > 1){
+if (!empty($cliente->moedaFavorita)) {
+    if ($cliente->moedaFavorita > 1) {
         $moedaCategoria = "c";
         $moedaSelecionado = \Utils\Criptografia::encriptyPostId($cliente->moedaFavorita);
         $moeda = $moedaRn->get($cliente->moedaFavorita);
     } else {
         $moedaCategoria = "b";
-        $moedaSelecionado = \Utils\Criptografia::encriptyPostId(1);//Reasl
+        $moedaSelecionado = \Utils\Criptografia::encriptyPostId(1); //Reasl
     }
 }
 ?>
@@ -136,611 +136,627 @@ if(!empty($cliente->moedaFavorita)){
     </div>
 </div> -->
 <body>
-    <div class="">
-        <div class="col-md-12 col-lg-9">
-            <div class="card mostrar mtb15">
-                <div class="row">
-                    <div class="card-body">
-                        <h5 class="card-title"><?php echo $idioma->getText("titulo") ?></h2>
-                        <div class="">
-                            <div class="">
-                                <div class="row p-md">
-                                    <div class="col-sm-12 select-box choose-position">
-                                        <select class="form-control-lg select2 chosen-select input-lg full-width" id="selectCoins">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div id="saqueReais">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="row p-md text-center">
-                                                <h2 class="m-l-sm p-md" style="display: inline;"><?php echo $idioma->getText("saqueReais") ?></h2>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-11 mx-auto">
+            <div class="col-md-12 col-lg-9 settings">
+                <div class="card mostrar mtb15">
+                    <div class="row">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <?php echo $idioma->getText("titulo") ?>
+                                </h2>
+                                <div class="">
+                                    <div class="">
+                                        <div class="row p-md">
+                                            <div class="col-sm-12 select-box choose-position">
+                                                <select
+                                                    class="form-control-lg select2 chosen-select input-lg full-width"
+                                                    id="selectCoins">
+                                                </select>
                                             </div>
-                                            <div id="saqueBrl p-md">
-                                                <div class="row p-md">
-                                                    <div class="col-sm-4">
-                                                        <div class="ibox float-e-margins">
-                                                            <h4><?php echo $idioma->getText("saldoTotal") ?></h4>
-                                                            <div class="ibox-content">
-                                                                <h3 class="" id="saldoTotalBrl">-</h3>
-                                                            </div>
-                                                        </div>
+                                        </div>
+                                        <div id="saqueReais">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="row p-md text-center">
+                                                        <h2 class="m-l-sm p-md" style="display: inline;">
+                                                            <?php echo $idioma->getText("saqueReais") ?>
+                                                        </h2>
                                                     </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="ibox float-e-margins">
-                                                            <h4><?php echo $idioma->getText("saldoDisponivel") ?></h4>
-                                                            <div class="ibox-content">
-                                                                <h3 class="" id="saldoBrl">-</h3>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="ibox float-e-margins">
-                                                            <h4><?php echo $idioma->getText("saldoBloqueado") ?></h4>
-                                                            <div class="ibox-content">
-                                                                <h3 class="" id="saldoBloqueadoBrl">-</h3>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div id="infReais">
-
-                                                    <div class="row p-md" id="emailCliente">
-                                                        <div class="col col-lg-12 ">
-                                                            <div class="form-group">
-                                                                <label><?php echo $idioma->getText("email") ?></label>
-                                                                <div class="input-group">
-                                                                    <input type="text"  class="form-control" id="email" name="email" value="" />
-                                                                    <span class="input-group-btn">
-                                                                        <button type="button" class="btn btn-primary" onclick="findCliente();">&nbsp;<i class="fa fa-search"></i></button>
-                                                                    </span>
-                                                                </div>
-                                                                <strong><span id="nomeCliente"></span></strong>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <?php if(!empty($atar) && $atar->ativo == true) {?>
-                                                    <div class="row p-md" id="atar">
-                                                        <div class="col-lg-12 ">
-                                                            <h3>O saque através da Atar é somente para o titular da conta.</h3>
-                                                            <div class="form-group">
-                                                                <label>Nome:</label>
-                                                                <input type="text"  class="form-control"  value="<?php echo $cliente->nome ?>" disabled="true"/>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Documento</label>
-                                                                <input type="text"  class="form-control"  value="<?php echo $cliente->documento ?>" disabled="true"/>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <?php } else { ?>
-                                                    <div class="row p-md" id="atar">
-                                                        <div class="col col-lg-12">
-                                                            <div class="form-group">
-                                                                <label><?php echo "Faça o cadastro de seu Atar ID ou CPF no menu Depósito." ?></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <?php } ?>
-
-                                                    <div class="row">
-                                                        <div class="col-sm-12 m-b-lg">
-                                                            <div class="form-group">
-                                                                <label><?php echo $idioma->getText("valor") ?></label>
-                                                                <div class="input-group">
-                                                                    <input type="text"  class="form-control" id="valorReais" name="valorReais" value="0,00" />
-                                                                    <span class="input-group-btn">
-                                                                        <button type="button" class="btn btn-primary full-width" onclick="getSaldoDisponivel();"><?php echo $idioma->getText("meuSaldoTotal") ?></button>
-                                                                    </span>
-                                                                </div>
-                                                                <label style="margin-top: 5px !important;">
-                                                                    <small><?php echo $idioma->getText("comiSaque") ?> <span id="comissaoCobradaSaque"><?php echo number_format($comissao, 2, ",", "") ?></span>%</small></br>
-                                                                    <small><?php echo $idioma->getText("tarifaTansfer") ?> <span id="tarifaTransferencia"></span></small></br>
-                                                                    <small><?php echo $idioma->getText("seraCreditadaNaConta") ?> <strong id="valorSacado2"></strong></small></br>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row p-md">
-                                                        <h3 class="m-l-md text-center" id="limiteDisponivelReal"></h3>
-                                                        <div class="col-lg-12 col-xs-12 col-sm-12">
-
-                                                            <div class="form-group">
-                                                                <button class="btn btn-primary full-width" type="button" onclick="saqueTransferir('<?php echo $processo1 ?>');" id="btnSalvar" disabled>
-                                                                    <?php echo $idioma->getText("confirmaSaque") ?>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div id="carregaTokenBrl" class="text-center"></div>
-                                                <div class="row p-w-md" id="token2faBrl">
-                                                    <div class="col-lg-12">
-                                                        <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
-                                                        <dl class="dl-horizontal m-t-sm">
-                                                            <dt class="border-bottom">Nome Titular:</dt> <dd id="nomeTitular">-</dd>
-                                                            <dt class="border-bottom">Chave PIX:</dt> <dd id="documentoCPF">-</dd>
-                                                            <!-- <dt class="border-bottom">Banco:</dt> <dd id="bancoInf">-</dd>
-                                                            <dt class="border-bottom">Agência:</dt> <dd id="agencia">-</dd>
-                                                            <dt class="border-bottom">Conta:</dt> <dd id="conta">-</dd> -->
-                                                            <dt class="border-bottom">Valor Solicitado:</dt> <dd id="valorSolicitado">-</dd>
-                                                            <dt class="border-bottom">Valor do Saque:</dt> <dd id="valorSaque">-</dd>
-                                                        </dl>
-
-                                                        <div class="row">
-                                                            <div class="col-md-6 col-xs-12">
-                                                                <div class="form-group">
-                                                                    <label><?php echo $idioma->getText("pin") ?></label>
-                                                                    <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control" id="pinBrl"/>
+                                                    <div id="saqueBrl p-md">
+                                                        <div class="row p-md">
+                                                            <div class="col-sm-4">
+                                                                <div class="ibox float-e-margins">
+                                                                    <h4>
+                                                                        <?php echo $idioma->getText("saldoTotal") ?>
+                                                                    </h4>
+                                                                    <div class="ibox-content">
+                                                                        <h3 class="" id="saldoTotalBrl">-</h3>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6 col-xs-12">
-                                                                <div class="form-group m-b-none">
-                                                                    <label><?php echo $idioma->getText("token2fa") ?></label>
-                                                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control" id="tokenBrl"/>
-                                                                    <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
-                                                                        <a href="javascript:saqueTransferir('<?php echo $processo1 ?>');" id="reenviarLink"><?php echo $idioma->getText("reenviar2fa") ?></a>
-                                                                    <?php } ?>
+                                                            <div class="col-sm-4">
+                                                                <div class="ibox float-e-margins">
+                                                                    <h4>
+                                                                        <?php echo $idioma->getText("saldoDisponivel") ?>
+                                                                    </h4>
+                                                                    <div class="ibox-content">
+                                                                        <h3 class="" id="saldoBrl">-</h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div class="ibox float-e-margins">
+                                                                    <h4>
+                                                                        <?php echo $idioma->getText("saldoBloqueado") ?>
+                                                                    </h4>
+                                                                    <div class="ibox-content">
+                                                                        <h3 class="" id="saldoBloqueadoBrl">-</h3>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div id="infReais">
 
-                                                        <div class="row p-h-sm">
-                                                            <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                                <button class="btn btn-white full-width" onclick="cancelarTransferencia();"><?php echo $idioma->getText("cancelar") ?></button>
-                                                            </div>
-                                                            <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                                <button class="btn btn-success full-width"  onclick="saqueTransferir('<?php echo $processo2 ?>');"><?php echo $idioma->getText("confirmar") ?></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <?php if ($configuracao->atarAtivo == 1) { ?>
-                                                    <div class="row p-w-md" id="token2faAtar">
-                                                        <div class="col-lg-12">
-                                                            <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
-                                                            <dl class="dl-horizontal m-t-sm">
-                                                                <dt class="border-bottom">Documento:</dt> <dd id="documentoAtar">-</dd>
-                                                                <dt class="border-bottom">Valor Solicitado:</dt> <dd id="valorSolicitadoAtar">-</dd>
-                                                                <dt class="border-bottom">Valor do Saque:</dt> <dd id="valorSaqueAtar">-</dd>
-                                                            </dl>
-                                                            <div class="row">
-                                                                <div class="col-lg-12 col-xs-12">
+                                                            <div class="row p-md" id="emailCliente">
+                                                                <div class="col col-lg-12 ">
                                                                     <div class="form-group">
-                                                                        <label><?php echo $idioma->getText("pin") ?></label>
-                                                                        <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="pinAtar"/>
+                                                                        <label>
+                                                                            <?php echo $idioma->getText("email") ?>
+                                                                        </label>
+                                                                        <div class="input-group">
+                                                                            <input type="text" class="form-control"
+                                                                                id="email" name="email" value="" />
+                                                                            <span class="input-group-btn">
+                                                                                <button type="button"
+                                                                                    class="btn btn-primary"
+                                                                                    onclick="findCliente();">&nbsp;<i
+                                                                                        class="fa fa-search"></i></button>
+                                                                            </span>
+                                                                        </div>
+                                                                        <strong><span id="nomeCliente"></span></strong>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-lg-12 col-xs-12">
-                                                                    <div class="form-group m-b-none">
-                                                                        <label><?php echo $idioma->getText("token2fa") ?></label>
-                                                                        <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="tokenAtar"/>
-                                                                        <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
-                                                                            <a href="javascript:atar();" id="reenviarLinkAtar"><?php echo $idioma->getText("reenviar2fa") ?></a>
-                                                                        <?php } ?>
+                                                            </div>
+                                                            <?php if (!empty($atar) && $atar->ativo == true) { ?>
+                                                            <div class="row p-md" id="atar">
+                                                                <div class="col-lg-12 ">
+                                                                    <h3>O saque através da Atar é somente para o titular
+                                                                        da conta.</h3>
+                                                                    <div class="form-group">
+                                                                        <label>Nome:</label>
+                                                                        <input type="text" class="form-control"
+                                                                            value="<?php echo $cliente->nome ?>"
+                                                                            disabled="true" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Documento</label>
+                                                                        <input type="text" class="form-control"
+                                                                            value="<?php echo $cliente->documento ?>"
+                                                                            disabled="true" />
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="row p-h-sm">
-                                                                <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                                    <button class="btn btn-white full-width"  onclick="cancelarTransferencia();"><?php echo $idioma->getText("cancelar") ?></button>
-                                                                </div>
-                                                                <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                                    <button class="btn btn-success full-width"  onclick="saqueAtar();"><?php echo $idioma->getText("confirmar") ?></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="saqueMoedas">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-xs-12">
-                                            <div class="row text-left">
-                                                <h4 id="tituloMoeda" class="m-l-sm p-md text-center" style="display: inline;"><?php echo $idioma->getText("saqueCripto") ?></h4>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <h6 class="card-title"><?php echo $idioma->getText("saldoTotal") ?></h6>
-                                                            <h6 class="" id="saldoTotalCripto">-</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <h6 class="card-title display-6"><?php echo $idioma->getText("saldoDisponivel") ?></h6>
-                                                            <h6 class="" id="saldoCripto">-</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <h6 class="card-title"><?php echo $idioma->getText("saldoBloqueado") ?></h6>
-                                                            <h6 class="" id="saldoBloqueadoCripto">-</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <br>
-                                            <div class="row">
-                                                <div id="infMoeda">
-                                                    <div class="row">
-                                                        <div class="col-sm-12 m-b-lg">
-                                                            <div class="form-group">
-                                                                <label><?php echo $idioma->getText("carteiraDestino") ?></label>
-                                                                <input type="text" class="form-control" id="endereco"/>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row" id="redeMoeda">
-                                                        <div class="">
-                                                            <label>Escolha a rede de saque: </label>
-                                                        </div>
-                                                        <div class="">
-                                                            <div data-toggle="buttons" class="btn-group" id="optionsRede">
-                                                                <label class="btn btn-white" id="erc20"> <input type="radio" name="optionRede" value="<?php echo \Utils\Constantes::REDE_ERC20 ?>">ERC20</label>
-                                                                <label class="btn btn-white" id="bep20"> <input type="radio" name="optionRede" value="<?php echo \Utils\Constantes::REDE_BEP20 ?>">BEP20</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-12 m-b-lg">
-                                                            <div class="form-group">
-                                                                <label><?php echo $idioma->getText("volume") ?></label>
-                                                                <div class="input-group">
-                                                                    <input type="text"  class="form-control" inputmode="numeric" pattern="[0-9]*" id="valor" name="valor" value="0.00000000" />
-                                                                    <span class="input-group-btn">
-                                                                        <button type="button" class="btn btn-primary" onclick="getSaldoDisponivel();"><?php echo $idioma->getText("meuSaldoTotal") ?></button>
-                                                                    </span>
-                                                                </div>
-                                                                <div>
-                                                                <label style="margin-top: 5px !important;">
-                                                                <span><?php echo $idioma->getText("taxa") ?>:</span> <span id="comissaoCobradaBtc"></span></br>
-                                                                <strong><span><?php echo $idioma->getText("seraDebitado") ?>:</span> <span id="debitadoBtc"></span></strong></br>
-                                                                </label>
+                                                            <?php } else { ?>
+                                                            <div class="row p-md" id="atar">
+                                                                <div class="col col-lg-12">
+                                                                    <div class="form-group">
+                                                                        <label>
+                                                                            <?php echo "Faça o cadastro de seu Atar ID ou CPF no menu Depósito." ?>
+                                                                        </label>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <h3 class="m-l-md text-center" id="limiteDisponivelCripto"></h3>
-                                            <div class="col-lg-12 col-xs-12 col-sm-12">
-                                                <button class="btn btn-primary full-width" id="btnTransferir" onclick="confirmarTransferencia();" disabled><?php echo $idioma->getText("transferir") ?></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="carregaToken" class="text-center"></div>
-                                    <div class="row  p-md" id="token2fa">
-                                        <div class="col-lg-12">
-                                            <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
-                                            <dl class="dl-horizontal m-t-sm">
-                                                <dt class="border-bottom"><?php echo $idioma->getText("volume") ?>: </dt> <dd id="volumeConfirmar">-</dd>
-                                                <dt class="border-bottom"><?php echo $idioma->getText("carteira") ?>:</dt> <dd id="enderecoConfirmar">-</dd>
-                                                <dt class="border-bottom" id="redeConfirmar"><?php echo "Rede" ?>:</dt> <dd id="rede">-</dd>
-                                            </dl>
 
-                                            <div class="row">
-                                                <div class="col-lg-6 col-xs-12">
-                                                    <div class="form-group">
-                                                        <label><?php echo $idioma->getText("pin") ?></label>
-                                                        <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="pin"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-xs-12">
-                                                    <div class="form-group m-b-none">
-                                                        <label><?php echo $idioma->getText("token2fa") ?></label>
-                                                        <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="token"/>
-                                                        <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
-                                                            <a href="javascript:confirmarTransferencia();" id="reenviarLink"><?php echo $idioma->getText("reenviar2fa") ?></a>
+                                                            <?php } ?>
+
+                                                            <div class="row">
+                                                                <div class="col-sm-12 m-b-lg">
+                                                                    <div class="form-group">
+                                                                        <label>
+                                                                            <?php echo $idioma->getText("valor") ?>
+                                                                        </label>
+                                                                        <div class="input-group">
+                                                                            <input type="text" class="form-control"
+                                                                                id="valorReais" name="valorReais"
+                                                                                value="0,00" />
+                                                                            <span class="input-group-btn">
+                                                                                <button type="button"
+                                                                                    class="btn btn-primary full-width"
+                                                                                    onclick="getSaldoDisponivel();">
+                                                                                    <?php echo $idioma->getText("meuSaldoTotal") ?>
+                                                                                </button>
+                                                                            </span>
+                                                                        </div>
+                                                                        <label style="margin-top: 5px !important;">
+                                                                            <small>
+                                                                                <?php echo $idioma->getText("comiSaque") ?>
+                                                                                <span id="comissaoCobradaSaque">
+                                                                                    <?php echo number_format($comissao, 2, ",", "") ?>
+                                                                                </span>%
+                                                                            </small></br>
+                                                                            <small>
+                                                                                <?php echo $idioma->getText("tarifaTansfer") ?>
+                                                                                <span id="tarifaTransferencia"></span>
+                                                                            </small></br>
+                                                                            <small>
+                                                                                <?php echo $idioma->getText("seraCreditadaNaConta") ?>
+                                                                                <strong id="valorSacado2"></strong>
+                                                                            </small></br>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row p-md">
+                                                                <h3 class="m-l-md text-center"
+                                                                    id="limiteDisponivelReal"></h3>
+                                                                <div class="col-lg-12 col-xs-12 col-sm-12">
+
+                                                                    <div class="form-group">
+                                                                        <button class="btn btn-primary full-width"
+                                                                            type="button"
+                                                                            onclick="saqueTransferir('<?php echo $processo1 ?>');"
+                                                                            id="btnSalvar" disabled>
+                                                                            <?php echo $idioma->getText("confirmaSaque") ?>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="carregaTokenBrl" class="text-center"></div>
+                                                        <div class="row p-w-md" id="token2faBrl">
+                                                            <div class="col-lg-12">
+                                                                <label>
+                                                                    <?php echo $idioma->getText("insiraSeuToken") ?>
+                                                                </label>
+                                                                <dl class="dl-horizontal m-t-sm">
+                                                                    <dt class="border-bottom">Nome Titular:</dt>
+                                                                    <dd id="nomeTitular">-</dd>
+                                                                    <dt class="border-bottom">Chave PIX:</dt>
+                                                                    <dd id="documentoCPF">-</dd>
+                                                                    <!-- <dt class="border-bottom">Banco:</dt> <dd id="bancoInf">-</dd>
+                                                        <dt class="border-bottom">Agência:</dt> <dd id="agencia">-</dd>
+                                                        <dt class="border-bottom">Conta:</dt> <dd id="conta">-</dd> -->
+                                                                    <dt class="border-bottom">Valor Solicitado:</dt>
+                                                                    <dd id="valorSolicitado">-</dd>
+                                                                    <dt class="border-bottom">Valor do Saque:</dt>
+                                                                    <dd id="valorSaque">-</dd>
+                                                                </dl>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6 col-xs-12">
+                                                                        <div class="form-group">
+                                                                            <label>
+                                                                                <?php echo $idioma->getText("pin") ?>
+                                                                            </label>
+                                                                            <input type="password" inputmode="numeric"
+                                                                                pattern="[0-9]*" class="form-control"
+                                                                                id="pinBrl" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-xs-12">
+                                                                        <div class="form-group m-b-none">
+                                                                            <label>
+                                                                                <?php echo $idioma->getText("token2fa") ?>
+                                                                            </label>
+                                                                            <input type="text" inputmode="numeric"
+                                                                                pattern="[0-9]*" class="form-control"
+                                                                                id="tokenBrl" />
+                                                                            <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
+                                                                            <a href="javascript:saqueTransferir('<?php echo $processo1 ?>');"
+                                                                                id="reenviarLink">
+                                                                                <?php echo $idioma->getText("reenviar2fa") ?>
+                                                                            </a>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row p-h-sm">
+                                                                    <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                                        <button class="btn btn-white full-width"
+                                                                            onclick="cancelarTransferencia();">
+                                                                            <?php echo $idioma->getText("cancelar") ?>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                                        <button class="btn btn-success full-width"
+                                                                            onclick="saqueTransferir('<?php echo $processo2 ?>');">
+                                                                            <?php echo $idioma->getText("confirmar") ?>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <?php if ($configuracao->atarAtivo == 1) { ?>
+                                                        <div class="row p-w-md" id="token2faAtar">
+                                                            <div class="col-lg-12">
+                                                                <label>
+                                                                    <?php echo $idioma->getText("insiraSeuToken") ?>
+                                                                </label>
+                                                                <dl class="dl-horizontal m-t-sm">
+                                                                    <dt class="border-bottom">Documento:</dt>
+                                                                    <dd id="documentoAtar">-</dd>
+                                                                    <dt class="border-bottom">Valor Solicitado:</dt>
+                                                                    <dd id="valorSolicitadoAtar">-</dd>
+                                                                    <dt class="border-bottom">Valor do Saque:</dt>
+                                                                    <dd id="valorSaqueAtar">-</dd>
+                                                                </dl>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-xs-12">
+                                                                        <div class="form-group">
+                                                                            <label>
+                                                                                <?php echo $idioma->getText("pin") ?>
+                                                                            </label>
+                                                                            <input type="password" inputmode="numeric"
+                                                                                pattern="[0-9]*"
+                                                                                class="form-control full-width"
+                                                                                id="pinAtar" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-12 col-xs-12">
+                                                                        <div class="form-group m-b-none">
+                                                                            <label>
+                                                                                <?php echo $idioma->getText("token2fa") ?>
+                                                                            </label>
+                                                                            <input type="text" inputmode="numeric"
+                                                                                pattern="[0-9]*"
+                                                                                class="form-control full-width"
+                                                                                id="tokenAtar" />
+                                                                            <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
+                                                                            <a href="javascript:atar();"
+                                                                                id="reenviarLinkAtar">
+                                                                                <?php echo $idioma->getText("reenviar2fa") ?>
+                                                                            </a>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row p-h-sm">
+                                                                    <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                                        <button class="btn btn-white full-width"
+                                                                            onclick="cancelarTransferencia();">
+                                                                            <?php echo $idioma->getText("cancelar") ?>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                                        <button class="btn btn-success full-width"
+                                                                            onclick="saqueAtar();">
+                                                                            <?php echo $idioma->getText("confirmar") ?>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <?php } ?>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div id="saqueMoedas">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-xs-12">
+                                                    <div class="row text-left">
+                                                        <h4 id="tituloMoeda" class="m-l-sm p-md text-center"
+                                                            style="display: inline;">
+                                                            <?php echo $idioma->getText("saqueCripto") ?>
+                                                        </h4>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h6 class="card-title">
+                                                                        <?php echo $idioma->getText("saldoTotal") ?>
+                                                                    </h6>
+                                                                    <h6 class="" id="saldoTotalCripto">-</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h6 class="card-title display-6">
+                                                                        <?php echo $idioma->getText("saldoDisponivel") ?>
+                                                                    </h6>
+                                                                    <h6 class="" id="saldoCripto">-</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h6 class="card-title">
+                                                                        <?php echo $idioma->getText("saldoBloqueado") ?>
+                                                                    </h6>
+                                                                    <h6 class="" id="saldoBloqueadoCripto">-</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                            <div class="row p-h-sm">
-                                                <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                    <button class="btn btn-white full-width"  onclick="cancelarTransferencia();"><?php echo $idioma->getText("cancelar") ?></button>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div id="infMoeda">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 m-b-lg">
+                                                                    <div class="form-group">
+                                                                        <label>
+                                                                            <?php echo $idioma->getText("carteiraDestino") ?>
+                                                                        </label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="endereco" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row" id="redeMoeda">
+                                                                <div class="">
+                                                                    <label>Escolha a rede de saque: </label>
+                                                                </div>
+                                                                <div class="">
+                                                                    <div data-toggle="buttons" class="btn-group"
+                                                                        id="optionsRede">
+                                                                        <label class="btn btn-white" id="erc20"> <input
+                                                                                type="radio" name="optionRede"
+                                                                                value="<?php echo \Utils\Constantes::REDE_ERC20 ?>">ERC20</label>
+                                                                        <label class="btn btn-white" id="bep20"> <input
+                                                                                type="radio" name="optionRede"
+                                                                                value="<?php echo \Utils\Constantes::REDE_BEP20 ?>">BEP20</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12 m-b-lg">
+                                                                    <div class="form-group">
+                                                                        <label>
+                                                                            <?php echo $idioma->getText("volume") ?>
+                                                                        </label>
+                                                                        <div class="input-group">
+                                                                            <input type="text" class="form-control"
+                                                                                inputmode="numeric" pattern="[0-9]*"
+                                                                                id="valor" name="valor"
+                                                                                value="0.00000000" />
+                                                                            <span class="input-group-btn">
+                                                                                <button type="button"
+                                                                                    class="btn btn-primary"
+                                                                                    onclick="getSaldoDisponivel();">
+                                                                                    <?php echo $idioma->getText("meuSaldoTotal") ?>
+                                                                                </button>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <label style="margin-top: 5px !important;">
+                                                                                <span>
+                                                                                    <?php echo $idioma->getText("taxa") ?>:
+                                                                                </span> <span
+                                                                                    id="comissaoCobradaBtc"></span></br>
+                                                                                <strong><span>
+                                                                                        <?php echo $idioma->getText("seraDebitado") ?>:
+                                                                                    </span> <span
+                                                                                        id="debitadoBtc"></span></strong></br>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-12 col-xs-12 m-t-xs">
-                                                    <button class="btn btn-success full-width" onclick="transferirCurrency();"><?php echo $idioma->getText("confirmar") ?></button>
+                                                <div class="row">
+                                                    <h3 class="m-l-md text-center" id="limiteDisponivelCripto"></h3>
+                                                    <div class="col-lg-12 col-xs-12 col-sm-12">
+                                                        <button class="btn btn-primary full-width" id="btnTransferir"
+                                                            onclick="confirmarTransferencia();" disabled>
+                                                            <?php echo $idioma->getText("transferir") ?>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div id="carregaToken" class="text-center"></div>
+                                            <div class="row  p-md" id="token2fa">
+                                                <div class="col-lg-12">
+                                                    <label>
+                                                        <?php echo $idioma->getText("insiraSeuToken") ?>
+                                                    </label>
+                                                    <dl class="dl-horizontal m-t-sm">
+                                                        <dt class="border-bottom">
+                                                            <?php echo $idioma->getText("volume") ?>:
+                                                        </dt>
+                                                        <dd id="volumeConfirmar">-</dd>
+                                                        <dt class="border-bottom">
+                                                            <?php echo $idioma->getText("carteira") ?>:
+                                                        </dt>
+                                                        <dd id="enderecoConfirmar">-</dd>
+                                                        <dt class="border-bottom" id="redeConfirmar">
+                                                            <?php echo "Rede" ?>:
+                                                        </dt>
+                                                        <dd id="rede">-</dd>
+                                                    </dl>
 
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-xs-12">
+                                                            <div class="form-group">
+                                                                <label>
+                                                                    <?php echo $idioma->getText("pin") ?>
+                                                                </label>
+                                                                <input type="password" inputmode="numeric"
+                                                                    pattern="[0-9]*" class="form-control full-width"
+                                                                    id="pin" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-xs-12">
+                                                            <div class="form-group m-b-none">
+                                                                <label>
+                                                                    <?php echo $idioma->getText("token2fa") ?>
+                                                                </label>
+                                                                <input type="text" inputmode="numeric" pattern="[0-9]*"
+                                                                    class="form-control full-width" id="token" />
+                                                                <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
+                                                                <a href="javascript:confirmarTransferencia();"
+                                                                    id="reenviarLink">
+                                                                    <?php echo $idioma->getText("reenviar2fa") ?>
+                                                                </a>
+                                                                <?php } ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row p-h-sm">
+                                                        <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                            <button class="btn btn-white full-width"
+                                                                onclick="cancelarTransferencia();">
+                                                                <?php echo $idioma->getText("cancelar") ?>
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-lg-12 col-xs-12 m-t-xs">
+                                                            <button class="btn btn-success full-width"
+                                                                onclick="transferirCurrency();">
+                                                                <?php echo $idioma->getText("confirmar") ?>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- <div class="card mtb15">
-                <div class="row">
+            <div class="col-md-12 col-lg-3 settings">
+                <div class="card mtb15">
                     <div class="card-body">
-
-                        <div id="tabelaReais">
+                        <div class="row m-t-md m-l-sm" id="infGerais">
+                            <div class="col-sm-12 m-b-lg">
                                 <div class="">
-                                    <div class="col-sm-3 ">
-                                        <div class=" p-xs">
-                                            <select class="form-control input-sm" id="filtroStatus">
-                                                <option value="T"><?php echo $idioma->getText("todos") ?></option>
-                                                <option value="<?php echo Utils\Constantes::STATUS_DEPOSITO_PENDENTE ?>"><?php echo $idioma->getText("pendente") ?></option>
-                                                <option value="<?php echo Utils\Constantes::STATUS_DEPOSITO_CONFIRMADO ?>"><?php echo $idioma->getText("confirmado") ?></option>
-                                                <option value="<?php echo Utils\Constantes::STATUS_DEPOSITO_CANCELADO ?>"><?php echo $idioma->getText("cancelado") ?></option>
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-sm-5 ">
-                                        <div data-toggle="buttons" class="btn-group p-xs" id="radioDatas">
-                                            <button type="button" class="btn-white" onclick="filterBtnReal('dia');" id="diaReal"><?php echo $idioma->getText("dia") ?></button>
-                                            <button type="button" class="btn-white" onclick="filterBtnReal('semana');" id="semanaReal"><?php echo $idioma->getText("semana") ?></button>
-                                            <button type="button" class="btn-white" onclick="filterBtnReal('mes');" id="mesReal"><?php echo $idioma->getText("mes") ?></button>
-                                            <button type="button" class="btn-white" onclick="filterBtnReal('todos');" id="todosReal"><?php echo $idioma->getText("todos") ?></button>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4 ">
-                                        <div class="input-group p-xs">
-                                            <input type="text" id="filtroTextoReal" placeholder="<?php echo $idioma->getText("pesquisar") ?>" class="input-sm form-control"><span class="input-group-btn">
-                                                        <button type="button" class="btn btn-sm btn-primary" onclick="filtrarReaisAux();">&nbsp;<i class="fa fa-search"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-default" onclick="limpaSearchReal();">&nbsp;<i class="fa fa-eraser"></i></button></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="table-responsive m-t-sm">
-                                            <table id="tbllistareais" class="table table-striped text-center" data-paging="true" data-limit-navigation="3" data-paging-size="3" data-paging-limit="10" style="font-size: 12px;">
-                                                <thead>
-                                                <tr>
-                                                    <th class="text-center">
-                                                        <?php echo $idioma->getText("data") ?>
-                                                    </th>
-                                                    <th class="text-center">
-                                                        <?php echo $idioma->getText("valor") ?>
-                                                    </th>
-                                                    <th class="text-center">
-                                                        <?php echo $idioma->getText("comissaoP") ?>
-                                                    </th>
-                                                    <th class="text-center">
-                                                        <?php echo $idioma->getText("taxaTed") ?>
-                                                    </th>
-                                                    <th class="text-center">
-                                                        <?php echo $idioma->getText("creditado") ?>
-                                                    </th>
-                                                    <th class="text-center">
-                                                        <?php echo $idioma->getText("status") ?>
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="listaReais">
-
-                                                </tbody>
-                                                <tfoot>
-                                                <tr>
-                                                <tr>
-                                                    <td colspan="12">
-                                                        <ul class="pagination pull-right"></ul>
-                                                    </td>
-                                                </tr>
-                                                </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                        </div>
-
-
-
-                        <div id="tabelaMoeda">
-                                <div class="row">
-                                    <div class="col-sm-6 pull-left">
-                                        <div data-toggle="buttons" class="btn-group p-xs" id="radioDatasBtc">
-                                            <button type="button" class="btn-white" onclick="filterBtn('dia');" id="diaBtc"><?php echo $idioma->getText("dia") ?></button>
-                                            <button type="button" class="btn-white" onclick="filterBtn('semana');" id="semanaBtc"><?php echo $idioma->getText("semana") ?></button>
-                                            <button type="button" class="btn-white" onclick="filterBtn('mes');" id="mesBtc"><?php echo $idioma->getText("mes") ?></button>
-                                            <button type="button" class="btn-white" onclick="filterBtn('todos');" id="todosBtc"><?php echo $idioma->getText("todos") ?></button>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 pull-left">
-                                        <div class="input-group p-xs">
-                                            <input type="text" id="filtroTextoBtc" placeholder="<?php echo $idioma->getText("pesquisar") ?>" class="input-sm form-control"><span class="input-group-btn">
-                                            <div class="input-group-prepend">
-                                                <button type="button" class="btn btn-sm btn-primary" onclick="filtrarBtcAux();">&nbsp;<i class="fa fa-search"></i></button>
-                                                <button type="button" class="btn btn-sm btn-default" onclick="limpaSearchBtc();">&nbsp;<i class="fa fa-eraser"></i></button></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="table-responsive ">
-                                    <table id="tbllistabtc" class="table table-striped text-center" data-paging="true" data-limit-navigation="3" data-paging-size="3" data-paging-limit="10" style="font-size: 12px;">
-                                        <thead>
-                                        <tr>
-                                            <th class="text-center"><?php echo $idioma->getText("data") ?></th>
-                                            <th class="text-center"><?php echo $idioma->getText("volume") ?></th>
-                                            <th class="text-center"><?php echo $idioma->getText("taxa") ?></th>
-                                            <th class="text-center"><?php echo $idioma->getText("carteira") ?></th>
-                                            <th class="text-center"><?php echo $idioma->getText("hash") ?></th>
-                                            <th class="text-center"><?php echo $idioma->getText("status") ?></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="listaCripto">
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td colspan="5">
-                                                <ul class="pagination pull-right"></ul>
-                                            </td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-
-                        </div>
-
-
-                        <div id="tabelaAtar">
-                                <div class="row">
-                                    <div class="col-sm-5">
-                                        <div data-toggle="buttons" class="btn-group p-xs" id="radioDatasAtar" >
-                                            <label class="btn btn-sm btn-white" id="diaAtar"> <input type="radio"  name="optionsAtar" value="dia"><?php echo $idioma->getText("dia") ?></label>
-                                            <label class="btn btn-sm btn-white active" id="semanaAtar"> <input type="radio"  name="optionsAtar" value="semana"><?php echo $idioma->getText("semana") ?></label>
-                                            <label class="btn btn-sm btn-white" id="mesAtar"> <input type="radio"  name="optionsAtar" value="mes"><?php echo $idioma->getText("mes") ?></label>
-                                            <label class="btn btn-sm btn-white" id="todosAtar"> <input type="radio"  name="optionsAtar" value="todos"><?php echo $idioma->getText("todos") ?></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-offset-2 col-sm-5">
-                                        <div class="input-group p-xs">
-                                            <input type="text" id="filtroTextoAtar" placeholder="<?php echo $idioma->getText("pesquisar") ?>" class="input-sm form-control"><span class="input-group-btn">
-                                                        <button type="button" class="btn btn-sm btn-primary" onclick="filtrarAtarAux();">&nbsp;<i class="fa fa-search"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-default" onclick="filtrarAtar();">&nbsp;<i class="fa fa-eraser"></i></button></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="table-responsive ">
-                                    <table id="tbllistaAtar" class="table table-striped text-center" data-paging="true" data-limit-navigation="3" data-paging-size="3" data-paging-limit="10" style="font-size: 12px;">
-                                        <thead>
-                                        <tr>
-                                            <th class="text-center">
-                                                <?php echo $idioma->getText("data") ?>
-                                            </th>
-                                            <th class="text-center">
-                                                <?php echo $idioma->getText("valor") ?>
-                                            </th>
-                                            <th class="text-center">
-                                                <?php echo $idioma->getText("comissaoP") ?>
-                                            </th>
-                                            <th class="text-center">
-                                                <?php echo $idioma->getText("taxaTed") ?>
-                                            </th>
-                                            <th class="text-center">
-                                                <?php echo $idioma->getText("creditado") ?>
-                                            </th>
-                                            <th class="text-center">
-                                                <?php echo "Destino" ?>
-                                            </th>
-                                            <th class="text-center">
-                                                <?php echo $idioma->getText("status") ?>
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="listaAtar">
-
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td colspan="7">
-                                                <ul class="pagination pull-right"></ul>
-                                            </td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-        </div>
-
-        <div class="col-md-12 col-lg-3">
-            <div class="card mtb15">
-                <div class="card-body">
-                    <div class="row m-t-md m-l-sm" id="infGerais">
-                        <div class="col-sm-12 m-b-lg">
-                            <div class="">
-                                <div class="list-indicados">
-                                    <div class="">
-                                        <div class="col-sm-12">
-                                            <div id="avisoFiat">
-                                            </div>
-                                            <div id="avisoCurrency">
-                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                                                    <div class="vertical-timeline-block">
-                                                        <div class="vertical-timeline-icon yellow-bg">
-                                                            <i class="fa fa-exclamation-triangle fa-1x"></i>
-                                                        </div>
-                                                        <div class="vertical-timeline-content">
-                                                            <strong class="text-left"><?php echo $idioma->getText("atencao") ?></strong>
-                                                            <small>
-                                                                <ul>
-                                                                    <li class="m-t-xs"><?php echo $idioma->getText("irreversiveis") ?></li>
-                                                                    <li class="m-t-xs" id="aceitaRede"></li>
-                                                                </ul>
-                                                            </small>
+                                    <div class="list-indicados">
+                                        <div class="">
+                                            <div class="col-sm-12">
+                                                <div id="avisoFiat">
+                                                </div>
+                                                <div id="avisoCurrency">
+                                                    <div id="vertical-timeline"
+                                                        class="vertical-container light-timeline no-margins">
+                                                        <div class="vertical-timeline-block">
+                                                            <div class="vertical-timeline-icon yellow-bg">
+                                                                <i class="fa fa-exclamation-triangle fa-1x"></i>
+                                                            </div>
+                                                            <div class="vertical-timeline-content">
+                                                                <strong class="text-left">
+                                                                    <?php echo $idioma->getText("atencao") ?>
+                                                                </strong>
+                                                                <small>
+                                                                    <ul>
+                                                                        <li class="m-t-xs">
+                                                                            <?php echo $idioma->getText("irreversiveis") ?>
+                                                                        </li>
+                                                                        <li class="m-t-xs" id="aceitaRede"></li>
+                                                                    </ul>
+                                                                </small>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div id="infFiat">
-                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                                                    <?php if ($configuracao->atarAtivo == 1) { ?>
+                                                <div id="infFiat">
+                                                    <div id="vertical-timeline"
+                                                        class="vertical-container light-timeline no-margins">
+                                                        <?php if ($configuracao->atarAtivo == 1) { ?>
                                                         <div class="vertical-timeline-block">
                                                             <div class="vertical-timeline-icon blue-bg">
                                                                 <i class="fa fa-info fa-1x"></i>
                                                             </div>
                                                             <div class="vertical-timeline-content">
-                                                                <strong class="text-left"><?php echo "ATAR PAY" ?></strong><!--informacoes-->
-                                                                <small><ul>
-                                                                        <li class="m-t-xs"><?php echo "Saques via Atar Pay são instantâneos e 24/7." ?></li>
-                                                                        <li class="m-t-xs"><?php echo "Baixe o app Atar Pay e crie sua conta grátis em apenas 2 minutos." ?></li>
-                                                                        <li class="m-t-xs"><a href="https://apps.apple.com/br/app/atar-pay/id1144625341" target="atar_pay"><?php echo "Link iOS" ?></a></li>
-                                                                        <li class="m-t-xs"><a href="https://play.google.com/store/apps/details?id=com.wearatar.atarpay&hl=en" target="atar_pay"><?php echo "Link Android" ?></a></li>
-                                                                        <li class="m-t-xs">Valor disponível para saque: <span id="atarSaldo">R$ 0,00</span></li>
-                                                                    </ul></small>
+                                                                <strong class="text-left">
+                                                                    <?php echo "ATAR PAY" ?>
+                                                                </strong><!--informacoes-->
+                                                                <small>
+                                                                    <ul>
+                                                                        <li class="m-t-xs">
+                                                                            <?php echo "Saques via Atar Pay são instantâneos e 24/7." ?>
+                                                                        </li>
+                                                                        <li class="m-t-xs">
+                                                                            <?php echo "Baixe o app Atar Pay e crie sua conta grátis em apenas 2 minutos." ?>
+                                                                        </li>
+                                                                        <li class="m-t-xs"><a
+                                                                                href="https://apps.apple.com/br/app/atar-pay/id1144625341"
+                                                                                target="atar_pay">
+                                                                                <?php echo "Link iOS" ?>
+                                                                            </a></li>
+                                                                        <li class="m-t-xs"><a
+                                                                                href="https://play.google.com/store/apps/details?id=com.wearatar.atarpay&hl=en"
+                                                                                target="atar_pay">
+                                                                                <?php echo "Link Android" ?>
+                                                                            </a></li>
+                                                                        <li class="m-t-xs">Valor disponível para saque:
+                                                                            <span id="atarSaldo">R$ 0,00</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </small>
                                                             </div>
                                                         </div>
-                                                    <?php } ?>
-                                                    <div class="vertical-timeline-block">
-                                                        <div class="vertical-timeline-icon blue-bg">
-                                                            <i class="fa fa-info fa-1x"></i>
-                                                        </div>
-                                                        <div class="vertical-timeline-content">
-                                                            <strong class="text-left"><?php echo $idioma->getText("informacoes") ?></strong>
-                                                            <small><ul>
-                                                                    <li class="m-t-xs" id="limiteInformacaoReal"></li>
-                                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque5"); ?></li>
-                                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque6"); ?></li>
-                                                                    <li class="m-t-xs"><?php echo str_replace("{var}", $valorMinReais, $idioma->getText("saque1")) ?></li>
-                                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque2") ?></li>
-                                                                    <li class="m-t-xs"><?php echo $idioma->getText("saque3") ?></li>
-                                                                    <li class="m-t-xs"><?php echo $idioma->getText("paraBrasileiro") ?></li>
-                                                                </ul></small>
+                                                        <?php } ?>
+                                                        <div class="vertical-timeline-block">
+                                                            <div class="vertical-timeline-icon blue-bg">
+                                                                <i class="fa fa-info fa-1x"></i>
+                                                            </div>
+                                                            <div class="vertical-timeline-content">
+                                                                <strong class="text-left">
+                                                                    <?php echo $idioma->getText("informacoes") ?>
+                                                                </strong>
+                                                                <small>
+                                                                    <ul>
+                                                                        <li class="m-t-xs" id="limiteInformacaoReal">
+                                                                        </li>
+                                                                        <li class="m-t-xs">
+                                                                            <?php echo $idioma->getText("saque5"); ?>
+                                                                        </li>
+                                                                        <li class="m-t-xs">
+                                                                            <?php echo $idioma->getText("saque6"); ?>
+                                                                        </li>
+                                                                        <li class="m-t-xs">
+                                                                            <?php echo str_replace("{var}", $valorMinReais, $idioma->getText("saque1")) ?>
+                                                                        </li>
+                                                                        <li class="m-t-xs">
+                                                                            <?php echo $idioma->getText("saque2") ?>
+                                                                        </li>
+                                                                        <li class="m-t-xs">
+                                                                            <?php echo $idioma->getText("saque3") ?>
+                                                                        </li>
+                                                                        <li class="m-t-xs">
+                                                                            <?php echo $idioma->getText("paraBrasileiro") ?>
+                                                                        </li>
+                                                                    </ul>
+                                                                </small>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div id="infCurrency">
-                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                                                    <div class="vertical-timeline-block">
-                                                        <div class="vertical-timeline-icon blue-bg">
-                                                            <i class="fa fa-info fa-1x"></i>
-                                                        </div>
-                                                        <div class="vertical-timeline-content">
-                                                            <strong class="text-left"><?php echo $idioma->getText("informacoes") ?></strong>
-                                                            <small><ul>
-                                                                    <li class="m-t-xs" id="limiteInformacaoCripto"></li>
-                                                                    <li class="m-t-xs" id="useCarteira"></li>
-                                                                    <li class="m-t-xs" id="taxasMoeda"></li>
-                                                                </ul></small>
+                                                <div id="infCurrency">
+                                                    <div id="vertical-timeline"
+                                                        class="vertical-container light-timeline no-margins">
+                                                        <div class="vertical-timeline-block">
+                                                            <div class="vertical-timeline-icon blue-bg">
+                                                                <i class="fa fa-info fa-1x"></i>
+                                                            </div>
+                                                            <div class="vertical-timeline-content">
+                                                                <strong class="text-left">
+                                                                    <?php echo $idioma->getText("informacoes") ?>
+                                                                </strong>
+                                                                <small>
+                                                                    <ul>
+                                                                        <li class="m-t-xs" id="limiteInformacaoCripto">
+                                                                        </li>
+                                                                        <li class="m-t-xs" id="useCarteira"></li>
+                                                                        <li class="m-t-xs" id="taxasMoeda"></li>
+                                                                    </ul>
+                                                                </small>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -759,7 +775,7 @@ if(!empty($cliente->moedaFavorita)){
 
     <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
 <script>
-    var comissao = <?php echo number_format($comissao, 2, ".", "")?>;
+    var comissao = <?php echo number_format($comissao, 2, ".", "") ?>;
     var dataReal = "";
     var dataAtar = "";
     var dataCoin = "";
@@ -875,16 +891,16 @@ if(!empty($cliente->moedaFavorita)){
     });
 
 
-    <?php if($configuracao->atarAtivo == 1){ ?>
+    <?php if ($configuracao->atarAtivo == 1) { ?>
 
-        atarSaldo();
-        setInterval(atarSaldo, 10000);
+            atarSaldo();
+            setInterval(atarSaldo, 10000);
 
-        $("#radioDatasAtar input").on('change', function(){
-            dataAtar = $('input[name="optionsAtar"]:checked', '#radioDatasAtar').val();
-            filtrarAtar();
-        });
-    <?php }?>
+            $("#radioDatasAtar input").on('change', function(){
+                dataAtar = $('input[name="optionsAtar"]:checked', '#radioDatasAtar').val();
+                filtrarAtar();
+            });
+    <?php } ?>
 
         new Clipboard("#btn-link-ref");
 
@@ -1010,7 +1026,7 @@ if(!empty($cliente->moedaFavorita)){
         $("#carregaToken").html("<img src='<?php echo IMAGES ?>loading.gif' />");
 
         $.ajax({
-                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_AUTORIZACAO_TOKEN  ?>',
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_AUTORIZACAO_TOKEN ?>',
                 method: 'post',
                 dataType: 'json',
                 data: {
@@ -1207,7 +1223,7 @@ if(!empty($cliente->moedaFavorita)){
     function filtrarBtc() {
         $("#listaCripto").html("<tr><td colspan='6' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
         $.ajax({
-            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_TRANSFERENCIAS_FILTRAR  ?>',
+            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_BTC_TRANSFERENCIAS_FILTRAR ?>',
             method: 'post',
             dataType: 'json',
             data: {
@@ -1487,7 +1503,7 @@ if(!empty($cliente->moedaFavorita)){
                                     trigger: "focus",
                                     container: "body",
                                     placement: "top",
-                                    title: "<?php echo $idioma->getText("controle")?> " + controle,
+                                    title: "<?php echo $idioma->getText("controle") ?> " + controle,
                                     content: motivo
                                 });
                             });
@@ -1528,141 +1544,141 @@ if(!empty($cliente->moedaFavorita)){
         }
     }
 
-    <?php if($configuracao->atarAtivo == 1 ) { ?>
+    <?php if ($configuracao->atarAtivo == 1) { ?>
 
-    function atarSaldo() {
-        $.ajax({
-            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_SALDO ?>',
-            method: 'post',
-            dataType: 'json',
-            success: function (json) {
-                try {
-                    if (json.sucesso) {
-                        $("#atarSaldo").html(json.atarSaldo);
-                    } else {
-                        $("#atarSaldo").html("R$ 0,00");
+        function atarSaldo() {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_SALDO ?>',
+                method: 'post',
+                dataType: 'json',
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#atarSaldo").html(json.atarSaldo);
+                        } else {
+                            $("#atarSaldo").html("R$ 0,00");
+                        }
+                    } catch (e) {
+
                     }
-                } catch (e) {
-
                 }
-            }
-        });
-    }
+            });
+        }
 
 
-    function atar() {
-        $("#tokenAtar").val("");
-        $("#pinAtar").val("");
-        $("#token2faBrl").hide();
-        $("#infReais").hide();
-        $("#carregaTokenBrl").show();
-        $("#carregaTokenBrl").html("<img src='<?php echo IMAGES ?>loading.gif' />");
+        function atar() {
+            $("#tokenAtar").val("");
+            $("#pinAtar").val("");
+            $("#token2faBrl").hide();
+            $("#infReais").hide();
+            $("#carregaTokenBrl").show();
+            $("#carregaTokenBrl").html("<img src='<?php echo IMAGES ?>loading.gif' />");
 
-        $("#btnSalvar").prop("disabled", true);
-        $.ajax({
-            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_TOKEN ?>',
-            method: 'post',
-            dataType: 'json',
-            data: {
-                valorReais: $("#valorReais").val(),
-                documento: $("#atarDoc").val()
-            },
-            success: function (json) {
-                try {
-                    if (json.sucesso) {
-                            $("#tokenBrl").val("");
-                            $("#pinBrl").val("");
+            $("#btnSalvar").prop("disabled", true);
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_TOKEN ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    valorReais: $("#valorReais").val(),
+                    documento: $("#atarDoc").val()
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                                $("#tokenBrl").val("");
+                                $("#pinBrl").val("");
+                                $("#carregaTokenBrl").hide();
+                                $("#token2faAtar").show();
+                                $("#documentoAtar").html(json.documentoCPF);
+                                $("#valorSolicitadoAtar").html("R$ " + json.valorSolicitado);
+                                $("#valorSaqueAtar").html("R$ " + json.valorSaque);
+                                showNotyAlert(json.mensagem, "s");
+
+                        } else {
+                            $("#token2faAtar").hide();
                             $("#carregaTokenBrl").hide();
-                            $("#token2faAtar").show();
-                            $("#documentoAtar").html(json.documentoCPF);
-                            $("#valorSolicitadoAtar").html("R$ " + json.valorSolicitado);
-                            $("#valorSaqueAtar").html("R$ " + json.valorSaque);
-                            showNotyAlert(json.mensagem, "s");
-
-                    } else {
+                            $("#infReais").show();
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
                         $("#token2faAtar").hide();
                         $("#carregaTokenBrl").hide();
                         $("#infReais").show();
-                        showNotyAlert(json.mensagem, "e");
+                        showNotyAlert(e, "e");
                     }
-                } catch (e) {
-                    $("#token2faAtar").hide();
-                    $("#carregaTokenBrl").hide();
-                    $("#infReais").show();
-                    showNotyAlert(e, "e");
+
+                    $("#btnSalvar").prop("disabled", false);
                 }
+            });
+        }
 
-                $("#btnSalvar").prop("disabled", false);
-            }
-        });
-    }
+        function saqueAtar() {
+            $("#token2faAtar").hide();
+            $("#carregaTokenBrl").show();
+            $("#carregaTokenBrl").html("<img src='<?php echo IMAGES ?>loading.gif' />");
 
-    function saqueAtar() {
-        $("#token2faAtar").hide();
-        $("#carregaTokenBrl").show();
-        $("#carregaTokenBrl").html("<img src='<?php echo IMAGES ?>loading.gif' />");
+            $("#btnSalvar").prop("disabled", true);
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_SALVAR ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    valorReais: $("#valorReais").val(),
+                    documento: $("#atarDoc").val(),
+                    token: $("#tokenAtar").val(),
+                    pin: $("#pinAtar").val()
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            $("#carregaTokenBrl").hide();
+                            $("#infReais").show();
+                            filtrarAtar();
+                            showNotyAlert(json.mensagem, "s");
 
-        $("#btnSalvar").prop("disabled", true);
-        $.ajax({
-            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_SALVAR ?>',
-            method: 'post',
-            dataType: 'json',
-            data: {
-                valorReais: $("#valorReais").val(),
-                documento: $("#atarDoc").val(),
-                token: $("#tokenAtar").val(),
-                pin: $("#pinAtar").val()
-            },
-            success: function (json) {
-                try {
-                    if (json.sucesso) {
+                        } else {
+                            $("#carregaTokenBrl").hide();
+                            $("#infReais").show();
+                            showNotyAlert(json.mensagem, "e");
+                        }
+                    } catch (e) {
+                        $("#token2faAtar").hide();
                         $("#carregaTokenBrl").hide();
                         $("#infReais").show();
-                        filtrarAtar();
-                        showNotyAlert(json.mensagem, "s");
-
-                    } else {
-                        $("#carregaTokenBrl").hide();
-                        $("#infReais").show();
-                        showNotyAlert(json.mensagem, "e");
+                        showNotyAlert(e, "e");
                     }
-                } catch (e) {
-                    $("#token2faAtar").hide();
-                    $("#carregaTokenBrl").hide();
-                    $("#infReais").show();
-                    showNotyAlert(e, "e");
+
+                    $("#btnSalvar").prop("disabled", false);
                 }
+            });
+        }
 
-                $("#btnSalvar").prop("disabled", false);
-            }
-        });
-    }
+        function filtrarAtar() {
+            $("#listaAtar").html("<tr><td colspan='7' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_LISTAR ?>',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    data: dataAtar,
+                    filtro: $("#filtroTextoAtar").val()
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                                $("#listaAtar").html(json.html);
+                                $('#tbllistaAtar').trigger('footable_initialize');
+                        } else {
 
-    function filtrarAtar() {
-        $("#listaAtar").html("<tr><td colspan='7' class='text-center'><img src='<?php echo IMAGES ?>loading.gif' /></td></tr>");
-        $.ajax({
-            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_LISTAR ?>',
-            method: 'post',
-            dataType: 'json',
-            data: {
-                data: dataAtar,
-                filtro: $("#filtroTextoAtar").val()
-            },
-            success: function (json) {
-                try {
-                    if (json.sucesso) {
-                            $("#listaAtar").html(json.html);
-                            $('#tbllistaAtar').trigger('footable_initialize');
-                    } else {
-
-                        $("#listaAtar").html("<tr><td colspan='7' class='text-center'>"+json.mensagem+"</td></tr>");
+                            $("#listaAtar").html("<tr><td colspan='7' class='text-center'>"+json.mensagem+"</td></tr>");
+                        }
+                    } catch (e) {
+                        $("#listaAtar").html("<tr><td colspan='7' class='text-center'>"+e+"</td></tr>");
                     }
-                } catch (e) {
-                    $("#listaAtar").html("<tr><td colspan='7' class='text-center'>"+e+"</td></tr>");
                 }
-            }
-        });
-    }
+            });
+        }
     <?php } ?>
 
     function saque(processo) {

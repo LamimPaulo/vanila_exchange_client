@@ -253,231 +253,266 @@ $_data["idiomaMenu"] = $idioma;
     }
 </style>
 
-<div id="container">
-    <!-- <div class="col-md-12 col-lg-2">
-    </div> -->
-    <!-- <div class="col-md-12 col-lg-8"> -->
-    <div class="page_content">
-        <div class="settings mtb15">
-
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Link Para Compartilhamento</h5>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12">
+<div id="container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-11 mx-auto">
+            <div class="page_content">
+                <div class="settings mtb15">
+                    <div class="container-fluid">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Link Para Compartilhamento</h5>
+                                <div class="container">
                                     <div class="row">
-                                        <div class="alert alert-success m-t-md m-r-md">
-                                            <span id="linkReferencia" style="word-wrap: break-word;"><?php echo $linkCliente ?></span>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="alert alert-success m-t-md m-r-md">
+                                                    <span id="linkReferencia" style="word-wrap: break-word;">
+                                                        <?php echo $linkCliente ?>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+        
+                                        <div class="d-flex flex-column align-items-center">
+                                            <ul>
+                                                <li><span class="social-icon social-facebook" onclick="facebook();"><i
+                                                            class="fa fa-facebook"></i></span></li>
+                                                <li><span class="social-icon social-whatsapp" onclick="whatsapp();"><i
+                                                            class="fa fa-whatsapp"></i></span></li>
+                                                <li><span class="social-icon social-linkedin" onclick="telegram();"><i
+                                                            class="fa fa-telegram"></i></span></li>
+                                                <li><span class="social-icon social-instagram" onclick="email();"><i
+                                                            class="fa fa-envelope-o"></i></span></li>
+                                                <li><span id="copyRef" class="social-icon social-twitter"
+                                                        data-clipboard-target="#linkReferencia"><i
+                                                            class="fa fa-copy"></i></span></li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="d-flex flex-column align-items-center">
-                                    <ul>
-                                        <li><span class="social-icon social-facebook" onclick="facebook();"><i class="fa fa-facebook"></i></span></li>
-                                        <li><span class="social-icon social-whatsapp" onclick="whatsapp();"><i class="fa fa-whatsapp"></i></span></li>
-                                        <li><span class="social-icon social-linkedin" onclick="telegram();"><i class="fa fa-telegram"></i></span></li>
-                                        <li><span class="social-icon social-instagram" onclick="email();"><i class="fa fa-envelope-o"></i></span></li>
-                                        <li><span id="copyRef" class="social-icon social-twitter" data-clipboard-target="#linkReferencia"><i class="fa fa-copy"></i></span></li>
-                                    </ul>
-                                </div>
-
-
                             </div>
                         </div>
-
                     </div>
                 </div>
+                <div id="lista"></div>
             </div>
-        </div>
-
-        <div id="lista"></div>
-    </div>
-    <!-- <hr> -->
-
-    <div class="page_content col-md-6 col-xs-12">
-        <div class="settings">
-            <div class="container-fluid">
-                <div class=" justify-content-center">
-                    <?php foreach ($plans as $m) { ?>
-                        <div class="">
-                            <div class="card p-2">
-                                <h5 class="card-title p-2">Planos</h5>
-                                <div class="card-body" style="min-height: 473px;">
-                                    <div class="col no-gutters">
-                                        <div class="py-3">
-                                            <h4 class="text-uppercase"><?php echo $m->title; ?></h4>
-                                            <div class="allergy"><span> Seja um Gesto de Renda fixa digital! </span></div>
-                                            <div class="stats py-4">
-                                                <table class="table table-borderless">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-center head" scope="col">Nível</th>
-                                                            <th class="text-center head" scope="col">Saque</th>
-                                                            <th class="text-center head" scope="col">Ordem Compra</th>
-                                                            <th class="text-center head" scope="col">Ordem Venda</th>
-                                                            <th class="text-center head" scope="col">Ordem de plano</th>
-                                                            <th class="text-center head" scope="col">Gestao Renda Fixa</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                        <?php foreach ($m->limits as $l) { ?>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><strong><?php echo $l->level ?></strong></span> </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->withdrawal . '%' ?></span> </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->order_buy . '%' ?></span> </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->order_sell . '%' ?></span> </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->plan_purchase . '%' ?></span> </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex flex-column"> <span class="text-center head"></span> <span class="text-center bottom"><?php echo $l->manager . '%' ?></span> </div>
-                                                                </td>
-                                                            </tr>
-                                                        <?php } ?>
-                                                    </tbody>
-                                                </table>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="settings">
+                        <div class="container-fluid">
+                            <div class=" justify-content-center">
+                                <?php foreach ($plans as $m) { ?>
+                                <div class="">
+                                    <div class="card p-2">
+                                        <h5 class="card-title p-2">Planos</h5>
+                                        <div class="card-body" style="min-height: 473px;">
+                                            <div class="col no-gutters">
+                                                <div class="py-3">
+                                                    <h4 class="text-uppercase">
+                                                        <?php echo $m->title; ?>
+                                                    </h4>
+                                                    <div class="allergy"><span> Seja um Gesto de Renda fixa digital! </span></div>
+                                                    <div class="stats py-4">
+                                                        <table class="table table-borderless">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center head" scope="col">Nível</th>
+                                                                    <th class="text-center head" scope="col">Saque</th>
+                                                                    <th class="text-center head" scope="col">Ordem Compra</th>
+                                                                    <th class="text-center head" scope="col">Ordem Venda</th>
+                                                                    <th class="text-center head" scope="col">Ordem de plano</th>
+                                                                    <th class="text-center head" scope="col">Gestao Renda Fixa</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+            
+                                                                <?php foreach ($m->limits as $l) { ?>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="d-flex flex-column"> <span
+                                                                                class="text-center head"></span> <span
+                                                                                class="text-center bottom"><strong>
+                                                                                    <?php echo $l->level ?>
+                                                                                </strong></span> </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex flex-column"> <span
+                                                                                class="text-center head"></span> <span
+                                                                                class="text-center bottom">
+                                                                                <?php echo $l->withdrawal . '%' ?>
+                                                                            </span> </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex flex-column"> <span
+                                                                                class="text-center head"></span> <span
+                                                                                class="text-center bottom">
+                                                                                <?php echo $l->order_buy . '%' ?>
+                                                                            </span> </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex flex-column"> <span
+                                                                                class="text-center head"></span> <span
+                                                                                class="text-center bottom">
+                                                                                <?php echo $l->order_sell . '%' ?>
+                                                                            </span> </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex flex-column"> <span
+                                                                                class="text-center head"></span> <span
+                                                                                class="text-center bottom">
+                                                                                <?php echo $l->plan_purchase . '%' ?>
+                                                                            </span> </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex flex-column"> <span
+                                                                                class="text-center head"></span> <span
+                                                                                class="text-center bottom">
+                                                                                <?php echo $l->manager . '%' ?>
+                                                                            </span> </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php } ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <?php
+                                                if($current_plan[0]->plan->title == $m->title){?>
+                                            <button onclick="listar('<?php echo $m->id ?>')" disabled type="button"
+                                                class="btn btn-primary btn-block"> Já Contratado!</button>
+                                            <?php } else { ?>
+                                            <button onclick="listar('<?php echo $m->id ?>')" type="button"
+                                                class="btn btn-primary btn-block">
+                                                <?php echo $m->price_local; ?> - Contratar
+                                            </button>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="settings mtb15">
+                        <div class="container-fluid">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Filtrar por Período</h5>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group" id="datas">
+                                                <label class="control-label">Período</label>
+                                                <div class="input-daterange input-group full-width" id="datepicker">
+                                                    <input type="text" id="dataInicial" class=" form-control" name="dataInicial"
+                                                        value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                                    <span class="input-group-addon">Até</span>
+                                                    <input type="text" id="dataFinal" class=" form-control" name="dataFinal"
+                                                        value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Moedas</label>
+                                                <select class="form-control custom-select" id="idMoeda">
+                                                    <?php foreach ($moedas as $m) { ?>
+                                                    <option value="<?php echo \Utils\Criptografia::encriptyPostId($m->id) ?>" <?php echo
+                                                        $m->id == $moedaFavorita ? "selected" : ""; ?>>
+                                                        <?php echo $m->simbolo . " - " . $m->nome ?>
+                                                    </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>
+                                                    <?php echo "Registro" ?>
+                                                </label>
+                                                <select class="form-control custom-select" id="registros">
+                                                    <option value="30">30</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                    <option value="T">
+                                                        <?php echo "Todos" ?>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <label>&nbsp;</label>
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-light full-width" onclick="filtrar()">
+                                                    <?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card">
-                                    <?php
-                                    if($current_plan[0]->plan->title == $m->title){?>
-                                        <button onclick="listar('<?php echo $m->id ?>')" disabled type="button" class="btn btn-primary btn-block"> Já Contratado!</button>
-                                    <?php } else { ?>
-                                        <button onclick="listar('<?php echo $m->id ?>')" type="button" class="btn btn-primary btn-block"> <?php echo $m->price_local; ?> - Contratar</button>
-                                    <?php } ?>
-                                    <!-- <button onclick="listar('<?php echo $m->id ?>')" type="button" class="btn btn-primary btn-block"> <?php echo $m->price_local; ?> - Contratar</button> -->
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-    <!-- <hr> -->
-
-
-
-    <div class="settings mtb15">
-        <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Filtrar por Período</h5>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group" id="datas">
-                                <label class="control-label">Período</label>
-                                <div class="input-daterange input-group full-width" id="datepicker">
-                                    <input type="text" id="dataInicial" class=" form-control" name="dataInicial" value="<?php echo $dataInicial->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                    <span class="input-group-addon">Até</span>
-                                    <input type="text" id="dataFinal" class=" form-control" name="dataFinal" value="<?php echo $dataFinal->formatar(\Utils\Data::FORMATO_PT_BR) ?>">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Moedas</label>
-                                <select class="form-control custom-select" id="idMoeda">
-                                    <?php foreach ($moedas as $m) { ?>
-                                        <option value="<?php echo \Utils\Criptografia::encriptyPostId($m->id) ?>" <?php echo $m->id == $moedaFavorita ? "selected" : ""; ?>><?php echo $m->simbolo . " - " . $m->nome ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label><?php echo "Registro" ?></label>
-                                <select class="form-control custom-select" id="registros">
-                                    <option value="30">30</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                    <option value="T"><?php echo "Todos" ?></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <label>&nbsp;</label>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-light full-width" onclick="filtrar()"><?php echo "Filtrar" ?>&nbsp;&nbsp;<i class="fa fa-filter"></i></button>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="settings mtb15">
-        <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Informações Gerais</h5>
-                    <div class="row m-l-xs">
-                        <div class="col-sm-1">
-                            <small class="stats-label">Moeda</small></br>
-                            <div id="moedaImg">-</div>
-                        </div>
-                        <div class="col-sm-12 col-md-2">
-                            <small class="stats-label">Qtd. Total Indicados</small>
-                            <h6 id="qtdReferencias">-</h4>
-                        </div>
-                        <div class="col-sm-12 col-md-2">
-                            <small class="stats-label">Total Depósitos</small>
-                            <h6 id="totalDepositos">-</h4>
-                        </div>
-                        <div class="col-sm-12 col-md-2">
-                            <small class="stats-label">Total Compra/Venda</small>
-                            <h6 id="totalCompraVenda">-</h4>
-                        </div>
-                        <div class="col-sm-12 col-md-2">
-                            <small class="stats-label">Total Saques</small>
-                            <h6 id="totalSaques">-</h4>
-                        </div>
-                        <div class="col-sm-12 col-md-2">
-                            <small class="stats-label">Total no Período</small>
-                            <h6><strong id="total">-</strong></h4>
-                        </div>
-                        <div class="col-sm-1">
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-down"></i>
-                                </a>
+                    <div class="settings mtb15">
+                        <div class="container-fluid">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Informações Gerais</h5>
+                                    <div class="row m-l-xs">
+                                        <div class="col-sm-1">
+                                            <small class="stats-label">Moeda</small></br>
+                                            <div id="moedaImg">-</div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-2">
+                                            <small class="stats-label">Qtd. Total Indicados</small>
+                                            <h6 id="qtdReferencias">-</h4>
+                                        </div>
+                                        <div class="col-sm-12 col-md-2">
+                                            <small class="stats-label">Total Depósitos</small>
+                                            <h6 id="totalDepositos">-</h4>
+                                        </div>
+                                        <div class="col-sm-12 col-md-2">
+                                            <small class="stats-label">Total Compra/Venda</small>
+                                            <h6 id="totalCompraVenda">-</h4>
+                                        </div>
+                                        <div class="col-sm-12 col-md-2">
+                                            <small class="stats-label">Total Saques</small>
+                                            <h6 id="totalSaques">-</h4>
+                                        </div>
+                                        <div class="col-sm-12 col-md-2">
+                                            <small class="stats-label">Total no Período</small>
+                                            <h6><strong id="total">-</strong></h4>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <div class="ibox-tools">
+                                                <a class="collapse-link">
+                                                    <i class="fa fa-chevron-down"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="settings mtb15">
-        <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Saldos</h5>
-                    <div class="row m-t-xs">
-                        <div class="col-lg-12">
-                            <div class="ibox float-e-margins ">
-                                <div class="list-items" id="detalhesReferencias">
-
+                    <div class="settings mtb15">
+                        <div class="container-fluid">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Saldos</h5>
+                                    <div class="row m-t-xs">
+                                        <div class="col-lg-12">
+                                            <div class="ibox float-e-margins ">
+                                                <div class="list-items" id="detalhesReferencias">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -486,11 +521,6 @@ $_data["idiomaMenu"] = $idioma;
             </div>
         </div>
     </div>
-</div>
-<!-- </div> -->
-<!-- <div class="col-md-12 col-lg-2">
-    </div> -->
-
 </div>
 
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>

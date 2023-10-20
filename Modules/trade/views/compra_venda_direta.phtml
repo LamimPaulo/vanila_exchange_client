@@ -24,6 +24,7 @@ $_data["idiomaMenu"] = $idioma;
     .border-edit {
         border: 1px solid #1c84c6 !important;
     }
+
     .carregando {
         background: url("<?php echo IMAGES ?>loading.gif") center no-repeat;
         width: 200px;
@@ -133,9 +134,8 @@ $_data["idiomaMenu"] = $idioma;
         justify-content: center;
         box-shadow: 0 5px 20px rgba(35, 49, 45, 0.14);
     }
-    .select2-container--default .select2-selection--single {
 
-    }
+    .select2-container--default .select2-selection--single {}
 </style>
 <?php Utils\Layout::append("inspina/metas", $_data) ?>
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
@@ -148,34 +148,34 @@ $_data["idiomaMenu"] = $idioma;
 </div> -->
 
 <div class="wrapper wrapper-content mostrar">
-
     <div class="settings mtb15">
         <div class="container-fluid">
             <div class="row">
-                <!-- <div class="col-md-12 col-lg-4">
-                </div> -->
-                <div class="col-md-12 col-lg-12">
+                <div class="col-12 col-md-11 mx-auto">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Conversão de Ativos</h5>
-
                             <div class="">
                                 <div class="row choose-position">
                                     <div class="col-lg-6 box-conversion-custom">
                                         <div class="form-group">
                                             <label for="from" class="d-flex justify-content-between">
-                                                <div class="info_saldo">Saldo: <a href="javascript:inserirSaldo();"><span id="saldo_disponivel"></span></a></div>
+                                                <div class="info_saldo">Saldo: <a
+                                                        href="javascript:inserirSaldo();"><span
+                                                            id="saldo_disponivel"></span></a></div>
                                             </label>
-                                            <input type="text" class="form-control choose-input" id="from" placeholder="Valor para conversão">
+                                            <input type="text" class="form-control choose-input" id="from"
+                                                placeholder="Valor para conversão">
                                         </div>
                                     </div>
-    
+
                                     <div class="col-lg-6 box-conversion-custom">
                                         <div class="form-group">
                                             <label for="from" class="d-flex justify-content-between">
                                                 <div>De:</div>
                                             </label>
-                                            <select id="cryptoFrom" class="crypto custom-select choose-position choose-position-input"></select>
+                                            <select id="cryptoFrom"
+                                                class="crypto custom-select choose-position choose-position-input"></select>
                                         </div>
                                     </div>
                                 </div>
@@ -188,11 +188,12 @@ $_data["idiomaMenu"] = $idioma;
                                             <label for="to" class="d-flex justify-content-between">
                                                 <div>Total Aproximado:</div>
                                             </label>
-                                            <input type="text" class="form-control choose-input" id="to" placeholder="Insira o valor total">
-    
+                                            <input type="text" class="form-control choose-input" id="to"
+                                                placeholder="Insira o valor total">
+
                                         </div>
                                     </div>
-    
+
                                     <div class="col-lg-6 box-conversion-custom">
                                         <div class="form-group">
                                             <label for="to" class="d-flex justify-content-between">
@@ -209,7 +210,7 @@ $_data["idiomaMenu"] = $idioma;
                                     <div class="col-lg-12 p-5 box-conversion-custom p-3 text-center">
 
                                         <div id="confirm-conversion" class="confirm-conversion">
-                                            <div class="justify-content-between" >
+                                            <div class="justify-content-between">
                                                 <span>Cotação:</span>&nbsp;<span id="cotacao">0,0000</span>
                                                 <br>
                                             </div>
@@ -221,134 +222,34 @@ $_data["idiomaMenu"] = $idioma;
                                                 <span>Por favor, confirmar no tempo máximo de 15 Segundos.</span>
                                             </div>
                                             <div class="d-flex align-items-center" style="margin: 20px 0">
-                                                <button id="cancel" class="btn btn-back btn-lg btn-primary d-flex align-items-center justify-content-center" style="margin-right: 10px; flex: 1;">Recomeçar</button>
-                                                <button id="convert" onclick="inserirOrdem();" class="ladda-button btn btn-conversion btn-lg btn-primary d-flex align-items-center justify-content-center" data-style="expand-right" style="flex: 1;">Converter em (15s)</button>
+                                                <button id="cancel"
+                                                    class="btn btn-back btn-lg btn-primary d-flex align-items-center justify-content-center"
+                                                    style="margin-right: 10px; flex: 1;">Recomeçar</button>
+                                                <button id="convert" onclick="inserirOrdem();"
+                                                    class="ladda-button btn btn-conversion btn-lg btn-primary d-flex align-items-center justify-content-center"
+                                                    data-style="expand-right" style="flex: 1;">Converter em
+                                                    (15s)</button>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="">
                                         <div class="col-lg-12 p-5">
-                                            <button id="btn_conversao" class="btn btn-lg btn-primary full-width" onclick="consultarPreco();">
+                                            <button id="btn_conversao" class="btn btn-lg btn-primary full-width"
+                                                onclick="consultarPreco();">
                                                 Calcular Conversão
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="settings mtb15">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12 col-lg-4">
-                </div>
-
-                <div class="col-md-12 col-lg-4">
-                    
-                </div>
-
-                <div class="col-md-12 col-lg-4">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- <div class="row">
-        <div class="col-sm-offset-0 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8">
-            <div class="ibox">
-                <div class="ibox-content box">
-                    <div class="row p-md">
-                        <div class="row choose-position">
-                            <div class="col-lg-6 box-conversion-custom">
-                                <div class="form-group">
-                                    <label for="from" class="d-flex justify-content-between">
-                                        <div class="info_saldo">Saldo Disponível: <a href="javascript:inserirSaldo();"><span id="saldo_disponivel"></span></a></div>
-                                    </label>
-                                    <input type="text" class="form-control choose-input" id="from" placeholder="Insira o valor de conversão">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 box-conversion-custom">
-                                <div class="form-group">
-                                    <label for="from" class="d-flex justify-content-between">
-                                        <div>De:</div>
-                                    </label>
-                                    <select id="cryptoFrom" class="crypto custom-select choose-position choose-position-input"></select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row choose-position">
-                            <div class="col-lg-6 box-conversion-custom">
-                                <div class="form-group">
-                                    <label for="to" class="d-flex justify-content-between">
-                                        <div>Total Aproximado:</div>
-                                    </label>
-                                    <input type="text" class="form-control choose-input" id="to" placeholder="Insira o valor total">
-
-                                </div>
-                            </div>
-                            <div class="col-lg-6 box-conversion-custom">
-                                <div class="form-group">
-                                    <label for="to" class="d-flex justify-content-between">
-                                        <div>Para:</div>
-                                    </label>
-                                    <select id="cryptoTo" class="crypto custom-select"></select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                        <div class="row choose-position">
-                            <div class="col-lg-12 p-5 box-conversion-custom p-3 text-center">
-
-                                <div id="confirm-conversion" class="confirm-conversion">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Cotação:</span>&nbsp;<span id="cotacao">0,0000</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center border-bottom">
-                                        <span>Será aproximadamente creditado em sua conta</span>
-                                        <h2 id="creditado_conta">0.00000000</h2>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center" style="font-size: 12px;">
-                                        <span>Por favor, confirmar no tempo máximo de 15 Segundos.</span>
-                                    </div>
-                                    <div class="d-flex align-items-center" style="margin: 20px 0">
-                                        <button id="cancel" class="btn btn-back btn-lg btn-primary d-flex align-items-center justify-content-center" style="margin-right: 10px; flex: 1;">Recomeçar</button>
-                                        <button id="convert" onclick="inserirOrdem();" class="ladda-button btn btn-conversion btn-lg btn-primary d-flex align-items-center justify-content-center" data-style="expand-right" style="flex: 1;">Converter em (15s)</button>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row m-t-md p-md">
-                                <div class="col-lg-12 p-5">
-                                    <button id="btn_conversao" class="btn btn-lg btn-primary full-width" onclick="consultarPreco();">
-                                        Calcular Conversão
-                                    </button>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-
-
-
+</div>
 
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
 <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
@@ -359,12 +260,12 @@ $_data["idiomaMenu"] = $idioma;
     var saldo = 0;
     var regressor = null;
     var casaDecimal = 8;
-    
-    $(document).ready(function() {
-        
+
+    $(document).ready(function () {
+
         $("#cryptoFrom").select2();
         $("#cryptoTo").select2();
-        
+
         $('#confirm-conversion').hide();
         $('#loading').hide();
 
@@ -376,18 +277,18 @@ $_data["idiomaMenu"] = $idioma;
             var data = $("#cryptoFrom").val();
             carregarTo(data);
         });
-        
+
         $("#cryptoTo").on('select2:select', function (e) {
             cancelar();
             $("#from").val("");
             $("#to").val("");
         });
 
-        $('#cancel').click(function(evt){
+        $('#cancel').click(function (evt) {
             evt.preventDefault();
             cancelar();
         });
-        
+
         $("#from, #to").maskMoney({
             decimal: ',',
             thousands: '.',
@@ -395,7 +296,7 @@ $_data["idiomaMenu"] = $idioma;
             allowNegative: false,
             precision: casaDecimal
         });
-    
+
         $("#from").keyup(function () {
             calculadora("FROM");
         });
@@ -407,32 +308,32 @@ $_data["idiomaMenu"] = $idioma;
         $.ajax({
             url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MERCADO_BALANCE ?>",
             method: "POST",
-            dataType:'json',
+            dataType: 'json',
             success: function (json) {
-                
-                if(json.sucesso){
+
+                if (json.sucesso) {
                     json.moedas.forEach(element => {
-                        option += '<option value="'+ element.id_moeda +'" title="'+element.imagem+'" data-decimal="'+element.decimal+'">'+element.simbolo+ ' - ' + element.nome +'</option>';
+                        option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
                     });
                     $('#cryptoFrom').html(option);
 
                     $(".crypto").select2({
                         templateResult: function (coin) {
-                            var $span = $("<span><img style='width: 25px;' src="+coin.title+" /> " + coin.text + "</span>");
+                            var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
                             return $span;
                         },
                         templateSelection: function (coin) {
-                            var $span = $("<span><img style='width: 25px;' src="+coin.title+" /> " + coin.text + "</span>");
+                            var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
                             return $span;
                         }
                     });
-                    
+
                     carregarTo($("#cryptoFrom").val());
                 }
             }
         });
     });
-    
+
     function cancelar() {
         $("#from").val("");
         $("#to").val("");
@@ -442,23 +343,23 @@ $_data["idiomaMenu"] = $idioma;
         preco = 0;
         time = 0;
     }
-    
+
     function inserirSaldo() {
         saldo = parseFloat(saldo);
         $('#from').maskMoney('mask', saldo);
         calculadora("FROM");
     }
-    
+
     function consultarPreco() {
-    
+
         $("#btn_conversao").prop("disabled", true);
-        
+
         var tipo = $("#cryptoTo option:selected").attr("data-tipo");
         var par = $("#cryptoTo option:selected").attr("data-par");
-        
+
         $('#creditado_conta').html("");
         $('#cotacao').html("");
-         
+
         $.ajax({
             url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MERCADO_PRECO ?>',
             method: 'post',
@@ -473,27 +374,27 @@ $_data["idiomaMenu"] = $idioma;
             success: function (json) {
                 try {
                     if (json.sucesso) {
-                        
+
                         $('#btn_conversao').hide();
                         $('#loading').hide();
-                        
+
                         $('#convert').text("Converter em (15s)");
-                        
+
                         clearInterval(regressor);
-                        
-                        if(json.preco > 0){
+
+                        if (json.preco > 0) {
                             $("#convert").prop("disabled", false);
                             regressor = setInterval(tempoAprovacao, 1000);
-                            
+
                         } else {
                             $("#convert").prop("disabled", true);
                         }
-                        
+
                         $('#creditado_conta').html(json.volume_format);
                         $('#to').val(json.volume.replace(".", ","));
                         $('#cotacao').html(json.preco_format);
                         preco = json.preco;
-                        
+
                         $('#confirm-conversion').show();
 
                     } else {
@@ -506,38 +407,38 @@ $_data["idiomaMenu"] = $idioma;
             }
         });
     }
-    
+
     function carregarTo(moeda) {
         $("#cryptoTo").prop("disabled", true);
         $("#cryptoTo").val(null).trigger("change");
         $("#btn_conversao").prop("disabled", true);
-        
+
         $("#from").val("");
         $("#to").val("");
-        
+
         var option = '';
         $.ajax({
             url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MERCADO_PARIDADES ?>",
             method: "POST",
-            dataType:'json',
+            dataType: 'json',
             data: {
                 moeda: moeda
             },
             success: function (json) {
-                if(json.sucesso){
-                    
+                if (json.sucesso) {
+
                     json.moedas.forEach(element => {
-                        option += '<option data-par="' + element.par + '" data-preco="' + element.preco + '" data-tipo="' + element.tipo + '" value="'+element.id_moeda+'" title="'+element.imagem+'">'+element.simbolo+ ' - ' + element.nome +'</option>';
+                        option += '<option data-par="' + element.par + '" data-preco="' + element.preco + '" data-tipo="' + element.tipo + '" value="' + element.id_moeda + '" title="' + element.imagem + '">' + element.simbolo + ' - ' + element.nome + '</option>';
                     });
                     $('#cryptoTo').html(option);
 
                     $(".crypto").select2({
                         templateResult: function (coin) {
-                            var $span = $("<span><img style='width: 25px;' src="+coin.title+" /> " + coin.text + "</span>");
+                            var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
                             return $span;
                         },
                         templateSelection: function (coin) {
-                            var $span = $("<span><img style='width: 25px;' src="+coin.title+" /> " + coin.text + "</span>");
+                            var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
                             return $span;
                         }
                     });
@@ -549,44 +450,44 @@ $_data["idiomaMenu"] = $idioma;
             }
         });
     }
-    
-    function tempoAprovacao(){
+
+    function tempoAprovacao() {
         $('#convert').text("Converter em (" + (15 - time) + "s)");
         time++;
-        
-        if(time == (15 + 1)){
+
+        if (time == (15 + 1)) {
             clearInterval(regressor);
             $("#convert").prop("disabled", true);
             time = 0;
         }
     }
-    
-    function calculadora(origem){
-        
+
+    function calculadora(origem) {
+
         var entrada = 0;
         var total = 0;
         var parTipo = $("#cryptoTo option:selected").attr("data-tipo");
         var parPreco = $("#cryptoTo option:selected").attr("data-preco");
-        
-        switch(origem){
+
+        switch (origem) {
             case "FROM":
                 entrada = $("#from").maskMoney('unmasked')[0];
-                if(entrada > 0) {
-                    if(parTipo == "C"){
-                        total = entrada / parPreco ;
-                    } else if (parTipo == "V"){
+                if (entrada > 0) {
+                    if (parTipo == "C") {
+                        total = entrada / parPreco;
+                    } else if (parTipo == "V") {
                         total = parPreco * entrada;
                     }
                     $("#to").maskMoney('mask', total);
                 }
                 break;
-                
+
             case "TO":
                 entrada = $("#to").maskMoney('unmasked')[0];
-                if(entrada > 0) {
-                    if(parTipo == "C"){
-                        total = entrada * parPreco ;
-                    } else if (parTipo == "V"){
+                if (entrada > 0) {
+                    if (parTipo == "C") {
+                        total = entrada * parPreco;
+                    } else if (parTipo == "V") {
                         total = entrada / parPreco;
                     }
                     $("#from").maskMoney('mask', total);
@@ -594,20 +495,20 @@ $_data["idiomaMenu"] = $idioma;
                 break;
         }
     }
-    
-    function inserirOrdem(){
+
+    function inserirOrdem() {
         var parTipo = $("#cryptoTo option:selected").attr("data-tipo");
         var par = $("#cryptoTo option:selected").attr("data-par");
         var total = ($("#to").val().length > 0 ? parseFloat($("#to").val().replace(",", ".")) : 0);
         var entrada = ($("#from").val().length > 0 ? parseFloat($("#from").val().replace(",", ".")) : 0);
-        
-        if(parTipo == "C"){
+
+        if (parTipo == "C") {
             salvarOrdemCompra(total, par);
-        } else if (parTipo == "V"){
+        } else if (parTipo == "V") {
             salvarOrdemVenda(entrada, par);
         }
     }
-    
+
     function salvarOrdemCompra(total, par) {
         $("#convert, #cancel").prop("disabled", true);
         $.ajax({
@@ -664,4 +565,3 @@ $_data["idiomaMenu"] = $idioma;
     }
 </script>
 <?php Utils\Layout::append("mensage_text", $_data) ?>
-

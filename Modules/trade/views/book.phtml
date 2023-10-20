@@ -1,10 +1,10 @@
 <?php
 
 $idioma = new \Utils\PropertiesUtils("book", IDIOMA);
-$casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"]  : 2);
+$casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"] : 2);
 
-$taxaCompra = (isset($_data["compra"]) ? number_format($_data["compra"], $casasDecimais, ".", "")  : 0);
-$taxaVenda = (isset($_data["venda"]) ? number_format($_data["venda"], $casasDecimais, ".", "")  : 0 );
+$taxaCompra = (isset($_data["compra"]) ? number_format($_data["compra"], $casasDecimais, ".", "") : 0);
+$taxaVenda = (isset($_data["venda"]) ? number_format($_data["venda"], $casasDecimais, ".", "") : 0);
 
 $paridade = Modules\principal\Controllers\Principal::getParity();
 
@@ -43,312 +43,451 @@ $_data["idiomaMenu"] = $idioma;
 <script src="<?php echo JS; ?>underscore-min.js"></script>
 
 <div class="container-fluid mtb15 no-fluid">
-    <div class="row sm-gutters"> <!--LISTA PARIDADES -->
-    <div class="col-md-3">
-        <div class="market-pairs mb15">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-sm"><i class="icon ion-md-search"></i></span>
-                </div>
-            <input id="ticker-search" type="text" class="form-control" placeholder="Search" aria-describedby="inputGroup-sizing-sm">
-            </div>
-
-            <ul class="nav" role="tablist">
-                <li class="">
-                    <a onclick="setSomenteFavoritas();" class="nav-link" data-toggle="pill" href="#STAR" role="tab" aria-selected="false" ><i
-                        class="icon ion-md-star"></i></a>
-                </li>
-
-                <?php
-                foreach ($paridades as $moedaTrade) {
-                    $selected = ($paridade->idMoedaTrade == $moedaTrade->id);
-                    ?>
-                <li class="nav-item">
-                    <a class="btn nav-link <?php echo ($paridade->idMoedaTrade == $moedaTrade->id) ? 'active' : ''  ?>" data-toggle="pill" role="tab" aria-selected="false" onclick="setCurrentCoin(<?php echo $moedaTrade->id?>);"><?php echo $moedaTrade->simbolo ?></a>
-                    <input type="hidden" id="hiddencontainer" name="hiddencontainer"/>
-                </li>
-                    <?php
-                }
-                ?>
-            </ul>
-
-            <div class="paridade">
-                <table class="table" id="tickers-table">
-                    <thead>
-                        <tr>
-                            <th scope="col"><?php echo $idioma->getText("direta22") ?></th>
-                            <th scope="col"><?php echo $idioma->getText("direta4") ?></th>
-                            <th scope="col"><?php echo $idioma->getText("direta40") ?></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="body-paridades" class="tbody-h tbody-h1" style="cursor: pointer;">
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
+    <div class="row">
+        <div class="col-12 col-md-11 mx-auto">
+            <div class="row sm-gutters"> <!--LISTA PARIDADES -->
+            <div class="col-md-3">
+                <div class="market-pairs mb15">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm"><i class="icon ion-md-search"></i></span>
+                        </div>
+                    <input id="ticker-search" type="text" class="form-control" placeholder="Search" aria-describedby="inputGroup-sizing-sm">
+                    </div>
         
-        <div style="border: 1px solid #e0e3eb; border-radius: 2px;">
-          <ul class="nav " role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="pill" href="#recent-trades" role="tab" aria-selected="true"><?php echo $idioma->getText("direta24") ?></a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="table-responsive tab-pane fade show active" id="recent-trades" role="tabpanel">
-              <table class="table table-hover" style="table-layout: fixed">
-                <thead>
-                    <tr class="tr-h">
-                        <th scope="col">
-                            <?php echo $idioma->getText("direta22") ?>
-                        </th>
-                        <th scope="col">
-                            <?php echo $idioma->getText("direta29") ?>
-                        </th>
-                        <th class="text-right" scope="col">
-                            <?php echo $idioma->getText("direta23") ?>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="body-balances" class="tbody-h tbody-saldo" >
-                </tbody>
-              </table>
-            </div>
-            <div class="tab-pane fade" id="market-depth" role="tabpanel">
-              <div class="depth-chart-container">
-                <div class="depth-chart-inner">
-                  <div id="lightDepthChart"></div>
+                    <ul class="nav" role="tablist">
+                        <li class="">
+                            <a onclick="setSomenteFavoritas();" class="nav-link" data-toggle="pill" href="#STAR" role="tab" aria-selected="false" ><i
+                                class="icon ion-md-star"></i></a>
+                        </li>
+        
+                        <?php
+                        foreach ($paridades as $moedaTrade) {
+                            $selected = ($paridade->idMoedaTrade == $moedaTrade->id);
+                            ?>
+                            <li class="nav-item">
+                                <a class="btn nav-link <?php echo ($paridade->idMoedaTrade == $moedaTrade->id) ? 'active' : '' ?>" data-toggle="pill" role="tab" aria-selected="false" onclick="setCurrentCoin(<?php echo $moedaTrade->id ?>);"><?php echo $moedaTrade->simbolo ?></a>
+                                <input type="hidden" id="hiddencontainer" name="hiddencontainer"/>
+                            </li>
+                                <?php
+                        }
+                        ?>
+                    </ul>
+        
+                    <div class="paridade">
+                        <table class="table" id="tickers-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col"><?php echo $idioma->getText("direta22") ?></th>
+                                    <th scope="col"><?php echo $idioma->getText("direta4") ?></th>
+                                    <th scope="col"><?php echo $idioma->getText("direta40") ?></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="body-paridades" class="tbody-h tbody-h1" style="cursor: pointer;">
+                            </tbody>
+                        </table>
+                    </div>
+        
                 </div>
-              </div>
+                
+                <div style="border: 1px solid #e0e3eb; border-radius: 2px;">
+                  <ul class="nav " role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="pill" href="#recent-trades" role="tab" aria-selected="true"><?php echo $idioma->getText("direta24") ?></a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="table-responsive tab-pane fade show active" id="recent-trades" role="tabpanel">
+                      <table class="table table-hover" style="table-layout: fixed">
+                        <thead>
+                            <tr class="tr-h">
+                                <th scope="col">
+                                    <?php echo $idioma->getText("direta22") ?>
+                                </th>
+                                <th scope="col">
+                                    <?php echo $idioma->getText("direta29") ?>
+                                </th>
+                                <th class="text-right" scope="col">
+                                    <?php echo $idioma->getText("direta23") ?>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="body-balances" class="tbody-h tbody-saldo" >
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="tab-pane fade" id="market-depth" role="tabpanel">
+                      <div class="depth-chart-container">
+                        <div class="depth-chart-inner">
+                          <div id="lightDepthChart"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+        
             </div>
-          </div>
-        </div>
-
-    </div>
-
-    <div class="col-md-6">
+        
+            <div class="col-md-6">
+                <!-- TradingView Widget BEGIN -->
+                <!-- <div class="">
+                    <div class="page-tv-chart-container" id="tv_chart_container">
+                </div> -->
         <!-- TradingView Widget BEGIN -->
-        <!-- <div class="">
-            <div class="page-tv-chart-container" id="tv_chart_container">
-        </div> -->
-<!-- TradingView Widget BEGIN -->
-
-                <div class="">
-            <div class="page-tv-chart-container" id="tv_chart_container">
-        </div>
-                    <div class="tradingview-widget-container" >
-                    <div id="tradingview_e8053"></div>
-                    <script src="https://s3.tradingview.com/tv.js"></script>
-                    <script type="text/javascript" src="<?php echo DIR_TV ?>/charting_library/charting_library.min.js"></script>
-                    <script type="text/javascript" src="<?php echo DIR_TV ?>/datafeeds/udf/dist/polyfills.js"></script>
-                    <script type="text/javascript" src="<?php echo DIR_TV ?>/datafeeds/udf/dist/bundle.js"></script>
-                    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-                    <script>
-                        TradingView.onready(function()
-                        {
-                            var widget = window.tvWidget = new TradingView.widget(
-                            {
-                                "debug": false,
-                                "fullscreen":false,
-                                "timezone": "America/Sao_Paulo",
-                                "symbol": "<?php echo $paridade->symbol?>",
-                                "interval": '15',
-                                "container_id": "tv_chart_container",
-                                "intervals": ["1", "3", "5", "15", "30", "60", "360", "720", "D", "7D", "M", "3M"],
-                                "chartTypes":["Candles"],
-                                "datafeed": new Datafeeds.UDFCompatibleDatafeed("<?php echo DATAFEED_URL ?>", 60000),
-                                "library_path": "<?php echo DIR_TV ?>charting_library/",
-                                "locale": "pt",
-                                disabled_features: ["use_localstorage_for_settings"],
-                                enabled_features: ["study_templates"],
-                                "overrides":{
-                                    'paneProperties.legendProperties.showLegend': false,
-                                    'mainSeriesProperties.candleStyle.upColor': '#64ae74',
-                                    'mainSeriesProperties.candleStyle.downColor': '#df5f61',
-                                    'mainSeriesProperties.candleStyle.drawWick': true,
-                                    'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
-                                    'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
-                                    'mainSeriesProperties.candleStyle.drawBorder': true,
-                                    'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
-                                    'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
-                                    'scalesProperties.lineColor': '#252525',
-                                    'scalesProperties.textColor': '#8a8a8a',
-                                    'paneProperties.topMargin': 20,
-                                },
-                                // "disabled_features": [
-                                //     'use_localstorage_for_settings',
-                                //     "timeframes_toolbar",
-                                //     "volume_force_overlay",
-                                //     "left_toolbar",
-                                //     "show_logo_on_all_charts",
-                                //     // "caption_buttons_text_if_possible",
-                                //     "header_settings",
-                                //     // "header_chart_type",
-                                //     "header_indicators",
-                                //     "header_compare",
-                                //     "compare_symbol",
-                                //     // "header_screenshot",
-                                //     "header_widget_dom_node",
-                                //     "header_saveload",
-                                //     "header_undo_redo",
-                                //     // "header_interval_dialog_button",
-                                //     "show_interval_dialog_on_key_press",
-                                //     // "symbol_info",
-                                //     // "header_symbol_search",
-                                //     // "header_resolutions",
-                                //     // "header_widget"
-                                // ],
-                                "charts_storage_url": 'https://saveload.tradingview.com',
-                                "charts_storage_api_version": "1.1",
-                                "client_id": 'tradingview.com',
-                                "user_id": 'public_user_id',
-                                "height": "425",
-                                "width": "100%",
-                                "theme": "White",
-                                "style": 2
-                            }
-                            );
-                        });
-                    </script>
+        
+                        <div class="">
+                    <div class="page-tv-chart-container" id="tv_chart_container">
+                </div>
+                            <div class="tradingview-widget-container" >
+                            <div id="tradingview_e8053"></div>
+                            <script src="https://s3.tradingview.com/tv.js"></script>
+                            <script type="text/javascript" src="<?php echo DIR_TV ?>/charting_library/charting_library.min.js"></script>
+                            <script type="text/javascript" src="<?php echo DIR_TV ?>/datafeeds/udf/dist/polyfills.js"></script>
+                            <script type="text/javascript" src="<?php echo DIR_TV ?>/datafeeds/udf/dist/bundle.js"></script>
+                            <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+                            <script>
+                                TradingView.onready(function()
+                                {
+                                    var widget = window.tvWidget = new TradingView.widget(
+                                    {
+                                        "debug": false,
+                                        "fullscreen":false,
+                                        "timezone": "America/Sao_Paulo",
+                                        "symbol": "<?php echo $paridade->symbol ?>",
+                                        "interval": '15',
+                                        "container_id": "tv_chart_container",
+                                        "intervals": ["1", "3", "5", "15", "30", "60", "360", "720", "D", "7D", "M", "3M"],
+                                        "chartTypes":["Candles"],
+                                        "datafeed": new Datafeeds.UDFCompatibleDatafeed("<?php echo DATAFEED_URL ?>", 60000),
+                                        "library_path": "<?php echo DIR_TV ?>charting_library/",
+                                        "locale": "pt",
+                                        disabled_features: ["use_localstorage_for_settings"],
+                                        enabled_features: ["study_templates"],
+                                        "overrides":{
+                                            'paneProperties.legendProperties.showLegend': false,
+                                            'mainSeriesProperties.candleStyle.upColor': '#64ae74',
+                                            'mainSeriesProperties.candleStyle.downColor': '#df5f61',
+                                            'mainSeriesProperties.candleStyle.drawWick': true,
+                                            'mainSeriesProperties.candleStyle.wickUpColor': '#64ae74',
+                                            'mainSeriesProperties.candleStyle.wickDownColor': '#df5f61',
+                                            'mainSeriesProperties.candleStyle.drawBorder': true,
+                                            'mainSeriesProperties.candleStyle.borderUpColor': '#64ae74',
+                                            'mainSeriesProperties.candleStyle.borderDownColor': '#df5f61',
+                                            'scalesProperties.lineColor': '#252525',
+                                            'scalesProperties.textColor': '#8a8a8a',
+                                            'paneProperties.topMargin': 20,
+                                        },
+                                        // "disabled_features": [
+                                        //     'use_localstorage_for_settings',
+                                        //     "timeframes_toolbar",
+                                        //     "volume_force_overlay",
+                                        //     "left_toolbar",
+                                        //     "show_logo_on_all_charts",
+                                        //     // "caption_buttons_text_if_possible",
+                                        //     "header_settings",
+                                        //     // "header_chart_type",
+                                        //     "header_indicators",
+                                        //     "header_compare",
+                                        //     "compare_symbol",
+                                        //     // "header_screenshot",
+                                        //     "header_widget_dom_node",
+                                        //     "header_saveload",
+                                        //     "header_undo_redo",
+                                        //     // "header_interval_dialog_button",
+                                        //     "show_interval_dialog_on_key_press",
+                                        //     // "symbol_info",
+                                        //     // "header_symbol_search",
+                                        //     // "header_resolutions",
+                                        //     // "header_widget"
+                                        // ],
+                                        "charts_storage_url": 'https://saveload.tradingview.com',
+                                        "charts_storage_api_version": "1.1",
+                                        "client_id": 'tradingview.com',
+                                        "user_id": 'public_user_id',
+                                        "height": "425",
+                                        "width": "100%",
+                                        "theme": "White",
+                                        "style": 2
+                                    }
+                                    );
+                                });
+                            </script>
+                            </div>
+                        </div>
+        
+        
+        
+                        <!-- user trade -->
+                <div class="market-trade">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="pill" href="#pills-compra" role="tab"
+                                aria-selected="true"><?php echo $idioma->getText("direta36") ?></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="pill" href="#pills-ordens" role="tab" aria-selected="false"><?php echo $idioma->getText("direta37") ?></a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" data-toggle="pill" href="#pills-extrato" role="tab" aria-selected="false"><?php echo $idioma->getText("direta38") ?></a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="pill" href="#pills-24hrs" role="tab" aria-selected="false"><?php echo $idioma->getText("direta39") ?></a>
+                        </li>
+                    </ul>
+        
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="pills-compra" role="tabpanel">
+                            <div class="d-flex justify-content-between">
+                                <div class="market-trade-buy">
+                                    <div class="input-group">
+                                        <input type="hidden" class="form-control" id="buyamountwithfee"> 
+                                        <input type="text" class="form-control digital-currency" id="buyamount" placeholder="<?php echo $idioma->getText("volumeComprar") ?>">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="initbuysell('b', 'a');" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
+                                        </div>
+                                    </div>
+                                <div class="input-group">
+                                    <input type="text" class="form-control real" id="buyprice" placeholder=<?php echo $idioma->getText("preco") ?>>
+                                    <div class="input-group-append">
+                                    <span class="input-group-text" onclick="initbuysell('b', 'p');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                    </div>
+                                </div>
+        
+                                <div class="input-group">
+                                    <input type="text" class="form-control real" id="buytotal" placeholder=<?php echo $idioma->getText("totalComprar") ?>>
+                                    <div class="input-group-append">
+                                    <span class="input-group-text" onclick="initbuysell('b', 't');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                    </div>
+                                </div>
+        
+                                <div class="input-group">
+                                    <input type="text" class="form-control real disabled" disabled="true" id="buytaxIn" placeholder=<?php echo $idioma->getText("taxa") ?>>
+                                    <div class="input-group-append">
+                                    <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
+                                    </div>
+                                </div>
+        
+                                <div class="input-group">
+                                    <input type="text" class="form-control real disabled" disabled="true" id="buyreceiveIn" placeholder=<?php echo $idioma->getText("receberaAprox") ?>>
+                                    <div class="input-group-append">
+                                    <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
+                                    </div>
+                                </div>
+                                <!--                   
+                                <ul class="market-trade-list">
+                                    <li><a href="#!">25%</a></li>
+                                    <li><a href="#!">50%</a></li>
+                                    <li><a href="#!">75%</a></li>
+                                    <li><a href="#!">100%</a></li>
+                                </ul>
+                                <p>Available: <span>0 BTC = 0 USD</span></p>
+                                <p>Volume: <span>0 BTC = 0 USD</span></p>
+                                <p>Margin: <span>0 BTC = 0 USD</span></p>
+                                <p>Fee: <span>0 BTC = 0 USD</span></p> -->
+                                    <!-- <button class="btn buy">Buy</button> -->
+                                    <button type="button" class="btn buy" id="btn-order-buy" onclick="salvarOrdemCompra();">
+                                        <strong><?php echo $idioma->getText("compraRegistrarOrdemBtn") ?></strong>
+                                    </button>
+                                </div>
+        
+                                <div class="market-trade-sell">
+                                    <div class="input-group">
+                                    <input type="text" class="form-control digital-currency" id="sellamount" placeholder="<?php echo $idioma->getText("volumeVender") ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" onclick="initbuysell('s', 'a');" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
+                                    </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control real" id="sellprice" placeholder="<?php echo $idioma->getText("preco") ?>">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="initbuysell('s', 'p');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control real" id="selltotal" placeholder="<?php echo $idioma->getText("totalVender") ?>">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="initbuysell('s', 't');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="text" disabled="true" class="form-control real" id="selltaxIn" placeholder="<?php echo $idioma->getText("taxa") ?>">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control real" disabled="true" id="sellreceiveIn" placeholder="<?php echo $idioma->getText("receberaAproxVender") ?>">
+                                        <div class="input-group-append">
+                                        <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
+                                        </div>
+                                    </div>
+                                    <!-- <ul class="market-trade-list">
+                                        <li><a href="#!">25%</a></li>
+                                        <li><a href="#!">50%</a></li>
+                                        <li><a href="#!">75%</a></li>
+                                        <li><a href="#!">100%</a></li>
+                                    </ul>
+                                    <p>Available: <span>0 BTC = 0 USD</span></p>
+                                    <p>Volume: <span>0 BTC = 0 USD</span></p>
+                                    <p>Margin: <span>0 BTC = 0 USD</span></p>
+                                    <p>Fee: <span>0 BTC = 0 USD</span></p> -->
+                                    <!-- <button class="btn sell">Sell</button> -->
+                                    <button type="button" class="btn sell" id="btn-order-sell" onclick="salvarOrdemVenda();">
+                                        <strong><?php echo $idioma->getText("vendaRegistrarOrdemBtn") ?></strong>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="tab-pane fade" id="pills-ordens" role="tabpanel">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="panel-heading" style="text-align: center;">
+                                        <strong style="margin-left: -35px"><?php echo $idioma->getText("minhasOrdens") ?> - <?php echo $paridade->moedaBook->nome ?>  (<?php echo $paridade->symbol ?>)</strong>                                                            
+                                        <div class="pull-left">
+                                            <input type="checkbox" class="custom-checkbox" id="todas" name="todas" value="1"><label>&nbsp;<?php echo $idioma->getText("todas") ?>&nbsp;</label>
+                                        </div>
+                                    </div>
+                                    <div class="table" style="background-color: #fff;">
+                                        <table class="table table-hover table-condensed " style="font-size: 12px; background-color: #fff; margin-bottom: 0px !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center"><?php echo $idioma->getText("moeda") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("movimento") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("dataTb") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("cotacaoTb") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("volumeTb") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("valorTotalTb") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("executado") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("pendente") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("statusTb") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("acaoTb") ?></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="orders-list" style="overflow-y: auto;">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="tab-pane fade" id="pills-extrato" role="tabpanel">
+                            <div class="row" >
+                                <div class="col col-lg-12">
+                                    <div class="row">
+        
+                                        <div class="col-sm-3">
+                                            <div data-toggle="buttons" class="btn-group" id="radioTipoBtc">
+                                                <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="compraBtc"> 
+                                                    <input hidden type="radio"  name="optionsBtc" value="compra" class="btn-filtro-extrato">
+                                                        <?php echo $idioma->getText("direta11") ?>
+                                                </label>
+                                                <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="vendaBtc"> 
+                                                    <input hidden type="radio" name="optionsBtc" value="venda" class="btn-filtro-extrato">
+                                                        <?php echo $idioma->getText("direta12") ?>
+                                                </label>
+                                                <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato active " id="todosBtc"> 
+                                                    <input hidden type="radio" id="" name="optionsBtc" value="todos" class="btn-filtro-extrato">
+                                                        <?php echo $idioma->getText("direta13") ?>
+                                                </label>
+                                            </div>
+                                        </div>
+        
+                                        <div class="col-sm-3">
+                                            <div data-toggle="buttons" class="btn-group" id="radioDatas">
+                                                <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="diaBtc"> 
+                                                    <input hidden type="radio" name="optionsBtc" value="dia" ><?php echo $idioma->getText("direta7") ?>
+                                                </label>
+                                                <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="semanaBtc"> 
+                                                    <input hidden type="radio"  name="optionsBtc" value="semana" ><?php echo $idioma->getText("direta8") ?>
+                                                </label>
+                                                <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" > 
+                                                    <input hidden type="radio" name="optionsBtc " value="mes" class=""><?php echo $idioma->getText("direta9") ?>
+                                                </label>
+                                                <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato active" id="todosDataBtc"> 
+                                                    <input hidden type="radio"  name="optionsBtc" value="todos" ><?php echo $idioma->getText("direta10") ?>
+                                                </label>
+                                            </div>
+                                        </div>
+        
+                                        <div class="col-sm-3"></div>
+        
+                                        <div class="col-sm-3">
+                                            <div data-toggle="buttons" class="btn-group" id="radioLimite">
+                                                <label style="font-size: 10px;" class="btn btn-sm btn-white active btn-filtro-extrato" id="limit10"> 
+                                                    <input type="radio"  name="optionsBtc" value="10" >
+                                                        <?php echo $idioma->getText("direta34") ?>
+                                                </label>
+                                                <label style="font-size: 10px;" class="btn btn-sm btn-white btn-filtro-extrato" id="limit20"> 
+                                                    <input type="radio" name="optionsBtc" value="30" >
+                                                        <?php echo $idioma->getText("direta35") ?>
+                                                </label>
+                                                <label style="font-size: 10px;" class="btn btn-sm btn-white btn-filtro-extrato"  id="noLimit"> 
+                                                    <input type="radio" id="" name="optionsBtc" value="todos" >
+                                                        <?php echo $idioma->getText("direta13") ?>
+                                                </label>
+                                            </div>
+                                        </div>
+        
+                                    </div>
+                                    <div class="table-responsive m-t-md" style="height: 52.1% !important; background-color: #fff; ">
+                                        <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 12.5px; margin-bottom: 0px !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center"><strong><?php echo $idioma->getText("moeda") ?></strong></th>
+                                                    <th class="text-center"><strong><?php echo $idioma->getText("data") ?></strong></th>
+                                                    <th class="text-center"><strong><?php echo $idioma->getText("cotacao") ?></strong></th>
+                                                    <th class="text-center"><strong><?php echo $idioma->getText("volumeTotal") ?></strong></th>
+                                                    <th class="text-center"><strong><?php echo $idioma->getText("valorTotal") ?></strong></th>
+                                                    <th class="text-center"><strong><?php echo $idioma->getText("volumeExecutado") ?></strong></th>
+                                                    <th class="text-center"><strong><?php echo $idioma->getText("valorExecutado") ?></strong></th>
+                                                    <th class="text-center"><strong><?php echo $idioma->getText("status") ?></strong></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="myTrades" style="overflow-y: auto;">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="tab-pane fade" id="pills-24hrs" role="tabpanel">
+                            <div class="row" >
+                                <div class="col col-lg-12">
+                                    <div class="">
+                                        <table class="table table-hover" style="font-size: 12.5px; margin-bottom: 0px !important;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center"><?php echo $idioma->getText("hora") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("cotacaoN") ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("volumeN") ?> - <?php echo $paridade->moedaBook->simbolo ?></th>
+                                                    <th class="text-center"><?php echo $idioma->getText("valorTotalN") ?></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="trade-list" style="overflow-y: auto;">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-
-
-                <!-- user trade -->
-        <div class="market-trade">
-            <ul class="nav nav-pills" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" data-toggle="pill" href="#pills-compra" role="tab"
-                        aria-selected="true"><?php echo $idioma->getText("direta36")?></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-ordens" role="tab" aria-selected="false"><?php echo $idioma->getText("direta37")?></a>
-                </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-extrato" role="tab" aria-selected="false"><?php echo $idioma->getText("direta38")?></a>
-                </li> -->
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-24hrs" role="tab" aria-selected="false"><?php echo $idioma->getText("direta39")?></a>
-                </li>
-            </ul>
-
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="pills-compra" role="tabpanel">
-                    <div class="d-flex justify-content-between">
-                        <div class="market-trade-buy">
-                            <div class="input-group">
-                                <input type="hidden" class="form-control" id="buyamountwithfee"> 
-                                <input type="text" class="form-control digital-currency" id="buyamount" placeholder="<?php echo $idioma->getText("volumeComprar") ?>">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" onclick="initbuysell('b', 'a');" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
-                                </div>
-                            </div>
-                        <div class="input-group">
-                            <input type="text" class="form-control real" id="buyprice" placeholder=<?php echo $idioma->getText("preco")?>>
-                            <div class="input-group-append">
-                            <span class="input-group-text" onclick="initbuysell('b', 'p');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <input type="text" class="form-control real" id="buytotal" placeholder=<?php echo $idioma->getText("totalComprar")?>>
-                            <div class="input-group-append">
-                            <span class="input-group-text" onclick="initbuysell('b', 't');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <input type="text" class="form-control real disabled" disabled="true" id="buytaxIn" placeholder=<?php echo $idioma->getText("taxa")?>>
-                            <div class="input-group-append">
-                            <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
-                            </div>
-                        </div>
-
-                        <div class="input-group">
-                            <input type="text" class="form-control real disabled" disabled="true" id="buyreceiveIn" placeholder=<?php echo $idioma->getText("receberaAprox")?>>
-                            <div class="input-group-append">
-                            <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
-                            </div>
-                        </div>
-                        <!--                   
-                        <ul class="market-trade-list">
-                            <li><a href="#!">25%</a></li>
-                            <li><a href="#!">50%</a></li>
-                            <li><a href="#!">75%</a></li>
-                            <li><a href="#!">100%</a></li>
-                        </ul>
-                        <p>Available: <span>0 BTC = 0 USD</span></p>
-                        <p>Volume: <span>0 BTC = 0 USD</span></p>
-                        <p>Margin: <span>0 BTC = 0 USD</span></p>
-                        <p>Fee: <span>0 BTC = 0 USD</span></p> -->
-                            <!-- <button class="btn buy">Buy</button> -->
-                            <button type="button" class="btn buy" id="btn-order-buy" onclick="salvarOrdemCompra();">
-                                <strong><?php echo $idioma->getText("compraRegistrarOrdemBtn") ?></strong>
-                            </button>
-                        </div>
-
-                        <div class="market-trade-sell">
-                            <div class="input-group">
-                            <input type="text" class="form-control digital-currency" id="sellamount" placeholder="<?php echo $idioma->getText("volumeVender") ?>">
-                            <div class="input-group-append">
-                                <span class="input-group-text" onclick="initbuysell('s', 'a');" style="cursor: pointer;"><?php echo $paridade->moedaBook->simbolo ?></span>
-                            </div>
-                            </div>
-                            <div class="input-group">
-                                <input type="text" class="form-control real" id="sellprice" placeholder="<?php echo $idioma->getText("preco") ?>">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" onclick="initbuysell('s', 'p');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <input type="text" class="form-control real" id="selltotal" placeholder="<?php echo $idioma->getText("totalVender") ?>">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" onclick="initbuysell('s', 't');" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <input type="text" disabled="true" class="form-control real" id="selltaxIn" placeholder="<?php echo $idioma->getText("taxa") ?>">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <input type="text" class="form-control real" disabled="true" id="sellreceiveIn" placeholder="<?php echo $idioma->getText("receberaAproxVender") ?>">
-                                <div class="input-group-append">
-                                <span class="input-group-text" style="cursor: pointer;"><?php echo $paridade->moedaTrade->simbolo ?></span>
-                                </div>
-                            </div>
-                            <!-- <ul class="market-trade-list">
-                                <li><a href="#!">25%</a></li>
-                                <li><a href="#!">50%</a></li>
-                                <li><a href="#!">75%</a></li>
-                                <li><a href="#!">100%</a></li>
-                            </ul>
-                            <p>Available: <span>0 BTC = 0 USD</span></p>
-                            <p>Volume: <span>0 BTC = 0 USD</span></p>
-                            <p>Margin: <span>0 BTC = 0 USD</span></p>
-                            <p>Fee: <span>0 BTC = 0 USD</span></p> -->
-                            <!-- <button class="btn sell">Sell</button> -->
-                            <button type="button" class="btn sell" id="btn-order-sell" onclick="salvarOrdemVenda();">
-                                <strong><?php echo $idioma->getText("vendaRegistrarOrdemBtn") ?></strong>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="pills-ordens" role="tabpanel">
-                    <div class="row">
+                <!-- <div class="mtb15"></div>
+                <div class="market-trade mtb15">
+                    <div class="" style="margin-top: 15px; overflow:scroll; height:405px;">
                         <div class="col-lg-12">
                             <div class="panel-heading" style="text-align: center;">
-                                <strong style="margin-left: -35px"><?php echo $idioma->getText("minhasOrdens") ?> - <?php echo $paridade->moedaBook->nome ?>  (<?php echo $paridade->symbol ?>)</strong>                                                            
+                                <strong style="margin-left: 0px; "><?php echo $idioma->getText("minhasOrdens") ?> - <?php echo $paridade->moedaBook->nome ?>  (<?php echo $paridade->symbol ?>)</strong>                                                            
                                 <div class="pull-left">
-                                    <input type="checkbox" class="custom-checkbox" id="todas" name="todas" value="1"><label>&nbsp;<?php echo $idioma->getText("todas") ?>&nbsp;</label>
+                                    <input type="checkbox" style="margin-left: 15px; " class="custom-checkbox" id="todas" name="todas" value="1"><label>&nbsp;<?php echo $idioma->getText("todas") ?>&nbsp;</label>
                                 </div>
                             </div>
                             <div class="table" style="background-color: #fff;">
-                                <table class="table table-hover table-condensed " style="font-size: 12px; background-color: #fff; margin-bottom: 0px !important;">
+                                <table class="table table-hover table-condensed" style="font-size: 12px; background-color: #fff; margin-bottom: 0px !important;">
                                     <thead>
                                         <tr>
                                             <th class="text-center"><?php echo $idioma->getText("moeda") ?></th>
@@ -363,279 +502,144 @@ $_data["idiomaMenu"] = $idioma;
                                             <th class="text-center"><?php echo $idioma->getText("acaoTb") ?></th>
                                         </tr>
                                     </thead>
-                                    <tbody id="orders-list" style="overflow-y: auto;">
+                                    <tbody id="orders-list">
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="tab-pane fade" id="pills-extrato" role="tabpanel">
-                    <div class="row" >
-                        <div class="col col-lg-12">
-                            <div class="row">
-
-                                <div class="col-sm-3">
-                                    <div data-toggle="buttons" class="btn-group" id="radioTipoBtc">
-                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="compraBtc"> 
-                                            <input hidden type="radio"  name="optionsBtc" value="compra" class="btn-filtro-extrato">
-                                                <?php echo $idioma->getText("direta11") ?>
-                                        </label>
-                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="vendaBtc"> 
-                                            <input hidden type="radio" name="optionsBtc" value="venda" class="btn-filtro-extrato">
-                                                <?php echo $idioma->getText("direta12") ?>
-                                        </label>
-                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato active " id="todosBtc"> 
-                                            <input hidden type="radio" id="" name="optionsBtc" value="todos" class="btn-filtro-extrato">
-                                                <?php echo $idioma->getText("direta13") ?>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-3">
-                                    <div data-toggle="buttons" class="btn-group" id="radioDatas">
-                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="diaBtc"> 
-                                            <input hidden type="radio" name="optionsBtc" value="dia" ><?php echo $idioma->getText("direta7") ?>
-                                        </label>
-                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" id="semanaBtc"> 
-                                            <input hidden type="radio"  name="optionsBtc" value="semana" ><?php echo $idioma->getText("direta8") ?>
-                                        </label>
-                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato" > 
-                                            <input hidden type="radio" name="optionsBtc " value="mes" class=""><?php echo $idioma->getText("direta9") ?>
-                                        </label>
-                                        <label style="font-size: 12px;" class="btn btn-sm btn-white btn-filtro-extrato active" id="todosDataBtc"> 
-                                            <input hidden type="radio"  name="optionsBtc" value="todos" ><?php echo $idioma->getText("direta10") ?>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-3"></div>
-
-                                <div class="col-sm-3">
-                                    <div data-toggle="buttons" class="btn-group" id="radioLimite">
-                                        <label style="font-size: 10px;" class="btn btn-sm btn-white active btn-filtro-extrato" id="limit10"> 
-                                            <input type="radio"  name="optionsBtc" value="10" >
-                                                <?php echo $idioma->getText("direta34") ?>
-                                        </label>
-                                        <label style="font-size: 10px;" class="btn btn-sm btn-white btn-filtro-extrato" id="limit20"> 
-                                            <input type="radio" name="optionsBtc" value="30" >
-                                                <?php echo $idioma->getText("direta35") ?>
-                                        </label>
-                                        <label style="font-size: 10px;" class="btn btn-sm btn-white btn-filtro-extrato"  id="noLimit"> 
-                                            <input type="radio" id="" name="optionsBtc" value="todos" >
-                                                <?php echo $idioma->getText("direta13") ?>
-                                        </label>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="table-responsive m-t-md" style="height: 52.1% !important; background-color: #fff; ">
-                                <table class="table table-hover table-bordered table-condensed table-stripped" style="font-size: 12.5px; margin-bottom: 0px !important;">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center"><strong><?php echo $idioma->getText("moeda") ?></strong></th>
-                                            <th class="text-center"><strong><?php echo $idioma->getText("data") ?></strong></th>
-                                            <th class="text-center"><strong><?php echo $idioma->getText("cotacao") ?></strong></th>
-                                            <th class="text-center"><strong><?php echo $idioma->getText("volumeTotal") ?></strong></th>
-                                            <th class="text-center"><strong><?php echo $idioma->getText("valorTotal") ?></strong></th>
-                                            <th class="text-center"><strong><?php echo $idioma->getText("volumeExecutado") ?></strong></th>
-                                            <th class="text-center"><strong><?php echo $idioma->getText("valorExecutado") ?></strong></th>
-                                            <th class="text-center"><strong><?php echo $idioma->getText("status") ?></strong></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="myTrades" style="overflow-y: auto;">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                </div> -->
+        
+                <!-- <div class="market-history market-order mt15">
+                    <ul class="nav nav-pills" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="pill" href="#open-orders" role="tab" aria-selected="true">Open
+                        Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#stop-orders" role="tab" aria-selected="false">Closed
+                        Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#order-history" role="tab" aria-selected="false">Order
+                        history</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#trade-history" role="tab" aria-selected="false">Balance</a>
+                    </li>
+                    </ul>
+                    <div class="tab-content">
+                    <div class="tab-pane fade show active" id="open-orders" role="tabpanel">
+                        <ul class="d-flex justify-content-between market-order-item">
+                        <li>Time</li>
+                        <li>All pairs</li>
+                        <li>All Types</li>
+                        <li>Buy/Sell</li>
+                        <li>Price</li>
+                        <li>Amount</li>
+                        <li>Executed</li>
+                        <li>Unexecuted</li>
+                        </ul>
+                        <span class="no-data">
+                        <i class="icon ion-md-document"></i>
+                        No data
+                        </span>
                     </div>
-                </div>
-
-                <div class="tab-pane fade" id="pills-24hrs" role="tabpanel">
-                    <div class="row" >
-                        <div class="col col-lg-12">
-                            <div class="">
-                                <table class="table table-hover" style="font-size: 12.5px; margin-bottom: 0px !important;">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center"><?php echo $idioma->getText("hora") ?></th>
-                                            <th class="text-center"><?php echo $idioma->getText("cotacaoN") ?></th>
-                                            <th class="text-center"><?php echo $idioma->getText("volumeN") ?> - <?php echo $paridade->moedaBook->simbolo ?></th>
-                                            <th class="text-center"><?php echo $idioma->getText("valorTotalN") ?></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="trade-list" style="overflow-y: auto;">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="tab-pane fade" id="stop-orders" role="tabpanel">
+                        <ul class="d-flex justify-content-between market-order-item">
+                        <li>Time</li>
+                        <li>All pairs</li>
+                        <li>All Types</li>
+                        <li>Buy/Sell</li>
+                        <li>Price</li>
+                        <li>Amount</li>
+                        <li>Executed</li>
+                        <li>Unexecuted</li>
+                        </ul>
+                        <span class="no-data">
+                        <i class="icon ion-md-document"></i>
+                        No data
+                        </span>
                     </div>
-                </div>
-            </div>
-        </div>
-        <!-- <div class="mtb15"></div>
-        <div class="market-trade mtb15">
-            <div class="" style="margin-top: 15px; overflow:scroll; height:405px;">
-                <div class="col-lg-12">
-                    <div class="panel-heading" style="text-align: center;">
-                        <strong style="margin-left: 0px; "><?php echo $idioma->getText("minhasOrdens") ?> - <?php echo $paridade->moedaBook->nome ?>  (<?php echo $paridade->symbol ?>)</strong>                                                            
-                        <div class="pull-left">
-                            <input type="checkbox" style="margin-left: 15px; " class="custom-checkbox" id="todas" name="todas" value="1"><label>&nbsp;<?php echo $idioma->getText("todas") ?>&nbsp;</label>
-                        </div>
+                    <div class="tab-pane fade" id="order-history" role="tabpanel">
+                        <ul class="d-flex justify-content-between market-order-item">
+                        <li>Time</li>
+                        <li>All pairs</li>
+                        <li>All Types</li>
+                        <li>Buy/Sell</li>
+                        <li>Price</li>
+                        <li>Amount</li>
+                        <li>Executed</li>
+                        <li>Unexecuted</li>
+                        </ul>
+                        <span class="no-data">
+                        <i class="icon ion-md-document"></i>
+                        No data
+                        </span>
                     </div>
-                    <div class="table" style="background-color: #fff;">
-                        <table class="table table-hover table-condensed" style="font-size: 12px; background-color: #fff; margin-bottom: 0px !important;">
+                    <div class="tab-pane fade" id="trade-history" role="tabpanel">
+                        <ul class="d-flex justify-content-between market-order-item">
+                        <li>Time</li>
+                        <li>All pairs</li>
+                        <li>All Types</li>
+                        <li>Buy/Sell</li>
+                        <li>Price</li>
+                        <li>Amount</li>
+                        <li>Executed</li>
+                        <li>Unexecuted</li>
+                        </ul>
+                        <span class="no-data">
+                        <i class="icon ion-md-document"></i>
+                        No data
+                        </span>
+                    </div>
+                    </div>
+                </div> -->
+              </div>
+        
+                <div class="col-md-3">
+                    <div class="order-book mb15">
+                        <h2 class="heading">Order Book</h2>
+                        <table class="table">
                             <thead>
                                 <tr>
-                                    <th class="text-center"><?php echo $idioma->getText("moeda") ?></th>
-                                    <th class="text-center"><?php echo $idioma->getText("movimento") ?></th>
-                                    <th class="text-center"><?php echo $idioma->getText("dataTb") ?></th>
-                                    <th class="text-center"><?php echo $idioma->getText("cotacaoTb") ?></th>
-                                    <th class="text-center"><?php echo $idioma->getText("volumeTb") ?></th>
-                                    <th class="text-center"><?php echo $idioma->getText("valorTotalTb") ?></th>
-                                    <th class="text-center"><?php echo $idioma->getText("executado") ?></th>
-                                    <th class="text-center"><?php echo $idioma->getText("pendente") ?></th>
-                                    <th class="text-center"><?php echo $idioma->getText("statusTb") ?></th>
-                                    <th class="text-center"><?php echo $idioma->getText("acaoTb") ?></th>
+                                    <th class="text-left"><?php echo $idioma->getText("direta31") ?>(<?php echo $paridade->moedaTrade->simbolo ?>)</th>
+                                    <th class="text-right"><?php echo $idioma->getText("direta33") ?>(<?php echo $paridade->moedaTrade->simbolo ?>)</th>
+                                    <th class="text-center"><?php echo $idioma->getText("direta32") ?>(<?php echo $paridade->moedaBook->simbolo ?>)</th>
                                 </tr>
                             </thead>
-                            <tbody id="orders-list">
+                            <tbody id="ordersSells">
+                            </tbody>
+                            <tbody class="ob-heading">
+                                <tr>
+                                    <td>
+                                        <span>Dif</span>
+                                        <span id="differenceV"></span>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td id="differenceClass" >
+                                        <span>Change</span>
+                                        <span id="differenceP" ></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody id="ordersBuys">
                             </tbody>
                         </table>
                     </div>
                 </div>
+        
+        
+        
+        
+        
+                <!-- //hist -->
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
+                </div>
             </div>
-        </div> -->
-
-        <!-- <div class="market-history market-order mt15">
-            <ul class="nav nav-pills" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="pill" href="#open-orders" role="tab" aria-selected="true">Open
-                Orders</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#stop-orders" role="tab" aria-selected="false">Closed
-                Orders</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#order-history" role="tab" aria-selected="false">Order
-                history</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#trade-history" role="tab" aria-selected="false">Balance</a>
-            </li>
-            </ul>
-            <div class="tab-content">
-            <div class="tab-pane fade show active" id="open-orders" role="tabpanel">
-                <ul class="d-flex justify-content-between market-order-item">
-                <li>Time</li>
-                <li>All pairs</li>
-                <li>All Types</li>
-                <li>Buy/Sell</li>
-                <li>Price</li>
-                <li>Amount</li>
-                <li>Executed</li>
-                <li>Unexecuted</li>
-                </ul>
-                <span class="no-data">
-                <i class="icon ion-md-document"></i>
-                No data
-                </span>
-            </div>
-            <div class="tab-pane fade" id="stop-orders" role="tabpanel">
-                <ul class="d-flex justify-content-between market-order-item">
-                <li>Time</li>
-                <li>All pairs</li>
-                <li>All Types</li>
-                <li>Buy/Sell</li>
-                <li>Price</li>
-                <li>Amount</li>
-                <li>Executed</li>
-                <li>Unexecuted</li>
-                </ul>
-                <span class="no-data">
-                <i class="icon ion-md-document"></i>
-                No data
-                </span>
-            </div>
-            <div class="tab-pane fade" id="order-history" role="tabpanel">
-                <ul class="d-flex justify-content-between market-order-item">
-                <li>Time</li>
-                <li>All pairs</li>
-                <li>All Types</li>
-                <li>Buy/Sell</li>
-                <li>Price</li>
-                <li>Amount</li>
-                <li>Executed</li>
-                <li>Unexecuted</li>
-                </ul>
-                <span class="no-data">
-                <i class="icon ion-md-document"></i>
-                No data
-                </span>
-            </div>
-            <div class="tab-pane fade" id="trade-history" role="tabpanel">
-                <ul class="d-flex justify-content-between market-order-item">
-                <li>Time</li>
-                <li>All pairs</li>
-                <li>All Types</li>
-                <li>Buy/Sell</li>
-                <li>Price</li>
-                <li>Amount</li>
-                <li>Executed</li>
-                <li>Unexecuted</li>
-                </ul>
-                <span class="no-data">
-                <i class="icon ion-md-document"></i>
-                No data
-                </span>
-            </div>
-            </div>
-        </div> -->
-      </div>
-
-        <div class="col-md-3">
-            <div class="order-book mb15">
-                <h2 class="heading">Order Book</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="text-left"><?php echo $idioma->getText("direta31") ?>(<?php echo $paridade->moedaTrade->simbolo?>)</th>
-                            <th class="text-right"><?php echo $idioma->getText("direta33") ?>(<?php echo $paridade->moedaTrade->simbolo?>)</th>
-                            <th class="text-center"><?php echo $idioma->getText("direta32") ?>(<?php echo $paridade->moedaBook->simbolo?>)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersSells">
-                    </tbody>
-                    <tbody class="ob-heading">
-                        <tr>
-                            <td>
-                                <span>Dif</span>
-                                <span id="differenceV"></span>
-                            </td>
-                            <td>
-                            </td>
-                            <td id="differenceClass" >
-                                <span>Change</span>
-                                <span id="differenceP" ></span>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody id="ordersBuys">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-
-
-
-
-        <!-- //hist -->
-        <div class="col-md-3">
-        </div>
-        <div class="col-md-6">
         </div>
     </div>
   </div>
@@ -687,89 +691,89 @@ function calculateSMA(data, count){
 }
 
 function generateBarsData(period) {
-	var res = [];
-	var controlPoints = generateControlPoints(res, period);
+    var res = [];
+    var controlPoints = generateControlPoints(res, period);
     console.log(res);
     console.log(period);
 
 
-	for (var i = 0; i < controlPoints.length - 1; i++) {
-		var left = controlPoints[i];
-		var right = controlPoints[i + 1];
-		fillBarsSegment(left, right, res);
-	}
-	return res;
+    for (var i = 0; i < controlPoints.length - 1; i++) {
+        var left = controlPoints[i];
+        var right = controlPoints[i + 1];
+        fillBarsSegment(left, right, res);
+    }
+    return res;
 }
 
 function fillBarsSegment(left, right, points) {
-	var deltaY = right.price - left.price;
-	var deltaX = right.index - left.index;
-	var angle = deltaY / deltaX;
-	for (var i = left.index; i <= right.index; i++) {
-		var basePrice = left.price + (i - left.index) * angle;
-		var openNoise = (0.1 - Math.random() * 0.2) + 1;
-		var closeNoise = (0.1 - Math.random() * 0.2) + 1;
-		var open = basePrice * openNoise;
-		var close = basePrice * closeNoise;
-		var high = Math.max(basePrice * (1 + Math.random() * 0.2), open, close);
-		var low = Math.min(basePrice * (1 - Math.random() * 0.2), open, close);
-		points[i].open = open;
-		points[i].high = high;
-		points[i].low = low;
-		points[i].close = close;
-	}
+    var deltaY = right.price - left.price;
+    var deltaX = right.index - left.index;
+    var angle = deltaY / deltaX;
+    for (var i = left.index; i <= right.index; i++) {
+        var basePrice = left.price + (i - left.index) * angle;
+        var openNoise = (0.1 - Math.random() * 0.2) + 1;
+        var closeNoise = (0.1 - Math.random() * 0.2) + 1;
+        var open = basePrice * openNoise;
+        var close = basePrice * closeNoise;
+        var high = Math.max(basePrice * (1 + Math.random() * 0.2), open, close);
+        var low = Math.min(basePrice * (1 - Math.random() * 0.2), open, close);
+        points[i].open = open;
+        points[i].high = high;
+        points[i].low = low;
+        points[i].close = close;
+    }
 }
 
 function generateControlPoints(res, period, dataMultiplier) {
     console.log(res);
 
-	var time = period !== undefined ? period.timeFrom : { day: 1, month: 1, year: 2018 };
-	var timeTo = period !== undefined ? period.timeTo : { day: 1, month: 1, year: 2019 };
-	var days = getDiffDays(time, timeTo);
+    var time = period !== undefined ? period.timeFrom : { day: 1, month: 1, year: 2018 };
+    var timeTo = period !== undefined ? period.timeTo : { day: 1, month: 1, year: 2019 };
+    var days = getDiffDays(time, timeTo);
     
-	dataMultiplier = dataMultiplier || 100;
-	var controlPoints = [];
+    dataMultiplier = dataMultiplier || 100;
+    var controlPoints = [];
     
-	controlPoints.push({ index: 0, price: getRandomPrice() * dataMultiplier });
-	for (var i = 0; i < days; i++) {
-		if (i > 0 && i < days - 1 && Math.random() < 0.05) {
-			controlPoints.push({ index: i, price: getRandomPrice() * dataMultiplier });
-		}
-		res.push({ time: time });
+    controlPoints.push({ index: 0, price: getRandomPrice() * dataMultiplier });
+    for (var i = 0; i < days; i++) {
+        if (i > 0 && i < days - 1 && Math.random() < 0.05) {
+            controlPoints.push({ index: i, price: getRandomPrice() * dataMultiplier });
+        }
+        res.push({ time: time });
         
-		time = nextBusinessDay(time);
-	}
-	controlPoints.push({ index: res.length - 1, price: getRandomPrice() * dataMultiplier });
-	
+        time = nextBusinessDay(time);
+    }
+    controlPoints.push({ index: res.length - 1, price: getRandomPrice() * dataMultiplier });
+    
     return controlPoints;
 }
 
 function getDiffDays(dateFrom, dateTo) {
-	var df = convertBusinessDayToUTCTimestamp(dateFrom);
-	var dt = convertBusinessDayToUTCTimestamp(dateTo);
-	var diffTime = Math.abs(dt.getTime() - df.getTime());
-	return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    var df = convertBusinessDayToUTCTimestamp(dateFrom);
+    var dt = convertBusinessDayToUTCTimestamp(dateTo);
+    var diffTime = Math.abs(dt.getTime() - df.getTime());
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
 
 function convertBusinessDayToUTCTimestamp(date) {
-	return new Date(Date.UTC(date.year, date.month - 1, date.day, 0, 0, 0, 0));
+    return new Date(Date.UTC(date.year, date.month - 1, date.day, 0, 0, 0, 0));
 }
 
 function nextBusinessDay(time) {
-	var d = convertBusinessDayToUTCTimestamp({ year: time.year, month: time.month, day: time.day + 1 });
-	return { year: d.getUTCFullYear(), month: d.getUTCMonth() + 1, day: d.getUTCDate() };
+    var d = convertBusinessDayToUTCTimestamp({ year: time.year, month: time.month, day: time.day + 1 });
+    return { year: d.getUTCFullYear(), month: d.getUTCMonth() + 1, day: d.getUTCDate() };
 }
 
 function getRandomPrice() {
-	return 10 + Math.round(Math.random() * 10000) / 100;
+    return 10 + Math.round(Math.random() * 10000) / 100;
 }
 
 function setLegendText(priceValue) {
-	let val = '∅';
-	if (priceValue !== undefined) {
-		val = (Math.round(priceValue * 100) / 100).toFixed(2);
-	}
-	legend.innerHTML = 'MA10 <span style="color:rgba(4, 111, 232, 1)">' + val + '</span>';
+    let val = '∅';
+    if (priceValue !== undefined) {
+        val = (Math.round(priceValue * 100) / 100).toFixed(2);
+    }
+    legend.innerHTML = 'MA10 <span style="color:rgba(4, 111, 232, 1)">' + val + '</span>';
 }
 
 
@@ -1334,7 +1338,7 @@ $(document).ready(function () {
         let price = ($(fieldPrice).val().length > 0 ? parseFloat($(fieldPrice).val().replace(",", ".")) : 0);;
         let total = ($(fieldTotal).val().length > 0 ? parseFloat($(fieldTotal).val().replace(",", ".")) : 0);;
 
-        let perTax = (m === 'b' ? <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?> : <?php echo number_format($taxaVenda, $casasDecimais, ".", "")?>);
+        let perTax = (m === 'b' ? <?php echo number_format($taxaCompra, $casasDecimais, ".", "") ?> : <?php echo number_format($taxaVenda, $casasDecimais, ".", "") ?>);
 
         if (f === "a") { // o usuário inseriu dados no campo amount
             if (price > 0) { 
@@ -1609,7 +1613,7 @@ $(document).ready(function () {
             $("#buyprice").val(cotacaoC.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
             $("#buytotal").val(total.toFixed(<?php echo $paridade->moedaTrade->casasDecimais ?>).toString().replace('.', ','));
 
-            var taxa = <?php echo number_format($taxaCompra, $casasDecimais, ".", "")?>;
+            var taxa = <?php echo number_format($taxaCompra, $casasDecimais, ".", "") ?>;
             var fee = (volumeC * taxa) / 100;
             var receber = parseFloat(volumeC - fee);
 

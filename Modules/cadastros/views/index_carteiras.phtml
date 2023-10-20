@@ -1,15 +1,15 @@
-<?php  
-$atarCliente = (isset($_data["atarCliente"]) ? $_data["atarCliente"]: null);
+<?php
+$atarCliente = (isset($_data["atarCliente"]) ? $_data["atarCliente"] : null);
 
-if($atarCliente == null){
+if ($atarCliente == null) {
     $hasAtar = false;
 } else {
     $hasAtar = true;
 }
 
-$boletoAtivo = (isset($_data["boletoAtivo"]) ? $_data["boletoAtivo"]: false);
+$boletoAtivo = (isset($_data["boletoAtivo"]) ? $_data["boletoAtivo"] : false);
 
-$contasBancarias = isset($_data["contas"]) ? $_data["contas"] : Array();
+$contasBancarias = isset($_data["contas"]) ? $_data["contas"] : array();
 
 $configuracao = isset($_data["configuracao"]) ? $_data["configuracao"] : new \Models\Modules\Cadastro\Configuracao();
 
@@ -27,8 +27,8 @@ $moedaSelecionado = \Utils\Criptografia::encriptyPostId(2); //Bitcoin
 
 $moedaRn = new Models\Modules\Cadastro\MoedaRn();
 
-if(!empty($cliente->moedaFavorita)){
-    if($cliente->moedaFavorita > 1){
+if (!empty($cliente->moedaFavorita)) {
+    if ($cliente->moedaFavorita > 1) {
         $moedaCategoria = "c";
         $moedaSelecionado = \Utils\Criptografia::encriptyPostId($cliente->moedaFavorita);
         $moeda = $moedaRn->get($cliente->moedaFavorita);
@@ -38,13 +38,13 @@ if(!empty($cliente->moedaFavorita)){
     }
 }
 
-$mostrarBotaoDeposito = (Models\Modules\Acesso\ModuloRn::validar(Utils\Rotas::M_DEPOSITOS, \Utils\Constantes::CADASTRAR)  ? (Utils\Geral::isCliente() && ($cliente->statusDepositoBrl > 0)) : false);
+$mostrarBotaoDeposito = (Models\Modules\Acesso\ModuloRn::validar(Utils\Rotas::M_DEPOSITOS, \Utils\Constantes::CADASTRAR) ? (Utils\Geral::isCliente() && ($cliente->statusDepositoBrl > 0)) : false);
 // $mostrarAbaDepositoReais = isset($_data["verificado"]) ? $_data["verificado"] : false;
 $mostrarAbaDepositoReais = true;
 
-$casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"]  : 2);
+$casasDecimais = (isset($_data["casasDecimais"]) ? $_data["casasDecimais"] : 2);
 
-$jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
+$jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
 
 ?>
 <style>
@@ -182,459 +182,460 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
     </div>
 </div> -->
 <div class="">
-    <div class="settings mtb15">
         <div class="container-fluid">
             <div class="row">
-                <!-- <div class="col-md-12 col-lg-1">
-                </div> -->
-                <div class="col-md-12 col-lg-9">
-                    <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title"><?php echo $idioma->getText("titulo") ?></h5>
-
-                                <div class="row p-md">
-                                    <div class="col-sm-12 select-box choose-position">
-                                        <select class="form-control-lg select2 chosen-select input-lg full-width" id="selectCoins">
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <?php if ($configuracao->statusDepositoBrl > 0 && $mostrarAbaDepositoReais) { ?>
-                                    <div class="m-t-sm" id="depositoReais">
-                                        <div class="row">
-                                            <div class="col-lg-12">     <!--Formulario deposito em Reais -->
-                                                <h2 class="m-l-sm"style="display: inline;"><?php echo $idioma->getText("depositoEmReais") ?></h2>&nbsp;&nbsp;<img src="" id="imagemBanco" height="30" width="30" style="margin-bottom: 10px;"/>
-                                                <div class="p-md" id="depositoBrl">
-                                                    <div class="row m-b-md" style="font-size: 14px !important;">
-                                                        <div class="col-lg-12">
-                                                            <dl class="dl-horizontal">
-                                                                <dt class="border-bottom"><?php echo $idioma->getText("titular") ?></dt> <dd id="titular">-</dd>
-                                                                <dt class="border-bottom"><?php echo $idioma->getText("cnpj") ?></dt> <dd id="cnpj">-</dd>
-                                                                <dt class="border-bottom"><?php echo $idioma->getText("banco") ?></dt> <dd id="banco">-</dd>
-                                                                <dt class="border-bottom"><?php echo $idioma->getText("tipo") ?></dt> <dd id="contaTipo">-</dd>
-                                                                <dt class="border-bottom"><?php echo $idioma->getText("agencia") ?></dt> <dd id="agencia">-</dd>
-                                                                <dt class="border-bottom"><?php echo $idioma->getText("conta1") ?></dt> <dd id="conta">-</dd>
-                                                            </dl>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <form action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_DEPOSITOS_SALVAR ?>" method="post" enctype="multipart/form-data" id="form-deposito" >
-                                                                <input type="" value="<?php echo $deposito->id ?>" name="id" />
-                                                                <input type="" value="" id="idContaBancariaEmpresa" name="idContaBancariaEmpresa"/>
-                                                                <div class="row m-b-sm">
-                                                                    <div class="col col-lg-12">
-                                                                        <h3 id="limiteDisponivelReal"></h3>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="row">
-                                                                    <div class="col col-lg-12">
-                                                                        <div class="form-group">
-                                                                            <label><?php echo $idioma->getText("tipoDeposito") ?></label>
-                                                                            <select class="form-control" id="tipoDeposito" name="tipoDeposito" ><!--tipo de deposito-->
-                                                                                <option value="<?php echo Utils\Constantes::TED ?>" <?php echo ($deposito->tipoDeposito == Utils\Constantes::TED ? "selected='true'" : "") ?>><?php echo $idioma->getText("ted2") ?></option>
-                                                                                <option value="<?php echo Utils\Constantes::DOC ?>" <?php echo ($deposito->tipoDeposito == Utils\Constantes::DOC ? "selected='true'" : "") ?>><?php echo $idioma->getText("doc") ?></option>
-                                                                                <option value="<?php echo Utils\Constantes::TRANSF_ENTRE_CONTAS ?>" <?php echo ($deposito->tipoDeposito == Utils\Constantes::TRANSF_ENTRE_CONTAS ? "selected='true'" : "") ?>><?php echo $idioma->getText("transEntreContas") ?></option>
-                                                                            </select>
-                                                                            <div class="row" id="alerta-banco" style="display: none;">
-                                                                                <div class="col-lg-12">
-                                                                                    <span style="color: #ff1e1e;" id="alerta-banco-observacoes"></span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col col-lg-5 border-right">
-                                                                        <div class="form-group">
-                                                                            <label><?php echo $idioma->getText("valorDepositado") ?></label><!--valor a ser depositado-->
-                                                                            <input type="text"  class="form-control" id="valor" name="valor" value="<?php echo number_format($deposito->valorDepositado, 2, ",", ".") ?>" />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-7 m-t-sm m-b-sm"><!--comprovante de deposito-->
-                                                                        <small><?php echo $idioma->getText("comissaoDeposito") ?> (<span id="comissaoCobradaDeposito"><?php echo number_format($comissao, 2, ",", "") ?></span>%)</small></br>
-                                                                        <small><?php echo $idioma->getText("seraCreditado") ?> <strong id="valorCreditado2"> </strong></small></br>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-lg-7">
-                                                                        <div class="" style="display: block !important;">
-                                                                            <label><?php echo $idioma->getText("comprovanDeposito") ?></label>
-                                                                            <div class="fileinput fileinput-new input-group text-left" data-provides="fileinput" id="arquivo" >
-                                                                                <div class="form-control" data-trigger="fileinput">
-                                                                                    <i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename" style="width: 60px !important;"></span>
-                                                                                </div>
-                                                                                <span class="input-group-addon btn btn-default btn-file">
-                                                                                    <span class="fileinput-new"><?php echo $idioma->getText("selecionar") ?></span>
-                                                                                    <span class="fileinput-exists"><?php echo $idioma->getText("alterar") ?></span>
-                                                                                    <input class="full-width" type="file" id="comprovante" name="comprovante" accept=".pdf,.jpg,.jpeg,.png,.xps,.doc,.docx,.bmp" maxlength="15">
-                                                                                </span>
-                                                                                <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput"><?php echo $idioma->getText("remover") ?></a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div><!--fim comprovante deposito-->
-                                                                    <div class="col-lg-5">
-                                                                        <div class="form-group">
-                                                                            <label>&nbsp;</label>
-                                                                            <button class="btn btn-primary full-width" type="submit" id="btnSalvar"><!--botao cadastrar deposito-->
-                                                                                <?php echo $idioma->getText("cadastrarDeposito") ?>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row" id="progressDocumentsContainer">
-                                                                    <div class="col col-lg-12">
-                                                                        <div class="progress">
-                                                                            <div style="width: 0%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" id="progressDocuments" class="progress-bar progress-bar-success">
-                                                                                <span class="sr-only" id="progressDocumentsLegend"></span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <?php if ($configuracao->atarAtivo == 1) { ?>
-                                                    <div id="atar">
-                                                        <?php if ($hasAtar) { ?>
+                <div class="col-12 col-md-11 mx-auto">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-9 settings">
+                            <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $idioma->getText("titulo") ?></h5>
+        
+                                        <div class="row p-md">
+                                            <div class="col-sm-12 select-box choose-position">
+                                                <select class="form-control-lg select2 chosen-select input-lg full-width" id="selectCoins">
+                                                </select>
+                                            </div>
+                                        </div>
+        
+                                        <?php if ($configuracao->statusDepositoBrl > 0 && $mostrarAbaDepositoReais) { ?>
+                                                        <div class="m-t-sm" id="depositoReais">
                                                             <div class="row">
-                                                                <div class="col-lg-12 text-center">
-                                                                    <div class="border-bottom text-center" id="infAtar">
-                                                                        <div id="containerAtar"></div></br>
-                                                                        <span class="label label-default m-t-sm" style="cursor: pointer; font-size: 13px;position: relative;" id="btncopyAtar" alt="<?php echo $idioma->getText("copiarEndereco") ?>">
-                                                                        </span>
-                                                                        </br>
-                                                                        <button class="btn-link m-t-xs m-b-sm" id="btn-link-ref" data-clipboard-target="#btncopyAtar">
-                                                                            <?php echo $idioma->getText("copiarEndereco1") ?>&nbsp;&nbsp;<i class="fa fa-copy"></i>
-                                                                        </button>
+                                                                <div class="col-lg-12">     <!--Formulario deposito em Reais -->
+                                                                    <h2 class="m-l-sm"style="display: inline;"><?php echo $idioma->getText("depositoEmReais") ?></h2>&nbsp;&nbsp;<img src="" id="imagemBanco" height="30" width="30" style="margin-bottom: 10px;"/>
+                                                                    <div class="p-md" id="depositoBrl">
+                                                                        <div class="row m-b-md" style="font-size: 14px !important;">
+                                                                            <div class="col-lg-12">
+                                                                                <dl class="dl-horizontal">
+                                                                                    <dt class="border-bottom"><?php echo $idioma->getText("titular") ?></dt> <dd id="titular">-</dd>
+                                                                                    <dt class="border-bottom"><?php echo $idioma->getText("cnpj") ?></dt> <dd id="cnpj">-</dd>
+                                                                                    <dt class="border-bottom"><?php echo $idioma->getText("banco") ?></dt> <dd id="banco">-</dd>
+                                                                                    <dt class="border-bottom"><?php echo $idioma->getText("tipo") ?></dt> <dd id="contaTipo">-</dd>
+                                                                                    <dt class="border-bottom"><?php echo $idioma->getText("agencia") ?></dt> <dd id="agencia">-</dd>
+                                                                                    <dt class="border-bottom"><?php echo $idioma->getText("conta1") ?></dt> <dd id="conta">-</dd>
+                                                                                </dl>
+                                                                            </div>
+                                                                        </div>
+        
+                                                                        <div class="row">
+                                                                            <div class="col-sm-12">
+                                                                                <form action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_DEPOSITOS_SALVAR ?>" method="post" enctype="multipart/form-data" id="form-deposito" >
+                                                                                    <input type="" value="<?php echo $deposito->id ?>" name="id" />
+                                                                                    <input type="" value="" id="idContaBancariaEmpresa" name="idContaBancariaEmpresa"/>
+                                                                                    <div class="row m-b-sm">
+                                                                                        <div class="col col-lg-12">
+                                                                                            <h3 id="limiteDisponivelReal"></h3>
+                                                                                        </div>
+                                                                                    </div>
+        
+                                                                                    <div class="row">
+                                                                                        <div class="col col-lg-12">
+                                                                                            <div class="form-group">
+                                                                                                <label><?php echo $idioma->getText("tipoDeposito") ?></label>
+                                                                                                <select class="form-control" id="tipoDeposito" name="tipoDeposito" ><!--tipo de deposito-->
+                                                                                                    <option value="<?php echo Utils\Constantes::TED ?>" <?php echo ($deposito->tipoDeposito == Utils\Constantes::TED ? "selected='true'" : "") ?>><?php echo $idioma->getText("ted2") ?></option>
+                                                                                                    <option value="<?php echo Utils\Constantes::DOC ?>" <?php echo ($deposito->tipoDeposito == Utils\Constantes::DOC ? "selected='true'" : "") ?>><?php echo $idioma->getText("doc") ?></option>
+                                                                                                    <option value="<?php echo Utils\Constantes::TRANSF_ENTRE_CONTAS ?>" <?php echo ($deposito->tipoDeposito == Utils\Constantes::TRANSF_ENTRE_CONTAS ? "selected='true'" : "") ?>><?php echo $idioma->getText("transEntreContas") ?></option>
+                                                                                                </select>
+                                                                                                <div class="row" id="alerta-banco" style="display: none;">
+                                                                                                    <div class="col-lg-12">
+                                                                                                        <span style="color: #ff1e1e;" id="alerta-banco-observacoes"></span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="row">
+                                                                                        <div class="col col-lg-5 border-right">
+                                                                                            <div class="form-group">
+                                                                                                <label><?php echo $idioma->getText("valorDepositado") ?></label><!--valor a ser depositado-->
+                                                                                                <input type="text"  class="form-control" id="valor" name="valor" value="<?php echo number_format($deposito->valorDepositado, 2, ",", ".") ?>" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-lg-7 m-t-sm m-b-sm"><!--comprovante de deposito-->
+                                                                                            <small><?php echo $idioma->getText("comissaoDeposito") ?> (<span id="comissaoCobradaDeposito"><?php echo number_format($comissao, 2, ",", "") ?></span>%)</small></br>
+                                                                                            <small><?php echo $idioma->getText("seraCreditado") ?> <strong id="valorCreditado2"> </strong></small></br>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-lg-7">
+                                                                                            <div class="" style="display: block !important;">
+                                                                                                <label><?php echo $idioma->getText("comprovanDeposito") ?></label>
+                                                                                                <div class="fileinput fileinput-new input-group text-left" data-provides="fileinput" id="arquivo" >
+                                                                                                    <div class="form-control" data-trigger="fileinput">
+                                                                                                        <i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename" style="width: 60px !important;"></span>
+                                                                                                    </div>
+                                                                                                    <span class="input-group-addon btn btn-default btn-file">
+                                                                                                        <span class="fileinput-new"><?php echo $idioma->getText("selecionar") ?></span>
+                                                                                                        <span class="fileinput-exists"><?php echo $idioma->getText("alterar") ?></span>
+                                                                                                        <input class="full-width" type="file" id="comprovante" name="comprovante" accept=".pdf,.jpg,.jpeg,.png,.xps,.doc,.docx,.bmp" maxlength="15">
+                                                                                                    </span>
+                                                                                                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput"><?php echo $idioma->getText("remover") ?></a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div><!--fim comprovante deposito-->
+                                                                                        <div class="col-lg-5">
+                                                                                            <div class="form-group">
+                                                                                                <label>&nbsp;</label>
+                                                                                                <button class="btn btn-primary full-width" type="submit" id="btnSalvar"><!--botao cadastrar deposito-->
+                                                                                                    <?php echo $idioma->getText("cadastrarDeposito") ?>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="row" id="progressDocumentsContainer">
+                                                                                        <div class="col col-lg-12">
+                                                                                            <div class="progress">
+                                                                                                <div style="width: 0%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" id="progressDocuments" class="progress-bar progress-bar-success">
+                                                                                                    <span class="sr-only" id="progressDocumentsLegend"></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            </br>
-                                                        <?php } ?>
-                                                        <?php if (!$hasAtar) { ?>
-                                                            <div class="row p-md" id="token2faAtar">
-                                                                <div class="col-lg-12">
-                                                                    <ul class="list-group">
-                                                                        <li class="list-group-item" style="height: 30px !important; padding-bottom: 5px !important; padding-top: 5px !important;">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-12">
-                                                                                    <b>Documento:</b> <span><span id="labelIdAtar"></span></span>
+                                                                    <?php if ($configuracao->atarAtivo == 1) { ?>
+                                                                                    <div id="atar">
+                                                                                        <?php if ($hasAtar) { ?>
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-lg-12 text-center">
+                                                                                                                <div class="border-bottom text-center" id="infAtar">
+                                                                                                                    <div id="containerAtar"></div></br>
+                                                                                                                    <span class="label label-default m-t-sm" style="cursor: pointer; font-size: 13px;position: relative;" id="btncopyAtar" alt="<?php echo $idioma->getText("copiarEndereco") ?>">
+                                                                                                                    </span>
+                                                                                                                    </br>
+                                                                                                                    <button class="btn-link m-t-xs m-b-sm" id="btn-link-ref" data-clipboard-target="#btncopyAtar">
+                                                                                                                        <?php echo $idioma->getText("copiarEndereco1") ?>&nbsp;&nbsp;<i class="fa fa-copy"></i>
+                                                                                                                    </button>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        </br>
+                                                                                        <?php } ?>
+                                                                                        <?php if (!$hasAtar) { ?>
+                                                                                                        <div class="row p-md" id="token2faAtar">
+                                                                                                            <div class="col-lg-12">
+                                                                                                                <ul class="list-group">
+                                                                                                                    <li class="list-group-item" style="height: 30px !important; padding-bottom: 5px !important; padding-top: 5px !important;">
+                                                                                                                        <div class="row">
+                                                                                                                            <div class="col-lg-12">
+                                                                                                                                <b>Documento:</b> <span><span id="labelIdAtar"></span></span>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </li>
+                                                                                                                    <li class="list-group-item">
+                                                                                                                        <div class="row">
+                                                                                                                            <div class="col-lg-6 text-left">
+                                                                                                                                <div class="form-group">
+                                                                                                                                    <label><?php echo "PIN" ?></label>
+                                                                                                                                    <input type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" class="form-control" id="pinAtar"/>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </li>
+                                                                                                                    <li class="list-group-item text-center">
+                                                                                                                        <div class="row">
+                                                                                                                            <div class="col-lg-6">
+                                                                                                                                <button class="btn btn-white" style="width: 180px;" onclick="limparAtar();"><?php echo "Cancelar" ?></button>
+                                                                                                                            </div>
+                                                                                                                            <div class="col-lg-6">
+                                                                                                                                <button class="btn btn-success" style="width: 180px;" onclick="depositarAtar();" id="btnCadastrarConta" ><?php echo "Cadastrar" ?></button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </li>
+                                                                                                                </ul>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div id="cadastroAtar">
+                                                                                                            <div class="row p-md">
+                                                                                                                <div class="col-lg-12">
+                                                                                                                    <h4>Cadastre seu Atar ID ou Documento (CPF ou CNPJ) para receber os seus depósitos feitos na Atar.</h4>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="row p-md">
+                                                                                                                <div class="col-lg-6">
+                                                                                                                    <div class="form-group">
+                                                                                                                        <label><?php echo "Documento" ?></label>
+                                                                                                                        <input type="text"  class="form-control" value="<?php echo $cliente->documento ?>" disabled="true"/>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="row border-bottom p-md">
+                                                                                                                <div class="col-lg-6">
+                                                                                                                    <div class="form-group">
+                                                                                                                        <button class="btn btn-primary full-width" type="button" onclick="tokenAtar();" id="btnTokenAtar">
+                                                                                                                            <?php echo "Cadastrar Conta Atar" ?>
+                                                                                                                        </button>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                        <?php } else { ?>
+                                                                                                        <div id="atarAtivo" class="p-sm">
+                                                                                                            </br>
+                                                                                                            <div class="row">
+                                                                                                                <div class="col-lg-12">
+                                                                                                                    <h4>Meu Cadastro Atar</h4>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="row border-bottom">
+                                                                                                                <div class="col-lg-6">
+                                                                                                                    <b>Atar ID ou Documento:</b> <span><?php echo $atarCliente->idAtar ?></span>
+                                                                                                                </div>
+                                                                                                                </br>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                        <?php } ?>
+                                                                                        </br>
+                                                                                    </div>
+                                                                    <?php } ?>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                                                                    <div id="depositoBoleto">
+                                                                        </br>
+                                                                        <div class="row p-md">
+                                                                            <div class="col-lg-12">
+                                                                                <label><?php echo $idioma->getText("depositeBoleto") ?></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        </br>
+        
+                                                                        <div id="telaBoleto">
+                                                                            <div class="row p-md">
+                                                                                <div class="col col-lg-5 col-xs-12 border-right">
+                                                                                    <div class="form-group">
+                                                                                        <label><?php echo $idioma->getText("valorDepositado") ?></label>
+                                                                                        <input type="text"  class="form-control" id="valorBoleto" name="valorBoleto"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-lg-7 col-xs-12 m-t-md">
+                                                                                    <small><?php echo $idioma->getText("comissaoDeposito") ?> (<span id="comissaoCobradaBoleto">R$ <?php echo number_format($tarifaBoleto, 2, ",", "") ?> + <?php echo number_format($comissao, 2, ",", "") ?></span>%)</small></br>
+                                                                                    <small><?php echo $idioma->getText("seraCreditado") ?> <strong id="valorCreditadoBoleto"> </strong></small>a
                                                                                 </div>
                                                                             </div>
-                                                                        </li>
-                                                                        <li class="list-group-item">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-6 text-left">
-                                                                                    <div class="form-group">
-                                                                                        <label><?php echo "PIN" ?></label>
-                                                                                        <input type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" class="form-control" id="pinAtar"/>
+                                                                            <div class="row p-md">
+                                                                                <div class="col-lg-5 col-xs-12">
+                                                                                    <button type="button" class="btn btn-primary full-width" onclick="tokenBoleto();" id="btnGerarBoleto"><?php echo $idioma->getText("gerarBoleto") ?></button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+        
+                                                                        <div class="row p-md" id="tokenBoleto">
+                                                                            <div class="col-lg-12">
+                                                                                <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
+                                                                                <dl class="dl-horizontal m-t-sm">
+                                                                                    <dt class="border-bottom">Valor Total:</dt> <dd id="valorTotalBoleto">-</dd>
+                                                                                    <dt class="border-bottom">Valor à Creditar:</dt> <dd id="valorCreditarBoleto">-</dd>
+                                                                                </dl>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-6 col-xs-12">
+                                                                                        <div class="form-group">
+                                                                                            <label><?php echo $idioma->getText("pin") ?></label>
+                                                                                            <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="pinBoleto"/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-lg-6 col-xs-12">
+                                                                                        <div class="form-group m-b-none">
+                                                                                            <label><?php echo $idioma->getText("token2fa") ?></label>
+                                                                                            <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="tokenBoletoDigito"/>
+                                                                                            <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
+                                                                                                            <a href="javascript:tokenBoleto();" id="reenviarLink"><?php echo $idioma->getText("reenviar2fa") ?></a>
+                                                                                            <?php } ?>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row p-h-sm">
+                                                                                    <div class="col-lg-6 col-xs-12">
+                                                                                        <button class="btn btn-white full-width m-t-xs"  onclick="cancelarBoleto();"><?php echo $idioma->getText("cancelar") ?></button>
+                                                                                    </div>
+                                                                                    <div class="col-lg-6 col-xs-12">
+                                                                                        <button class="btn btn-success full-width m-t-xs"  onclick="salvarDepositoBoleto();"> <?php echo $idioma->getText("confirmar") ?></button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </li>
-                                                                        <li class="list-group-item text-center">
-                                                                            <div class="row">
-                                                                                <div class="col-lg-6">
-                                                                                    <button class="btn btn-white" style="width: 180px;" onclick="limparAtar();"><?php echo "Cancelar" ?></button>
-                                                                                </div>
-                                                                                <div class="col-lg-6">
-                                                                                    <button class="btn btn-success" style="width: 180px;" onclick="depositarAtar();" id="btnCadastrarConta" ><?php echo "Cadastrar" ?></button>
-                                                                                </div>
+                                                                        </div>
+        
+                                                                        <div class="text-center" id="carregaBoleto"></div>
+                                                                        <div class="row p-md" id="boletoGerado"  >
+                                                                            <div class="col-lg-12">
+                                                                                <dl class="dl-horizontal m-t-sm">
+                                                                                    <dt class="border-bottom">QrCode</dt> <dd id="modalBoletoGeradoImgBarcode">-</dd>
+                                                                                    <span id="modalBoletoGeradoImgBarcodeChave"></span>
+                                                                                    </br>
+                                                                                    </br>
+                                                                                    <dt class="border-bottom">Status</dt> <dd id="modalStatusBoleto">-</dd>
+                                                                                    <dt class="border-bottom">Mensagem</dt> <dd id="modalMensagemLabel">-</dd>
+                                                                                    <dt class="border-bottom">Vencimento</dt> <dd id="modalBoletoGeradoVencimento">-</dd>
+                                                                                    <dt class="border-bottom"><?php echo "Comissão" ?>:</dt> <dd id="modalBoletoComissao">-</dd>
+                                                                                    <dt class="border-bottom"><?php echo "Valor Tarifa" ?>:</dt> <dd id="modalBoletoTaxa">-</dd>
+                                                                                    <dt class="border-bottom"><?php echo "Valor PIX" ?>:</dt> <dd id="modalBoletoGeradoValor">-</dd>
+                                                                                    <dt class="border-bottom"><?php echo "Valor à Creditar" ?>:</dt> <dd id="modalBoletoValorCreditar">-</dd>
+                                                                                </dl>
                                                                             </div>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div id="cadastroAtar">
-                                                                <div class="row p-md">
-                                                                    <div class="col-lg-12">
-                                                                        <h4>Cadastre seu Atar ID ou Documento (CPF ou CNPJ) para receber os seus depósitos feitos na Atar.</h4>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row p-md">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="form-group">
-                                                                            <label><?php echo "Documento" ?></label>
-                                                                            <input type="text"  class="form-control" value="<?php echo $cliente->documento ?>" disabled="true"/>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row border-bottom p-md">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="form-group">
-                                                                            <button class="btn btn-primary full-width" type="button" onclick="tokenAtar();" id="btnTokenAtar">
-                                                                                <?php echo "Cadastrar Conta Atar" ?>
-                                                                            </button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        <?php } else { ?>
-                                                            <div id="atarAtivo" class="p-sm">
-                                                                </br>
-                                                                <div class="row">
-                                                                    <div class="col-lg-12">
-                                                                        <h4>Meu Cadastro Atar</h4>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row border-bottom">
-                                                                    <div class="col-lg-6">
-                                                                        <b>Atar ID ou Documento:</b> <span><?php echo $atarCliente->idAtar ?></span>
-                                                                    </div>
-                                                                    </br>
-                                                                </div>
-                                                            </div>
-                                                        <?php } ?>
-                                                        </br>
+                                                        </div>
+                                        <?php } ?>
+        
+                                        <div class="m-t-sm" id="depositoMoedas">
+                                            <div class="row m-b-sm">
+                                                <div class="col-lg-12 text-center ">
+        
+                                                </div>
+                                            </div>
+                                            <div id="infMoeda">
+                                                <div class=" row  m-b-md " >
+                                                    <div class="col-lg-12 text-center" id="">
+                                                        <h2 id="redesTopo"></h2>
                                                     </div>
-                                                <?php } ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                <div id="depositoBoleto">
-                                                    </br>
-                                                    <div class="row p-md">
-                                                        <div class="col-lg-12">
-                                                            <label><?php echo $idioma->getText("depositeBoleto") ?></label>
-                                                        </div>
+                                                </div>
+                                                <div class=" row  m-b-md " >
+                                                    <div class="col-lg-12 text-center" id="container">
+        
                                                     </div>
-                                                    </br>
-
-                                                    <div id="telaBoleto">
-                                                        <div class="row p-md">
-                                                            <div class="col col-lg-5 col-xs-12 border-right">
-                                                                <div class="form-group">
-                                                                    <label><?php echo $idioma->getText("valorDepositado") ?></label>
-                                                                    <input type="text"  class="form-control" id="valorBoleto" name="valorBoleto"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-7 col-xs-12 m-t-md">
-                                                                <small><?php echo $idioma->getText("comissaoDeposito") ?> (<span id="comissaoCobradaBoleto">R$ <?php echo number_format($tarifaBoleto, 2, ",", "") ?> + <?php echo number_format($comissao, 2, ",", "") ?></span>%)</small></br>
-                                                                <small><?php echo $idioma->getText("seraCreditado") ?> <strong id="valorCreditadoBoleto"> </strong></small>a
-                                                            </div>
-                                                        </div>
-                                                        <div class="row p-md">
-                                                            <div class="col-lg-5 col-xs-12">
-                                                                <button type="button" class="btn btn-primary full-width" onclick="tokenBoleto();" id="btnGerarBoleto"><?php echo $idioma->getText("gerarBoleto") ?></button>
-                                                            </div>
-                                                        </div>
+                                                </div>
+                                                <div class="row m-t-xs">
+                                                    <div class="col-lg-12 text-center">
+                                                        <span class="label label-default m-t-sm" style="cursor: pointer; font-size: 10px;" id="btncopy"><?php echo $idioma->getText("copiarEndereco") ?></span>
                                                     </div>
-
-                                                    <div class="row p-md" id="tokenBoleto">
-                                                        <div class="col-lg-12">
-                                                            <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
-                                                            <dl class="dl-horizontal m-t-sm">
-                                                                <dt class="border-bottom">Valor Total:</dt> <dd id="valorTotalBoleto">-</dd>
-                                                                <dt class="border-bottom">Valor à Creditar:</dt> <dd id="valorCreditarBoleto">-</dd>
-                                                            </dl>
-                                                            <div class="row">
-                                                                <div class="col-lg-6 col-xs-12">
-                                                                    <div class="form-group">
-                                                                        <label><?php echo $idioma->getText("pin") ?></label>
-                                                                        <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="pinBoleto"/>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-6 col-xs-12">
-                                                                    <div class="form-group m-b-none">
-                                                                        <label><?php echo $idioma->getText("token2fa") ?></label>
-                                                                        <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="tokenBoletoDigito"/>
-                                                                        <?php if ($cliente->tipoAutenticacao === \Utils\Constantes::TIPO_AUTH_EMAIL) { ?>
-                                                                            <a href="javascript:tokenBoleto();" id="reenviarLink"><?php echo $idioma->getText("reenviar2fa") ?></a>
-                                                                        <?php } ?>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row p-h-sm">
-                                                                <div class="col-lg-6 col-xs-12">
-                                                                    <button class="btn btn-white full-width m-t-xs"  onclick="cancelarBoleto();"><?php echo $idioma->getText("cancelar") ?></button>
-                                                                </div>
-                                                                <div class="col-lg-6 col-xs-12">
-                                                                    <button class="btn btn-success full-width m-t-xs"  onclick="salvarDepositoBoleto();"> <?php echo $idioma->getText("confirmar") ?></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="text-center" id="carregaBoleto"></div>
-                                                    <div class="row p-md" id="boletoGerado"  >
-                                                        <div class="col-lg-12">
-                                                            <dl class="dl-horizontal m-t-sm">
-                                                                <dt class="border-bottom">QrCode</dt> <dd id="modalBoletoGeradoImgBarcode">-</dd>
-                                                                <span id="modalBoletoGeradoImgBarcodeChave"></span>
-                                                                </br>
-                                                                </br>
-                                                                <dt class="border-bottom">Status</dt> <dd id="modalStatusBoleto">-</dd>
-                                                                <dt class="border-bottom">Mensagem</dt> <dd id="modalMensagemLabel">-</dd>
-                                                                <dt class="border-bottom">Vencimento</dt> <dd id="modalBoletoGeradoVencimento">-</dd>
-                                                                <dt class="border-bottom"><?php echo "Comissão" ?>:</dt> <dd id="modalBoletoComissao">-</dd>
-                                                                <dt class="border-bottom"><?php echo "Valor Tarifa" ?>:</dt> <dd id="modalBoletoTaxa">-</dd>
-                                                                <dt class="border-bottom"><?php echo "Valor PIX" ?>:</dt> <dd id="modalBoletoGeradoValor">-</dd>
-                                                                <dt class="border-bottom"><?php echo "Valor à Creditar" ?>:</dt> <dd id="modalBoletoValorCreditar">-</dd>
-                                                            </dl>
-                                                        </div>
+                                                </div>
+                                                <div class="row m-b-md">
+                                                    <div class="col-lg-12 text-center">
+                                                        <button class="btn btn-primary m-t-xs m-b-sm" id="btn-link-ref" data-clipboard-target="#btncopy">
+                                                            <?php echo $idioma->getText("copiarEndereco1") ?>&nbsp;&nbsp;<i class="fa fa-copy"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-
-                                <div class="m-t-sm" id="depositoMoedas">
-                                    <div class="row m-b-sm">
-                                        <div class="col-lg-12 text-center ">
-
-                                        </div>
-                                    </div>
-                                    <div id="infMoeda">
-                                        <div class=" row  m-b-md " >
-                                            <div class="col-lg-12 text-center" id="">
-                                                <h2 id="redesTopo"></h2>
-                                            </div>
-                                        </div>
-                                        <div class=" row  m-b-md " >
-                                            <div class="col-lg-12 text-center" id="container">
-
-                                            </div>
-                                        </div>
-                                        <div class="row m-t-xs">
-                                            <div class="col-lg-12 text-center">
-                                                <span class="label label-default m-t-sm" style="cursor: pointer; font-size: 10px;" id="btncopy"><?php echo $idioma->getText("copiarEndereco") ?></span>
-                                            </div>
-                                        </div>
-                                        <div class="row m-b-md">
-                                            <div class="col-lg-12 text-center">
-                                                <button class="btn btn-primary m-t-xs m-b-sm" id="btn-link-ref" data-clipboard-target="#btncopy">
-                                                    <?php echo $idioma->getText("copiarEndereco1") ?>&nbsp;&nbsp;<i class="fa fa-copy"></i>
+        
+                                            <div class="border-bottom text-center m-b-lg" id="infSemMoeda" style="">
+                                                <i class="fa fa-question fa-5x m-b-md"></i></br>
+                                                <span class="label label-default m-t-sm m-b-md" style="cursor: pointer; font-size: 18px;">- - - - - - - - - - - - - - - -</span></br></br>
+                                                <button class="btn btn-primary" id="btn-link-carteira" onclick="salvar();">
+                                                    <?php echo $idioma->getText("criarCarteira") ?>&nbsp;&nbsp;<i class="fa fa-plus-circle"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="border-bottom text-center m-b-lg" id="infSemMoeda" style="">
-                                        <i class="fa fa-question fa-5x m-b-md"></i></br>
-                                        <span class="label label-default m-t-sm m-b-md" style="cursor: pointer; font-size: 18px;">- - - - - - - - - - - - - - - -</span></br></br>
-                                        <button class="btn btn-primary" id="btn-link-carteira" onclick="salvar();">
-                                            <?php echo $idioma->getText("criarCarteira") ?>&nbsp;&nbsp;<i class="fa fa-plus-circle"></i>
-                                        </button>
-                                    </div>
                                 </div>
-                            </div>
                         </div>
-                </div>
-
-                <div class="col-md-12 col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row m-t-md m-l-sm" id="infGerais">
-                                <div class="col-sm-12 m-b-lg">
-                                    <div id="avisoFiat">
-                                        <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                                            <div class="vertical-timeline-block">
-                                                <div class="vertical-timeline-icon yellow-bg">
-                                                    <i class="fa fa-exclamation fa-1x"></i>
-                                                </div>
-                                                <div class="vertical-timeline-content">
-                                                    <strong class="text-left"><h5><?php echo $idioma->getText("atencao") ?> </h5></strong><!--atenção atencao-->
-                                                    <small><ul style="text-align: justify;">
-                                                            <li class="m-t-xs"><?php echo $idioma->getText("naoPermitidoDepositoDinheiro") ?></li>
-                                                            <li class="m-t-xs"><?php echo $idioma->getText("naoAceitamosDepositosTerceiros") ?></li>
-                                                            <li class="m-t-xs" id="limiteInformacao"></li>
-                                                        </ul></small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="avisoCurrency">
-                                        <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                                            <div class="vertical-timeline-block">
-                                                <div class="vertical-timeline-icon yellow-bg">
-                                                    <i class="fa fa-exclamation fa-1x"></i>
-                                                </div>
-                                                <div class="vertical-timeline-content">
-                                                    <strong class="text-left"><h5><?php echo $idioma->getText("atencao") ?></h5></strong>
-                                                    <small><ul>
-                                                            <li class="m-t-xs" id="envieSomente"></li>
-                                                            <li class="m-t-xs" id="depositoMinimo"></li>
-                                                        </ul></small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div id="infFiat">
-                                        <div id="vertical-timeline" class="vertical-container light-timeline no-margins" id="infFiat">
-                                            <?php if ($configuracao->atarAtivo == 1) { ?>
-                                                <div class="vertical-timeline-block">
-                                                    <div class="vertical-timeline-icon blue-bg">
-                                                        <i class="fa fa-info fa-1x"></i>
-                                                    </div>
-                                                    <div class="vertical-timeline-content">
-                                                        <strong class="text-left"><h5><?php echo "ATAR PAY" ?> </h5></strong><!--informacoes-->
-                                                        <small><ul>
-                                                                <li class="m-t-xs"><?php echo "Depósitos via Atar Pay são instantâneos e 24/7." ?></li>
-                                                                <li class="m-t-xs"><?php echo "Baixe o app Atar Pay e crie sua conta grátis em apenas 2 minutos." ?></li>
-                                                                <li class="m-t-xs"><a href="https://apps.apple.com/br/app/atar-pay/id1144625341" target="atar_pay"><?php echo "Link iOS" ?></a></li>
-                                                                <li class="m-t-xs"><a href="https://play.google.com/store/apps/details?id=com.wearatar.atarpay&hl=en" target="atar_pay"><?php echo "Link Android" ?></a></li>
-                                                                <li class="m-t-xs"><?php echo "Tarifa para depósito: R$ " . number_format($configuracao->atarTarifaDeposito, 2, ",", ".") ?></li>
-                                                                <li class="m-t-xs"><?php echo "Taxa para depósito: R$ " . number_format($configuracao->atarTaxsDeposito, 2, ",", ".") ?></li>
-                                                            </ul></small>
-                                                    </div>
-                                                </div>
-                                            <?php } ?>
-                                            <div id="infBanco">
-                                                <div class="vertical-timeline-block">
-                                                    <div class="vertical-timeline-icon blue-bg">
-                                                        <i class="fa fa-info fa-1x"></i>
-                                                    </div>
-                                                    <div class="vertical-timeline-content">
-                                                        <strong class="text-left"><h5><?php echo $idioma->getText("informacoes") ?> </h5></strong><!--informacoes-->
-                                                        <small><ul>
-                                                                <li class="m-t-xs"><?php echo str_replace("{var1}", $valorMinimo, $idioma->getText("valorMinimoDeposito")) ?></li>
-                                                                <li class="m-t-xs"><?php echo str_replace("{var2}", $valorMinimo, $idioma->getText("ted")) ?></li>
-                                                                <li class="m-t-xs"><?php echo $idioma->getText("doc2") ?></li>
-                                                                <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi4") ?></li>
-                                                                <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi1") ?></li>
-                                                                <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi2") ?></li>
-                                                                <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi3") ?></li>
-                                                                <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi5") ?></li>
-                                                                <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi6") ?></li>
-                                                                <?php if ($boletoAtivo) { ?>
-                                                                    <li class="m-t-xs"><?php echo "Boleto - Valor máximo de R$ " . number_format($configuracao->valorMaxBoleto, 2, ",", ".") ?></li>
-                                                                <?php } ?>
-                                                            </ul></small>
+        
+                        <div class="col-md-12 col-lg-3 settings">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row m-t-md m-l-sm" id="infGerais">
+                                        <div class="col-sm-12 m-b-lg">
+                                            <div id="avisoFiat">
+                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+                                                    <div class="vertical-timeline-block">
+                                                        <div class="vertical-timeline-icon yellow-bg">
+                                                            <i class="fa fa-exclamation fa-1x"></i>
+                                                        </div>
+                                                        <div class="vertical-timeline-content">
+                                                            <strong class="text-left"><h5><?php echo $idioma->getText("atencao") ?> </h5></strong><!--atenção atencao-->
+                                                            <small><ul style="text-align: justify;">
+                                                                    <li class="m-t-xs"><?php echo $idioma->getText("naoPermitidoDepositoDinheiro") ?></li>
+                                                                    <li class="m-t-xs"><?php echo $idioma->getText("naoAceitamosDepositosTerceiros") ?></li>
+                                                                    <li class="m-t-xs" id="limiteInformacao"></li>
+                                                                </ul></small>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div id="infCurrency">
-                                        <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                                            <div class="vertical-timeline-block">
-                                                <div class="vertical-timeline-icon blue-bg">
-                                                    <i class="fa fa-info fa-1x"></i>
+                                            <div id="avisoCurrency">
+                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+                                                    <div class="vertical-timeline-block">
+                                                        <div class="vertical-timeline-icon yellow-bg">
+                                                            <i class="fa fa-exclamation fa-1x"></i>
+                                                        </div>
+                                                        <div class="vertical-timeline-content">
+                                                            <strong class="text-left"><h5><?php echo $idioma->getText("atencao") ?></h5></strong>
+                                                            <small><ul>
+                                                                    <li class="m-t-xs" id="envieSomente"></li>
+                                                                    <li class="m-t-xs" id="depositoMinimo"></li>
+                                                                </ul></small>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="vertical-timeline-content">
-                                                    <strong class="text-left"><h5><?php echo $idioma->getText("informacoes") ?></h5></strong>
-                                                    <small><ul>
-                                                            <li id="aceitaRede"></li>
-                                                            <li id="naoTaxaDeposito"></li>
-                                                        </ul></small>
-                                                    </br>
+                                            </div>
+        
+                                            <div id="infFiat">
+                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins" id="infFiat">
+                                                    <?php if ($configuracao->atarAtivo == 1) { ?>
+                                                                    <div class="vertical-timeline-block">
+                                                                        <div class="vertical-timeline-icon blue-bg">
+                                                                            <i class="fa fa-info fa-1x"></i>
+                                                                        </div>
+                                                                        <div class="vertical-timeline-content">
+                                                                            <strong class="text-left"><h5><?php echo "ATAR PAY" ?> </h5></strong><!--informacoes-->
+                                                                            <small><ul>
+                                                                                    <li class="m-t-xs"><?php echo "Depósitos via Atar Pay são instantâneos e 24/7." ?></li>
+                                                                                    <li class="m-t-xs"><?php echo "Baixe o app Atar Pay e crie sua conta grátis em apenas 2 minutos." ?></li>
+                                                                                    <li class="m-t-xs"><a href="https://apps.apple.com/br/app/atar-pay/id1144625341" target="atar_pay"><?php echo "Link iOS" ?></a></li>
+                                                                                    <li class="m-t-xs"><a href="https://play.google.com/store/apps/details?id=com.wearatar.atarpay&hl=en" target="atar_pay"><?php echo "Link Android" ?></a></li>
+                                                                                    <li class="m-t-xs"><?php echo "Tarifa para depósito: R$ " . number_format($configuracao->atarTarifaDeposito, 2, ",", ".") ?></li>
+                                                                                    <li class="m-t-xs"><?php echo "Taxa para depósito: R$ " . number_format($configuracao->atarTaxsDeposito, 2, ",", ".") ?></li>
+                                                                                </ul></small>
+                                                                        </div>
+                                                                    </div>
+                                                    <?php } ?>
+                                                    <div id="infBanco">
+                                                        <div class="vertical-timeline-block">
+                                                            <div class="vertical-timeline-icon blue-bg">
+                                                                <i class="fa fa-info fa-1x"></i>
+                                                            </div>
+                                                            <div class="vertical-timeline-content">
+                                                                <strong class="text-left"><h5><?php echo $idioma->getText("informacoes") ?> </h5></strong><!--informacoes-->
+                                                                <small><ul>
+                                                                        <li class="m-t-xs"><?php echo str_replace("{var1}", $valorMinimo, $idioma->getText("valorMinimoDeposito")) ?></li>
+                                                                        <li class="m-t-xs"><?php echo str_replace("{var2}", $valorMinimo, $idioma->getText("ted")) ?></li>
+                                                                        <li class="m-t-xs"><?php echo $idioma->getText("doc2") ?></li>
+                                                                        <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi4") ?></li>
+                                                                        <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi1") ?></li>
+                                                                        <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi2") ?></li>
+                                                                        <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi3") ?></li>
+                                                                        <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi5") ?></li>
+                                                                        <li class="m-t-xs"><?php echo $idioma->getText("informacoesEnvioArqLi6") ?></li>
+                                                                        <?php if ($boletoAtivo) { ?>
+                                                                                        <li class="m-t-xs"><?php echo "Boleto - Valor máximo de R$ " . number_format($configuracao->valorMaxBoleto, 2, ",", ".") ?></li>
+                                                                        <?php } ?>
+                                                                    </ul></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="infCurrency">
+                                                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
+                                                    <div class="vertical-timeline-block">
+                                                        <div class="vertical-timeline-icon blue-bg">
+                                                            <i class="fa fa-info fa-1x"></i>
+                                                        </div>
+                                                        <div class="vertical-timeline-content">
+                                                            <strong class="text-left"><h5><?php echo $idioma->getText("informacoes") ?></h5></strong>
+                                                            <small><ul>
+                                                                    <li id="aceitaRede"></li>
+                                                                    <li id="naoTaxaDeposito"></li>
+                                                                </ul></small>
+                                                            </br>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -646,14 +647,12 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="settings mtb15">
         <div class="container-fluid">
             <div class="row">
-                <!-- <div class="col-md-12 col-lg-1">
-                </div> -->
-                <div class="col-md-12 col-lg-9">
+                <div class="col-12 col-md-11 mx-auto">
+                <div class="row">
+                <div class="col-md-12 col-lg-9 settings">
                     <div class="card">
                         <div class="card-body">
                             <div id="tabelaReais">
@@ -906,7 +905,6 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                 </div>
                             </div>
                         </div>
-                        <!-- </div> -->
                     </div>
                 </div>
             </div>
@@ -930,15 +928,15 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
 <script src="<?php echo JS; ?>easy.qrcode.min.js"></script>
 
 <script>
-    var comissao = <?php echo number_format($comissao, 2, ".", "")?>;
-    var comissaoBoleto = <?php echo number_format($comissaoBoleto, 2, ".", "")?>;
-    var tarifaBoleto = <?php echo number_format($tarifaBoleto, 2, ".", "")?>;
+    var comissao = <?php echo number_format($comissao, 2, ".", "") ?>;
+    var comissaoBoleto = <?php echo number_format($comissaoBoleto, 2, ".", "") ?>;
+    var tarifaBoleto = <?php echo number_format($tarifaBoleto, 2, ".", "") ?>;
 
-    var comissaoDinheiroAte2 = <?php echo number_format($configuracao->percentualDepositos, 2, ".", "")?>;
-    var comissaoDinheiro2a5 = <?php echo number_format($configuracao->depositoDoisCinco, 2, ".", "")?>;
-    var comissaoDinheiro5a10 = <?php echo number_format($configuracao->depositoCincoDez, 2, ".", "")?>;
-    var comissaoDinheiro10a50 = <?php echo number_format($configuracao->depositoDezCinquenta, 2, ".", "")?>;
-    var comissaoDinheiro50acima = <?php echo number_format($configuracao->depositoCinquentaAcima, 2, ".", "")?>;   
+    var comissaoDinheiroAte2 = <?php echo number_format($configuracao->percentualDepositos, 2, ".", "") ?>;
+    var comissaoDinheiro2a5 = <?php echo number_format($configuracao->depositoDoisCinco, 2, ".", "") ?>;
+    var comissaoDinheiro5a10 = <?php echo number_format($configuracao->depositoCincoDez, 2, ".", "") ?>;
+    var comissaoDinheiro10a50 = <?php echo number_format($configuracao->depositoDezCinquenta, 2, ".", "") ?>;
+    var comissaoDinheiro50acima = <?php echo number_format($configuracao->depositoCinquentaAcima, 2, ".", "") ?>;   
     var dataReal = "";
     var dataCoin = "semana";
     var dataAtar = "";
@@ -1058,7 +1056,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                 $("#progressDocumentsContainer").show();
                 var percentVal = percentComplete + '%';
                 $("#progressDocuments").width(percentVal);
-                $("#progressDocumentsLegend").html("<?php echo $idioma->getText("carregando")?> "+percentVal + "%");
+                $("#progressDocumentsLegend").html("<?php echo $idioma->getText("carregando") ?> "+percentVal + "%");
                 },
             success: function (json) {
                 try {
@@ -1067,7 +1065,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                         $("#idContaBancariaEmpresa").children("option").first().prop("selected", true);
                         $("#tipoDeposito").children("option").first().prop("selected", true);
                         $("#valor").val("0,00").trigger("keydown");
-                        showNotyAlert("<?php echo $idioma->getText("solicitacaoDepositoSucesso")?>", "s");
+                        showNotyAlert("<?php echo $idioma->getText("solicitacaoDepositoSucesso") ?>", "s");
                         limparCampos();
                         filtrarReais();
 
@@ -1100,7 +1098,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         });
 
         $("#tipoDeposito").change(function () {
-            if ($(this).val() === '<?php echo \Utils\Constantes::GERENCIA_NET?>') {
+            if ($(this).val() === '<?php echo \Utils\Constantes::GERENCIA_NET ?>') {
                 $("#idContaBancariaEmpresa").val(0);
                 $("#idContaBancariaEmpresa").prop("disabled", true);
                 $("#comprovante").prop("disabled", true).trigger("change");
@@ -1267,7 +1265,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
     function getDadosContaBancaria() {
         if ($("#idContaBancariaEmpresa").val() > 0) {
             $.ajax({
-                url: '<?php echo URLBASE_CLIENT  . Utils\Rotas::R_REAIS_DEPOSITOS_DADOSCONTA ?>',
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_DEPOSITOS_DADOSCONTA ?>',
                 method: 'post',
                 dataType: 'json',
                 data: {
@@ -1535,7 +1533,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
     function calcularValorCreditado() {
         var valor = ($("#valor").val().length > 0 ? parseFloat(toFloat($("#valor").val())) : 0);
         
-        var comissao = <?php echo number_format($comissao, 2, ".", "")?>;
+        var comissao = <?php echo number_format($comissao, 2, ".", "") ?>;
         if ($("#tipoDeposito").val() === "<?php echo \Utils\Constantes::DINHEIRO ?>") {
             
             if (valor >= 50000) {
@@ -1566,7 +1564,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         var valor = ($("#valorBoleto").val().length > 0 ? parseFloat(toFloat($("#valorBoleto").val())) : 0);
 
         var tarifaExtra = tarifaBoleto;
-        var comissao = <?php echo number_format($comissaoBoleto, 2, ".", "")?>;
+        var comissao = <?php echo number_format($comissaoBoleto, 2, ".", "") ?>;
 
         var resultado = (valor - tarifaExtra - ((valor * comissao / 100)));
         $("#comissaoCobradaBoleto").html("R$ "+ tarifaBoleto.toFixed(2).replace(".", ",") + " + "+comissao.toFixed(2).replace(".", ","));
@@ -1602,7 +1600,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         $("#pinBoleto").val("");
         $("#tokenBoletoDigito").val("");
         $.ajax({
-        url: "<?php echo URLBASE_CLIENT  . Utils\Rotas::R_DEPOSITO_BOLETO_TOKEN  ?>",
+        url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DEPOSITO_BOLETO_TOKEN ?>",
         method: "post",
         dataType: "json",
         data: {
@@ -1637,11 +1635,11 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         $("#boletoGerado").hide();
         $("#tokenBoleto").hide();
         $.ajax({
-        url: "<?php echo URLBASE_CLIENT  . Utils\Rotas::R_REAIS_DEPOSITOS_SALVAR  ?>",
+        url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_DEPOSITOS_SALVAR ?>",
         method: "post",
         dataType: "json",
         data: {
-            tipoDeposito: '<?php echo \Utils\Constantes:: GERENCIA_NET ?>',
+            tipoDeposito: '<?php echo \Utils\Constantes::GERENCIA_NET ?>',
             valor: $("#valorBoleto").val()
         },
         success: function (json) {
@@ -1667,7 +1665,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         $("#carregaBoleto").show();
         $("#carregaBoleto").html("<img src='<?php echo IMAGES ?>loading.gif' />");
         $.ajax({
-            url: "<?php echo URLBASE_CLIENT  . Utils\Rotas::R_DEPOSITO_BOLETO_LARA ?>",
+            url: "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DEPOSITO_BOLETO_LARA ?>",
             method: "post",
             dataType: "json",
             data: {
@@ -1783,7 +1781,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                     trigger: "focus",
                                     container: "body",
                                     placement: "top",
-                                    title: "<?php echo $idioma->getText("depositoJs")?>" + controle,
+                                    title: "<?php echo $idioma->getText("depositoJs") ?>" + controle,
                                     content: json.popover[controle]
                                 });
                             });
@@ -1796,7 +1794,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
                                     trigger: "focus",
                                     container: "body",
                                     placement: "top",
-                                    title: "<?php echo $idioma->getText("depositoJs")?>" + controle,
+                                    title: "<?php echo $idioma->getText("depositoJs") ?>" + controle,
                                     content: motivo
                                 });
                             });
@@ -1904,114 +1902,114 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : Array();
         $("#cadastroAtar").show();
     }
 
-    <?php if($configuracao->atarAtivo == 1){ ?>
-    function filtrarAtar() {
-            $.ajax({
-                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_DEP_LISTAR ?>',
-                method: 'post',
-                dataType: 'json',
-                data: {
-                    data: dataAtar,
-                    filtro: $("#filtroTextoAtar").val()
-                },
-                success: function (json) {
-                    try {
-                        if (json.sucesso) {
-                            $(".carregando").hide();
-                            $("#listaAtar").html(json.html);
-                            $('#tbllistaAtar').trigger('footable_initialize');
-                        } else {
-                            $("#listaAtar").html("<tr ><td class='text-center' colspan='6'>"+json.mensagem+"</td></tr>");
-                        }
-                    } catch (e) {
-                        $("#listaAtar").html("<tr ><td class='text-center' colspan='6'>"+e+"</td></tr>");
+    <?php if ($configuracao->atarAtivo == 1) { ?>
+                function filtrarAtar() {
+                        $.ajax({
+                            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_DEP_LISTAR ?>',
+                            method: 'post',
+                            dataType: 'json',
+                            data: {
+                                data: dataAtar,
+                                filtro: $("#filtroTextoAtar").val()
+                            },
+                            success: function (json) {
+                                try {
+                                    if (json.sucesso) {
+                                        $(".carregando").hide();
+                                        $("#listaAtar").html(json.html);
+                                        $('#tbllistaAtar').trigger('footable_initialize');
+                                    } else {
+                                        $("#listaAtar").html("<tr ><td class='text-center' colspan='6'>"+json.mensagem+"</td></tr>");
+                                    }
+                                } catch (e) {
+                                    $("#listaAtar").html("<tr ><td class='text-center' colspan='6'>"+e+"</td></tr>");
+                                }
+                            }
+                        });
                     }
-                }
-            });
-        }
 
-    function depositarAtar() {
-            $("#btnCadastrarConta").prop("disabled", true);
-            $.ajax({
-                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_DEP_SALVAR ?>',
-                method: 'post',
-                dataType: 'json',
-                data: {
-                    idAtar: $("#labelIdAtar").html(),
-                    pin: $("#pinAtar").val()
-                },
-                beforeSend: function(){
-                    $('#btnCadastrarConta').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
-                },
-                success: function (json) {
-                    try {
-                        if (json.sucesso) {
-                            $("#cadastroAtar").hide();
-                            $("#token2faAtar").hide();
-                            limparCampos();
-                            showNotyAlert(json.mensagem, "s");
-                            location.reload();
-                        } else {
-                            showNotyAlert(json.mensagem, "e");
-                        }
-                    } catch (e) {
-                        showNotyAlert(json.mensagem, "e");
+                function depositarAtar() {
+                        $("#btnCadastrarConta").prop("disabled", true);
+                        $.ajax({
+                            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_DEP_SALVAR ?>',
+                            method: 'post',
+                            dataType: 'json',
+                            data: {
+                                idAtar: $("#labelIdAtar").html(),
+                                pin: $("#pinAtar").val()
+                            },
+                            beforeSend: function(){
+                                $('#btnCadastrarConta').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+                            },
+                            success: function (json) {
+                                try {
+                                    if (json.sucesso) {
+                                        $("#cadastroAtar").hide();
+                                        $("#token2faAtar").hide();
+                                        limparCampos();
+                                        showNotyAlert(json.mensagem, "s");
+                                        location.reload();
+                                    } else {
+                                        showNotyAlert(json.mensagem, "e");
+                                    }
+                                } catch (e) {
+                                    showNotyAlert(json.mensagem, "e");
+                                }
+                                $('#btnCadastrarConta').html('Cadastrar');
+                                $("#btnCadastrarConta").prop("disabled", false);
+                            }
+                        });
                     }
-                    $('#btnCadastrarConta').html('Cadastrar');
-                    $("#btnCadastrarConta").prop("disabled", false);
-                }
-            });
-        }
 
-        function tokenAtar() {
-            $('#btnTokenAtar').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
-            $("#btnTokenAtar").prop("disabled", true);
-            $.ajax({
-                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_DEP_TOKEN ?>',
-                method: 'post',
-                dataType: 'json',
-                data: {
-                    idAtar: $("#idAtar").val()
+                    function tokenAtar() {
+                        $('#btnTokenAtar').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+                        $("#btnTokenAtar").prop("disabled", true);
+                        $.ajax({
+                            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_ATAR_DEP_TOKEN ?>',
+                            method: 'post',
+                            dataType: 'json',
+                            data: {
+                                idAtar: $("#idAtar").val()
 
-                },
-                beforeSend: function(){
-                    $('#btnTokenAtar').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
-                },
-                success: function (json) {
-                    try {
-                        if (json.sucesso) {
-                            limparCampos();
-                            $("#cadastroAtar").hide();
-                            $("#labelIdAtar").html(json.idAtar);                            
+                            },
+                            beforeSend: function(){
+                                $('#btnTokenAtar').html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+                            },
+                            success: function (json) {
+                                try {
+                                    if (json.sucesso) {
+                                        limparCampos();
+                                        $("#cadastroAtar").hide();
+                                        $("#labelIdAtar").html(json.idAtar);                            
                            
-                            $("#token2faAtar").show();
+                                        $("#token2faAtar").show();
                                                         
-                        } else {
-                            showNotyAlert(json.mensagem, "e");
-                        }
-                    } catch (e) {
-                       showNotyAlert(json.mensagem, "e");
-                    }
-                    $("#btnTokenAtar").html("Cadastrar Conta Atar");    
-                    $("#btnTokenAtar").prop("disabled", false);
-                }
+                                    } else {
+                                        showNotyAlert(json.mensagem, "e");
+                                    }
+                                } catch (e) {
+                                   showNotyAlert(json.mensagem, "e");
+                                }
+                                $("#btnTokenAtar").html("Cadastrar Conta Atar");    
+                                $("#btnTokenAtar").prop("disabled", false);
+                            }
                 
-            });
-        }
+                        });
+                    }
 
-    function calcularValorAtar() {
-        var valor = ($("#valorAtar").val().length > 0 ? parseFloat(toFloat($("#valorAtar").val())) : 0);
-        var tarAtar = parseFloat(tarifaAtar);
-        var taxAtar = parseFloat(taxaAtar);
+                function calcularValorAtar() {
+                    var valor = ($("#valorAtar").val().length > 0 ? parseFloat(toFloat($("#valorAtar").val())) : 0);
+                    var tarAtar = parseFloat(tarifaAtar);
+                    var taxAtar = parseFloat(taxaAtar);
         
-        var resultado = valor - (valor * (taxAtar / 100)) - tarAtar;
+                    var resultado = valor - (valor * (taxAtar / 100)) - tarAtar;
         
-        if (resultado <= 0) {
-            resultado = 0;
-        }
+                    if (resultado <= 0) {
+                        resultado = 0;
+                    }
         
-        $("#valorCreditadoAtar").html("R$ " + mascaraValor(resultado.toFixed(2)));
-    }
+                    $("#valorCreditadoAtar").html("R$ " + mascaraValor(resultado.toFixed(2)));
+                }
     <?php } ?>
 
     function loadCheckBox(){   
