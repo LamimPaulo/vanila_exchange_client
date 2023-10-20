@@ -18,6 +18,8 @@ if ($paridade->ativo < 1 || $paridade->moedaBook->ativo < 1) {
   $mostrarAlerta = true;
 }
 
+$configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
+
 $_data["idiomaMenu"] = $idioma;
 ?>
 
@@ -28,6 +30,12 @@ $_data["idiomaMenu"] = $idioma;
 
 <link href="<?php echo TEMA; ?>css.old/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/dashboard.css">
+
+
+
+asfdasfasf
+<?php echo $configuracao->valorMinSaqueReais ?>
+
 
 <div class="container no-fluid mt-3">
   <div class="row">
@@ -50,6 +58,8 @@ $_data["idiomaMenu"] = $idioma;
               </div>
             </div>
           </div>
+
+
 
           <div class="shadow mt-3">
             <div class="p-3">
@@ -175,7 +185,7 @@ $_data["idiomaMenu"] = $idioma;
                   <div class="row">
                     <div class="col-md-5 text-center mb-3-md">
                       <span class="d-block">
-                        <?php echo $cliente->nome ?>, este é o seu patrimônio
+                        <?php echo $cliente->nome ?>, este é o seu patrimônio 
                       </span>
                       <span class="fs-20 d-block font-weight-bold"><span class="balance-hidden">****</span><span
                           class="balance-visible" id="total-balance"></span></span>
@@ -572,6 +582,8 @@ $_data["idiomaMenu"] = $idioma;
               <span class="d-block ml-33">Confira a performance da sua carteira quando comparada a outros
                 indicadores</span>
             </div>
+
+
 
             <table class="table table-hover mt-3" id="rentabilidade-table">
               <thead>
