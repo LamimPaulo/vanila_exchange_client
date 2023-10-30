@@ -895,27 +895,29 @@ $_data["idiomaMenu"] = $idioma;
       return (amount * 100 / percent100);
     }
 
-    const dadosPie = [{
+    const dadosPie = [
+      {
       "products": "Criptomoedas",
       "share": pieChartPercent(portfolio_cryptoBalance).toFixed(2),
       "color": am4core.color("orange")
-    }, {
-      "products": "Renda Fixa Digital",
-      "share": pieChartPercent(portfolio_rendaFixaBalance).toFixed(2),
-      "color": am4core.color("yellow")
-    }, {
-      "products": "Utility Tokens",
-      "share": pieChartPercent(portfolio_utilityBalance).toFixed(2),
-      "color": am4core.color("blue")
-    }, {
-      "products": "Startups",
-      "share": pieChartPercent(portfolio_startupsBalance).toFixed(2),
-      "color": am4core.color("green")
-    }, {
-      "products": "Não Investido",
-      "share": pieChartPercent(walletData["series"][0]).toFixed(2),
-      "color": am4core.color("#ccc")
-    }];
+      }, {
+        "products": "Renda Fixa Digital",
+        "share": pieChartPercent(portfolio_rendaFixaBalance).toFixed(2),
+        "color": am4core.color("yellow")
+      }, {
+        "products": "Utility Tokens",
+        "share": pieChartPercent(portfolio_utilityBalance).toFixed(2),
+        "color": am4core.color("blue")
+      }, {
+        "products": "Startups",
+        "share": pieChartPercent(portfolio_startupsBalance).toFixed(2),
+        "color": am4core.color("green")
+      }, {
+        "products": "Não Investido",
+        "share": pieChartPercent(walletData["series"][0]).toFixed(2),
+        "color": am4core.color("#ccc")
+      }
+    ];
 
     const handlePieChart = (id, data) => {
       am4core.ready(function () {
@@ -955,7 +957,122 @@ $_data["idiomaMenu"] = $idioma;
       }); // end am4core.ready()
     }
 
+    const handleAxisChart = (id, user_id) => {
+      am4core.ready(async function() {
+      am4core.addLicense("ch-custom-attribution");
+      am4core.useTheme(am4themes_animated);
+      var chart = am4core.create(id, am4charts.XYChart);
+      chart.colors.step = 2;
+      var apiData = await fetchData(user_id);
+
+      var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+      // dateAxis.renderer.minGridDistance = 50;
+      // dateAxis.dataFields.category = 'label';
+      
+      var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+
+      function createAxisAndSeries(field, name, opposite, bullet) {
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        if(chart.yAxes.indexOf(valueAxis) != 0){
+            valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
+        }
+        
+        var series = chart.series.push(new am4charts.LineSeries());
+        series.dataFields.valueY = field;
+        series.dataFields.dateX = "date";
+        series.strokeWidth = 2;
+        series.yAxis = valueAxis;
+        series.name = name;
+        series.tooltipText = "{name}: [bold]{valueY}[/]";
+        series.tensionX = 0.8;
+        series.showOnInit = true;
+        
+        var interfaceColors = new am4core.InterfaceColorSet();
+        
+        switch(bullet) {
+          case "triangle":
+            var bullet = series.bullets.push(new am4charts.Bullet());
+            bullet.width = 12;
+            bullet.height = 12;
+            bullet.horizontalCenter = "middle";
+            bullet.verticalCenter = "middle";
+            
+            var triangle = bullet.createChild(am4core.Triangle);
+            triangle.stroke = interfaceColors.getFor("background");
+            triangle.strokeWidth = 2;
+            triangle.direction = "top";
+            triangle.width = 12;
+            triangle.height = 12;
+            break;
+          case "rectangle":
+            var bullet = series.bullets.push(new am4charts.Bullet());
+            bullet.width = 10;
+            bullet.height = 10;
+            bullet.horizontalCenter = "middle";
+            bullet.verticalCenter = "middle";
+            
+            var rectangle = bullet.createChild(am4core.Rectangle);
+            rectangle.stroke = interfaceColors.getFor("background");
+            rectangle.strokeWidth = 2;
+            rectangle.width = 10;
+            rectangle.height = 10;
+            break;
+          default:
+            var bullet = series.bullets.push(new am4charts.CircleBullet());
+            bullet.circle.stroke = interfaceColors.getFor("background");
+            bullet.circle.strokeWidth = 2;
+            break;
+        }
+        
+        valueAxis.renderer.line.strokeOpacity = 1;
+        valueAxis.renderer.line.strokeWidth = 2;
+        valueAxis.renderer.line.stroke = series.stroke;
+        valueAxis.renderer.labels.template.fill = series.stroke;
+        valueAxis.renderer.opposite = opposite;
+      }
+
+      createAxisAndSeries("wallet", "Carteira", false, "circle");
+      createAxisAndSeries("cdi", "CDI", true, "triangle");
+      // createAxisAndSeries("hits", "Hits", true, "rectangle");
+
+      // Add legend
+      chart.legend = new am4charts.Legend();
+
+      // Add cursor
+      chart.cursor = new am4charts.XYCursor();
+
+      // generate some random data, quite different range
+      var filteredChartData = [];
+      apiData.forEach(item => {
+        
+        filteredChartData.push({
+          date: new Date(item.label),
+          carteira: item.wallet,
+          cdi: item.cdi
+        });
+      });
+
+      chart.data =  filteredChartData;
+
+
+}); 
+    }
+
+    async function fetchData(user_id) {
+      try {
+        const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user="+user_id);
+        const fData = await response.json();
+        const data = Object.keys(fData.scope).map(key => fData.scope[key]);
+        console.log(data)
+        return data;
+      } catch (error) {
+        console.error(`Data error: ${error.message}`);
+      }
+    }
+
     handlePieChart("dashboard-chart", dadosPie);
+    handleAxisChart("performance-chart", "<?php echo $cliente->id ?>" )
     handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);
     handleRadialChart("pie-rendaFixa-chart", pieChartPercent(portfolio_rendaFixaBalance).toFixed(1), "yellow", 50, 14);
     handleRadialChart("pie-utility-chart", pieChartPercent(portfolio_utilityBalance).toFixed(1), "blue", 50, 14);
@@ -981,7 +1098,7 @@ $_data["idiomaMenu"] = $idioma;
   // $.getJSON("<?php echo $_ENV['SITE_URL'] ?>"+"/api/priv/listOurTokens", function (data) {
 </script>
 <script src="assets/js/divergentLinesChart.js"></script>
-<script src="assets/js/valueAxisChart.js"></script>
+<!-- <script src="assets/js/valueAxisChart.js"></script> -->
 <?php Utils\Layout::append("mensage_text", $_data) ?>
 <?php Utils\Layout::append("mensage_text", $_data) ?>
 

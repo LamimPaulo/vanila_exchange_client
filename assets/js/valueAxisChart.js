@@ -1,17 +1,18 @@
-async function fetchData() {
-  try {
-    const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user=15093064590045");
-    const fData = await response.json();
-    const data = Object.keys(fData.scope).map(key => fData.scope[key]);
-    console.log(data)
-    return data;
-  } catch (error) {
-    console.error(`Data error: ${error.message}`);
-  }
-}
+// async function fetchData() {
+//   try {
+//     const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user=15093064590045");
+//     const fData = await response.json();
+//     const data = Object.keys(fData.scope).map(key => fData.scope[key]);
+//     console.log(data)
+//     return data;
+//   } catch (error) {
+//     console.error(`Data error: ${error.message}`);
+//   }
+// }
 
 
 
+// am4core.ready(function() {
 am4core.ready(function() {
 
     // License begin
@@ -34,8 +35,8 @@ am4core.ready(function() {
     chart.data = fetchData();
     
     // Create axes
-    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    dateAxis.renderer.minGridDistance = 50;
+    var dateAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    // dateAxis.renderer.minGridDistance = 50;
     
     // Create series
     function createAxisAndSeries(field, name, opposite, bullet) {
@@ -46,7 +47,7 @@ am4core.ready(function() {
       
       var series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = field;
-      series.dataFields.dateX = "date";
+      series.dataFields.dateX = categoryAxis;
       series.strokeWidth = 2;
       series.yAxis = valueAxis;
       series.name = name;
@@ -55,6 +56,7 @@ am4core.ready(function() {
       series.showOnInit = true;
       
       var interfaceColors = new am4core.InterfaceColorSet();
+      console.log(bullet);
       
       switch(bullet) {
         case "triangle":
