@@ -351,6 +351,8 @@ $_data["idiomaMenu"] = $idioma;
 <body>
   <div class="settings mtb15">
     <div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-11 mx-auto">
       <div class="row">
         <div class="col-md-12 col-lg-3">
           <div class="accordion mb-3" id="accordionExample">
@@ -382,7 +384,7 @@ $_data["idiomaMenu"] = $idioma;
                     <a class="nav-link" onclick="listaNavegadores();" id="settings-hist-tab" data-toggle="pill" href="#settings-hist" role="tab" aria-controls="settings-hist" aria-selected="false"><i class="icon ion-md-exit"></i> <?php echo $idioma->getText("perfil21") ?></a>
 
                     <?php if ($documentosEntregue && $configuracao->aparelhos == 1) { ?>
-                      <a class="nav-link" onclick="listarDispositivosMobile(); parear();" id="settings-devices-tab" data-toggle="pill" href="#settings-devices" role="tab" aria-controls="settings-devices" aria-selected="false"><i class="icon ion-md-phone-portrait"></i> <?php echo $idioma->getText("perfil1") ?></a>
+                        <a class="nav-link" onclick="listarDispositivosMobile(); parear();" id="settings-devices-tab" data-toggle="pill" href="#settings-devices" role="tab" aria-controls="settings-devices" aria-selected="false"><i class="icon ion-md-phone-portrait"></i> <?php echo $idioma->getText("perfil1") ?></a>
                     <?php } ?>
                     <a class="nav-link" onclick="meusLimites(); getTaxas();" id="settings-limits-tab" data-toggle="pill" href="#settings-limits" role="tab" aria-controls="settings-limits" aria-selected="false"><i class="icon ion-md-cash"></i> <?php echo $idioma->getText("perfil24") ?></a>
                   </div>
@@ -441,24 +443,24 @@ $_data["idiomaMenu"] = $idioma;
                       </p>
                       <!-- <p> </p> -->
                       <?php if ($cliente->documentoVerificado == 1) { ?>
-                        <!-- <li class="timeline-item"> -->
-                        <!-- <div class="timeline-badge check-success" style="padding-top:10px;"><i
+                          <!-- <li class="timeline-item"> -->
+                          <!-- <div class="timeline-badge check-success" style="padding-top:10px;"><i
                                               class="fa fa-check"></i></div> -->
-                        <div class="timeline-panel">
-                          <div class="timeline-heading">
-                            <h6 class="timeline-title">Conta nível I</h6>
+                          <div class="timeline-panel">
+                            <div class="timeline-heading">
+                              <h6 class="timeline-title">Conta nível I</h6>
+                            </div>
+                            <div class="timeline-body">
+                              <p>
+                                <?php
+                                echo '<i class="fa fa-check-circle-o fa-1x text-kyc-success" aria-hidden="true"></i>&nbsp;Liberação de operações<br/>';
+                                echo '<i class="fa fa-check-circle-o fa-1x text-kyc-success" aria-hidden="true"></i>&nbsp;Saques/Depósitos BRL<br/>';
+                                echo '<i class="fa fa-check-circle-o fa-1x text-kyc-success" aria-hidden="true"></i>&nbsp;Saque/Depósito Cripto<br/>';
+                                ?>
+                              </p>
+                            </div>
                           </div>
-                          <div class="timeline-body">
-                            <p>
-                              <?php
-                              echo '<i class="fa fa-check-circle-o fa-1x text-kyc-success" aria-hidden="true"></i>&nbsp;Liberação de operações<br/>';
-                              echo '<i class="fa fa-check-circle-o fa-1x text-kyc-success" aria-hidden="true"></i>&nbsp;Saques/Depósitos BRL<br/>';
-                              echo '<i class="fa fa-check-circle-o fa-1x text-kyc-success" aria-hidden="true"></i>&nbsp;Saque/Depósito Cripto<br/>';
-                              ?>
-                            </p>
-                          </div>
-                        </div>
-                        </li>
+                          </li>
                       <?php } ?>
                       <p>
                         <?php
@@ -508,9 +510,9 @@ $_data["idiomaMenu"] = $idioma;
                               <small><?php echo $idioma->getText("clienteDesde") ?><?php echo !empty($cliente->dataCadastro) ? $cliente->dataCadastro->formatar(\Utils\Data::FORMATO_PT_BR) : "-" ?></small>
                               </br>
                               <?php if ($configuracao->kyc == 1) { ?>
-                                <small>
-                                  <?php echo str_replace("{var}", $statusConta, $idioma->getText("conta")) ?>
-                                </small></br>
+                                  <small>
+                                    <?php echo str_replace("{var}", $statusConta, $idioma->getText("conta")) ?>
+                                  </small></br>
                               <?php } ?>
                               <small>
                                 <?php echo $idioma->getText("fraseSeguranca") ?><?php echo $fraseSeguranca ?>
@@ -521,27 +523,27 @@ $_data["idiomaMenu"] = $idioma;
                       </div>
                       <?php if (!$documentosEntregue) { ?>
 
-                        <div class="vertical-timeline-block">
-                          <div class="vertical-timeline-icon blue-bg">
-                            <i class="fa fa-info fa-1x"></i>
+                          <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon blue-bg">
+                              <i class="fa fa-info fa-1x"></i>
+                            </div>
+                            <div class="vertical-timeline-content">
+                              <strong class="text-center">
+                                <h4><?php echo strtoupper(str_replace("{var}", $brand->nome, $idioma->getText("parabensVoceCliente"))) ?></h4>
+                              </strong>
+                              <strong class="text-center">
+                                <h5><?php echo $idioma->getText("informacoes") ?></h5>
+                              </strong>
+                              <small>
+                                <ul>
+                                  <li class="m-t-xs"><?php echo $idioma->getText("todosOsCamposDevem") ?></li>
+                                  <li class="m-t-xs"><?php echo $idioma->getText("casoNaoTenhaAlgum") ?></li>
+                                  <li class="m-t-xs"><?php echo $idioma->getText("agoraQueVoce2") ?></li>
+                                  <li class="m-t-xs"><?php echo $idioma->getText("documentosLiberado") ?></li>
+                                </ul>
+                              </small>
+                            </div>
                           </div>
-                          <div class="vertical-timeline-content">
-                            <strong class="text-center">
-                              <h4><?php echo strtoupper(str_replace("{var}", $brand->nome, $idioma->getText("parabensVoceCliente"))) ?></h4>
-                            </strong>
-                            <strong class="text-center">
-                              <h5><?php echo $idioma->getText("informacoes") ?></h5>
-                            </strong>
-                            <small>
-                              <ul>
-                                <li class="m-t-xs"><?php echo $idioma->getText("todosOsCamposDevem") ?></li>
-                                <li class="m-t-xs"><?php echo $idioma->getText("casoNaoTenhaAlgum") ?></li>
-                                <li class="m-t-xs"><?php echo $idioma->getText("agoraQueVoce2") ?></li>
-                                <li class="m-t-xs"><?php echo $idioma->getText("documentosLiberado") ?></li>
-                              </ul>
-                            </small>
-                          </div>
-                        </div>
                       <?php } ?>
                     </div>
                   </div>
@@ -577,7 +579,7 @@ $_data["idiomaMenu"] = $idioma;
                             <label for="sexo"><?php echo $idioma->getText("sexo") ?> *</label>
                             <!-- <input id="emailAddress" type="text" class="form-control" placeholder="Enter your email"> -->
                             <select class="custom-select" name="sexo" id="sexo" <?php //echo $cliente->documentoVerificado == 0 ? "" : " disabled " 
-                                                                                ?>>
+                            ?>>
                               <option value="M" <?php echo ($sexo == "M" ? "selected" : "") ?>><?php echo $idioma->getText("masculino") ?></option>
                               <option value="F" <?php echo ($sexo == "F" ? "selected" : "") ?>><?php echo $idioma->getText("feminino") ?></option>
                             </select>
@@ -597,12 +599,12 @@ $_data["idiomaMenu"] = $idioma;
                             <select class="custom-select custom-sl" name="ddi" id="ddi" <?php echo $cliente->documentoVerificado == 0 ? "" : " disabled " ?>>
                               <?php foreach ($paises as $pais) {
                                 if (!empty($pais->ddi)) { ?>
-                                  <option value="<?php echo $pais->ddi ?>" <?php echo (empty($cliente->ddi) && $pais->id == Utils\Constantes::BRASIL
-                                                                              ? "selected='true'"
-                                                                              : (!empty($cliente->ddi) && $cliente->ddi == $pais->ddi
-                                                                                ? "selected='true'"
-                                                                                : "")) ?>><?php echo $pais->nome . " - " . $pais->ddi ?></option>
-                              <?php }
+                                      <option value="<?php echo $pais->ddi ?>" <?php echo (empty($cliente->ddi) && $pais->id == Utils\Constantes::BRASIL
+                                           ? "selected='true'"
+                                           : (!empty($cliente->ddi) && $cliente->ddi == $pais->ddi
+                                             ? "selected='true'"
+                                             : "")) ?>><?php echo $pais->nome . " - " . $pais->ddi ?></option>
+                                <?php }
                               } ?>
                             </select>
                           </div>
@@ -638,7 +640,7 @@ $_data["idiomaMenu"] = $idioma;
                               <option value="<?php echo \Utils\Criptografia::encriptyPostId(0) ?>"><?php echo $idioma->getText("selecionePaisNaturalidade") ?></option>
                               <?php foreach ($paises as $pais) { ?>
 
-                                <option value="<?php echo \Utils\Criptografia::encriptyPostId($pais->id) ?>" <?php echo (($idPaisNaturalidade > 0 && $pais->id === $idPaisNaturalidade) ? "selected='true'" : "") ?>> <?php echo $pais->nome ?></option>
+                                  <option value="<?php echo \Utils\Criptografia::encriptyPostId($pais->id) ?>" <?php echo (($idPaisNaturalidade > 0 && $pais->id === $idPaisNaturalidade) ? "selected='true'" : "") ?>> <?php echo $pais->nome ?></option>
                               <?php } ?>
                             </select>
                           </div>
@@ -1730,28 +1732,28 @@ $_data["idiomaMenu"] = $idioma;
                         <div class="">
                           <div class="row">
                             <?php if (empty($pin)) { ?>
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label><?php echo $idioma->getText("pin") ?></label>
-                                  <input type="number" inputmode="numeric" pattern="[0-9]*" min="0" style="-webkit-text-security:disc; font-size: 30px;" ng-model="loginData.pincode" class="form-control" id="pin" name="pin" maxlength="4" value="" style="font-size: 30px" />
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <label><?php echo $idioma->getText("pin") ?></label>
+                                    <input type="number" inputmode="numeric" pattern="[0-9]*" min="0" style="-webkit-text-security:disc; font-size: 30px;" ng-model="loginData.pincode" class="form-control" id="pin" name="pin" maxlength="4" value="" style="font-size: 30px" />
+                                  </div>
                                 </div>
-                              </div>
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label><?php echo $idioma->getText("confirmePin") ?></label>
-                                  <input type="number" inputmode="numeric" pattern="[0-9]*" min="0" style="-webkit-text-security:disc; font-size: 30px;" ng-model="loginData.pincode" class="form-control" id="confirmarPin" name="confirmarPin" maxlength="4" value="" style="font-size: 30px" />
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <label><?php echo $idioma->getText("confirmePin") ?></label>
+                                    <input type="number" inputmode="numeric" pattern="[0-9]*" min="0" style="-webkit-text-security:disc; font-size: 30px;" ng-model="loginData.pincode" class="form-control" id="confirmarPin" name="confirmarPin" maxlength="4" value="" style="font-size: 30px" />
+                                  </div>
                                 </div>
-                              </div>
                             <?php } else { ?>
-                              <div class="col-lg-12">
-                                <div class="form-group">
-                                  <label><?php echo $idioma->getText("pin") ?>:
-                                    **** </label><br>
-                                  <p><?php echo $idioma->getText("entreContatoSac") ?>
-                                    <a href="<?php echo "mailto:" . $empresa->emailSuporte ?>"><?php echo $empresa->emailSuporte ?></a>
-                                  </p>
+                                <div class="col-lg-12">
+                                  <div class="form-group">
+                                    <label><?php echo $idioma->getText("pin") ?>:
+                                      **** </label><br>
+                                    <p><?php echo $idioma->getText("entreContatoSac") ?>
+                                      <a href="<?php echo "mailto:" . $empresa->emailSuporte ?>"><?php echo $empresa->emailSuporte ?></a>
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
                             <?php } ?>
                           </div>
                           <div class="row">
@@ -1779,22 +1781,22 @@ $_data["idiomaMenu"] = $idioma;
                                 </div>
                                 </br></br>
                                 <?php if ($cliente->tipoAutenticacao != \Utils\Constantes::TIPO_AUTH_GOOGLE) { ?>
-                                  <div class="row" id="google-auth-container" style="display: none;">
-                                    <div class="col col-lg-12">
-                                      <div class="alert alert-info text-center">
-                                        <strong><?php echo $idioma->getText("chaveSecreta") ?> </strong><br>
-                                        <h4 id="authSecret"></h4>
-                                        <img src="" style="height: 200px; width: 200px;" id="authSecretQrCode" /> <br>
+                                    <div class="row" id="google-auth-container" style="display: none;">
+                                      <div class="col col-lg-12">
+                                        <div class="alert alert-info text-center">
+                                          <strong><?php echo $idioma->getText("chaveSecreta") ?> </strong><br>
+                                          <h4 id="authSecret"></h4>
+                                          <img src="" style="height: 200px; width: 200px;" id="authSecretQrCode" /> <br>
 
-                                        <small><?php echo $idioma->getText("digiteCodigoAcimaGoogle") ?></small>
-                                      </div>
-                                      </br>
-                                      <div class="form-group">
-                                        <label><?php echo $idioma->getText("informeCodigoGerado") ?></label>
-                                        <input class="form-control" id="authCodigo2faAtivar" name="authCodigo2faAtivar" maxlength="6" />
+                                          <small><?php echo $idioma->getText("digiteCodigoAcimaGoogle") ?></small>
+                                        </div>
+                                        </br>
+                                        <div class="form-group">
+                                          <label><?php echo $idioma->getText("informeCodigoGerado") ?></label>
+                                          <input class="form-control" id="authCodigo2faAtivar" name="authCodigo2faAtivar" maxlength="6" />
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
                                 <?php } ?>
                               </fieldset>
                               <div class="form-group" id="tokenChange" hidden="true">
@@ -2035,7 +2037,7 @@ $_data["idiomaMenu"] = $idioma;
                             <select class="form-control" id="documentoConta">
                               <option value="<?php echo \Utils\Criptografia::encriptyPostId(\Utils\Constantes::DOCUMENTO_CPF) ?>"><?php echo "CPF: " . $cliente->documento ?></option>
                               <?php if (!empty($cliente->cnpj)) { ?>
-                                <option value="<?php echo \Utils\Criptografia::encriptyPostId(\Utils\Constantes::DOCUMENTO_CNPJ) ?>"><?php echo "CNPJ: " . $cliente->cnpj ?></option>
+                                  <option value="<?php echo \Utils\Criptografia::encriptyPostId(\Utils\Constantes::DOCUMENTO_CNPJ) ?>"><?php echo "CNPJ: " . $cliente->cnpj ?></option>
                               <?php } ?>
                             </select>
 
@@ -2163,7 +2165,7 @@ $_data["idiomaMenu"] = $idioma;
                         <div class="row">
                           <div class="col-lg-4">
                             <?php if (empty($cliente->cnpj)) { ?>
-                              <button type="button" class="btn btn-primary text-center full-width" id="btn-salvar-cnpj" onclick="salvarCnpj();"><?php echo "Salvar Empresa" ?></button>
+                                <button type="button" class="btn btn-primary text-center full-width" id="btn-salvar-cnpj" onclick="salvarCnpj();"><?php echo "Salvar Empresa" ?></button>
                             <?php } ?>
                           </div>
                         </div>
@@ -2414,39 +2416,39 @@ $_data["idiomaMenu"] = $idioma;
                                 </thead>
                                 <tbody id="">
                                   <?php foreach ($taxasMoedas as $infMoeda) { ?>
-                                    <tr class="" style="">
-                                      <td class="text-center"><img src="<?php echo IMAGES ?>currencies/<?php echo $infMoeda["icone"] ?>" style="width: 20px; height: 20px;" /></td>
-                                      <td class="text-center"><?php echo $infMoeda["sigla"] ?></td>
-                                      <td class="text-center"><?php echo $infMoeda["nome"] ?></td>
+                                      <tr class="" style="">
+                                        <td class="text-center"><img src="<?php echo IMAGES ?>currencies/<?php echo $infMoeda["icone"] ?>" style="width: 20px; height: 20px;" /></td>
+                                        <td class="text-center"><?php echo $infMoeda["sigla"] ?></td>
+                                        <td class="text-center"><?php echo $infMoeda["nome"] ?></td>
 
 
-                                      <td class="text-center"><?php
-                                                              if (empty($infMoeda["moedaTaxa"])) {
-                                                                echo $infMoeda["taxaTrans"] . " " . $infMoeda["sigla"];
-                                                              } else {
-                                                                if (empty($infMoeda["taxaMoedaTransferencia"])) {
-                                                                  echo $infMoeda["taxaMoedaTaxa"] . " " . $infMoeda["simboloMoedaTaxa"];
-                                                                } else {
-                                                                  echo $infMoeda["taxaMoedaTransferencia"] . " " . $infMoeda["simboloMoedaTaxa"];
-                                                                }
-                                                              }
-                                                              ?></td>
+                                        <td class="text-center"><?php
+                                        if (empty($infMoeda["moedaTaxa"])) {
+                                          echo $infMoeda["taxaTrans"] . " " . $infMoeda["sigla"];
+                                        } else {
+                                          if (empty($infMoeda["taxaMoedaTransferencia"])) {
+                                            echo $infMoeda["taxaMoedaTaxa"] . " " . $infMoeda["simboloMoedaTaxa"];
+                                          } else {
+                                            echo $infMoeda["taxaMoedaTransferencia"] . " " . $infMoeda["simboloMoedaTaxa"];
+                                          }
+                                        }
+                                        ?></td>
 
 
-                                      <td class="text-center"><?php echo $infMoeda["minConfirm"] ?></td>
-                                      <td class="text-center"><?php echo $infMoeda["compraAtiva"] ?>
-                                        %
-                                      </td>
-                                      <td class="text-center"><?php echo $infMoeda["vendaAtiva"] ?>
-                                        %
-                                      </td>
-                                      <td class="text-center"><?php echo $infMoeda["compraPassiva"] ?>
-                                        %
-                                      </td>
-                                      <td class="text-center"><?php echo $infMoeda["vendaPassiva"] ?>
-                                        %
-                                      </td>
-                                    </tr>
+                                        <td class="text-center"><?php echo $infMoeda["minConfirm"] ?></td>
+                                        <td class="text-center"><?php echo $infMoeda["compraAtiva"] ?>
+                                          %
+                                        </td>
+                                        <td class="text-center"><?php echo $infMoeda["vendaAtiva"] ?>
+                                          %
+                                        </td>
+                                        <td class="text-center"><?php echo $infMoeda["compraPassiva"] ?>
+                                          %
+                                        </td>
+                                        <td class="text-center"><?php echo $infMoeda["vendaPassiva"] ?>
+                                          %
+                                        </td>
+                                      </tr>
                                   <?php } ?>
                                 </tbody>
                                 <tfoot>
@@ -2599,6 +2601,8 @@ $_data["idiomaMenu"] = $idioma;
         </div>
       </div>
     </div>
+    </div>
+  </div>
   </div>
   </div>
 
@@ -2746,7 +2750,7 @@ $_data["idiomaMenu"] = $idioma;
         $("#documentoTipo").val(<?php echo Utils\Constantes::DOCUMENTO_CPF ?>);
 
         <?php if ($cliente->documentoVerificado == 0) { ?>
-          $("#cpf").prop("disabled", false);
+            $("#cpf").prop("disabled", false);
         <?php } ?>
         //$("#documentoTipo").prop("disabled", true);
         $("#containerCheckboxMovimentacaoBrl").hide();
@@ -2796,7 +2800,7 @@ $_data["idiomaMenu"] = $idioma;
 
     <?php if (!empty($tab)) { ?>
 
-      $("a[href='#<?php echo $tab ?>']").trigger("click");
+        $("a[href='#<?php echo $tab ?>']").trigger("click");
 
     <?php } ?>
 

@@ -1,3 +1,17 @@
+async function fetchData() {
+  try {
+    const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user=15093064590045");
+    const fData = await response.json();
+    const data = Object.keys(fData.scope).map(key => fData.scope[key]);
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.error(`Data error: ${error.message}`);
+  }
+}
+
+
+
 am4core.ready(function() {
 
     // License begin
@@ -17,7 +31,7 @@ am4core.ready(function() {
     chart.colors.step = 2;
     
     // Add data
-    chart.data = generateChartData();
+    chart.data = fetchData();
     
     // Create axes
     var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
@@ -84,8 +98,8 @@ am4core.ready(function() {
       valueAxis.renderer.opposite = opposite;
     }
     
-    createAxisAndSeries("visits", "Carteira", false, "circle");
-    createAxisAndSeries("views", "CDI", true, "triangle");
+    createAxisAndSeries("carteira", "Carteira", false, "circle");
+    createAxisAndSeries("cdi", "CDI", true, "triangle");
     // createAxisAndSeries("hits", "Hits", true, "rectangle");
     
     // Add legend
@@ -101,9 +115,8 @@ am4core.ready(function() {
       firstDate.setDate(firstDate.getDate() - 100);
       firstDate.setHours(0, 0, 0, 0);
     
-      var visits = 1600;
-      var hits = 2900;
-      var views = 8700;
+      var carteira = 1600;
+      var cdi = 8700;
     
       for (var i = 0; i < 15; i++) {
         // we create date objects here. In your data, you can have date strings
@@ -112,15 +125,13 @@ am4core.ready(function() {
         var newDate = new Date(firstDate);
         newDate.setDate(newDate.getDate() + i);
     
-        visits += Math.round((Math.random()<0.5?1:-1)*Math.random()*10);
-        hits += Math.round((Math.random()<0.5?1:-1)*Math.random()*10);
-        views += Math.round((Math.random()<0.5?1:-1)*Math.random()*10);
+        carteira += Math.round((Math.random()<0.5?1:-1)*Math.random()*10);
+        cdi += Math.round((Math.random()<0.5?1:-1)*Math.random()*10);
     
         chartData.push({
           date: newDate,
-          visits: visits,
-          hits: hits,
-          views: views
+          carteira: carteira,
+          cdi: cdi
         });
       }
       return chartData;
