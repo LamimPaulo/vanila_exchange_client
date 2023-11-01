@@ -632,6 +632,7 @@ public static $rotas = Array(
         "contas/empresa/reais"                              => Array("url" => "contas/reaisEmpresa/index" ,                                 "modulo" => "contasempresa",                     "rotina" => "contas/empresa/reais" ),
 
         "portfolio"                                          => Array("url" => "portfolio/portfolio/index" ,                                       "modulo" => "dashboard",                            "rotina" => "mercado" ),
+        "staking"                                          => Array("url" => "staking/staking/index" ,                                       "modulo" => "staking",                            "rotina" => "mercado" ),
 
 
         /// TRADE 
