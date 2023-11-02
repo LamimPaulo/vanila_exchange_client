@@ -197,7 +197,7 @@ $_data["idiomaMenu"] = $idioma;
                 <div class="card-body">
                   <h4>Saldo de <span class="nome_moeda"></span></h4>
                   <div class="info_saldo">
-                    Saldo disponível: <span id="saldo_disponivel" class="fw-bold text-primary"></span>
+                    Saldo disponível: <span class="saldo_disponivel fw-bold text-primary"></span>
                   </div>
                 </div>
               </div>
@@ -211,17 +211,17 @@ $_data["idiomaMenu"] = $idioma;
                   <!-- <h5 class="card-title"><?php echo $idioma2->getText("idioma") ?></h5> -->
                   <h5 class="fw-bold">Informações</h5>
                   <div class="mt-3">
-                    <span>Recompensa líquida estimada</span>
+                    <span>Recompensa líquida estimada:</span>
                     <span class="d-block"><b>3,30%</b> ao ano</span>
                   </div>
                   <div class="mt-3 d-flex">
                     <div class="">
-                      <span>Resgate</span>
+                      <span>Resgate:</span>
                       <span class="d-block">Em até 5 dias úteis</span>
                     </div>
                     <div class="ml-5">
-                      <span>Staking mínimo</span>
-                      <span class="d-block">0,00100000 ETH</span>
+                      <span>Staking mínimo:</span>
+                      <span class="d-block">0,00100000 <span class="symbol_moeda"></span></span>
                     </div>
                   </div>
                 </div>
@@ -230,28 +230,28 @@ $_data["idiomaMenu"] = $idioma;
                 <div class="card-body">
                   <h5 class="fw-bold">Em staking</h5>
                   <div class="row justify-content-between">
-                    <div class="col-5">
+                    <div class="col-lg-5">
                       <div class="mt-3">
-                        <span>Saldo total em staking</span>
-                        <span class="d-block">0,02835415 ETH</span>
+                        <span>Saldo total em staking:</span>
+                        <span class="d-block">0,02835415 <span class="symbol_moeda"></span></span>
                       </div>
                       <div class="mt-3">
-                        <span>Lucro acumulado</span>
-                        <span class="d-block">0,00005449 ETH</span>
+                        <span>Lucro acumulado:</span>
+                        <span class="d-block">0,00005449 <span class="symbol_moeda"></span></span>
                       </div>
                     </div>
-                    <div class="col-7 mt-3">
+                    <div class="col-lg-7 mt-3">
                       <div class="row">
                         <div class="col-6 mb-2">
                           <button
-                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center">
+                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" data-toggle="modal" data-target="#stakingModal">
                             <i class=""><img src="assets/img/icon/ico-staking.svg" alt="staking"></i>
                           </button>
                           <p class="fw-bold text-center">Fazer Staking</p>
                         </div>
                         <div class="col-6 mb-2">
                           <button
-                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center">
+                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" data-toggle="modal" data-target="#resgateModal">
                             <i class="ico"><img src="assets/img/icon/ico-resgatar.svg" alt="resgatar"></i>
                           </button>
                           <p class="fw-bold text-center">Resgatar</p>
@@ -286,8 +286,8 @@ $_data["idiomaMenu"] = $idioma;
                       </span>
                     </div>
                     <div class="col-11">
-                      <a href="#">Clique aqui</a> e saiba como funciona o Staking
-                      de <span class="nome_moeda"></span>.</p>
+                      <a href="#" data-toggle="modal" data-target="#infoModal">Clique aqui</a> e saiba como funciona o Staking
+                      de <span class="nome_moeda"></span>.
                     </div>
                   </div>
                 </div>
@@ -298,24 +298,24 @@ $_data["idiomaMenu"] = $idioma;
           <div class="row justify-content-end">
             <div class="col-lg-6 mt-3">
               <span class="d-block font-weight-lighter">ATIVIDADE</span>
-              <div class="mt-1">
-                <button class="btn btn-primary">Todas</button>
-                <button class="btn btn-white">Staking</button>
-                <button class="btn btn-white">Recompensas</button>
-                <button class="btn btn-white">Resgate</button>
+              <div>
+                <button class="btn btn-sm btn-primary mt-1">Todas</button>
+                <button class="btn btn-sm btn-white mt-1">Staking</button>
+                <button class="btn btn-sm btn-white mt-1">Recompensas</button>
+                <button class="btn btn-sm btn-white mt-1">Resgate</button>
               </div>
             </div>
             <div class="col-lg-6 mt-3">
               <span class="d-block font-weight-lighter">STATUS</span>
-              <div class="mt-1">
-                <button class="btn btn-primary">Todos</button>
-                <button class="btn btn-white">Finalizadas</button>
-                <button class="btn btn-white">Processando</button>
-                <button class="btn btn-white">Erro</button>
+              <div>
+                <button class="btn btn-sm btn-primary mt-1">Todos</button>
+                <button class="btn btn-sm btn-white mt-1">Finalizadas</button>
+                <button class="btn btn-sm btn-white mt-1">Processando</button>
+                <button class="btn btn-sm btn-white mt-1">Erro</button>
               </div>
             </div>
           </div>
-          <table class="mt-4 table settings">
+          <table class="mt-4 table settings text-center" id="table-staking">
             <thead class="bg-light">
               <tr>
                 <th scope="col">DATA</th>
@@ -373,16 +373,110 @@ $_data["idiomaMenu"] = $idioma;
     </div>
   </div>
 
+
+<!-- stakeModal -->
+<div class="modal fade" id="stakingModal" tabindex="-1" role="dialog" aria-labelledby="stakingModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="stakingModalTitle">Staking de <span class="nome_moeda"></span> ( <span class="symbol_moeda"></span>)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <div class="info_saldo">
+              Saldo disponível: <a href="javascript:inserirSaldo();"><span class="saldo_disponivel fw-bold text-primary"></span></a>
+            </div>
+            <label for="valor" class="col-form-label">Quantidade:</label>
+            <input type="text" class="form-control" id="valor" placeholder="1010.10564800">
+            <span class="fs-10 font-weight-lighter">Mínimo de 100 <span class="symbol_moeda"></span> para staking.</span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary">Fazer Staking</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- resgateModal -->
+<div class="modal fade" id="resgateModal" tabindex="-1" role="dialog" aria-labelledby="resgateModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resgateModalTitle">Resgate de <span class="nome_moeda"></span> ( <span class="symbol_moeda"></span>)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <div class="info_saldo">
+              Saldo em stake: <a href="javascript:inserirSaldoStake();"><span class="saldo_stake fw-bold text-primary"></span></a>
+            </div>
+            <label for="valor" class="col-form-label">Quantidade:</label>
+            <input type="text" class="form-control" id="valor_stake" placeholder="1010.10564800">
+            <span class="fs-10 font-weight-lighter">Informe o valor de <span class="symbol_moeda"></span> para resgate.</span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary">Fazer Resgate</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- infoModal -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalTitle">Informações do staking de <span class="symbol_moeda"></span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <p class="font-weight-lighter fs-12">ORIENTAÇÕES</p>
+        <div class="row">
+          <div class="col-1">
+            <span class="rounded-icon bg-primary">
+              <i class="icon ion-ios-information icon-badge"></i>
+            </span>
+          </div>
+          <div class="col-11">
+            <span>As recompensas serão contabilizadas em até 2 dias úteis após o Staking.</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- End Main content -->
 
 
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
 <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="<?php echo JS; ?>maskMoney.min.js"></script>
 <script>
     var preco = 0;
     var time = 0;
     var saldo = 0;
+    var saldo_stake = 0;
     var regressor = null;
     var casaDecimal = 8;
 
@@ -391,7 +485,7 @@ $_data["idiomaMenu"] = $idioma;
         $("#cryptoFrom").select2();
 
         $("#cryptoFrom").on('select2:select', function (e) {
-            $("#saldo_disponivel").html("");
+            $(".saldo_disponivel").html("");
             saldo = 0;
             casaDecimal = $("#cryptoFrom option:selected").attr("data-decimal");
             var data = $("#cryptoFrom").val();
@@ -413,6 +507,7 @@ $_data["idiomaMenu"] = $idioma;
                     $('#cryptoFrom').html(option);
                     var nome = $( "#cryptoFrom option:selected" ).text().split("-");
                     $('.nome_moeda').html(nome[1]);
+                    $('.symbol_moeda').html(nome[0]);
                     $(".crypto").select2({
                         templateResult: function (coin) {
                             var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
@@ -429,6 +524,16 @@ $_data["idiomaMenu"] = $idioma;
             }
         });
     });
+
+    function inserirSaldo() {
+       saldo = parseFloat(saldo);
+      $('#valor').maskMoney('mask', saldo);
+    };
+
+    function inserirSaldoStake() {
+       saldo_stake = parseFloat(saldo_stake);
+      $('#valor_stake').maskMoney('mask', saldo_stake);
+    };
 
     function carregarSaldo(moeda) {
         $('#nome_moeda').html("");
@@ -448,6 +553,7 @@ $_data["idiomaMenu"] = $idioma;
                     });
                     var nome = $( "#cryptoFrom option:selected" ).text().split("-");
                     $('.nome_moeda').html(nome[1]);
+                    $('.symbol_moeda').html(nome[0]);
                     $(".crypto").select2({
                         templateResult: function (coin) {
                             var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
@@ -459,11 +565,19 @@ $_data["idiomaMenu"] = $idioma;
                         }
                     });
                 }
-                $("#saldo_disponivel").html(json.saldo_format);
+                $(".saldo_disponivel").html(json.saldo_format);
                 saldo = json.saldo;
+                $(".saldo_stake").html("0,00000000");
+                
             }
         });
     }
 
+</script>
+<script>
+  window.addEventListener('resize', () => {
+    const staking_table = document.querySelector('#table-staking');
+    staking_table.classList.toggle('table-responsive', window.matchMedia('(max-width:505px)').matches);
+});
 </script>
 <?php Utils\Layout::append("mensage_text", $_data) ?>
