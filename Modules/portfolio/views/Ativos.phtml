@@ -655,35 +655,37 @@ $_data["idiomaMenu"] = $idioma;
 <script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script>
 <script src="assets/js/dashboard.js"></script>
 <script>
-  var walletData = null;
-  var projectedBalance = 0;
+    var walletData = "";
+    var projectedBalance = 0;
 
-  $.getJSON("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/jsonPortfolio?user=<?php echo $cliente->id ?>", function (parsed_data) {
+    $.getJSON("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/jsonPortfolio?user=<?php echo $cliente->id ?>", function (parsed_data) {
 
-    // Configurações do gráfico redondo
-    const handleRadialChart = (id, percent, color, width, fontSize) => {
-      const radChart = document.getElementById(id);
-      radChart.style = "--p: " + percent + "; --c:" + color + "; --w:" + width + "px" + "; font-size:" + fontSize + "px";
-      if (id === "dashboard-chart" || id === "portfolio-chart") {
-        radChart.innerHTML = `<span class="d-block mt-2 text-center">${percent}%</span><p class="fs-12 text-center">Total Investido</p>`
-      } else {
-        radChart.innerText = percent + "%";
-      }
-    }
+        walletData = parsed_data;
 
-    walletData = parsed_data;
-    var walletHtml = '';
-    var portfolio_cryptoHtml = '';
-    var portfolio_rendaHtml = '';
-    var portfolio_utilityHtml = '';
-    var portfolio_startupsHtml = '';
-    var portfolio_cryptoBalance = 0;
-    var portfolio_rendaBalance = 0;
-    var portfolio_utilityBalance = 0;
-    var portfolio_startupsBalance = 0;
+    }).then(function(){
+      var walletHtml = '';
+      var portfolio_cryptoHtml = '';
+      var portfolio_rendaHtml = '';
+      var portfolio_utilityHtml = '';
+      var portfolio_startupsHtml = '';
+      var portfolio_cryptoBalance = 0;
+      var portfolio_rendaBalance = 0;
+      var portfolio_utilityBalance = 0;
+      var portfolio_startupsBalance = 0;
 
-    const headerHtml = (j) => {
-      return `<div class="card">
+      // Configurações do gráfico redondo
+      const handleRadialChart = (id, percent, color, width, fontSize) => {
+            const radChart = document.getElementById(id);
+            radChart.style = "--p: " + percent + "; --c:" + color + "; --w:" + width + "px" + "; font-size:" + fontSize + "px";
+            if (id === "dashboard-chart" || id === "portfolio-chart") {
+                radChart.innerHTML = `<span class="d-block mt-2 text-center">${percent}%</span><p class="fs-12 text-center">Total Investido</p>`
+            } else {
+                radChart.innerText = percent + "%";
+            }
+        }
+  
+      const headerHtml = (j) => {
+          return `<div class="card">
                           <div class="card-header collapsed cursor" data-toggle="collapse" data-target="#collapse${walletData['labels'][j + 1]}"
                             aria-expanded="false" aria-controls="collapse${walletData['labels'][j + 1]}" id="heading${walletData['labels'][j + 1]}">
                             <div class="row justify-content-between text-center">
@@ -704,10 +706,10 @@ $_data["idiomaMenu"] = $idioma;
                               </div>
                             </div>
                           </div>`
-    }
-
-    const headerWalletHtml = (j) => {
-      return `<div class="card">
+      }
+  
+      const headerWalletHtml = (j) => {
+          return `<div class="card">
                           <div class="card-header collapsed cursor" data-toggle="collapse" data-target="#collapse-${walletData['labels'][j + 1]}"
                             aria-expanded="false" aria-controls="collapse-${walletData['labels'][j + 1]}" id="heading-${walletData['labels'][j + 1]}">
                             <div class="row justify-content-between text-center">
@@ -728,10 +730,10 @@ $_data["idiomaMenu"] = $idioma;
                               </div>
                             </div>
                           </div>`
-    }
-
-    const bodyHtml = (t, j) => {
-      return `<div id="collapse${walletData['labels'][j + 1]}" class="collapse" aria-labelledby="heading${walletData['labels'][j + 1]}"
+      }
+  
+      const bodyHtml = (t, j) => {
+          return `<div id="collapse${walletData['labels'][j + 1]}" class="collapse" aria-labelledby="heading${walletData['labels'][j + 1]}"
                             data-parent="#${t}-accordion">
                             <div class="card-body">
                             <div class="row justify-content-center mb-4">
@@ -797,10 +799,10 @@ $_data["idiomaMenu"] = $idioma;
                             </div>
                           </div>
                         </div>`
-    }
-    if (walletData['position'].length > 0) {
-      for (var j = 0; j < walletData['position'].length; j++) {
-        walletHtml += headerWalletHtml(j) + `
+      }
+      if (walletData.position.length > 0) {
+          for (var j = 0; j < walletData['position'].length; j++) {
+              walletHtml += headerWalletHtml(j) + `
                           <div id="collapse-${walletData['labels'][j + 1]}" class="collapse" aria-labelledby="heading-${walletData['labels'][j + 1]}"
                             data-parent="#wallet-accordion">
                             <div class="card-body">
@@ -853,7 +855,7 @@ $_data["idiomaMenu"] = $idioma;
                                       O valor mínimo para depósitos em <b>${walletData['position'][j].name}</b> é de <b>0,00001000 ${walletData['labels'][j + 1]}</b>.
                                       </div>
                                     </div>
-
+  
                                     <p class="font-weight-lighter fs-12 mt-3">INFORMAÇÕES ADICIONAIS</p>
                                     <div class="row">
                                       <div class="col-1">
@@ -871,398 +873,400 @@ $_data["idiomaMenu"] = $idioma;
                             </div>
                           </div>
                         </div>`;
-      }
-      for (var j = 0; j < walletData['position'].length - 1; j++) {
-        portfolio_cryptoBalance += walletData['series'][j + 1];
-        portfolio_cryptoHtml += headerHtml(j) + bodyHtml("crypto", j);
-      }
-      for (var j = 4; j < walletData['position'].length; j++) {
-        portfolio_rendaBalance += walletData['series'][j + 1];
-        portfolio_rendaHtml += headerHtml(j) + bodyHtml("renda", j);
-      }
-      for (var j = 5; j < walletData['position'].length; j++) {
-        portfolio_utilityBalance += walletData['series'][j + 1];
-        portfolio_utilityHtml += headerHtml(j) + bodyHtml("utility", j);
-      }
-      for (var j = 5; j < walletData['position'].length; j++) {
-        portfolio_startupsBalance += walletData['series'][j + 1];
-        portfolio_startupsHtml += headerHtml(j) + bodyHtml("startups", j);
-      }
-    } else {
-      walletHtml = '<p>Nenhuma posição encontrada</p>';
-      portfolio_cryptoHtml = '<p>Nenhuma posição encontrada</p>';
-      portfolio_rendaHtml = '<p>Nenhuma posição encontrada</p>';
-      portfolio_utilityHtml = '<p>Nenhuma posição encontrada</p>';
-      portfolio_startupsHtml = '<p>Nenhuma posição encontrada</p>';
-    }
-
-    const totalBalance = () => {
-      total = 0;
-      if(walletData['series']){
-        walletData['series'].forEach(element => {
-          total = element + total;
-        });
-      }
-      return total;
-    }
-    
-    projectedBalance = totalBalance();
-
-    const investedBalance = () => {
-      total = 0;
-      if(walletData['series']){
-        walletData['series'].forEach((e, i) => {
-          if (i > 0) {
-            total = e + total;
           }
-        });
-      }
-      return total;
-    }
-
-    const currentDate = () => {
-      let now = new Date();
-      return "Atualizado em " + now.toLocaleString("pt-BR");
-    }
-
-    const pieChartPercent = (amount) => {
-      const percent100 = totalBalance();
-      return (amount * 100 / percent100);
-    }
-
-    const dadosPie = [
-      {
-      "products": "Criptomoedas",
-      "share": pieChartPercent(portfolio_cryptoBalance).toFixed(2),
-      "color": am4core.color("orange")
-      }, {
-        "products": "Renda Digital",
-        "share": pieChartPercent(portfolio_rendaBalance).toFixed(2),
-        "color": am4core.color("yellow")
-      }, {
-        "products": "Utility Tokens",
-        "share": pieChartPercent(portfolio_utilityBalance).toFixed(2),
-        "color": am4core.color("blue")
-      }, {
-        "products": "Startups",
-        "share": pieChartPercent(portfolio_startupsBalance).toFixed(2),
-        "color": am4core.color("green")
-      }, {
-        "products": "Não Investido",
-        "share": pieChartPercent(walletData["series"][0]).toFixed(2),
-        "color": am4core.color("#ccc")
-      }
-    ];
-
-    const handlePieChart = (id, data) => {
-      am4core.ready(function () {
-
-        // License begin
-        am4core.addLicense("ch-custom-attribution");
-
-        // Themes begin
-        am4core.useTheme(am4themes_animated);
-        // Themes end
-
-        // Create chart instance
-        var chart = am4core.create(id, am4charts.PieChart);
-
-        // Add data
-        chart.data = data;
-
-        // Set inner radius
-        chart.innerRadius = am4core.percent(70);
-
-        // Add and configure Series
-        var pieSeries = chart.series.push(new am4charts.PieSeries());
-        pieSeries.ticks.template.disabled = true;
-        pieSeries.labels.template.disabled = true;
-        pieSeries.dataFields.value = "share";
-        pieSeries.dataFields.category = "products";
-        pieSeries.slices.template.propertyFields.fill = "color";
-        pieSeries.slices.template.stroke = am4core.color("#fff");
-        pieSeries.slices.template.strokeWidth = 2;
-        pieSeries.slices.template.strokeOpacity = 1;
-
-        // This creates initial animation
-        pieSeries.hiddenState.properties.opacity = 1;
-        pieSeries.hiddenState.properties.endAngle = -90;
-        pieSeries.hiddenState.properties.startAngle = -90;
-
-      }); // end am4core.ready()
-    }
-
-    async function fetchData(user_id) {
-      try {
-        const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user="+user_id);
-        const fData = await response.json();
-        const data = Object.keys(fData.scope).map(key => fData.scope[key]);
-        return data;
-      } catch (error) {
-        console.error(`Data error: ${error.message}`);
-      }
-    }
-
-    // Mudar seleção entre radios
-    const handleRadioIcon = ({ target }) => {
-        const mktRadio = document.getElementById("market-radio");
-        const crvRadio = document.getElementById("curve-radio");
-        const mktTxt = document.getElementById("market-radio-text");
-        const crvTxt = document.getElementById("curve-radio-text");
-        const mktTitle = document.getElementById("market-card-title");
-        const crvTitle = document.getElementById("curve-card-title");
-
-        if (target.parentNode.id == "market-radio-trigger") {
-            if (mktRadio.classList.contains("ion-ios-radio-button-off")) {
-              handleChangePosition()
-            }
-        } else {
-            if (crvRadio.classList.contains("ion-ios-radio-button-off")) {
-              handleChangePosition()
-            }
-        }
-    }
-
-    // Mudar posição padrão
-    const handleChangePosition = () => {
-
-      const mktTxt = document.getElementById("market-radio-text");
-      const crvTxt = document.getElementById("curve-radio-text");
-      const mktTitle = document.getElementById("market-card-title");
-      const crvTitle = document.getElementById("curve-card-title");
-      const mktRadio = document.getElementById("market-radio");
-      const crvRadio = document.getElementById("curve-radio");
-      const projectedBalanceValue = document.getElementById('projected-balance');
-
-      if (crvTitle.classList.contains("text-hidden")) {
-          mktRadio.classList.replace("ion-ios-radio-button-on", "ion-ios-radio-button-off")
-          crvRadio.classList.replace("ion-ios-radio-button-off", "ion-ios-radio-button-on")
-          mktTxt.classList.toggle("text-hidden")
-          crvTxt.classList.toggle("text-hidden")
-          mktTitle.classList.toggle("text-hidden")
-          crvTitle.classList.toggle("text-hidden")
-          projectedBalanceValue.innerHTML = (projectedBalance + (portfolio_rendaBalance * 1.24)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-          
+          for (var j = 0; j < walletData['position'].length - 1; j++) {
+              portfolio_cryptoBalance += walletData['series'][j + 1];
+              portfolio_cryptoHtml += headerHtml(j) + bodyHtml("crypto", j);
+          }
+          for (var j = 4; j < walletData['position'].length; j++) {
+              portfolio_rendaBalance += walletData['series'][j + 1];
+              portfolio_rendaHtml += headerHtml(j) + bodyHtml("renda", j);
+          }
+          for (var j = 5; j < walletData['position'].length; j++) {
+              portfolio_utilityBalance += walletData['series'][j + 1];
+              portfolio_utilityHtml += headerHtml(j) + bodyHtml("utility", j);
+          }
+          for (var j = 5; j < walletData['position'].length; j++) {
+              portfolio_startupsBalance += walletData['series'][j + 1];
+              portfolio_startupsHtml += headerHtml(j) + bodyHtml("startups", j);
+          }
       } else {
-          mktRadio.classList.replace("ion-ios-radio-button-off", "ion-ios-radio-button-on")
-          crvRadio.classList.replace("ion-ios-radio-button-on", "ion-ios-radio-button-off")
-          mktTxt.classList.toggle("text-hidden")
-          crvTxt.classList.toggle("text-hidden")
-          mktTitle.classList.toggle("text-hidden")
-          crvTitle.classList.toggle("text-hidden")
-          projectedBalanceValue.innerHTML = projectedBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+          walletHtml = '<p>Nenhuma posição encontrada</p>';
+          portfolio_cryptoHtml = '<p>Nenhuma posição encontrada</p>';
+          portfolio_rendaHtml = '<p>Nenhuma posição encontrada</p>';
+          portfolio_utilityHtml = '<p>Nenhuma posição encontrada</p>';
+          portfolio_startupsHtml = '<p>Nenhuma posição encontrada</p>';
       }
-    }
-
-    function formatPercent(num) {
-      return num / 100;
-    }
-
-    var performanceData = [];
-
-    const callData = async () => {
-      const data = await fetchData("<?php echo $cliente->id ?>")
-      data.forEach(e => {
-        performanceData.push({
-          "date": new Date(e.label),
-          "ativo": formatPercent(e.wallet),
-          "cdi": formatPercent(e.cdi),
-          "ipca": formatPercent(e.ipca),
-          "selic": formatPercent(e.selic)
-        })
-      });
-    }
-
-    callData()
-
-    const ativoData = [{
-  "date": new Date(2023, 0, 1),
-  "ativo": 2.30 / 100,
-  "cdi": 0 / 100,
-  "ipca": 0 / 100,
-  "selic": 0 / 100,
-}, {
-  "date": new Date(2023, 1, 1),
-  "ativo": 4.60 / 100,
-}, {
-  "date": new Date(2023, 2, 1),
-  "ativo": 6.91 / 100,
-}, {
-  "date": new Date(2023, 3, 1),
-  "ativo": 9.21 / 100,
-}, {
-  "date": new Date(2023, 4, 1),
-  "ativo": 11.52 / 100,
-}, {
-  "date": new Date(2023, 5, 1),
-  "ativo": 13.82 / 100,
-}, {
-  "date": new Date(2023, 6, 1),
-  "ativo": 16.12 / 100,
-}, {
-  "date": new Date(2023, 7, 1),
-  "ativo": 18.43 / 100,
-}, {
-  "date": new Date(2023, 8, 1),
-  "ativo": 20.73 / 100,
-}, {
-  "date": new Date(2023, 9, 1),
-  "ativo": 23.04 / 100,
-}, {
-  "date": new Date(2023, 10, 1),
-  "ativo": 25.34 / 100,
-}, {
-  "date": new Date(2023, 11, 1),
-  "ativo": 27.64 / 100,
-  "cdi": 12.65 / 100,
-  "ipca": 5.19 / 100,
-  "selic": 12.25 / 100,
-}];
-
-const token_data = (symbol) => [
-  {
-    "field": "ativo",
-    "name": symbol,
-    "color": "blue",
-    "dashed": true
-  },
-  {
-    "field": "cdi",
-    "name": "CDI",
-    "color": "orange",
-    "dashed": false
-  },
-  {
-    "field": "ipca",
-    "name": "IPCA",
-    "color": "green",
-    "dashed": false
-  },
-  {
-    "field": "selic",
-    "name": "Selic",
-    "color": "black",
-    "dashed": false
-  }
-];
-
-const handleDivergentLinesChart = (id, data, series) => {
-  am4core.ready(function () {
-
-    // License begin
-    am4core.addLicense("ch-custom-attribution");
-    // License end
-
-    // Themes begin
-    am4core.useTheme(am4themes_animated);
-    // Themes end
-
-    // Create chart instance(2023
-    var chart = am4core.create(id, am4charts.XYChart);
-
-    chart.numberFormatter.language.locale = am4lang_pt_BR;
-    chart.dateFormatter.dateFormat = "MMM YYYY";
-    chart.numberFormatter.numberFormat = "#.##%";
-
-    // Chart title
-    var title = chart.titles.create();
-    // title.text = "Projected infection dynamics";
-    title.fontSize = 20;
-    title.paddingBottom = 10;
-
-    // Add data
-    chart.data = data;
-
-    // Create axes
-    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    dateAxis.renderer.grid.template.location = 0;
-    dateAxis.renderer.minGridDistance = 30;
-
-    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.renderer.inside = true;
-    valueAxis.renderer.labels.template.verticalCenter = "bottom";
-    valueAxis.renderer.labels.template.dx = -5;
-    valueAxis.renderer.labels.template.dy = 10;
-    valueAxis.renderer.maxLabelPosition = 0.95;
-    // valueAxis.title.text = "Number of infections";
-    valueAxis.title.marginRight = 5;
-
-    // Create series
-    function createSeries(field, name, color, dashed) {
-      var series = chart.series.push(new am4charts.LineSeries());
-      series.dataFields.valueY = field;
-      series.dataFields.dateX = "date";
-      series.name = name;
-      series.tooltipText = "[bold]{name}[/]\n{dateX}: [b]{valueY}[/]";
-      series.strokeWidth = 2;
-      series.smoothing = "monotoneX";
-      series.stroke = color;
-
-      if (dashed) {
-        series.strokeDasharray = "5 3";
+  
+      const totalBalance = () => {
+          total = 0;
+          if (walletData['series']) {
+              walletData['series'].forEach(element => {
+                  total = element + total;
+              });
+          }
+          return total;
       }
-
-      return series;
-    }
-
-    series.forEach((e,i) => {
-      createSeries(series[i].field, series[i].name, am4core.color(series[i].color), series[i].dashed);
-    });
-
-    chart.legend = new am4charts.Legend();
-    chart.cursor = new am4charts.XYCursor();
-
-  }); // end am4core.ready()
-}
-
-setTimeout(() => {
-  handleDivergentLinesChart("performance-chart", performanceData, token_data("Carteira"));
-  handleDivergentLinesChart("BTC-divergentChart", ativoData, token_data("BTC"));
-  handleDivergentLinesChart("ETH-divergentChart", ativoData, token_data("ETH"));
-  handleDivergentLinesChart("USDT-divergentChart", ativoData, token_data("USDT"));
-  handleDivergentLinesChart("BNB-divergentChart", ativoData, token_data("BNB"));
-  handleDivergentLinesChart("FTR-divergentChart", ativoData, token_data("FTR"));
-}, "1000");
-
-    handlePieChart("dashboard-chart", dadosPie);
-    // handleAxisChart("performance-chart", "<?php echo $cliente->id ?>" )
-    handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);
-    handleRadialChart("pie-renda-chart", pieChartPercent(portfolio_rendaBalance).toFixed(1), "yellow", 50, 14);
-    handleRadialChart("pie-utility-chart", pieChartPercent(portfolio_utilityBalance).toFixed(1), "blue", 50, 14);
-    handleRadialChart("pie-startups-chart", pieChartPercent(portfolio_startupsBalance).toFixed(1), "green", 50, 14);
-    document.getElementById('total-percent').innerHTML = pieChartPercent(investedBalance()).toFixed(2) + "%";
-    document.getElementById('wallet-accordion').innerHTML = walletHtml;
-    document.getElementById('crypto-accordion').innerHTML = portfolio_cryptoHtml;
-    document.getElementById('renda-accordion').innerHTML = portfolio_rendaHtml;
-    document.getElementById('utility-accordion').innerHTML = portfolio_utilityHtml;
-    document.getElementById('startups-accordion').innerHTML = portfolio_startupsHtml;
-    document.getElementById('crypto-balance').innerHTML = portfolio_cryptoBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('renda-balance').innerHTML = portfolio_rendaBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('utility-balance').innerHTML = portfolio_utilityBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('startups-balance').innerHTML = portfolio_startupsBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('current-date').innerHTML = currentDate();
-    document.getElementById('total-balance').innerHTML = totalBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('available-balance').innerHTML = walletData['series'][0]?walletData['series'][0].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }):"R$ 0,00";
-    document.getElementById('invested-balance').innerHTML = investedBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById("market-radio-toggler").addEventListener("click", handleChangePosition);
-    document.getElementById("curve-radio-toggler").addEventListener("click", handleChangePosition);
-    document.getElementById("market-radio").addEventListener("click", handleRadioIcon);
-    document.getElementById("curve-radio").addEventListener("click", handleRadioIcon);
-    document.getElementById('projected-balance').innerHTML = projectedBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    const vPortfolio = document.getElementById('visualizar-portfolio');
-    vPortfolio.addEventListener("click", () => {
-      document.getElementById('dashboard-tab').classList.remove("active");
-      document.getElementById('dashboard-portfolio-tab').classList.add("active");
+  
+      projectedBalance = totalBalance();
+  
+      const investedBalance = () => {
+          total = 0;
+          if (walletData['series']) {
+              walletData['series'].forEach((e, i) => {
+                  if (i > 0) {
+                      total = e + total;
+                  }
+              });
+          }
+          return total;
+      }
+  
+      const currentDate = () => {
+          let now = new Date();
+          return "Atualizado em " + now.toLocaleString("pt-BR");
+      }
+  
+      const pieChartPercent = (amount) => {
+          const total = totalBalance();
+          const percent100 = total == 0 ? 1: total;
+          return (amount * 100 / percent100);
+      }
+  
+      const dadosPie = [
+          {
+              "products": "Criptomoedas",
+              "share": pieChartPercent(portfolio_cryptoBalance).toFixed(2),
+              "color": am4core.color("orange")
+          }, {
+              "products": "Renda Digital",
+              "share": pieChartPercent(portfolio_rendaBalance).toFixed(2),
+              "color": am4core.color("yellow")
+          }, {
+              "products": "Utility Tokens",
+              "share": pieChartPercent(portfolio_utilityBalance).toFixed(2),
+              "color": am4core.color("blue")
+          }, {
+              "products": "Startups",
+              "share": pieChartPercent(portfolio_startupsBalance).toFixed(2),
+              "color": am4core.color("green")
+          }, {
+              "products": "Não Investido",
+              "share": pieChartPercent(walletData["series"][0]).toFixed(2),
+              "color": am4core.color("#ccc")
+          }
+      ];
+  
+      const handlePieChart = (id, data) => {
+          am4core.ready(function () {
+  
+              // License begin
+              am4core.addLicense("ch-custom-attribution");
+  
+              // Themes begin
+              am4core.useTheme(am4themes_animated);
+              // Themes end
+  
+              // Create chart instance
+              var chart = am4core.create(id, am4charts.PieChart);
+  
+              // Add data
+              chart.data = data;
+  
+              // Set inner radius
+              chart.innerRadius = am4core.percent(70);
+  
+              // Add and configure Series
+              var pieSeries = chart.series.push(new am4charts.PieSeries());
+              pieSeries.ticks.template.disabled = true;
+              pieSeries.labels.template.disabled = true;
+              pieSeries.dataFields.value = "share";
+              pieSeries.dataFields.category = "products";
+              pieSeries.slices.template.propertyFields.fill = "color";
+              pieSeries.slices.template.stroke = am4core.color("#fff");
+              pieSeries.slices.template.strokeWidth = 2;
+              pieSeries.slices.template.strokeOpacity = 1;
+  
+              // This creates initial animation
+              pieSeries.hiddenState.properties.opacity = 1;
+              pieSeries.hiddenState.properties.endAngle = -90;
+              pieSeries.hiddenState.properties.startAngle = -90;
+  
+          }); // end am4core.ready()
+      }
+  
+      async function fetchData(user_id) {
+          try {
+              const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user=" + user_id);
+              const fData = await response.json();
+              const data = Object.keys(fData.scope).map(key => fData.scope[key]);
+              return data;
+          } catch (error) {
+              console.error(`Data error: ${error.message}`);
+          }
+      }
+  
+      // Mudar seleção entre radios
+      const handleRadioIcon = ({ target }) => {
+          const mktRadio = document.getElementById("market-radio");
+          const crvRadio = document.getElementById("curve-radio");
+          const mktTxt = document.getElementById("market-radio-text");
+          const crvTxt = document.getElementById("curve-radio-text");
+          const mktTitle = document.getElementById("market-card-title");
+          const crvTitle = document.getElementById("curve-card-title");
+  
+          if (target.parentNode.id == "market-radio-trigger") {
+              if (mktRadio.classList.contains("ion-ios-radio-button-off")) {
+                  handleChangePosition()
+              }
+          } else {
+              if (crvRadio.classList.contains("ion-ios-radio-button-off")) {
+                  handleChangePosition()
+              }
+          }
+      }
+  
+      // Mudar posição padrão
+      const handleChangePosition = () => {
+  
+          const mktTxt = document.getElementById("market-radio-text");
+          const crvTxt = document.getElementById("curve-radio-text");
+          const mktTitle = document.getElementById("market-card-title");
+          const crvTitle = document.getElementById("curve-card-title");
+          const mktRadio = document.getElementById("market-radio");
+          const crvRadio = document.getElementById("curve-radio");
+          const projectedBalanceValue = document.getElementById('projected-balance');
+  
+          if (crvTitle.classList.contains("text-hidden")) {
+              mktRadio.classList.replace("ion-ios-radio-button-on", "ion-ios-radio-button-off")
+              crvRadio.classList.replace("ion-ios-radio-button-off", "ion-ios-radio-button-on")
+              mktTxt.classList.toggle("text-hidden")
+              crvTxt.classList.toggle("text-hidden")
+              mktTitle.classList.toggle("text-hidden")
+              crvTitle.classList.toggle("text-hidden")
+              projectedBalanceValue.innerHTML = (projectedBalance + (portfolio_rendaBalance * 1.24)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  
+          } else {
+              mktRadio.classList.replace("ion-ios-radio-button-off", "ion-ios-radio-button-on")
+              crvRadio.classList.replace("ion-ios-radio-button-on", "ion-ios-radio-button-off")
+              mktTxt.classList.toggle("text-hidden")
+              crvTxt.classList.toggle("text-hidden")
+              mktTitle.classList.toggle("text-hidden")
+              crvTitle.classList.toggle("text-hidden")
+              projectedBalanceValue.innerHTML = projectedBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+          }
+      }
+  
+      function formatPercent(num) {
+          return num / 100;
+      }
+  
+      var performanceGraphData = [];
+  
+      const callData = async () => {
+          const data = await fetchData("<?php echo $cliente->id ?>")
+          data.forEach(e => {
+              performanceGraphData.push({
+                  "date": new Date(e.label),
+                  "ativo": formatPercent(e.wallet),
+                  "cdi": formatPercent(e.cdi),
+                  "ipca": formatPercent(e.ipca),
+                  "selic": formatPercent(e.selic)
+              })
+          });
+      }
+  
+      callData()
+  
+      const ativoData = [{
+          "date": new Date(2023, 0, 1),
+          "ativo": 2.30 / 100,
+          "cdi": 0 / 100,
+          "ipca": 0 / 100,
+          "selic": 0 / 100,
+      }, {
+          "date": new Date(2023, 1, 1),
+          "ativo": 4.60 / 100,
+      }, {
+          "date": new Date(2023, 2, 1),
+          "ativo": 6.91 / 100,
+      }, {
+          "date": new Date(2023, 3, 1),
+          "ativo": 9.21 / 100,
+      }, {
+          "date": new Date(2023, 4, 1),
+          "ativo": 11.52 / 100,
+      }, {
+          "date": new Date(2023, 5, 1),
+          "ativo": 13.82 / 100,
+      }, {
+          "date": new Date(2023, 6, 1),
+          "ativo": 16.12 / 100,
+      }, {
+          "date": new Date(2023, 7, 1),
+          "ativo": 18.43 / 100,
+      }, {
+          "date": new Date(2023, 8, 1),
+          "ativo": 20.73 / 100,
+      }, {
+          "date": new Date(2023, 9, 1),
+          "ativo": 23.04 / 100,
+      }, {
+          "date": new Date(2023, 10, 1),
+          "ativo": 25.34 / 100,
+      }, {
+          "date": new Date(2023, 11, 1),
+          "ativo": 27.64 / 100,
+          "cdi": 12.65 / 100,
+          "ipca": 5.19 / 100,
+          "selic": 12.25 / 100,
+      }];
+  
+      const token_data = (symbol) => [
+          {
+              "field": "ativo",
+              "name": symbol,
+              "color": "blue",
+              "dashed": true
+          },
+          {
+              "field": "cdi",
+              "name": "CDI",
+              "color": "orange",
+              "dashed": false
+          },
+          {
+              "field": "ipca",
+              "name": "IPCA",
+              "color": "green",
+              "dashed": false
+          },
+          {
+              "field": "selic",
+              "name": "Selic",
+              "color": "black",
+              "dashed": false
+          }
+      ];
+  
+      const handleDivergentLinesChart = (id, data, series) => {
+          am4core.ready(function () {
+  
+              // License begin
+              am4core.addLicense("ch-custom-attribution");
+              // License end
+  
+              // Themes begin
+              am4core.useTheme(am4themes_animated);
+              // Themes end
+  
+              // Create chart instance(2023
+              var chart = am4core.create(id, am4charts.XYChart);
+  
+              chart.numberFormatter.language.locale = am4lang_pt_BR;
+              chart.dateFormatter.dateFormat = "MMM YYYY";
+              chart.numberFormatter.numberFormat = "#.##%";
+  
+              // Chart title
+              var title = chart.titles.create();
+              // title.text = "Projected infection dynamics";
+              title.fontSize = 20;
+              title.paddingBottom = 10;
+  
+              // Add data
+              chart.data = data;
+  
+              // Create axes
+              var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+              dateAxis.renderer.grid.template.location = 0;
+              dateAxis.renderer.minGridDistance = 30;
+  
+              var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+              valueAxis.renderer.inside = true;
+              valueAxis.renderer.labels.template.verticalCenter = "bottom";
+              valueAxis.renderer.labels.template.dx = -5;
+              valueAxis.renderer.labels.template.dy = 10;
+              valueAxis.renderer.maxLabelPosition = 0.95;
+              // valueAxis.title.text = "Number of infections";
+              valueAxis.title.marginRight = 5;
+  
+              // Create series
+              function createSeries(field, name, color, dashed) {
+                  var series = chart.series.push(new am4charts.LineSeries());
+                  series.dataFields.valueY = field;
+                  series.dataFields.dateX = "date";
+                  series.name = name;
+                  series.tooltipText = "[bold]{name}[/]\n{dateX}: [b]{valueY}[/]";
+                  series.strokeWidth = 2;
+                  series.smoothing = "monotoneX";
+                  series.stroke = color;
+  
+                  if (dashed) {
+                      series.strokeDasharray = "5 3";
+                  }
+  
+                  return series;
+              }
+  
+              series.forEach((e, i) => {
+                  createSeries(series[i].field, series[i].name, am4core.color(series[i].color), series[i].dashed);
+              });
+  
+              chart.legend = new am4charts.Legend();
+              chart.cursor = new am4charts.XYCursor();
+  
+          }); // end am4core.ready()
+      }
+  
       setTimeout(() => {
-        vPortfolio.setAttribute("aria-selected", "false");
-        vPortfolio.classList.remove("active");
-      }, 1000);
+          handleDivergentLinesChart("performance-chart", performanceGraphData, token_data("Carteira"));
+          handleDivergentLinesChart("BTC-divergentChart", ativoData, token_data("BTC"));
+          handleDivergentLinesChart("ETH-divergentChart", ativoData, token_data("ETH"));
+          handleDivergentLinesChart("USDT-divergentChart", ativoData, token_data("USDT"));
+          handleDivergentLinesChart("BNB-divergentChart", ativoData, token_data("BNB"));
+          handleDivergentLinesChart("FTR-divergentChart", ativoData, token_data("FTR"));
+      }, "1000");
+  
+      handlePieChart("dashboard-chart", dadosPie);
+      // handleAxisChart("performance-chart", "<?php echo $cliente->id ?>" )
+      handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);
+      handleRadialChart("pie-renda-chart", pieChartPercent(portfolio_rendaBalance).toFixed(1), "yellow", 50, 14);
+      handleRadialChart("pie-utility-chart", pieChartPercent(portfolio_utilityBalance).toFixed(1), "blue", 50, 14);
+      handleRadialChart("pie-startups-chart", pieChartPercent(portfolio_startupsBalance).toFixed(1), "green", 50, 14);
+      document.getElementById('total-percent').innerHTML = pieChartPercent(investedBalance()).toFixed(2) + "%";
+      document.getElementById('wallet-accordion').innerHTML = walletHtml;
+      document.getElementById('crypto-accordion').innerHTML = portfolio_cryptoHtml;
+      document.getElementById('renda-accordion').innerHTML = portfolio_rendaHtml;
+      document.getElementById('utility-accordion').innerHTML = portfolio_utilityHtml;
+      document.getElementById('startups-accordion').innerHTML = portfolio_startupsHtml;
+      document.getElementById('crypto-balance').innerHTML = portfolio_cryptoBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('renda-balance').innerHTML = portfolio_rendaBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('utility-balance').innerHTML = portfolio_utilityBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('startups-balance').innerHTML = portfolio_startupsBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('current-date').innerHTML = currentDate();
+      document.getElementById('total-balance').innerHTML = totalBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('available-balance').innerHTML = walletData['series'][0] ? walletData['series'][0].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : "R$ 0,00";
+      document.getElementById('invested-balance').innerHTML = investedBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById("market-radio-toggler").addEventListener("click", handleChangePosition);
+      document.getElementById("curve-radio-toggler").addEventListener("click", handleChangePosition);
+      document.getElementById("market-radio").addEventListener("click", handleRadioIcon);
+      document.getElementById("curve-radio").addEventListener("click", handleRadioIcon);
+      document.getElementById('projected-balance').innerHTML = projectedBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const vPortfolio = document.getElementById('visualizar-portfolio');
+      vPortfolio.addEventListener("click", () => {
+          document.getElementById('dashboard-tab').classList.remove("active");
+          document.getElementById('dashboard-portfolio-tab').classList.add("active");
+          setTimeout(() => {
+              vPortfolio.setAttribute("aria-selected", "false");
+              vPortfolio.classList.remove("active");
+          }, 1000);
+      })
     })
-  });
+    // });
 
-  // $.getJSON("<?php echo $_ENV['SITE_URL'] ?>"+"/api/priv/listOurTokens", function (data) {
+    // $.getJSON("<?php echo $_ENV['SITE_URL'] ?>"+"/api/priv/listOurTokens", function (data) {
 </script>
-<script src="assets/js/divergentLinesChart.js"></script>
+<!-- <script src="assets/js/divergentLinesChart.js"></script> -->
 <!-- <script src="assets/js/valueAxisChart.js"></script> -->
 <?php Utils\Layout::append("mensage_text", $_data) ?>
 <?php Utils\Layout::append("mensage_text", $_data) ?>
