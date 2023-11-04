@@ -474,6 +474,30 @@ $_data["idiomaMenu"] = $idioma;
   </div>
 </div>
 
+<!-- noCoinsModal -->
+<div class="modal fade" id="noCoinsModal" tabindex="-1" role="dialog" aria-labelledby="noCoinsModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="noCoinsModalTitle">OPS! Não existem moedas na sua carteira</h5>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body">
+        <p class="text-center">Faça primeiro um depósito em sua carteira, use o botão abaixo!</p>
+        <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/deposit">
+          <i class="text-primary fs-30"><img src="assets/img/icon/ico-depositar.svg" alt="deposit"></i>
+        </a>
+        <p class="fw-bold text-center">Depositar</p>
+      </div>
+      <div class="modal-footer">
+        <a type="button" class="btn btn-secondary" href="/portfolio">Ir para o Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- End Main content -->
 
 
@@ -523,8 +547,7 @@ $_data["idiomaMenu"] = $idioma;
       method: "POST",
       dataType: 'json',
       success: function (json) {
-        console.log(json)
-        if (json.sucesso) {
+        if (json.sucesso && json.moedas.lenght > 0) {
           json.moedas.forEach(element => {
             option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
           });
@@ -544,7 +567,10 @@ $_data["idiomaMenu"] = $idioma;
           });
 
           carregarSaldo($("#cryptoFrom").val());
-        }
+        } else {
+          $("#noCoinsModal").modal("show");
+          showNotyAlert("Sem moedas na carteira, primeiro adquira moedas!", "e");
+        }  
       }
     });
   });

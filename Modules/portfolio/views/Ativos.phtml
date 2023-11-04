@@ -187,7 +187,7 @@ $_data["idiomaMenu"] = $idioma;
                           class="balance-visible" id="total-balance"></span></span>
                       <span id="current-date"></span>
                     </div>
-                    <div class="col-md-7 d-flex vl-60 justify-content-between">
+                    <div class="col-md-7 vl-60">
                       <div class="row text-center">
                         <div class="col-12 col-lg-4 mt-2">
                           <span class="d-block">Saldo disponível</span>
@@ -741,7 +741,7 @@ $_data["idiomaMenu"] = $idioma;
                                     <div class="my-3 border-bottom d-flex justify-content-between font-weight-bold">
                                       <span class="ml-2 mb-2"><i class="icon ion-ios-trending-up mr-1"></i>Minha
                                         Posição</span>
-                                      <span class="ml-2 mb-2">Ver mais detalhes</span>
+                                      <a href="#"><span class="ml-2 mb-2">Ver mais detalhes</span></a>
                                     </div>
                                     <table class="table table-responsive mt-2">
                                       <thead class="text-center">
@@ -755,19 +755,18 @@ $_data["idiomaMenu"] = $idioma;
                                       </thead>
                                       <tbody class="text-center">
                                         <tr>
-                                          <td><span class="balance-hidden">****</span><span class="balance-visible">R$
-                                              160,00</span></td>
+                                          <td><span class="balance-hidden">****</span><span class="balance-visible">R$ 0,00</span></td>
                                           <td><span class="balance-hidden">****</span><span
-                                              class="balance-visible">0</span>
+                                              class="balance-visible">R$ 0,00</span>
                                           </td>
                                           <td><span class="balance-hidden">****</span><span
-                                              class="balance-visible">0</span>
+                                              class="balance-visible">R$ 0,00</span>
                                           </td>
                                           <td><span class="balance-hidden">****</span><span
-                                              class="balance-visible">0</span>
+                                              class="balance-visible">R$ 0,00</span>
                                           </td>
                                           <td><span class="balance-hidden">****</span><span
-                                              class="balance-visible">0</span>
+                                              class="balance-visible">R$ 0,00</span>
                                           </td>
                                           
                                         </tr>
@@ -932,6 +931,20 @@ $_data["idiomaMenu"] = $idioma;
           const percent100 = total == 0 ? 1: total;
           return (amount * 100 / percent100);
       }
+
+      const noInvestedFunds = () => {
+        if(portfolio_cryptoBalance == 0 && portfolio_rendaBalance == 0 && portfolio_utilityBalance == 0 && portfolio_startupsBalance == 0 && walletData["series"][0] == 0){
+          return true
+        }
+      }
+
+      const dadosZeradosPie = [
+          {
+              "products": "Sem Fundos",
+              "share": pieChartPercent(0.001).toFixed(2),
+              "color": am4core.color("#ccc")
+          }
+      ]
   
       const dadosPie = [
           {
@@ -1062,6 +1075,7 @@ $_data["idiomaMenu"] = $idioma;
       }
   
       var performanceGraphData = [];
+      var ativoGraphData = [];
   
       const callData = async () => {
           const data = await fetchData("<?php echo $cliente->id ?>")
@@ -1078,49 +1092,20 @@ $_data["idiomaMenu"] = $idioma;
   
       callData()
   
-      const ativoData = [{
-          "date": new Date(2023, 0, 1),
-          "ativo": 2.30 / 100,
-          "cdi": 0 / 100,
-          "ipca": 0 / 100,
-          "selic": 0 / 100,
-      }, {
-          "date": new Date(2023, 1, 1),
-          "ativo": 4.60 / 100,
-      }, {
-          "date": new Date(2023, 2, 1),
-          "ativo": 6.91 / 100,
-      }, {
-          "date": new Date(2023, 3, 1),
-          "ativo": 9.21 / 100,
-      }, {
-          "date": new Date(2023, 4, 1),
-          "ativo": 11.52 / 100,
-      }, {
-          "date": new Date(2023, 5, 1),
-          "ativo": 13.82 / 100,
-      }, {
-          "date": new Date(2023, 6, 1),
-          "ativo": 16.12 / 100,
-      }, {
-          "date": new Date(2023, 7, 1),
-          "ativo": 18.43 / 100,
-      }, {
-          "date": new Date(2023, 8, 1),
-          "ativo": 20.73 / 100,
-      }, {
-          "date": new Date(2023, 9, 1),
-          "ativo": 23.04 / 100,
-      }, {
-          "date": new Date(2023, 10, 1),
-          "ativo": 25.34 / 100,
-      }, {
-          "date": new Date(2023, 11, 1),
-          "ativo": 27.64 / 100,
-          "cdi": 12.65 / 100,
-          "ipca": 5.19 / 100,
-          "selic": 12.25 / 100,
-      }];
+      const callAtivoData = async () => {
+          const data = await fetchData("<?php echo $cliente->id ?>")
+          data.forEach(e => {
+            ativoGraphData.push({
+                  "date": new Date(e.label),
+                  "ativo": formatPercent(Math.random()*2 + 0.5),
+                  "cdi": formatPercent(e.cdi),
+                  "ipca": formatPercent(e.ipca),
+                  "selic": formatPercent(e.selic)
+              })
+          });
+      }
+
+      callAtivoData()
   
       const token_data = (symbol) => [
           {
@@ -1220,14 +1205,14 @@ $_data["idiomaMenu"] = $idioma;
   
       setTimeout(() => {
           handleDivergentLinesChart("performance-chart", performanceGraphData, token_data("Carteira"));
-          handleDivergentLinesChart("BTC-divergentChart", ativoData, token_data("BTC"));
-          handleDivergentLinesChart("ETH-divergentChart", ativoData, token_data("ETH"));
-          handleDivergentLinesChart("USDT-divergentChart", ativoData, token_data("USDT"));
-          handleDivergentLinesChart("BNB-divergentChart", ativoData, token_data("BNB"));
-          handleDivergentLinesChart("FTR-divergentChart", ativoData, token_data("FTR"));
+          handleDivergentLinesChart("BTC-divergentChart", ativoGraphData, token_data("BTC"));
+          handleDivergentLinesChart("ETH-divergentChart", ativoGraphData, token_data("ETH"));
+          handleDivergentLinesChart("USDT-divergentChart", ativoGraphData, token_data("USDT"));
+          handleDivergentLinesChart("BNB-divergentChart", ativoGraphData, token_data("BNB"));
+          handleDivergentLinesChart("FTR-divergentChart", ativoGraphData, token_data("FTR"));
       }, "1000");
   
-      handlePieChart("dashboard-chart", dadosPie);
+      handlePieChart("dashboard-chart", noInvestedFunds() == true ? dadosZeradosPie : dadosPie);
       // handleAxisChart("performance-chart", "<?php echo $cliente->id ?>" )
       handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);
       handleRadialChart("pie-renda-chart", pieChartPercent(portfolio_rendaBalance).toFixed(1), "yellow", 50, 14);
