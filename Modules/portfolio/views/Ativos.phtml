@@ -57,8 +57,6 @@ $_data["idiomaMenu"] = $idioma;
             </div>
           </div>
 
-
-
           <div class="shadow mt-3">
             <div class="p-3">
               <div class="row">
@@ -69,7 +67,7 @@ $_data["idiomaMenu"] = $idioma;
                     caso fossem resgatados
                     antes
                     do
-                    vencimento. Válido para Títulos Públicos, Debêntures, CRIs e CRAs. Os outros ativos são
+                    vencimento. Válido para Criptomoedas, Renda Digital, Utility Tokens, Startups e Staking. Os outros ativos são
                     precificados na taxa de compra. Caso queira alterar o seu padrão de visualização para
                     <b>Posição
                       na taxa de compra ("na curva")</b> acesse: <a class="text-dark font-weight-bold btn btn-light"
@@ -78,7 +76,7 @@ $_data["idiomaMenu"] = $idioma;
                   </p>
                   <p class="text-hidden" id="curve-radio-text">Posição
                     na taxa de compra ("na curva") é um método de atualização dos ganhos em investimentos de renda
-                    fixa. Com ela, é possível identificar a rentabilidade, a longo e curto prazo, de uma aplicação.
+                    fixa. Com ela, é possível identificar a rentabilidade, a longo prazo, de uma aplicação.
                     Caso queira alterar o seu padrão de visualização para
                     <b>Posição a mercado (D-1)</b> acesse: <a class="text-dark font-weight-bold btn btn-light" href="#"
                       id="curve-radio-toggler">Mudar posição padrão <i
@@ -270,14 +268,17 @@ $_data["idiomaMenu"] = $idioma;
                               Rentabilidade CDI
                             </span>
                             <span class="text-success">
-                              <span class="balance-hidden">****</span><span class="balance-visible">0,00%</span>
+                            <span class="balance-hidden">****</span><span class="balance-visible" id="rentabilidade-cdi">0,00%</span>
                             </span>
                           </div>
                         </div>
                         <div class="mt-5">
+                        <a id="visualizar-portfolio" data-toggle="pill" href="#dashboard-portfolio"
+                          role="tab" aria-controls="dashboard-portfolio" aria-selected="false">
                           <p class="h6">
                             Visualizar Evolução Completa <i class="icon ion-ios-arrow-forward text-warning"></i>
-                          </p>
+                          </p></a>
+                          
                         </div>
                       </div>
                     </div>
@@ -342,14 +343,14 @@ $_data["idiomaMenu"] = $idioma;
                           aria-expanded="true" aria-controls="collapseTwo" id="headingTwo">
                           <div class="d-flex justify-content-between align-items-center">
                             <div class="w-75">
-                              <div class="pie animate no-round" id="pie-rendaFixa-chart">0%</div>
-                              <span class="font-weight-bold font-card fs-r">Renda Fixa Digital</span>
+                              <div class="pie animate no-round" id="pie-renda-chart">0%</div>
+                              <span class="font-weight-bold font-card fs-r">Renda Digital</span>
                             </div>
                             <div class="vl font-weight-bold w-50">
                               <span class="d-block ml-4 fs-r">Saldo</span>
                               <span class="balance-hidden ml-4 fs-r">****</span>
                               <span class="balance-visible">
-                                <span class="ml-4 fs-r" id="rendaFixa-balance"></span>
+                                <span class="ml-4 fs-r" id="renda-balance"></span>
                               </span>
                             </div>
                             <span class="vl d-flex align-items-center justify-content-center w-10"><i
@@ -379,7 +380,7 @@ $_data["idiomaMenu"] = $idioma;
                               </div>
                             </div>
                           </div>
-                          <div class="accordion" id="rendaFixa-accordion"></div>
+                          <div class="accordion" id="renda-accordion"></div>
                         </div>
                       </div>
                       <div class="card">
@@ -604,28 +605,28 @@ $_data["idiomaMenu"] = $idioma;
                   <td>0,00%</td>
                 </tr>
                 <tr>
-                  <th scope="row">CDI%</th>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
+                  <th scope="row">CDI</th>
+                  <td id="cdi-mes">0,00%</td>
+                  <td id="cdi-sem">0,00%</td>
+                  <td id="cdi-ano">0,00%</td>
+                  <td id="cdi-12m">0,00%</td>
+                  <td id="cdi-ini">0,00%</td>
                 </tr>
                 <tr>
-                  <th scope="row">IPC-A</th>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
+                  <th scope="row">IPCA</th>
+                  <td id="ipca-mes">0,00%</td>
+                  <td id="ipca-sem">0,00%</td>
+                  <td id="ipca-ano">0,00%</td>
+                  <td id="ipca-12m">0,00%</td>
+                  <td id="ipca-ini">0,00%</td>
                 </tr>
                 <tr>
-                  <th scope="row">IBOVESPA</th>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
-                  <td>0,00%</td>
+                  <th scope="row">Selic</th>
+                  <td id="selic-mes">0,00%</td>
+                  <td id="selic-sem">0,00%</td>
+                  <td id="selic-ano">0,00%</td>
+                  <td id="selic-12m">0,00%</td>
+                  <td id="selic-ini">0,00%</td>
                 </tr>
                 <tr>
                   <th scope="row" class="">Rentabilidade real <i class="icon ion-ios-information-circle-outline" d
@@ -648,7 +649,6 @@ $_data["idiomaMenu"] = $idioma;
 
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
 <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
-
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
@@ -656,9 +656,9 @@ $_data["idiomaMenu"] = $idioma;
 <script src="assets/js/dashboard.js"></script>
 <script>
   var walletData = null;
+  var projectedBalance = 0;
 
   $.getJSON("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/jsonPortfolio?user=<?php echo $cliente->id ?>", function (parsed_data) {
-
 
     // Configurações do gráfico redondo
     const handleRadialChart = (id, percent, color, width, fontSize) => {
@@ -674,11 +674,11 @@ $_data["idiomaMenu"] = $idioma;
     walletData = parsed_data;
     var walletHtml = '';
     var portfolio_cryptoHtml = '';
-    var portfolio_rendaFixaHtml = '';
+    var portfolio_rendaHtml = '';
     var portfolio_utilityHtml = '';
     var portfolio_startupsHtml = '';
     var portfolio_cryptoBalance = 0;
-    var portfolio_rendaFixaBalance = 0;
+    var portfolio_rendaBalance = 0;
     var portfolio_utilityBalance = 0;
     var portfolio_startupsBalance = 0;
 
@@ -805,41 +805,40 @@ $_data["idiomaMenu"] = $idioma;
                             data-parent="#wallet-accordion">
                             <div class="card-body">
                               <div class="row">
-                                <div class="d-flex col-12 col-lg-6 align-items-stretch">
-                                  <div class="d-flex justify-content-around align-items-center my-1 w-100">
+                                <div class="col-12 col-lg-6">
                                     <div class="row">
-                                      <div class="col-6 col-md-3 mb-2">
+                                      <div class="col-6 col-md-4 mb-2">
                                         <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/deposit">
                                           <i class="text-primary fs-30"><img src="assets/img/icon/ico-depositar.svg" alt="deposit"></i>
                                         </a>
                                         <p class="fw-bold text-center">Depositar</p>
                                       </div>
-                                      <div class="col-6 col-md-3 mb-2">
+                                      <div class="col-6 col-md-4 mb-2">
                                         <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/withdraw">
                                           <i class="text-primary fs-30"><img src="assets/img/icon/ico-sacar.svg" alt="withdraw"></i>
                                         </a>
                                         <p class="fw-bold text-center">Transferir</p>
                                       </div>
-                                      <div class="col-6 col-md-3 mb-2">
+                                      <div class="col-6 col-md-4 mb-2">
                                         <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/exchange">
                                           <i class="text-primary fs-30"><img src="assets/img/icon/ico-comprar.svg" alt="exchange"></i>
                                         </a>
                                         <p class="fw-bold text-center">Comprar</p>
                                       </div>
-                                      <div class="col-6 col-md-3 mb-2">
+                                      <div class="col-6 col-md-4 mb-2">
                                         <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/book">
                                           <i class="text-primary fs-30"><img src="assets/img/icon/ico-ordens.svg" alt="book"></i>
                                         </a>
                                         <p class="fw-bold text-center">Ordens</p>
                                       </div>
-                                      <div class="col-6 col-md-3 mb-2">
+                                      <div class="col-6 col-md-4 mb-2">
                                         <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/staking">
                                           <i class="text-primary fs-30"><img src="assets/img/icon/ico-staking.svg" alt="staking"></i>
                                         </a>
                                         <p class="fw-bold text-center">Staking</p>
                                       </div>
+                                
                                     </div>
-                                  </div>
                                 </div>
                                 <div class="col-12 col-lg-6 shadow">
                                   <div class="pt-4 pl-2 pr-2 mr-2">
@@ -878,8 +877,8 @@ $_data["idiomaMenu"] = $idioma;
         portfolio_cryptoHtml += headerHtml(j) + bodyHtml("crypto", j);
       }
       for (var j = 4; j < walletData['position'].length; j++) {
-        portfolio_rendaFixaBalance += walletData['series'][j + 1];
-        portfolio_rendaFixaHtml += headerHtml(j) + bodyHtml("rendaFixa", j);
+        portfolio_rendaBalance += walletData['series'][j + 1];
+        portfolio_rendaHtml += headerHtml(j) + bodyHtml("renda", j);
       }
       for (var j = 5; j < walletData['position'].length; j++) {
         portfolio_utilityBalance += walletData['series'][j + 1];
@@ -892,7 +891,7 @@ $_data["idiomaMenu"] = $idioma;
     } else {
       walletHtml = '<p>Nenhuma posição encontrada</p>';
       portfolio_cryptoHtml = '<p>Nenhuma posição encontrada</p>';
-      portfolio_rendaFixaHtml = '<p>Nenhuma posição encontrada</p>';
+      portfolio_rendaHtml = '<p>Nenhuma posição encontrada</p>';
       portfolio_utilityHtml = '<p>Nenhuma posição encontrada</p>';
       portfolio_startupsHtml = '<p>Nenhuma posição encontrada</p>';
     }
@@ -906,6 +905,8 @@ $_data["idiomaMenu"] = $idioma;
       }
       return total;
     }
+    
+    projectedBalance = totalBalance();
 
     const investedBalance = () => {
       total = 0;
@@ -935,8 +936,8 @@ $_data["idiomaMenu"] = $idioma;
       "share": pieChartPercent(portfolio_cryptoBalance).toFixed(2),
       "color": am4core.color("orange")
       }, {
-        "products": "Renda Fixa Digital",
-        "share": pieChartPercent(portfolio_rendaFixaBalance).toFixed(2),
+        "products": "Renda Digital",
+        "share": pieChartPercent(portfolio_rendaBalance).toFixed(2),
         "color": am4core.color("yellow")
       }, {
         "products": "Utility Tokens",
@@ -991,108 +992,6 @@ $_data["idiomaMenu"] = $idioma;
       }); // end am4core.ready()
     }
 
-    const handleAxisChart = (id, user_id) => {
-      am4core.ready(async function() {
-      am4core.addLicense("ch-custom-attribution");
-      am4core.useTheme(am4themes_animated);
-      var chart = am4core.create(id, am4charts.XYChart);
-      chart.colors.step = 2;
-      var apiData = await fetchData(user_id);
-
-      var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-      // dateAxis.renderer.minGridDistance = 50;
-      // dateAxis.dataFields.category = 'label';
-      
-      var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-
-      function createAxisAndSeries(field, name, opposite, bullet) {
-        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        if(chart.yAxes.indexOf(valueAxis) != 0){
-            valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
-        }
-        
-        var series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.valueY = field;
-        series.dataFields.dateX = "date";
-        series.strokeWidth = 2;
-        series.yAxis = valueAxis;
-        series.name = name;
-        series.tooltipText = "{name}: [bold]{valueY}[/]";
-        series.tensionX = 0.8;
-        series.showOnInit = true;
-        
-        var interfaceColors = new am4core.InterfaceColorSet();
-        
-        switch(bullet) {
-          case "triangle":
-            var bullet = series.bullets.push(new am4charts.Bullet());
-            bullet.width = 12;
-            bullet.height = 12;
-            bullet.horizontalCenter = "middle";
-            bullet.verticalCenter = "middle";
-            
-            var triangle = bullet.createChild(am4core.Triangle);
-            triangle.stroke = interfaceColors.getFor("background");
-            triangle.strokeWidth = 2;
-            triangle.direction = "top";
-            triangle.width = 12;
-            triangle.height = 12;
-            break;
-          case "rectangle":
-            var bullet = series.bullets.push(new am4charts.Bullet());
-            bullet.width = 10;
-            bullet.height = 10;
-            bullet.horizontalCenter = "middle";
-            bullet.verticalCenter = "middle";
-            
-            var rectangle = bullet.createChild(am4core.Rectangle);
-            rectangle.stroke = interfaceColors.getFor("background");
-            rectangle.strokeWidth = 2;
-            rectangle.width = 10;
-            rectangle.height = 10;
-            break;
-          default:
-            var bullet = series.bullets.push(new am4charts.CircleBullet());
-            bullet.circle.stroke = interfaceColors.getFor("background");
-            bullet.circle.strokeWidth = 2;
-            break;
-        }
-        
-        valueAxis.renderer.line.strokeOpacity = 1;
-        valueAxis.renderer.line.strokeWidth = 2;
-        valueAxis.renderer.line.stroke = series.stroke;
-        valueAxis.renderer.labels.template.fill = series.stroke;
-        valueAxis.renderer.opposite = opposite;
-      }
-
-      createAxisAndSeries("wallet", "Carteira", false, "circle");
-      createAxisAndSeries("cdi", "CDI", true, "triangle");
-      // createAxisAndSeries("hits", "Hits", true, "rectangle");
-
-      // Add legend
-      chart.legend = new am4charts.Legend();
-
-      // Add cursor
-      chart.cursor = new am4charts.XYCursor();
-
-      // generate some random data, quite different range
-      var filteredChartData = [];
-      apiData.forEach(item => {
-        
-        filteredChartData.push({
-          date: new Date(item.label),
-          carteira: item.wallet,
-          cdi: item.cdi
-        });
-      });
-
-      chart.data =  filteredChartData;
-
-
-}); 
-    }
-
     async function fetchData(user_id) {
       try {
         const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user="+user_id);
@@ -1104,28 +1003,262 @@ $_data["idiomaMenu"] = $idioma;
       }
     }
 
+    // Mudar seleção entre radios
+    const handleRadioIcon = ({ target }) => {
+        const mktRadio = document.getElementById("market-radio");
+        const crvRadio = document.getElementById("curve-radio");
+        const mktTxt = document.getElementById("market-radio-text");
+        const crvTxt = document.getElementById("curve-radio-text");
+        const mktTitle = document.getElementById("market-card-title");
+        const crvTitle = document.getElementById("curve-card-title");
+
+        if (target.parentNode.id == "market-radio-trigger") {
+            if (mktRadio.classList.contains("ion-ios-radio-button-off")) {
+              handleChangePosition()
+            }
+        } else {
+            if (crvRadio.classList.contains("ion-ios-radio-button-off")) {
+              handleChangePosition()
+            }
+        }
+    }
+
+    // Mudar posição padrão
+    const handleChangePosition = () => {
+
+      const mktTxt = document.getElementById("market-radio-text");
+      const crvTxt = document.getElementById("curve-radio-text");
+      const mktTitle = document.getElementById("market-card-title");
+      const crvTitle = document.getElementById("curve-card-title");
+      const mktRadio = document.getElementById("market-radio");
+      const crvRadio = document.getElementById("curve-radio");
+      const projectedBalanceValue = document.getElementById('projected-balance');
+
+      if (crvTitle.classList.contains("text-hidden")) {
+          mktRadio.classList.replace("ion-ios-radio-button-on", "ion-ios-radio-button-off")
+          crvRadio.classList.replace("ion-ios-radio-button-off", "ion-ios-radio-button-on")
+          mktTxt.classList.toggle("text-hidden")
+          crvTxt.classList.toggle("text-hidden")
+          mktTitle.classList.toggle("text-hidden")
+          crvTitle.classList.toggle("text-hidden")
+          projectedBalanceValue.innerHTML = (projectedBalance + (portfolio_rendaBalance * 1.24)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+          
+      } else {
+          mktRadio.classList.replace("ion-ios-radio-button-off", "ion-ios-radio-button-on")
+          crvRadio.classList.replace("ion-ios-radio-button-on", "ion-ios-radio-button-off")
+          mktTxt.classList.toggle("text-hidden")
+          crvTxt.classList.toggle("text-hidden")
+          mktTitle.classList.toggle("text-hidden")
+          crvTitle.classList.toggle("text-hidden")
+          projectedBalanceValue.innerHTML = projectedBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      }
+    }
+
+    function formatPercent(num) {
+      return num / 100;
+    }
+
+    var performanceData = [];
+
+    const callData = async () => {
+      const data = await fetchData("<?php echo $cliente->id ?>")
+      console.log(data)
+      data.forEach(e => {
+        performanceData.push({
+          "date": new Date(e.label),
+          "ativo": formatPercent(e.wallet),
+          "cdi": formatPercent(e.cdi),
+          "ipca": formatPercent(e.ipca),
+          "selic": formatPercent(e.selic)
+        })
+      });
+    }
+
+    callData()
+
+    const ativoData = [{
+  "date": new Date(2023, 0, 1),
+  "ativo": 2.30 / 100,
+  "cdi": 0 / 100,
+  "ipca": 0 / 100,
+  "selic": 0 / 100,
+}, {
+  "date": new Date(2023, 1, 1),
+  "ativo": 4.60 / 100,
+}, {
+  "date": new Date(2023, 2, 1),
+  "ativo": 6.91 / 100,
+}, {
+  "date": new Date(2023, 3, 1),
+  "ativo": 9.21 / 100,
+}, {
+  "date": new Date(2023, 4, 1),
+  "ativo": 11.52 / 100,
+}, {
+  "date": new Date(2023, 5, 1),
+  "ativo": 13.82 / 100,
+}, {
+  "date": new Date(2023, 6, 1),
+  "ativo": 16.12 / 100,
+}, {
+  "date": new Date(2023, 7, 1),
+  "ativo": 18.43 / 100,
+}, {
+  "date": new Date(2023, 8, 1),
+  "ativo": 20.73 / 100,
+}, {
+  "date": new Date(2023, 9, 1),
+  "ativo": 23.04 / 100,
+}, {
+  "date": new Date(2023, 10, 1),
+  "ativo": 25.34 / 100,
+}, {
+  "date": new Date(2023, 11, 1),
+  "ativo": 27.64 / 100,
+  "cdi": 12.65 / 100,
+  "ipca": 5.19 / 100,
+  "selic": 12.25 / 100,
+}];
+
+const token_data = (symbol) => [
+  {
+    "field": "ativo",
+    "name": symbol,
+    "color": "blue",
+    "dashed": true
+  },
+  {
+    "field": "cdi",
+    "name": "CDI",
+    "color": "orange",
+    "dashed": false
+  },
+  {
+    "field": "ipca",
+    "name": "IPCA",
+    "color": "green",
+    "dashed": false
+  },
+  {
+    "field": "selic",
+    "name": "Selic",
+    "color": "black",
+    "dashed": false
+  }
+];
+
+const handleDivergentLinesChart = (id, data, series) => {
+  am4core.ready(function () {
+
+    // License begin
+    am4core.addLicense("ch-custom-attribution");
+    // License end
+
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+
+    // Create chart instance(2023
+    var chart = am4core.create(id, am4charts.XYChart);
+
+    chart.numberFormatter.language.locale = am4lang_pt_BR;
+    chart.dateFormatter.dateFormat = "MMM YYYY";
+    chart.numberFormatter.numberFormat = "#.##%";
+
+    // Chart title
+    var title = chart.titles.create();
+    // title.text = "Projected infection dynamics";
+    title.fontSize = 20;
+    title.paddingBottom = 10;
+
+    // Add data
+    chart.data = data;
+
+    // Create axes
+    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    dateAxis.renderer.grid.template.location = 0;
+    dateAxis.renderer.minGridDistance = 30;
+
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.renderer.inside = true;
+    valueAxis.renderer.labels.template.verticalCenter = "bottom";
+    valueAxis.renderer.labels.template.dx = -5;
+    valueAxis.renderer.labels.template.dy = 10;
+    valueAxis.renderer.maxLabelPosition = 0.95;
+    // valueAxis.title.text = "Number of infections";
+    valueAxis.title.marginRight = 5;
+
+    // Create series
+    function createSeries(field, name, color, dashed) {
+      var series = chart.series.push(new am4charts.LineSeries());
+      series.dataFields.valueY = field;
+      series.dataFields.dateX = "date";
+      series.name = name;
+      series.tooltipText = "[bold]{name}[/]\n{dateX}: [b]{valueY}[/]";
+      series.strokeWidth = 2;
+      series.smoothing = "monotoneX";
+      series.stroke = color;
+
+      if (dashed) {
+        series.strokeDasharray = "5 3";
+      }
+
+      return series;
+    }
+
+    series.forEach((e,i) => {
+      createSeries(series[i].field, series[i].name, am4core.color(series[i].color), series[i].dashed);
+    });
+
+    chart.legend = new am4charts.Legend();
+    chart.cursor = new am4charts.XYCursor();
+
+  }); // end am4core.ready()
+}
+
+setTimeout(() => {
+  handleDivergentLinesChart("performance-chart", performanceData, token_data("Carteira"));
+  handleDivergentLinesChart("BTC-divergentChart", ativoData, token_data("BTC"));
+  handleDivergentLinesChart("ETH-divergentChart", ativoData, token_data("ETH"));
+  handleDivergentLinesChart("USDT-divergentChart", ativoData, token_data("USDT"));
+  handleDivergentLinesChart("BNB-divergentChart", ativoData, token_data("BNB"));
+  handleDivergentLinesChart("FTR-divergentChart", ativoData, token_data("FTR"));
+}, "1000");
+
     handlePieChart("dashboard-chart", dadosPie);
-    handleAxisChart("performance-chart", "<?php echo $cliente->id ?>" )
+    // handleAxisChart("performance-chart", "<?php echo $cliente->id ?>" )
     handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);
-    handleRadialChart("pie-rendaFixa-chart", pieChartPercent(portfolio_rendaFixaBalance).toFixed(1), "yellow", 50, 14);
+    handleRadialChart("pie-renda-chart", pieChartPercent(portfolio_rendaBalance).toFixed(1), "yellow", 50, 14);
     handleRadialChart("pie-utility-chart", pieChartPercent(portfolio_utilityBalance).toFixed(1), "blue", 50, 14);
     handleRadialChart("pie-startups-chart", pieChartPercent(portfolio_startupsBalance).toFixed(1), "green", 50, 14);
     document.getElementById('total-percent').innerHTML = pieChartPercent(investedBalance()).toFixed(2) + "%";
     document.getElementById('wallet-accordion').innerHTML = walletHtml;
     document.getElementById('crypto-accordion').innerHTML = portfolio_cryptoHtml;
-    document.getElementById('rendaFixa-accordion').innerHTML = portfolio_rendaFixaHtml;
+    document.getElementById('renda-accordion').innerHTML = portfolio_rendaHtml;
     document.getElementById('utility-accordion').innerHTML = portfolio_utilityHtml;
     document.getElementById('startups-accordion').innerHTML = portfolio_startupsHtml;
     document.getElementById('crypto-balance').innerHTML = portfolio_cryptoBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('rendaFixa-balance').innerHTML = portfolio_rendaFixaBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('renda-balance').innerHTML = portfolio_rendaBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     document.getElementById('utility-balance').innerHTML = portfolio_utilityBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     document.getElementById('startups-balance').innerHTML = portfolio_startupsBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     document.getElementById('current-date').innerHTML = currentDate();
     document.getElementById('total-balance').innerHTML = totalBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     document.getElementById('available-balance').innerHTML = walletData['series'][0]?walletData['series'][0].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }):"R$ 0,00";
     document.getElementById('invested-balance').innerHTML = investedBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('projected-balance').innerHTML = totalBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
+    document.getElementById("market-radio-toggler").addEventListener("click", handleChangePosition);
+    document.getElementById("curve-radio-toggler").addEventListener("click", handleChangePosition);
+    document.getElementById("market-radio").addEventListener("click", handleRadioIcon);
+    document.getElementById("curve-radio").addEventListener("click", handleRadioIcon);
+    document.getElementById('projected-balance').innerHTML = projectedBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const vPortfolio = document.getElementById('visualizar-portfolio');
+    vPortfolio.addEventListener("click", () => {
+      document.getElementById('dashboard-tab').classList.remove("active");
+      document.getElementById('dashboard-portfolio-tab').classList.add("active");
+      setTimeout(() => {
+        vPortfolio.setAttribute("aria-selected", "false");
+        vPortfolio.classList.remove("active");
+      }, 1000);
+    })
   });
 
   // $.getJSON("<?php echo $_ENV['SITE_URL'] ?>"+"/api/priv/listOurTokens", function (data) {

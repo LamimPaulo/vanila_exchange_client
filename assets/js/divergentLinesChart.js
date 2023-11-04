@@ -122,11 +122,3 @@ const handleDivergentLinesChart = (id, data, series) => {
 
   }); // end am4core.ready()
 }
-
-setTimeout(() => {
-  handleDivergentLinesChart("BTC-divergentChart", ftrData, token_data("BTC"));
-  handleDivergentLinesChart("ETH-divergentChart", ftrData, token_data("ETH"));
-  handleDivergentLinesChart("USDT-divergentChart", ftrData, token_data("USDT"));
-  handleDivergentLinesChart("BNB-divergentChart", ftrData, token_data("BNB"));
-  handleDivergentLinesChart("FTR-divergentChart", ftrData, token_data("FTR"));
-}, "1000");
