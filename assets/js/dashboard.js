@@ -248,7 +248,7 @@ const performanceData = async () => {
     document.getElementById("selic-12m").innerHTML = formatDecimals(values[0].valor)
     document.getElementById("selic-ini").innerHTML = "0,00%";
 
-    document.getElementById("rentabilidade-cdi").innerHTML = formatDecimals(values[0].valor);
+    document.getElementById("rentabilidade-cdi").innerHTML = formatDecimals(values[1].valor);
 }
 
 performanceData();
