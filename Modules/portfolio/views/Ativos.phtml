@@ -1062,7 +1062,6 @@ $_data["idiomaMenu"] = $idioma;
 
     const callData = async () => {
       const data = await fetchData("<?php echo $cliente->id ?>")
-      console.log(data)
       data.forEach(e => {
         performanceData.push({
           "date": new Date(e.label),
