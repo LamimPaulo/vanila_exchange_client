@@ -243,6 +243,108 @@ class CompraVendaDireta {
         
         print json_encode($json);
     }
+
+    public function getStakingBalances() {
+        
+        try {
+            
+            $cliente = \Utils\Geral::getCliente();
+            
+            // $moedas = Array();
+            
+            $moedasRn = new \Models\Modules\Cadastro\MoedaRn();
+            $moedas = $moedasRn->listar("ativo = 1 AND status_mercado = 1 AND has_staking = 1 AND id <> 1", null, null, null, true, false);
+
+            $lista = Array();
+            
+            $contaCorrenteReaisRn = new \Models\Modules\Cadastro\ContaCorrenteReaisRn();
+            $saldos = $contaCorrenteReaisRn->calcularSaldoConta($cliente, true);
+            
+            if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
+                $moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
+                $getStakedBalance = $this->getStakedBalance($moeda, $cliente);
+                
+                $lista[] = Array(
+                    "id_moeda" => \Utils\Criptografia::encriptyPostId($moeda->id),
+                    "saldo_bloqueado" => $saldos["bloqueado"],
+                    "saldo_disponivel" => $saldos["saldo"],
+                    "decimal" => $moeda->casasDecimais,
+                    "imagem" => IMAGES . "currencies/" . $moeda->icone ,
+                    "simbolo" => $moeda->simbolo,
+                    "nome" => $moeda->nome,
+                    'staked_balance' => json_encode($getStakedBalance),
+                    'usr_id' => $cliente->id,
+                    'coin_id' => $moeda->id,
+                );
+            }
+            
+            $contaCorrenteBtcRn = new \Models\Modules\Cadastro\ContaCorrenteBtcRn();
+            foreach ($moedas as $coin) {
+                $saldos = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $coin->id, true, false);             
+                if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
+                    $getStakedBalance = $this->getStakedBalance($coin, $cliente);
+                    $lista[] = Array(
+                        "id_moeda" => \Utils\Criptografia::encriptyPostId($moeda->id),
+                        "saldo_bloqueado" => $saldos["bloqueado"],
+                        "saldo_disponivel" => $saldos["saldo"],
+                        "decimal" => $coin->casasDecimais,
+                        "imagem" => IMAGES . "currencies/" . $coin->icone ,
+                        "simbolo" => $coin->simbolo,
+                        "nome" => $coin->nome,
+                        'staking' => json_encode($getStakedBalance),
+                    );
+                } 
+            }
+            
+            $json["moedas"] = $lista;
+            $json["sucesso"] = true;
+        } catch (\Exception $ex) {
+            $json["sucesso"] = false;
+            $json["mensagem"] = \Utils\Excecao::mensagem($ex);
+        }
+        
+        print json_encode($json);
+    }
+
+    public function getStakedBalance($coin, $user)
+    {   
+        $curl = curl_init();
+
+        $data = array(
+            // 'contract' => $coin->staking_contract,
+            'contract' => 'default',
+        );
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/getBalance",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => json_encode($data),
+          CURLOPT_HTTPHEADER => array(
+            'Accept: application/json',
+            'Content-Type: application/json'),
+        ));
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        curl_close($curl);
+        
+        if($httpCode != 200){
+            \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
+            
+            return null;
+        }
+        
+        $object = json_decode($response);
+
+        return $object->data->saldo;
+    }
     
     public function getParidades($params) {
         

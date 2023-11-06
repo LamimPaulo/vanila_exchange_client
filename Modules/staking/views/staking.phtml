@@ -543,11 +543,12 @@ $_data["idiomaMenu"] = $idioma;
 
     var option = '';
     $.ajax({
-      url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MERCADO_BALANCE ?>",
+      url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_BALANCE ?>",
       method: "POST",
       dataType: 'json',
       success: function (json) {
-        if (json.sucesso && json.moedas.lenght > 0) {
+        // if (json.sucesso && json.moedas.lenght > 0) { //check
+        if (json.sucesso) {
           json.moedas.forEach(element => {
             option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
           });

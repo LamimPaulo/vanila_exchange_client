@@ -198,6 +198,12 @@ class Moeda {
      * @var Integer 
      */
     public $gerarCarteira;
+    
+    /**
+     *
+     * @var Boolean 
+     */
+    public $hasStaking;
 
     /**
      * Construtor da classe
@@ -252,6 +258,7 @@ class Moeda {
         $this->idMoedaSaque = ((isset($dados ["{$pre}id_moeda_saque"])) ? ($dados ["{$pre}id_moeda_saque"]) : (null));
         $this->idCategoriaMoeda = ((isset($dados ["{$pre}id_categoria_moeda"])) ? ($dados ["{$pre}id_categoria_moeda"]) : (null));
         $this->gerarCarteira = ((isset($dados ["{$pre}gerar_carteira"])) ? ($dados ["{$pre}gerar_carteira"]) : (null));
+        $this->hasStaking = ((isset($dados ["{$pre}has_staking"])) ? ($dados ["{$pre}has_staking"]) : (null));
 
     }
 
