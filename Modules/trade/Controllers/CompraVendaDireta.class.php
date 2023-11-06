@@ -313,6 +313,7 @@ class CompraVendaDireta {
         $data = array(
             // 'contract' => $coin->staking_contract,
             'contract' => 'default',
+            'user_id' => $user->id,
         );
 
         curl_setopt_array($curl, array(
