@@ -88,57 +88,36 @@ $_data["idiomaMenu"] = $idioma;
                   <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner bg-primary rounded">
                       <div class="carousel-item active">
-                        <div class="row align-items-center">
-                          <div class="col-3">
-                            <img src="assets/img/icon/convert.svg" class="d-block w-100 carousel_icon" alt="...">
+                        <div class="row align-items-center ml-2 mr-3">
+                          <div class="col-2">
+                            <img src="assets/img/icon/earn.svg" class="carousel_icon" alt="staking">
                           </div>
-                          <div class="col-9">
-                            <div class="text-white fs-10 mr-4 mt-3 ml-1">
-                              <p class="h6">Slide 1</p>
-                              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="carousel-item">
-                        <div class="row align-items-center">
-                          <div class="col-3">
-                            <img src="assets/img/icon/earn.svg" class="d-block w-100 carousel_icon" alt="...">
-                          </div>
-                          <div class="col-9">
-                            <div class="text-white fs-10 mr-4 mt-3 ml-1">
-                              <p class="h6">Slide 2</p>
-                              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                            </div>
+                          <div class="col-10">
+                            <a href="/staking">
+                              <div class="text-white fs-10 mt-3 ml-1">
+                                <p class="h6 text-white">Staking</p>
+                                <p>Faça staking dos seus ativos e receba proventos acima dos rendimentos da CDI.</p>
+                              </div>
+                            </a>
                           </div>
                         </div>
                       </div>
                       <div class="carousel-item">
-                        <div class="row align-items-center">
-                          <div class="col-3">
-                            <img src="assets/img/icon/futures.svg" class="d-block w-100 carousel_icon" alt="...">
+                        <div class="row align-items-center ml-2 mr-3">
+                          <div class="col-2">
+                            <img src="assets/img/icon/futures.svg" class="carousel_icon" alt="staking">
                           </div>
-                          <div class="col-9">
-                            <div class="text-white fs-10 mr-4 mt-3 ml-1">
-                              <p class="h6">Slide 3</p>
-                              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="carousel-item">
-                        <div class="row align-items-center">
-                          <div class="col-3">
-                            <img src="assets/img/icon/spot.svg" class="d-block w-100 carousel_icon" alt="...">
-                          </div>
-                          <div class="col-9">
-                            <div class="text-white fs-10 mr-4 mt-3 ml-1">
-                              <p class="h6">Slide 4</p>
-                              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                            </div>
+                          <div class="col-10">
+                            <a href="/book">
+                              <div class="text-white fs-10 mt-3 ml-1">
+                                <p class="h6 text-white">HODL</p>
+                                <p>Comprar e manter moedas à longo prazo, usualmente mais de um ano.</p>
+                              </div>
+                            </a>
                           </div>
                         </div>
                       </div>
+                      
                     </div>
 
                     <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
@@ -629,8 +608,8 @@ $_data["idiomaMenu"] = $idioma;
                   <td id="selic-ini">0,00%</td>
                 </tr>
                 <tr>
-                  <th scope="row" class="">Rentabilidade real <i class="icon ion-ios-information-circle-outline" d
-                      data-toggle="tooltip" data-html="true" title="Rentabilidade já considerando a inflação"></i>
+                  <th scope="row" class="">Rentabilidade real <i class="icon ion-ios-information-circle-outline"
+                      data-toggle="tooltip" data-placement="top" title="Rentabilidade já considerando a inflação"></i>
                   </th>
                   <td>0,00%</td>
                   <td>0,00%</td>
@@ -649,12 +628,19 @@ $_data["idiomaMenu"] = $idioma;
 
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
 <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 <script src="https://www.amcharts.com/lib/4/lang/pt_BR.js"></script>
 <script src="assets/js/dashboard.js"></script>
 <script>
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
     var walletData = "";
     var projectedBalance = 0;
 
@@ -941,7 +927,7 @@ $_data["idiomaMenu"] = $idioma;
       const dadosZeradosPie = [
           {
               "products": "Sem Fundos",
-              "share": pieChartPercent(0.001).toFixed(2),
+              "share": pieChartPercent(0.0001).toFixed(2),
               "color": am4core.color("#ccc")
           }
       ]
@@ -999,6 +985,8 @@ $_data["idiomaMenu"] = $idioma;
               pieSeries.slices.template.stroke = am4core.color("#fff");
               pieSeries.slices.template.strokeWidth = 2;
               pieSeries.slices.template.strokeOpacity = 1;
+              if(noInvestedFunds() == true)
+              pieSeries.tooltip.disabled = true;
   
               // This creates initial animation
               pieSeries.hiddenState.properties.opacity = 1;
