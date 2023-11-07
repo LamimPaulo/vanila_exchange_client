@@ -204,6 +204,11 @@ class Moeda {
      * @var Boolean 
      */
     public $hasStaking;
+    /**
+     *
+     * @var string 
+     */
+    public $stakingContract;
 
     /**
      * Construtor da classe
@@ -259,6 +264,7 @@ class Moeda {
         $this->idCategoriaMoeda = ((isset($dados ["{$pre}id_categoria_moeda"])) ? ($dados ["{$pre}id_categoria_moeda"]) : (null));
         $this->gerarCarteira = ((isset($dados ["{$pre}gerar_carteira"])) ? ($dados ["{$pre}gerar_carteira"]) : (null));
         $this->hasStaking = ((isset($dados ["{$pre}has_staking"])) ? ($dados ["{$pre}has_staking"]) : (null));
+        $this->stakingContract = ((isset($dados ["{$pre}staking_contract"])) ? ($dados ["{$pre}staking_contract"]) : (null));
 
     }
 

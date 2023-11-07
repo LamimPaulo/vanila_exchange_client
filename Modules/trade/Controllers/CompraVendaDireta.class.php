@@ -262,8 +262,12 @@ class CompraVendaDireta {
             
             if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
                 $moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
-                $getStakedBalance = $this->getStakedBalance($moeda, $cliente);
-                
+
+                $stakedBalance = $this->getStakedBalance($moeda, $cliente);
+                $minStake = $this->getMinStake($moeda);
+                $rewards = $this->checkReward($moeda, $cliente);
+    $accumulated = $this->checkAccumulatedReward($moeda, $cliente);
+
                 $lista[] = Array(
                     "id_moeda" => \Utils\Criptografia::encriptyPostId($moeda->id),
                     "saldo_bloqueado" => $saldos["bloqueado"],
@@ -272,9 +276,10 @@ class CompraVendaDireta {
                     "imagem" => IMAGES . "currencies/" . $moeda->icone ,
                     "simbolo" => $moeda->simbolo,
                     "nome" => $moeda->nome,
-                    'staked_balance' => json_encode($getStakedBalance),
-                    'usr_id' => $cliente->id,
-                    'coin_id' => $moeda->id,
+                    'min_stake' => json_encode($minStake),
+                    'reward_amount' => json_encode($rewards),
+                    'accumulated_amount' => json_encode($accumulated),
+                    'staked_balance' => json_encode($stakedBalance),
                 );
             }
             
@@ -282,16 +287,24 @@ class CompraVendaDireta {
             foreach ($moedas as $coin) {
                 $saldos = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $coin->id, true, false);             
                 if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
-                    $getStakedBalance = $this->getStakedBalance($coin, $cliente);
+                    
+                    $stakedBalance = $this->getStakedBalance($moeda, $cliente);
+                    $minStake = $this->getMinStake($moeda);
+                    $rewards = $this->checkReward($moeda, $cliente);
+                    $accumulated = $this->checkAccumulatedReward($moeda, $cliente);
+
                     $lista[] = Array(
-                        "id_moeda" => \Utils\Criptografia::encriptyPostId($moeda->id),
+                        "id_moeda" => \Utils\Criptografia::encriptyPostId($coin->id),
                         "saldo_bloqueado" => $saldos["bloqueado"],
                         "saldo_disponivel" => $saldos["saldo"],
                         "decimal" => $coin->casasDecimais,
                         "imagem" => IMAGES . "currencies/" . $coin->icone ,
                         "simbolo" => $coin->simbolo,
                         "nome" => $coin->nome,
-                        'staking' => json_encode($getStakedBalance),
+                        'min_stake' => json_encode($minStake),
+                        'reward_amount' => json_encode($rewards),
+                        'accumulated_amount' => json_encode($accumulated),
+                        'staked_balance' => json_encode($stakedBalance),
                     );
                 } 
             }
@@ -311,8 +324,7 @@ class CompraVendaDireta {
         $curl = curl_init();
 
         $data = array(
-            // 'contract' => $coin->staking_contract,
-            'contract' => 'default',
+            'contract_address' => $coin->stakingContract,
             'user_id' => $user->id,
         );
 
@@ -343,8 +355,127 @@ class CompraVendaDireta {
         }
         
         $object = json_decode($response);
-
+        
         return $object->data->saldo;
+    }
+
+    public function checkReward($coin, $user)
+    {   
+        $curl = curl_init();
+
+        $data = array(
+            'contract_address' => $coin->stakingContract,
+            'user_id' => $user->id,
+        );
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/checkReward",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => json_encode($data),
+          CURLOPT_HTTPHEADER => array(
+            'Accept: application/json',
+            'Content-Type: application/json'),
+        ));
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        curl_close($curl);
+        
+        if($httpCode != 200){
+            \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
+            
+            return null;
+        }
+        
+        $object = json_decode($response);
+        
+        return $object->data->reward;
+    }
+
+    public function checkAccumulatedReward($coin, $user)
+    {   
+        $curl = curl_init();
+
+        $data = array(
+            'contract_address' => $coin->stakingContract,
+            'user_id' => $user->id,
+        );
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/checkAccumulatedReward",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => json_encode($data),
+          CURLOPT_HTTPHEADER => array(
+            'Accept: application/json',
+            'Content-Type: application/json'),
+        ));
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        curl_close($curl);
+        
+        if($httpCode != 200){
+            \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
+            
+            return null;
+        }
+        
+        $object = json_decode($response);
+        
+        return $object->data->reward;
+    }
+
+    public function getMinStake($coin)
+    {   
+        $curl = curl_init();
+
+        $data = array(
+            'contract_address' => $coin->stakingContract,
+        );
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/minStake",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => json_encode($data),
+          CURLOPT_HTTPHEADER => array(
+            'Accept: application/json',
+            'Content-Type: application/json'),
+        ));
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        curl_close($curl);
+        
+        if($httpCode != 200){
+            \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
+            
+            return null;
+        }
+        
+        $object = json_decode($response);
+        
+        return $object->data->minAmount;
     }
     
     public function getParidades($params) {
