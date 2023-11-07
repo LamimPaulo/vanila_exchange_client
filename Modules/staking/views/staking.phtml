@@ -167,6 +167,22 @@ $_data["idiomaMenu"] = $idioma;
     border: none;
     margin-bottom: 15px;
   }
+
+  .input_text{
+    transform: translate(-10px, -37px);
+  }
+
+  .input_legend{
+    background-color: white;
+    transform: translate(10px, 16px);
+    padding: 0 5px 0 5px;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  .balance-hidden {
+    display: none;
+}
 </style>
 <?php Utils\Layout::append("inspina/metas", $_data) ?>
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
@@ -391,19 +407,33 @@ $_data["idiomaMenu"] = $idioma;
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <div class="info_saldo">
-              Saldo disponível: <a href="javascript:inserirSaldo();"><span
-                  class="saldo_disponivel fw-bold text-primary"></span></a>
+            <div class="info_saldo d-flex">
+              <a class="btn btn-sm btn-light ml-2" id="visibility-button"><i class="icon ion-ios-eye" id="eye"></i></a>
+              <span class="mr-1">Disponível para stake:
+                <a href="javascript:inserirSaldo(100);">
+                  <span class="balance-hidden">****</span>
+                  <span class="saldo_disponivel fw-bold text-primary balance-visible">100,0000</span>
+                </a>
+              </span>
             </div>
-            <label for="valor" class="col-form-label">Quantidade:</label>
-            <input type="text" class="form-control" id="valor" placeholder="1010.10564800">
-            <span class="fs-10 font-weight-lighter">Mínimo de 100 <span class="symbol_moeda"></span> para
-              staking.</span>
+            <label for="valor" class="input_legend">Quantia para stake:</label>
+            <input type="text" class="form-control input_height" id="valor" placeholder="1010.10564800">
+            <div class="d-flex justify-content-between">
+              <span class="fs-10 font-weight-lighter">Mínimo de 100 <span class="symbol_moeda"></span> para
+                staking.</span>
+              <span class="input_text symbol_moeda mt-2"></span>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+              <a href="javascript:inserirSaldo(25);" class="btn btn-sm btn-outline-primary fw-bold">25%</a>
+              <a href="javascript:inserirSaldo(50);" class="btn btn-sm btn-outline-primary fw-bold">50%</a>
+              <a href="javascript:inserirSaldo(75);" class="btn btn-sm btn-outline-primary fw-bold">75%</a>
+              <a href="javascript:inserirSaldo(100);" class="btn btn-sm btn-outline-primary fw-bold">100%</a>
+            </div>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
         <a href="javascript:setStake();" type="button" class="btn btn-primary">Fazer Staking</a>
       </div>
     </div>
@@ -425,20 +455,34 @@ $_data["idiomaMenu"] = $idioma;
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <div class="info_saldo">
-              Saldo em stake: <a href="javascript:inserirSaldoStake();"><span
-                  class="saldo_stake fw-bold text-primary"></span></a>
+            <div class="info_saldo d-flex">
+              <a class="btn btn-sm btn-light ml-2" id="visibility-button"><i class="icon ion-ios-eye" id="eye"></i></a>
+              <span class="mr-1">Disponível para resgate:
+                <a href="javascript:inserirSaldoStake(100);">
+                  <span class="balance-hidden">****</span>
+                  <span class="saldo_disponivel fw-bold text-primary balance-visible">100,0000</span>
+                </a>
+              </span>
             </div>
-            <label for="valor" class="col-form-label">Quantidade:</label>
-            <input type="text" class="form-control" id="valor_stake" placeholder="1010.10564800">
-            <span class="fs-10 font-weight-lighter">Informe o valor de <span class="symbol_moeda"></span> para
-              resgate.</span>
+            <label for="valor_stake" class="input_legend">Quantia para resgate:</label>
+            <input type="text" class="form-control input_height" id="valor_stake" placeholder="1010.10564800">
+            <div class="d-flex justify-content-between">
+              <span class="fs-10 font-weight-lighter">Informe o valor de <span class="symbol_moeda"></span> para
+                resgate.</span>
+              <span class="input_text symbol_moeda mt-2"></span>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+              <a href="javascript:inserirSaldoStake(25);" class="btn btn-sm btn-outline-primary fw-bold">25%</a>
+              <a href="javascript:inserirSaldoStake(50);" class="btn btn-sm btn-outline-primary fw-bold">50%</a>
+              <a href="javascript:inserirSaldoStake(75);" class="btn btn-sm btn-outline-primary fw-bold">75%</a>
+              <a href="javascript:inserirSaldoStake(100);" class="btn btn-sm btn-outline-primary fw-bold">100%</a>
+            </div>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <a href="javascript:setResgate();" type="button" class="btn btn-primary">Fazer Resgate</a>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
+        <a href="javascript:setStake();" type="button" class="btn btn-primary">Fazer Resgate</a>
       </div>
     </div>
   </div>
@@ -500,7 +544,6 @@ $_data["idiomaMenu"] = $idioma;
 
 <!-- End Main content -->
 
-
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
 <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
@@ -528,6 +571,39 @@ $_data["idiomaMenu"] = $idioma;
   var regressor = null;
   var casaDecimal = 8;
 
+  let balanceVisibility = true;
+
+const handleVisibility = () => {
+    const eye = document.getElementById("eye");
+    if (balanceVisibility == true) {
+        const hidden = document.querySelectorAll(".balance-hidden");
+        for (var i = 0; i < hidden.length; i++) {
+            hidden[i].style.display = "inline-flex";
+        }
+        const visible = document.querySelectorAll(".balance-visible");
+        for (var i = 0; i < visible.length; i++) {
+            visible[i].style.display = "none";
+        }
+        eye.classList.remove("ion-ios-eye");
+        eye.classList.add("ion-ios-eye-off");
+        balanceVisibility = false;
+    } else {
+        const hidden = document.querySelectorAll(".balance-hidden");
+        for (var i = 0; i < hidden.length; i++) {
+            hidden[i].style.display = "none";
+        }
+        const visible = document.querySelectorAll(".balance-visible");
+        for (var i = 0; i < visible.length; i++) {
+            visible[i].style.display = "inline-flex";
+        }
+        eye.classList.remove("ion-ios-eye-off");
+        eye.classList.add("ion-ios-eye");
+        balanceVisibility = true;
+    }
+}
+
+  document.getElementById("visibility-button").addEventListener("click", handleVisibility);
+
   $(document).ready(function () {
 
     $("#cryptoFrom").select2();
@@ -540,15 +616,14 @@ $_data["idiomaMenu"] = $idioma;
       carregarSaldo(data);
     });
 
-
     var option = '';
     $.ajax({
       url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_BALANCE ?>",
       method: "POST",
       dataType: 'json',
       success: function (json) {
-        // if (json.sucesso && json.moedas.lenght > 0) { //check
-        if (json.sucesso) {
+
+        if (json.sucesso && json.moedas.length) {
           json.moedas.forEach(element => {
             option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
           });
@@ -600,14 +675,14 @@ $_data["idiomaMenu"] = $idioma;
     }
   }
 
-  function inserirSaldo() {
-    saldo = parseFloat(saldo);
-    $('#valor').maskMoney('mask', saldo);
+  function inserirSaldo(percent) {
+    var saldo_inserido = parseFloat(saldo * percent/100);
+    $('#valor').maskMoney('mask', saldo_inserido);
   };
 
-  function inserirSaldoStake() {
-    saldo_stake = parseFloat(saldo_stake);
-    $('#valor_stake').maskMoney('mask', saldo_stake);
+  function inserirSaldoStake(percent) {
+    var saldo_resgate = parseFloat(saldo_stake * percent/100);
+    $('#valor_stake').maskMoney('mask', saldo_resgate);
   };
 
   function carregarSaldo(moeda) {

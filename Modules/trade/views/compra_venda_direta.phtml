@@ -262,7 +262,7 @@ $_data["idiomaMenu"] = $idioma;
     var casaDecimal = 8;
 
     $(document).ready(function () {
-
+        $("#btn_conversao").prop("disabled", true);
         $("#cryptoFrom").select2();
         $("#cryptoTo").select2();
 
@@ -311,7 +311,7 @@ $_data["idiomaMenu"] = $idioma;
             dataType: 'json',
             success: function (json) {
 
-                if (json.sucesso) {
+                if (json.sucesso && json.moedas.lenght) {
                     json.moedas.forEach(element => {
                         option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
                     });
@@ -327,7 +327,7 @@ $_data["idiomaMenu"] = $idioma;
                             return $span;
                         }
                     });
-
+                    $("#btn_conversao").prop("disabled", false);
                     carregarTo($("#cryptoFrom").val());
                 }
             }
