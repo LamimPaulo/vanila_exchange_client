@@ -184,11 +184,11 @@ $_data["idiomaMenu"] = $idioma;
     display: none;
   }
 
-  #loading_content{
+  #loading_content {
     margin-top: 50vh;
   }
 
-  #show_content{
+  #show_content {
     display: none;
   }
 </style>
@@ -222,7 +222,12 @@ $_data["idiomaMenu"] = $idioma;
                 <div class="card-body">
                   <h4>Saldo de <span class="nome_moeda"></span></h4>
                   <div class="info_saldo">
-                    Saldo disponível: <span class="saldo_disponivel fw-bold text-primary"></span>
+                    <span>Saldo disponível:
+                      <span class="balance-hidden">****</span>
+                      <span class="saldo_disponivel fw-bold text-primary balance-visible"></span>
+                    </span>
+                    <a class="btn btn-sm btn-light ml-2" id="visibility-button3"><i class="icon ion-ios-eye"
+                        id="eye3"></i></a>
                   </div>
                 </div>
               </div>
@@ -246,7 +251,7 @@ $_data["idiomaMenu"] = $idioma;
                     </div>
                     <div class="ml-5">
                       <span>Staking mínimo:</span>
-                      <span class="d-block">0,00100000 <span class="symbol_moeda"></span></span>
+                      <span class="d-block"><span class="min_stake"></span> <span class="symbol_moeda"></span></span>
                     </div>
                   </div>
                 </div>
@@ -258,11 +263,18 @@ $_data["idiomaMenu"] = $idioma;
                     <div class="col-lg-5">
                       <div class="mt-3">
                         <span>Saldo total em staking:</span>
-                        <span class="d-block">0,02835415 <span class="symbol_moeda"></span></span>
+                        <span class="d-block"><span class="balance-hidden">****</span><span
+                            class="staked_balance balance-visible"></span> <span class="symbol_moeda"></span></span>
                       </div>
                       <div class="mt-3">
                         <span>Lucro acumulado:</span>
-                        <span class="d-block">0,00005449 <span class="symbol_moeda"></span></span>
+                        <span class="d-block"><span class="balance-hidden">****</span><span
+                            class="reward_amount balance-visible"></span> <span class="symbol_moeda"></span></span>
+                      </div>
+                      <div class="mt-3">
+                        <span>Lucro total recebido:</span>
+                        <span class="d-block"><span class="balance-hidden">****</span><span
+                            class="accumulated_amount balance-visible"></span> <span class="symbol_moeda"></span></span>
                       </div>
                     </div>
                     <div class="col-lg-7 mt-3">
@@ -473,11 +485,12 @@ $_data["idiomaMenu"] = $idioma;
         <form>
           <div class="form-group">
             <div class="info_saldo d-flex">
-              <a class="btn btn-sm btn-light ml-2" id="visibility-button"><i class="icon ion-ios-eye" id="eye"></i></a>
+              <a class="btn btn-sm btn-light ml-2" id="visibility-button2"><i class="icon ion-ios-eye"
+                  id="eye2"></i></a>
               <span class="mr-1">Disponível para resgate:
                 <a href="javascript:inserirSaldoStake(100);">
                   <span class="balance-hidden">****</span>
-                  <span class="saldo_disponivel fw-bold text-primary balance-visible"><span
+                  <span class="staked_balance fw-bold text-primary balance-visible"><span
                       class="font-weight-lighter fs-10">Carregando Saldo</span></span>
                 </a>
               </span>
@@ -588,13 +601,15 @@ $_data["idiomaMenu"] = $idioma;
   var saldo = 0;
   var saldo_stake = 0;
   var regressor = null;
-  var casaDecimal = 8;
-
-  let balanceVisibility = true;
-
+  let balanceVisibility = "";
+  
+  var tokens = [];
+  
   const handleVisibility = () => {
     const eye = document.getElementById("eye");
-    if (balanceVisibility == true) {
+    const eye2 = document.getElementById("eye2");
+    const eye3 = document.getElementById("eye3");
+    if (balanceVisibility == "true") {
       const hidden = document.querySelectorAll(".balance-hidden");
       for (var i = 0; i < hidden.length; i++) {
         hidden[i].style.display = "inline-flex";
@@ -605,7 +620,12 @@ $_data["idiomaMenu"] = $idioma;
       }
       eye.classList.remove("ion-ios-eye");
       eye.classList.add("ion-ios-eye-off");
-      balanceVisibility = false;
+      eye2.classList.remove("ion-ios-eye");
+      eye2.classList.add("ion-ios-eye-off");
+      eye3.classList.remove("ion-ios-eye");
+      eye3.classList.add("ion-ios-eye-off");
+      balanceVisibility = "false";
+      localStorage.setItem("balance_visibility", "false")
     } else {
       const hidden = document.querySelectorAll(".balance-hidden");
       for (var i = 0; i < hidden.length; i++) {
@@ -617,11 +637,26 @@ $_data["idiomaMenu"] = $idioma;
       }
       eye.classList.remove("ion-ios-eye-off");
       eye.classList.add("ion-ios-eye");
-      balanceVisibility = true;
+      eye2.classList.remove("ion-ios-eye-off");
+      eye2.classList.add("ion-ios-eye");
+      eye3.classList.remove("ion-ios-eye-off");
+      eye3.classList.add("ion-ios-eye");
+      balanceVisibility = "true";
+      localStorage.setItem("balance_visibility", "true")
     }
   }
 
+  if(balanceVisibility == "" && !localStorage.getItem("balance_visibility")){
+    balanceVisibility = "true";
+    handleVisibility()
+  } else{
+    localStorage.getItem("balance_visibility") == "true" ? balanceVisibility = "false" : balanceVisibility = "true";
+    handleVisibility()
+  }
+
   document.getElementById("visibility-button").addEventListener("click", handleVisibility);
+  document.getElementById("visibility-button2").addEventListener("click", handleVisibility);
+  document.getElementById("visibility-button3").addEventListener("click", handleVisibility);
 
   $(document).ready(function () {
 
@@ -630,7 +665,6 @@ $_data["idiomaMenu"] = $idioma;
     $("#cryptoFrom").on('select2:select', function (e) {
       $(".saldo_disponivel").html("");
       saldo = 0;
-      casaDecimal = $("#cryptoFrom option:selected").attr("data-decimal");
       var data = $("#cryptoFrom").val();
       carregarSaldo(data);
     });
@@ -641,15 +675,24 @@ $_data["idiomaMenu"] = $idioma;
       method: "POST",
       dataType: 'json',
       success: function (json) {
+
         if (json.sucesso && json.moedas.length) {
-          console.log("Staking Balance: ",json)
+          tokens = json.moedas;
           json.moedas.forEach(element => {
             option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
           });
           $('#cryptoFrom').html(option);
-          var nome = $("#cryptoFrom option:selected").text().split("-");
+          const nome = $("#cryptoFrom option:selected").text().replace(" ", "").split("-");
+          const token = json.moedas.filter(t => t.simbolo === nome[0])
           $('.nome_moeda').html(nome[1]);
           $('.symbol_moeda').html(nome[0]);
+          $('.min_stake').html(fixDecimals(token[0].min_stake, token[0].decimal));
+          saldo = token[0].saldo_disponivel;
+          saldo_stake = token[0].staked_balance;
+          $('.staked_balance').html(fixDecimals(token[0].staked_balance, token[0].decimal));
+          $('.accumulated_amount').html(fixDecimals(token[0].accumulated_amount, token[0].decimal));
+          $('.reward_amount').html(fixDecimals(token[0].reward_amount, token[0].decimal));
+          $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0].decimal));
           $(".crypto").select2({
             templateResult: function (coin) {
               var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
@@ -670,13 +713,17 @@ $_data["idiomaMenu"] = $idioma;
     });
   });
 
+  function fixDecimals(num, decimal) {
+    return (parseFloat(num).toFixed(decimal)).toString().replace('.', ',')
+  }
+
   function setStake() {
     var valor = $('#stake_input').val();
     valor = parseFloat(valor.replace(',', '.'))
     try {
       if (valor <= saldo * 1) {
-          $.ajax(
-            {
+        $.ajax(
+          {
             url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_STAKE ?>",
             method: "POST",
             dataType: 'json',
@@ -686,7 +733,7 @@ $_data["idiomaMenu"] = $idioma;
             },
             success: function (json) {
               if (json.sucesso) {
-                console.log("stake res: ",json)
+                console.log("stake res: ", json)
 
                 showNotyAlert("Certo!", "s");
 
@@ -712,7 +759,7 @@ $_data["idiomaMenu"] = $idioma;
       if (valor <= saldo_stake * 1 && valor > 0) {
         // showNotyAlert("Certo!", "s");
         $.ajax(
-            {
+          {
             url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_UNSTAKE ?>",
             method: "POST",
             dataType: 'json',
@@ -722,7 +769,7 @@ $_data["idiomaMenu"] = $idioma;
             },
             success: function (json) {
               if (json.sucesso) {
-                console.log("stake res: ",json)
+                console.log("stake res: ", json)
 
                 showNotyAlert("Certo!", "s");
 
@@ -754,41 +801,45 @@ $_data["idiomaMenu"] = $idioma;
 
   function carregarSaldo(moeda) {
     $('#nome_moeda').html("");
-    var option = '';
-    $.ajax({
-      url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MERCADO_PARIDADES ?>",
-      method: "POST",
-      dataType: 'json',
-      data: {
-        moeda: moeda
-      },
-      success: function (json) {
-        if (json.sucesso) {
-          console.log("Mercado paridades: ",json)
-          document.getElementById("loading_content").style.display = "none";
-          document.getElementById("show_content").style.display = "block";
-          json.moedas.forEach(element => {
-            option += '<option data-par="' + element.par + '" data-preco="' + element.preco + '" data-tipo="' + element.tipo + '" value="' + element.id_moeda + '" title="' + element.imagem + '">' + element.simbolo + ' - ' + element.nome + '</option>';
-          });
-          var nome = $("#cryptoFrom option:selected").text().split("-");
-          $('.nome_moeda').html(nome[1]);
-          $('.symbol_moeda').html(nome[0]);
-          $(".crypto").select2({
-            templateResult: function (coin) {
-              var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
-              return $span;
-            },
-            templateSelection: function (coin) {
-              var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
-              return $span;
-            }
-          });
-        }
-        $(".saldo_disponivel").html(json.saldo_format);
-        saldo = json.saldo;
-        $(".saldo_stake").html("0,00000000");
+    document.getElementById("loading_content").style.display = "none";
+    document.getElementById("show_content").style.display = "block";
+    // $.ajax({
+    //   url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_BALANCE ?>",
+    //   method: "POST",
+    //   dataType: 'json',
+    //   data: {
+    //     moeda: moeda
+    //   },
+    //   success: function (json) {
+    //     if (json.sucesso) {
+    //       document.getElementById("loading_content").style.display = "none";
+    //       document.getElementById("show_content").style.display = "block";
 
+    const nome = $("#cryptoFrom option:selected").text().replace(" ", "").split("-");
+    const token = tokens.filter(t => t.simbolo === nome[0])
+    $('.nome_moeda').html(nome[1]);
+    $('.symbol_moeda').html(nome[0]);
+    $('.min_stake').html(fixDecimals(token[0].min_stake, token[0].decimal));
+    saldo = token[0].saldo_disponivel;
+    saldo_stake = token[0].staked_balance;
+    $('.staked_balance').html(fixDecimals(token[0].staked_balance, token[0].decimal));
+    $('.accumulated_amount').html(fixDecimals(token[0].accumulated_amount, token[0].decimal));
+    $('.reward_amount').html(fixDecimals(token[0].reward_amount, token[0].decimal));
+    $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0].decimal));
+    $("#stake_input").val("");
+    $("#resgate_input").val("");
+    $(".crypto").select2({
+      templateResult: function (coin) {
+        var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
+        return $span;
+      },
+      templateSelection: function (coin) {
+        var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
+        return $span;
       }
+      // });
+      //   }
+      // }
     });
   }
 

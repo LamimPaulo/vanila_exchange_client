@@ -1,8 +1,8 @@
-let balanceVisibility = true;
+let balanceVisibility = "";
 
 const handleVisibility = () => {
     const eye = document.getElementById("eye");
-    if (balanceVisibility == true) {
+    if (balanceVisibility == "true") {
         const hidden = document.querySelectorAll(".balance-hidden");
         for (var i = 0; i < hidden.length; i++) {
             hidden[i].style.display = "block";
@@ -13,7 +13,10 @@ const handleVisibility = () => {
         }
         eye.classList.remove("ion-ios-eye");
         eye.classList.add("ion-ios-eye-off");
-        balanceVisibility = false;
+        console.log("3: ",balanceVisibility)
+        balanceVisibility = "false";
+        console.log("4: ",balanceVisibility)
+        localStorage.setItem("balance_visibility", "false")
     } else {
         const hidden = document.querySelectorAll(".balance-hidden");
         for (var i = 0; i < hidden.length; i++) {
@@ -25,9 +28,20 @@ const handleVisibility = () => {
         }
         eye.classList.remove("ion-ios-eye-off");
         eye.classList.add("ion-ios-eye");
-        balanceVisibility = true;
+        console.log("5: ",balanceVisibility)
+        balanceVisibility = "true";
+        console.log("6: ",balanceVisibility)
+        localStorage.setItem("balance_visibility", "true")
     }
 }
+
+if(balanceVisibility == "" && !localStorage.getItem("balance_visibility")){
+    balanceVisibility = "true";
+    handleVisibility()
+  } else{
+    localStorage.getItem("balance_visibility") == "true" ? balanceVisibility = "false" : balanceVisibility = "true";
+    handleVisibility()
+  }
 
 window.addEventListener('load', () => {
     const portfolio = document.querySelector('#portfolio');
