@@ -658,7 +658,9 @@ public static $rotas = Array(
         "book/ordens/executadas"                            => Array("url" => "trade/bookNew/listarOrdensExecutadas" ,                        "modulo" => "trade",                    "rotina" => "book" ),
         "exchange"                                          => Array("url" => "trade/compraVendaDireta/index" ,                              "modulo" => "trade",                    "rotina" => "mercado" ),
         "mercado/balance"                                   => Array("url" => "trade/compraVendaDireta/getBalances" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
-        "mercado/staking-balance"                                   => Array("url" => "trade/compraVendaDireta/getStakingBalances" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/staking-balance"                           => Array("url" => "trade/compraVendaDireta/getStakingBalances" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/staking-stake"                             => Array("url" => "trade/compraVendaDireta/doStake" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/staking-unstake"                           => Array("url" => "trade/compraVendaDireta/doUnstake" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
         "mercado/paridades"                                 => Array("url" => "trade/compraVendaDireta/getParidades" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
         "mercado/preco"                                     => Array("url" => "trade/compraVendaDireta/consultarPreco" ,                     "modulo" => "trade",                    "rotina" => "mercado" ),
         "mercado/comprar"                                   => Array("url" => "trade/compraVendaDireta/salvarCompra" ,                       "modulo" => "trade",                    "rotina" => "mercado" ),
@@ -1346,6 +1348,8 @@ public static $rotas = Array(
     const R_MERCADO_PRECO = "mercado/preco";
     const R_MERCADO_BALANCE = "mercado/balance";
     const R_STAKING_BALANCE = "mercado/staking-balance";
+    const R_STAKING_STAKE = "mercado/staking-stake";
+    const R_STAKING_UNSTAKE = "mercado/staking-unstake";
     const R_MERCADO_PARIDADES = "mercado/paridades";
     const R_MERCADO_COMPRAR = "mercado/comprar";
     const R_MERCADO_VENDER = "mercado/vender";
