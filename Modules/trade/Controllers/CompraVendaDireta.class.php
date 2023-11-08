@@ -212,6 +212,36 @@ class CompraVendaDireta {
         }
         print json_encode($json);
     } 
+
+    public function doUnstake($params) {
+        try {
+
+            // if (!\Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_MERCADO, \Utils\Constantes::CADASTRAR)) {
+            //     throw new \Exception($this->idioma->getText("voceNaoTemPermissao"));
+            // }
+
+            $amount = \Utils\Post::getNumeric($params, "amount", 0);
+            $coinId = \Utils\Post::getNumeric($params, "coin_id", 0);
+            
+            $cliente = \Utils\Geral::getCliente();
+            $moedasRn = new \Models\Modules\Cadastro\MoedaRn();
+            $coin = $moedasRn->get($coinId);
+
+            $response = $this->unstakeCall($coin, $cliente->id ,$amount);
+
+            
+            
+            
+            $json["sucesso"] = true;
+            // $json["mensagem"] = $this->idioma->getText("ordemRegistradaSucessoV");
+            $json["mensagem"] = 'Valor staked successfuly';
+            $json["raw"] = json_encode($response);
+        } catch (\Exception $ex) {
+            $json["sucesso"] = false;
+            $json["mensagem"] = \Utils\Excecao::mensagem($ex);
+        }
+        print json_encode($json);
+    } 
     
     public function getBalances() {
         
@@ -324,13 +354,13 @@ class CompraVendaDireta {
                 $saldos = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $coin->id, true, false);             
                 if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
                     
-                    $stakedBalance = $this->getStakedBalance($moeda, $cliente);
-                    $minStake = $this->getMinStake($moeda);
-                    $rewards = $this->checkReward($moeda, $cliente);
-                    $accumulated = $this->checkAccumulatedReward($moeda, $cliente);
-                    $apm = $this->getAPM($moeda);
-                    $bonus = $this->getBonus($moeda);
-                    $penalty = $this->getPenalty($moeda);
+                    $stakedBalance = $this->getStakedBalance($coin, $cliente);
+                    $minStake = $this->getMinStake($coin);
+                    $rewards = $this->checkReward($coin, $cliente);
+                    $accumulated = $this->checkAccumulatedReward($coin, $cliente);
+                    $apm = $this->getAPM($coin);
+                    $bonus = $this->getBonus($coin);
+                    $penalty = $this->getPenalty($coin);
 
                     $lista[] = Array(
                         "id_moeda" => \Utils\Criptografia::encriptyPostId($coin->id),
@@ -649,6 +679,47 @@ class CompraVendaDireta {
 
         curl_setopt_array($curl, array(
           CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/stake",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => json_encode($data),
+          CURLOPT_HTTPHEADER => array(
+            'Accept: application/json',
+            'Content-Type: application/json'),
+        ));
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        curl_close($curl);
+        
+        if($httpCode != 200){
+            \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
+            
+            return null;
+        }
+        
+        $object = json_decode($response);
+        
+        return $object;
+    }
+
+    public function unstakeCall($coin, $usr_id, $amount)
+    {   
+        $curl = curl_init();
+
+        $data = array(
+            'contract_address' => $coin->stakingContract,
+            'user_id' => $usr_id,
+            'amount' => $amount
+        );
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/unstake",
           CURLOPT_RETURNTRANSFER => true,
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,

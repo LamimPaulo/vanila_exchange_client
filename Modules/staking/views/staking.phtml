@@ -675,7 +675,28 @@ $_data["idiomaMenu"] = $idioma;
     valor = parseFloat(valor.replace(',', '.'))
     try {
       if (valor <= saldo * 1) {
-        showNotyAlert("Certo!", "s");
+          $.ajax(
+            {
+            url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_STAKE ?>",
+            method: "POST",
+            dataType: 'json',
+            data: {
+              coin_id: 1, //TODO
+              amount: valor,
+            },
+            success: function (json) {
+              if (json.sucesso) {
+                console.log("stake res: ",json)
+
+                showNotyAlert("Certo!", "s");
+
+
+              }
+            }
+          },
+        );
+
+
       } else {
         showNotyAlert("Errado!", "e");
       }
@@ -689,7 +710,29 @@ $_data["idiomaMenu"] = $idioma;
     valor = parseFloat(valor.replace(',', '.'))
     try {
       if (valor <= saldo_stake * 1 && valor > 0) {
-        showNotyAlert("Certo!", "s");
+        // showNotyAlert("Certo!", "s");
+        $.ajax(
+            {
+            url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_UNSTAKE ?>",
+            method: "POST",
+            dataType: 'json',
+            data: {
+              coin_id: 1, //TODO
+              amount: valor,
+            },
+            success: function (json) {
+              if (json.sucesso) {
+                console.log("stake res: ",json)
+
+                showNotyAlert("Certo!", "s");
+
+
+              }
+            }
+          },
+        );
+
+
       } else {
         showNotyAlert("Errado!", "e");
       }
