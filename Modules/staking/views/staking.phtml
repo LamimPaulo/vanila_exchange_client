@@ -168,11 +168,11 @@ $_data["idiomaMenu"] = $idioma;
     margin-bottom: 15px;
   }
 
-  .input_text{
+  .input_text {
     transform: translate(-10px, -37px);
   }
 
-  .input_legend{
+  .input_legend {
     background-color: white;
     transform: translate(10px, 16px);
     padding: 0 5px 0 5px;
@@ -182,7 +182,15 @@ $_data["idiomaMenu"] = $idioma;
 
   .balance-hidden {
     display: none;
-}
+  }
+
+  #loading_content{
+    margin-top: 50vh;
+  }
+
+  #show_content{
+    display: none;
+  }
 </style>
 <?php Utils\Layout::append("inspina/metas", $_data) ?>
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
@@ -194,198 +202,206 @@ $_data["idiomaMenu"] = $idioma;
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 col-md-11 mx-auto">
-        <h4>Selecione uma moeda:</h4>
-        <div class="row">
-          <div class="col-md-6 mt-4">
-            <div class="">
-              <div class="row choose-position">
-                <div class="col box-conversion-custom">
-                  <div class="form-group">
-                    <select id="cryptoFrom" class="crypto custom-select choose-position choose-position-input"></select>
+        <div id="show_content">
+          <h4>Selecione uma moeda:</h4>
+          <div class="row">
+            <div class="col-md-6 mt-4">
+              <div class="">
+                <div class="row choose-position">
+                  <div class="col box-conversion-custom">
+                    <div class="form-group">
+                      <select id="cryptoFrom"
+                        class="crypto custom-select choose-position choose-position-input"></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h4>Saldo de <span class="nome_moeda"></span></h4>
+                  <div class="info_saldo">
+                    Saldo disponível: <span class="saldo_disponivel fw-bold text-primary"></span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
-                <h4>Saldo de <span class="nome_moeda"></span></h4>
-                <div class="info_saldo">
-                  Saldo disponível: <span class="saldo_disponivel fw-bold text-primary"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <h4 class="mt-3">Staking de <span class="nome_moeda"></span></h4>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
-                <!-- <h5 class="card-title"><?php echo $idioma2->getText("idioma") ?></h5> -->
-                <h5 class="fw-bold">Informações</h5>
-                <div class="mt-3">
-                  <span>Recompensa líquida estimada:</span>
-                  <span class="d-block"><b>3,30%</b> ao ano</span>
-                </div>
-                <div class="mt-3 d-flex">
-                  <div class="">
-                    <span>Resgate:</span>
-                    <span class="d-block">Em até 5 dias úteis</span>
+          <h4 class="mt-3">Staking de <span class="nome_moeda"></span></h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <!-- <h5 class="card-title"><?php echo $idioma2->getText("idioma") ?></h5> -->
+                  <h5 class="fw-bold">Informações</h5>
+                  <div class="mt-3">
+                    <span>Recompensa líquida estimada:</span>
+                    <span class="d-block"><b>3,30%</b> ao ano</span>
                   </div>
-                  <div class="ml-5">
-                    <span>Staking mínimo:</span>
-                    <span class="d-block">0,00100000 <span class="symbol_moeda"></span></span>
+                  <div class="mt-3 d-flex">
+                    <div class="">
+                      <span>Resgate:</span>
+                      <span class="d-block">Em até 5 dias úteis</span>
+                    </div>
+                    <div class="ml-5">
+                      <span>Staking mínimo:</span>
+                      <span class="d-block">0,00100000 <span class="symbol_moeda"></span></span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="card">
-              <div class="card-body">
-                <h5 class="fw-bold">Em staking</h5>
-                <div class="row justify-content-between">
-                  <div class="col-lg-5">
-                    <div class="mt-3">
-                      <span>Saldo total em staking:</span>
-                      <span class="d-block">0,02835415 <span class="symbol_moeda"></span></span>
-                    </div>
-                    <div class="mt-3">
-                      <span>Lucro acumulado:</span>
-                      <span class="d-block">0,00005449 <span class="symbol_moeda"></span></span>
-                    </div>
-                  </div>
-                  <div class="col-lg-7 mt-3">
-                    <div class="row">
-                      <div class="col-6 mb-2">
-                        <button
-                          class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
-                          data-toggle="modal" data-target="#stakingModal">
-                          <i class=""><img src="assets/img/icon/ico-staking.svg" alt="staking"></i>
-                        </button>
-                        <p class="fw-bold text-center">Fazer Staking</p>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="fw-bold">Em staking</h5>
+                  <div class="row justify-content-between">
+                    <div class="col-lg-5">
+                      <div class="mt-3">
+                        <span>Saldo total em staking:</span>
+                        <span class="d-block">0,02835415 <span class="symbol_moeda"></span></span>
                       </div>
-                      <div class="col-6 mb-2">
-                        <button
-                          class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
-                          data-toggle="modal" data-target="#resgateModal">
-                          <i class="ico"><img src="assets/img/icon/ico-resgatar.svg" alt="resgatar"></i>
-                        </button>
-                        <p class="fw-bold text-center">Resgatar</p>
+                      <div class="mt-3">
+                        <span>Lucro acumulado:</span>
+                        <span class="d-block">0,00005449 <span class="symbol_moeda"></span></span>
                       </div>
                     </div>
+                    <div class="col-lg-7 mt-3">
+                      <div class="row">
+                        <div class="col-6 mb-2">
+                          <button
+                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
+                            data-toggle="modal" data-target="#stakingModal">
+                            <i class=""><img src="assets/img/icon/ico-staking.svg" alt="staking"></i>
+                          </button>
+                          <p class="fw-bold text-center">Fazer Staking</p>
+                        </div>
+                        <div class="col-6 mb-2">
+                          <button
+                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
+                            data-toggle="modal" data-target="#resgateModal">
+                            <i class="ico"><img src="assets/img/icon/ico-resgatar.svg" alt="resgatar"></i>
+                          </button>
+                          <p class="fw-bold text-center">Resgatar</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="settings-main">
-              <div class=" pl-2 pr-2 mr-2">
-                <p class="font-weight-lighter fs-12">ORIENTAÇÕES</p>
-                <div class="row">
-                  <div class="col-1">
-                    <span class="rounded-icon bg-primary">
-                      <i class="icon ion-ios-information icon-badge"></i>
-                    </span>
+            <div class="col-md-6">
+              <div class="settings-main">
+                <div class=" pl-2 pr-2 mr-2">
+                  <p class="font-weight-lighter fs-12">ORIENTAÇÕES</p>
+                  <div class="row">
+                    <div class="col-1">
+                      <span class="rounded-icon bg-primary">
+                        <i class="icon ion-ios-information icon-badge"></i>
+                      </span>
+                    </div>
+                    <div class="col-11">
+                      As recompensas serão contabilizadas em até 2 dias úteis após
+                      o Staking.
+                    </div>
                   </div>
-                  <div class="col-11">
-                    As recompensas serão contabilizadas em até 2 dias úteis após
-                    o Staking.
-                  </div>
-                </div>
 
-                <p class="font-weight-lighter fs-12 mt-3">INFORMAÇÕES ADICIONAIS</p>
-                <div class="row">
-                  <div class="col-1">
-                    <span class="rounded-icon bg-primary">
-                      <i class="icon ion-ios-information icon-badge"></i>
-                    </span>
-                  </div>
-                  <div class="col-11">
-                    <a href="#" data-toggle="modal" data-target="#infoModal">Clique aqui</a> e saiba como funciona o
-                    Staking
-                    de <span class="nome_moeda"></span>.
+                  <p class="font-weight-lighter fs-12 mt-3">INFORMAÇÕES ADICIONAIS</p>
+                  <div class="row">
+                    <div class="col-1">
+                      <span class="rounded-icon bg-primary">
+                        <i class="icon ion-ios-information icon-badge"></i>
+                      </span>
+                    </div>
+                    <div class="col-11">
+                      <a href="#" data-toggle="modal" data-target="#infoModal">Clique aqui</a> e saiba como funciona o
+                      Staking
+                      de <span class="nome_moeda"></span>.
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <h4 class="mt-5">Histórico</h4>
-        <div class="row justify-content-end">
-          <div class="col-lg-6 mt-3">
-            <span class="d-block font-weight-lighter">ATIVIDADE</span>
-            <div>
-              <button class="btn btn-sm btn-primary mt-1">Todas</button>
-              <button class="btn btn-sm btn-white mt-1">Staking</button>
-              <button class="btn btn-sm btn-white mt-1">Recompensas</button>
-              <button class="btn btn-sm btn-white mt-1">Resgate</button>
+          <h4 class="mt-5">Histórico</h4>
+          <div class="row justify-content-end">
+            <div class="col-lg-6 mt-3">
+              <span class="d-block font-weight-lighter">ATIVIDADE</span>
+              <div>
+                <button class="btn btn-sm btn-primary mt-1">Todas</button>
+                <button class="btn btn-sm btn-white mt-1">Staking</button>
+                <button class="btn btn-sm btn-white mt-1">Recompensas</button>
+                <button class="btn btn-sm btn-white mt-1">Resgate</button>
+              </div>
+            </div>
+            <div class="col-lg-6 mt-3">
+              <span class="d-block font-weight-lighter">STATUS</span>
+              <div>
+                <button class="btn btn-sm btn-primary mt-1">Todos</button>
+                <button class="btn btn-sm btn-white mt-1">Finalizadas</button>
+                <button class="btn btn-sm btn-white mt-1">Processando</button>
+                <button class="btn btn-sm btn-white mt-1">Erro</button>
+              </div>
             </div>
           </div>
-          <div class="col-lg-6 mt-3">
-            <span class="d-block font-weight-lighter">STATUS</span>
-            <div>
-              <button class="btn btn-sm btn-primary mt-1">Todos</button>
-              <button class="btn btn-sm btn-white mt-1">Finalizadas</button>
-              <button class="btn btn-sm btn-white mt-1">Processando</button>
-              <button class="btn btn-sm btn-white mt-1">Erro</button>
-            </div>
+          <table class="mt-4 table settings text-center" id="table-staking">
+            <thead class="bg-light">
+              <tr>
+                <th scope="col">DATA</th>
+                <th scope="col">ATIVIDADE</th>
+                <th scope="col">QUANTIDADE</th>
+                <th scope="col">PREVISÃO</th>
+                <th scope="col">STATUS</th>
+              </tr>
+            </thead>
+            <tbody class="align-middle border border-white">
+              <tr>
+                <th class="fs-12 align-middle p-2"><span>29/10/2023</span><span class="d-block">ÀS
+                    13:32:51</span></th>
+                <td class="align-middle">Recompensas</td>
+                <td class="align-middle">0,00000226 ETH</td>
+                <td class="align-middle">-</td>
+                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
+              </tr>
+              <tr>
+                <th class="fs-12 align-middle p-2"><span>28/10/2023</span><span class="d-block">ÀS
+                    13:32:56</span></th>
+                <td class="align-middle">Recompensas</td>
+                <td class="align-middle">0,00000136 ETH</td>
+                <td class="align-middle">-</td>
+                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
+              </tr>
+              <tr>
+                <th class="fs-12 align-middle p-2"><span>27/10/2023</span><span class="d-block">ÀS
+                    13:32:31</span></th>
+                <td class="align-middle">Recompensas</td>
+                <td class="align-middle">0,00000165 ETH</td>
+                <td class="align-middle">-</td>
+                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
+              </tr>
+              <tr>
+                <th class="fs-12 align-middle p-2"><span>26/10/2023</span><span class="d-block">ÀS
+                    13:32:32</span></th>
+                <td class="align-middle">Recompensas</td>
+                <td class="align-middle">0,00000224 ETH</td>
+                <td class="align-middle">-</td>
+                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
+              </tr>
+              <tr>
+                <th class="fs-12 align-middle p-2"><span>25/10/2023</span><span class="d-block">ÀS
+                    18:32:1</span></th>
+                <td class="align-middle">Recompensas</td>
+                <td class="align-middle">0,00000184 ETH</td>
+                <td class="align-middle">-</td>
+                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="loading_content" class="text-center">
+          <div class="spinner-border text-primary" role="status" style="width: 5rem; height: 5rem;">
+            <span class="sr-only">Loading...</span>
           </div>
         </div>
-        <table class="mt-4 table settings text-center" id="table-staking">
-          <thead class="bg-light">
-            <tr>
-              <th scope="col">DATA</th>
-              <th scope="col">ATIVIDADE</th>
-              <th scope="col">QUANTIDADE</th>
-              <th scope="col">PREVISÃO</th>
-              <th scope="col">STATUS</th>
-            </tr>
-          </thead>
-          <tbody class="align-middle border border-white">
-            <tr>
-              <th class="fs-12 align-middle p-2"><span>29/10/2023</span><span class="d-block">ÀS
-                  13:32:51</span></th>
-              <td class="align-middle">Recompensas</td>
-              <td class="align-middle">0,00000226 ETH</td>
-              <td class="align-middle">-</td>
-              <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-            </tr>
-            <tr>
-              <th class="fs-12 align-middle p-2"><span>28/10/2023</span><span class="d-block">ÀS
-                  13:32:56</span></th>
-              <td class="align-middle">Recompensas</td>
-              <td class="align-middle">0,00000136 ETH</td>
-              <td class="align-middle">-</td>
-              <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-            </tr>
-            <tr>
-              <th class="fs-12 align-middle p-2"><span>27/10/2023</span><span class="d-block">ÀS
-                  13:32:31</span></th>
-              <td class="align-middle">Recompensas</td>
-              <td class="align-middle">0,00000165 ETH</td>
-              <td class="align-middle">-</td>
-              <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-            </tr>
-            <tr>
-              <th class="fs-12 align-middle p-2"><span>26/10/2023</span><span class="d-block">ÀS
-                  13:32:32</span></th>
-              <td class="align-middle">Recompensas</td>
-              <td class="align-middle">0,00000224 ETH</td>
-              <td class="align-middle">-</td>
-              <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-            </tr>
-            <tr>
-              <th class="fs-12 align-middle p-2"><span>25/10/2023</span><span class="d-block">ÀS
-                  18:32:1</span></th>
-              <td class="align-middle">Recompensas</td>
-              <td class="align-middle">0,00000184 ETH</td>
-              <td class="align-middle">-</td>
-              <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>
@@ -412,12 +428,13 @@ $_data["idiomaMenu"] = $idioma;
               <span class="mr-1">Disponível para stake:
                 <a href="javascript:inserirSaldo(100);">
                   <span class="balance-hidden">****</span>
-                  <span class="saldo_disponivel fw-bold text-primary balance-visible">100,0000</span>
+                  <span class="saldo_disponivel fw-bold text-primary balance-visible"><span
+                      class="font-weight-lighter fs-10 text-success">Carregando Saldo</span></span>
                 </a>
               </span>
             </div>
-            <label for="valor" class="input_legend">Quantia para stake:</label>
-            <input type="text" class="form-control input_height" id="valor" placeholder="1010.10564800">
+            <label for="stake_input" class="input_legend">Quantia para stake:</label>
+            <input type="text" class="form-control input_height" id="stake_input" placeholder="1010.10564800">
             <div class="d-flex justify-content-between">
               <span class="fs-10 font-weight-lighter">Mínimo de 100 <span class="symbol_moeda"></span> para
                 staking.</span>
@@ -460,12 +477,13 @@ $_data["idiomaMenu"] = $idioma;
               <span class="mr-1">Disponível para resgate:
                 <a href="javascript:inserirSaldoStake(100);">
                   <span class="balance-hidden">****</span>
-                  <span class="saldo_disponivel fw-bold text-primary balance-visible">100,0000</span>
+                  <span class="saldo_disponivel fw-bold text-primary balance-visible"><span
+                      class="font-weight-lighter fs-10">Carregando Saldo</span></span>
                 </a>
               </span>
             </div>
-            <label for="valor_stake" class="input_legend">Quantia para resgate:</label>
-            <input type="text" class="form-control input_height" id="valor_stake" placeholder="1010.10564800">
+            <label for="resgate_input" class="input_legend">Quantia para resgate:</label>
+            <input type="text" class="form-control input_height" id="resgate_input" placeholder="1010.10564800">
             <div class="d-flex justify-content-between">
               <span class="fs-10 font-weight-lighter">Informe o valor de <span class="symbol_moeda"></span> para
                 resgate.</span>
@@ -519,7 +537,8 @@ $_data["idiomaMenu"] = $idioma;
 </div>
 
 <!-- noCoinsModal -->
-<div class="modal fade" id="noCoinsModal" tabindex="-1" role="dialog" aria-labelledby="noCoinsModalTitle" aria-hidden="true">
+<div class="modal fade" id="noCoinsModal" tabindex="-1" role="dialog" aria-labelledby="noCoinsModalTitle"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -567,40 +586,40 @@ $_data["idiomaMenu"] = $idioma;
   var preco = 0;
   var time = 0;
   var saldo = 0;
-  var saldo_stake = 10;
+  var saldo_stake = 0;
   var regressor = null;
   var casaDecimal = 8;
 
   let balanceVisibility = true;
 
-const handleVisibility = () => {
+  const handleVisibility = () => {
     const eye = document.getElementById("eye");
     if (balanceVisibility == true) {
-        const hidden = document.querySelectorAll(".balance-hidden");
-        for (var i = 0; i < hidden.length; i++) {
-            hidden[i].style.display = "inline-flex";
-        }
-        const visible = document.querySelectorAll(".balance-visible");
-        for (var i = 0; i < visible.length; i++) {
-            visible[i].style.display = "none";
-        }
-        eye.classList.remove("ion-ios-eye");
-        eye.classList.add("ion-ios-eye-off");
-        balanceVisibility = false;
+      const hidden = document.querySelectorAll(".balance-hidden");
+      for (var i = 0; i < hidden.length; i++) {
+        hidden[i].style.display = "inline-flex";
+      }
+      const visible = document.querySelectorAll(".balance-visible");
+      for (var i = 0; i < visible.length; i++) {
+        visible[i].style.display = "none";
+      }
+      eye.classList.remove("ion-ios-eye");
+      eye.classList.add("ion-ios-eye-off");
+      balanceVisibility = false;
     } else {
-        const hidden = document.querySelectorAll(".balance-hidden");
-        for (var i = 0; i < hidden.length; i++) {
-            hidden[i].style.display = "none";
-        }
-        const visible = document.querySelectorAll(".balance-visible");
-        for (var i = 0; i < visible.length; i++) {
-            visible[i].style.display = "inline-flex";
-        }
-        eye.classList.remove("ion-ios-eye-off");
-        eye.classList.add("ion-ios-eye");
-        balanceVisibility = true;
+      const hidden = document.querySelectorAll(".balance-hidden");
+      for (var i = 0; i < hidden.length; i++) {
+        hidden[i].style.display = "none";
+      }
+      const visible = document.querySelectorAll(".balance-visible");
+      for (var i = 0; i < visible.length; i++) {
+        visible[i].style.display = "inline-flex";
+      }
+      eye.classList.remove("ion-ios-eye-off");
+      eye.classList.add("ion-ios-eye");
+      balanceVisibility = true;
     }
-}
+  }
 
   document.getElementById("visibility-button").addEventListener("click", handleVisibility);
 
@@ -622,8 +641,8 @@ const handleVisibility = () => {
       method: "POST",
       dataType: 'json',
       success: function (json) {
-
         if (json.sucesso && json.moedas.length) {
+          console.log("Staking Balance: ",json)
           json.moedas.forEach(element => {
             option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
           });
@@ -646,14 +665,16 @@ const handleVisibility = () => {
         } else {
           $("#noCoinsModal").modal("show");
           showNotyAlert("Sem moedas na carteira, primeiro adquira moedas!", "e");
-        }  
+        }
       }
     });
   });
 
   function setStake() {
+    var valor = $('#stake_input').val();
+    valor = parseFloat(valor.replace(',', '.'))
     try {
-      if ($('#valor').val() * 1 <= saldo * 1) {
+      if (valor <= saldo * 1) {
         showNotyAlert("Certo!", "s");
       } else {
         showNotyAlert("Errado!", "e");
@@ -664,8 +685,10 @@ const handleVisibility = () => {
   }
 
   function setResgate() {
+    var valor = $('#resgate_input').val();
+    valor = parseFloat(valor.replace(',', '.'))
     try {
-      if ($('#valor_stake').val() * 1 <= saldo_stake * 1 && $('#valor_stake').val() > 0) {
+      if (valor <= saldo_stake * 1 && valor > 0) {
         showNotyAlert("Certo!", "s");
       } else {
         showNotyAlert("Errado!", "e");
@@ -676,13 +699,14 @@ const handleVisibility = () => {
   }
 
   function inserirSaldo(percent) {
-    var saldo_inserido = parseFloat(saldo * percent/100);
-    $('#valor').maskMoney('mask', saldo_inserido);
+    var saldo_inserido = (saldo * percent / 100);
+    $('#stake_input').val(saldo_inserido.toString().replace('.', ','));
+    // $('#valor').maskMoney('mask', saldo_inserido);
   };
 
   function inserirSaldoStake(percent) {
-    var saldo_resgate = parseFloat(saldo_stake * percent/100);
-    $('#valor_stake').maskMoney('mask', saldo_resgate);
+    var saldo_resgate = (saldo_stake * percent / 100);
+    $('#resgate_input').val(saldo_resgate.toString().replace(".", ","));
   };
 
   function carregarSaldo(moeda) {
@@ -697,7 +721,9 @@ const handleVisibility = () => {
       },
       success: function (json) {
         if (json.sucesso) {
-
+          console.log("Mercado paridades: ",json)
+          document.getElementById("loading_content").style.display = "none";
+          document.getElementById("show_content").style.display = "block";
           json.moedas.forEach(element => {
             option += '<option data-par="' + element.par + '" data-preco="' + element.preco + '" data-tipo="' + element.tipo + '" value="' + element.id_moeda + '" title="' + element.imagem + '">' + element.simbolo + ' - ' + element.nome + '</option>';
           });
