@@ -266,7 +266,10 @@ class CompraVendaDireta {
                 $stakedBalance = $this->getStakedBalance($moeda, $cliente);
                 $minStake = $this->getMinStake($moeda);
                 $rewards = $this->checkReward($moeda, $cliente);
-    $accumulated = $this->checkAccumulatedReward($moeda, $cliente);
+                $accumulated = $this->checkAccumulatedReward($moeda, $cliente);
+                $apm = $this->getAPM($moeda);
+                $bonus = $this->getBonus($moeda);
+                $penalty = $this->getPenalty($moeda);
 
                 $lista[] = Array(
                     "id_moeda" => \Utils\Criptografia::encriptyPostId($moeda->id),
@@ -280,6 +283,9 @@ class CompraVendaDireta {
                     'reward_amount' => json_encode($rewards),
                     'accumulated_amount' => json_encode($accumulated),
                     'staked_balance' => json_encode($stakedBalance),
+                    'current_apm' => json_encode($apm),
+                    'current_bonus' => json_encode($bonus),
+                    'current_penalty' => json_encode($penalty),
                 );
             }
             
@@ -292,6 +298,9 @@ class CompraVendaDireta {
                     $minStake = $this->getMinStake($moeda);
                     $rewards = $this->checkReward($moeda, $cliente);
                     $accumulated = $this->checkAccumulatedReward($moeda, $cliente);
+                    $apm = $this->getAPM($moeda);
+                    $bonus = $this->getBonus($moeda);
+                    $penalty = $this->getPenalty($moeda);
 
                     $lista[] = Array(
                         "id_moeda" => \Utils\Criptografia::encriptyPostId($coin->id),
@@ -305,6 +314,9 @@ class CompraVendaDireta {
                         'reward_amount' => json_encode($rewards),
                         'accumulated_amount' => json_encode($accumulated),
                         'staked_balance' => json_encode($stakedBalance),
+                        'current_apm' => json_encode($apm),
+                        'current_bonus' => json_encode($bonus),
+                        'current_penalty' => json_encode($penalty),
                     );
                 } 
             }
@@ -476,6 +488,123 @@ class CompraVendaDireta {
         $object = json_decode($response);
         
         return $object->data->minAmount;
+    }
+
+    public function getAPM($coin)
+    {   
+        $curl = curl_init();
+
+        $data = array(
+            'contract_address' => $coin->stakingContract,
+        );
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/checkAPM",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => json_encode($data),
+          CURLOPT_HTTPHEADER => array(
+            'Accept: application/json',
+            'Content-Type: application/json'),
+        ));
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        curl_close($curl);
+        
+        if($httpCode != 200){
+            \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
+            
+            return null;
+        }
+        
+        $object = json_decode($response);
+        
+        return $object->data->current_apm;
+    }
+
+    public function getBonus($coin)
+    {   
+        $curl = curl_init();
+
+        $data = array(
+            'contract_address' => $coin->stakingContract,
+        );
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/bonusPercentage",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => json_encode($data),
+          CURLOPT_HTTPHEADER => array(
+            'Accept: application/json',
+            'Content-Type: application/json'),
+        ));
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        curl_close($curl);
+        
+        if($httpCode != 200){
+            \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
+            
+            return null;
+        }
+        
+        $object = json_decode($response);
+        
+        return $object->data->bonus_percentage;
+    }
+
+    public function getPenalty($coin)
+    {   
+        $curl = curl_init();
+
+        $data = array(
+            'contract_address' => $coin->stakingContract,
+        );
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/penaltyPercentage",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => json_encode($data),
+          CURLOPT_HTTPHEADER => array(
+            'Accept: application/json',
+            'Content-Type: application/json'),
+        ));
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        
+        curl_close($curl);
+        
+        if($httpCode != 200){
+            \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
+            
+            return null;
+        }
+        
+        $object = json_decode($response);
+        
+        return $object->data->penalty_percentage;
     }
     
     public function getParidades($params) {
