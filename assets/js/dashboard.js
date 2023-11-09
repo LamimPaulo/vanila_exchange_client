@@ -1,48 +1,3 @@
-let balanceVisibility = "";
-
-const handleVisibility = () => {
-    const eye = document.getElementById("eye");
-    if (balanceVisibility == "true") {
-        const hidden = document.querySelectorAll(".balance-hidden");
-        for (var i = 0; i < hidden.length; i++) {
-            hidden[i].style.display = "block";
-        }
-        const visible = document.querySelectorAll(".balance-visible");
-        for (var i = 0; i < visible.length; i++) {
-            visible[i].style.display = "none";
-        }
-        eye.classList.remove("ion-ios-eye");
-        eye.classList.add("ion-ios-eye-off");
-        console.log("3: ",balanceVisibility)
-        balanceVisibility = "false";
-        console.log("4: ",balanceVisibility)
-        localStorage.setItem("balance_visibility", "false")
-    } else {
-        const hidden = document.querySelectorAll(".balance-hidden");
-        for (var i = 0; i < hidden.length; i++) {
-            hidden[i].style.display = "none";
-        }
-        const visible = document.querySelectorAll(".balance-visible");
-        for (var i = 0; i < visible.length; i++) {
-            visible[i].style.display = "block";
-        }
-        eye.classList.remove("ion-ios-eye-off");
-        eye.classList.add("ion-ios-eye");
-        console.log("5: ",balanceVisibility)
-        balanceVisibility = "true";
-        console.log("6: ",balanceVisibility)
-        localStorage.setItem("balance_visibility", "true")
-    }
-}
-
-if(balanceVisibility == "" && !localStorage.getItem("balance_visibility")){
-    balanceVisibility = "true";
-    handleVisibility()
-  } else{
-    localStorage.getItem("balance_visibility") == "true" ? balanceVisibility = "false" : balanceVisibility = "true";
-    handleVisibility()
-  }
-
 window.addEventListener('load', () => {
     const portfolio = document.querySelector('#portfolio');
     const rentabilidade = document.querySelector('#rentabilidade-table');
@@ -56,9 +11,6 @@ window.addEventListener('resize', () => {
     portfolio.classList.toggle('table-responsive', window.matchMedia('(max-width:500px)').matches);
     rentabilidade.classList.toggle('table-responsive', window.matchMedia('(max-width:650px)').matches);
 });
-
-document.getElementById("visibility-button").addEventListener("click", handleVisibility);
-
 
 const proventos_data = [
     {
@@ -262,7 +214,9 @@ const performanceData = async () => {
     document.getElementById("selic-12m").innerHTML = formatDecimals(values[0].valor)
     document.getElementById("selic-ini").innerHTML = "0,00%";
 
-    document.getElementById("rentabilidade-cdi").innerHTML = formatDecimals(values[1].valor);
+    document.getElementById("rentabilidade_cdi_percent").innerHTML = formatDecimals(values[1].valor);
+    document.getElementById("rentabilidade_percent").innerHTML = formatDecimals(0);
+    document.getElementById("rendimento_valor").innerHTML = (0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
 performanceData();

@@ -169,6 +169,14 @@
     margin-left: 63px;
 }
 
+.mt-81{
+    margin-top: 81px;
+}
+
+.mt-120{
+    margin-top: 120px;
+}
+
 /* Controle do gráfico radial nos collapses */
 
 @property --p {
