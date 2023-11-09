@@ -699,8 +699,6 @@ $_data["idiomaMenu"] = $idioma;
 
         if (json.sucesso && json.moedas.length) {
           tokens = json.moedas;
-
-          console.log(tokens)
           tokens.forEach(element => {
             option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
           });
