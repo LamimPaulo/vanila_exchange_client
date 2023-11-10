@@ -674,7 +674,7 @@ $_data["idiomaMenu"] = $idioma;
           const apm = (parseInt(token[0].current_apm) + parseInt(token[0].current_bonus)) / 10 - ((parseInt(token[0].current_apm) + parseInt(token[0].current_bonus)) / 10 * (parseInt(token[0].current_penalty) / 1000));
           $('#apm_percent').html(apm.toString().replace(".", ",") + "%")
           const tokenReward = token[0].simbolo == "BTC" || token[0].simbolo == "CBRL" ? "CBRL" : "RTK"
-          $('#reward_period').html(" ao mês em ");
+          $('#reward_period').html(" ao mês em <b>" + tokenReward + "</b>");
           saldo = token[0].saldo_disponivel;
           saldo_stake = token[0].staked_balance;
           $('.staked_balance').html(fixDecimals(token[0].staked_balance, token[0].decimal));
