@@ -431,7 +431,13 @@ class CompraVendaDireta {
         
         $object = json_decode($response);
         
-        return $object->data->saldo;
+        // return $object->data->saldo;
+        $object = json_decode($response);
+   
+        $json["valor"] = $object->data->saldo;
+        $json["sucesso"] = true;
+        
+        print json_encode($json);
     }
 
     public function checkReward($params)
