@@ -663,7 +663,7 @@ $_data["idiomaMenu"] = $idioma;
 
 
     $.ajax({
-      url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_CHECK_REWARD ?>",
+      url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_BALANCE ?>",
       method: "POST",
       dataType: 'json',
       success: function (json) {

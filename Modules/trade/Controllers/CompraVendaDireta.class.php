@@ -310,8 +310,7 @@ class CompraVendaDireta {
             
             $cliente = \Utils\Geral::getCliente();
             
-            // $moedas = Array();
-            
+            $moedas = Array();
             $moedasRn = new \Models\Modules\Cadastro\MoedaRn();
             $moedas = $moedasRn->listar("ativo = 1 AND status_mercado = 1 AND has_staking = 1 AND id <> 1", null, null, null, true, false);
 
@@ -321,8 +320,8 @@ class CompraVendaDireta {
             $saldos = $contaCorrenteReaisRn->calcularSaldoConta($cliente, true);
             
             if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
-                $moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
 
+                $moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
                 // $stakedBalance = $this->getStakedBalance($moeda, $cliente);
                 // $minStake = $this->getMinStake($moeda);
                 // $rewards = $this->checkReward($moeda, $cliente);
@@ -366,7 +365,7 @@ class CompraVendaDireta {
                     $lista[] = Array(
                         "id_moeda" => \Utils\Criptografia::encriptyPostId($coin->id),
                         "saldo_bloqueado" => $saldos["bloqueado"],
-                        "contract_address" => $moeda->stakingContract,
+                        "contract_address" => $coin->stakingContract,
                         "saldo_disponivel" => $saldos["saldo"],
                         "decimal" => $coin->casasDecimais,
                         "imagem" => IMAGES . "currencies/" . $coin->icone ,
