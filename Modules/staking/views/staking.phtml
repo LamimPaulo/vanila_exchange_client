@@ -653,8 +653,17 @@ $_data["idiomaMenu"] = $idioma;
 
     var option = '';
 
+    // const R_STAKING_MIN_STAKE = "mercado/stake/min_stake";
+    // const R_STAKING_CHECK_REWARD = "mercado/stake/reward_amount";
+    // const R_STAKING_STAKED_BALANCE = "mercado/stake/staked_balance";
+    // const R_STAKING_CHECK_ACCUMULATED_REWARD = "mercado/stake/accumulated_amount";
+    // const R_STAKING_GET_APM = "mercado/stake/current_apm";
+    // const R_STAKING_GET_BONUS = "mercado/stake/current_bonus";
+    // const R_STAKING_GET_PENALTY = "mercado/stake/current_penalty";
+
+
     $.ajax({
-      url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_BALANCE ?>",
+      url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_CHECK_REWARD ?>",
       method: "POST",
       dataType: 'json',
       success: function (json) {

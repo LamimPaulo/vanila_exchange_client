@@ -323,29 +323,30 @@ class CompraVendaDireta {
             if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
                 $moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
 
-                $stakedBalance = $this->getStakedBalance($moeda, $cliente);
-                $minStake = $this->getMinStake($moeda);
-                $rewards = $this->checkReward($moeda, $cliente);
-                $accumulated = $this->checkAccumulatedReward($moeda, $cliente);
-                $apm = $this->getAPM($moeda);
-                $bonus = $this->getBonus($moeda);
-                $penalty = $this->getPenalty($moeda);
+                // $stakedBalance = $this->getStakedBalance($moeda, $cliente);
+                // $minStake = $this->getMinStake($moeda);
+                // $rewards = $this->checkReward($moeda, $cliente);
+                // $accumulated = $this->checkAccumulatedReward($moeda, $cliente);
+                // $apm = $this->getAPM($moeda);
+                // $bonus = $this->getBonus($moeda);
+                // $penalty = $this->getPenalty($moeda);
 
                 $lista[] = Array(
                     "id_moeda" => \Utils\Criptografia::encriptyPostId($moeda->id),
+                    "contract_address" => $moeda->stakingContract,
                     "saldo_bloqueado" => $saldos["bloqueado"],
                     "saldo_disponivel" => $saldos["saldo"],
                     "decimal" => $moeda->casasDecimais,
                     "imagem" => IMAGES . "currencies/" . $moeda->icone ,
                     "simbolo" => $moeda->simbolo,
                     "nome" => $moeda->nome,
-                    'min_stake' => json_encode($minStake),
-                    'reward_amount' => json_encode($rewards),
-                    'accumulated_amount' => json_encode($accumulated),
-                    'staked_balance' => json_encode($stakedBalance),
-                    'current_apm' => json_encode($apm),
-                    'current_bonus' => json_encode($bonus),
-                    'current_penalty' => json_encode($penalty),
+                    // 'min_stake' => json_encode($minStake),
+                    // 'reward_amount' => json_encode($rewards),
+                    // 'accumulated_amount' => json_encode($accumulated),
+                    // 'staked_balance' => json_encode($stakedBalance),
+                    // 'current_apm' => json_encode($apm),
+                    // 'current_bonus' => json_encode($bonus),
+                    // 'current_penalty' => json_encode($penalty),
                 );
             }
             
@@ -354,29 +355,30 @@ class CompraVendaDireta {
                 $saldos = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $coin->id, true, false);             
                 if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
                     
-                    $stakedBalance = $this->getStakedBalance($coin, $cliente);
-                    $minStake = $this->getMinStake($coin);
-                    $rewards = $this->checkReward($coin, $cliente);
-                    $accumulated = $this->checkAccumulatedReward($coin, $cliente);
-                    $apm = $this->getAPM($coin);
-                    $bonus = $this->getBonus($coin);
-                    $penalty = $this->getPenalty($coin);
+                    // $stakedBalance = $this->getStakedBalance($coin, $cliente);
+                    // $minStake = $this->getMinStake($coin);
+                    // $rewards = $this->checkReward($coin, $cliente);
+                    // $accumulated = $this->checkAccumulatedReward($coin, $cliente);
+                    // $apm = $this->getAPM($coin);
+                    // $bonus = $this->getBonus($coin);
+                    // $penalty = $this->getPenalty($coin);
 
                     $lista[] = Array(
                         "id_moeda" => \Utils\Criptografia::encriptyPostId($coin->id),
                         "saldo_bloqueado" => $saldos["bloqueado"],
+                        "contract_address" => $moeda->stakingContract,
                         "saldo_disponivel" => $saldos["saldo"],
                         "decimal" => $coin->casasDecimais,
                         "imagem" => IMAGES . "currencies/" . $coin->icone ,
                         "simbolo" => $coin->simbolo,
                         "nome" => $coin->nome,
-                        'min_stake' => json_encode($minStake),
-                        'reward_amount' => json_encode($rewards),
-                        'accumulated_amount' => json_encode($accumulated),
-                        'staked_balance' => json_encode($stakedBalance),
-                        'current_apm' => json_encode($apm),
-                        'current_bonus' => json_encode($bonus),
-                        'current_penalty' => json_encode($penalty),
+                        // 'min_stake' => json_encode($minStake),
+                        // 'reward_amount' => json_encode($rewards),
+                        // 'accumulated_amount' => json_encode($accumulated),
+                        // 'staked_balance' => json_encode($stakedBalance),
+                        // 'current_apm' => json_encode($apm),
+                        // 'current_bonus' => json_encode($bonus),
+                        // 'current_penalty' => json_encode($penalty),
                     );
                 } 
             }
@@ -391,13 +393,15 @@ class CompraVendaDireta {
         print json_encode($json);
     }
 
-    public function getStakedBalance($coin, $user)
-    {   
+    public function getStakedBalance($params)
+    {  
+         $contract_address = \Utils\Post::get($params, "contract_address", null);
+        $cliente = \Utils\Geral::getCliente();
+        
         $curl = curl_init();
-
         $data = array(
-            'contract_address' => $coin->stakingContract,
-            'user_id' => $user->id,
+            'contract_address' => $contract_address,
+            'user_id' => $cliente->id,
         );
 
         curl_setopt_array($curl, array(
@@ -406,8 +410,8 @@ class CompraVendaDireta {
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
           CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_FOLLOWLOCATION => false,
+        //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
           CURLOPT_POSTFIELDS => json_encode($data),
           CURLOPT_HTTPHEADER => array(
@@ -431,13 +435,17 @@ class CompraVendaDireta {
         return $object->data->saldo;
     }
 
-    public function checkReward($coin, $user)
+    public function checkReward($params)
     {   
+        //  $contract_address = \Utils\Post::get($params, "contract_address", null);
+        
+        $contract_address = \Utils\Post::get($params, "contract_address", null);
+        $cliente = \Utils\Geral::getCliente();
+        
         $curl = curl_init();
-
         $data = array(
-            'contract_address' => $coin->stakingContract,
-            'user_id' => $user->id,
+            'contract_address' => $contract_address,
+            'user_id' => $cliente->id,
         );
 
         curl_setopt_array($curl, array(
@@ -446,8 +454,8 @@ class CompraVendaDireta {
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
           CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_FOLLOWLOCATION => false,
+        //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
           CURLOPT_POSTFIELDS => json_encode($data),
           CURLOPT_HTTPHEADER => array(
@@ -467,17 +475,22 @@ class CompraVendaDireta {
         }
         
         $object = json_decode($response);
+   
+        $json["valor"] = $object->data->reward;
+        $json["sucesso"] = true;
         
-        return $object->data->reward;
+        print json_encode($json);
     }
 
-    public function checkAccumulatedReward($coin, $user)
+    public function checkAccumulatedReward($params)
     {   
+        $contract_address = \Utils\Post::get($params, "contract_address", null);
+        $cliente = \Utils\Geral::getCliente();
+        
         $curl = curl_init();
-
         $data = array(
-            'contract_address' => $coin->stakingContract,
-            'user_id' => $user->id,
+            'contract_address' => $contract_address,
+            'user_id' => $cliente->id,
         );
 
         curl_setopt_array($curl, array(
@@ -486,8 +499,8 @@ class CompraVendaDireta {
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
           CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_FOLLOWLOCATION => false,
+        //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
           CURLOPT_POSTFIELDS => json_encode($data),
           CURLOPT_HTTPHEADER => array(
@@ -508,15 +521,21 @@ class CompraVendaDireta {
         
         $object = json_decode($response);
         
-        return $object->data->reward;
+        // return $object->data->reward;
+
+        $json["valor"] = $object->data->reward;
+        $json["sucesso"] = true;
+        
+        print json_encode($json);
     }
 
-    public function getMinStake($coin)
+    public function getMinStake($params)
     {   
+        $contract_address = \Utils\Post::get($params, "contract_address", null);
+        
         $curl = curl_init();
-
         $data = array(
-            'contract_address' => $coin->stakingContract,
+            'contract_address' => $contract_address
         );
 
         curl_setopt_array($curl, array(
@@ -525,8 +544,8 @@ class CompraVendaDireta {
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
           CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_FOLLOWLOCATION => false,
+        //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
           CURLOPT_POSTFIELDS => json_encode($data),
           CURLOPT_HTTPHEADER => array(
@@ -547,15 +566,20 @@ class CompraVendaDireta {
         
         $object = json_decode($response);
         
-        return $object->data->minAmount;
+        // return $object->data->minAmount;   
+        $json["valor"] = $object->data->minAmount;
+        $json["sucesso"] = true;
+        
+        print json_encode($json);
     }
 
-    public function getAPM($coin)
+    public function getAPM($params)
     {   
+        $contract_address = \Utils\Post::get($params, "contract_address", null);
+        
         $curl = curl_init();
-
         $data = array(
-            'contract_address' => $coin->stakingContract,
+            'contract_address' => $contract_address
         );
 
         curl_setopt_array($curl, array(
@@ -564,8 +588,8 @@ class CompraVendaDireta {
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
           CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_FOLLOWLOCATION => false,
+        //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
           CURLOPT_POSTFIELDS => json_encode($data),
           CURLOPT_HTTPHEADER => array(
@@ -586,15 +610,20 @@ class CompraVendaDireta {
         
         $object = json_decode($response);
         
-        return $object->data->current_apm;
+        // return $object->data->current_apm;   
+        $json["valor"] = $object->data->current_apm;
+        $json["sucesso"] = true;
+        
+        print json_encode($json);
     }
 
-    public function getBonus($coin)
+    public function getBonus($params)
     {   
+         $contract_address = \Utils\Post::get($params, "contract_address", null);
+        
         $curl = curl_init();
-
         $data = array(
-            'contract_address' => $coin->stakingContract,
+            'contract_address' => $contract_address
         );
 
         curl_setopt_array($curl, array(
@@ -603,8 +632,8 @@ class CompraVendaDireta {
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
           CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_FOLLOWLOCATION => false,
+        //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
           CURLOPT_POSTFIELDS => json_encode($data),
           CURLOPT_HTTPHEADER => array(
@@ -625,15 +654,21 @@ class CompraVendaDireta {
         
         $object = json_decode($response);
         
-        return $object->data->bonus_percentage;
+        // return $object->data->bonus_percentage;
+           
+        $json["valor"] = $object->data->bonus_percentage;
+        $json["sucesso"] = true;
+        
+        print json_encode($json);
     }
 
-    public function getPenalty($coin)
+    public function getPenalty($params)
     {   
+         $contract_address = \Utils\Post::get($params, "contract_address", null);
+        
         $curl = curl_init();
-
         $data = array(
-            'contract_address' => $coin->stakingContract,
+            'contract_address' => $contract_address
         );
 
         curl_setopt_array($curl, array(
@@ -642,8 +677,8 @@ class CompraVendaDireta {
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
           CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_FOLLOWLOCATION => false,
+        //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
           CURLOPT_POSTFIELDS => json_encode($data),
           CURLOPT_HTTPHEADER => array(
@@ -664,7 +699,11 @@ class CompraVendaDireta {
         
         $object = json_decode($response);
         
-        return $object->data->penalty_percentage;
+        // return $object->data->penalty_percentage;   
+        $json["valor"] = $object->data->penalty_percentage;
+        $json["sucesso"] = true;
+        
+        print json_encode($json);
     }
 
     public function stakeCall($coin, $usr_id, $amount)
@@ -683,8 +722,8 @@ class CompraVendaDireta {
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
           CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_FOLLOWLOCATION => false,
+        //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
           CURLOPT_POSTFIELDS => json_encode($data),
           CURLOPT_HTTPHEADER => array(
@@ -724,8 +763,8 @@ class CompraVendaDireta {
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
           CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_FOLLOWLOCATION => false,
+        //   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
           CURLOPT_POSTFIELDS => json_encode($data),
           CURLOPT_HTTPHEADER => array(

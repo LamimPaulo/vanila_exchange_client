@@ -661,6 +661,13 @@ public static $rotas = Array(
         "mercado/staking-balance"                           => Array("url" => "trade/compraVendaDireta/getStakingBalances" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
         "mercado/staking-stake"                             => Array("url" => "trade/compraVendaDireta/doStake" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
         "mercado/staking-unstake"                           => Array("url" => "trade/compraVendaDireta/doUnstake" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/stake/min_stake"                           => Array("url" => "trade/compraVendaDireta/getMinStake" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/stake/reward_amount"                       => Array("url" => "trade/compraVendaDireta/checkReward" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/stake/accumulated_amount"                  => Array("url" => "trade/compraVendaDireta/checkAccumulatedReward" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/stake/staked_balance"                      => Array("url" => "trade/compraVendaDireta/getStakedBalance" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/stake/current_apm"                         => Array("url" => "trade/compraVendaDireta/getAPM" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/stake/current_bonus"                       => Array("url" => "trade/compraVendaDireta/getBonus" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
+        "mercado/stake/current_penalty"                     => Array("url" => "trade/compraVendaDireta/getPenalty" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
         "mercado/paridades"                                 => Array("url" => "trade/compraVendaDireta/getParidades" ,                         "modulo" => "trade",                    "rotina" => "mercado" ),
         "mercado/preco"                                     => Array("url" => "trade/compraVendaDireta/consultarPreco" ,                     "modulo" => "trade",                    "rotina" => "mercado" ),
         "mercado/comprar"                                   => Array("url" => "trade/compraVendaDireta/salvarCompra" ,                       "modulo" => "trade",                    "rotina" => "mercado" ),
@@ -1348,6 +1355,13 @@ public static $rotas = Array(
     const R_MERCADO_PRECO = "mercado/preco";
     const R_MERCADO_BALANCE = "mercado/balance";
     const R_STAKING_BALANCE = "mercado/staking-balance";
+    const R_STAKING_MIN_STAKE = "mercado/stake/min_stake";
+    const R_STAKING_CHECK_REWARD = "mercado/stake/reward_amount";
+    const R_STAKING_STAKED_BALANCE = "mercado/stake/staked_balance";
+    const R_STAKING_CHECK_ACCUMULATED_REWARD = "mercado/stake/accumulated_amount";
+    const R_STAKING_GET_APM = "mercado/stake/current_apm";
+    const R_STAKING_GET_BONUS = "mercado/stake/current_bonus";
+    const R_STAKING_GET_PENALTY = "mercado/stake/current_penalty";
     const R_STAKING_STAKE = "mercado/staking-stake";
     const R_STAKING_UNSTAKE = "mercado/staking-unstake";
     const R_MERCADO_PARIDADES = "mercado/paridades";
