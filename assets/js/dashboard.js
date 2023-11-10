@@ -3,6 +3,11 @@ window.addEventListener('load', () => {
     const rentabilidade = document.querySelector('#rentabilidade-table');
     portfolio.classList.toggle('table-responsive', window.matchMedia('(max-width:500px)').matches);
     rentabilidade.classList.toggle('table-responsive', window.matchMedia('(max-width:650px)').matches);
+    setTimeout(() => {
+        const table_responsive_540 = document.querySelectorAll('.table_responsive_540');
+        for (const item of table_responsive_540)
+        item.classList.toggle('table-responsive', window.matchMedia('(max-width:540px)').matches);
+    }, 1000);
 });
 
 window.addEventListener('resize', () => {
@@ -10,7 +15,13 @@ window.addEventListener('resize', () => {
     const rentabilidade = document.querySelector('#rentabilidade-table');
     portfolio.classList.toggle('table-responsive', window.matchMedia('(max-width:500px)').matches);
     rentabilidade.classList.toggle('table-responsive', window.matchMedia('(max-width:650px)').matches);
+    setTimeout(() => {
+        const table_responsive_540 = document.querySelectorAll('.table_responsive_540');
+        for (const item of table_responsive_540)
+        item.classList.toggle('table-responsive', window.matchMedia('(max-width:540px)').matches);
+    }, 1000);
 });
+
 
 const proventos_data = [
     {
@@ -116,63 +127,6 @@ const handleProventos = () => {
     document.getElementById("proventos-balance").innerHTML = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-const paginate = (current, max) => {
-    if (!current || !max) return null
-
-    let prev = current === 1 ? null : current - 1,
-        next = current === max ? null : current + 1,
-        items = [1]
-
-    if (current === 1 && max === 1) return { current, prev, next, items }
-    if (current > 4) items.push('…')
-
-    let r = 2, r1 = current - r, r2 = current + r
-
-    for (let i = r1 > 2 ? r1 : 2; i <= Math.min(max, r2); i++) items.push(i)
-
-    if (r2 + 1 < max) items.push('…')
-    if (r2 < max) items.push(max)
-
-    return { current, prev, next, items }
-}
-var cur = 1;
-const handlePagination = (id, data) => {
-    let pagination = paginate(cur, Math.ceil(data.length / 2));
-
-    const checkPrev = () => {
-        if (pagination.prev == null) {
-            return "disabled"
-        }
-    }
-
-    const checkNext = () => {
-        if (pagination.next == null) {
-            return "disabled"
-        }
-    }
-
-    document.getElementById(id).innerHTML = `<li class="page-item ${checkPrev()}" id="pagination_prev">
-                                                <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                                </a>
-                                            </li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item ${checkNext()}" id="pagination_next">
-                                                <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>`;
-
-    for (i = (cur - 1) * 5; i < 5 * cur; i++) {
-        if (data[i] == null) {
-        } else {
-            console.log(data[i])
-        }
-    }
-}
-
 async function fetchData() {
   try {
     const response = await fetch("https://brasilapi.com.br/api/taxas/v1");
@@ -220,8 +174,6 @@ const performanceData = async () => {
 }
 
 performanceData();
-
-// handlePagination("proventos_pagination", proventos_data)
 handleProventos()
 
 

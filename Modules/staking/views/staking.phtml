@@ -206,7 +206,8 @@ $_data["idiomaMenu"] = $idioma;
                 <div class="row choose-position">
                   <div class="col box-conversion-custom text-center">
                     <div class="form-group" id="select_token">
-                      <select id="cryptoFrom" class="crypto custom-select choose-position choose-position-input"></select>
+                      <select id="cryptoFrom"
+                        class="crypto custom-select choose-position choose-position-input"></select>
                     </div>
                     <div class="spinner-border text-primary" role="status" id="select_token_spinner">
                       <span class="sr-only">Loading...</span>
@@ -376,56 +377,17 @@ $_data["idiomaMenu"] = $idioma;
           <table class="mt-4 table settings text-center" id="table-staking">
             <thead class="bg-light">
               <tr>
-                <th scope="col">DATA</th>
-                <th scope="col">ATIVIDADE</th>
-                <th scope="col">QUANTIDADE</th>
-                <th scope="col">PREVISÃO</th>
-                <th scope="col">STATUS</th>
+                <th scope="col">Moeda</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">TXID</th>
+                <th scope="col">Data</th>
+                <th scope="col">Quantidade</th>
+                <th scope="col">Status</th>
               </tr>
             </thead>
-            <tbody class="align-middle border border-white">
-              <tr>
-                <th class="fs-12 align-middle p-2"><span>29/10/2023</span><span class="d-block">ÀS
-                    13:32:51</span></th>
-                <td class="align-middle">Recompensas</td>
-                <td class="align-middle">0,00000226 ETH</td>
-                <td class="align-middle">-</td>
-                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-              </tr>
-              <tr>
-                <th class="fs-12 align-middle p-2"><span>28/10/2023</span><span class="d-block">ÀS
-                    13:32:56</span></th>
-                <td class="align-middle">Recompensas</td>
-                <td class="align-middle">0,00000136 ETH</td>
-                <td class="align-middle">-</td>
-                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-              </tr>
-              <tr>
-                <th class="fs-12 align-middle p-2"><span>27/10/2023</span><span class="d-block">ÀS
-                    13:32:31</span></th>
-                <td class="align-middle">Recompensas</td>
-                <td class="align-middle">0,00000165 ETH</td>
-                <td class="align-middle">-</td>
-                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-              </tr>
-              <tr>
-                <th class="fs-12 align-middle p-2"><span>26/10/2023</span><span class="d-block">ÀS
-                    13:32:32</span></th>
-                <td class="align-middle">Recompensas</td>
-                <td class="align-middle">0,00000224 ETH</td>
-                <td class="align-middle">-</td>
-                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-              </tr>
-              <tr>
-                <th class="fs-12 align-middle p-2"><span>25/10/2023</span><span class="d-block">ÀS
-                    18:32:1</span></th>
-                <td class="align-middle">Recompensas</td>
-                <td class="align-middle">0,00000184 ETH</td>
-                <td class="align-middle">-</td>
-                <td class="align-middle"><span class="badge bg-success p-2">Finalizado</span></td>
-              </tr>
-            </tbody>
+            <tbody class="align-middle border border-white" id="transactions_table"></tbody>
           </table>
+          <div id="pagination" class="d-flex justify-content-center"></div>
         </div>
       </div>
     </div>
@@ -711,7 +673,8 @@ $_data["idiomaMenu"] = $idioma;
           console.log()
           const apm = (parseInt(token[0].current_apm) + parseInt(token[0].current_bonus)) / 10 - ((parseInt(token[0].current_apm) + parseInt(token[0].current_bonus)) / 10 * (parseInt(token[0].current_penalty) / 1000));
           $('#apm_percent').html(apm.toString().replace(".", ",") + "%")
-          apm >= 5 ? $('#reward_period').html("ao ano") : $('#reward_period').html("ao mês");
+          const tokenReward = token[0].simbolo == "BTC" || token[0].simbolo == "CBRL" ? "CBRL" : "RTK"
+          $('#reward_period').html(" ao mês em ");
           saldo = token[0].saldo_disponivel;
           saldo_stake = token[0].staked_balance;
           $('.staked_balance').html(fixDecimals(token[0].staked_balance, token[0].decimal));
@@ -738,8 +701,86 @@ $_data["idiomaMenu"] = $idioma;
     });
   });
 
+  async function fetchTxs(page) {
+    const update = {
+      contract_address: "0xD11c920992a1Fab90Ac41ed2B5D618dD9c1a80Ec",
+      user_id: "15093064590045"
+    };
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(update),
+    };
+
+    try {
+      const response = await fetch('https://sandbox.coinage.trade/api/priv/staking/transactions?page=' + page, options)
+      const data = await response.json();
+      const tx = data.data;
+      // console.log(data)
+      var tBodyHtml = "";
+      for (i = 0; i < tx.length; i++) {
+        const rawDate = tx[i].data.split(" ");
+        const dateGMT = new Date(rawDate[0] + "T" + rawDate[1] + "Z");
+        const date = dateGMT.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" }).trim().split(",");
+        const amount = parseInt(tx[i].valor).toFixed(token[0].decimal);
+        const qde = 
+          tx[i].descricao.split(" ")[0] == "Staking" ? `<span class="text-danger fw-bold">- ${amount} ${token[0].simbolo}</span>` :
+          tx[i].descricao.split(" ")[0] == "Resgate" ? `<span class="text-primary">+ ${amount} ${token[0].simbolo}</span>` : 
+                                                    `<span class="text-success">+ ${amount} ${token[0].simbolo}</span>`
+        const status = tx[i].confirmacoes >= tx[i].confirmacoes_necessarias ? "<span class='badge badge-success p-2'>Finalizada</span>" : "<span class='badge badge-warning p-2'>Pendente</span>";
+        tBodyHtml += `
+                  <tr>
+                    <td class="align-middle"><img src="${token[0].imagem}" height="30" width="30"></td>
+                    <td class="align-middle"><span>${tx[i].descricao}</span></td>
+                    <td class="align-middle"><a href="https://mumbai.polygonscan.com/tx/${tx[i].hash}" target="_blank">Explorer</a></td>
+                    <th class="fs-12 align-middle p-2"><span>${date[0]}</span><span class="d-block">${date[1]}</span></th>
+                    <td class="align-middle">${qde}</td>
+                    <td class="align-middle">${status}</td>
+                  </tr>
+                  `
+      }
+      const tBody_tx = document.getElementById("transactions_table");
+      tBody_tx.innerHTML = tBodyHtml;
+      const pagination = document.getElementById("pagination");
+      var pages = "";
+      for (const item of data.links){
+        const active = item.active == true ? "active" : "";
+        const url = item.url == null ? "" : item.label;
+        const disabled = item.url == null ? "disabled" : "";
+        pages += `<li class="page-item ${active} ${disabled}"><a class="page-link" href="javascript:fetchTxs(${url});">${item.label}</a></li>`
+      }
+      const paginationHTML = `<nav class="mx-auto" aria-label="Page navigation example">
+                  <ul class="pagination">
+                    ${pages}
+                  </ul>
+                </nav>
+              `;
+      pagination.innerHTML = paginationHTML;
+    } catch (error) {
+      console.error(`Data error: ${error.message}`);
+    }
+  }
+  
+
   function fixDecimals(num, decimal) {
     return (parseFloat(num).toFixed(decimal)).toString().replace('.', ',')
+  }
+
+  function getTransactions() {
+    // var valor = $('#stake_input').val();
+    // valor = parseFloat(valor.replace(',', '.'))
+    try {
+      // if (valor <= saldo * 1) {
+
+      // } else {
+      //   showNotyAlert("Errado!", "e");
+      // }
+    } catch (e) {
+      showNotyAlert(e, "e");
+    }
   }
 
   function setStake() {
@@ -758,17 +799,12 @@ $_data["idiomaMenu"] = $idioma;
             },
             success: function (json) {
               if (json.sucesso) {
-                console.log("stake res: ", json)
-
+                // console.log("stake res: ", json)
                 showNotyAlert("Certo!", "s");
-
-
               }
             }
           },
         );
-
-
       } else {
         showNotyAlert("Errado!", "e");
       }
@@ -843,7 +879,7 @@ $_data["idiomaMenu"] = $idioma;
     // //       document.getElementById("show_content").style.display = "block";
 
     const nome = $("#cryptoFrom option:selected").text().replace(" ", "").split("-");
-    const token = tokens.filter(t => t.simbolo === nome[0])
+    token = tokens.filter(t => t.simbolo === nome[0])
     $('.nome_moeda').html(nome[1]);
     $('.symbol_moeda').html(nome[0]);
     $('.min_stake').html(fixDecimals(token[0].min_stake, token[0].decimal));
@@ -868,6 +904,7 @@ $_data["idiomaMenu"] = $idioma;
       //   }
       // }
     });
+    fetchTxs()
   }
 
 </script>
