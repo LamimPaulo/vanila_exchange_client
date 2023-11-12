@@ -780,13 +780,14 @@ $_data["idiomaMenu"] = $idioma;
       const pagination = document.getElementById("pagination");
       tBody_tx.innerHTML = "";
       pagination.innerHTML = "";
+      console.log(tx)
       if (tx.length) {
         for (i = 0; i < tx.length; i++) {
           if (tx[i].staked_coin.simbolo == token[0].simbolo) {
             const rawDate = tx[i].created_at.replace(".000000", "").replace("T", " ").replace("Z", "").split(" ");
             const dateGMT = new Date(rawDate[0] + "T" + rawDate[1] + "Z");
             const date = dateGMT.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" }).trim().split(",");
-            const amount = parseInt(tx[i].value).toFixed(token[0].decimal);
+            const amount = parseFloat(tx[i].value).toFixed(token[0].decimal);
             const qde =
               tx[i].type == 1 ? `<span class="text-danger fw-bold">- ${amount} ${token[0].simbolo}</span>` :
                 tx[i].type == 3 ? `<span class="text-primary">+ ${amount} ${token[0].simbolo}</span>` :
