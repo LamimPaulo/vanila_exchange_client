@@ -735,7 +735,7 @@ $_data["idiomaMenu"] = $idioma;
           $('.nome_moeda').html(token[0].nome);
           $('.symbol_moeda').html(token[0].simbolo);
 
-          const tokenReward = token[0].simbolo == "PTQ" ? token[0].simbolo : "PCOIN";
+          const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
           $('#reward_period').html(" em <b>" + tokenReward + "</b>");
           saldo = token[0].saldo_disponivel;
           saldo_stake = token[0].staked_balance;
