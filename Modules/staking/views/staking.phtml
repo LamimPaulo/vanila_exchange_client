@@ -249,7 +249,7 @@ $_data["idiomaMenu"] = $idioma;
                   <!-- <h5 class="card-title"><?php echo $idioma2->getText("idioma") ?></h5> -->
                   <h5 class="fw-bold">Informações</h5>
                   <div class="mt-3">
-                    <span>Recompensa líquida estimada:</span>
+                    <span>Recompensa líquida estimada este mês:</span>
                     <span class="d-block"><b id="apm_percent">
                         <div class="spinner-border spinner-border-sm text-primary" role="status">
                           <span class="sr-only">Loading...</span>
@@ -736,7 +736,7 @@ $_data["idiomaMenu"] = $idioma;
           $('.symbol_moeda').html(token[0].simbolo);
 
           const tokenReward = token[0].simbolo == "PTQ" ? token[0].simbolo : "PCOIN";
-          $('#reward_period').html(" ao mês em <b>" + tokenReward + "</b>");
+          $('#reward_period').html(" em <b>" + tokenReward + "</b>");
           saldo = token[0].saldo_disponivel;
           saldo_stake = token[0].staked_balance;
           $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0].decimal));
