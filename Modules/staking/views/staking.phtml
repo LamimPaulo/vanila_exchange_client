@@ -180,11 +180,11 @@ $_data["idiomaMenu"] = $idioma;
     font-size: 12px;
   }
 
-  .balance-hidden {
-    display: none;
+  #staking_spinner_div{
+    height: 100vh;
   }
 
-  #select_token {
+  #show_content, #noCoinCard, #select_token, .balance-hidden{
     display: none;
   }
 </style>
@@ -198,6 +198,11 @@ $_data["idiomaMenu"] = $idioma;
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 col-md-11 mx-auto">
+        <div class="d-flex align-items-center justify-content-center" id="staking_spinner_div">
+          <div class="spinner-border text-primary" role="status" id="staking_spinner">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
         <div id="show_content">
           <h4>Selecione uma moeda:</h4>
           <div class="row">
@@ -278,7 +283,7 @@ $_data["idiomaMenu"] = $idioma;
                           </span> <span class="symbol_moeda"></span></span>
                       </div>
                       <div class="mt-3">
-                        <span>Lucro acumulado:</span>
+                        <span>Recompensa a receber:</span>
                         <span class="d-block"><span class="balance-hidden">****</span><span
                             class="reward_amount balance-visible">
                             <div class="spinner-border spinner-border-sm text-primary" role="status">
@@ -286,8 +291,7 @@ $_data["idiomaMenu"] = $idioma;
                             </div>
                           </span> <span class="symbol_moeda"></span></span>
                       </div>
-                      <div class="mt-3">
-                        <span>Lucro total recebido:</span>
+                      <div class="mt-3">Recompensa recebida:</span>
                         <span class="d-block"><span class="balance-hidden">****</span><span
                             class="accumulated_amount balance-visible">
                             <div class="spinner-border spinner-border-sm text-primary" role="status">
@@ -531,26 +535,24 @@ $_data["idiomaMenu"] = $idioma;
   </div>
 </div>
 
-<!-- noCoinsModal -->
-<div class="modal fade" id="noCoinsModal" tabindex="-1" role="dialog" aria-labelledby="noCoinsModalTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="noCoinsModalTitle">OPS! Não existem moedas na sua carteira</h5>
-        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button> -->
-      </div>
-      <div class="modal-body">
-        <p class="text-center">Faça primeiro um depósito em sua carteira, use o botão abaixo!</p>
-        <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/deposit">
-          <i class="text-primary fs-30"><img src="assets/img/icon/ico-depositar.svg" alt="deposit"></i>
-        </a>
-        <p class="fw-bold text-center">Depositar</p>
-      </div>
-      <div class="modal-footer">
-        <a type="button" class="btn btn-secondary" href="/portfolio">Ir para o Dashboard</a>
+<!-- noCoinCard -->
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-md-11 settings">
+      <div class="card" id="noCoinCard">
+        <div class="card-header text-center bg-danger">
+          <span class="card-title h2 text-white" id="noCoinsModalTitle">OPS! Não existem moedas na sua carteira</span>
+        </div>
+        <div class="card-body">
+          <p class="text-center">Faça primeiro um depósito em sua carteira, use o botão abaixo!</p>
+          <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/deposit">
+            <i class="text-primary fs-30"><img src="assets/img/icon/ico-depositar.svg" alt="deposit"></i>
+          </a>
+          <p class="fw-bold text-center">Depositar</p>
+        </div>
+        <div class="card-footer d-flex justify-content-center">
+          <a type="button" class="btn btn-primary" href="/portfolio">Ir para o Dashboard</a>
+        </div>
       </div>
     </div>
   </div>
@@ -618,7 +620,6 @@ $_data["idiomaMenu"] = $idioma;
   var saldo_stake = 0;
   var regressor = null;
   let balanceVisibility = "";
-  var user_id = <?php echo json_encode($cliente->id) ?>;
   const stakingRates = [
     {
       simbolo: "BTC",
@@ -696,7 +697,6 @@ $_data["idiomaMenu"] = $idioma;
   document.getElementById("visibility-button3").addEventListener("click", handleVisibility);
 
   $(document).ready(function () {
-
     $("#cryptoFrom").select2();
 
     $("#cryptoFrom").on('select2:select', function (e) {
@@ -722,6 +722,9 @@ $_data["idiomaMenu"] = $idioma;
       dataType: 'json',
       success: function (json) {
         if (json.sucesso && json.moedas.length) {
+          document.getElementById("staking_spinner_div").style.height = "0vh";
+          $("#staking_spinner").hide();
+          $("#show_content").show();
           tokens = json.moedas;
           tokens.forEach(element => {
             option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
@@ -750,7 +753,7 @@ $_data["idiomaMenu"] = $idioma;
 
           carregarSaldo($("#cryptoFrom").val());
         } else {
-          $("#noCoinsModal").modal("show");
+          $("#noCoinCard").show();
           showNotyAlert("Sem moedas na carteira, primeiro adquira moedas!", "e");
         }
       }
@@ -760,7 +763,7 @@ $_data["idiomaMenu"] = $idioma;
   async function fetchTxs(page) {
     const update = {
       contract_address: token[0].contract_address,
-      user_id: user_id
+      user_id: <?php echo json_encode($cliente->id) ?>
     };
 
     const options = {
@@ -780,7 +783,6 @@ $_data["idiomaMenu"] = $idioma;
       const pagination = document.getElementById("pagination");
       tBody_tx.innerHTML = "";
       pagination.innerHTML = "";
-      console.log(tx)
       if (tx.length) {
         for (i = 0; i < tx.length; i++) {
           if (tx[i].staked_coin.simbolo == token[0].simbolo) {
@@ -939,6 +941,7 @@ $_data["idiomaMenu"] = $idioma;
   }
 
   function getCheckReward() {
+    var recompensa = 0;
     $.ajax({
       url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_CHECK_REWARD ?>",
       method: "POST",
@@ -947,7 +950,20 @@ $_data["idiomaMenu"] = $idioma;
         contract_address: token[0].contract_address
       },
       success: function (json) {
+        recompensa = json.valor;
         $('.reward_amount').html(fixDecimals(json.valor, token[0].decimal));
+      }
+    });
+
+    $.ajax({
+      url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_CHECK_ACCUMULATED_REWARD ?>",
+      method: "POST",
+      dataType: 'json',
+      data: {
+        contract_address: token[0].contract_address
+      },
+      success: function (json) {
+        $('.accumulated_amount').html(fixDecimals(json.valor - recompensa, token[0].decimal));
       }
     });
   }
@@ -1065,7 +1081,7 @@ $_data["idiomaMenu"] = $idioma;
     fetchTxs()
     getStakedBalance()
     getCheckReward()
-    getCheckAccumulatedReward()
+    // getCheckAccumulatedReward()
   }
 
 </script>

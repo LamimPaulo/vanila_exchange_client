@@ -169,9 +169,9 @@ $_data["idiomaMenu"] = $idioma;
                       </span>
                       <span class="fs-20 d-block font-weight-bold"><span class="balance-hidden">****</span><span
                           class="balance-visible" id="total-balance">
-                            <div class="spinner-border spinner-border-sm text-primary" role="status">
-                              <span class="sr-only">Loading...</span>
-                            </div>
+                          <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                          </div>
                         </span></span>
                       <span id="current-date"></span>
                     </div>
@@ -256,7 +256,8 @@ $_data["idiomaMenu"] = $idioma;
                               Rendimento
                             </span>
                             <span class="text-success">
-                              <span class="balance-hidden">****</span><span class="balance-visible" id="rendimento_valor">
+                              <span class="balance-hidden">****</span><span class="balance-visible"
+                                id="rendimento_valor">
                                 <div class="spinner-border spinner-border-sm text-primary" role="status">
                                   <span class="sr-only">Loading...</span>
                                 </div>
@@ -268,7 +269,8 @@ $_data["idiomaMenu"] = $idioma;
                               Rentabilidade
                             </span>
                             <span class="text-success">
-                              <span class="balance-hidden">****</span><span class="balance-visible" id="rentabilidade_percent">
+                              <span class="balance-hidden">****</span><span class="balance-visible"
+                                id="rentabilidade_percent">
                                 <div class="spinner-border spinner-border-sm text-primary" role="status">
                                   <span class="sr-only">Loading...</span>
                                 </div>
@@ -1099,6 +1101,32 @@ $_data["idiomaMenu"] = $idioma;
       return num / 100;
     }
 
+    const getProventosData = async () => {
+      const update = {
+        user_id: <?php echo json_encode($cliente->id) ?>
+      };
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(update),
+      };
+      const data = await fetchData('https://sandbox.coinage.trade/api/priv/staking/proventos', options);
+      console.log("Proventos: ",data)
+      // data.forEach(e => {
+      //   performanceGraphData.push({
+      //     "date": new Date(e.label),
+      //     "ativo": formatPercent(e.wallet),
+      //     "cdi": formatPercent(e.cdi),
+      //     "ipca": formatPercent(e.ipca),
+      //     "selic": formatPercent(e.selic)
+      //   })
+      // });
+    }
+    // getProventosData()
+
     var performanceGraphData = [];
     var ativoGraphData = [];
 
@@ -1314,7 +1342,7 @@ $_data["idiomaMenu"] = $idioma;
     handleVisibility()
   }
 
-  function checkVisibility(){
+  function checkVisibility() {
     balanceVisibility == "true" ? balanceVisibility = "false" : balanceVisibility = "true";
     handleVisibility()
   }
