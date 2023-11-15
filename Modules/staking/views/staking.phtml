@@ -734,7 +734,6 @@ $_data["idiomaMenu"] = $idioma;
           token = json.moedas.filter(t => t.simbolo === nome[0])
           $('.nome_moeda').html(token[0].nome);
           $('.symbol_moeda').html(token[0].simbolo);
-
           const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
           $('#reward_period').html(" em <b>" + tokenReward + "</b>");
           saldo = token[0].saldo_disponivel;
@@ -1074,6 +1073,8 @@ $_data["idiomaMenu"] = $idioma;
     $('.symbol_moeda').html(nome[0]);
     saldo = token[0].saldo_disponivel;
     $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0].decimal));
+    const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
+    $('#reward_period').html(" em <b>" + tokenReward + "</b>");
     getCurrentApm(token[0]);
 
     $("#stake_input").val("");
