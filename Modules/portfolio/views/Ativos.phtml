@@ -837,6 +837,7 @@ $_data["idiomaMenu"] = $idioma;
 
   $.getJSON("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/jsonPortfolio?user=<?php echo $cliente->id ?>", function (parsed_data) {
 
+    
     walletData = parsed_data;
 
   }).then(function () {
@@ -1091,8 +1092,8 @@ $_data["idiomaMenu"] = $idioma;
     const totalBalance = () => {
       total = 0;
       if (walletData['series']) {
-        walletData['series'].forEach(element => {
-          total = element + total;
+        walletData['series'].forEach(e => {
+          total = parseFloat(e) + total;
         });
       }
       return total;
@@ -1105,7 +1106,7 @@ $_data["idiomaMenu"] = $idioma;
       if (walletData['series']) {
         walletData['series'].forEach((e, i) => {
           if (i > 0) {
-            total = e + total;
+            total = parseFloat(e) + total;
           }
         });
       }
@@ -1306,6 +1307,8 @@ $_data["idiomaMenu"] = $idioma;
 
     handleProventos();
 
+    console.log(walletData)
+
     handlePieChart("dashboard-chart", noInvestedFunds() == true ? dadosZeradosPie : dadosPie);
     handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);
     handleRadialChart("pie-renda-chart", pieChartPercent(portfolio_rendaBalance).toFixed(1), "yellow", 50, 14);
@@ -1324,12 +1327,13 @@ $_data["idiomaMenu"] = $idioma;
     document.getElementById('startups-balance').innerHTML = portfolio_startupsBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     document.getElementById('current-date').innerHTML = currentDate();
     document.getElementById('total-balance').innerHTML = totalBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('available-balance').innerHTML = walletData['series'][0] ? walletData['series'][0].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : "R$ 0,00";
+    document.getElementById('available-balance').innerHTML = walletData['series'][0] ? parseFloat(walletData['series'][0]).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : "R$ 0,00";
     document.getElementById('invested-balance').innerHTML = investedBalance().toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     document.getElementById("market-radio-toggler").addEventListener("click", handleChangePosition);
     document.getElementById("curve-radio-toggler").addEventListener("click", handleChangePosition);
     document.getElementById("market-radio").addEventListener("click", handleRadioIcon);
     document.getElementById("curve-radio").addEventListener("click", handleRadioIcon);
+    console.log(projectedBalance)
     document.getElementById('projected-balance').innerHTML = projectedBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const vPortfolio = document.getElementById('visualizar-portfolio');
     vPortfolio.addEventListener("click", () => {
