@@ -22,111 +22,6 @@ window.addEventListener('resize', () => {
     }, 1000);
 });
 
-
-const proventos_data = [
-    {
-        "ativo": "BTC",
-        "ganho": 0.0009,
-        "cbrl_price": 144755.6,
-        "data": "19/10/2023"
-    },
-    {
-        "ativo": "BTC",
-        "ganho": 0.00012,
-        "cbrl_price": 144755.6,
-        "data": "19/10/2023"
-    },
-    {
-        "ativo": "FTR",
-        "ganho": 5,
-        "cbrl_price": 1,
-        "data": "19/10/2023"
-    },
-    {
-        "ativo": "BTC",
-        "ganho": 0.0007,
-        "cbrl_price": 144755.6,
-        "data": "18/10/2023"
-    },
-    {
-        "ativo": "BTC",
-        "ganho": 0.0009,
-        "cbrl_price": 144755.6,
-        "data": "18/10/2023"
-    },
-    {
-        "ativo": "FTR",
-        "ganho": 15,
-        "cbrl_price": 1,
-        "data": "18/10/2023"
-    },
-    {
-        "ativo": "BTC",
-        "ganho": 0.00025,
-        "cbrl_price": 144755.6,
-        "data": "15/10/2023"
-    },
-    {
-        "ativo": "ETH",
-        "ganho": 0.0021,
-        "cbrl_price": 7898.57,
-        "data": "15/10/2023"
-    },
-    {
-        "ativo": "ETH",
-        "ganho": 0.0012,
-        "cbrl_price": 7898.57,
-        "data": "12/10/2023"
-    },
-    {
-        "ativo": "BTC",
-        "ganho": 0.00053,
-        "cbrl_price": 144755.6,
-        "data": "11/10/2023"
-    },
-    {
-        "ativo": "FTR",
-        "ganho": 24,
-        "cbrl_price": 1,
-        "data": "10/10/2023"
-    },
-    {
-        "ativo": "FTR",
-        "ganho": 9,
-        "cbrl_price": 1,
-        "data": "10/10/2023"
-    },
-    {
-        "ativo": "BTC",
-        "ganho": 0.00048,
-        "cbrl_price": 144755.6,
-        "data": "05/10/2023"
-    },
-];
-
-const handleProventos = () => {
-    let p = proventos_data;
-    var html = "";
-    var total = 0;
-    for(i=0; i < p.length; i++){
-        var price = p[i].ganho * p[i].cbrl_price;
-        total = total + price;
-        html += `<tr>
-                    <td><img class="symbol" src="assets/img/icon/${p[i].ativo}.png" alt="symbol"></td>
-                    <td><span class="theme-color">${p[i].ativo}</span></td>
-                    <td><span class="balance-hidden">****</span><span
-                    class="balance-visible text-success">${p[i].ganho}</span>
-                    </td>
-                    <td><span class="balance-hidden">****</span><span
-                    class="balance-visible text-success">${price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
-                    </td>
-                    <td>${p[i].data}</td>
-                </tr>`
-    }
-    document.getElementById("proventos-items").innerHTML = html;
-    document.getElementById("proventos-balance").innerHTML = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
-
 async function fetchData() {
   try {
     const response = await fetch("https://brasilapi.com.br/api/taxas/v1");
@@ -174,6 +69,5 @@ const performanceData = async () => {
 }
 
 performanceData();
-handleProventos()
 
 

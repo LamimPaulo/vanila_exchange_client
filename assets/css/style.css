@@ -4063,6 +4063,10 @@ button.dim:active:before {
   .markets-capital-item {
     height: 304px;
   }
+
+  #token_options {
+    margin-top: 30px;
+  }
 }
 @media only screen and (max-width: 576px) {
   .markets-capital-item {

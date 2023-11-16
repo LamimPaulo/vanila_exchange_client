@@ -683,6 +683,152 @@ $_data["idiomaMenu"] = $idioma;
   var walletData = "";
   var projectedBalance = 0;
 
+  function formatPercent(num) {
+    return num / 100;
+  }
+
+  const token_data = (symbol) => [
+    {
+      "field": "ativo",
+      "name": symbol,
+      "color": "blue",
+      "dashed": true
+    },
+    {
+      "field": "cdi",
+      "name": "CDI",
+      "color": "orange",
+      "dashed": false
+    },
+    {
+      "field": "ipca",
+      "name": "IPCA",
+      "color": "green",
+      "dashed": false
+    },
+    {
+      "field": "selic",
+      "name": "Selic",
+      "color": "black",
+      "dashed": false
+    }
+  ];
+
+  const handleDivergentLinesChart = (id, data, series) => {
+    am4core.ready(function () {
+
+      // License begin
+      am4core.addLicense("ch-custom-attribution");
+      // License end
+
+      // Themes begin
+      am4core.useTheme(am4themes_animated);
+      // Themes end
+
+      // Create chart instance(2023
+      var chart = am4core.create(id, am4charts.XYChart);
+
+      chart.numberFormatter.language.locale = am4lang_pt_BR;
+      chart.dateFormatter.dateFormat = "MMM YYYY";
+      chart.numberFormatter.numberFormat = "#.##%";
+
+      // Chart title
+      var title = chart.titles.create();
+      // title.text = "Projected infection dynamics";
+      title.fontSize = 20;
+      title.paddingBottom = 10;
+
+      // Add data
+      chart.data = data;
+
+      // Create axes
+      var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+      dateAxis.renderer.grid.template.location = 0;
+      dateAxis.renderer.minGridDistance = 30;
+
+      var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      valueAxis.renderer.inside = true;
+      valueAxis.renderer.labels.template.verticalCenter = "bottom";
+      valueAxis.renderer.labels.template.dx = -5;
+      valueAxis.renderer.labels.template.dy = 10;
+      valueAxis.renderer.maxLabelPosition = 0.95;
+      // valueAxis.title.text = "Number of infections";
+      valueAxis.title.marginRight = 5;
+
+      // Create series
+      function createSeries(field, name, color, dashed) {
+        var series = chart.series.push(new am4charts.LineSeries());
+        series.dataFields.valueY = field;
+        series.dataFields.dateX = "date";
+        series.name = name;
+        series.tooltipText = "[bold]{name}[/]\n{dateX}: [b]{valueY}[/]";
+        series.strokeWidth = 2;
+        series.smoothing = "monotoneX";
+        series.stroke = color;
+
+        if (dashed) {
+          series.strokeDasharray = "5 3";
+        }
+
+        return series;
+      }
+
+      series.forEach((e, i) => {
+        createSeries(series[i].field, series[i].name, am4core.color(series[i].color), series[i].dashed);
+      });
+
+      chart.legend = new am4charts.Legend();
+      chart.cursor = new am4charts.XYCursor();
+
+    }); // end am4core.ready()
+  }
+  var performanceGraphData = [];
+
+  async function fetchDataPerformance(user_id) {
+    try {
+      const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user=" + user_id);
+      const fData = await response.json();
+      const data = Object.keys(fData.scope).map(key => fData.scope[key]);
+      data.forEach((e, i) => {
+        performanceGraphData.push({
+          "date": new Date(e.label),
+          "ativo": formatPercent(e.wallet * 1),
+          "cdi": formatPercent(e.cdi),
+          "ipca": formatPercent(e.ipca),
+          "selic": formatPercent(e.selic)
+        })
+      });
+      handleDivergentLinesChart("performance-chart", performanceGraphData, token_data("Carteira"));
+      return data;
+    } catch (error) {
+      console.error(`Data error: ${error.message}`);
+    }
+  }
+
+  fetchDataPerformance(<?php echo $cliente->id ?>)
+
+  async function fetchDataToken(user_id, token) {
+    try {
+      const response = await fetch("https://sandbox.coinage.trade/api/priv/coin/monthly?user=" + user_id + "&abbr=" + token);
+      const fData = await response.json();
+      const data = Object.keys(fData.scope).map(key => fData.scope[key]);
+      // console.log(data)
+      return data;
+    } catch (error) {
+      console.error(`Data error: ${error.message}`);
+    }
+  }
+
+  const callAtivoData = async (token) => {
+    const data = await fetchDataToken("<?php echo $cliente->id ?>", token.toLowerCase())
+    var graphData = performanceGraphData;
+    graphData.forEach((e, i) => {
+      graphData[i].ativo = formatPercent(data[i].wallet);
+    });
+    // console.log(graphData)
+    handleDivergentLinesChart(token + "-divergentChart", graphData, token_data(token));
+  }
+
   $.getJSON("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/jsonPortfolio?user=<?php echo $cliente->id ?>", function (parsed_data) {
 
     walletData = parsed_data;
@@ -826,6 +972,7 @@ $_data["idiomaMenu"] = $idioma;
     }
     if (walletData.position.length > 0) {
       for (var j = 0; j < walletData['position'].length; j++) {
+        callAtivoData(walletData['labels'][j + 1])
         walletHtml += headerWalletHtml(j) + `
                           <div id="collapse-${walletData['labels'][j + 1]}" class="collapse" aria-labelledby="heading-${walletData['labels'][j + 1]}"
                             data-parent="#wallet-accordion">
@@ -898,22 +1045,35 @@ $_data["idiomaMenu"] = $idioma;
                           </div>
                         </div>`;
       }
-      for (var j = 0; j < walletData['position'].length - 1; j++) {
-        portfolio_cryptoBalance += walletData['series'][j + 1];
-        portfolio_cryptoHtml += headerHtml(j) + bodyHtml("crypto", j);
+      for (var j = 0; j < walletData['position'].length; j++) {
+
+        switch (walletData['position'][j].coin_category) {
+          case 1:
+            portfolio_cryptoBalance += walletData['series'][j + 1];
+            portfolio_cryptoHtml += headerHtml(j) + bodyHtml("crypto", j);
+
+            break;
+          case 2:
+            portfolio_rendaBalance += walletData['series'][j + 1];
+            portfolio_rendaHtml += headerHtml(j) + bodyHtml("renda", j);
+
+            break;
+          case 3:
+            portfolio_utilityBalance += walletData['series'][j + 1];
+            portfolio_utilityHtml += headerHtml(j) + bodyHtml("utility", j);
+
+            break;
+          case 4:
+            portfolio_startupsBalance += walletData['series'][j + 1];
+            portfolio_startupsHtml += headerHtml(j) + bodyHtml("startups", j);
+
+            break;
+
+          default:
+            break;
+        }
       }
-      for (var j = 4; j < walletData['position'].length; j++) {
-        portfolio_rendaBalance += walletData['series'][j + 1];
-        portfolio_rendaHtml += headerHtml(j) + bodyHtml("renda", j);
-      }
-      for (var j = 5; j < walletData['position'].length; j++) {
-        portfolio_utilityBalance += walletData['series'][j + 1];
-        portfolio_utilityHtml += headerHtml(j) + bodyHtml("utility", j);
-      }
-      for (var j = 5; j < walletData['position'].length; j++) {
-        portfolio_startupsBalance += walletData['series'][j + 1];
-        portfolio_startupsHtml += headerHtml(j) + bodyHtml("startups", j);
-      }
+
     } else {
       walletHtml = '<p>Nenhuma posição encontrada</p>';
       portfolio_cryptoHtml = '<p>Nenhuma posição encontrada</p>';
@@ -1035,16 +1195,7 @@ $_data["idiomaMenu"] = $idioma;
       }); // end am4core.ready()
     }
 
-    async function fetchData(user_id) {
-      try {
-        const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user=" + user_id);
-        const fData = await response.json();
-        const data = Object.keys(fData.scope).map(key => fData.scope[key]);
-        return data;
-      } catch (error) {
-        console.error(`Data error: ${error.message}`);
-      }
-    }
+
 
     // Mudar seleção entre radios
     const handleRadioIcon = ({ target }) => {
@@ -1097,173 +1248,138 @@ $_data["idiomaMenu"] = $idioma;
       }
     }
 
-    function formatPercent(num) {
-      return num / 100;
-    }
+    // const proventos_data = [
+    //   {
+    //     "ativo": "BTC",
+    //     "ganho": 0.0009,
+    //     "cbrl_price": 144755.6,
+    //     "data": "19/10/2023"
+    //   },
+    //   {
+    //     "ativo": "BTC",
+    //     "ganho": 0.00012,
+    //     "cbrl_price": 144755.6,
+    //     "data": "19/10/2023"
+    //   },
+    //   {
+    //     "ativo": "FTR",
+    //     "ganho": 5,
+    //     "cbrl_price": 1,
+    //     "data": "19/10/2023"
+    //   },
+    //   {
+    //     "ativo": "BTC",
+    //     "ganho": 0.0007,
+    //     "cbrl_price": 144755.6,
+    //     "data": "18/10/2023"
+    //   },
+    //   {
+    //     "ativo": "BTC",
+    //     "ganho": 0.0009,
+    //     "cbrl_price": 144755.6,
+    //     "data": "18/10/2023"
+    //   },
+    //   {
+    //     "ativo": "FTR",
+    //     "ganho": 15,
+    //     "cbrl_price": 1,
+    //     "data": "18/10/2023"
+    //   },
+    //   {
+    //     "ativo": "BTC",
+    //     "ganho": 0.00025,
+    //     "cbrl_price": 144755.6,
+    //     "data": "15/10/2023"
+    //   },
+    //   {
+    //     "ativo": "ETH",
+    //     "ganho": 0.0021,
+    //     "cbrl_price": 7898.57,
+    //     "data": "15/10/2023"
+    //   },
+    //   {
+    //     "ativo": "ETH",
+    //     "ganho": 0.0012,
+    //     "cbrl_price": 7898.57,
+    //     "data": "12/10/2023"
+    //   },
+    //   {
+    //     "ativo": "BTC",
+    //     "ganho": 0.00053,
+    //     "cbrl_price": 144755.6,
+    //     "data": "11/10/2023"
+    //   },
+    //   {
+    //     "ativo": "FTR",
+    //     "ganho": 24,
+    //     "cbrl_price": 1,
+    //     "data": "10/10/2023"
+    //   },
+    //   {
+    //     "ativo": "FTR",
+    //     "ganho": 9,
+    //     "cbrl_price": 1,
+    //     "data": "10/10/2023"
+    //   },
+    //   {
+    //     "ativo": "BTC",
+    //     "ganho": 0.00048,
+    //     "cbrl_price": 144755.6,
+    //     "data": "05/10/2023"
+    //   },
+    // ];
 
-    const getProventosData = async () => {
-      const update = {
-        user_id: <?php echo json_encode($cliente->id) ?>
-      };
-
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    const handleProventos = () => {
+      $.ajax({
+        url: "https://sandbox.coinage.trade/api/priv/staking/proventos",
+        method: "POST",
+        dataType: 'json',
+        data: {
+          user_id: <?php echo json_encode($cliente->id) ?>
         },
-        body: JSON.stringify(update),
-      };
-      const data = await fetchData('https://sandbox.coinage.trade/api/priv/staking/proventos', options);
-      console.log("Proventos: ",data)
-      // data.forEach(e => {
-      //   performanceGraphData.push({
-      //     "date": new Date(e.label),
-      //     "ativo": formatPercent(e.wallet),
-      //     "cdi": formatPercent(e.cdi),
-      //     "ipca": formatPercent(e.ipca),
-      //     "selic": formatPercent(e.selic)
-      //   })
-      // });
-    }
-    // getProventosData()
+        success: function (json) {
+          var p = [];
+          json.data.forEach(e => {
+            var cbrlValor = 1;
 
-    var performanceGraphData = [];
-    var ativoGraphData = [];
+            walletData['position'].forEach((n, i) => {
+              if (n.name == e.staked_coin.nome) {
+                cbrlValor = n.quote;
+                console.log("Valor em CBRL alterado!")
+              }
+            });
+            p.push({
+              "ativo": e.staked_coin.simbolo,
+              "ganho": parseFloat(e.value),
+              "cbrl_price": cbrlValor,
+              "data": new Date(e.created_at).toLocaleString("pt-BR").trim().split(",")[0]
+            })
+          });
 
-    const callData = async () => {
-      const data = await fetchData("<?php echo $cliente->id ?>")
-      data.forEach(e => {
-        performanceGraphData.push({
-          "date": new Date(e.label),
-          "ativo": formatPercent(e.wallet),
-          "cdi": formatPercent(e.cdi),
-          "ipca": formatPercent(e.ipca),
-          "selic": formatPercent(e.selic)
-        })
-      });
-    }
-
-    callData()
-
-    const callAtivoData = async () => {
-      const data = await fetchData("<?php echo $cliente->id ?>")
-      data.forEach(e => {
-        ativoGraphData.push({
-          "date": new Date(e.label),
-          "ativo": formatPercent(Math.random() * 2 + 0.5),
-          "cdi": formatPercent(e.cdi),
-          "ipca": formatPercent(e.ipca),
-          "selic": formatPercent(e.selic)
-        })
-      });
-    }
-
-    callAtivoData()
-
-    const token_data = (symbol) => [
-      {
-        "field": "ativo",
-        "name": symbol,
-        "color": "blue",
-        "dashed": true
-      },
-      {
-        "field": "cdi",
-        "name": "CDI",
-        "color": "orange",
-        "dashed": false
-      },
-      {
-        "field": "ipca",
-        "name": "IPCA",
-        "color": "green",
-        "dashed": false
-      },
-      {
-        "field": "selic",
-        "name": "Selic",
-        "color": "black",
-        "dashed": false
-      }
-    ];
-
-    const handleDivergentLinesChart = (id, data, series) => {
-      am4core.ready(function () {
-
-        // License begin
-        am4core.addLicense("ch-custom-attribution");
-        // License end
-
-        // Themes begin
-        am4core.useTheme(am4themes_animated);
-        // Themes end
-
-        // Create chart instance(2023
-        var chart = am4core.create(id, am4charts.XYChart);
-
-        chart.numberFormatter.language.locale = am4lang_pt_BR;
-        chart.dateFormatter.dateFormat = "MMM YYYY";
-        chart.numberFormatter.numberFormat = "#.##%";
-
-        // Chart title
-        var title = chart.titles.create();
-        // title.text = "Projected infection dynamics";
-        title.fontSize = 20;
-        title.paddingBottom = 10;
-
-        // Add data
-        chart.data = data;
-
-        // Create axes
-        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-        dateAxis.renderer.grid.template.location = 0;
-        dateAxis.renderer.minGridDistance = 30;
-
-        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxis.renderer.inside = true;
-        valueAxis.renderer.labels.template.verticalCenter = "bottom";
-        valueAxis.renderer.labels.template.dx = -5;
-        valueAxis.renderer.labels.template.dy = 10;
-        valueAxis.renderer.maxLabelPosition = 0.95;
-        // valueAxis.title.text = "Number of infections";
-        valueAxis.title.marginRight = 5;
-
-        // Create series
-        function createSeries(field, name, color, dashed) {
-          var series = chart.series.push(new am4charts.LineSeries());
-          series.dataFields.valueY = field;
-          series.dataFields.dateX = "date";
-          series.name = name;
-          series.tooltipText = "[bold]{name}[/]\n{dateX}: [b]{valueY}[/]";
-          series.strokeWidth = 2;
-          series.smoothing = "monotoneX";
-          series.stroke = color;
-
-          if (dashed) {
-            series.strokeDasharray = "5 3";
+          var html = "";
+          var total = 0;
+          for (i = 0; i < p.length; i++) {
+            var price = p[i].ganho * p[i].cbrl_price;
+            total = total + price;
+            html += `<tr class="">
+                    <td><img class="symbol" src="assets/img/icon/${p[i].ativo}.png" alt="symbol"></td>
+                    <td class="align-middle"><span class="theme-color">${p[i].ativo}</span></td>
+                    <td class="align-middle"><span class="balance-hidden">****</span><span
+                    class="balance-visible text-success">${p[i].ganho.toFixed(4)}</span>
+                    </td>
+                    <td class="align-middle"><span class="balance-hidden">****</span><span
+                    class="balance-visible text-success">${price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                    </td>
+                    <td class="align-middle">${p[i].data}</td>
+                </tr>`
           }
-
-          return series;
+          document.getElementById("proventos-items").innerHTML = html;
+          document.getElementById("proventos-balance").innerHTML = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
-
-        series.forEach((e, i) => {
-          createSeries(series[i].field, series[i].name, am4core.color(series[i].color), series[i].dashed);
-        });
-
-        chart.legend = new am4charts.Legend();
-        chart.cursor = new am4charts.XYCursor();
-
-      }); // end am4core.ready()
+      });
     }
 
-    setTimeout(() => {
-      handleDivergentLinesChart("performance-chart", performanceGraphData, token_data("Carteira"));
-      handleDivergentLinesChart("BTC-divergentChart", ativoGraphData, token_data("BTC"));
-      handleDivergentLinesChart("ETH-divergentChart", ativoGraphData, token_data("ETH"));
-      handleDivergentLinesChart("USDT-divergentChart", ativoGraphData, token_data("USDT"));
-      handleDivergentLinesChart("BNB-divergentChart", ativoGraphData, token_data("BNB"));
-      handleDivergentLinesChart("FTR-divergentChart", ativoGraphData, token_data("FTR"));
-    }, "1000");
+    handleProventos();
 
     handlePieChart("dashboard-chart", noInvestedFunds() == true ? dadosZeradosPie : dadosPie);
     handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);

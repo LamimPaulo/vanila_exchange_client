@@ -26,7 +26,6 @@ $paridade = Modules\principal\Controllers\Principal::getParity();
 <script src="<?php echo TEMA; ?>lib/highlight/highlight.pack.js"></script>
 <script src="<?php echo JS; ?>TweenMax.min.js"></script>
 <script src="<?php echo TEMA; ?>js/datatables.js"></script>
-<script src="<?php echo TEMA; ?>js/plugins/sweetalert/sweetalert.min.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="<?php echo TEMA; ?>js/plugins/codemirror/codemirror.js"></script>
@@ -234,14 +233,12 @@ $(document).ready(function () {
             preventDuplicates: true,
             showDuration: 300,
             hideDuration: 1000,
-            timeOut: 5000,
+            timeOut: 3000,
             extendedTimeOut: 1000,
             showEasing: 'swing',
             hideEasing: 'linear',
             showMethod: 'fadeIn',
             hideMethod: 'fadeOut',
-            timeOut: 7500,
-            positionClass: "toast-top-left",
         };
         
         if (tipo === "s") {
