@@ -319,7 +319,8 @@ class CompraVendaDireta {
             $contaCorrenteReaisRn = new \Models\Modules\Cadastro\ContaCorrenteReaisRn();
             $saldos = $contaCorrenteReaisRn->calcularSaldoConta($cliente, true);
             
-            if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
+            // if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
+            if (true) {
 
                 $moeda = \Models\Modules\Cadastro\MoedaRn::get(1);
                 // $stakedBalance = $this->getStakedBalance($moeda, $cliente);
