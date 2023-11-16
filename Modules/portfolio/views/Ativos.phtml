@@ -782,30 +782,37 @@ $_data["idiomaMenu"] = $idioma;
 
     }); // end am4core.ready()
   }
-  var performanceGraphData = [];
-
-  async function fetchDataPerformance(user_id) {
+  var generalData = [];
+  async function fetchDataPerformance() {
     try {
-      const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user=" + user_id);
+      const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user=" + <?php echo $cliente->id ?>);
       const fData = await response.json();
       const data = Object.keys(fData.scope).map(key => fData.scope[key]);
+      var performanceGraphData = [];
       data.forEach((e, i) => {
         performanceGraphData.push({
-          "date": new Date(e.label),
-          "ativo": formatPercent(e.wallet * 1),
-          "cdi": formatPercent(e.cdi),
-          "ipca": formatPercent(e.ipca),
+        "date": new Date(e.label),
+        "ativo": formatPercent(e.wallet * 1),
+        "cdi": formatPercent(e.cdi),
+        "ipca": formatPercent(e.ipca),
+          "selic": formatPercent(e.selic)
+        })
+        generalData.push({
+        "date": new Date(e.label),
+        "ativo": formatPercent(e.wallet * 1),
+        "cdi": formatPercent(e.cdi),
+        "ipca": formatPercent(e.ipca),
           "selic": formatPercent(e.selic)
         })
       });
       handleDivergentLinesChart("performance-chart", performanceGraphData, token_data("Carteira"));
-      return data;
+      console.log(performanceGraphData)
     } catch (error) {
       console.error(`Data error: ${error.message}`);
     }
   }
 
-  fetchDataPerformance(<?php echo $cliente->id ?>)
+  fetchDataPerformance()
 
   async function fetchDataToken(user_id, token) {
     try {
@@ -821,12 +828,12 @@ $_data["idiomaMenu"] = $idioma;
 
   const callAtivoData = async (token) => {
     const data = await fetchDataToken("<?php echo $cliente->id ?>", token.toLowerCase())
-    var graphData = performanceGraphData;
-    graphData.forEach((e, i) => {
-      graphData[i].ativo = formatPercent(data[i].wallet);
+
+    generalData.forEach((e, i) => {
+      generalData[i].ativo = formatPercent(data[i].wallet);
     });
     // console.log(graphData)
-    handleDivergentLinesChart(token + "-divergentChart", graphData, token_data(token));
+    handleDivergentLinesChart(token + "-divergentChart", generalData, token_data(token));
   }
 
   $.getJSON("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/jsonPortfolio?user=<?php echo $cliente->id ?>", function (parsed_data) {
@@ -1247,87 +1254,6 @@ $_data["idiomaMenu"] = $idioma;
         projectedBalanceValue.innerHTML = projectedBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
       }
     }
-
-    // const proventos_data = [
-    //   {
-    //     "ativo": "BTC",
-    //     "ganho": 0.0009,
-    //     "cbrl_price": 144755.6,
-    //     "data": "19/10/2023"
-    //   },
-    //   {
-    //     "ativo": "BTC",
-    //     "ganho": 0.00012,
-    //     "cbrl_price": 144755.6,
-    //     "data": "19/10/2023"
-    //   },
-    //   {
-    //     "ativo": "FTR",
-    //     "ganho": 5,
-    //     "cbrl_price": 1,
-    //     "data": "19/10/2023"
-    //   },
-    //   {
-    //     "ativo": "BTC",
-    //     "ganho": 0.0007,
-    //     "cbrl_price": 144755.6,
-    //     "data": "18/10/2023"
-    //   },
-    //   {
-    //     "ativo": "BTC",
-    //     "ganho": 0.0009,
-    //     "cbrl_price": 144755.6,
-    //     "data": "18/10/2023"
-    //   },
-    //   {
-    //     "ativo": "FTR",
-    //     "ganho": 15,
-    //     "cbrl_price": 1,
-    //     "data": "18/10/2023"
-    //   },
-    //   {
-    //     "ativo": "BTC",
-    //     "ganho": 0.00025,
-    //     "cbrl_price": 144755.6,
-    //     "data": "15/10/2023"
-    //   },
-    //   {
-    //     "ativo": "ETH",
-    //     "ganho": 0.0021,
-    //     "cbrl_price": 7898.57,
-    //     "data": "15/10/2023"
-    //   },
-    //   {
-    //     "ativo": "ETH",
-    //     "ganho": 0.0012,
-    //     "cbrl_price": 7898.57,
-    //     "data": "12/10/2023"
-    //   },
-    //   {
-    //     "ativo": "BTC",
-    //     "ganho": 0.00053,
-    //     "cbrl_price": 144755.6,
-    //     "data": "11/10/2023"
-    //   },
-    //   {
-    //     "ativo": "FTR",
-    //     "ganho": 24,
-    //     "cbrl_price": 1,
-    //     "data": "10/10/2023"
-    //   },
-    //   {
-    //     "ativo": "FTR",
-    //     "ganho": 9,
-    //     "cbrl_price": 1,
-    //     "data": "10/10/2023"
-    //   },
-    //   {
-    //     "ativo": "BTC",
-    //     "ganho": 0.00048,
-    //     "cbrl_price": 144755.6,
-    //     "data": "05/10/2023"
-    //   },
-    // ];
 
     const handleProventos = () => {
       $.ajax({
