@@ -547,11 +547,7 @@ $_data["idiomaMenu"] = $idioma;
 
                               </tbody>
                             </table>
-                            <div class="d-flex mt-3 justify-content-center">
-                              <nav aria-label="Page navigation example">
-                                <ul class="pagination" id="proventos_pagination"></ul>
-                              </nav>
-                            </div>
+                            <div id="pagination" class="d-flex justify-content-center mt-3"></div>
                           </div>
                         </div>
                       </div>
@@ -1301,13 +1297,27 @@ $_data["idiomaMenu"] = $idioma;
           }
           document.getElementById("proventos-items").innerHTML = html;
           document.getElementById("proventos-balance").innerHTML = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+          const pagination = document.getElementById("pagination");
+
+          var pages = "";
+          for (const item of json.links) {
+            const active = item.active == true ? "active" : "";
+            const url = item.url == null ? "" : item.label == "&laquo; Anterior" ? data.current_page - 1 :
+              item.label == "Próximo &raquo;" ? data.current_page + 1 : item.label;
+            const disabled = item.url == null ? "disabled" : "";
+            pages += '<li class="page-item ' + active + ' ' + disabled +
+              '"><a class="page-link" href="javascript:fetchTxs(' + url + ');">' + item.label +
+              '</a></li>'
+          }
+          const paginationHTML =
+            '<nav class="mx-auto" aria-label="Page navigation example"><ul class="pagination">' + pages +
+            '</ul></nav>';
+          pagination.innerHTML = paginationHTML;
         }
       });
     }
 
     handleProventos();
-
-    console.log(walletData)
 
     handlePieChart("dashboard-chart", noInvestedFunds() == true ? dadosZeradosPie : dadosPie);
     handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);
@@ -1333,7 +1343,6 @@ $_data["idiomaMenu"] = $idioma;
     document.getElementById("curve-radio-toggler").addEventListener("click", handleChangePosition);
     document.getElementById("market-radio").addEventListener("click", handleRadioIcon);
     document.getElementById("curve-radio").addEventListener("click", handleRadioIcon);
-    console.log(projectedBalance)
     document.getElementById('projected-balance').innerHTML = projectedBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const vPortfolio = document.getElementById('visualizar-portfolio');
     vPortfolio.addEventListener("click", () => {
