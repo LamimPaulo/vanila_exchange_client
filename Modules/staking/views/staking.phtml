@@ -393,17 +393,17 @@ $_data["idiomaMenu"] = $idioma;
             </div>
           </div>
           <h4 class="mt-5">Histórico</h4>
-          <!-- <div class="row justify-content-end">
+          <div class="row justify-content-start">
             <div class="col-lg-6 mt-3">
               <span class="d-block font-weight-lighter">ATIVIDADE</span>
               <div>
-                <button class="btn btn-sm btn-primary mt-1">Todas</button>
-                <button class="btn btn-sm btn-white mt-1">Staking</button>
-                <button class="btn btn-sm btn-white mt-1">Recompensas</button>
-                <button class="btn btn-sm btn-white mt-1">Resgate</button>
+                <button class="btn btn-sm btn-primary mt-1" id="filterBtn0">Todas</button>
+                <button class="btn btn-sm btn-white mt-1" id="filterBtn1">Staking</button>
+                <button class="btn btn-sm btn-white mt-1" id="filterBtn2">Recompensas</button>
+                <button class="btn btn-sm btn-white mt-1" id="filterBtn3">Resgate</button>
               </div>
             </div>
-            <div class="col-lg-6 mt-3">
+            <!-- <div class="col-lg-6 mt-3">
               <span class="d-block font-weight-lighter">STATUS</span>
               <div>
                 <button class="btn btn-sm btn-primary mt-1">Todos</button>
@@ -411,8 +411,8 @@ $_data["idiomaMenu"] = $idioma;
                 <button class="btn btn-sm btn-white mt-1">Processando</button>
                 <button class="btn btn-sm btn-white mt-1">Erro</button>
               </div>
-            </div>
-          </div> -->
+            </div> -->
+          </div>
           <table class="mt-4 table settings text-center" id="table-staking">
             <thead class="bg-light">
               <tr>
@@ -659,7 +659,6 @@ $_data["idiomaMenu"] = $idioma;
   });
 </script>
 <script>
-  var uxsxrxixd = <?php echo json_encode($cliente->id) ?>;
   var url_staking_balance = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_BALANCE ?>";
   var url_staking_stake = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_STAKE ?>";
   var url_staking_unstake = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_UNSTAKE ?>";
@@ -770,7 +769,6 @@ $_data["idiomaMenu"] = $idioma;
       method: "POST",
       dataType: 'json',
       success: function (json) {
-        console.log(json)
         if (json.sucesso && json.moedas.length) {
           document.getElementById("staking_spinner_div").style.height = "0vh";
           $("#staking_spinner").hide();
@@ -814,10 +812,11 @@ $_data["idiomaMenu"] = $idioma;
     });
   });
 
-  async function fetchTxs(page) {
+  async function fetchTxs(page, type) {
     const update = {
       contract_address: token[0].contract_address,
-      user_id: uxsxrxixd
+      user_id: <?php echo json_encode($cliente->id) ?>,
+      type: type
     };
 
     const options = {
@@ -833,6 +832,7 @@ $_data["idiomaMenu"] = $idioma;
         options);
       const data = await response.json();
       const tx = data.data;
+
       var tBodyHtml = "";
       const tBody_tx = document.getElementById("transactions_table");
       const pagination = document.getElementById("pagination");
@@ -1087,10 +1087,44 @@ $_data["idiomaMenu"] = $idioma;
 
     $("#stake_input").val("");
     $("#resgate_input").val("");
-    fetchTxs()
+    fetchTxs(1,0)
     getStakedBalance()
     getCheckReward()
   }
+
+  const fBtn0 = document.getElementById("filterBtn0");
+  const fBtn1 = document.getElementById("filterBtn1");
+  const fBtn2 = document.getElementById("filterBtn2");
+  const fBtn3 = document.getElementById("filterBtn3");
+  fBtn0.onclick = () => {
+    fBtn0.className = "btn btn-sm btn-primary mt-1";
+    fBtn1.className = "btn btn-sm btn-white mt-1"
+    fBtn2.className = "btn btn-sm btn-white mt-1"
+    fBtn3.className = "btn btn-sm btn-white mt-1"
+    fetchTxs(1,0);
+  }
+  fBtn1.onclick = () => {
+    fBtn0.className = "btn btn-sm btn-white mt-1";
+    fBtn1.className = "btn btn-sm btn-primary mt-1"
+    fBtn2.className = "btn btn-sm btn-white mt-1"
+    fBtn3.className = "btn btn-sm btn-white mt-1"
+    fetchTxs(1,1);
+  }
+  fBtn2.onclick = () => {
+    fBtn0.className = "btn btn-sm btn-white mt-1";
+    fBtn1.className = "btn btn-sm btn-white mt-1"
+    fBtn2.className = "btn btn-sm btn-primary mt-1"
+    fBtn3.className = "btn btn-sm btn-white mt-1"
+    fetchTxs(1,2);
+  }
+  fBtn3.onclick = () => {
+    fBtn0.className = "btn btn-sm btn-white mt-1";
+    fBtn1.className = "btn btn-sm btn-white mt-1"
+    fBtn2.className = "btn btn-sm btn-white mt-1"
+    fBtn3.className = "btn btn-sm btn-primary mt-1"
+    fetchTxs(1,3);
+  }
+
 </script>
 
 <script>
