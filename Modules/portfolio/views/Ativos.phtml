@@ -608,7 +608,7 @@ $_data["idiomaMenu"] = $idioma;
                   <th scope="col">Semestre</th>
                   <th scope="col">No ano</th>
                   <th scope="col">12 meses</th>
-                  <th scope="col">Desde o início</th>
+                  <!-- <th scope="col">Desde o início</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -618,7 +618,7 @@ $_data["idiomaMenu"] = $idioma;
                   <td>0,00%</td>
                   <td>0,00%</td>
                   <td>0,00%</td>
-                  <td>0,00%</td>
+                  <!-- <td>0,00%</td> -->
                 </tr>
                 <tr>
                   <th scope="row">CDI</th>
@@ -626,7 +626,7 @@ $_data["idiomaMenu"] = $idioma;
                   <td id="cdi-sem">0,00%</td>
                   <td id="cdi-ano">0,00%</td>
                   <td id="cdi-12m">0,00%</td>
-                  <td id="cdi-ini">0,00%</td>
+                  <!-- <td id="cdi-ini">0,00%</td> -->
                 </tr>
                 <tr>
                   <th scope="row">IPCA</th>
@@ -634,7 +634,7 @@ $_data["idiomaMenu"] = $idioma;
                   <td id="ipca-sem">0,00%</td>
                   <td id="ipca-ano">0,00%</td>
                   <td id="ipca-12m">0,00%</td>
-                  <td id="ipca-ini">0,00%</td>
+                  <!-- <td id="ipca-ini">0,00%</td> -->
                 </tr>
                 <tr>
                   <th scope="row">Selic</th>
@@ -642,7 +642,7 @@ $_data["idiomaMenu"] = $idioma;
                   <td id="selic-sem">0,00%</td>
                   <td id="selic-ano">0,00%</td>
                   <td id="selic-12m">0,00%</td>
-                  <td id="selic-ini">0,00%</td>
+                  <!-- <td id="selic-ini">0,00%</td> -->
                 </tr>
                 <!-- <tr>
                   <th scope="row" class="">Rentabilidade real <i class="icon ion-ios-information-circle-outline"
@@ -1273,7 +1273,7 @@ $_data["idiomaMenu"] = $idioma;
             p.push({
               "ativo": e.staked_coin.simbolo,
               "ganho": parseFloat(e.value),
-              "cbrl_price": cbrlValor,
+              "cbrl_price": parseFloat(cbrlValor),
               "data": new Date(e.created_at).toLocaleString("pt-BR").trim().split(",")[0]
             })
           });
@@ -1281,13 +1281,13 @@ $_data["idiomaMenu"] = $idioma;
           var html = "";
           var total = 0;
           for (i = 0; i < p.length; i++) {
-            var price = p[i].ganho * p[i].cbrl_price;
-            total = total + price;
+            var price = parseFloat(p[i].ganho) * parseFloat(p[i].cbrl_price);
+            total = parseFloat(total) + parseFloat(price);
             html += `<tr class="">
                     <td><img class="symbol" src="resources/images/currencies/${p[i].ativo}.png" alt="symbol"></td>
                     <td class="align-middle"><span class="theme-color">${p[i].ativo}</span></td>
                     <td class="align-middle"><span class="balance-hidden">****</span><span
-                    class="balance-visible text-success">${p[i].ganho.toFixed(4)}</span>
+                    class="balance-visible text-success">${p[i].ganho.toFixed(8)}</span>
                     </td>
                     <td class="align-middle"><span class="balance-hidden">****</span><span
                     class="balance-visible text-success">${price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>

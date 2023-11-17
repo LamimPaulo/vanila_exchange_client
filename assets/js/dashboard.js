@@ -49,19 +49,19 @@ const performanceData = async () => {
     document.getElementById("cdi-sem").innerHTML = formatDecimals(values[1].valor/2)
     document.getElementById("cdi-ano").innerHTML = formatDecimals(values[1].valor * compareDates() / 365)
     document.getElementById("cdi-12m").innerHTML = formatDecimals(values[1].valor)
-    document.getElementById("cdi-ini").innerHTML = "0,00%";
+    // document.getElementById("cdi-ini").innerHTML = "0,00%";
 
     document.getElementById("ipca-mes").innerHTML = formatDecimals(values[2].valor/12)
     document.getElementById("ipca-sem").innerHTML = formatDecimals(values[2].valor/2)
     document.getElementById("ipca-ano").innerHTML = formatDecimals(values[2].valor * compareDates() / 365)
     document.getElementById("ipca-12m").innerHTML = formatDecimals(values[2].valor)
-    document.getElementById("ipca-ini").innerHTML = "0,00%";
+    // document.getElementById("ipca-ini").innerHTML = "0,00%";
 
     document.getElementById("selic-mes").innerHTML = formatDecimals(values[0].valor/12)
     document.getElementById("selic-sem").innerHTML = formatDecimals(values[0].valor/2)
     document.getElementById("selic-ano").innerHTML = formatDecimals(values[0].valor * compareDates() / 365)
     document.getElementById("selic-12m").innerHTML = formatDecimals(values[0].valor)
-    document.getElementById("selic-ini").innerHTML = "0,00%";
+    // document.getElementById("selic-ini").innerHTML = "0,00%";
 
     document.getElementById("rentabilidade_cdi_percent").innerHTML = formatDecimals(values[1].valor);
     document.getElementById("rentabilidade_percent").innerHTML = formatDecimals(0);
