@@ -781,21 +781,21 @@ $_data["idiomaMenu"] = $idioma;
   var generalData = [];
   async function fetchDataPerformance() {
     try {
-      const response = await fetch("https://sandbox.coinage.trade/api/priv/performance/monthly?user=" + <?php echo $cliente->id ?>);
+      const response = await fetch("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/performance/monthly?user=" + <?php echo $cliente->id ?>);
       const fData = await response.json();
       const data = Object.keys(fData.scope).map(key => fData.scope[key]);
       var performanceGraphData = [];
       data.forEach((e, i) => {
         performanceGraphData.push({
         "date": new Date(e.label),
-        "ativo": formatPercent(e.wallet * 1),
+        "ativo": formatPercent(parseFloat(e.wallet) == null || parseFloat(e.wallet) == undefined ? 0 : parseFloat(e.wallet)),
         "cdi": formatPercent(e.cdi),
         "ipca": formatPercent(e.ipca),
           "selic": formatPercent(e.selic)
         })
         generalData.push({
         "date": new Date(e.label),
-        "ativo": formatPercent(e.wallet * 1),
+        "ativo": formatPercent(parseFloat(e.wallet) == null || parseFloat(e.wallet) == undefined ? 0 : parseFloat(e.wallet)),
         "cdi": formatPercent(e.cdi),
         "ipca": formatPercent(e.ipca),
           "selic": formatPercent(e.selic)
@@ -811,7 +811,7 @@ $_data["idiomaMenu"] = $idioma;
 
   async function fetchDataToken(user_id, token) {
     try {
-      const response = await fetch("https://sandbox.coinage.trade/api/priv/coin/monthly?user=" + user_id + "&abbr=" + token);
+      const response = await fetch("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/coin/monthly?user=" + user_id + "&abbr=" + token);
       const fData = await response.json();
       const data = Object.keys(fData.scope).map(key => fData.scope[key]);
       // console.log(data)
@@ -1253,7 +1253,7 @@ $_data["idiomaMenu"] = $idioma;
 
     const handleProventos = () => {
       $.ajax({
-        url: "https://sandbox.coinage.trade/api/priv/staking/proventos",
+        url: "<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/staking/proventos",
         method: "POST",
         dataType: 'json',
         data: {
