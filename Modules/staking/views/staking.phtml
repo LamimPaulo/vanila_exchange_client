@@ -1062,7 +1062,7 @@ $_data["idiomaMenu"] = $idioma;
     }
     const apmFinal = (stk.apm + stk.bonus) / 10 - (stk.apm + stk.bonus) / 10 * (stk.penalty / 1000);
     const min_stake = stk.min_stake;
-    $('#apm_percent').html(apmFinal.toString().replace(".", ",") + "%")
+    $('#apm_percent').html(apmFinal.toFixed(2).toString().replace(".", ",") + "%")
     $('.min_stake').html(fixDecimals(min_stake, token[0].decimal));
   }
 
