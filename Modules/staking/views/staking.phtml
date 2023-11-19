@@ -682,11 +682,18 @@ $_data["idiomaMenu"] = $idioma;
     min_stake: 0
   },
   {
-    simbolo: "CBRL",
-    apm: 21,
+    simbolo: "ETH",
+    apm: 25,
     bonus: 0,
-    penalty: 0,
+    penalty: 900,
     min_stake: 0
+  },
+  {
+    simbolo: "CBRL",
+    apm: 149,
+    bonus: 0,
+    penalty: 900,
+    min_stake: 10
   },
   ]
 
@@ -788,7 +795,7 @@ $_data["idiomaMenu"] = $idioma;
           const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
           $('#reward_period').html(" em <b>" + tokenReward + "</b>");
           saldo = token[0].saldo_disponivel;
-          saldo_stake = token[0].staked_balance;
+          saldo_stake = isNaN(token[0].staked_balance) ? 0 : token[0].staked_balance;
           $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0]
             .decimal));
           $(".crypto").select2({
@@ -1014,7 +1021,7 @@ $_data["idiomaMenu"] = $idioma;
       },
       success: function (json) {
         saldo_stake = json.valor;
-        $('.staked_balance').html(fixDecimals(json.valor, token[0].decimal));
+        $('.staked_balance').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
       }
     });
   }
@@ -1030,7 +1037,7 @@ $_data["idiomaMenu"] = $idioma;
       },
       success: function (json) {
         recompensa = json.valor;
-        $('.reward_amount').html(fixDecimals(json.valor, token[0].decimal));
+        $('.reward_amount').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
       }
     });
 
@@ -1042,7 +1049,7 @@ $_data["idiomaMenu"] = $idioma;
         contract_address: token[0].contract_address
       },
       success: function (json) {
-        $('.accumulated_amount').html(fixDecimals(json.valor - recompensa, token[0].decimal));
+        $('.accumulated_amount').html(fixDecimals((isNaN(json.valor) ? 0 : json.valor) - recompensa, token[0].decimal));
       }
     });
   }
