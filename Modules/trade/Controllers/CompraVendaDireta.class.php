@@ -346,7 +346,8 @@ class CompraVendaDireta {
             $contaCorrenteBtcRn = new \Models\Modules\Cadastro\ContaCorrenteBtcRn();
             foreach ($moedas as $coin) {
                 $saldos = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $coin->id, true, false);             
-                if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
+                // if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
+                if (true) {
 
                     $lista[] = Array(
                         "id_moeda" => \Utils\Criptografia::encriptyPostId($coin->id),
