@@ -186,13 +186,13 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
             <div class="row">
                 <div class="col-12 col-md-11 mx-auto">
                     <div class="row">
-                        <div class="col-md-12 col-lg-9 settings">
+                        <div class="col-12 settings">
                             <div class="card">
                                     <div class="card-body">
                                         <h5 class="card-title"><?php echo $idioma->getText("titulo") ?></h5>
         
                                         <div class="row p-md">
-                                            <div class="col-sm-12 select-box choose-position">
+                                            <div class="col-12 select-box choose-position">
                                                 <select class="form-control-lg select2 chosen-select input-lg full-width" id="selectCoins">
                                                 </select>
                                             </div>
@@ -201,11 +201,11 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                         <?php if ($configuracao->statusDepositoBrl > 0 && $mostrarAbaDepositoReais) { ?>
                                                         <div class="m-t-sm" id="depositoReais">
                                                             <div class="row">
-                                                                <div class="col-lg-12">     <!--Formulario deposito em Reais -->
+                                                                <div class="col-12">     <!--Formulario deposito em Reais -->
                                                                     <h2 class="m-l-sm"style="display: inline;"><?php echo $idioma->getText("depositoEmReais") ?></h2>&nbsp;&nbsp;<img src="" id="imagemBanco" height="30" width="30" style="margin-bottom: 10px;"/>
                                                                     <div class="p-md" id="depositoBrl">
                                                                         <div class="row m-b-md" style="font-size: 14px !important;">
-                                                                            <div class="col-lg-12">
+                                                                            <div class="col-12">
                                                                                 <dl class="dl-horizontal">
                                                                                     <dt class="border-bottom"><?php echo $idioma->getText("titular") ?></dt> <dd id="titular">-</dd>
                                                                                     <dt class="border-bottom"><?php echo $idioma->getText("cnpj") ?></dt> <dd id="cnpj">-</dd>
@@ -218,18 +218,18 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                         </div>
         
                                                                         <div class="row">
-                                                                            <div class="col-sm-12">
+                                                                            <div class="col-12">
                                                                                 <form action="<?php echo URLBASE_CLIENT . Utils\Rotas::R_REAIS_DEPOSITOS_SALVAR ?>" method="post" enctype="multipart/form-data" id="form-deposito" >
                                                                                     <input type="" value="<?php echo $deposito->id ?>" name="id" />
                                                                                     <input type="" value="" id="idContaBancariaEmpresa" name="idContaBancariaEmpresa"/>
                                                                                     <div class="row m-b-sm">
-                                                                                        <div class="col col-lg-12">
+                                                                                        <div class="col-12">
                                                                                             <h3 id="limiteDisponivelReal"></h3>
                                                                                         </div>
                                                                                     </div>
         
                                                                                     <div class="row">
-                                                                                        <div class="col col-lg-12">
+                                                                                        <div class="col-12">
                                                                                             <div class="form-group">
                                                                                                 <label><?php echo $idioma->getText("tipoDeposito") ?></label>
                                                                                                 <select class="form-control" id="tipoDeposito" name="tipoDeposito" ><!--tipo de deposito-->
@@ -238,7 +238,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                                     <option value="<?php echo Utils\Constantes::TRANSF_ENTRE_CONTAS ?>" <?php echo ($deposito->tipoDeposito == Utils\Constantes::TRANSF_ENTRE_CONTAS ? "selected='true'" : "") ?>><?php echo $idioma->getText("transEntreContas") ?></option>
                                                                                                 </select>
                                                                                                 <div class="row" id="alerta-banco" style="display: none;">
-                                                                                                    <div class="col-lg-12">
+                                                                                                    <div class="col-12">
                                                                                                         <span style="color: #ff1e1e;" id="alerta-banco-observacoes"></span>
                                                                                                     </div>
                                                                                                 </div>
@@ -246,19 +246,19 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="row">
-                                                                                        <div class="col col-lg-5 border-right">
+                                                                                        <div class="col-12 border-right">
                                                                                             <div class="form-group">
                                                                                                 <label><?php echo $idioma->getText("valorDepositado") ?></label><!--valor a ser depositado-->
                                                                                                 <input type="text"  class="form-control" id="valor" name="valor" value="<?php echo number_format($deposito->valorDepositado, 2, ",", ".") ?>" />
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-lg-7 m-t-sm m-b-sm"><!--comprovante de deposito-->
+                                                                                        <div class="col-12 m-t-sm m-b-sm"><!--comprovante de deposito-->
                                                                                             <small><?php echo $idioma->getText("comissaoDeposito") ?> (<span id="comissaoCobradaDeposito"><?php echo number_format($comissao, 2, ",", "") ?></span>%)</small></br>
                                                                                             <small><?php echo $idioma->getText("seraCreditado") ?> <strong id="valorCreditado2"> </strong></small></br>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="row">
-                                                                                        <div class="col-lg-7">
+                                                                                        <div class="col-12">
                                                                                             <div class="" style="display: block !important;">
                                                                                                 <label><?php echo $idioma->getText("comprovanDeposito") ?></label>
                                                                                                 <div class="fileinput fileinput-new input-group text-left" data-provides="fileinput" id="arquivo" >
@@ -274,7 +274,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div><!--fim comprovante deposito-->
-                                                                                        <div class="col-lg-5">
+                                                                                        <div class="col-12">
                                                                                             <div class="form-group">
                                                                                                 <label>&nbsp;</label>
                                                                                                 <button class="btn btn-primary full-width" type="submit" id="btnSalvar"><!--botao cadastrar deposito-->
@@ -284,7 +284,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="row" id="progressDocumentsContainer">
-                                                                                        <div class="col col-lg-12">
+                                                                                        <div class="col-12">
                                                                                             <div class="progress">
                                                                                                 <div style="width: 0%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" id="progressDocuments" class="progress-bar progress-bar-success">
                                                                                                     <span class="sr-only" id="progressDocumentsLegend"></span>
@@ -296,11 +296,11 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <?php if ($configuracao->atarAtivo == 1) { ?>
+                                                                    <!-- <?php if ($configuracao->atarAtivo == 1) { ?>
                                                                                     <div id="atar">
                                                                                         <?php if ($hasAtar) { ?>
                                                                                                         <div class="row">
-                                                                                                            <div class="col-lg-12 text-center">
+                                                                                                            <div class="col-12 text-center">
                                                                                                                 <div class="border-bottom text-center" id="infAtar">
                                                                                                                     <div id="containerAtar"></div></br>
                                                                                                                     <span class="label label-default m-t-sm" style="cursor: pointer; font-size: 13px;position: relative;" id="btncopyAtar" alt="<?php echo $idioma->getText("copiarEndereco") ?>">
@@ -316,18 +316,18 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                         <?php } ?>
                                                                                         <?php if (!$hasAtar) { ?>
                                                                                                         <div class="row p-md" id="token2faAtar">
-                                                                                                            <div class="col-lg-12">
+                                                                                                            <div class="col-12">
                                                                                                                 <ul class="list-group">
                                                                                                                     <li class="list-group-item" style="height: 30px !important; padding-bottom: 5px !important; padding-top: 5px !important;">
                                                                                                                         <div class="row">
-                                                                                                                            <div class="col-lg-12">
+                                                                                                                            <div class="col-12">
                                                                                                                                 <b>Documento:</b> <span><span id="labelIdAtar"></span></span>
                                                                                                                             </div>
                                                                                                                         </div>
                                                                                                                     </li>
                                                                                                                     <li class="list-group-item">
                                                                                                                         <div class="row">
-                                                                                                                            <div class="col-lg-6 text-left">
+                                                                                                                            <div class="col-12 text-left">
                                                                                                                                 <div class="form-group">
                                                                                                                                     <label><?php echo "PIN" ?></label>
                                                                                                                                     <input type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" class="form-control" id="pinAtar"/>
@@ -337,10 +337,10 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                                                     </li>
                                                                                                                     <li class="list-group-item text-center">
                                                                                                                         <div class="row">
-                                                                                                                            <div class="col-lg-6">
+                                                                                                                            <div class="col-12">
                                                                                                                                 <button class="btn btn-white" style="width: 180px;" onclick="limparAtar();"><?php echo "Cancelar" ?></button>
                                                                                                                             </div>
-                                                                                                                            <div class="col-lg-6">
+                                                                                                                            <div class="col-12">
                                                                                                                                 <button class="btn btn-success" style="width: 180px;" onclick="depositarAtar();" id="btnCadastrarConta" ><?php echo "Cadastrar" ?></button>
                                                                                                                             </div>
                                                                                                                         </div>
@@ -350,12 +350,12 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                                         </div>
                                                                                                         <div id="cadastroAtar">
                                                                                                             <div class="row p-md">
-                                                                                                                <div class="col-lg-12">
+                                                                                                                <div class="col-12">
                                                                                                                     <h4>Cadastre seu Atar ID ou Documento (CPF ou CNPJ) para receber os seus depósitos feitos na Atar.</h4>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                             <div class="row p-md">
-                                                                                                                <div class="col-lg-6">
+                                                                                                                <div class="col-12">
                                                                                                                     <div class="form-group">
                                                                                                                         <label><?php echo "Documento" ?></label>
                                                                                                                         <input type="text"  class="form-control" value="<?php echo $cliente->documento ?>" disabled="true"/>
@@ -363,7 +363,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                             <div class="row border-bottom p-md">
-                                                                                                                <div class="col-lg-6">
+                                                                                                                <div class="col-12">
                                                                                                                     <div class="form-group">
                                                                                                                         <button class="btn btn-primary full-width" type="button" onclick="tokenAtar();" id="btnTokenAtar">
                                                                                                                             <?php echo "Cadastrar Conta Atar" ?>
@@ -376,12 +376,12 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                                         <div id="atarAtivo" class="p-sm">
                                                                                                             </br>
                                                                                                             <div class="row">
-                                                                                                                <div class="col-lg-12">
+                                                                                                                <div class="col-12">
                                                                                                                     <h4>Meu Cadastro Atar</h4>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                             <div class="row border-bottom">
-                                                                                                                <div class="col-lg-6">
+                                                                                                                <div class="col-12">
                                                                                                                     <b>Atar ID ou Documento:</b> <span><?php echo $atarCliente->idAtar ?></span>
                                                                                                                 </div>
                                                                                                                 </br>
@@ -390,7 +390,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                         <?php } ?>
                                                                                         </br>
                                                                                     </div>
-                                                                    <?php } ?>
+                                                                    <?php } ?> -->
         
         
         
@@ -408,7 +408,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                     <div id="depositoBoleto">
                                                                         </br>
                                                                         <div class="row p-md">
-                                                                            <div class="col-lg-12">
+                                                                            <div class="col-12">
                                                                                 <label><?php echo $idioma->getText("depositeBoleto") ?></label>
                                                                             </div>
                                                                         </div>
@@ -416,39 +416,39 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
         
                                                                         <div id="telaBoleto">
                                                                             <div class="row p-md">
-                                                                                <div class="col col-lg-5 col-xs-12 border-right">
+                                                                                <div class="col-12 border-right">
                                                                                     <div class="form-group">
                                                                                         <label><?php echo $idioma->getText("valorDepositado") ?></label>
                                                                                         <input type="text"  class="form-control" id="valorBoleto" name="valorBoleto"/>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="col-lg-7 col-xs-12 m-t-md">
+                                                                                <div class="col-12 m-t-md">
                                                                                     <small><?php echo $idioma->getText("comissaoDeposito") ?> (<span id="comissaoCobradaBoleto">R$ <?php echo number_format($tarifaBoleto, 2, ",", "") ?> + <?php echo number_format($comissao, 2, ",", "") ?></span>%)</small></br>
                                                                                     <small><?php echo $idioma->getText("seraCreditado") ?> <strong id="valorCreditadoBoleto"> </strong></small>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="row p-md">
-                                                                                <div class="col-lg-5 col-xs-12">
+                                                                                <div class="col-12">
                                                                                     <button type="button" class="btn btn-primary full-width" onclick="tokenBoleto();" id="btnGerarBoleto"><?php echo $idioma->getText("gerarBoleto") ?></button>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
         
                                                                         <div class="row p-md" id="tokenBoleto">
-                                                                            <div class="col-lg-12">
+                                                                            <div class="col-12">
                                                                                 <label><?php echo $idioma->getText("insiraSeuToken") ?></label>
                                                                                 <dl class="dl-horizontal m-t-sm">
                                                                                     <dt class="border-bottom">Valor Total:</dt> <dd id="valorTotalBoleto">-</dd>
                                                                                     <dt class="border-bottom">Valor à Creditar:</dt> <dd id="valorCreditarBoleto">-</dd>
                                                                                 </dl>
                                                                                 <div class="row">
-                                                                                    <div class="col-lg-6 col-xs-12">
+                                                                                    <div class="col-12 col-xs-12">
                                                                                         <div class="form-group">
                                                                                             <label><?php echo $idioma->getText("pin") ?></label>
                                                                                             <input type="password" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="pinBoleto"/>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-lg-6 col-xs-12">
+                                                                                    <div class="col-12 col-xs-12">
                                                                                         <div class="form-group m-b-none">
                                                                                             <label><?php echo $idioma->getText("token2fa") ?></label>
                                                                                             <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control full-width" id="tokenBoletoDigito"/>
@@ -459,10 +459,10 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="row p-h-sm">
-                                                                                    <div class="col-lg-6 col-xs-12">
+                                                                                    <div class="col-12 col-xs-12">
                                                                                         <button class="btn btn-white full-width m-t-xs"  onclick="cancelarBoleto();"><?php echo $idioma->getText("cancelar") ?></button>
                                                                                     </div>
-                                                                                    <div class="col-lg-6 col-xs-12">
+                                                                                    <div class="col-12 col-xs-12">
                                                                                         <button class="btn btn-success full-width m-t-xs"  onclick="salvarDepositoBoleto();"> <?php echo $idioma->getText("confirmar") ?></button>
                                                                                     </div>
                                                                                 </div>
@@ -471,7 +471,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
         
                                                                         <div class="text-center" id="carregaBoleto"></div>
                                                                         <div class="row p-md" id="boletoGerado"  >
-                                                                            <div class="col-lg-12">
+                                                                            <div class="col-12">
                                                                                 <dl class="dl-horizontal m-t-sm">
                                                                                     <dt class="border-bottom">QrCode</dt> <dd id="modalBoletoGeradoImgBarcode">-</dd>
                                                                                     <span id="modalBoletoGeradoImgBarcodeChave"></span>
@@ -495,28 +495,28 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
         
                                         <div class="m-t-sm" id="depositoMoedas">
                                             <div class="row m-b-sm">
-                                                <div class="col-lg-12 text-center ">
+                                                <div class="col-12 text-center ">
         
                                                 </div>
                                             </div>
                                             <div id="infMoeda">
                                                 <div class=" row  m-b-md " >
-                                                    <div class="col-lg-12 text-center" id="">
+                                                    <div class="col-12 text-center" id="">
                                                         <h2 id="redesTopo"></h2>
                                                     </div>
                                                 </div>
                                                 <div class=" row  m-b-md " >
-                                                    <div class="col-lg-12 text-center" id="container">
+                                                    <div class="col-12 text-center" id="container">
         
                                                     </div>
                                                 </div>
                                                 <div class="row m-t-xs">
-                                                    <div class="col-lg-12 text-center">
+                                                    <div class="col-12 text-center">
                                                         <span class="label label-default m-t-sm" style="cursor: pointer; font-size: 10px;" id="btncopy"><?php echo $idioma->getText("copiarEndereco") ?></span>
                                                     </div>
                                                 </div>
                                                 <div class="row m-b-md">
-                                                    <div class="col-lg-12 text-center">
+                                                    <div class="col-12 text-center">
                                                         <button class="btn btn-primary m-t-xs m-b-sm" id="btn-link-ref" data-clipboard-target="#btncopy">
                                                             <?php echo $idioma->getText("copiarEndereco1") ?>&nbsp;&nbsp;<i class="fa fa-copy"></i>
                                                         </button>
@@ -536,11 +536,11 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                 </div>
                         </div>
         
-                        <div class="col-md-12 col-lg-3 settings">
+                        <div class="col-12 settings">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row m-t-md m-l-sm" id="infGerais">
-                                        <div class="col-lg-12 m-b-lg">
+                                        <div class="col-12 m-b-lg">
                                             <div id="avisoFiat">
                                                 <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
                                                     <div class="vertical-timeline-block">
@@ -652,14 +652,14 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
             <div class="row">
                 <div class="col-12 col-md-11 mx-auto">
                 <div class="row">
-                <div class="col-md-12 col-lg-9 settings">
+                <div class="col-12 settings">
                     <div class="card">
                         <div class="card-body">
                             <div id="tabelaReais">
                             <div class="ibox">
                                 <div class="ibox-content box">
                                     <div class="row m-t-md p-md">
-                                    <div class="col-sm-3 ">
+                                    <div class="col-12 ">
                                         <div class=" p-xs">
                                             <select class="form-control input-sm" id="filtroStatus">
                                                 <option value="T"><?php echo $idioma->getText("todos") ?></option>
@@ -670,7 +670,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                         </div>
 
                                     </div>
-                                    <div class="col-sm-5 ">
+                                    <div class="col-12 ">
                                         <div data-toggle="buttons" class="btn-group p-xs" id="radioDatas">
                                             <label class="btn btn-sm btn-white" id="diaReal"> <input type="radio"  name="options" value="dia"><?php echo $idioma->getText("dia") ?></label>
                                             <label class="btn btn-sm btn-white active" id="semanaReal"> <input type="radio"  name="options" value="semana"><?php echo $idioma->getText("semana") ?></label>
@@ -678,7 +678,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                                             <label class="btn btn-sm btn-white" id="todosReal"> <input type="radio"  name="options" value="todos"><?php echo $idioma->getText("todos") ?></label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4 ">
+                                    <div class="col-12 ">
                                         <div class="input-group p-xs">
                                             <input type="text" id="filtroTextoReal" placeholder="<?php echo $idioma->getText("pesquisar") ?>" class="input-sm form-control"><span class="input-group-btn">
                                                 <button type="button" class="btn btn-sm btn-primary" onclick="filtrarReaisAux();">&nbsp;<i class="fa fa-search"></i></button>
@@ -731,7 +731,7 @@ $jsonMoedas = isset($_data["moedas"]) ? $_data["moedas"] : array();
                         <div id="tabelaMoeda" >
                             <div class="ibox-content">
                                 <div class="row">
-                                    <div class="col-sm-6 pull-left">
+                                    <div class="col-12 pull-left">
                                         <div data-toggle="buttons" class="btn-group p-xs" id="radioDatasBtc">
                                             <!-- <label class="btn btn-sm btn-white" id="diaBtc"> <input type="radio" id="" name="optionsBtc" value="dia"><?php echo $idioma->getText("dia") ?></label>
                                             <label class="btn btn-sm btn-white active" id="semanaBtc"> <input type="radio" id="" name="optionsBtc" value="semana"><?php echo $idioma->getText("semana") ?></label>
