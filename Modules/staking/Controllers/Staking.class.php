@@ -79,6 +79,58 @@ class Staking
         \Utils\Layout::view("staking", $params);
     }
 
+    public function index_garantia($params)
+    {
+        try {
+
+            $getCliente = (\Utils\Geral::isCliente() ? \Utils\Geral::getCliente() : null);
+            $cliente = new \Models\Modules\Cadastro\Cliente();
+            $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
+            $cliente->id = $getCliente->id;
+            $clienteRn->conexao->carregar($cliente);
+            $clienteVerificado = $clienteRn->clienteVerificado($cliente);
+
+            \Utils\Geral::setCliente($cliente);
+            \Utils\Geral::setLogado(null, $cliente);
+
+            $paisRn = new \Models\Modules\Cadastro\PaisRn();
+            $paises = $paisRn->listar(" ativo = 1", "nome");
+
+            $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
+
+            $taxaMoedaRn = new \Models\Modules\Cadastro\TaxaMoedaRn();
+            $taxasMoedas = $taxaMoedaRn->taxasMoedasAtivas();
+
+            $clienteTaxaRn = new \Models\Modules\Cadastro\ClienteHasTaxaRn();
+
+            foreach ($taxasMoedas as $taxaMoeda) {
+                $result = $clienteTaxaRn->getTaxaCliente($cliente, $taxaMoeda["moedaId"], true);
+                $resultFinal[] = $taxaMoeda + $result;
+            }
+
+            $comissao = \Models\Modules\Cadastro\ClienteHasComissaoRn::get($cliente->id);
+
+            $bancoRn = new \Models\Modules\Cadastro\BancoRn();
+            $todosOsBancos = $bancoRn->conexao->listar(" codigo <> 1000 AND codigo <> 000", "nome");
+
+            $params["clienteVerificado"] = $clienteVerificado;
+            $params["todosOsBancos"] = $todosOsBancos;
+            $params["taxas"] = $resultFinal;
+            //$params["cidade"] = $cidade;
+            $params["configuracao"] = $configuracao;
+            $params["paises"] = $paises;
+            //$params["estado"] = $estado;
+            //$params["estados"] = $estados;
+            $params["cliente"] = $cliente;
+            $params["comissao"] = $comissao;
+
+        } catch (\Exception $ex) {
+
+        }
+
+        \Utils\Layout::view("garantia", $params);
+    }
+
     public function getCidades($params)
     {
         try {

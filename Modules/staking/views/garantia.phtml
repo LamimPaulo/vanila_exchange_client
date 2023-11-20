@@ -1,0 +1,1274 @@
+<?php
+
+$idioma = new \Utils\PropertiesUtils("perfil", IDIOMA);
+$cliente = Utils\Geral::getCliente();
+$mostrarBotoes = ($paridade->ativo > 0 && $paridade->statusMercado > 0 && $cliente->statusMercado > 0 && $paridade->moedaBook->statusMercado > 0 && $paridade->moedaBook->ativo > 0);
+$mostrarAlerta = false;
+$mensagemAlerta = "";
+
+$idioma2 = new \Utils\PropertiesUtils("menu", IDIOMA);
+
+$_data["idiomaMenu"] = $idioma;
+
+?>
+
+<style>
+  .border-edit {
+    border: 1px solid #1c84c6 !important;
+  }
+
+  .carregando {
+    background: url("<?php echo IMAGES ?>loading.gif") center no-repeat;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 30%;
+    left: 45%;
+    color: blue;
+  }
+
+  .box {
+    border-radius: 10px !important;
+  }
+
+  .box-conversion-custom {
+    padding-right: 3px !important;
+    padding-left: 3px !important;
+  }
+
+  .row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
+
+  * {
+    font-family: "Segoe UI", Roboto, sans-serif;
+  }
+
+  .choose-position .select2-container {
+    width: 100% !important;
+  }
+
+  /* .select2-selection__arrow {
+    display: none !important;
+  } */
+
+  .choose-position .select2-container--default .select2-selection--single {
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    height: 50px;
+    line-height: 50px;
+    font-weight: 500;
+    font-size: 16px;
+    background-color: #fafafa;
+    border: 1px solid #eeeeee;
+    border-radius: 25px;
+    transition: 0.1s;
+  }
+
+  .select2-dropdown {
+    border: 1px solid #eeeeee !important;
+  }
+
+  .choose-position .select2-search {
+    display: none;
+  }
+
+  .choose-position .choose-input {
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    height: 50px;
+    line-height: 50px;
+    font-weight: 500;
+    font-size: 16px;
+    background-color: #fafafa;
+    border: 1px solid #eeeeee;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .choose-position .select2-results__option {
+    display: flex;
+    align-items: center;
+  }
+
+  .choose-position .select2-results__option .img-flag {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+
+  .choose-position .select2-container--default.select2-container--focus .select2-selection--single {
+    border: 1px solid #c9c9c9 !important;
+    outline: 0;
+  }
+
+  .choose-position span.select2-selection.select2-selection--single {
+    outline: none;
+  }
+
+  .choose-position .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    width: 35px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 20px rgba(35, 49, 45, 0.14);
+  }
+
+  .btn-square {
+    width: 75px;
+    height: 75px;
+    border-radius: 12px;
+    border: 2px solid #2351ff;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 14px -6px;
+  }
+
+  .btn-square-sm {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    border: 2px solid #2351ff;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 14px -6px;
+  }
+
+  .ico {
+    transform: translate(13px, 62px);
+  }
+
+  .icon-badge {
+    font-size: 20px;
+  }
+
+  .rounded-icon {
+    height: 25px;
+    width: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 1rem;
+  }
+
+  .fs-12 {
+    font-size: 12px;
+  }
+
+  .fs-24 {
+    font-size: 24px;
+  }
+
+  .settings .table {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 14px -6px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 15px;
+  }
+
+  .input_text {
+    transform: translate(-10px, -37px);
+  }
+
+  .input_legend {
+    background-color: white;
+    transform: translate(10px, 16px);
+    padding: 0 5px 0 5px;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  #garantia_spinner_div {
+    height: 100vh;
+  }
+
+  #show_content,
+  #noCoinCard,
+  #select_token,
+  .balance-hidden {
+    display: none;
+  }
+</style>
+<?php Utils\Layout::append("inspina/metas", $_data) ?>
+<?php Utils\Layout::append("inspina/scripts", $_data) ?>
+<?php Utils\Layout::append("inspina/menu", $_data) ?>
+<link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+<!-- Main content -->
+
+<div class="settings mtb15">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-md-11 mx-auto">
+        <div class="d-flex align-items-center justify-content-center" id="garantia_spinner_div">
+          <div class="spinner-border text-primary" role="status" id="garantia_spinner">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <div id="show_content">
+          <h4>Garantia remunerada:</h4>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="">
+                <div class="row choose-position">
+                  <div class="col box-conversion-custom text-center">
+                    <div class="form-group" id="select_token">
+                      <select id="cryptoFrom" class="crypto custom-select choose-position choose-position-input"
+                        disabled></select>
+                    </div>
+                    <div class="spinner-border text-primary" role="status" id="select_token_spinner">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h4>Saldo de <span class="nome_moeda"></span></h4>
+                        <div class="info_saldo">
+                          <span>Saldo disponível:
+                            <span class="balance-hidden">****</span>
+                            <span class="saldo_disponivel fw-bold text-primary balance-visible">
+                              <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                            </span>
+                          </span>
+                          <a class="btn btn-sm btn-light ml-2" id="visibility-button3"><i class="icon ion-ios-eye"
+                              id="eye3"></i></a>
+                        </div>
+                      </div>
+                      <div class="col-sm-6" id="token_options">
+                        <div class="row">
+                          <div class="col mb-2">
+                            <a class="btn btn-light btn-square-sm d-flex align-items-center mx-auto justify-content-center"
+                              href="/deposit">
+                              <i class="text-primary fs-30"><img src="assets/img/icon/ico-depositar.svg"
+                                  alt="deposit"></i>
+                            </a>
+                            <p class="fw-bold text-center">Depositar</p>
+                          </div>
+                          <div class="col mb-2">
+                            <a class="btn btn-light btn-square-sm d-flex align-items-center mx-auto justify-content-center"
+                              href="/exchange">
+                              <i class="text-primary fs-30"><img src="assets/img/icon/ico-comprar.svg"
+                                  alt="exchange"></i>
+                            </a>
+                            <p class="fw-bold text-center">Comprar</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h4>Imobiliária XYZ</h4>
+                      <div class="info_saldo">
+                        <span>CNPJ:
+                          <span class="cnpj fw-bold text-primary balance-visible">
+                            00.000.000/0001-00
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="">
+                        <div class="row choose-position">
+                          <div class="col box-conversion-custom text-center">
+                            <div class="form-group">
+                              <select id="empresa" class="custom-select choose-position choose-position-input">
+                                <option value="1">Imobiliária XYZ</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 class="mt-3">Garantia de <span class="nome_moeda"></span></h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <!-- <h5 class="card-title"><?php echo $idioma2->getText("idioma") ?></h5> -->
+                  <h5 class="fw-bold">Informações</h5>
+                  <div class="mt-3">
+                    <span>Recompensa líquida estimada este mês:</span>
+                    <span class="d-block"><b id="apm_percent">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </b><span id="reward_period"></span></span>
+                  </div>
+                  <div class="mt-3 d-flex">
+                    <div class="">
+                      <span>Resgate:</span>
+                      <span class="d-block">Somente ao final do contrato.</span>
+                    </div>
+                    <!-- <div class="ml-5">
+                      <span>Garantia mínimo:</span>
+                      <span class="d-block"><span class="min_stake"></span> <span class="symbol_moeda"></span></span>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="fw-bold">Em garantia</h5>
+                  <div class="row justify-content-between">
+                    <div class="col-lg-5">
+                      <div class="mt-3">
+                        <span>Saldo total em garantia:</span>
+                        <span class="d-block"><span class="balance-hidden">****</span><span
+                            class="staked_balance balance-visible">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          </span> <span class="symbol_moeda"></span></span>
+                      </div>
+                      <div class="mt-3">
+                        <span>Recompensa a receber:</span>
+                        <span class="d-block"><span class="balance-hidden">****</span><span
+                            class="reward_amount balance-visible">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          </span> <span class="symbol_moeda"></span></span>
+                      </div>
+                      <div class="mt-3">Recompensa recebida:</span>
+                        <span class="d-block"><span class="balance-hidden">****</span><span
+                            class="accumulated_amount balance-visible">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          </span> <span class="symbol_moeda"></span></span>
+                      </div>
+                    </div>
+                    <div class="col-lg-7 mt-3">
+                      <div class="row">
+                        <div class="col-6 mb-2">
+                          <button
+                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
+                            data-toggle="modal" data-target="#garantiaModal">
+                            <i class=""><img src="assets/img/icon/ico-staking.svg" alt="garantia"></i>
+                          </button>
+                          <p class="fw-bold text-center">Depositar Garantia</p>
+                        </div>
+                        <div class="col-6 mb-2">
+                          <button
+                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
+                            data-toggle="modal" data-target="#resgateModal">
+                            <i class="ico"><img src="assets/img/icon/ico-resgatar.svg" alt="resgatar"></i>
+                          </button>
+                          <p class="fw-bold text-center">Resgatar</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="settings-main">
+                <div class=" pl-2 pr-2 mr-2">
+                  <p class="font-weight-lighter fs-12">ORIENTAÇÕES</p>
+                  <div class="row">
+                    <div class="col-1">
+                      <span class="rounded-icon bg-primary">
+                        <i class="icon ion-ios-information icon-badge"></i>
+                      </span>
+                    </div>
+                    <div class="col-11">
+                      As recompensas serão contabilizadas em até 2 dias úteis após
+                      o depósito da garantia.
+                    </div>
+                  </div>
+
+                  <p class="font-weight-lighter fs-12 mt-3">INFORMAÇÕES ADICIONAIS</p>
+                  <div class="row">
+                    <div class="col-1">
+                      <span class="rounded-icon bg-primary">
+                        <i class="icon ion-ios-information icon-badge"></i>
+                      </span>
+                    </div>
+                    <div class="col-11">
+                      <a href="#" data-toggle="modal" data-target="#infoModal">Clique aqui</a> e
+                      saiba como funciona a
+                      garantia
+                      de GAR.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 class="mt-5">Histórico</h4>
+          <div class="row justify-content-start">
+            <div class="col-lg-6 mt-3">
+              <span class="d-block font-weight-lighter">ATIVIDADE</span>
+              <div>
+                <button class="btn btn-sm btn-primary mt-1" id="filterBtn0">Todas</button>
+                <button class="btn btn-sm btn-white mt-1" id="filterBtn1">Garantia</button>
+                <button class="btn btn-sm btn-white mt-1" id="filterBtn2">Recompensas</button>
+                <button class="btn btn-sm btn-white mt-1" id="filterBtn3">Resgate</button>
+              </div>
+            </div>
+            <!-- <div class="col-lg-6 mt-3">
+              <span class="d-block font-weight-lighter">STATUS</span>
+              <div>
+                <button class="btn btn-sm btn-primary mt-1">Todos</button>
+                <button class="btn btn-sm btn-white mt-1">Finalizadas</button>
+                <button class="btn btn-sm btn-white mt-1">Processando</button>
+                <button class="btn btn-sm btn-white mt-1">Erro</button>
+              </div>
+            </div> -->
+          </div>
+          <table class="mt-4 table settings text-center" id="table-garantia">
+            <thead class="bg-light">
+              <tr>
+                <th scope="col">Moeda</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">TXID</th>
+                <th scope="col">Data</th>
+                <th scope="col">Quantidade</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody class="align-middle border border-white" id="transactions_table"></tbody>
+          </table>
+          <div id="pagination" class="d-flex justify-content-center"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- stakeModal -->
+<div class="modal fade" id="garantiaModal" tabindex="-1" role="dialog" aria-labelledby="garantiaModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="garantiaModalTitle">Garantia de <span class="nome_moeda"></span> (<span
+            class="symbol_moeda"></span>)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <div class="info_saldo d-flex">
+              <a class="btn btn-sm btn-light ml-2" id="visibility-button"><i class="icon ion-ios-eye" id="eye"></i></a>
+              <span class="mr-1">Disponível para stake:
+                <a href="javascript:inserirSaldo(100);">
+                  <span class="balance-hidden">****</span>
+                  <span class="saldo_disponivel fw-bold text-primary balance-visible">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </span>
+                </a>
+              </span>
+            </div>
+            <label for="stake_input" class="input_legend">Quantia para stake:</label>
+            <input type="text" class="form-control input_height" id="stake_input" placeholder="1010.10564800">
+            <div class="d-flex justify-content-between">
+              <span class="fs-10 font-weight-lighter">Mínimo de <span class="min_stake"></span> <span
+                  class="symbol_moeda"></span> para
+                garantia.</span>
+              <span class="input_text symbol_moeda mt-2"></span>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+              <a href="javascript:inserirSaldo(25);" class="btn btn-sm btn-outline-primary fw-bold">25%</a>
+              <a href="javascript:inserirSaldo(50);" class="btn btn-sm btn-outline-primary fw-bold">50%</a>
+              <a href="javascript:inserirSaldo(75);" class="btn btn-sm btn-outline-primary fw-bold">75%</a>
+              <a href="javascript:inserirSaldo(100);" class="btn btn-sm btn-outline-primary fw-bold">100%</a>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
+        <a href="javascript:setStake();" type="button" class="btn btn-primary" id="stake_button">Fazer
+          Garantia</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- resgateModal -->
+<div class="modal fade" id="resgateModal" tabindex="-1" role="dialog" aria-labelledby="resgateModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resgateModalTitle">Resgate de <span class="nome_moeda"></span> (<span
+            class="symbol_moeda"></span>)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <div class="info_saldo d-flex">
+              <a class="btn btn-sm btn-light ml-2" id="visibility-button2"><i class="icon ion-ios-eye"
+                  id="eye2"></i></a>
+              <span class="mr-1">Disponível para resgate:
+                <a href="javascript:inserirSaldoStake(100);">
+                  <span class="balance-hidden">****</span>
+                  <span class="staked_balance fw-bold text-primary balance-visible">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </span>
+                </a>
+              </span>
+            </div>
+            <label for="resgate_input" class="input_legend">Quantia para resgate:</label>
+            <input type="text" class="form-control input_height" id="resgate_input" placeholder="1010.10564800">
+            <div class="d-flex justify-content-between">
+              <span class="fs-10 font-weight-lighter">Informe o valor de <span class="symbol_moeda"></span> para
+                resgate.</span>
+              <span class="input_text symbol_moeda mt-2"></span>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+              <a href="javascript:inserirSaldoStake(25);" class="btn btn-sm btn-outline-primary fw-bold">25%</a>
+              <a href="javascript:inserirSaldoStake(50);" class="btn btn-sm btn-outline-primary fw-bold">50%</a>
+              <a href="javascript:inserirSaldoStake(75);" class="btn btn-sm btn-outline-primary fw-bold">75%</a>
+              <a href="javascript:inserirSaldoStake(100);" class="btn btn-sm btn-outline-primary fw-bold">100%</a>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
+        <a href="javascript:setResgate();" type="button" class="btn btn-primary" id="unstake_button">Fazer
+          Resgate</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- infoModal -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalTitle">Informações do garantia de <span class="symbol_moeda"></span>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="font-weight-lighter fs-12">ORIENTAÇÕES</p>
+        <div class="row">
+          <div class="col-1">
+            <span class="rounded-icon bg-primary">
+              <i class="icon ion-ios-information icon-badge"></i>
+            </span>
+          </div>
+          <div class="col-11">
+            <span>As recompensas serão contabilizadas em até 2 dias úteis após o Garantia.</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- noCoinCard -->
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-md-11 settings">
+      <div class="card" id="noCoinCard">
+        <div class="card-header text-center bg-danger">
+          <span class="card-title h2 text-white" id="noCoinsModalTitle">OPS! Não existem moedas na sua
+            carteira</span>
+        </div>
+        <div class="card-body">
+          <p class="text-center">Faça primeiro um depósito em sua carteira, use o botão abaixo!</p>
+          <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/deposit">
+            <i class="text-primary fs-30"><img src="assets/img/icon/ico-depositar.svg" alt="deposit"></i>
+          </a>
+          <p class="fw-bold text-center">Depositar</p>
+        </div>
+        <div class="card-footer d-flex justify-content-center">
+          <a type="button" class="btn btn-primary" href="/portfolio">Ir para o Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- waitingTxModal -->
+<div class="modal fade" id="waitingTxModal" tabindex="-1" role="dialog" aria-labelledby="waitingTxModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="waitingTxModalTitle">Transação em progresso...</h5>
+      </div>
+      <div class="modal-body text-center">
+        <p class="">Por favor, aguarde o fim da transação!</p>
+        <div class="spinner-border text-primary mx-auto" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- completedModal -->
+<div class="modal fade" id="completedModal" tabindex="-1" role="dialog" aria-labelledby="completedModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success">
+        <h5 class="modal-title text-white" id="completedModalTitle">Transação Concluida!</h5>
+      </div>
+      <div class="modal-body text-center">
+        <p class="fw-bold">A transação foi concluída!</p>
+        <p class="fw-bold">A tela recarregará em instantes, aguarde!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End Main content -->
+
+<?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
+<link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+<script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
+<script src="<?php echo JS; ?>maskMoney.min.js"></script>
+
+<script>
+  window.addEventListener('load', () => {
+    const garantia_table = document.querySelector('#table-garantia');
+    garantia_table.classList.toggle('table-responsive', window.matchMedia('(max-width:505px)').matches);
+  });
+</script>
+<script>
+  window.addEventListener('resize', () => {
+    const garantia_table = document.querySelector('#table-garantia');
+    garantia_table.classList.toggle('table-responsive', window.matchMedia('(max-width:505px)').matches);
+  });
+</script>
+<script>
+  var url_garantia_balance = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_BALANCE ?>";
+  var url_garantia_stake = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_STAKE ?>";
+  var url_garantia_unstake = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_UNSTAKE ?>";
+  var url_garantia_staked_balance = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_STAKED_BALANCE ?>";
+  var url_garantia_check_reward = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_CHECK_REWARD ?>";
+  var url_garantia_check_accumulated_reward =
+    "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_CHECK_ACCUMULATED_REWARD ?>";
+
+  var preco = 0;
+  var time = 0;
+  var saldo = 0;
+  var saldo_stake = 0;
+  var regressor = null;
+  let balanceVisibility = "";
+
+  const garantiaRates = [{
+    simbolo: "BTC",
+    apm: 25,
+    bonus: 0,
+    penalty: 900,
+    min_stake: 0
+  },
+  {
+    simbolo: "ETH",
+    apm: 25,
+    bonus: 0,
+    penalty: 900,
+    min_stake: 0
+  },
+  {
+    simbolo: "CBRL",
+    apm: 149,
+    bonus: 0,
+    penalty: 900,
+    min_stake: 10
+  },
+  {
+    simbolo: "FTR",
+    apm: 21,
+    bonus: 0,
+    penalty: 0,
+    min_stake: 10
+  },
+  {
+    simbolo: "IMOB",
+    apm: 10,
+    bonus: 0,
+    penalty: 0,
+    min_stake: 10
+  },
+  {
+    simbolo: "JUD",
+    apm: 19,
+    bonus: 0,
+    penalty: 0,
+    min_stake: 10
+  },
+  ]
+
+  var tokens = {};
+  var token = [];
+  const handleVisibility = () => {
+    const eye = document.getElementById("eye");
+    const eye2 = document.getElementById("eye2");
+    const eye3 = document.getElementById("eye3");
+    if (balanceVisibility == "true") {
+      const hidden = document.querySelectorAll(".balance-hidden");
+      for (var i = 0; i < hidden.length; i++) {
+        hidden[i].style.display = "inline-flex";
+      }
+      const visible = document.querySelectorAll(".balance-visible");
+      for (var i = 0; i < visible.length; i++) {
+        visible[i].style.display = "none";
+      }
+      eye.classList.remove("ion-ios-eye");
+      eye.classList.add("ion-ios-eye-off");
+      eye2.classList.remove("ion-ios-eye");
+      eye2.classList.add("ion-ios-eye-off");
+      eye3.classList.remove("ion-ios-eye");
+      eye3.classList.add("ion-ios-eye-off");
+      balanceVisibility = "false";
+      localStorage.setItem("balance_visibility", "false")
+    } else {
+      const hidden = document.querySelectorAll(".balance-hidden");
+      for (var i = 0; i < hidden.length; i++) {
+        hidden[i].style.display = "none";
+      }
+      const visible = document.querySelectorAll(".balance-visible");
+      for (var i = 0; i < visible.length; i++) {
+        visible[i].style.display = "inline-flex";
+      }
+      eye.classList.remove("ion-ios-eye-off");
+      eye.classList.add("ion-ios-eye");
+      eye2.classList.remove("ion-ios-eye-off");
+      eye2.classList.add("ion-ios-eye");
+      eye3.classList.remove("ion-ios-eye-off");
+      eye3.classList.add("ion-ios-eye");
+      balanceVisibility = "true";
+      localStorage.setItem("balance_visibility", "true")
+    }
+  }
+
+  if (balanceVisibility == "" && !localStorage.getItem("balance_visibility")) {
+    balanceVisibility = "true";
+    handleVisibility()
+  } else {
+    localStorage.getItem("balance_visibility") == "true" ? balanceVisibility = "false" : balanceVisibility = "true";
+    handleVisibility()
+  }
+
+  document.getElementById("visibility-button").addEventListener("click", handleVisibility);
+  document.getElementById("visibility-button2").addEventListener("click", handleVisibility);
+  document.getElementById("visibility-button3").addEventListener("click", handleVisibility);
+
+  $(document).ready(function () {
+    $("#cryptoFrom").select2();
+
+    $("#cryptoFrom").on('select2:select', function (e) {
+      $(".saldo_disponivel").html("");
+      saldo = 0;
+      var data = $("#cryptoFrom").val();
+      const spinner = '<div class="spinner-border spinner-border-sm text-primary" role="status">' +
+        '<span class="sr-only">Loading...</span>' +
+        '</div>'
+      $('.min_stake').html(spinner);
+      $('.staked_balance').html(spinner);
+      $('.reward_amount').html(spinner);
+      $('.accumulated_amount').html(spinner);
+      $('#apm_percent').html(spinner)
+      carregarSaldo(data);
+    });
+
+    $("#empresa").select2();
+
+    var option = '';
+
+    $.ajax({
+      url: url_garantia_balance,
+      method: "POST",
+      dataType: 'json',
+      success: function (json) {
+        if (json.sucesso && json.moedas.length) {
+          document.getElementById("garantia_spinner_div").style.height = "0vh";
+          $("#garantia_spinner").hide();
+          $("#show_content").show();
+          tokens = json.moedas;
+          tokens.forEach(element => {
+            option += '<option value="' + element.id_moeda + '" title="' + element
+              .imagem + '" data-decimal="' + element.decimal + '">' + element
+                .simbolo + ' - ' + element.nome + '</option>';
+          });
+          $('#cryptoFrom').html(option);
+          const nome = $("#cryptoFrom option:selected").text().replace(" ", "").split("-");
+          token = json.moedas.filter(t => t.simbolo === nome[0])
+          $('.nome_moeda').html(token[0].nome);
+          $('.symbol_moeda').html(token[0].simbolo);
+          const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
+          $('#reward_period').html(" em <b>" + tokenReward + "</b>");
+          saldo = token[0].saldo_disponivel;
+          saldo_stake = isNaN(token[0].staked_balance) ? 0 : token[0].staked_balance;
+          $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0]
+            .decimal));
+          $(".crypto").select2({
+            templateResult: function (coin) {
+              var $span = $("<span><img style='width: 25px;' src=" + coin
+                .title + " /> " + coin.text + "</span>");
+              return $span;
+            },
+            templateSelection: function (coin) {
+              var $span = $("<span><img style='width: 25px;' src=" + coin
+                .title + " /> " + coin.text + "</span>");
+              return $span;
+            }
+          });
+
+          carregarSaldo($("#cryptoFrom").val());
+        } else {
+          $("#noCoinCard").show();
+          showNotyAlert("Sem moedas na carteira, primeiro adquira moedas!", "e");
+        }
+      }
+    });
+  });
+
+  async function fetchTxs(page, type) {
+    const update = {
+      contract_address: token[0].contract_address,
+      user_id: <?php echo json_encode($cliente->id) ?>,
+      type: type
+    };
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(update),
+    };
+
+    try {
+      const response = await fetch('<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/garantia/transactions?page=' + page, options);
+      const data = await response.json();
+      const tx = data.data;
+
+      var tBodyHtml = "";
+      const tBody_tx = document.getElementById("transactions_table");
+      const pagination = document.getElementById("pagination");
+      tBody_tx.innerHTML = "";
+      pagination.innerHTML = "";
+      if (tx.length && tx.length > 0) {
+        for (i = 0; i < tx.length; i++) {
+          if (tx[i].staked_coin.simbolo == token[0].simbolo) {
+            const rawDate = tx[i].created_at.replace(".000000", "").replace("T", " ").replace("Z", "")
+              .split(" ");
+            const dateGMT = new Date(rawDate[0] + "T" + rawDate[1] + "Z");
+            const date = dateGMT.toLocaleString("pt-BR", {
+              timeZone: "America/Sao_Paulo"
+            }).trim().split(",");
+            const amount = parseFloat(tx[i].value).toFixed(token[0].decimal);
+            const qde =
+              tx[i].type == 1 ? '<span class="text-danger fw-bold">- ' + amount + ' ' + token[0].simbolo +
+                '</span>' :
+                tx[i].type == 3 ? '<span class="text-primary">+ ' + amount + ' ' + token[0].simbolo +
+                  '</span>' :
+                  '<span class="text-success">+ ' + amount + ' ' + token[0].simbolo + '</span>';
+            const status = (tx[i].confirmations >= tx[i].confirmations_required ?
+              "<span class='badge badge-success p-2'>Finalizada</span>" :
+              "<span class='badge badge-warning p-2'>Pendente</span>");
+            const txid = tx[i].hash;
+            const description = tx[i].type == 1 ? "Garantia de " + token[0].simbolo : tx[i].type == 2 ?
+              "Recompensa em " + token[0].simbolo : "Resgate de " + token[0].simbolo;
+
+            tBodyHtml += '<tr>' +
+              '<td class="align-middle"><img src="' + token[0].imagem + '" height="30" width="30"></td>' +
+              '<td class="align-middle"><span>' + description + '</span></td>' +
+              '<td class="align-middle"><a href="https://polygonscan.com/tx/' + txid +
+              '" target="_blank">Explorer</a></td>' +
+              '<th class="fs-12 align-middle p-2"><span>' + date[0] + '</span><span class="d-block">' +
+              date[1] + '</span></th>' +
+              '<td class="align-middle">' + qde + '</td>' +
+              '<td class="align-middle">' + status + '</td>' +
+              '</tr>'
+
+          }
+          tBody_tx.innerHTML = tBodyHtml;
+
+          var pages = "";
+          for (const item of data.links) {
+            const active = item.active == true ? "active" : "";
+            const url = item.url == null ? "" : item.label == "&laquo; Anterior" ? data.current_page - 1 :
+              item.label == "Próximo &raquo;" ? data.current_page + 1 : item.label;
+            const disabled = item.url == null ? "disabled" : "";
+            pages += '<li class="page-item ' + active + ' ' + disabled +
+              '"><a class="page-link" href="javascript:fetchTxs(' + url + ');">' + item.label +
+              '</a></li>'
+          }
+          const paginationHTML =
+            '<nav class="mx-auto" aria-label="Page navigation example"><ul class="pagination">' + pages +
+            '</ul></nav>';
+          pagination.innerHTML = paginationHTML;
+        }
+      }
+    } catch (error) {
+      console.error('Data error: ' + error.message);
+    }
+  }
+
+  function showSweetAlert(id, type, title, message) {
+    $(id).modal("hide");
+    $(document.body).removeClass("modal-open");
+    $(".modal-backdrop").remove();
+    var icon = "";
+    type == "e" ? icon = "error" : type == "s" ? icon = "success" : icon = "warning";
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: icon,
+      timer: 3000,
+      showConfirmButton: false,
+      timerProgressBar: true
+    }).then(() => {
+      $(id).modal("show");
+    })
+  }
+
+  function fixDecimals(num, decimal) {
+    return (parseFloat(num).toFixed(decimal)).toString().replace('.', ',')
+  }
+
+  function setStake() {
+    var valor = $('#stake_input').val();
+    valor = parseFloat(valor.replace(',', '.'))
+    $('#stake_input').val("");
+    try {
+      if (valor <= saldo * 1 && valor > 0) {
+        $("#garantiaModal").modal("hide");
+        $("#waitingTxModal").modal("show");
+        $.ajax({
+          url: url_garantia_stake,
+          method: "POST",
+          dataType: 'json',
+          data: {
+            coin_id: 1, //TODO
+            amount: valor,
+          },
+          success: function (json) {
+            if (json.sucesso) {
+              showNotyAlert("Transação completa!", "s");
+              $("#waitingTxModal").modal("hide");
+              $("#completedModal").modal("show");
+              setTimeout(() => {
+                location.reload(true);
+              }, 3000);
+            }
+          }
+        },);
+      } else {
+        showSweetAlert("#garantiaModal", "e", "Algo deu errado :(", "Valor incorreto ou saldo insuficiente!");
+        showNotyAlert("Valor incorreto ou saldo insuficiente!", "e");
+      }
+    } catch (e) {
+      showNotyAlert(e, "e");
+    }
+  }
+
+  function setResgate() {
+    var valor = $('#resgate_input').val();
+    valor = parseFloat(valor.replace(',', '.'));
+    $('#resgate_input').val("");
+    try {
+      if (valor <= saldo_stake * 1 && valor > 0) {
+        $("#resgateModal").modal("hide");
+        $("#waitingTxModal").modal("show");
+        // showNotyAlert("Certo!", "s");
+        $.ajax({
+          url: url_garantia_unstake,
+          method: "POST",
+          dataType: 'json',
+          data: {
+            coin_id: 1, //TODO
+            amount: valor,
+          },
+          success: function (json) {
+            if (json.sucesso) {
+              showNotyAlert("Transação completa!", "s");
+              $("#waitingTxModal").modal("hide");
+              $("#completedModal").modal("show");
+              setTimeout(() => {
+                location.reload(true);
+              }, 3000);
+            }
+          }
+        },);
+      } else {
+        showSweetAlert("#resgateModal", "e", "Algo deu errado :(", "Valor incorreto ou saldo insuficiente!");
+        showNotyAlert("Errado!", "e");
+      }
+    } catch (e) {
+      showNotyAlert(e, "e");
+    }
+  }
+
+  function inserirSaldo(percent) {
+    var saldo_inserido = (saldo * percent / 100);
+    $('#stake_input').val(saldo_inserido.toString().replace('.', ','));
+    // $('#valor').maskMoney('mask', saldo_inserido);
+  };
+
+  function inserirSaldoStake(percent) {
+    var saldo_resgate = (saldo_stake * percent / 100);
+    $('#resgate_input').val(saldo_resgate.toString().replace(".", ","));
+  };
+
+
+  function getStakedBalance() {
+    $.ajax({
+      url: url_garantia_staked_balance,
+      method: "POST",
+      dataType: 'json',
+      data: {
+        contract_address: token[0].contract_address
+      },
+      success: function (json) {
+        saldo_stake = json.valor;
+        $('.staked_balance').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
+      }
+    });
+  }
+
+  function getCheckReward() {
+    var recompensa = 0;
+    $.ajax({
+      url: url_garantia_check_reward,
+      method: "POST",
+      dataType: 'json',
+      data: {
+        contract_address: token[0].contract_address
+      },
+      success: function (json) {
+        recompensa = json.valor;
+        $('.reward_amount').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
+      }
+    });
+
+    $.ajax({
+      url: url_garantia_check_accumulated_reward,
+      method: "POST",
+      dataType: 'json',
+      data: {
+        contract_address: token[0].contract_address
+      },
+      success: function (json) {
+        $('.accumulated_amount').html(fixDecimals((isNaN(json.valor) ? 0 : json.valor) - recompensa, token[0].decimal));
+      }
+    });
+  }
+
+  function getCurrentApm(stakedToken) {
+    var stk = {};
+    for (const item of garantiaRates) {
+      if (stakedToken.simbolo == item.simbolo)
+        stk = item;
+    }
+    const apmFinal = (stk.apm + stk.bonus) / 10 - (stk.apm + stk.bonus) / 10 * (stk.penalty / 1000);
+    const min_stake = stk.min_stake;
+    $('#apm_percent').html(apmFinal.toFixed(2).toString().replace(".", ",") + "%")
+    $('.min_stake').html(fixDecimals(min_stake, token[0].decimal));
+  }
+
+  function carregarSaldo(moeda) {
+    $('#nome_moeda').html("");
+    document.getElementById("select_token_spinner").style.display = "none";
+    document.getElementById("select_token").style.display = "block";
+
+    $(".crypto").select2({
+      templateResult: function (coin) {
+        var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text +
+          "</span>");
+        return $span;
+      },
+      templateSelection: function (coin) {
+        var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text +
+          "</span>");
+        return $span;
+      }
+    });
+    const nome = $("#cryptoFrom option:selected").text().replace(" ", "").split("-");
+    token = tokens.filter(t => t.simbolo === nome[0])
+    $('.nome_moeda').html(nome[1]);
+    $('.symbol_moeda').html(nome[0]);
+    saldo = token[0].saldo_disponivel;
+    $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0].decimal));
+    const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
+    $('#reward_period').html(" em <b>" + tokenReward + "</b>");
+    getCurrentApm(token[0]);
+
+    $("#stake_input").val("");
+    $("#resgate_input").val("");
+    fetchTxs(1, 0)
+    getStakedBalance()
+    getCheckReward()
+  }
+
+  const fBtn0 = document.getElementById("filterBtn0");
+  const fBtn1 = document.getElementById("filterBtn1");
+  const fBtn2 = document.getElementById("filterBtn2");
+  const fBtn3 = document.getElementById("filterBtn3");
+  fBtn0.onclick = () => {
+    fBtn0.className = "btn btn-sm btn-primary mt-1";
+    fBtn1.className = "btn btn-sm btn-white mt-1"
+    fBtn2.className = "btn btn-sm btn-white mt-1"
+    fBtn3.className = "btn btn-sm btn-white mt-1"
+    fetchTxs(1, 0);
+  }
+  fBtn1.onclick = () => {
+    fBtn0.className = "btn btn-sm btn-white mt-1";
+    fBtn1.className = "btn btn-sm btn-primary mt-1"
+    fBtn2.className = "btn btn-sm btn-white mt-1"
+    fBtn3.className = "btn btn-sm btn-white mt-1"
+    fetchTxs(1, 1);
+  }
+  fBtn2.onclick = () => {
+    fBtn0.className = "btn btn-sm btn-white mt-1";
+    fBtn1.className = "btn btn-sm btn-white mt-1"
+    fBtn2.className = "btn btn-sm btn-primary mt-1"
+    fBtn3.className = "btn btn-sm btn-white mt-1"
+    fetchTxs(1, 2);
+  }
+  fBtn3.onclick = () => {
+    fBtn0.className = "btn btn-sm btn-white mt-1";
+    fBtn1.className = "btn btn-sm btn-white mt-1"
+    fBtn2.className = "btn btn-sm btn-white mt-1"
+    fBtn3.className = "btn btn-sm btn-primary mt-1"
+    fetchTxs(1, 3);
+  }
+
+</script>
+
+<script>
+  // function getCheckAccumulatedReward() {
+  //   $.ajax({
+  //     url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_CHECK_ACCUMULATED_REWARD ?>",
+  //     method: "POST",
+  //     dataType: 'json',
+  //     data: {
+  //       contract_address: token[0].contract_address
+  //     },
+  //     success: function (json) {
+  //       $('.accumulated_amount').html(fixDecimals(json.valor, token[0].decimal));
+  //     }
+  //   });
+  // }
+  // function getMinStake() {
+  //   $.ajax({
+  //     url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_MIN_STAKE ?>",
+  //     method: "POST",
+  //     dataType: 'json',
+  //     data: {
+  //       contract_address: token[0].contract_address
+  //     },
+  //     success: function (json) {
+  //       $('.min_stake').html(fixDecimals(json.valor, token[0].decimal));
+  //     }
+  //   });
+  // }
+
+  // var apm = 0;
+  // var bonus = 0;
+  // var penalty = 0;
+
+  // function getAPM() {
+  //   $.ajax({
+  //     url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_GET_APM ?>",
+  //     method: "POST",
+  //     dataType: 'json',
+  //     data: {
+  //       contract_address: token[0].contract_address
+  //     },
+  //     success: function (json) {
+  //       apm = json.valor;
+  //     }
+  //   });
+  // }
+
+  // function getBonus() {
+  //   $.ajax({
+  //     url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_GET_BONUS ?>",
+  //     method: "POST",
+  //     dataType: 'json',
+  //     data: {
+  //       contract_address: token[0].contract_address
+  //     },
+  //     success: function (json) {
+  //       bonus = json.valor;
+  //     }
+  //   });
+  // }
+
+  // function getPenalty() {
+  //   $.ajax({
+  //     url: "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_GET_PENALTY ?>",
+  //     method: "POST",
+  //     dataType: 'json',
+  //     data: {
+  //       contract_address: token[0].contract_address
+  //     },
+  //     success: function (json) {
+  //       penalty = json.valor;
+  //     }
+  //   });
+  // }
+</script>
+
+
+
+
+<?php Utils\Layout::append("mensage_text", $_data) ?>

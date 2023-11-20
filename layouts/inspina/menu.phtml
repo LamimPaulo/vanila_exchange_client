@@ -1,5 +1,6 @@
 <?php
 use Utils\Rotas;
+
 $idioma = new \Utils\PropertiesUtils("menu", IDIOMA);
 
 $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
@@ -12,7 +13,7 @@ $brand = \Models\Modules\Cadastro\BrandRn::getBrand();
 $configuracao = \Models\Modules\Cadastro\ConfiguracaoRn::get();
 \Utils\Geral::setCliente($cliente);
 
-if($cliente->modoOperacao === \Utils\Constantes::MODO_BASIC){
+if ($cliente->modoOperacao === \Utils\Constantes::MODO_BASIC) {
     $modo = true;
 } else {
     $modo = false;
@@ -31,21 +32,21 @@ $rota = $_data["_rota"];
 $saldo = isset($_data["saldo"]) ? $_data["saldo"] : 0;
 $moedaRn = new Models\Modules\Cadastro\MoedaRn();
 $orderBookRn = new \Models\Modules\Cadastro\OrderBookRn();
-$moedaReal = new \Models\Modules\Cadastro\Moeda(Array("id" => 1));
-$moedaBitcoin = new \Models\Modules\Cadastro\Moeda(Array("id" => 2));
-$moedaLitecoin = new \Models\Modules\Cadastro\Moeda(Array("id" => 4));
-$moedaDash = new \Models\Modules\Cadastro\Moeda(Array("id" => 7));
-$moedaDoge = new \Models\Modules\Cadastro\Moeda(Array("id" => 13));
-$moedaEthereum = new \Models\Modules\Cadastro\Moeda(Array("id" => 3));
-$moedaTrueUsd = new \Models\Modules\Cadastro\Moeda(Array("id" => 35));
+$moedaReal = new \Models\Modules\Cadastro\Moeda(array("id" => 1));
+$moedaBitcoin = new \Models\Modules\Cadastro\Moeda(array("id" => 2));
+$moedaLitecoin = new \Models\Modules\Cadastro\Moeda(array("id" => 4));
+$moedaDash = new \Models\Modules\Cadastro\Moeda(array("id" => 7));
+$moedaDoge = new \Models\Modules\Cadastro\Moeda(array("id" => 13));
+$moedaEthereum = new \Models\Modules\Cadastro\Moeda(array("id" => 3));
+$moedaTrueUsd = new \Models\Modules\Cadastro\Moeda(array("id" => 35));
 $paridadeRn = new Models\Modules\Cadastro\ParidadeRn();
-$paridadesReal = Array();
-$paridadesBitcoin = Array();
-$paridadesLitecoin = Array();
-$paridadesDash = Array();
-$paridadesDoge = Array();
-$paridadesEthereum = Array();
-$paridadesTrueUsd = Array();
+$paridadesReal = array();
+$paridadesBitcoin = array();
+$paridadesLitecoin = array();
+$paridadesDash = array();
+$paridadesDoge = array();
+$paridadesEthereum = array();
+$paridadesTrueUsd = array();
 $todasAsParidades = $paridadeRn->getListaTodasParidades(false);
 
 foreach ($todasAsParidades as $paridade) {
@@ -90,48 +91,57 @@ $moeda = $paridade->moedaBook;
         <div class="row">
             <div class="col-12 col-md-11 mx-auto">
                 <nav class="navbar navbar-expand-lg" id="light">
-                    <a class="navbar-brand" href="<?php echo $_SERVER['EnvUrlProd'] ?>/home"><img src="<?php echo IMAGES . "logo-ca.png" ?>" style="max-height: 40px;"></a>
+                    <a class="navbar-brand" href="<?php echo $_SERVER['EnvUrlProd'] ?>/home"><img
+                            src="<?php echo IMAGES . "logo-ca.png" ?>" style="height: 40px; width: 100%;"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerMenu"
                         aria-controls="headerMenu" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="icon ion-md-menu"></i>
                     </button>
-        
+
                     <div class="collapse navbar-collapse" id="headerMenu">
-                        <ul class="navbar-nav mr-auto"  >
+                        <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <?php echo \Utils\Layout::menu($_data)?>
+                                <?php echo \Utils\Layout::menu($_data) ?>
                             </li>
-                            <!-- <li class="nav-item">
-                                tst
-                            </li> -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle menu-color" href="#" id="navbarDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Renda Digital
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item menu-color" href="/staking">Staking</a>
+                                    <a class="dropdown-item menu-color" href="/garantia">Garantia</a>
+                                </div>
+                            </li>
                         </ul>
-        
-        
-                        <ul class="navbar-nav navbar-right " style="display: flex !important; align-items: center !important;">
+
+
+                        <ul class="navbar-nav navbar-right "
+                            style="display: flex !important; align-items: center !important;">
                             <li class="nav-item dropdown"">
-                                <!-- <a style="color:#00dfff;" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <?php 
-                                    $arrayNomeCliente = explode(" ",$cliente->nome);
-                                    $clienteNome = $arrayNomeCliente[0]. ' ' .$arrayNomeCliente[1];
-                                    $clienteNome = mb_convert_case($clienteNome, MB_CASE_LOWER, "UTF-8");
-                                    echo ucwords($clienteNome);
-                                    ?>
+                                <!-- <a style=" color:#00dfff;" class="nav-link dropdown-toggle" href="#" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <?php
+                                $arrayNomeCliente = explode(" ", $cliente->nome);
+                                $clienteNome = $arrayNomeCliente[0] . ' ' . $arrayNomeCliente[1];
+                                $clienteNome = mb_convert_case($clienteNome, MB_CASE_LOWER, "UTF-8");
+                                echo ucwords($clienteNome);
+                                ?>
                                 </a> -->
-        
-                                <li class="nav-item dropdown header-img-icon">
-                                    <!-- <a style="color:#00dfff;" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+
+                            <li class="nav-item dropdown header-img-icon">
+                                <!-- <a style="color:#00dfff;" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false"> -->
-                                        <!-- <img src="assets/img/avatar.svg" alt="avatar"> -->
-                                        <?php 
-                                        //$arrayNomeCliente = explode(" ",$cliente->nome);
-                                        //$clienteNome = $arrayNomeCliente[0]. ' ' .$arrayNomeCliente[1];
-                                        //$clienteNome = mb_convert_case($clienteNome, MB_CASE_LOWER, "UTF-8");
-                                        //echo ucwords($clienteNome);
-                                        ?>
-                                    <!-- </a> -->
-        
-                                    <!-- 
+                                <!-- <img src="assets/img/avatar.svg" alt="avatar"> -->
+                                <?php
+                                //$arrayNomeCliente = explode(" ",$cliente->nome);
+                                //$clienteNome = $arrayNomeCliente[0]. ' ' .$arrayNomeCliente[1];
+                                //$clienteNome = mb_convert_case($clienteNome, MB_CASE_LOWER, "UTF-8");
+                                //echo ucwords($clienteNome);
+                                ?>
+                                <!-- </a> -->
+
+                                <!-- 
                                     <div class="dropdown-menu">
                                             <div class="dropdown-header d-flex flex-column align-items-center">
                                             <div class="figure mb-3">
@@ -142,8 +152,8 @@ $moeda = $paridade->moedaBook;
                                             <p class="email text-muted mb-3">tonystark@gmail.com</p>
                                             </div>
                                         </div> -->
-        
-                                        <!-- <div class="dropdown-body">
+
+                                <!-- <div class="dropdown-body">
                                             <ul class="profile-nav">
                                                 <li class="nav-item">
                                                     <a class="nav-link" style="color:#00dfff;" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MEUSDADOS ?>">
@@ -162,19 +172,22 @@ $moeda = $paridade->moedaBook;
                                         
                                     </div>
                                 -->
-                                    <li class="nav-item">
-                                        <a class="nav-link menu-color" href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MEUSDADOS ?>">
-                                            <i class="icon ion-md-person"></i>
-                                            <span><?php echo $idioma->getText("meuPerfilD") ?></span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link red" href="#" id="logout">
-                                            <i class="icon ion-md-power"></i>
-                                            <?php echo $idioma->getText("sair") ?>
-                                        </a>
-                                    </li>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-color"
+                                    href="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_MEUSDADOS ?>">
+                                    <i class="icon ion-md-person"></i>
+                                    <span>
+                                        <?php echo $idioma->getText("meuPerfilD") ?>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link red" href="#" id="logout">
+                                    <i class="icon ion-md-power"></i>
+                                    <?php echo $idioma->getText("sair") ?>
+                                </a>
+                            </li>
+                            </li>
                             </li>
                         </ul>
                     </div>
@@ -186,22 +199,22 @@ $moeda = $paridade->moedaBook;
 
 <script src="assets/js/jquery-3.4.1.min.js"></script>
 <script src="assets/js/popper.min.js"></script>
-<!-- <script src="assets/js/bootstrap.min.js"></script> -->
+<script src="assets/js/bootstrap.min.js"></script>
 <script src="assets/js/amcharts-core.min.js"></script>
 <script src="assets/js/amcharts.min.js"></script>
 <script src="assets/js/jquery.mCustomScrollbar.js"></script>
-<!-- <script src="assets/js/custom.js"></script> -->
+<script src="assets/js/custom.js"></script>
 <script>
-$('tbody, .market-news ul').mCustomScrollbar({
-    theme: 'minimal',
-});
+    $('tbody, .market-news ul').mCustomScrollbar({
+        theme: 'minimal',
+    });
 </script>
 
 <script src="<?php echo TEMA; ?>js/jquery-2.1.1.js"></script>
 <script src="<?php echo TEMA ?>bootstrap_nativo/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript">
-        $(document).ready(function () {
-        $('.dropdown-submenu a.test').on("click", function(e){
+    $(document).ready(function () {
+        $('.dropdown-submenu a.test').on("click", function (e) {
             $(this).next('ul').toggle();
             e.stopPropagation();
             e.preventDefault();
@@ -210,35 +223,35 @@ $('tbody, .market-news ul').mCustomScrollbar({
         $("#mode").attr("hidden", false);
 
         setInterval(online, 20000);
-        });
+    });
 
-        var flagClientesOnline = true;
-        function online() {
-            if (flagClientesOnline) {
-                $.ajax({
-                    url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTES_ONLINE?>',
-                    dataType: 'json',
-                    method: 'post',
-                    beforeSend: function () {
-                        flagClientesOnline = false;
-                    },
-                    success: function (json) {
-                        try {
-                            if (json.sucesso == false) {
-                                showNotyAlert(json.mensagem, "e");   
-                                location = json.url;
-                            }
-                        } catch (e) {
-
+    var flagClientesOnline = true;
+    function online() {
+        if (flagClientesOnline) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . \Utils\Rotas::R_CLIENTES_ONLINE ?>',
+                dataType: 'json',
+                method: 'post',
+                beforeSend: function () {
+                    flagClientesOnline = false;
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso == false) {
+                            showNotyAlert(json.mensagem, "e");
+                            location = json.url;
                         }
-                        flagClientesOnline = true;
-                    },
-                    complete: function () {
-                        flagClientesOnline = true;
+                    } catch (e) {
+
                     }
-                });
-            }
+                    flagClientesOnline = true;
+                },
+                complete: function () {
+                    flagClientesOnline = true;
+                }
+            });
         }
+    }
 
     function trocarIdioma(lang) {
         $.ajax({
@@ -267,10 +280,3 @@ $('tbody, .market-news ul').mCustomScrollbar({
     }
 
 </script>
-
-
-
-
-
-
-

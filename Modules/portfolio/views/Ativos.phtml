@@ -1274,7 +1274,8 @@ $_data["idiomaMenu"] = $idioma;
               "ativo": e.staked_coin.simbolo,
               "ganho": parseFloat(e.value),
               "cbrl_price": parseFloat(cbrlValor),
-              "data": new Date(e.created_at).toLocaleString("pt-BR").trim().split(",")[0]
+              "data": new Date(e.created_at).toLocaleString("pt-BR").trim().split(",")[0],
+              "hora": new Date(e.created_at).toLocaleString("pt-BR").trim().split(",")[1]
             })
           });
 
@@ -1284,7 +1285,7 @@ $_data["idiomaMenu"] = $idioma;
             var price = parseFloat(p[i].ganho) * parseFloat(p[i].cbrl_price);
             total = parseFloat(total) + parseFloat(price);
             html += `<tr class="">
-                    <td><img class="symbol" src="resources/images/currencies/${p[i].ativo}.png" alt="symbol"></td>
+                    <td><img class="symbol mt-2" src="resources/images/currencies/${p[i].ativo}.png" alt="symbol"></td>
                     <td class="align-middle"><span class="theme-color">${p[i].ativo}</span></td>
                     <td class="align-middle"><span class="balance-hidden">****</span><span
                     class="balance-visible text-success">${p[i].ganho.toFixed(8)}</span>
@@ -1292,7 +1293,7 @@ $_data["idiomaMenu"] = $idioma;
                     <td class="align-middle"><span class="balance-hidden">****</span><span
                     class="balance-visible text-success">${price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                     </td>
-                    <td class="align-middle">${p[i].data}</td>
+                    <td class="align-middle">${p[i].data}<br>${p[i].hora}</td>
                 </tr>`
           }
           document.getElementById("proventos-items").innerHTML = html;
