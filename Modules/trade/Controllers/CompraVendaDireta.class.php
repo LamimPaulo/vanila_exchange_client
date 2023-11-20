@@ -340,13 +340,6 @@ class CompraVendaDireta {
                     "imagem" => IMAGES . "currencies/" . $moeda->icone ,
                     "simbolo" => $moeda->simbolo,
                     "nome" => $moeda->nome,
-                    // 'min_stake' => json_encode($minStake),
-                    // 'reward_amount' => json_encode($rewards),
-                    // 'accumulated_amount' => json_encode($accumulated),
-                    // 'staked_balance' => json_encode($stakedBalance),
-                    // 'current_apm' => json_encode($apm),
-                    // 'current_bonus' => json_encode($bonus),
-                    // 'current_penalty' => json_encode($penalty),
                 );
             }
             
@@ -354,14 +347,6 @@ class CompraVendaDireta {
             foreach ($moedas as $coin) {
                 $saldos = $contaCorrenteBtcRn->calcularSaldoConta($cliente, $coin->id, true, false);             
                 if ($saldos["saldo"] > 0 || $saldos["bloqueado"] > 0) {
-                    
-                    // $stakedBalance = $this->getStakedBalance($coin, $cliente);
-                    // $minStake = $this->getMinStake($coin);
-                    // $rewards = $this->checkReward($coin, $cliente);
-                    // $accumulated = $this->checkAccumulatedReward($coin, $cliente);
-                    // $apm = $this->getAPM($coin);
-                    // $bonus = $this->getBonus($coin);
-                    // $penalty = $this->getPenalty($coin);
 
                     $lista[] = Array(
                         "id_moeda" => \Utils\Criptografia::encriptyPostId($coin->id),
@@ -372,13 +357,6 @@ class CompraVendaDireta {
                         "imagem" => IMAGES . "currencies/" . $coin->icone ,
                         "simbolo" => $coin->simbolo,
                         "nome" => $coin->nome,
-                        // 'min_stake' => json_encode($minStake),
-                        // 'reward_amount' => json_encode($rewards),
-                        // 'accumulated_amount' => json_encode($accumulated),
-                        // 'staked_balance' => json_encode($stakedBalance),
-                        // 'current_apm' => json_encode($apm),
-                        // 'current_bonus' => json_encode($bonus),
-                        // 'current_penalty' => json_encode($penalty),
                     );
                 } 
             }
