@@ -192,13 +192,10 @@ $_data["idiomaMenu"] = $idioma;
     font-size: 12px;
   }
 
-  #garantia_spinner_div {
-    height: 100vh;
-  }
-
-  #show_content,
-  #noCoinCard,
   #select_token,
+  #form_imob,
+  #info_imob,
+  .md-visible,
   .balance-hidden {
     display: none;
   }
@@ -213,13 +210,8 @@ $_data["idiomaMenu"] = $idioma;
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 col-md-11 mx-auto">
-        <div class="d-flex align-items-center justify-content-center" id="garantia_spinner_div">
-          <div class="spinner-border text-primary" role="status" id="garantia_spinner">
-            <span class="sr-only">Loading...</span>
-          </div>
-        </div>
         <div id="show_content">
-          <h4>Garantia remunerada:</h4>
+              <h4>Garantia remunerada:</h4>
           <div class="row">
             <div class="col-lg-6">
               <div class="">
@@ -227,7 +219,10 @@ $_data["idiomaMenu"] = $idioma;
                   <div class="col box-conversion-custom text-center">
                     <div class="form-group" id="select_token">
                       <select id="cryptoFrom" class="crypto custom-select choose-position choose-position-input"
-                        disabled></select>
+                        disabled>
+                        <option value="GAR" title="/resources/images/currencies/GAR.png" data-decimal="8">GAR - Garantia
+                        </option>
+                      </select>
                     </div>
                     <div class="spinner-border text-primary" role="status" id="select_token_spinner">
                       <span class="sr-only">Loading...</span>
@@ -279,122 +274,7 @@ $_data["idiomaMenu"] = $idioma;
                 </div>
               </div>
             </div>
-            <div class="col-lg-6">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h4>Imobiliária XYZ</h4>
-                      <div class="info_saldo">
-                        <span>CNPJ:
-                          <span class="cnpj fw-bold text-primary balance-visible">
-                            00.000.000/0001-00
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="">
-                        <div class="row choose-position">
-                          <div class="col box-conversion-custom text-center">
-                            <div class="form-group">
-                              <select id="empresa" class="custom-select choose-position choose-position-input">
-                                <option value="1">Imobiliária XYZ</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <h4 class="mt-3">Garantia de <span class="nome_moeda"></span></h4>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-body">
-                  <!-- <h5 class="card-title"><?php echo $idioma2->getText("idioma") ?></h5> -->
-                  <h5 class="fw-bold">Informações</h5>
-                  <div class="mt-3">
-                    <span>Recompensa líquida estimada este mês:</span>
-                    <span class="d-block"><b id="apm_percent">
-                        <div class="spinner-border spinner-border-sm text-primary" role="status">
-                          <span class="sr-only">Loading...</span>
-                        </div>
-                      </b><span id="reward_period"></span></span>
-                  </div>
-                  <div class="mt-3 d-flex">
-                    <div class="">
-                      <span>Resgate:</span>
-                      <span class="d-block">Somente ao final do contrato.</span>
-                    </div>
-                    <!-- <div class="ml-5">
-                      <span>Garantia mínimo:</span>
-                      <span class="d-block"><span class="min_stake"></span> <span class="symbol_moeda"></span></span>
-                    </div> -->
-                  </div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="fw-bold">Em garantia</h5>
-                  <div class="row justify-content-between">
-                    <div class="col-lg-5">
-                      <div class="mt-3">
-                        <span>Saldo total em garantia:</span>
-                        <span class="d-block"><span class="balance-hidden">****</span><span
-                            class="staked_balance balance-visible">
-                            <div class="spinner-border spinner-border-sm text-primary" role="status">
-                              <span class="sr-only">Loading...</span>
-                            </div>
-                          </span> <span class="symbol_moeda"></span></span>
-                      </div>
-                      <div class="mt-3">
-                        <span>Recompensa a receber:</span>
-                        <span class="d-block"><span class="balance-hidden">****</span><span
-                            class="reward_amount balance-visible">
-                            <div class="spinner-border spinner-border-sm text-primary" role="status">
-                              <span class="sr-only">Loading...</span>
-                            </div>
-                          </span> <span class="symbol_moeda"></span></span>
-                      </div>
-                      <div class="mt-3">Recompensa recebida:</span>
-                        <span class="d-block"><span class="balance-hidden">****</span><span
-                            class="accumulated_amount balance-visible">
-                            <div class="spinner-border spinner-border-sm text-primary" role="status">
-                              <span class="sr-only">Loading...</span>
-                            </div>
-                          </span> <span class="symbol_moeda"></span></span>
-                      </div>
-                    </div>
-                    <div class="col-lg-7 mt-3">
-                      <div class="row">
-                        <div class="col-6 mb-2">
-                          <button
-                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
-                            data-toggle="modal" data-target="#garantiaModal">
-                            <i class=""><img src="assets/img/icon/ico-staking.svg" alt="garantia"></i>
-                          </button>
-                          <p class="fw-bold text-center">Depositar Garantia</p>
-                        </div>
-                        <div class="col-6 mb-2">
-                          <button
-                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
-                            data-toggle="modal" data-target="#resgateModal">
-                            <i class="ico"><img src="assets/img/icon/ico-resgatar.svg" alt="resgatar"></i>
-                          </button>
-                          <p class="fw-bold text-center">Resgatar</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
+            <div class="col-lg-6 mb-3">
               <div class="settings-main">
                 <div class=" pl-2 pr-2 mr-2">
                   <p class="font-weight-lighter fs-12">ORIENTAÇÕES</p>
@@ -405,8 +285,7 @@ $_data["idiomaMenu"] = $idioma;
                       </span>
                     </div>
                     <div class="col-11">
-                      As recompensas serão contabilizadas em até 2 dias úteis após
-                      o depósito da garantia.
+                      As recompensas serão contabilizadas em até 2 dias úteis após o aceite da garantia.
                     </div>
                   </div>
 
@@ -418,15 +297,133 @@ $_data["idiomaMenu"] = $idioma;
                       </span>
                     </div>
                     <div class="col-11">
-                      <a href="#" data-toggle="modal" data-target="#infoModal">Clique aqui</a> e
-                      saiba como funciona a
-                      garantia
-                      de GAR.
+                      <a href="#" data-toggle="modal" data-target="#infoModal">Clique aqui</a> e saiba como funciona a
+                      garantia de GAR.
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="col-lg-6">
+              <h5 class="">Selecione uma imobiliária:</h5>
+              <div class="" id="spinner_imob">
+                <div class="d-flex justify-content-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3" id="form_imob">
+                <div class="row choose-position">
+                  <div class="col box-conversion-custom">
+                    <div class="form-group">
+                      <select id="select_imob" name="imob"
+                        class="imob custom-select choose-position choose-position-input">
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="" id="info_imob">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 id="imob_name"></h4>
+                    <div class="info_imob">
+                      <p class="">CNPJ:
+                        <span class="cnpj fw-bold text-primary" id="imob_cnpj">
+                        </span>
+                      </p>
+                      <span class="">Saldo liberado:
+                        <span class="balance-hidden">****</span>
+                        <span class="mb-2 fw-bold text-primary balance-visible" id="imob_available">
+                        </span>
+                      </span><br>
+                      <span class="">Saldo bloqueado:
+                        <span class="balance-hidden">****</span>
+                        <span class="mb-1 fw-bold text-primary balance-visible" id="imob_blocked">
+                        </span>
+                      </span>
+                      <div class="row mt-5">
+                        <div class="col-6">
+                          <button
+                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
+                            data-toggle="modal" data-target="#garantiaModal">
+                            <i class=""><img src="assets/img/icon/ico-staking.svg" alt="garantia"></i>
+                          </button>
+                          <p class="fw-bold text-center">Enviar Garantia</p>
+                        </div>
+                        <div class="col-6">
+                          <button
+                            class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center"
+                            data-toggle="modal" data-target="#retiradaModal">
+                            <i class="ico"><img src="assets/img/icon/ico-resgatar.svg" alt="resgatar"></i>
+                          </button>
+                          <p class="fw-bold text-center">Pedir Retirada</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg-6">
+              <div class="card">
+                <div class="card-body">
+                  <!-- <h5 class="card-title"><?php echo $idioma2->getText("idioma") ?></h5> -->
+                  <h5 class="fw-bold">Informações</h5>
+                  <div class="mt-3">
+                    <span>Recompensa estimada este mês:</span>
+                    <span class="d-block"><b id="apm_percent">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </b><span id="reward_period"></span></span>
+                  </div>
+                  <div class="mt-3 d-flex">
+                    <div class="">
+                      <span>Retirada:</span>
+                      <span class="d-block">Somente ao final do contrato.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="fw-bold">Em garantia</h5>
+                  <div class="">
+                    <div class="mt-3">
+                      <span>Saldo total em garantia:</span>
+                      <span class="d-block"><span class="balance-hidden">****</span><span
+                          class="staked_balance balance-visible">
+                          <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                          </div>
+                        </span> <span class="symbol_moeda"></span></span>
+                    </div>
+                    <div class="mt-3">
+                      <span>Recompensa a receber:</span>
+                      <span class="d-block"><span class="balance-hidden">****</span><span
+                          class="reward_amount balance-visible">
+                          <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                          </div>
+                        </span> <span class="symbol_moeda"></span></span>
+                    </div>
+                    <div class="mt-3">Recompensa recebida:</span>
+                      <span class="d-block"><span class="balance-hidden">****</span><span
+                          class="accumulated_amount balance-visible">
+                          <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                          </div>
+                        </span><span class="symbol_moeda"></span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
           </div>
           <h4 class="mt-5">Histórico</h4>
           <div class="row justify-content-start">
@@ -436,7 +433,7 @@ $_data["idiomaMenu"] = $idioma;
                 <button class="btn btn-sm btn-primary mt-1" id="filterBtn0">Todas</button>
                 <button class="btn btn-sm btn-white mt-1" id="filterBtn1">Garantia</button>
                 <button class="btn btn-sm btn-white mt-1" id="filterBtn2">Recompensas</button>
-                <button class="btn btn-sm btn-white mt-1" id="filterBtn3">Resgate</button>
+                <button class="btn btn-sm btn-white mt-1" id="filterBtn3">Retirada</button>
               </div>
             </div>
             <!-- <div class="col-lg-6 mt-3">
@@ -524,13 +521,13 @@ $_data["idiomaMenu"] = $idioma;
   </div>
 </div>
 
-<!-- resgateModal -->
-<div class="modal fade" id="resgateModal" tabindex="-1" role="dialog" aria-labelledby="resgateModalTitle"
+<!-- retiradaModal -->
+<div class="modal fade" id="retiradaModal" tabindex="-1" role="dialog" aria-labelledby="retiradaModalTitle"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="resgateModalTitle">Resgate de <span class="nome_moeda"></span> (<span
+        <h5 class="modal-title" id="retiradaModalTitle">Retirada de <span class="nome_moeda"></span> (<span
             class="symbol_moeda"></span>)</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -542,7 +539,7 @@ $_data["idiomaMenu"] = $idioma;
             <div class="info_saldo d-flex">
               <a class="btn btn-sm btn-light ml-2" id="visibility-button2"><i class="icon ion-ios-eye"
                   id="eye2"></i></a>
-              <span class="mr-1">Disponível para resgate:
+              <span class="mr-1">Disponível para retirada:
                 <a href="javascript:inserirSaldoStake(100);">
                   <span class="balance-hidden">****</span>
                   <span class="staked_balance fw-bold text-primary balance-visible">
@@ -553,11 +550,11 @@ $_data["idiomaMenu"] = $idioma;
                 </a>
               </span>
             </div>
-            <label for="resgate_input" class="input_legend">Quantia para resgate:</label>
-            <input type="text" class="form-control input_height" id="resgate_input" placeholder="1010.10564800">
+            <label for="retirada_input" class="input_legend">Quantia para retirada:</label>
+            <input type="text" class="form-control input_height" id="retirada_input" placeholder="1010.10564800">
             <div class="d-flex justify-content-between">
               <span class="fs-10 font-weight-lighter">Informe o valor de <span class="symbol_moeda"></span> para
-                resgate.</span>
+                retirada.</span>
               <span class="input_text symbol_moeda mt-2"></span>
             </div>
             <div class="d-flex justify-content-between mt-3">
@@ -571,8 +568,8 @@ $_data["idiomaMenu"] = $idioma;
       </div>
       <div class="modal-footer d-flex justify-content-between">
         <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
-        <a href="javascript:setResgate();" type="button" class="btn btn-primary" id="unstake_button">Fazer
-          Resgate</a>
+        <a href="javascript:setRetirada();" type="button" class="btn btn-primary" id="unstake_button">Fazer
+          Retirada</a>
       </div>
     </div>
   </div>
@@ -598,7 +595,7 @@ $_data["idiomaMenu"] = $idioma;
             </span>
           </div>
           <div class="col-11">
-            <span>As recompensas serão contabilizadas em até 2 dias úteis após o Garantia.</span>
+            <span>As recompensas serão contabilizadas em até 2 dias úteis após o aceite da garantia.</span>
           </div>
         </div>
       </div>
@@ -610,7 +607,7 @@ $_data["idiomaMenu"] = $idioma;
 </div>
 
 <!-- noCoinCard -->
-<div class="container-fluid">
+<!-- <div class="container-fluid">
   <div class="row justify-content-center">
     <div class="col-md-11 settings">
       <div class="card" id="noCoinCard">
@@ -619,7 +616,7 @@ $_data["idiomaMenu"] = $idioma;
             carteira</span>
         </div>
         <div class="card-body">
-          <p class="text-center">Faça primeiro um depósito em sua carteira, use o botão abaixo!</p>
+          <p class="text-center">Faça primeiro um aceite em sua carteira, use o botão abaixo!</p>
           <a class="btn btn-light btn-square d-flex align-items-center mx-auto justify-content-center" href="/deposit">
             <i class="text-primary fs-30"><img src="assets/img/icon/ico-depositar.svg" alt="deposit"></i>
           </a>
@@ -631,7 +628,7 @@ $_data["idiomaMenu"] = $idioma;
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- waitingTxModal -->
 <div class="modal fade" id="waitingTxModal" tabindex="-1" role="dialog" aria-labelledby="waitingTxModalTitle"
@@ -673,12 +670,12 @@ $_data["idiomaMenu"] = $idioma;
 <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
   integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
   </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
   integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-  </script>
+  </script> -->
 <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
 <script src="<?php echo JS; ?>maskMoney.min.js"></script>
 
@@ -695,64 +692,19 @@ $_data["idiomaMenu"] = $idioma;
   });
 </script>
 <script>
-  var url_garantia_balance = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_BALANCE ?>";
-  var url_garantia_stake = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_STAKE ?>";
-  var url_garantia_unstake = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_UNSTAKE ?>";
-  var url_garantia_staked_balance = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_STAKED_BALANCE ?>";
-  var url_garantia_check_reward = "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_CHECK_REWARD ?>";
-  var url_garantia_check_accumulated_reward =
-    "<?php echo URLBASE_CLIENT . \Utils\Rotas::R_STAKING_CHECK_ACCUMULATED_REWARD ?>";
+  var url_guarantee_balance = '<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/guarantee/balance';
+  var url_guarantee_providers = '<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/guarantee/providers';
+  var url_guarantee_provider_balance = '<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/guarantee/provider/balance';
+  var url_guarantee_checkReward = '<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/guarantee/checkReward';
+  var url_guarantee_checkAccumulatedReward = '<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/guarantee/checkAccumulatedReward';
+  var url_guarantee_transfer = '<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/guarantee/transfer';
 
   var preco = 0;
   var time = 0;
   var saldo = 0;
   var saldo_stake = 0;
-  var regressor = null;
+  var selected_imob = "";
   let balanceVisibility = "";
-
-  const garantiaRates = [{
-    simbolo: "BTC",
-    apm: 25,
-    bonus: 0,
-    penalty: 900,
-    min_stake: 0
-  },
-  {
-    simbolo: "ETH",
-    apm: 25,
-    bonus: 0,
-    penalty: 900,
-    min_stake: 0
-  },
-  {
-    simbolo: "CBRL",
-    apm: 149,
-    bonus: 0,
-    penalty: 900,
-    min_stake: 10
-  },
-  {
-    simbolo: "FTR",
-    apm: 21,
-    bonus: 0,
-    penalty: 0,
-    min_stake: 10
-  },
-  {
-    simbolo: "IMOB",
-    apm: 10,
-    bonus: 0,
-    penalty: 0,
-    min_stake: 10
-  },
-  {
-    simbolo: "JUD",
-    apm: 19,
-    bonus: 0,
-    penalty: 0,
-    min_stake: 10
-  },
-  ]
 
   var tokens = {};
   var token = [];
@@ -824,143 +776,188 @@ $_data["idiomaMenu"] = $idioma;
       $('.reward_amount').html(spinner);
       $('.accumulated_amount').html(spinner);
       $('#apm_percent').html(spinner)
-      carregarSaldo(data);
     });
 
-    $("#empresa").select2();
+    $("#select_imob").select2();
 
     var option = '';
 
     $.ajax({
-      url: url_garantia_balance,
+      url: url_guarantee_balance,
       method: "POST",
       dataType: 'json',
+      data: {
+        user_id: <?php echo json_encode($cliente->id) ?>
+      },
       success: function (json) {
-        if (json.sucesso && json.moedas.length) {
-          document.getElementById("garantia_spinner_div").style.height = "0vh";
-          $("#garantia_spinner").hide();
-          $("#show_content").show();
-          tokens = json.moedas;
-          tokens.forEach(element => {
-            option += '<option value="' + element.id_moeda + '" title="' + element
-              .imagem + '" data-decimal="' + element.decimal + '">' + element
-                .simbolo + ' - ' + element.nome + '</option>';
-          });
-          $('#cryptoFrom').html(option);
+        if (json.message == "Sucesso!") {
           const nome = $("#cryptoFrom option:selected").text().replace(" ", "").split("-");
-          token = json.moedas.filter(t => t.simbolo === nome[0])
-          $('.nome_moeda').html(token[0].nome);
-          $('.symbol_moeda').html(token[0].simbolo);
-          const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
-          $('#reward_period').html(" em <b>" + tokenReward + "</b>");
-          saldo = token[0].saldo_disponivel;
-          saldo_stake = isNaN(token[0].staked_balance) ? 0 : token[0].staked_balance;
-          $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0]
-            .decimal));
+          $('.nome_moeda').html("Garantia");
+          $('.symbol_moeda').html("GAR");
+          $('#reward_period').html(" em <b>GAR</b>");
+          saldo = parseFloat(json.data.coin_balance);
+          saldo_stake = parseFloat(json.data.contract_balance);
+          $(".saldo_disponivel").html(fixDecimals(saldo, 8));
+          $('.staked_balance').html(fixDecimals(isNaN(saldo_stake) ? 0 : saldo_stake, 8));
           $(".crypto").select2({
-            templateResult: function (coin) {
-              var $span = $("<span><img style='width: 25px;' src=" + coin
-                .title + " /> " + coin.text + "</span>");
+            templateResult: function () {
+              var $span = $("<span><img style='width: 25px;' src='/resources/images/currencies/GAR.png' />GAR - Garantia</span>");
               return $span;
             },
-            templateSelection: function (coin) {
-              var $span = $("<span><img style='width: 25px;' src=" + coin
-                .title + " /> " + coin.text + "</span>");
+            templateSelection: function () {
+              var $span = $("<span><img style='width: 25px;' src='/resources/images/currencies/GAR.png' />GAR - Garantia</span>");
               return $span;
             }
           });
+          document.getElementById("select_token_spinner").style.display = "none";
+          document.getElementById("select_token").style.display = "block";
 
-          carregarSaldo($("#cryptoFrom").val());
+          getCurrentApm();
+          // fetchTxs(1, 0)
+          // getCheckReward()
         } else {
-          $("#noCoinCard").show();
+          // $("#noCoinCard").show();
           showNotyAlert("Sem moedas na carteira, primeiro adquira moedas!", "e");
         }
       }
     });
+
+    function getProviders() {
+      $.ajax({
+        url: url_guarantee_providers,
+        method: "GET",
+        dataType: 'json',
+        success: function (json) {
+          imob = json.data;
+          imob.forEach(element => {
+            option += '<option value="' + element.cnpj + '" title="' + element
+              .name + '">' + element
+                .name + ' - ' + element.cnpj + '</option>';
+          });
+          $('#select_imob').html(option);
+          $(".imob").select2({
+            templateResult: function (imb) {
+              var $span = $("<span>" + imb.text + "</span>");
+              return $span;
+            },
+            templateSelection: function (imb) {
+              var $span = $("<span>" + imb.text + "</span>");
+              $("#spinner_imob").hide();
+              $("#form_imob").show();
+              $("#info_imob").show();
+              $('#imob_name').html(imb.title);
+              $('#imob_cnpj').html(imb.id);
+              getProviderBalance(imb)
+              return $span;
+            }
+          });
+        }
+      });
+    }
+
+    getProviders()
+
+    function getProviderBalance(imb) {
+      $.ajax({
+        url: url_guarantee_provider_balance,
+        method: "POST",
+        dataType: 'json',
+        data: {
+          user_id: <?php echo json_encode($cliente->id) ?>,
+          provider_doc: imb.id
+        },
+        success: function (json) {
+          $('#imob_available').html(fixDecimals(json.data.available, 8));
+          $('#imob_blocked').html(fixDecimals(json.data.blocked, 8));
+        }
+      });
+    }
+
+
   });
 
-  async function fetchTxs(page, type) {
-    const update = {
-      contract_address: token[0].contract_address,
-      user_id: <?php echo json_encode($cliente->id) ?>,
-      type: type
-    };
+  // async function fetchTxs(page, type) {
+  //   const update = {
+  //     contract_address: "0x18BCa7Deed8C48A2fC8C3A2DA71ed98560Dc4384",
+  //     user_id: <?php echo json_encode($cliente->id) ?>,
+  //     type: type
+  //   };
 
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(update),
-    };
+  //   const options = {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(update),
+  //   };
 
-    try {
-      const response = await fetch('<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/garantia/transactions?page=' + page, options);
-      const data = await response.json();
-      const tx = data.data;
+  //   try {
+  //     const response = await fetch('<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/staking/transactions?page=' + page, options);
+  //     const data = await response.json();
+  //     const tx = data.data;
 
-      var tBodyHtml = "";
-      const tBody_tx = document.getElementById("transactions_table");
-      const pagination = document.getElementById("pagination");
-      tBody_tx.innerHTML = "";
-      pagination.innerHTML = "";
-      if (tx.length && tx.length > 0) {
-        for (i = 0; i < tx.length; i++) {
-          if (tx[i].staked_coin.simbolo == token[0].simbolo) {
-            const rawDate = tx[i].created_at.replace(".000000", "").replace("T", " ").replace("Z", "")
-              .split(" ");
-            const dateGMT = new Date(rawDate[0] + "T" + rawDate[1] + "Z");
-            const date = dateGMT.toLocaleString("pt-BR", {
-              timeZone: "America/Sao_Paulo"
-            }).trim().split(",");
-            const amount = parseFloat(tx[i].value).toFixed(token[0].decimal);
-            const qde =
-              tx[i].type == 1 ? '<span class="text-danger fw-bold">- ' + amount + ' ' + token[0].simbolo +
-                '</span>' :
-                tx[i].type == 3 ? '<span class="text-primary">+ ' + amount + ' ' + token[0].simbolo +
-                  '</span>' :
-                  '<span class="text-success">+ ' + amount + ' ' + token[0].simbolo + '</span>';
-            const status = (tx[i].confirmations >= tx[i].confirmations_required ?
-              "<span class='badge badge-success p-2'>Finalizada</span>" :
-              "<span class='badge badge-warning p-2'>Pendente</span>");
-            const txid = tx[i].hash;
-            const description = tx[i].type == 1 ? "Garantia de " + token[0].simbolo : tx[i].type == 2 ?
-              "Recompensa em " + token[0].simbolo : "Resgate de " + token[0].simbolo;
+  //     var tBodyHtml = "";
+  //     const tBody_tx = document.getElementById("transactions_table");
+  //     const pagination = document.getElementById("pagination");
+  //     tBody_tx.innerHTML = "";
+  //     pagination.innerHTML = "";
+  //     if (tx.length && tx.length > 0) {
+  //       for (i = 0; i < tx.length; i++) {
+  //         if (tx[i].staked_coin.simbolo == "GAR") {
+  //           const rawDate = tx[i].created_at.replace(".000000", "").replace("T", " ").replace("Z", "")
+  //             .split(" ");
+  //           const dateGMT = new Date(rawDate[0] + "T" + rawDate[1] + "Z");
+  //           const date = dateGMT.toLocaleString("pt-BR", {
+  //             timeZone: "America/Sao_Paulo"
+  //           }).trim().split(",");
+  //           const amount = parseFloat(tx[i].value).toFixed(8);
+  //           const qde =
+  //             tx[i].type == 1 ? '<span class="text-danger fw-bold">- ' + amount + ' ' + "GAR" +
+  //               '</span>' :
+  //               tx[i].type == 3 ? '<span class="text-primary">+ ' + amount + ' ' + "GAR" +
+  //                 '</span>' :
+  //                 '<span class="text-success">+ ' + amount + ' ' + "GAR" + '</span>';
+  //           const status = (tx[i].confirmations >= tx[i].confirmations_required ?
+  //             "<span class='badge badge-success p-2'>Finalizada</span>" :
+  //             "<span class='badge badge-warning p-2'>Pendente</span>");
+  //           const txid = tx[i].hash;
+  //           const description = tx[i].type == 1 ? "Garantia de GAR" : tx[i].type == 2 ?
+  //             "Recompensa em GAR" : "Retirada de GAR";
 
-            tBodyHtml += '<tr>' +
-              '<td class="align-middle"><img src="' + token[0].imagem + '" height="30" width="30"></td>' +
-              '<td class="align-middle"><span>' + description + '</span></td>' +
-              '<td class="align-middle"><a href="https://polygonscan.com/tx/' + txid +
-              '" target="_blank">Explorer</a></td>' +
-              '<th class="fs-12 align-middle p-2"><span>' + date[0] + '</span><span class="d-block">' +
-              date[1] + '</span></th>' +
-              '<td class="align-middle">' + qde + '</td>' +
-              '<td class="align-middle">' + status + '</td>' +
-              '</tr>'
+  //           tBodyHtml += '<tr>' +
+  //             '<td class="align-middle"><img src="/resources/images/currencies/GAR.png" height="30" width="30"></td>' +
+  //             '<td class="align-middle"><span>' + description + '</span></td>' +
+  //             '<td class="align-middle"><a href="https://polygonscan.com/tx/' + txid +
+  //             '" target="_blank">Explorer</a></td>' +
+  //             '<th class="fs-12 align-middle p-2"><span>' + date[0] + '</span><span class="d-block">' +
+  //             date[1] + '</span></th>' +
+  //             '<td class="align-middle">' + qde + '</td>' +
+  //             '<td class="align-middle">' + status + '</td>' +
+  //             '</tr>'
 
-          }
-          tBody_tx.innerHTML = tBodyHtml;
+  //         }
+  //         tBody_tx.innerHTML = tBodyHtml;
 
-          var pages = "";
-          for (const item of data.links) {
-            const active = item.active == true ? "active" : "";
-            const url = item.url == null ? "" : item.label == "&laquo; Anterior" ? data.current_page - 1 :
-              item.label == "Próximo &raquo;" ? data.current_page + 1 : item.label;
-            const disabled = item.url == null ? "disabled" : "";
-            pages += '<li class="page-item ' + active + ' ' + disabled +
-              '"><a class="page-link" href="javascript:fetchTxs(' + url + ');">' + item.label +
-              '</a></li>'
-          }
-          const paginationHTML =
-            '<nav class="mx-auto" aria-label="Page navigation example"><ul class="pagination">' + pages +
-            '</ul></nav>';
-          pagination.innerHTML = paginationHTML;
-        }
-      }
-    } catch (error) {
-      console.error('Data error: ' + error.message);
-    }
-  }
+  //         var pages = "";
+  //         for (const item of data.links) {
+  //           const active = item.active == true ? "active" : "";
+  //           const url = item.url == null ? "" : item.label == "&laquo; Anterior" ? data.current_page - 1 :
+  //             item.label == "Próximo &raquo;" ? data.current_page + 1 : item.label;
+  //           const disabled = item.url == null ? "disabled" : "";
+  //           pages += '<li class="page-item ' + active + ' ' + disabled +
+  //             '"><a class="page-link" href="javascript:fetchTxs(' + url + ');">' + item.label +
+  //             '</a></li>'
+  //         }
+  //         const paginationHTML =
+  //           '<nav class="mx-auto" aria-label="Page navigation example"><ul class="pagination">' + pages +
+  //           '</ul></nav>';
+  //         pagination.innerHTML = paginationHTML;
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Data error: ' + error.message);
+  //   }
+  // }
 
   function showSweetAlert(id, type, title, message) {
     $(id).modal("hide");
@@ -1020,13 +1017,13 @@ $_data["idiomaMenu"] = $idioma;
     }
   }
 
-  function setResgate() {
-    var valor = $('#resgate_input').val();
+  function setRetirada() {
+    var valor = $('#retirada_input').val();
     valor = parseFloat(valor.replace(',', '.'));
-    $('#resgate_input').val("");
+    $('#retirada_input').val("");
     try {
       if (valor <= saldo_stake * 1 && valor > 0) {
-        $("#resgateModal").modal("hide");
+        $("#retiradaModal").modal("hide");
         $("#waitingTxModal").modal("show");
         // showNotyAlert("Certo!", "s");
         $.ajax({
@@ -1049,7 +1046,7 @@ $_data["idiomaMenu"] = $idioma;
           }
         },);
       } else {
-        showSweetAlert("#resgateModal", "e", "Algo deu errado :(", "Valor incorreto ou saldo insuficiente!");
+        showSweetAlert("#retiradaModal", "e", "Algo deu errado :(", "Valor incorreto ou saldo insuficiente!");
         showNotyAlert("Errado!", "e");
       }
     } catch (e) {
@@ -1064,98 +1061,54 @@ $_data["idiomaMenu"] = $idioma;
   };
 
   function inserirSaldoStake(percent) {
-    var saldo_resgate = (saldo_stake * percent / 100);
-    $('#resgate_input').val(saldo_resgate.toString().replace(".", ","));
+    var saldo_retirada = (saldo_stake * percent / 100);
+    $('#retirada_input').val(saldo_retirada.toString().replace(".", ","));
   };
-
-
-  function getStakedBalance() {
-    $.ajax({
-      url: url_garantia_staked_balance,
-      method: "POST",
-      dataType: 'json',
-      data: {
-        contract_address: token[0].contract_address
-      },
-      success: function (json) {
-        saldo_stake = json.valor;
-        $('.staked_balance').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
-      }
-    });
-  }
 
   function getCheckReward() {
     var recompensa = 0;
     $.ajax({
-      url: url_garantia_check_reward,
+      url: url_guarantee_checkReward,
       method: "POST",
       dataType: 'json',
       data: {
-        contract_address: token[0].contract_address
+        user_id: <?php echo json_encode($cliente->id) ?>
       },
       success: function (json) {
-        recompensa = json.valor;
-        $('.reward_amount').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
+        // console.log("1 ", json)
+        recompensa = json.data.reward;
+        $('.reward_amount').html(fixDecimals(isNaN(json.data.reward) ? 0 : json.data.reward, 8));
       }
     });
 
     $.ajax({
-      url: url_garantia_check_accumulated_reward,
+      url: url_guarantee_checkAccumulatedReward,
       method: "POST",
       dataType: 'json',
       data: {
-        contract_address: token[0].contract_address
+        user_id: <?php echo json_encode($cliente->id) ?>
       },
       success: function (json) {
-        $('.accumulated_amount').html(fixDecimals((isNaN(json.valor) ? 0 : json.valor) - recompensa, token[0].decimal));
+        // console.log("2 ", json)
+        $('.accumulated_amount').html(fixDecimals((isNaN(json.data.reward) ? 0 : json.data.reward) - recompensa, 8));
       }
     });
   }
 
-  function getCurrentApm(stakedToken) {
-    var stk = {};
-    for (const item of garantiaRates) {
-      if (stakedToken.simbolo == item.simbolo)
-        stk = item;
-    }
+  getCheckReward()
+
+  function getCurrentApm() {
+    var stk = {
+      simbolo: "GAR",
+      apm: 10,
+      bonus: 0,
+      penalty: 0,
+      min_stake: 10
+    };
     const apmFinal = (stk.apm + stk.bonus) / 10 - (stk.apm + stk.bonus) / 10 * (stk.penalty / 1000);
     const min_stake = stk.min_stake;
     $('#apm_percent').html(apmFinal.toFixed(2).toString().replace(".", ",") + "%")
-    $('.min_stake').html(fixDecimals(min_stake, token[0].decimal));
-  }
-
-  function carregarSaldo(moeda) {
-    $('#nome_moeda').html("");
-    document.getElementById("select_token_spinner").style.display = "none";
-    document.getElementById("select_token").style.display = "block";
-
-    $(".crypto").select2({
-      templateResult: function (coin) {
-        var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text +
-          "</span>");
-        return $span;
-      },
-      templateSelection: function (coin) {
-        var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text +
-          "</span>");
-        return $span;
-      }
-    });
-    const nome = $("#cryptoFrom option:selected").text().replace(" ", "").split("-");
-    token = tokens.filter(t => t.simbolo === nome[0])
-    $('.nome_moeda').html(nome[1]);
-    $('.symbol_moeda').html(nome[0]);
-    saldo = token[0].saldo_disponivel;
-    $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0].decimal));
-    const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
-    $('#reward_period').html(" em <b>" + tokenReward + "</b>");
-    getCurrentApm(token[0]);
-
-    $("#stake_input").val("");
-    $("#resgate_input").val("");
-    fetchTxs(1, 0)
-    getStakedBalance()
-    getCheckReward()
+    $('.min_stake').html(fixDecimals(min_stake, 8));
   }
 
   const fBtn0 = document.getElementById("filterBtn0");
