@@ -749,6 +749,7 @@ $_data["idiomaMenu"] = $idioma;
         user_id: <?php echo json_encode($cliente->id) ?>
       },
       success: function (json) {
+        console.log("/guarantee_balance: ", json)
         if (json.message == "Sucesso!") {
           const nome = $("#cryptoFrom option:selected").text().replace(" ", "").split("-");
           $('.nome_moeda').html("Garantia");
@@ -787,6 +788,7 @@ $_data["idiomaMenu"] = $idioma;
         method: "GET",
         dataType: 'json',
         success: function (json) {
+          console.log("/guarantee_providers: ", json)
           imob = json.data;
           imob.forEach(element => {
             option += '<option value="' + element.cnpj + '" title="' + element
@@ -829,6 +831,7 @@ $_data["idiomaMenu"] = $idioma;
           provider_doc: imb.id
         },
         success: function (json) {
+          console.log("/guarantee_provider_balance: ", json)
           $('#imob_available').html(fixDecimals(json.data.available, 8));
           $('#imob_blocked').html(fixDecimals(json.data.blocked, 8));
         }
@@ -853,6 +856,7 @@ $_data["idiomaMenu"] = $idioma;
     try {
       const response = await fetch('<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/guarantee/operations?page=' + page, options);
       const data = await response.json();
+      console.log("/guarantee_operations: ", json)
       const tx = data.data;
 
       var tBodyHtml = "";
@@ -987,6 +991,7 @@ $_data["idiomaMenu"] = $idioma;
             provider_doc: selected_imob.id
           },
           success: function (json) {
+            console.log("/guarantee_transfer: ", json)
             if (json.message == "Sucesso!") {
               showNotyAlert("Transação completa!", "s");
               $("#waitingTxModal").modal("hide");
@@ -1027,6 +1032,7 @@ $_data["idiomaMenu"] = $idioma;
           hash: selected_hash
         },
         success: function (json) {
+          console.log("/guarantee_withdrawal: ", json)
           showNotyAlert("Transação completa!", "s");
           $("#waitingTxModal").modal("hide");
           $("#completedModal").modal("show");
@@ -1061,6 +1067,7 @@ $_data["idiomaMenu"] = $idioma;
         user_id: <?php echo json_encode($cliente->id) ?>
       },
       success: function (json) {
+        console.log("/guarantee_checkReward: ", json)
         recompensa = json.data.reward;
         $('.reward_amount').html(fixDecimals(isNaN(json.data.reward) ? 0 : json.data.reward, 8));
       }
@@ -1074,6 +1081,7 @@ $_data["idiomaMenu"] = $idioma;
         user_id: <?php echo json_encode($cliente->id) ?>
       },
       success: function (json) {
+        console.log("/guarantee_checkAccumulatedReward: ", json)
         // console.log("2 ", json)
         $('.accumulated_amount').html(fixDecimals((isNaN(json.data.reward) ? 0 : json.data.reward) - recompensa, 8));
       }

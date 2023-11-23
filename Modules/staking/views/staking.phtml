@@ -703,7 +703,7 @@ $_data["idiomaMenu"] = $idioma;
     min_stake: 10
   },
   {
-    simbolo: "IMOB",
+    simbolo: "IMB",
     apm: 10,
     bonus: 0,
     penalty: 0,
@@ -805,6 +805,7 @@ $_data["idiomaMenu"] = $idioma;
       method: "POST",
       dataType: 'json',
       success: function (json) {
+        console.log("TODAS AS MOEDAS: ", json)
         if (json.sucesso && json.moedas.length) {
           document.getElementById("staking_spinner_div").style.height = "0vh";
           $("#staking_spinner").hide();
@@ -866,6 +867,7 @@ $_data["idiomaMenu"] = $idioma;
     try {
       const response = await fetch('<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/staking/transactions?page=' + page, options);
       const data = await response.json();
+      console.log("TODAS AS TXS: ", json)
       const tx = data.data;
 
       var tBodyHtml = "";
@@ -970,6 +972,7 @@ $_data["idiomaMenu"] = $idioma;
             amount: valor,
           },
           success: function (json) {
+            console.log("STAKE: ", json)
             if (json.sucesso) {
               showNotyAlert("Transação completa!", "s");
               $("#waitingTxModal").modal("hide");
@@ -1007,6 +1010,7 @@ $_data["idiomaMenu"] = $idioma;
             amount: valor,
           },
           success: function (json) {
+            console.log("RESGATE: ", json)
             if (json.sucesso) {
               showNotyAlert("Transação completa!", "s");
               $("#waitingTxModal").modal("hide");
@@ -1047,8 +1051,9 @@ $_data["idiomaMenu"] = $idioma;
         contract_address: token[0].contract_address
       },
       success: function (json) {
-        saldo_stake = json.valor == null ? 0 : parseFloat(json.valor);
-        $('.staked_balance').html(fixDecimals(isNaN(parseFloat(json.valor)) ? 0 : parseFloat(json.valor), token[0].decimal));
+        console.log("SALDO EM STAKE: ", json)
+        saldo_stake = json.valor;
+        $('.staked_balance').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
       }
     });
   }
@@ -1063,8 +1068,9 @@ $_data["idiomaMenu"] = $idioma;
         contract_address: token[0].contract_address
       },
       success: function (json) {
-        recompensa = parseFloat(json.valor);
-        $('.reward_amount').html(fixDecimals(isNaN(parseFloat(json.valor)) ? 0 : parseFloat(json.valor), token[0].decimal));
+        console.log("CHECK REWARD: ", json)
+        recompensa = json.valor;
+        $('.reward_amount').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
       }
     });
 
@@ -1076,7 +1082,8 @@ $_data["idiomaMenu"] = $idioma;
         contract_address: token[0].contract_address
       },
       success: function (json) {
-        $('.accumulated_amount').html(fixDecimals(isNaN(parseFloat(json.valor)) ? 0 : parseFloat(json.valor) - recompensa, token[0].decimal));
+        console.log("ACCUMULATED REWARD: ", json)
+        $('.accumulated_amount').html(fixDecimals((isNaN(json.valor) ? 0 : json.valor) - recompensa, token[0].decimal));
       }
     });
   }
