@@ -317,6 +317,11 @@ class Extrato {
                                 <small class="stats-label">TXID</small>
                                 <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['BSCSCAN_URL']);  ?>"> Explorer</a></h6>
                             </div>
+                        <?php } else if($extrato->rede == 'POLYGON' ){?>
+                            <div class="col-sm-2">
+                                <small class="stats-label">TXID</small>
+                                <h6><a target="_blank" href="<?php echo str_replace("{hash}", $extrato->hash, $_ENV['POLYGONSCAN_URL']);  ?>"> Explorer</a></h6>
+                            </div>
                         <?php } else if($extrato->rede == 'ERC20' ){?>
                             <div class="col-sm-2">
                                 <small class="stats-label">TXID</small>
