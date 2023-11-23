@@ -822,9 +822,9 @@ $_data["idiomaMenu"] = $idioma;
           $('.symbol_moeda').html(token[0].simbolo);
           const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
           $('#reward_period').html(" em <b>" + tokenReward + "</b>");
-          saldo = token[0].saldo_disponivel;
-          saldo_stake = isNaN(token[0].staked_balance) ? 0 : token[0].staked_balance;
-          $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0]
+          saldo = parseFloat(token[0].saldo_disponivel);
+          saldo_stake = isNaN(parseFloat(token[0].saldo_bloqueado)) ? 0 : parseFloat(token[0].saldo_bloqueado);
+          $(".saldo_disponivel").html(fixDecimals(parseFloat(token[0].saldo_disponivel), token[0]
             .decimal));
           $(".crypto").select2({
             templateResult: function (coin) {
@@ -1047,8 +1047,8 @@ $_data["idiomaMenu"] = $idioma;
         contract_address: token[0].contract_address
       },
       success: function (json) {
-        saldo_stake = json.valor;
-        $('.staked_balance').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
+        saldo_stake = json.valor == null ? 0 : parseFloat(json.valor);
+        $('.staked_balance').html(fixDecimals(isNaN(parseFloat(json.valor)) ? 0 : parseFloat(json.valor), token[0].decimal));
       }
     });
   }
@@ -1063,8 +1063,8 @@ $_data["idiomaMenu"] = $idioma;
         contract_address: token[0].contract_address
       },
       success: function (json) {
-        recompensa = json.valor;
-        $('.reward_amount').html(fixDecimals(isNaN(json.valor) ? 0 : json.valor, token[0].decimal));
+        recompensa = parseFloat(json.valor);
+        $('.reward_amount').html(fixDecimals(isNaN(parseFloat(json.valor)) ? 0 : parseFloat(json.valor), token[0].decimal));
       }
     });
 
@@ -1076,7 +1076,7 @@ $_data["idiomaMenu"] = $idioma;
         contract_address: token[0].contract_address
       },
       success: function (json) {
-        $('.accumulated_amount').html(fixDecimals((isNaN(json.valor) ? 0 : json.valor) - recompensa, token[0].decimal));
+        $('.accumulated_amount').html(fixDecimals(isNaN(parseFloat(json.valor)) ? 0 : parseFloat(json.valor) - recompensa, token[0].decimal));
       }
     });
   }
@@ -1114,8 +1114,8 @@ $_data["idiomaMenu"] = $idioma;
     token = tokens.filter(t => t.simbolo === nome[0])
     $('.nome_moeda').html(nome[1]);
     $('.symbol_moeda').html(nome[0]);
-    saldo = token[0].saldo_disponivel;
-    $(".saldo_disponivel").html(fixDecimals(token[0].saldo_disponivel, token[0].decimal));
+    saldo = parseFloat(token[0].saldo_disponivel);
+    $(".saldo_disponivel").html(fixDecimals(parseFloat(token[0].saldo_disponivel), token[0].decimal));
     const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
     $('#reward_period').html(" em <b>" + tokenReward + "</b>");
     getCurrentApm(token[0]);
