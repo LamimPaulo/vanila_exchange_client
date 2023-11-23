@@ -426,7 +426,7 @@ $_data["idiomaMenu"] = $idioma;
 
           </div>
           <h4 class="mt-5">Histórico</h4>
-          <div class="row justify-content-start">
+          <!-- <div class="row justify-content-start">
             <div class="col-lg-6 mt-3">
               <span class="d-block font-weight-lighter">ATIVIDADE</span>
               <div>
@@ -436,7 +436,7 @@ $_data["idiomaMenu"] = $idioma;
                 <button class="btn btn-sm btn-white mt-1" id="filterBtn3">Retirada</button>
               </div>
             </div>
-            <!-- <div class="col-lg-6 mt-3">
+            <div class="col-lg-6 mt-3">
               <span class="d-block font-weight-lighter">STATUS</span>
               <div>
                 <button class="btn btn-sm btn-primary mt-1">Todos</button>
@@ -444,15 +444,15 @@ $_data["idiomaMenu"] = $idioma;
                 <button class="btn btn-sm btn-white mt-1">Processando</button>
                 <button class="btn btn-sm btn-white mt-1">Erro</button>
               </div>
-            </div> -->
-          </div>
+            </div>
+          </div> -->
           <table class="mt-4 table settings text-center" id="table-garantia">
             <thead class="bg-light">
               <tr>
                 <th scope="col">Moeda</th>
                 <th scope="col">Descrição</th>
                 <th scope="col">Recibo</th>
-                <!-- <th scope="col">Data</th> -->
+                <th scope="col">Data</th>
                 <th scope="col">Quantidade</th>
                 <th scope="col">Status</th>
               </tr>
@@ -534,34 +534,26 @@ $_data["idiomaMenu"] = $idioma;
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <div class="info_saldo d-flex">
-              <a class="btn btn-sm btn-light ml-2" id="visibility-button2"><i class="icon ion-ios-eye"
-                  id="eye2"></i></a>
-              <span class="mr-1">Disponível para retirada:
-                <a href="javascript:inserirSaldoStake(100);">
-                  <span class="balance-hidden">****</span>
-                  <span class="staked_balance fw-bold text-primary balance-visible">
-                    <div class="spinner-border spinner-border-sm text-primary" role="status">
-                      <span class="sr-only">Loading...</span>
-                    </div>
-                  </span>
-                </a>
-              </span>
+            <div class="mt-3" id="form_operation">
+              <div class="row choose-position">
+                <div class="col box-conversion-custom">
+                  <div class="form-group">
+                    <div class="mb-1">Selecione um contrato para retirada:</div>
+                    <select id="select_operation" class="imob custom-select choose-position choose-position-input">
+                    </select>
+                    <div class="mt-3 mb-1">Status: <span id="selected_status"></span></div>
+                    <p class="mt-3 fs-10 font-weight-lighter">Após clicar em Fazer Retirada, aguarde a imobiliária
+                      autorizar a retirada.</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="mt-2 mb-1">Imobiliária Selecionada: <span class="fw-bold selected_imob"></span></div>
-            <!-- <label for="retirada_input" class="input_legend">Quantia para retirada:</label>
-            <input type="text" class="form-control input_height" id="retirada_input" placeholder="1010.10564800"> -->
-            <!-- <div class="d-flex justify-content-between">
-              <span class="fs-10 font-weight-lighter">Informe o valor de <span class="symbol_moeda"></span> para
-                retirada.</span>
-              <span class="input_text symbol_moeda mt-2"></span>
-            </div> -->
           </div>
         </form>
       </div>
       <div class="modal-footer d-flex justify-content-between">
         <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
-        <a href="javascript:setRetirada();" type="button" class="btn btn-primary" id="ungarantia_button">Fazer
+        <a href="javascript:setRetirada();" type="button" class="btn btn-primary" id="retirada_button">Fazer
           Retirada</a>
       </div>
     </div>
@@ -675,13 +667,13 @@ $_data["idiomaMenu"] = $idioma;
   var saldo = 0;
   var saldo_stake = 0;
   var selected_imob = "";
+  var selected_hash = "";
   let balanceVisibility = "";
 
   var tokens = {};
   var token = [];
   const handleVisibility = () => {
     const eye = document.getElementById("eye");
-    const eye2 = document.getElementById("eye2");
     const eye3 = document.getElementById("eye3");
     if (balanceVisibility == "true") {
       const hidden = document.querySelectorAll(".balance-hidden");
@@ -694,8 +686,6 @@ $_data["idiomaMenu"] = $idioma;
       }
       eye.classList.remove("ion-ios-eye");
       eye.classList.add("ion-ios-eye-off");
-      eye2.classList.remove("ion-ios-eye");
-      eye2.classList.add("ion-ios-eye-off");
       eye3.classList.remove("ion-ios-eye");
       eye3.classList.add("ion-ios-eye-off");
       balanceVisibility = "false";
@@ -711,8 +701,6 @@ $_data["idiomaMenu"] = $idioma;
       }
       eye.classList.remove("ion-ios-eye-off");
       eye.classList.add("ion-ios-eye");
-      eye2.classList.remove("ion-ios-eye-off");
-      eye2.classList.add("ion-ios-eye");
       eye3.classList.remove("ion-ios-eye-off");
       eye3.classList.add("ion-ios-eye");
       balanceVisibility = "true";
@@ -729,7 +717,6 @@ $_data["idiomaMenu"] = $idioma;
   }
 
   document.getElementById("visibility-button").addEventListener("click", handleVisibility);
-  document.getElementById("visibility-button2").addEventListener("click", handleVisibility);
   document.getElementById("visibility-button3").addEventListener("click", handleVisibility);
 
   $(document).ready(function () {
@@ -750,6 +737,7 @@ $_data["idiomaMenu"] = $idioma;
     });
 
     $("#select_imob").select2();
+    $("#select_operation").select2();
 
     var option = '';
 
@@ -866,13 +854,43 @@ $_data["idiomaMenu"] = $idioma;
       const response = await fetch('<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/guarantee/operations?page=' + page, options);
       const data = await response.json();
       const tx = data.data;
-      console.log(data)
 
       var tBodyHtml = "";
       const tBody_tx = document.getElementById("transactions_table");
       const pagination = document.getElementById("pagination");
       tBody_tx.innerHTML = "";
       pagination.innerHTML = "";
+      var operations = '';
+      tx.forEach(e => {
+        operations += '<option value="' + e.hash + '" title="' + e.status_name + ',' + e.status + '">' + e.provider.name + ' - ' + parseFloat(e.value).toFixed(4) + ' (' + (e.date).split("-")[0].trim() + ')' + '</option>';
+      });
+      $("#select_operation").html(operations)
+      $("#select_operation").select2({
+        templateResult: function (imb) {
+          var $span = $("<span>" + imb.text + "</span>");
+          return $span;
+        },
+        templateSelection: function (imb) {
+          var $span = $("<span>" + imb.text + "</span>");
+          selected_hash = imb.id;
+          const status_id = parseInt(imb.title.split(",")[1])
+          const status_name = imb.title.split(",")[0]
+          const status = status_id ==1 ? "<span class='badge badge-warning p-2'>" + status_name + "</span>" :
+            status_id == 2 ? "<span class='badge badge-success p-2'>" + status_name + "</span>" :
+              status_id == 3 ? "<span class='badge badge-secondary p-2'>" + status_name + "</span>" :
+                status_id == 4 ? "<span class='badge badge-dark p-2'>" + status_name + "</span>" :
+                  status_id == 5 ? "<span class='badge badge-danger p-2'>" + status_name + "</span>" :
+                    status_id == 6 ? "<span class='badge badge-warning p-2'>" + status_name + "</span>" :
+                      status_id == 7 ? "<span class='badge badge-info p-2'>" + status_name + "</span>" :
+                        status_id == 8 ? "<span class='badge badge-success p-2'>" + status_name + "</span>" :
+                          "<span class='badge badge-primary p-2'>" + status_name + "</span>";
+          $("#selected_status").html(status)
+          const rtBtn = document.getElementById("retirada_button");
+          status_id > 5 ? rtBtn.classList.add("disabled") : rtBtn.classList.remove("disabled")
+          return $span;
+        }
+      });
+
       if (tx.length && tx.length > 0) {
         for (i = 0; i < tx.length; i++) {
           // const rawDate = tx[i].created_at.replace(".000000", "").replace("T", " ").replace("Z", "")
@@ -881,8 +899,9 @@ $_data["idiomaMenu"] = $idioma;
           // const date = dateGMT.toLocaleString("pt-BR", {
           //   timeZone: "America/Sao_Paulo"
           // }).trim().split(",");
+          const date = (tx[i].date).trim().split("-")
           const amount = parseFloat(tx[i].value).toFixed(8);
-          const qde = tx[i].status < 6 ? '<span class="text-danger fw-bold">- ' + amount + ' GAR</span>' : '<span class="text-success">+ ' + amount + ' GAR</span>';
+          const qde = amount + ' GAR</span>';
           const status = tx[i].status == 1 ? "<span class='badge badge-warning p-2'>" + tx[i].status_name + "</span>" :
             tx[i].status == 2 ? "<span class='badge badge-success p-2'>" + tx[i].status_name + "</span>" :
               tx[i].status == 3 ? "<span class='badge badge-secondary p-2'>" + tx[i].status_name + "</span>" :
@@ -899,8 +918,8 @@ $_data["idiomaMenu"] = $idioma;
             '<td class="align-middle"><img src="/resources/images/currencies/GAR.png" height="30" width="30"></td>' +
             '<td class="align-middle"><span>' + description + '</span></td>' +
             '<td class="align-middle"><b class="text-primary">' + txid + '</b></td>' +
-            // '<td class="fs-12 align-middle p-2"><span>' + date[0] + '</span><span class="d-block">' +
-            // date[1] + '</span></td>' +
+            '<td class="fs-12 align-middle p-2"><span>' + date[0] + '</span><span class="d-block">' +
+            date[1] + '</span></td>' +
             '<td class="align-middle">' + qde + '</td>' +
             '<td class="align-middle">' + status + '</td>' +
             '</tr>'
@@ -969,7 +988,6 @@ $_data["idiomaMenu"] = $idioma;
           },
           success: function (json) {
             if (json.message == "Sucesso!") {
-              console.log("SUCESSO: ", json)
               showNotyAlert("Transação completa!", "s");
               $("#waitingTxModal").modal("hide");
               $("#completedModal").modal("show");
@@ -977,7 +995,6 @@ $_data["idiomaMenu"] = $idioma;
                 location.reload(true);
               }, 3000);
             } else {
-              console.log("ERRO: ", json)
               $("#waitingTxModal").modal("hide");
               showSweetAlert("#garantiaModal", "e", "Algo deu errado :(", "Saldo insuficiente!");
               showNotyAlert("Saldo insuficiente!", "e");
@@ -993,10 +1010,10 @@ $_data["idiomaMenu"] = $idioma;
     }
   }
 
-  function setRetirada(hash) {
-    var valor = $('#retirada_input').val();
-    valor = parseFloat(valor.replace(',', '.'));
-    $('#retirada_input').val("");
+  function setRetirada() {
+    // var valor = $('#retirada_input').val();
+    // valor = parseFloat(valor.replace(',', '.'));
+    // $('#retirada_input').val("");
     try {
       $("#retiradaModal").modal("hide");
       $("#waitingTxModal").modal("show");
@@ -1007,20 +1024,15 @@ $_data["idiomaMenu"] = $idioma;
         dataType: 'json',
         data: {
           user_id: <?php echo json_encode($cliente->id) ?>,
-          hash: hash
+          hash: selected_hash
         },
         success: function (json) {
-          if (json.status == "Sucesso!") {
-            showNotyAlert("Transação completa!", "s");
-            $("#waitingTxModal").modal("hide");
-            $("#completedModal").modal("show");
-            setTimeout(() => {
-              location.reload(true);
-            }, 3000);
-          } else {
-            showSweetAlert("#retiradaModal", "e", "Algo deu errado :(", "Você não possui garantia com essa imobiliária!");
-            showNotyAlert("Errado!", "e");
-          }
+          showNotyAlert("Transação completa!", "s");
+          $("#waitingTxModal").modal("hide");
+          $("#completedModal").modal("show");
+          setTimeout(() => {
+            location.reload(true);
+          }, 3000);
         },
       });
     } catch (e) {
@@ -1049,7 +1061,6 @@ $_data["idiomaMenu"] = $idioma;
         user_id: <?php echo json_encode($cliente->id) ?>
       },
       success: function (json) {
-        // console.log("1 ", json)
         recompensa = json.data.reward;
         $('.reward_amount').html(fixDecimals(isNaN(json.data.reward) ? 0 : json.data.reward, 8));
       }
@@ -1085,38 +1096,38 @@ $_data["idiomaMenu"] = $idioma;
     $('.min_stake').html(fixDecimals(min_stake, 8));
   }
 
-  const fBtn0 = document.getElementById("filterBtn0");
-  const fBtn1 = document.getElementById("filterBtn1");
-  const fBtn2 = document.getElementById("filterBtn2");
-  const fBtn3 = document.getElementById("filterBtn3");
-  fBtn0.onclick = () => {
-    fBtn0.className = "btn btn-sm btn-primary mt-1";
-    fBtn1.className = "btn btn-sm btn-white mt-1"
-    fBtn2.className = "btn btn-sm btn-white mt-1"
-    fBtn3.className = "btn btn-sm btn-white mt-1"
-    fetchTxs(1, 0);
-  }
-  fBtn1.onclick = () => {
-    fBtn0.className = "btn btn-sm btn-white mt-1";
-    fBtn1.className = "btn btn-sm btn-primary mt-1"
-    fBtn2.className = "btn btn-sm btn-white mt-1"
-    fBtn3.className = "btn btn-sm btn-white mt-1"
-    fetchTxs(1, 1);
-  }
-  fBtn2.onclick = () => {
-    fBtn0.className = "btn btn-sm btn-white mt-1";
-    fBtn1.className = "btn btn-sm btn-white mt-1"
-    fBtn2.className = "btn btn-sm btn-primary mt-1"
-    fBtn3.className = "btn btn-sm btn-white mt-1"
-    fetchTxs(1, 2);
-  }
-  fBtn3.onclick = () => {
-    fBtn0.className = "btn btn-sm btn-white mt-1";
-    fBtn1.className = "btn btn-sm btn-white mt-1"
-    fBtn2.className = "btn btn-sm btn-white mt-1"
-    fBtn3.className = "btn btn-sm btn-primary mt-1"
-    fetchTxs(1, 3);
-  }
+  // const fBtn0 = document.getElementById("filterBtn0");
+  // const fBtn1 = document.getElementById("filterBtn1");
+  // const fBtn2 = document.getElementById("filterBtn2");
+  // const fBtn3 = document.getElementById("filterBtn3");
+  // fBtn0.onclick = () => {
+  //   fBtn0.className = "btn btn-sm btn-primary mt-1";
+  //   fBtn1.className = "btn btn-sm btn-white mt-1"
+  //   fBtn2.className = "btn btn-sm btn-white mt-1"
+  //   fBtn3.className = "btn btn-sm btn-white mt-1"
+  //   fetchTxs(1, 0);
+  // }
+  // fBtn1.onclick = () => {
+  //   fBtn0.className = "btn btn-sm btn-white mt-1";
+  //   fBtn1.className = "btn btn-sm btn-primary mt-1"
+  //   fBtn2.className = "btn btn-sm btn-white mt-1"
+  //   fBtn3.className = "btn btn-sm btn-white mt-1"
+  //   fetchTxs(1, 1);
+  // }
+  // fBtn2.onclick = () => {
+  //   fBtn0.className = "btn btn-sm btn-white mt-1";
+  //   fBtn1.className = "btn btn-sm btn-white mt-1"
+  //   fBtn2.className = "btn btn-sm btn-primary mt-1"
+  //   fBtn3.className = "btn btn-sm btn-white mt-1"
+  //   fetchTxs(1, 2);
+  // }
+  // fBtn3.onclick = () => {
+  //   fBtn0.className = "btn btn-sm btn-white mt-1";
+  //   fBtn1.className = "btn btn-sm btn-white mt-1"
+  //   fBtn2.className = "btn btn-sm btn-white mt-1"
+  //   fBtn3.className = "btn btn-sm btn-primary mt-1"
+  //   fetchTxs(1, 3);
+  // }
 
 </script>
 
