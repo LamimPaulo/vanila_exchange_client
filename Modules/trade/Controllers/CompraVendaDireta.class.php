@@ -44,7 +44,7 @@ class CompraVendaDireta {
     public function consultarPreco($params) {
         try {
 
-            $cliente = \Utils\Geral::getCliente();
+            $cliente = \Utils\Geral::getLogado();
 
             $amount = \Utils\Post::getNumeric($params, "amount", 0);
             $tipo = \Utils\Post::get($params, "tipo", null);
@@ -193,7 +193,7 @@ class CompraVendaDireta {
             $amount = \Utils\Post::getNumeric($params, "amount", 0);
             $coinId = \Utils\Post::getNumeric($params, "coin_id", 0);
             
-            $cliente = \Utils\Geral::getCliente();
+            $cliente = \Utils\Geral::getLogado();
             $moedasRn = new \Models\Modules\Cadastro\MoedaRn();
             $coin = $moedasRn->get($coinId);
 
@@ -223,7 +223,7 @@ class CompraVendaDireta {
             $amount = \Utils\Post::getNumeric($params, "amount", 0);
             $coinId = \Utils\Post::getNumeric($params, "coin_id", 0);
             
-            $cliente = \Utils\Geral::getCliente();
+            $cliente = \Utils\Geral::getLogado();
             $moedasRn = new \Models\Modules\Cadastro\MoedaRn();
             $coin = $moedasRn->get($coinId);
 
@@ -247,7 +247,7 @@ class CompraVendaDireta {
         
         try {
             
-            $cliente = \Utils\Geral::getCliente();
+            $cliente = \Utils\Geral::getLogado();
             
             $moedas = Array();
             $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
@@ -308,7 +308,7 @@ class CompraVendaDireta {
         
         try {
             
-            $cliente = \Utils\Geral::getCliente();
+            $cliente = \Utils\Geral::getLogado();
             
             $moedas = Array();
             $moedasRn = new \Models\Modules\Cadastro\MoedaRn();
@@ -374,8 +374,8 @@ class CompraVendaDireta {
 
     public function getStakedBalance($params)
     {  
-         $contract_address = \Utils\Post::get($params, "contract_address", null);
-        $cliente = \Utils\Geral::getCliente();
+        $contract_address = \Utils\Post::get($params, "contract_address", null);
+        $cliente = \Utils\Geral::getLogado();
         
         $curl = curl_init();
         $data = array(
@@ -425,7 +425,7 @@ class CompraVendaDireta {
         //  $contract_address = \Utils\Post::get($params, "contract_address", null);
         
         $contract_address = \Utils\Post::get($params, "contract_address", null);
-        $cliente = \Utils\Geral::getCliente();
+        $cliente = \Utils\Geral::getLogado();
         
         $curl = curl_init();
         $data = array(
@@ -470,7 +470,7 @@ class CompraVendaDireta {
     public function checkAccumulatedReward($params)
     {   
         $contract_address = \Utils\Post::get($params, "contract_address", null);
-        $cliente = \Utils\Geral::getCliente();
+        $cliente = \Utils\Geral::getLogado();
         
         $curl = curl_init();
         $data = array(
@@ -776,7 +776,7 @@ class CompraVendaDireta {
     public function getParidades($params) {
         
         try {
-            $cliente = \Utils\Geral::getCliente();
+            $cliente = \Utils\Geral::getLogado();
             $idMoeda = \Utils\Post::getEncrypted($params, "moeda", null);
             $tipoMoeda = "trade";
             $saldo = 0;
@@ -885,7 +885,7 @@ class CompraVendaDireta {
         }
 
         if(!$encontrada){
-            $cliente = \Utils\Geral::getCliente();
+            $cliente = \Utils\Geral::getLogado();
             $mensagem = "Compra Venda Direta - Paridade não encontrada - Cliente: {$cliente->nome} - {$cliente->email}";
             
             $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
