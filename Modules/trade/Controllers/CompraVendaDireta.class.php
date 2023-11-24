@@ -191,7 +191,7 @@ class CompraVendaDireta {
             // }
 
             $amount = \Utils\Post::getNumeric($params, "amount", 0);
-            $coinId = \Utils\Post::getNumeric($params, "coin_id", 0);
+            $coinId = \Utils\Post::getEncrypted($params, "coin_id", 0);
             
             $cliente = \Utils\Geral::getCliente();
             $moedasRn = new \Models\Modules\Cadastro\MoedaRn();
@@ -219,9 +219,9 @@ class CompraVendaDireta {
             // if (!\Models\Modules\Acesso\RotinaRn::validar(\Utils\Rotas::R_MERCADO, \Utils\Constantes::CADASTRAR)) {
             //     throw new \Exception($this->idioma->getText("voceNaoTemPermissao"));
             // }
-
+            // \Utils\Criptografia::decriptyPostId()
             $amount = \Utils\Post::getNumeric($params, "amount", 0);
-            $coinId = \Utils\Post::getNumeric($params, "coin_id", 0);
+            $coinId = \Utils\Post::getEncrypted($params, "coin_id", 0);
             
             $cliente = \Utils\Geral::getCliente();
             $moedasRn = new \Models\Modules\Cadastro\MoedaRn();
@@ -234,7 +234,7 @@ class CompraVendaDireta {
             
             $json["sucesso"] = true;
             // $json["mensagem"] = $this->idioma->getText("ordemRegistradaSucessoV");
-            $json["mensagem"] = 'Valor staked successfuly';
+            $json["mensagem"] = 'Valor unstaked successfuly';
             $json["raw"] = json_encode($response);
         } catch (\Exception $ex) {
             $json["sucesso"] = false;
