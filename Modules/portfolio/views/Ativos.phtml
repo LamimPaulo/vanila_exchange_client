@@ -1087,9 +1087,9 @@ $_data["idiomaMenu"] = $idioma;
 
     const totalBalance = () => {
       total = 0;
-      if (walletData['series']) {
-        walletData['series'].forEach(e => {
-          total = parseFloat(e) + total;
+      if (walletData['position']) {
+        walletData['position'].forEach(e => {
+          total = parseFloat(e.amount) + parseFloat(e.amount_in_orders) + parseFloat(e.amount_staked) + total;
         });
       }
       return total;
