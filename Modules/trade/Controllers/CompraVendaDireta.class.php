@@ -384,7 +384,7 @@ class CompraVendaDireta {
             'user_id' => $cliente->id,
         );
 
-        exit(print_r($data));
+        exit(print_r($cliente->ipUltimoAcesso));
 
         curl_setopt_array($curl, array(
           CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/getBalance",
