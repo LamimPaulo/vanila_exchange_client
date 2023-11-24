@@ -1052,7 +1052,9 @@ $_data["idiomaMenu"] = $idioma;
 
         switch (walletData['position'][j].coin_category) {
           case 1:
-            portfolio_cryptoBalance += walletData['series'][j + 1];
+            if(walletData['position'][j].name !== "Coinage BRL"){
+              portfolio_cryptoBalance += walletData['series'][j + 1];
+            }
             portfolio_cryptoHtml += headerHtml(j) + bodyHtml("crypto", j);
 
             break;
@@ -1085,11 +1087,15 @@ $_data["idiomaMenu"] = $idioma;
       portfolio_startupsHtml = '<p>Nenhuma posição encontrada</p>';
     }
 
+    const fixToFloat = (str) => {
+      return parseFloat((str).replace(".","").replace(",","."))
+    }
+
     const totalBalance = () => {
       total = 0;
       if (walletData['position']) {
-        walletData['position'].forEach(e => {
-          total = e.quote*(parseFloat(e.amount) + parseFloat(e.amount_in_orders) + parseFloat(e.amount_staked)) + total;
+        walletData['position'].forEach((e,i) => {
+          total = fixToFloat(e.quote)*(fixToFloat(e.amount) + fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked)) + total;
         });
       }
       return total;
@@ -1102,9 +1108,9 @@ $_data["idiomaMenu"] = $idioma;
       if (walletData['position']) {
         walletData['position'].forEach((e, i) => {
           if (i == 0) {
-            total = e.quote*(parseFloat(e.amount_in_orders) + parseFloat(e.amount_staked)) + total;
+            total = fixToFloat(e.quote)*(fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked)) + total;
           } else {
-            total = e.quote*(parseFloat(e.amount) + parseFloat(e.amount_in_orders) + parseFloat(e.amount_staked)) + total;
+            total = fixToFloat(e.quote)*(fixToFloat(e.amount) + fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked)) + total;
           }
         });
       }
