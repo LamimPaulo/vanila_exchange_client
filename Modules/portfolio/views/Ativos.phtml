@@ -1089,7 +1089,7 @@ $_data["idiomaMenu"] = $idioma;
       total = 0;
       if (walletData['position']) {
         walletData['position'].forEach(e => {
-          total = parseFloat(e.amount) + parseFloat(e.amount_in_orders) + parseFloat(e.amount_staked) + total;
+          total = e.quote*(parseFloat(e.amount) + parseFloat(e.amount_in_orders) + parseFloat(e.amount_staked)) + total;
         });
       }
       return total;
@@ -1099,10 +1099,12 @@ $_data["idiomaMenu"] = $idioma;
 
     const investedBalance = () => {
       total = 0;
-      if (walletData['series']) {
-        walletData['series'].forEach((e, i) => {
-          if (i > 0) {
-            total = parseFloat(e) + total;
+      if (walletData['position']) {
+        walletData['position'].forEach((e, i) => {
+          if (i == 0) {
+            total = e.quote*(parseFloat(e.amount_in_orders) + parseFloat(e.amount_staked)) + total;
+          } else {
+            total = e.quote*(parseFloat(e.amount) + parseFloat(e.amount_in_orders) + parseFloat(e.amount_staked)) + total;
           }
         });
       }
