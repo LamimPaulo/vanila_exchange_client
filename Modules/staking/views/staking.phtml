@@ -867,7 +867,7 @@ $_data["idiomaMenu"] = $idioma;
     try {
       const response = await fetch('<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/staking/transactions?page=' + page, options);
       const data = await response.json();
-      console.log("TODAS AS TXS: ", json)
+      // console.log("TODAS AS TXS: ", json)
       const tx = data.data;
 
       var tBodyHtml = "";
