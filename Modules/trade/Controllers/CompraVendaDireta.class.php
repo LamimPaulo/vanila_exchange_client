@@ -384,7 +384,6 @@ class CompraVendaDireta {
             'user_id' => $cliente->id,
         );
 
-        exit(print_r($cliente->ipUltimoAcesso));
 
         curl_setopt_array($curl, array(
           CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/getBalance",
@@ -405,6 +404,9 @@ class CompraVendaDireta {
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         
         curl_close($curl);
+
+        exit(print_r($response));
+
         
         if($httpCode != 200){
             \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
