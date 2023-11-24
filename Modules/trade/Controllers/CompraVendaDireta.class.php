@@ -374,16 +374,14 @@ class CompraVendaDireta {
 
     public function getStakedBalance($params)
     {  
-        $contract_address = \Utils\Post::get($params, "contract_address", null);
+         $contract_address = \Utils\Post::get($params, "contract_address", null);
         $cliente = \Utils\Geral::getCliente();
-
         
         $curl = curl_init();
         $data = array(
             'contract_address' => $contract_address,
             'user_id' => $cliente->id,
         );
-
 
         curl_setopt_array($curl, array(
           CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/getBalance",
@@ -404,9 +402,6 @@ class CompraVendaDireta {
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         
         curl_close($curl);
-
-        exit(print_r($response));
-
         
         if($httpCode != 200){
             \Utils\Notificacao::notificar("Falha na consulta de documento", true, false, null, true);
