@@ -673,6 +673,7 @@ $_data["idiomaMenu"] = $idioma;
   var saldo_stake = 0;
   var regressor = null;
   let balanceVisibility = "";
+  var selected_coin = "";
   
   const stakingRates = [{
     simbolo: "BTC",
@@ -973,7 +974,7 @@ $_data["idiomaMenu"] = $idioma;
           method: "POST",
           dataType: 'json',
           data: {
-            coin_id: 1, //TODO
+            coin_id: selected_coin,
             amount: valor,
           },
           success: function (json) {
@@ -1010,7 +1011,7 @@ $_data["idiomaMenu"] = $idioma;
           method: "POST",
           dataType: 'json',
           data: {
-            coin_id: 1, //TODO
+            coin_id: selected_coin,
             amount: valor,
           },
           success: function (json) {
@@ -1112,6 +1113,7 @@ $_data["idiomaMenu"] = $idioma;
         return $span;
       },
       templateSelection: function (coin) {
+        selected_coin = coin.id;
         var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text +
           "</span>");
         return $span;
