@@ -377,13 +377,14 @@ class CompraVendaDireta {
         $contract_address = \Utils\Post::get($params, "contract_address", null);
         $cliente = \Utils\Geral::getCliente();
 
-        exit(print_r($cliente));
         
         $curl = curl_init();
         $data = array(
             'contract_address' => $contract_address,
             'user_id' => $cliente->id,
         );
+
+        exit(print_r($data));
 
         curl_setopt_array($curl, array(
           CURLOPT_URL => $_ENV['SITE_URL']."/api/priv/staking/getBalance",
