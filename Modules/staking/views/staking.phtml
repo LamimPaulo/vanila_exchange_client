@@ -812,7 +812,6 @@ $_data["idiomaMenu"] = $idioma;
       method: "POST",
       dataType: 'json',
       success: function (json) {
-        console.log("TODAS AS MOEDAS: ", json)
         if (json.sucesso && json.moedas.length) {
           document.getElementById("staking_spinner_div").style.height = "0vh";
           $("#staking_spinner").hide();
