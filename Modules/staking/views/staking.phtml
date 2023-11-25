@@ -978,7 +978,8 @@ $_data["idiomaMenu"] = $idioma;
             amount: valor,
           },
           success: function (json) {
-            if (json.sucesso) {
+            console.log(json)
+            if (json.sucesso == true) {
               showNotyAlert("Transação completa!", "s");
               $("#waitingTxModal").modal("hide");
               $("#completedModal").modal("show");

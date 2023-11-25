@@ -1088,7 +1088,10 @@ $_data["idiomaMenu"] = $idioma;
     }
 
     const fixToFloat = (str) => {
-      return parseFloat((str).replace(".","").replace(",","."))
+      console.log(str)
+      const fix = parseFloat((str).replace(".","").replace(".","").replace(".","").replace(",","."))
+      console.log(fix)
+      return fix
     }
 
     const totalBalance = () => {
