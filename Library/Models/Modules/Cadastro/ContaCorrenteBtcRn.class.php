@@ -2,6 +2,7 @@
 
 namespace Models\Modules\Cadastro;
 
+use LambdaAWS\LambdaMain;
 use \Models\Modules\Model\GenericModel;
 /**
  * Classe que contém as regras de negócio da entidade Banco
@@ -1047,25 +1048,7 @@ class ContaCorrenteBtcRn {
         $contaCorrenteTo->autorizada = 1;
         $contaCorrenteTo->rede = 'Interna';
 
-        // $contaCorrenteFrom->id = 0;
-        // $contaCorrenteFrom->idCliente = $clienteFrom->id;
-        // $contaCorrenteFrom->data = new \Utils\Data(date("d/m/Y H:i:s"));
-        // $contaCorrenteFrom->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
-        // $contaCorrenteFrom->descricao = $descricao;
-        // $contaCorrenteFrom->tipo = \Utils\Constantes::SAIDA;
-        // $contaCorrenteFrom->valor = $valorTransferencia;
-        // $contaCorrenteFrom->valorTaxa = $taxa;
-        // $contaCorrenteFrom->idMoedaTaxa = empty($moedaTaxa) ? $idMoeda : $moedaTaxa->id;
-        // $contaCorrenteFrom->transferencia = 1;
-        // $contaCorrenteFrom->idMoeda = empty($moedaDestino) ? $idMoeda : $moedaDestino->id;
-        // $contaCorrenteFrom->enderecoBitcoin = $enderecoBitcoin;
-        // $contaCorrenteFrom->enderecoEnvio = 'todo';
-        // $contaCorrenteFrom->direcao = ($clienteTo == null ? \Utils\Constantes::TRANF_EXTERNA : \Utils\Constantes::TRANF_INTERNA);
-        // $contaCorrenteFrom->executada = ($clienteTo == null ? 0 : 1);
-        // $contaCorrenteFrom->rede = empty($rede) ? $moeda->coinType : $rede;
-
-
-
+        $result = LambdaMain::enviar('internal-transfer', json_encode($contaCorrenteTo));
         
         $this->salvar($contaCorrenteTo, $token);
     }
