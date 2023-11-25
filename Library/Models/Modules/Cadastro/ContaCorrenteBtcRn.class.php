@@ -858,6 +858,7 @@ class ContaCorrenteBtcRn {
             $contaCorrenteFrom->transferencia = 1;
             $contaCorrenteFrom->idMoeda = empty($moedaDestino) ? $idMoeda : $moedaDestino->id;
             $contaCorrenteFrom->enderecoBitcoin = $enderecoBitcoin;
+            $contaCorrenteFrom->enderecoEnvio = ' ';
             $contaCorrenteFrom->direcao = ($clienteTo == null ? \Utils\Constantes::TRANF_EXTERNA : \Utils\Constantes::TRANF_INTERNA);
             $contaCorrenteFrom->executada = ($clienteTo == null ? 0 : 1);
             $contaCorrenteFrom->rede = empty($rede) ? $moeda->coinType : $rede;
@@ -1032,6 +1033,7 @@ class ContaCorrenteBtcRn {
         $contaCorrenteTo->id = 0;
         $contaCorrenteTo->idCliente = $clienteTo->id;
         $contaCorrenteTo->data = new \Utils\Data(date("d/m/Y H:i:s"));
+        $contaCorrenteTo->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
         $contaCorrenteTo->descricao = "Depósito Interno {$moeda->nome}";
         $contaCorrenteTo->tipo = \Utils\Constantes::ENTRADA;
         $contaCorrenteTo->valor = number_format(($contaCorrente->valor - $contaCorrente->valorTaxa), $moeda->casasDecimais, ".", "");
