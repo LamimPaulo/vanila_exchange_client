@@ -1037,14 +1037,35 @@ class ContaCorrenteBtcRn {
         $contaCorrenteTo->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
         $contaCorrenteTo->descricao = "Depósito Interno {$moeda->nome}";
         $contaCorrenteTo->tipo = \Utils\Constantes::ENTRADA;
-        $contaCorrenteTo->valor = number_format(($contaCorrente->valor - $contaCorrente->valorTaxa), $moeda->casasDecimais, ".", "");
+        $contaCorrenteTo->valor = number_format(($contaCorrente->valor ?? 0 - $contaCorrente->valorTaxa ?? 0.0), $moeda->casasDecimais ?? 8, ".", "");
         $contaCorrenteTo->transferencia = 0;
         $contaCorrenteTo->enderecoBitcoin = $contaCorrente->enderecoBitcoin;
-        $contaCorrenteTo->enderecoEnvio = ' ';
+        $contaCorrenteTo->enderecoEnvio = 'Interno';
         $contaCorrenteTo->direcao = \Utils\Constantes::TRANF_INTERNA;
         $contaCorrenteTo->executada = 1;
-        $contaCorrenteTo->idMoeda = $contaCorrente->idMoeda;
+        $contaCorrenteTo->idMoeda = $contaCorrente->idMoeda ?? 2;
         $contaCorrenteTo->autorizada = 1;
+        $contaCorrenteTo->rede = 'Interna';
+
+        // $contaCorrenteFrom->id = 0;
+        // $contaCorrenteFrom->idCliente = $clienteFrom->id;
+        // $contaCorrenteFrom->data = new \Utils\Data(date("d/m/Y H:i:s"));
+        // $contaCorrenteFrom->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
+        // $contaCorrenteFrom->descricao = $descricao;
+        // $contaCorrenteFrom->tipo = \Utils\Constantes::SAIDA;
+        // $contaCorrenteFrom->valor = $valorTransferencia;
+        // $contaCorrenteFrom->valorTaxa = $taxa;
+        // $contaCorrenteFrom->idMoedaTaxa = empty($moedaTaxa) ? $idMoeda : $moedaTaxa->id;
+        // $contaCorrenteFrom->transferencia = 1;
+        // $contaCorrenteFrom->idMoeda = empty($moedaDestino) ? $idMoeda : $moedaDestino->id;
+        // $contaCorrenteFrom->enderecoBitcoin = $enderecoBitcoin;
+        // $contaCorrenteFrom->enderecoEnvio = 'todo';
+        // $contaCorrenteFrom->direcao = ($clienteTo == null ? \Utils\Constantes::TRANF_EXTERNA : \Utils\Constantes::TRANF_INTERNA);
+        // $contaCorrenteFrom->executada = ($clienteTo == null ? 0 : 1);
+        // $contaCorrenteFrom->rede = empty($rede) ? $moeda->coinType : $rede;
+
+
+
         
         $this->salvar($contaCorrenteTo, $token);
     }
