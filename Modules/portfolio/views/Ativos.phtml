@@ -858,6 +858,43 @@ $_data["idiomaMenu"] = $idioma;
       }
     }
 
+    const fixToFloat = (str) => {
+      const fix = parseFloat((str).replace(".","").replace(".","").replace(".","").replace(",","."))
+      return fix
+    }
+
+    const tokenTotalBalance = (i) => {
+        const e = walletData['position'][i];
+        const total = fixToFloat(e.quote)*(fixToFloat(e.amount) + fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked));
+      return total.toFixed(8);
+    }
+
+    const totalBalance = () => {
+      total = 0;
+      if (walletData['position']) {
+        walletData['position'].forEach((e,i) => {
+          total = fixToFloat(e.quote)*(fixToFloat(e.amount) + fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked)) + total;
+        });
+      }
+      return total;
+    }
+
+    projectedBalance = totalBalance();
+
+    const investedBalance = () => {
+      total = 0;
+      if (walletData['position']) {
+        walletData['position'].forEach((e, i) => {
+          if (i == 0) {
+            total = fixToFloat(e.quote)*(fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked)) + total;
+          } else {
+            total = fixToFloat(e.quote)*(fixToFloat(e.amount) + fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked)) + total;
+          }
+        });
+      }
+      return total;
+    }
+
     const headerHtml = (j) => {
       return `<div class="card">
                           <div class="card-header collapsed cursor" data-toggle="collapse" data-target="#collapse${walletData['labels'][j + 1]}"
@@ -870,7 +907,7 @@ $_data["idiomaMenu"] = $idioma;
                                 <span class="theme-color">${walletData['labels'][j + 1]}</span>
                               </div>
                               <div class="col-3">
-                                <span class="balance-hidden">****</span><span class="balance-visible">${walletData['position'][j].amount}</span>
+                                <span class="balance-hidden">****</span><span class="balance-visible">${tokenTotalBalance(j)}</span>
                               </div>
                               <div class="col-3">
                                 <span class="balance-hidden">****</span><span class="balance-visible">${walletData['series'][j + 1].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
@@ -920,29 +957,30 @@ $_data["idiomaMenu"] = $idioma;
                                     <table class="table w-100 mt-2 table_responsive_540">
                                       <thead class="text-center">
                                         <tr>
-                                          <th>Rendimento</th>
-                                          <th>Projetado</th>
-                                          <th>Negociado do dia</th>
+                                          <th>Saldo em ${walletData['labels'][j + 1]}</th>
+                                          <th>Em Ordens</th>
+                                          <th>Em Stake</th>
                                           <th>Em garantia</th>
-                                          <th>Liquidação de termo</th>
+                                          <th><b>Total</b></th>
                                         </tr>
                                       </thead>
                                       <tbody class="text-center">
                                         <tr>
-                                          <td><span class="balance-hidden">****</span><span class="balance-visible">R$ 0,00</span></td>
                                           <td><span class="balance-hidden">****</span><span
-                                              class="balance-visible">R$ 0,00</span>
+                                              class="balance-visible">${walletData['position'][j].amount}</span>
                                           </td>
                                           <td><span class="balance-hidden">****</span><span
-                                              class="balance-visible">R$ 0,00</span>
+                                              class="balance-visible">${walletData['position'][j].amount_in_orders}</span>
                                           </td>
                                           <td><span class="balance-hidden">****</span><span
-                                              class="balance-visible">R$ 0,00</span>
+                                              class="balance-visible">${walletData['position'][j].amount_staked}</span>
                                           </td>
                                           <td><span class="balance-hidden">****</span><span
-                                              class="balance-visible">R$ 0,00</span>
+                                              class="balance-visible">${walletData['position'][j].name == 'Garantia' ? walletData['position'][j].amount_guaranteed : "0,00000000"}</span>
                                           </td>
-                                          
+                                          <td><span class="balance-hidden">****</span><span
+                                              class="balance-visible">${tokenTotalBalance(j)}</span>
+                                          </td>
                                         </tr>
                                       </tbody>
                                     </table>
@@ -1085,39 +1123,6 @@ $_data["idiomaMenu"] = $idioma;
       portfolio_rendaHtml = '<p>Nenhuma posição encontrada</p>';
       portfolio_utilityHtml = '<p>Nenhuma posição encontrada</p>';
       portfolio_startupsHtml = '<p>Nenhuma posição encontrada</p>';
-    }
-
-    const fixToFloat = (str) => {
-      console.log(str)
-      const fix = parseFloat((str).replace(".","").replace(".","").replace(".","").replace(",","."))
-      console.log(fix)
-      return fix
-    }
-
-    const totalBalance = () => {
-      total = 0;
-      if (walletData['position']) {
-        walletData['position'].forEach((e,i) => {
-          total = fixToFloat(e.quote)*(fixToFloat(e.amount) + fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked)) + total;
-        });
-      }
-      return total;
-    }
-
-    projectedBalance = totalBalance();
-
-    const investedBalance = () => {
-      total = 0;
-      if (walletData['position']) {
-        walletData['position'].forEach((e, i) => {
-          if (i == 0) {
-            total = fixToFloat(e.quote)*(fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked)) + total;
-          } else {
-            total = fixToFloat(e.quote)*(fixToFloat(e.amount) + fixToFloat(e.amount_in_orders) + fixToFloat(e.amount_staked)) + total;
-          }
-        });
-      }
-      return total;
     }
 
     const currentDate = () => {

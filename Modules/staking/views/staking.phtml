@@ -828,7 +828,7 @@ $_data["idiomaMenu"] = $idioma;
           token = json.moedas.filter(t => t.simbolo === nome[0])
           $('.nome_moeda').html(token[0].nome);
           $('.symbol_moeda').html(token[0].simbolo);
-          const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo;
+          const tokenReward = token[0].simbolo == "PTQ" ? "PCOIN" : token[0].simbolo == "MJD" ? "CBRL" : token[0].simbolo;
           $('#reward_period').html(" em <b>" + tokenReward + "</b>");
           saldo = token[0].saldo_disponivel;
           saldo_stake = isNaN(token[0].staked_balance) ? 0 : token[0].staked_balance;
