@@ -850,6 +850,7 @@ class ContaCorrenteBtcRn {
             $contaCorrenteFrom->id = 0;
             $contaCorrenteFrom->idCliente = $clienteFrom->id;
             $contaCorrenteFrom->data = new \Utils\Data(date("d/m/Y H:i:s"));
+            $contaCorrenteFrom->dataCadastro = new \Utils\Data(date("d/m/Y H:i:s"));
             $contaCorrenteFrom->descricao = $descricao;
             $contaCorrenteFrom->tipo = \Utils\Constantes::SAIDA;
             $contaCorrenteFrom->valor = $valorTransferencia;
