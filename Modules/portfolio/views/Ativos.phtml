@@ -118,7 +118,21 @@ $_data["idiomaMenu"] = $idioma;
                           </div>
                         </div>
                       </div>
-
+                      <div class="carousel-item">
+                        <div class="row align-items-center ml-2 mr-3">
+                          <div class="col-2">
+                            <img src="assets/img/icon/convert.svg" class="carousel_icon" alt="staking">
+                          </div>
+                          <div class="col-10">
+                            <a href="/exchange">
+                              <div class="text-white fs-10 mt-3 ml-1">
+                                <p class="h6 text-white">Oportunidade</p>
+                                <p>Comprar tokens em pré-venda, garantindo o preço de lançamento.</p>
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
@@ -1337,10 +1351,10 @@ $_data["idiomaMenu"] = $idioma;
     handleProventos();
 
     handlePieChart("dashboard-chart", noInvestedFunds() == true ? dadosZeradosPie : dadosPie);
-    handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 14);
-    handleRadialChart("pie-renda-chart", pieChartPercent(portfolio_rendaBalance).toFixed(1), "yellow", 50, 14);
-    handleRadialChart("pie-utility-chart", pieChartPercent(portfolio_utilityBalance).toFixed(1), "blue", 50, 14);
-    handleRadialChart("pie-startups-chart", pieChartPercent(portfolio_startupsBalance).toFixed(1), "green", 50, 14);
+    handleRadialChart("pie-crypto-chart", pieChartPercent(portfolio_cryptoBalance).toFixed(1), "orange", 50, 10);
+    handleRadialChart("pie-renda-chart", pieChartPercent(portfolio_rendaBalance).toFixed(1), "yellow", 50, 10);
+    handleRadialChart("pie-utility-chart", pieChartPercent(portfolio_utilityBalance).toFixed(1), "blue", 50, 10);
+    handleRadialChart("pie-startups-chart", pieChartPercent(portfolio_startupsBalance).toFixed(1), "green", 50, 10);
     document.getElementById('total-percent').innerHTML = pieChartPercent(investedBalance()).toFixed(2) + "%";
     document.getElementById('total-text').innerHTML = "Total Investido";
     document.getElementById('wallet-accordion').innerHTML = walletHtml;

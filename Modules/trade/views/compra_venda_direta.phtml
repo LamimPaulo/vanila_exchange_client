@@ -136,6 +136,59 @@ $_data["idiomaMenu"] = $idioma;
     }
 
     .select2-container--default .select2-selection--single {}
+
+    .card-base {
+        position: relative;
+        opacity: 0.1;
+    }
+
+    .card-overlay {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        font-weight: bold;
+        font-size: 2rem;
+        border-radius: 5px;
+        background: rgba(52, 58, 64, .3);
+        position: absolute;
+        z-index: 2;
+    }
+
+    .sold-out {
+        color: #fff;
+        text-align: center;
+    }
+
+    .sold-out--title {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .img-token {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-img-top {
+        max-height: 120px;
+        max-width: 120px;
+    }
+
+    .input_text {
+        transform: translate(-10px, -29px);
+    }
+
+    .input_legend {
+        background-color: white;
+        transform: translate(10px, 16px);
+        padding: 0 5px 0 5px;
+        font-weight: bold;
+        font-size: 12px;
+    }
 </style>
 <?php Utils\Layout::append("inspina/metas", $_data) ?>
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
@@ -245,14 +298,195 @@ $_data["idiomaMenu"] = $idioma;
                             </div>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Oportunidades de Tokens</h4>
+                            <div class="row" id="pre-sale">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- compraModal -->
+<div class="modal fade" id="compraModal" tabindex="-1" role="dialog" aria-labelledby="compraModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="compraModalTitle">Compra de <span class="nome_moeda"></span>
+                    <span class="symbol_moeda"></span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <div class="info_saldo d-flex">
+                            <a class="btn btn-sm btn-light ml-2" id="visibility-button"><i class="icon ion-ios-eye"
+                                    id="eye"></i></a>
+                            <span class="mr-1">Saldo Disponível:
+                                <a href="javascript:addPercent(100);">
+                                    <span class="balance-hidden">****</span>
+                                    <span class="saldo_disponivel fw-bold text-primary balance-visible">
+                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </span>
+
+                                </a>
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="javascript:addPercent(25);" class="btn btn-sm btn-outline-primary fw-bold">25%</a>
+                            <a href="javascript:addPercent(50);" class="btn btn-sm btn-outline-primary fw-bold">50%</a>
+                            <a href="javascript:addPercent(75);" class="btn btn-sm btn-outline-primary fw-bold">75%</a>
+                            <a href="javascript:addPercent(100);"
+                                class="btn btn-sm btn-outline-primary fw-bold">100%</a>
+                        </div>
+                        <div class="info_saldo d-flex justify-content-between mt-4">
+                            <span class="mr-1">Disponível em Pré-Venda:
+                                <span class="saldo_pre-sale fw-bold text-primary">
+                                </span>
+                            </span>
+                            <span>
+                                Preço:
+                                <span class="badge badge-primary py-2" id="price_local"></span>
+                            </span>
+                        </div>
+                        <label for="buy_input" class="input_legend">Quantia para compra:</label>
+                        <input type="text" class="form-control input_height" id="buy_input" placeholder="123">
+                        <div class="d-flex justify-content-end">
+                            <span class="input_text">CBRL</span>
+                        </div>
+                        <div class="text-center"><small>Compra mínima de 10 CBRL</small></div>
+                        <div class="mt-3 text-center" id="pre-sale_conversion">
+                            <p class="fw-bold h5">Conversão:</p>
+                            <p class="mt-3">
+                                <span class="fw-bold h5 text-secondary">
+                                    <img class="mr-1 mb-1" src="/resources/images/currencies/CBRL.png" alt="from"
+                                        height="30px" width="30px">
+                                    <span id="buy_amount"></span> CBRL <b>≅</b>
+                                    <img class="mr-1 mb-1 token_image" src="" alt="to" height="30px" width="30px">
+                                    <span id="token_amount"></span> <span class="nome_moeda"></span>
+                                </span>
+                            </p>
+                            <span class="h6">Deseja continuar com a compra?</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
+                <button onclick=setBuy() type="button" class="btn btn-primary" id="buy_button" disabled>Comprar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- detalhesModal -->
+<div class="modal fade" id="detalhesModal" tabindex="-1" role="dialog" aria-labelledby="detalhesModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="detalhesModalTitle">Detalhes de <span class="nome_moeda"></span>
+                    (<span class="symbol_moeda"></span>)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <div class="info_saldo d-flex">
+                            <a class="btn btn-sm btn-light ml-2" id="visibility-button"><i class="icon ion-ios-eye"
+                                    id="eye"></i></a>
+                            <span class="mr-1">Disponível para stake:
+                                <a href="javascript:inserirSaldo(100);">
+                                    <span class="balance-hidden">****</span>
+                                    <span class="saldo_disponivel fw-bold text-primary balance-visible">
+                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </span>
+                                </a>
+                            </span>
+                        </div>
+                        <label for="stake_input" class="input_legend">Quantia para stake:</label>
+                        <input type="text" class="form-control input_height" id="stake_input"
+                            placeholder="1010.10564800">
+                        <div class="d-flex justify-content-between">
+                            <span class="fs-10 font-weight-lighter">Mínimo de <span class="min_stake"></span> <span
+                                    class="symbol_moeda"></span> para
+                                staking.</span>
+                            <span class="input_text symbol_moeda mt-2"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="" class="btn btn-sm btn-outline-primary fw-bold">25%</a>
+                            <a href="" class="btn btn-sm btn-outline-primary fw-bold">50%</a>
+                            <a href="" class="btn btn-sm btn-outline-primary fw-bold">75%</a>
+                            <a href="" class="btn btn-sm btn-outline-primary fw-bold">100%</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- waitingTxModal -->
+<div class="modal fade" id="waitingTxModal" tabindex="-1" role="dialog" aria-labelledby="waitingTxModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="waitingTxModalTitle">Transação em progresso...</h5>
+      </div>
+      <div class="modal-body text-center">
+        <p class="">Por favor, aguarde o fim da transação!</p>
+        <div class="spinner-border text-primary mx-auto" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- completedModal -->
+<div class="modal fade" id="completedModal" tabindex="-1" role="dialog" aria-labelledby="completedModalTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success">
+        <h5 class="modal-title text-white" id="completedModalTitle">Transação Concluida!</h5>
+      </div>
+      <div class="modal-body text-center">
+        <p class="fw-bold">A transação foi concluída!</p>
+        <p class="fw-bold">A tela recarregará em instantes, aguarde!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php Utils\Layout::append("inspina/footer_esp", $_data) ?>
 <link href="<?php echo TEMA; ?>css.old/plugins/toastr/toastr.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
 <script src="<?php echo JS; ?>maskMoney.min.js"></script>
 <script>
     var preco = 0;
@@ -260,6 +494,50 @@ $_data["idiomaMenu"] = $idioma;
     var saldo = 0;
     var regressor = null;
     var casaDecimal = 8;
+    let balanceVisibility = "";
+    var wallet = [];
+    var ps = [];
+
+    const handleVisibility = () => {
+        const eye = document.getElementById("eye");
+        if (balanceVisibility == "true") {
+            const hidden = document.querySelectorAll(".balance-hidden");
+            for (var i = 0; i < hidden.length; i++) {
+                hidden[i].style.display = "inline-flex";
+            }
+            const visible = document.querySelectorAll(".balance-visible");
+            for (var i = 0; i < visible.length; i++) {
+                visible[i].style.display = "none";
+            }
+            eye.classList.remove("ion-ios-eye");
+            eye.classList.add("ion-ios-eye-off");
+            balanceVisibility = "false";
+            localStorage.setItem("balance_visibility", "false")
+        } else {
+            const hidden = document.querySelectorAll(".balance-hidden");
+            for (var i = 0; i < hidden.length; i++) {
+                hidden[i].style.display = "none";
+            }
+            const visible = document.querySelectorAll(".balance-visible");
+            for (var i = 0; i < visible.length; i++) {
+                visible[i].style.display = "inline-flex";
+            }
+            eye.classList.remove("ion-ios-eye-off");
+            eye.classList.add("ion-ios-eye");
+            balanceVisibility = "true";
+            localStorage.setItem("balance_visibility", "true")
+        }
+    }
+
+    if (balanceVisibility == "" && !localStorage.getItem("balance_visibility")) {
+        balanceVisibility = "true";
+        handleVisibility()
+    } else {
+        localStorage.getItem("balance_visibility") == "true" ? balanceVisibility = "false" : balanceVisibility = "true";
+        handleVisibility()
+    }
+
+    document.getElementById("visibility-button").addEventListener("click", handleVisibility);
 
     $(document).ready(function () {
         $("#btn_conversao").prop("disabled", true);
@@ -310,20 +588,26 @@ $_data["idiomaMenu"] = $idioma;
             method: "POST",
             dataType: 'json',
             success: function (json) {
-
+                setTimeout(() => {
+                    wallet = json.moedas;
+                }, 500);
                 if (json.sucesso && json.moedas.lenght) {
                     json.moedas.forEach(element => {
-                        option += '<option value="' + element.id_moeda + '" title="' + element.imagem + '" data-decimal="' + element.decimal + '">' + element.simbolo + ' - ' + element.nome + '</option>';
+                        option += '<option value="' + element.id_moeda + '" title="' + element
+                            .imagem + '" data-decimal="' + element.decimal + '">' + element
+                                .simbolo + ' - ' + element.nome + '</option>';
                     });
                     $('#cryptoFrom').html(option);
 
                     $(".crypto").select2({
                         templateResult: function (coin) {
-                            var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
+                            var $span = $("<span><img style='width: 25px;' src=" + coin
+                                .title + " /> " + coin.text + "</span>");
                             return $span;
                         },
                         templateSelection: function (coin) {
-                            var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
+                            var $span = $("<span><img style='width: 25px;' src=" + coin
+                                .title + " /> " + coin.text + "</span>");
                             return $span;
                         }
                     });
@@ -332,7 +616,197 @@ $_data["idiomaMenu"] = $idioma;
                 }
             }
         });
+
+        $.ajax({
+            url: '<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/presales',
+            method: "GET",
+            dataType: 'json',
+            success: function (json) {
+                ps = json.data;
+                // ps[0].cbrl_price = 1;
+                // ps[2].total_sold = 200000;
+                // ps.push({
+                //     cbrl_price: 45,
+                //     coin: {
+                //         id: 1,
+                //         nome: "Meu Jurídico Digital",
+                //         simbolo: "MJD"
+                //     },
+                //     id:150,
+                //     description: "Teste",
+                //     file_url: "",
+                //     limit: 1000000,
+                //     limit_local: "MJD 1.000.000,0000",
+                //     price_local: "R$ 50,00",
+                //     status: 1,
+                //     total_sold: 1000000
+                // })
+                // ps.push({
+                //     cbrl_price: 1.09,
+                //     coin: {
+                //         id: 5,
+                //         nome: "Garantia",
+                //         simbolo: "GAR"
+                //     },
+                //     id:200,
+                //     description: "Teste",
+                //     file_url: "",
+                //     limit: 10000000,
+                //     limit_local: "GAR 10.000.000,0000",
+                //     price_local: "R$ 1,09",
+                //     status: 1,
+                //     total_sold: 1234567
+                // })
+                var psHtml = "";
+                const soldOut = '<div class="card-overlay">' +
+                    '<div>' +
+                    '<h5 class="sold-out sold-out--title">ESGOTADO!</h5>' +
+                    '<h6 class="sold-out">Aproveite outra oportunidade!</h6>' +
+                    '</div>' +
+                    '</div>';
+                ps.forEach(e => {
+                    const percent = Math.ceil(e.total_sold * 100 / e.limit);
+                    psHtml += '<div class="col-lg-6">' +
+                        '<div class="card">' +
+                        (e.total_sold >= e.limit ? soldOut : "") +
+                        '<div class="card-body ' + (e.total_sold >= e.limit ? "card-base " :
+                            "") + 'text-center">' +
+                        '<h5 class="mb-3">' + e.coin.nome + '</h5>' +
+                        '<div class="row">' +
+                        '<div class="col-lg-6 img-token mb-3">' +
+                        '<img src="resources/images/currencies/' + e.coin.simbolo +
+                        '.png" class="card-img-top" alt="mp-' + e.coin.simbolo + '">' +
+                        '</div>' +
+                        '<div class="col-lg-6">' +
+                        '<span class="d-block">Oportunidade:</span>' + ' ' + 
+                        '<p class="badge badge-success mb-2">Staking</p>' +
+                        (e.coin.simbolo == "GAR" ? '<p class="badge badge-info mb-2 ml-1">Garantia</p>' : '') +
+                        '<p class="card-text h6 text-secondary">' + '1 ' + e.coin.simbolo +
+                        ' = ' + e.price_local + '</p>' +
+                        '<span class="card-text h6 text-secondary"><small>Até:</small></span>' +
+                        '<p class="card-text h6 text-secondary">18/12/2023 12:00</p>' +
+                        '<span class="card-text h6 text-secondary"><small>Total:</small></span>' +
+                        '<p class="card-text h6 text-secondary">' + new Intl.NumberFormat(
+                            "pt-BR").format(e.limit) + ' ' + e.coin.simbolo + '</p>' +
+                        '<span class="card-text h6 text-secondary"><small>Disponível:</small></span>' +
+                        '<p class="card-text h6 text-secondary">' + new Intl.NumberFormat(
+                            "pt-BR").format(e.limit - e.total_sold) + ' ' + e.coin.simbolo +
+                        '</p>' +
+                        '<span class="card-text badge badge-primary mt-2">Pré-Venda</span>' +
+                        '<div class="progress mt-2 mb-3">' +
+                        '<div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="' +
+                        percent + '" aria-valuemin="0" aria-valuemax="100" style="width: ' +
+                        percent + '%">' + percent + '%</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="d-flex justify-content-center">' +
+                        // '<button class="btn btn-info" data-toggle="modal" data-target="#detalhesModal">Detalhes</button>' +
+                        '<button onclick="setSelected(this)" class="ml-2 btn btn-primary" data-toggle="modal" data-target="#compraModal" id="' + e.id + '">Comprar</button>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                });
+                $('#pre-sale').html(psHtml);
+            }
+        });
     });
+
+    var selectedPrice = 1;
+
+    function addPercent(percent) {
+        var saldo_inserido = (parseFloat(wallet[0].saldo_disponivel) * percent / 100);
+        $('#buy_input').val(saldo_inserido.toString().replace('.', ','));
+        $("#buy_amount").html(saldo_inserido.toString().replace(',', '.'));
+        $("#token_amount").html((parseFloat($("#buy_input").val().replace(",", ".")) / selectedPrice).toFixed(4));
+        if($('#buy_input').val() <= 0 || $('#buy_input').val() == "" || isNaN($('#buy_input').val())){
+            $('#buy_button').attr("disabled", true)
+        } else {
+            $('#buy_button').attr("disabled", false)
+        }
+    };
+
+    var selectedId = 0;
+    var setTokenValue = 0;
+    function setSelected(e) {
+        const btnId = e.id;
+        selectedId = e.id;
+        var selected = {};
+        ps.forEach(c => {
+            if (c.id == btnId) selected = c
+        });
+        selectedPrice = selected.cbrl_price;
+        $('.nome_moeda').html(selected.coin.simbolo);
+        $('.saldo_disponivel').html(wallet[0].simbolo == "CBRL" ? parseFloat(wallet[0].saldo_disponivel) + ' ' + 'CBRL' : "0.00");
+        $('.saldo_pre-sale').html(selected.limit - selected.total_sold + ' ' + selected.coin.simbolo);
+        $('#price_local').html(selected.price_local);
+        $('.token_image').attr("src", "/resources/images/currencies/" + selected.coin.simbolo + ".png");
+        $("#buy_input").on("input", function () {
+            $("#buy_amount").html($("#buy_input").val().replace(",", "."));
+            $("#token_amount").html($("#buy_input").val() == "" ? "" : (parseFloat($("#buy_input").val().replace(",", ".")) / selected.cbrl_price).toFixed(4));
+            setTokenValue = $("#buy_input").val() == "" ? "" : (parseFloat($("#buy_input").val().replace(",", ".")) / selected.cbrl_price).toFixed(4);
+            if(parseFloat($("#buy_input").val().replace(",", ".")) < 10 || parseFloat($("#buy_input").val().replace(",", ".")) > parseFloat(wallet[0].saldo_disponivel) || $('#buy_input').val() == "" || isNaN($('#buy_input').val())){
+                $('#buy_button').attr("disabled", true)
+            } else {
+                $('#buy_button').attr("disabled", false)
+            }
+        });
+    }
+
+    function showSweetAlert(id, type, title, message) {
+    $(id).modal("hide");
+    $(document.body).removeClass("modal-open");
+    $(".modal-backdrop").remove();
+    var icon = "";
+    type == "e" ? icon = "error" : type == "s" ? icon = "success" : icon = "warning";
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: icon,
+      timer: 3000,
+      showConfirmButton: false,
+      timerProgressBar: true
+    }).then(() => {
+      $(id).modal("show");
+    })
+  }
+
+    function setBuy() {
+        var valor = parseFloat(setTokenValue);
+        $('#buy_input').val("");
+        try {
+            if (valor <= parseFloat(wallet[0].saldo_disponivel) * 1 && valor > 0) {
+                $("#compraModal").modal("hide");
+                $("#waitingTxModal").modal("show");
+                $.ajax({
+                    url: '<?php echo $_ENV['SITE_URL'] ?>' + '/api/priv/presale/buy',
+                    method: "POST",
+                    dataType: 'json',
+                    data: {
+                        user_id: <?php echo json_encode($cliente->id) ?>,
+                        amount: valor,
+                        sale_id: selectedId
+                    },
+                    success: function (json) {
+                        if (json.status == "success") {
+                            showNotyAlert("Transação completa!", "s");
+                            $("#waitingTxModal").modal("hide");
+                            $("#completedModal").modal("show");
+                            setTimeout(() => {
+                                location.reload(true);
+                            }, 3000);
+                        }
+                    }
+                },);
+            } else {
+                showSweetAlert("#compraModal", "e", "Algo deu errado :(", "Valor incorreto ou saldo insuficiente!");
+                showNotyAlert("Valor incorreto ou saldo insuficiente!", "e");
+            }
+        } catch (e) {
+            showNotyAlert(e, "e");
+        }
+    }
 
     function cancelar() {
         $("#from").val("");
@@ -372,6 +846,7 @@ $_data["idiomaMenu"] = $idioma;
                 par: par
             },
             success: function (json) {
+                console.log(json)
                 try {
                     if (json.sucesso) {
 
@@ -425,20 +900,26 @@ $_data["idiomaMenu"] = $idioma;
                 moeda: moeda
             },
             success: function (json) {
+                console.log(json)
                 if (json.sucesso) {
 
                     json.moedas.forEach(element => {
-                        option += '<option data-par="' + element.par + '" data-preco="' + element.preco + '" data-tipo="' + element.tipo + '" value="' + element.id_moeda + '" title="' + element.imagem + '">' + element.simbolo + ' - ' + element.nome + '</option>';
+                        option += '<option data-par="' + element.par + '" data-preco="' + element
+                            .preco + '" data-tipo="' + element.tipo + '" value="' + element.id_moeda +
+                            '" title="' + element.imagem + '">' + element.simbolo + ' - ' + element
+                                .nome + '</option>';
                     });
                     $('#cryptoTo').html(option);
 
                     $(".crypto").select2({
                         templateResult: function (coin) {
-                            var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
+                            var $span = $("<span><img style='width: 25px;' src=" + coin.title +
+                                " /> " + coin.text + "</span>");
                             return $span;
                         },
                         templateSelection: function (coin) {
-                            var $span = $("<span><img style='width: 25px;' src=" + coin.title + " /> " + coin.text + "</span>");
+                            var $span = $("<span><img style='width: 25px;' src=" + coin.title +
+                                " /> " + coin.text + "</span>");
                             return $span;
                         }
                     });
@@ -530,8 +1011,7 @@ $_data["idiomaMenu"] = $idioma;
                         showNotyAlert(json.mensagem, "e");
                     }
 
-                } catch (e) {
-                }
+                } catch (e) { }
                 $("#cancel").prop("disabled", false);
             }
         });
@@ -557,8 +1037,7 @@ $_data["idiomaMenu"] = $idioma;
                     } else {
                         showNotyAlert(json.mensagem, "e");
                     }
-                } catch (e) {
-                }
+                } catch (e) { }
                 $("#cancel").prop("disabled", false);
             }
         });
