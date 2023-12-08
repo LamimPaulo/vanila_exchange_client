@@ -847,7 +847,6 @@ $_data["idiomaMenu"] = $idioma;
 
   $.getJSON("<?php echo $_ENV['SITE_URL'] ?>" + "/api/priv/jsonPortfolio?user=<?php echo $cliente->id ?>", function (parsed_data) {
   
-    console.log(parsed_data)
     walletData = parsed_data;
 
   }).then(function () {
@@ -1297,7 +1296,6 @@ $_data["idiomaMenu"] = $idioma;
             walletData['position'].forEach((n, i) => {
               if (n.name == e.staked_coin.nome) {
                 cbrlValor = n.quote;
-                console.log("Valor em CBRL alterado!")
               }
             });
             p.push({
