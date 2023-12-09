@@ -68,7 +68,6 @@ class LaraBoleto {
             throw new \Exception($err);
         }
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        exit(print_r($httpcode));
         curl_close($curl);
 
         if($httpcode != 200){
