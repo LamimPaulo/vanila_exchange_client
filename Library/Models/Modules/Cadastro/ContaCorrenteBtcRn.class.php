@@ -873,8 +873,11 @@ class ContaCorrenteBtcRn {
                 $this->excluir($contaCorrenteFrom);
                 throw new \Exception($this->idioma->getText("voceNaoTemSaldoSuficiente"));
             }
+            // exit(print_r($clienteTo));
 
-            if (!empty($clienteTo) && $contaCorrenteFrom->autorizada == 1) {
+            // if (!empty($clienteTo) && $contaCorrenteFrom->autorizada == 1) {
+            if (!empty($clienteTo)) {
+
                 // se o cliente foi identificado a transferência é interna
                 $this->creditarContaDesnataria($contaCorrenteFrom, $clienteTo, $token);
             }

@@ -44,7 +44,7 @@ class Wallet {
         }
 
         $json = json_decode($response, false);
-        //exit(print_r($json));
+        // exit(print_r($json));
         if ($json->error != null) {
             throw new \Exception("Houve uma falha na comunicação com o serviço. Por favor tente novamente mais tarde.");
         }
