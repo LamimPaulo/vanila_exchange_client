@@ -642,6 +642,7 @@ public static $rotas = Array(
         "book/saldos"                                       => Array("url" => "trade/BookNew/dadosSaldo" ,                                   "modulo" => "trade",                    "rotina" => "book" ),
         "bookCointrade"                                     => Array("url" => "trade/BookNew/index" ,                                        "modulo" => "trade",                    "rotina" => "book" ),
         "book"                                              => Array("url" => "trade/book/index" ,                                           "modulo" => "trade",                    "rotina" => "book" ),
+        "pratique"                                          => Array("url" => "trade/CloseOffer/index" ,                                     "modulo" => "trade",                    "rotina" => "book" ),
         "book/balance"                                      => Array("url" => "trade/book/getBalance" ,                                      "modulo" => "trade",                    "rotina" => "book" ),
         "book/listarbook"                                   => Array("url" => "trade/book/getBook" ,                                         "modulo" => "trade",                    "rotina" => "book" ),
         "book/trades/list"                                  => Array("url" => "trade/book/getListaTrade" ,                                   "modulo" => "trade",                    "rotina" => "book" ),
