@@ -4,6 +4,8 @@ namespace Modules\trade\Controllers;
 
 require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasParidadeFavorita.class.php';
 require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasParidadeFavoritaRn.class.php';
+require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasCloseOffer.class.php';
+require_once getcwd() . '/Library/Models/Modules/Cadastro/ClienteHasCloseOfferRn.class.php';
 
 class Book {
 
@@ -57,96 +59,123 @@ class Book {
         try {
             $moeda = new \Models\Modules\Cadastro\Moeda();
             $moeda->id = \Utils\Post::get($params, "moeda", 0);
+            
+            if($moeda->id == 'priv'){
+                $priv = true;
+                // throw new \Exception('é priv');
+                
+                $moeda = new \Models\Modules\Cadastro\Moeda();
+                $moeda->id = 1;
+                $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
+                $paridades = $paridadeRn->getListaParidadesByMoeda($moeda, false, true, true);
 
-            $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
-            $paridades = $paridadeRn->getListaParidadesByMoeda($moeda, false, true);
+            } else {
+                $priv = false;
+                $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
+                $paridades = $paridadeRn->getListaParidadesByMoeda($moeda, false, true, false);
 
-            $cliente = \Utils\Geral::getLogado();
-            $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
-            $clienteRn->conexao->carregar($cliente);
-            $clienteHasParidadeFavoritaRn = new \Models\Modules\Cadastro\ClienteHasParidadeFavoritaRn();
-            $favoritas = $clienteHasParidadeFavoritaRn->getParidadesFavoritas($cliente);
-
-            ob_start();
-            foreach ($paridades as $paridade) {
-
-                $favorita = isset($favoritas[$paridade->id]);
-                $precoAbertura = $paridade->primeiroPreco;
-                $precoVolume = $paridade->precoCompra ;
-                $valor = $paridade->precoCompra != 0 ? $paridade->precoCompra : $paridade->precoVenda;
-                if (($paridade->idMoedaTrade > 1) && ($paridade->ativo == 1)) {
-                    $par = $paridadeRn->getBySymbol("{$paridade->moedaTrade->simbolo}:BRL");
-                    if ($paridade != null) {
-                        $precoVolume = $par->precoCompra;
-                    } else {
-                        $precoVolume = 0;
-                    }
-                }
-
-                if ($precoAbertura > 0) {
-                    // $variacao = $precoAbertura;
-                    $variacao = (($valor > $precoAbertura) ? (($valor - $precoAbertura) / $precoAbertura) :  ($precoAbertura - $valor) / $precoAbertura) * 100;
-                } else {
-                    $variacao = 0;
-                }
-
-                $icon = "";
-                $color = "text-blue";
-                if ($valor > $precoAbertura) {
-                    $icon = "<i class='fa fa-level-up' style='color: #1ab394;'></i>";
-                    $color = "text-navy";
-                } else if ($valor < $precoAbertura) {
-                    $icon = "<i class='fa fa-level-down' style='color: #ed5565;'></i>";
-                    $color = "text-danger";
-                }
-                if($precoAbertura == 0){
-                    $icon = "-";
-                }
-
-                if (empty($paridade->casasDecimaisMoedaTrade)) {
-                    $casasDecimaisMoedaTrade = $paridade->moedaTrade->casasDecimais;
-                } else {
-                    $casasDecimaisMoedaTrade = $paridade->casasDecimaisMoedaTrade;
-                }
-
-                ?>
-
-                <tr class="<?php echo ($paridade->id == $cliente->idMoedaAtual) ? 'table-success' : ''  ?> <?php echo ($favorita ? "favorite-parity" : "") ?> tr-h" data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
-                    <td class="text-left change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 18px; width: 25% !important" data-name="<?php echo $paridade->symbol ?>">
-                        <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 12px; height: 12px;" />&nbsp;
-                        <?php echo $paridade->moedaBook->simbolo; ?>
-                    </td>
-                    <td class="text-right change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 35%;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($valor, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
-                    </td>
-                    <td class="text-right change-parity<?php echo $color ?> column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 30% !important;" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($variacao, 1, ",", ".") ?>%
-                    </td>
-                    <td><?php echo $icon ?></td>
-                    <?php if($cliente->modoOperacao == "basic"){ ?>
-                    <td class="text-right change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 35% !important" data-name="<?php echo $paridade->symbol ?>">
-                        <?php echo number_format($paridade->quoteVolume, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo ?>
-                    </td>
-                    <?php } ?>
-                    <td class="text-center column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 15% !important"  id="btn-favorito-<?php echo $paridade->id ?>" data-name="<?php echo $paridade->symbol ?>">
-                        <?php if ($favorita) {?>
-                        <button class="btn btn-link text-success" type="button" onclick="removerFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
-                            <i class="fa  fa-star" style="font-size: 9px; color: gold"></i>
-                        </button>
-                        <?php } else { ?>
-                        <button class="btn btn-link text-warning" type="button" onclick="addFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
-                            <i class="fa  fa-star-o" style="font-size: 12px; color: grey"></i>
-                        </button>
-                        <?php }  ?>
-                    </td>
-                </tr>
-                <?php
             }
-            $html = ob_get_contents();
-            ob_end_clean();
 
-            $json["html"] = $html;
-            $json["sucesso"] = true;
+            
+        $cliente = \Utils\Geral::getLogado();
+        $clienteRn = new \Models\Modules\Cadastro\ClienteRn();
+        $clienteRn->conexao->carregar($cliente);
+        $clienteHasParidadeFavoritaRn = new \Models\Modules\Cadastro\ClienteHasParidadeFavoritaRn();
+        $favoritas = $clienteHasParidadeFavoritaRn->getParidadesFavoritas($cliente);
+
+        ob_start();
+        foreach ($paridades as $paridade) {
+            
+            if($priv){
+                $clienteHasCloseOfferRn = new \Models\Modules\Cadastro\ClienteHasCloseOfferRn();
+                $hasAccess = $clienteHasCloseOfferRn->getAccess($cliente, $paridade->closeOfferId);
+                // die(print_r($hasAccess));
+                if(!$hasAccess){
+                    continue;
+                }
+            }
+
+
+            $favorita = isset($favoritas[$paridade->id]);
+            $precoAbertura = $paridade->primeiroPreco;
+            $precoVolume = $paridade->precoCompra ;
+            $valor = $paridade->precoCompra != 0 ? $paridade->precoCompra : $paridade->precoVenda;
+            if (($paridade->idMoedaTrade > 1) && ($paridade->ativo == 1)) {
+                $par = $paridadeRn->getBySymbol("{$paridade->moedaTrade->simbolo}:BRL");
+                if ($paridade != null) {
+                    $precoVolume = $par->precoCompra;
+                } else {
+                    $precoVolume = 0;
+                }
+            }
+
+            if ($precoAbertura > 0) {
+                // $variacao = $precoAbertura;
+                $variacao = (($valor > $precoAbertura) ? (($valor - $precoAbertura) / $precoAbertura) :  ($precoAbertura - $valor) / $precoAbertura) * 100;
+            } else {
+                $variacao = 0;
+            }
+
+            $icon = "";
+            $color = "text-blue";
+            if ($valor > $precoAbertura) {
+                $icon = "<i class='fa fa-level-up' style='color: #1ab394;'></i>";
+                $color = "text-navy";
+            } else if ($valor < $precoAbertura) {
+                $icon = "<i class='fa fa-level-down' style='color: #ed5565;'></i>";
+                $color = "text-danger";
+            }
+            if($precoAbertura == 0){
+                $icon = "-";
+            }
+
+            if (empty($paridade->casasDecimaisMoedaTrade)) {
+                $casasDecimaisMoedaTrade = $paridade->moedaTrade->casasDecimais;
+            } else {
+                $casasDecimaisMoedaTrade = $paridade->casasDecimaisMoedaTrade;
+            }
+
+            ?>
+
+            <tr class="<?php echo ($paridade->id == $cliente->idMoedaAtual) ? 'table-success' : ''  ?> <?php echo ($favorita ? "favorite-parity" : "") ?> <?php echo ($paridade->isCloseOffer ? "pratique-parity" : "") ?> tr-h"
+                data-paridade="<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>" >
+                
+                <td class="text-left change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; padding-left: 18px; width: 25% !important" data-name="<?php echo $paridade->symbol ?>">
+                    <img src="<?php echo IMAGES ?>currencies/<?php echo $paridade->moedaBook->icone?>" style="width: 12px; height: 12px;" />&nbsp;
+                    <?php echo $paridade->moedaBook->simbolo; ?>
+                </td>
+                <td class="text-right change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 35%;" data-name="<?php echo $paridade->symbol ?>">
+                    <?php echo number_format($valor, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo; ?>
+                </td>
+                <td class="text-right change-parity<?php echo $color ?> column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 30% !important;" data-name="<?php echo $paridade->symbol ?>">
+                    <?php echo number_format($variacao, 1, ",", ".") ?>%
+                </td>
+                <td><?php echo $icon ?></td>
+                <?php if($cliente->modoOperacao == "basic"){ ?>
+                <td class="text-right change-parity column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 35% !important" data-name="<?php echo $paridade->symbol ?>">
+                    <?php echo number_format($paridade->quoteVolume, $casasDecimaisMoedaTrade, ",", ".") ?> <?php echo $paridade->moedaTrade->simbolo ?>
+                </td>
+                <?php } ?>
+                <td class="text-center column-paridade" style="vertical-align: middle; padding-top: 1px !important; padding-bottom: 1px !important; width: 15% !important"  id="btn-favorito-<?php echo $paridade->id ?>" data-name="<?php echo $paridade->symbol ?>">
+                    <?php if ($favorita) {?>
+                    <button class="btn btn-link text-success" type="button" onclick="removerFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
+                        <i class="fa  fa-star" style="font-size: 9px; color: gold"></i>
+                    </button>
+                    <?php } else { ?>
+                    <button class="btn btn-link text-warning" type="button" onclick="addFavorito('<?php echo \Utils\Criptografia::encriptyPostId($paridade->id)?>');">
+                        <i class="fa  fa-star-o" style="font-size: 12px; color: grey"></i>
+                    </button>
+                    <?php }  ?>
+                </td>
+            </tr>
+            <?php
+        }
+        $html = ob_get_contents();
+        ob_end_clean();
+
+        $json["html"] = $html;
+        $json["sucesso"] = true;
+
         } catch (\Exception $ex) {
             $json["sucesso"] = false;
             $json["mensagem"] = \Utils\Excecao::mensagem($ex);

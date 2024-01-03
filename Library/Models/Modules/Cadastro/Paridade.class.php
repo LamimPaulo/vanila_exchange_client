@@ -126,6 +126,8 @@ class Paridade {
      * @var Integer 
      */
     public $casasDecimaisMoedaBook;
+    public $isCloseOffer;
+    public $closeOfferId;
     
     
     /**
@@ -188,6 +190,8 @@ class Paridade {
 
         $this->casasDecimaisMoedaTrade = ((isset($dados ["{$pre}casas_decimais_moeda_trade"])) ? ($dados ["{$pre}casas_decimais_moeda_trade"]) : (null));
         $this->casasDecimaisMoedaBook = ((isset($dados ["{$pre}casas_decimais_moeda_book"])) ? ($dados ["{$pre}casas_decimais_moeda_book"]) : (null));
+        $this->isCloseOffer = ((isset($dados ["{$pre}is_close_offer"])) ? ($dados ["{$pre}is_close_offer"]) : (null));
+        $this->closeOfferId = ((isset($dados ["{$pre}close_offer_id"])) ? ($dados ["{$pre}close_offer_id"]) : (null));
     }
 
     
@@ -213,6 +217,9 @@ class Paridade {
         . "{$alias}ult_atualizacao_ticker AS {$pre}ult_atualizacao_ticker, "
         . "{$alias}ordem AS {$pre}ordem, "
         . "{$alias}quote_volume AS {$pre}quote_volume, "
+        . "{$alias}casas_decimais_moeda_book AS {$pre}casas_decimais_moeda_book, "
+        . "{$alias}is_close_offer AS {$pre}is_close_offer, "
+        . "{$alias}close_offer_id AS {$pre}close_offer_id, "
         . "{$alias}casas_decimais_moeda_book AS {$pre}casas_decimais_moeda_book, "
         . "{$alias}casas_decimais_moeda_trade AS {$pre}casas_decimais_moeda_trade ";
          

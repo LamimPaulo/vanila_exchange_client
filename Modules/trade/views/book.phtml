@@ -72,6 +72,17 @@ $_data["idiomaMenu"] = $idioma;
                                 <?php
                         }
                         ?>
+
+                            <li class="nav-item">
+                                <a class="btn nav-link" data-toggle="pill" role="tab" aria-selected="false" onclick="setCurrentCoin('priv');">Ofertas Privadas</a>
+                                <input type="hidden" id="hiddencontainer" name="hiddencontainer"/>
+                            </li>
+
+
+                        <!-- <li class="">
+                            <a onclick="setSomentePratique();" class="nav-link" data-toggle="pill" href="#STAR" role="tab" aria-selected="false" ><i
+                                class="icon ion-md-star"></i> Ofertas Privadas</a>
+                        </li> -->
                     </ul>
         
                     <div class="paridade">
@@ -651,6 +662,7 @@ $_data["idiomaMenu"] = $idioma;
     var precoVenda = 0;
     var balanceMode = 1;
     var somenteFavoritas = false;
+    var somentePratique = false;
     var casasDecimaisReal = <?php echo empty($paridade->casasDecimaisMoedaTrade) ? $paridade->moedaTrade->casasDecimais : $paridade->casasDecimaisMoedaTrade ?>;
     var pageWidth, pageHeight;
     var data = "todos";
@@ -1038,6 +1050,12 @@ $(document).ready(function () {
         filtrarParidadesBook();
     }
 
+    function setSomentePratique() {
+        somentePratique = !somentePratique;
+
+        filtrarParidadesBook();
+    }
+
     function setCurrentCoin(id) {
         if(sessionStorage.getItem("current_coin") === null) {
             sessionStorage.setItem("current_coin", id)
@@ -1056,12 +1074,18 @@ $(document).ready(function () {
         $("#body-paridades tr").each(function () {
             var mostrar = true;
 
+            // console.log(this)
+
             if (filtro.length > 0) {
                 var name = $(this).children("td.column-paridade").first().attr("data-name").toLowerCase();
                 var content = $(this).children("td.column-paridade").first().html().toLowerCase();
 
                 var mostrar = (name.indexOf(filtro) !== -1 || content.indexOf(filtro) !== -1);
 
+            }
+
+            if (mostrar && somentePratique) {
+                mostrar = $(this).hasClass("pratique-parity");
             }
 
             if (mostrar && somenteFavoritas) {

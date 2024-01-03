@@ -107,7 +107,7 @@ class ParidadeRn {
         return $paridades;
     }
     
-    public function getListaParidadesByMoeda(Moeda $moeda, $mostrarTodos = true, $statusMercado = false) {
+    public function getListaParidadesByMoeda(Moeda $moeda, $mostrarTodos = true, $statusMercado = false, $privateOffers = false) {
         
         
         $wAtivo = ($mostrarTodos ? " " : " AND p.ativo = 1 ");
@@ -118,6 +118,12 @@ class ParidadeRn {
             $queryMercado = "";
         }
         
+        if($privateOffers){
+            $queryPrivOffer = " AND p.is_close_offer = 1 ";
+        } else {
+            $queryPrivOffer = "AND p.is_close_offer = 0 ";
+        }
+        
         $columnsParidade = Paridade::getLazingColumns("p.", 0);
         $columnsMoedaBook = Moeda::getLazingColumns("mb.", 0);
         $columnsMoedaTrade = Moeda::getLazingColumns("mt.", 1);
@@ -125,7 +131,7 @@ class ParidadeRn {
         $query = " SELECT {$columnsParidade}, {$columnsMoedaBook}, {$columnsMoedaTrade} "
                 . " FROM paridades p INNER JOIN moedas mb ON (mb.id = p.id_moeda_book) "
                 . " INNER JOIN moedas mt ON (p.id_moeda_trade = mt.id) "
-                . " WHERE p.id_moeda_trade = {$moeda->id} {$wAtivo} {$queryMercado} ORDER BY p.ordem";
+                . " WHERE p.id_moeda_trade = {$moeda->id} {$wAtivo} {$queryMercado} {$queryPrivOffer} ORDER BY p.ordem";
         
                 //exit($query);
         $result = $this->conexao->adapter->query($query)->execute();
