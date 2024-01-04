@@ -63,6 +63,9 @@ $_data["idiomaMenu"] = $idioma;
         
                         <?php
                         foreach ($paridades as $moedaTrade) {
+                            if($moedaTrade->id == 65){
+                                continue;
+                            }
                             $selected = ($paridade->idMoedaTrade == $moedaTrade->id);
                             ?>
                             <li class="nav-item">

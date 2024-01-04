@@ -65,7 +65,7 @@ class Book {
                 // throw new \Exception('é priv');
                 
                 $moeda = new \Models\Modules\Cadastro\Moeda();
-                $moeda->id = 1;
+                $moeda->id = 65;
                 $paridadeRn = new \Models\Modules\Cadastro\ParidadeRn();
                 $paridades = $paridadeRn->getListaParidadesByMoeda($moeda, false, true, true);
 
