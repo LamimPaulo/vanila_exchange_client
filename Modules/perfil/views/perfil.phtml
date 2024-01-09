@@ -2866,6 +2866,9 @@ $_data["idiomaMenu"] = $idioma;
         showNotyAlert("Adicione todos os documentos!", "e")
       } else {
         showNotyAlert("Documentos enviados!", "s")
+        setTimeout(() => {
+          location.reload(true);
+        }, 2000);
       }
       
     })
