@@ -338,6 +338,12 @@ $_data["idiomaMenu"] = $idioma;
     margin-top: -5px !important;
     margin-left: -14px !important;
   }
+
+  @media screen and (max-width: 768px){
+    .badge-label{
+      margin-top: -40px;
+    }
+  }
 </style>
 <?php Utils\Layout::append("inspina/metas", $_data) ?>
 <?php Utils\Layout::append("inspina/scripts", $_data) ?>
@@ -707,6 +713,7 @@ $_data["idiomaMenu"] = $idioma;
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Documentos</h5>
+                  <span>(Arquivos de até <b>1 MB</b> nos formatos: <b>jpg</b>, <b>png</b> ou <b>pdf</b>)</span>
                   <div class="settings-profile">
 
                     <form id="form-documentos" action="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_KYC_ENVIAR_DOCS ?>" method="POST" enctype="multipart/form-data" autocomplete="off">
@@ -721,9 +728,7 @@ $_data["idiomaMenu"] = $idioma;
                           </div>
                         </div>
 
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                        <div class="col-md-5">
+                        <div class="col-md-6 badge-label">
                           <div class="form-group" id="st-frente">
                             <!-- status -->
                           </div>
@@ -738,9 +743,7 @@ $_data["idiomaMenu"] = $idioma;
                           </div>
                         </div>
 
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                        <div class="col-md-5">
+                        <div class="col-md-6 badge-label">
                           <div class="form-group" id="st-verso">
                             status
                           </div>
@@ -755,18 +758,14 @@ $_data["idiomaMenu"] = $idioma;
                           </div>
                         </div>
 
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                        <div class="col-md-5">
-                          <div class="form-group" id="st-selfie">
+                        <div class="col-md-6 badge-label">
+                          <span id="st-selfie">
                             status
-                          </div>
+                          </span>
                         </div>
 
-                        <div class="col-md-12">
-                          <input type="submit" value="Enviar" id="btn-salvar-docs">
-                        </div>
                       </div>
+                      <input type="submit" value="Enviar" id="btn-salvar-docs">
                     </form>
 
                   </div>
@@ -2630,6 +2629,12 @@ $_data["idiomaMenu"] = $idioma;
   var inicial = 0;
   var pareamento = true;
 
+  // Add the following code if you want the name of the file appear on select
+  $(".custom-file-input").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+
 
   function getDocStats() {
     $.ajax({
@@ -2640,9 +2645,9 @@ $_data["idiomaMenu"] = $idioma;
       success: function(json) {
         try {
           if (json.status == 'success') {
-            $("#st-frente").html(json.data.Frente.message);
-            $("#st-verso").html(json.data.Verso.message);
-            $("#st-selfie").html(json.data.Selfie.message);
+            $("#st-frente").html(json.data.Frente.message === "Arquivo ainda não enviado" ? "<span class='badge bg-danger p-2 mt-1'>" + json.data.Frente.message + "</span>" : json.data.Frente.message === "Documento em processo de verificação." ? "<span class='badge bg-warning p-2 mt-1'>" + json.data.Frente.message + "</span>" : "<span class='badge bg-success p-2 mt-1'>" + json.data.Frente.message + "</span>");
+            $("#st-verso").html(json.data.Verso.message === "Arquivo ainda não enviado" ? "<span class='badge bg-danger p-2 mt-1'>" + json.data.Verso.message + "</span>" : json.data.Verso.message === "Documento em processo de verificação." ? "<span class='badge bg-warning p-2 mt-1'>" + json.data.Verso.message + "</span>" : "<span class='badge bg-success p-2 mt-1'>" + json.data.Verso.message + "</span>");
+            $("#st-selfie").html(json.data.Selfie.message === "Arquivo ainda não enviado" ? "<span class='badge bg-danger p-2 mt-1'>" + json.data.Selfie.message + "</span>" : json.data.Selfie.message === "Documento em processo de verificação." ? "<span class='badge bg-warning p-2 mt-1'>" + json.data.Selfie.message + "</span>" : "<span class='badge bg-success p-2 mt-1'>" + json.data.Selfie.message + "</span>");
           } else {
             showNotyAlert(json.mensagem, "e");
           }
@@ -2841,6 +2846,7 @@ $_data["idiomaMenu"] = $idioma;
         $("#btn-salvar").prop("disabled", true);
       },
       success: function(json) {
+        console.log(json)
         try {
           if (json.sucesso) {
             showNotyAlert(json.mensagem, "s");
@@ -2854,6 +2860,18 @@ $_data["idiomaMenu"] = $idioma;
         $("#btn-salvar").prop("disabled", false);
       }
     });
+
+    $("#btn-salvar-docs").click(function(){
+      if($('#frente')[0].files.length === 0 || $('#verso')[0].files.length === 0 || $('#selfie')[0].files.length === 0){
+        showNotyAlert("Adicione todos os documentos!", "e")
+      } else {
+        showNotyAlert("Documentos enviados!", "s")
+        setTimeout(() => {
+          location.reload(true);
+        }, 2000);
+      }
+      
+    })
 
     $("#form-documentos").ajaxForm({
       dataType: "json",
