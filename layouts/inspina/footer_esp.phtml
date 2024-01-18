@@ -101,23 +101,25 @@ $(document).ready(function () {
         });
         
         $('#sair,#logout').click(function () {
-            swal({
-                title: "<?php echo $idioma->getText("temCerteza")?>",
-                text: "<?php echo $idioma->getText("seraNecessario")?>" ,
-                type: "success",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                showLoaderOnConfirm: true,
-                confirmButtonColor: "#18a689",
-                confirmButtonText: "<?php echo $idioma->getText("simQueroSair")?>",
-                cancelButtonText: "<?php echo $idioma->getText("queroFicar")?>"
-            },
-                    function () {
+            // swal({
+            //     title: "<?php echo $idioma->getText("temCerteza")?>",
+            //     text: "<?php echo $idioma->getText("seraNecessario")?>" ,
+            //     type: "success",
+            //     showCancelButton: true,
+            //     closeOnConfirm: false,
+            //     showLoaderOnConfirm: true,
+            //     confirmButtonColor: "#18a689",
+            //     confirmButtonText: "<?php echo $idioma->getText("simQueroSair")?>",
+            //     cancelButtonText: "<?php echo $idioma->getText("queroFicar")?>"
+            // },
+            //         function () {
+                showNotyAlert("Logout realizado com sucesso!", "s");
                         setTimeout(function () {
-                            swal("<?php echo $idioma->getText("sessaFinalizada")?>");
+                            // swal("<?php echo $idioma->getText("sessaFinalizada")?>");
                             window.location.href = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_LOGOUT ?>";
                         }, 1000);
-                    });
+                    // }
+            // );
         });
         
         $('.home').click(function () {

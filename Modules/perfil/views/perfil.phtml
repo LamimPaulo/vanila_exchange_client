@@ -339,9 +339,17 @@ $_data["idiomaMenu"] = $idioma;
     margin-left: -14px !important;
   }
 
+  .senha_mobile{
+      display: none;
+    }
+
   @media screen and (max-width: 768px){
     .badge-label{
       margin-top: -40px;
+    }
+
+    .senha_mobile{
+      display: block;
     }
   }
 </style>
@@ -482,10 +490,10 @@ $_data["idiomaMenu"] = $idioma;
                           echo '<small>Não foi possível verificar sua conta</small></br>';
                           echo '<br/><button id="btn_kycStartBtn" class="btn btn-primary m-b-xs"  type="button" id="btn-salvar" onclick="kycStart()">Verificar novamente</button>  ';
                         } else if ($cliente->documentoVerificado == 2) {
-                          $kyc_status_name = 'verificarContaPendente';
-                          echo '<i class="fa fa-check-circle-o fa-1x text-warning" aria-hidden="true"></i>&nbsp;Documentos pessoais<br/><i class="fa fa-check-circle-o  fa-1x text-warning" aria-hidden="true"></i>&nbsp;Selfie<br/>';
-                          echo '<br/><small>Aguardando você concluir</small><br/><small>Enviamos o e-mail para ' . $cliente->email . ' <br/>
-                                            <button id="btn_smsresend" class="btn btn-link btn-resend" type="button" onclick="kycSmsResend()">Reenviar E-mail</small>';
+                          // $kyc_status_name = 'verificarContaPendente';
+                          // echo '<i class="fa fa-check-circle-o fa-1x text-warning" aria-hidden="true"></i>&nbsp;Documentos pessoais<br/><i class="fa fa-check-circle-o  fa-1x text-warning" aria-hidden="true"></i>&nbsp;Selfie<br/>';
+                          // echo '<br/><small>Aguardando você concluir</small><br/><small>Enviamos o e-mail para ' . $cliente->email . ' <br/>
+                          //                   <button id="btn_smsresend" class="btn btn-link btn-resend" type="button" onclick="kycSmsResend()">Reenviar E-mail</small>';
                         } else if ($cliente->documentoVerificado == 1) {
                           $kyc_status_name = 'verificarContaAprovada';
                           echo '<i class="fa fa-check-circle-o fa-1x text-kyc-success "  aria-hidden="true"></i>&nbsp;Documentos pessoais<br/><i class="fa fa-check-circle-o  fa-1x text-kyc-success"  aria-hidden="true"></i>&nbsp;Selfie<br/>';
@@ -494,6 +502,74 @@ $_data["idiomaMenu"] = $idioma;
                         ?>
                       </p>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Documentos</h5>
+                  <span>(Arquivos de até <b>1 MB</b> nos formatos: <b>jpg</b>, <b>png</b> ou <b>pdf</b>)</span>
+                  <div class="settings-profile">
+
+                    <form id="form-documentos" action="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_KYC_ENVIAR_DOCS ?>" method="POST" enctype="multipart/form-data" autocomplete="off">
+                      <div class="form-row mt-4">
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <!-- <div class="custom-file "> -->
+                            <input type="file" class="custom-file-input" name="frente" id="frente">
+                            <label class="custom-file-label" for="doc_front">CNH/RG Frente</label>
+                            <!-- </div> -->
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 badge-label">
+                          <div class="form-group" id="st-frente">
+                            <!-- status -->
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <!-- <div class="custom-file"> -->
+                            <input type="file" class="custom-file-input" name="verso" id="verso">
+                            <label class="custom-file-label" for="doc_back">CNH/RG Verso</label>
+                            <!-- </div> -->
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 badge-label">
+                          <div class="form-group" id="st-verso">
+                            <!-- status -->
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <!-- <div class="custom-file"> -->
+                            <input type="file" class="custom-file-input" name="selfie" id="selfie">
+                            <label class="custom-file-label" for="doc_selfie">Selfie com Documento</label>
+                            <!-- </div> -->
+                          </div>
+                        </div>
+
+                        <div class="col-md-6 badge-label">
+                          <span id="st-selfie">
+                            <!-- status -->
+                          </span>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <button class="btn btn-info" data-toggle="modal" data-target="#modalSelfie">Selfie Exemplo <i class="icon ion-md-person"></i></button>
+                          </div>
+                        </div>
+
+                      </div>
+                      <input type="submit" value="Enviar" id="btn-salvar-docs">
+                    </form>
+
                   </div>
                 </div>
               </div>
@@ -552,6 +628,23 @@ $_data["idiomaMenu"] = $idioma;
                           </div>
                       <?php } ?>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal fade" id="modalSelfie" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <span class="h5">Exemplo de Selfie</span>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>
+                      <div class="modal-body d-flex justify-content-center">
+                        <img src="<?php echo IMAGES . "selfie-exemplo.png" ?>" alt="selfie">
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -710,67 +803,7 @@ $_data["idiomaMenu"] = $idioma;
                 </div>
               </div>
 
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Documentos</h5>
-                  <span>(Arquivos de até <b>1 MB</b> nos formatos: <b>jpg</b>, <b>png</b> ou <b>pdf</b>)</span>
-                  <div class="settings-profile">
-
-                    <form id="form-documentos" action="<?php echo URLBASE_CLIENT . \Utils\Rotas::R_KYC_ENVIAR_DOCS ?>" method="POST" enctype="multipart/form-data" autocomplete="off">
-                      <div class="form-row mt-4">
-
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <!-- <div class="custom-file "> -->
-                            <input type="file" class="custom-file-input" name="frente" id="frente">
-                            <label class="custom-file-label" for="doc_front">CNH/RG Frente</label>
-                            <!-- </div> -->
-                          </div>
-                        </div>
-
-                        <div class="col-md-6 badge-label">
-                          <div class="form-group" id="st-frente">
-                            <!-- status -->
-                          </div>
-                        </div>
-
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <!-- <div class="custom-file"> -->
-                            <input type="file" class="custom-file-input" name="verso" id="verso">
-                            <label class="custom-file-label" for="doc_back">CNH/RG Verso</label>
-                            <!-- </div> -->
-                          </div>
-                        </div>
-
-                        <div class="col-md-6 badge-label">
-                          <div class="form-group" id="st-verso">
-                            status
-                          </div>
-                        </div>
-
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <!-- <div class="custom-file"> -->
-                            <input type="file" class="custom-file-input" name="selfie" id="selfie">
-                            <label class="custom-file-label" for="doc_selfie">Selfie com Documento</label>
-                            <!-- </div> -->
-                          </div>
-                        </div>
-
-                        <div class="col-md-6 badge-label">
-                          <span id="st-selfie">
-                            status
-                          </span>
-                        </div>
-
-                      </div>
-                      <input type="submit" value="Enviar" id="btn-salvar-docs">
-                    </form>
-
-                  </div>
-                </div>
-              </div>
+              
             </div>
 
             <div class="tab-pane fade" id="settings-preferences" role="tabpanel" aria-labelledby="settings-preferences-tab">
@@ -1673,6 +1706,9 @@ $_data["idiomaMenu"] = $idioma;
                                   <label><?php echo $idioma->getText("senhaAtual") ?></label>
                                   <input type="password" class="form-control" id="senhaAtual" name="senhaAtual" maxlength="200" style="font-size: 20px;" />
                                 </div>
+                              </div>
+                              <div class="col-sm-12 mt-2 mb-3 senha_mobile">
+                                <span>A senha deve conter ao menos: 8 dígitos, 1 letra minúscula, 1 letra maiúscula, 1 número, 1 caractere especial (#$%ˆ!*&-@%?\).</span>
                               </div>
                               <div class="col-sm-12">
                                 <div class="form-group">
@@ -2643,11 +2679,12 @@ $_data["idiomaMenu"] = $idioma;
       dataType: "json",
       data: {},
       success: function(json) {
+        console.log(json)
         try {
           if (json.status == 'success') {
-            $("#st-frente").html(json.data.Frente.message === "Arquivo ainda não enviado" || json.data.Frente.message === "Documento reprovado." ? "<span class='badge bg-danger p-2 mt-1'>" + json.data.Frente.message + "</span>" : json.data.Frente.message === "Documento em processo de verificação." ? "<span class='badge bg-warning p-2 mt-1'>" + json.data.Frente.message + "</span>" : "<span class='badge bg-success p-2 mt-1'>" + json.data.Frente.message + "</span>");
-            $("#st-verso").html(json.data.Verso.message === "Arquivo ainda não enviado" || json.data.Frente.message === "Documento reprovado." ? "<span class='badge bg-danger p-2 mt-1'>" + json.data.Verso.message + "</span>" : json.data.Verso.message === "Documento em processo de verificação." ? "<span class='badge bg-warning p-2 mt-1'>" + json.data.Verso.message + "</span>" : "<span class='badge bg-success p-2 mt-1'>" + json.data.Verso.message + "</span>");
-            $("#st-selfie").html(json.data.Selfie.message === "Arquivo ainda não enviado" || json.data.Frente.message === "Documento reprovado." ? "<span class='badge bg-danger p-2 mt-1'>" + json.data.Selfie.message + "</span>" : json.data.Selfie.message === "Documento em processo de verificação." ? "<span class='badge bg-warning p-2 mt-1'>" + json.data.Selfie.message + "</span>" : "<span class='badge bg-success p-2 mt-1'>" + json.data.Selfie.message + "</span>");
+            $("#st-frente").html(json.data.Frente.status === "invalid" ? "<span class='badge bg-danger p-2 mt-1'>" + json.data.Frente.message + "</span>" : json.data.Frente.status === "pending" ? "<span class='badge bg-warning p-2 mt-1'>" + json.data.Frente.message + "</span>" : "<span class='badge bg-success p-2 mt-1'>" + json.data.Frente.message + "</span>");
+            $("#st-verso").html(json.data.Verso.status === "invalid" ? "<span class='badge bg-danger p-2 mt-1'>" + json.data.Verso.message + "</span>" : json.data.Verso.status === "pending" ? "<span class='badge bg-warning p-2 mt-1'>" + json.data.Verso.message + "</span>" : "<span class='badge bg-success p-2 mt-1'>" + json.data.Verso.message + "</span>");
+            $("#st-selfie").html(json.data.Selfie.status === "invalid" ? "<span class='badge bg-danger p-2 mt-1'>" + json.data.Selfie.message + "</span>" : json.data.Selfie.status === "pending" ? "<span class='badge bg-warning p-2 mt-1'>" + json.data.Selfie.message + "</span>" : "<span class='badge bg-success p-2 mt-1'>" + json.data.Selfie.message + "</span>");
           } else {
             showNotyAlert(json.mensagem, "e");
           }

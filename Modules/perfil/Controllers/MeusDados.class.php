@@ -2322,9 +2322,13 @@ class MeusDados
             $clienteRn->conexao->carregar($cliente);
 
             $res = json_decode($response);
-                // if($res->data->all_approved){
+                if($res->data->all_approved){
                     $clienteRn->alterarDocumentoVerificado($cliente, $res->data->all_approved);
-                // }
+                } else if ($res->data->approved_count > 0) {
+                    $clienteRn->alterarDocumentoVerificado($cliente, 2);
+                } else {
+                    $clienteRn->alterarDocumentoVerificado($cliente, false);
+                }
 
                 // return 'ok';
         } catch(\Throwable $e){
