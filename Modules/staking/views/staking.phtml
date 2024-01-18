@@ -1080,6 +1080,7 @@ $_data["idiomaMenu"] = $idioma;
       },
       success: function (json) {
         recompensa = parseFloat(json.valor);
+        console.log("CHECK: ",json.valor);
         $('.reward_amount').html(fixDecimals(isNaN(parseFloat(json.valor)) ? 0 : parseFloat(json.valor), token[0].decimal));
       }
     });
@@ -1092,6 +1093,7 @@ $_data["idiomaMenu"] = $idioma;
         contract_address: token[0].contract_address
       },
       success: function (json) {
+        console.log("ACCUMULATED: ",json.valor);
         $('.accumulated_amount').html(fixDecimals(isNaN(parseFloat(json.valor)) ? 0 : parseFloat(json.valor) - recompensa, token[0].decimal));
       }
     });

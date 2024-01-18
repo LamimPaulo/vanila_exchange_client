@@ -3,7 +3,7 @@ $idioma = new \Utils\PropertiesUtils("docs_aceitacao", IDIOMA);
 $mensagem = ((isset($_data['mensagem'])) ? ($_data['mensagem']) : "");
 $sucesso = (isset($_data['sucesso']) ? ($_data['sucesso']) : false);
 $cliente = \Utils\Geral::getCliente();
-$lista = ((isset($_data['lista'])) ? ($_data['lista']) : Array());
+$lista = ((isset($_data['lista'])) ? ($_data['lista']) : array());
 $tipo = $cliente->tipoAutenticacao;
 $brand = Models\Modules\Cadastro\BrandRn::getBrand();
 $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
@@ -11,66 +11,104 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
 
 <!DOCTYPE html>
 <html class="wide wow-animation smoothscroll scrollTo" lang="pt-br">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo TITULO ?></title>
+    <title>
+        <?php echo TITULO ?>
+    </title>
     <link href="<?php echo TEMA; ?>paulo/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo TEMA; ?>font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
-    <link href="<?php echo TEMA; ?>css/styleD.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.1.0/css/flag-icons.min.css"
+        integrity="sha512-bZBu2H0+FGFz/stDN/L0k8J0G8qVsAL0ht1qg5kTwtAheiXwiRKyCq1frwfbSFSJN3jooR5kauE0YjtPzhZtJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <link href="<?php echo TEMA; ?>css/animate.css" rel="stylesheet">
+    <link href="<?php echo TEMA; ?>css/styleD.css" rel="stylesheet"> -->
     <link href="<?php echo TEMA; ?>css/plugins/iCheck/custom.css" rel="stylesheet">
+
+    <style>
+        .fs-20 {
+            font-size: 20px;
+        }
+        .fs-30 {
+            font-size: 30px;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="vh-100 d-flex justify-content-center">
-        <div class="my-auto middle-box text-center loginscreen animated fadeInDown">
-            <div class="m-t-lg m-b-lg">
-                <div class="">
-                    <div class="m-t-lg m-b-lg">
-                        <a href="<?php echo $empresa->homePage ?>">
-                            <img alt="image"  width="250px" src="<?php echo IMAGES; ?>logo-ca.png" class="logo">
-                        </a>
-                    </div>
-                    <br>
-                    <div>
-                        <li class="text-center m-t-md list-unstyled">
-                            <a href="javascript:trocarIdioma('en-US');" id="Btlangen">EN </a>
-                            &nbsp;&nbsp;
-                            <a href="javascript:trocarIdioma('pt-BR');" id="Btlangpt">PT </a>
-                            &nbsp;&nbsp;
-                            <a href="javascript:trocarIdioma('es-ES');" id="Btlanges">ES </a>
-                        </li>
-                    </div>
-                    <div class="mt-lg-2">
-                        <div class="col-lg-12">
-                        <h2><?php echo $idioma->getText("docsLegais") ?></h2>
-                        <br><br>
-                        <h3><?php echo $idioma->getText("paraSaberUtilizar") ?></h3>
-                        <p class="text-danger">*Aceite os termos para prosseguir</p>
-                        <?php foreach ($lista as $documentoSistema) { ?>
-                        <div class="row" id="<?php echo $documentoSistema->codigo ?>">
-                            <div class="col col-lg-12">
-                                <div class="form-group" >
-                                    <a href="<?php echo $documentoSistema->link?>" target="<?php echo $documentoSistema->id ?>"><?php echo $documentoSistema->descricao?></a>
+    <div class="settings mtb15">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-11 mx-auto">
+                    <div class="vh-100 d-flex justify-content-center">
+                        <div class="my-auto middle-box text-center loginscreen animated fadeInDown">
+                            <div class="m-t-lg m-b-lg">
+                                <div class="settings">
+                                    <div class="m-t-lg m-b-lg">
+                                        <a href="<?php echo $empresa->homePage ?>">
+                                            <img alt="image" width="250px" src="<?php echo IMAGES; ?>logo-ca.png"
+                                                class="logo">
+                                        </a>
+                                    </div>
+                                    <div class="card mt-5">
+                                        <div class="card-header d-flex justify-content-center align-items-center">
+                                            <div class="fw-bold me-5 fs-20 text-dark">
+                                                Idioma:
+                                            </div>
+                                            <div>
+                                                <a href="javascript:trocarIdioma('en-US');" id="Btlangen" class="me-5"><span class="fi fi-us fs-30"></span></a>
+                                                <a href="javascript:trocarIdioma('pt-BR');" id="Btlangpt" class="me-5"><span class="fi fi-br fs-30"></span></a>
+                                                <a href="javascript:trocarIdioma('es-ES');" id="Btlanges"><span class="fi fi-es fs-30"></span></a>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mt-lg-2">
+                                                <div class="col-lg-12">
+                                                    <h2 class="mt-5">
+                                                        <?php echo $idioma->getText("docsLegais") ?>
+                                                    </h2>
+                                                    <br><br>
+                                                    <h3 class="mb-3">
+                                                        <?php echo $idioma->getText("paraSaberUtilizar") ?>
+                                                    </h3>
+                                                    <?php foreach ($lista as $documentoSistema) { ?>
+                                                        <div class="row mt-2" id="<?php echo $documentoSistema->codigo ?>">
+                                                            <div class="col col-lg-12">
+                                                                <div class="form-group">
+                                                                    <a href="<?php echo $documentoSistema->link ?>"
+                                                                    target="<?php echo $documentoSistema->id ?>"
+                                                                    class="fs-20">
+                                                                    <?php echo $documentoSistema->descricao ?>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <?php } ?>
+                                                    <div class="custom-checkbox mt-5">
+                                                        <input style="width: 20px;height: 20px;" type="checkbox"
+                                                        name="termos" id="termos">
+                                                        <label for="termos" class="fs-20 text-dark">
+                                                            <?php echo $idioma->getText("liEConcordo") ?><span
+                                                            class="text-danger">*</span>
+                                                        </label>
+                                                    </div>
+                                                    <p class="text-danger mt-3">*Aceite os termos para prosseguir</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="text-center">
+                                                <button class="btn btn-primary full-width" type="button"
+                                                    onclick="aceitar();" id="btn-aceitar" disabled>
+                                                    <?php echo $idioma->getText("prosseguir") ?>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <?php } ?>
-                        <div class="custom-checkbox my-5">
-                            <input style="width: 20px;height: 20px;" type="checkbox" name="termos" id="termos" >
-                            <label for="termos" style="font-size: 20px">
-                            <?php echo $idioma->getText("liEConcordo") ?><span class="text-danger">*</span>
-                            </label>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-lg-12 text-center">
-                                <button class="btn btn-primary full-width" type="button" onclick="aceitar();" id="btn-aceitar">
-                                    <?php echo $idioma->getText("prosseguir") ?>
-                                </button>
-                            </div>
-                        </div>
-                        <br>
                         </div>
                     </div>
                 </div>
@@ -78,67 +116,72 @@ $empresa = Models\Modules\Cadastro\EmpresaRn::getEmpresa();
         </div>
     </div>
 
-<!-- Bootstrap 3.3.6 -->
-<script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script>
-<script src="<?php echo TEMA; ?>bootstrap/js/bootstrap.min.js"></script>
-<script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#btn-aceitar").hide();
-        $('#termos').change(function() {
-            $("#btn-aceitar").toggle();
+    <!-- Bootstrap 3.3.6 -->
+    <script src="<?php echo TEMA; ?>js/jquery-3.1.1.min.js"></script>
+    <script src="<?php echo TEMA; ?>bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo TEMA; ?>js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#btn-aceitar").prop("disabled", true);
+            const termos = document.getElementById("termos")
+            const btnAceitar = document.getElementById("btn-aceitar")
+            termos.addEventListener("change", () => {
+                $("#btn-aceitar").attr("disabled") ? $("#btn-aceitar").prop("disabled", false) : $("#btn-aceitar").prop("disabled", true);
+            })
+            $('#termos').change(function () {
+            });
+
         });
 
-    });
+        function aceitar() {
+            $("#btn-aceitar").prop("disabled", true);
+            $("#container-alert").hide();
+            $('#container-alert alert').html("");
 
-    function aceitar() {
-        $("#btn-aceitar").prop("disabled", true);
-        $("#container-alert").hide();
-        $('#container-alert alert').html("");
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DOCS_ACEITACAO_SALVAR ?>',
+                dataType: 'json',
+                method: 'post',
+                data: {
+                    Apresentacao: true, ContratoDeUsoDeAplicacao: true, PoliticaDeCookie: true, PoliticaDePrivacidade: true, TermosDeServico: true,
+                },
+                success: function (json) {
+                    try {
+                        if (json.sucesso) {
+                            location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DOCS_ACEITACAO ?>";
+                        } else {
+                            var i = 0;
+                            for (i = 0; i < json.aceites.length; i++) {
+                                $("#container-" + json.aceites[i]).remove();
+                            }
 
-        $.ajax({
-            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_DOCS_ACEITACAO_SALVAR ?>',
-            dataType: 'json',
-            method: 'post',
-            data: {                
-                Apresentacao: true, ContratoDeUsoDeAplicacao: true, PoliticaDeCookie: true, PoliticaDePrivacidade: true, TermosDeServico: true, 
-            },
-            success: function (json) {
-                try {
-                    if (json.sucesso) {
-                        location = "<?php echo URLBASE_CLIENT . Utils\Rotas::R_DOCS_ACEITACAO?>";
-                    } else {
-                        var i = 0;
-                        for(i=0; i<json.aceites.length; i++) {
-                            $("#container-"+json.aceites[i]).remove();
+                            $("#container-alert").show();
+                            $('#container-alert .col .alert').html(json.mensagem);
                         }
-                        
+                    } catch (e) {
                         $("#container-alert").show();
-                        $('#container-alert .col .alert').html(json.mensagem);
+                        $('#container-alert .col .alert').html(e);
                     }
-                } catch (e) {
-                    $("#container-alert").show();
-                    $('#container-alert .col .alert').html(e);
+                    $("#btn-aceitar").prop("disabled", false);
                 }
-                $("#btn-aceitar").prop("disabled", false);
-            }
-        });
-    }
-    
-    function trocarIdioma(lang) {
-        $.ajax({
-            url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_IDIOMA_CHANGE ?>',
-            method: 'post',
-            dataType: 'html',
-            data: {
-                lang: lang
-            },
-            success: function () {
+            });
+        }
 
-                location.reload();
-            }
-        });
-    }
-</script>
+        function trocarIdioma(lang) {
+            $.ajax({
+                url: '<?php echo URLBASE_CLIENT . Utils\Rotas::R_IDIOMA_CHANGE ?>',
+                method: 'post',
+                dataType: 'html',
+                data: {
+                    lang: lang
+                },
+                success: function () {
+
+                    location.reload();
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>
