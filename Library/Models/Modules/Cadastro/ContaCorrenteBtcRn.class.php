@@ -1051,6 +1051,7 @@ class ContaCorrenteBtcRn {
         $contaCorrenteTo->autorizada = 1;
         $contaCorrenteTo->rede = 'Interna';
 
+        $result = LambdaMain::enviar('internal-transfer', json_encode($contaCorrente));
         $result = LambdaMain::enviar('internal-transfer', json_encode($contaCorrenteTo));
         
         $this->salvar($contaCorrenteTo, $token);
